@@ -4,7 +4,7 @@ set -xe
 apk add bash && apk add git && apk add --update curl && rm -rf /var/cache/apk/*
 
 # clone repo manifest
-git clone "https://${PERSONAL_ACCESS_KEY}@${REPO_MANIFEST_URL}"
+git clone "https://{REPO_MANIFEST_URL}"
 cd ./${REPO_MANIFEST_NAME}
 git checkout ${REPO_MANIFEST_BRANCH} && git pull
 
