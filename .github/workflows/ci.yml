@@ -13,13 +13,13 @@ jobs:
       - name: Set environment variable
         run: |
           SHORT_SHA_COMMIT=$(git rev-parse --short HEAD)
-          echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/multisig-api:${GITHUB_REF_NAME}_${SHORT_SHA_COMMIT} >> $GITHUB_ENV
+          echo CONTAINER_RELEASE_IMAGE=ghcr.io/aura-nw/explorer-frontend:${GITHUB_REF_NAME}_${SHORT_SHA_COMMIT} >> $GITHUB_ENV
           echo REPO_MANIFEST_NAME=gitops >> $GITHUB_ENV
           echo REPO_MANIFEST_URL=github.com/aura-nw/gitops.git >> $GITHUB_ENV
           echo REPO_MANIFEST_BRANCH=master >> $GITHUB_ENV
-          echo REPO_MANIFEST_ENV_DEV=./clusters/k8s-dev/multisig-safe >> $GITHUB_ENV
-          echo REPO_MANIFEST_ENV_MAIN=./clusters/k8s-main/multisig-safe >> $GITHUB_ENV
-          echo REPO_MANIFEST_TAG_IMAGE=image_multisig_api >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_DEV=./clusters/k8s-dev/explorer-frontend >> $GITHUB_ENV
+          echo REPO_MANIFEST_ENV_MAIN=./clusters/k8s-main/explorer-frontend >> $GITHUB_ENV
+          echo REPO_MANIFEST_TAG_IMAGE=image_explorer_frontend >> $GITHUB_ENV
       - name: Build the Docker image and push it to the registry
         env:
           GITHUB_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
