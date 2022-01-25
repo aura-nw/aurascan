@@ -1,0 +1,234 @@
+{
+  "HEADER": {
+    "SEARCH": "Поиск...",
+    "MEGA_MENU": "Мега Меню",
+    "NOTIFICATIONS": {
+      "TITLE": "Уведомления",
+      "VIEW_ALL": "Посмотреть все",
+      "LOAD_MORE": "Посмотреть больше..",
+      "FIRST": {
+        "TITLE": "Джеймс Лемир",
+        "TEXT": "Это будет похоже на упрощенный английский.",
+        "TIME": "1 час назад"
+      },
+      "SECOND": {
+        "TITLE": "Ваш заказ размещен",
+        "TEXT": "Если несколько языков объединяют грамматику",
+        "TIME": "3 минуты назад"
+      },
+      "THIRD": {
+        "TITLE": "Ваш товар отправлен",
+        "TEXT": "Если несколько языков объединяют грамматику",
+        "TIME": "3 минуты назад"
+      },
+      "FOUR": {
+        "TITLE": "Салена Лэйфилд",
+        "TEXT": "Как скептически настроенный мой кембриджский друг с Запада.",
+        "TIME": "10 часов назад"
+      }
+    }
+  },
+  "RIGHTSIDEBAR": {
+    "LAYOUT": {
+      "TEXT": "Макет",
+      "LIST": {
+        "VERTICAL": "Вертикальный",
+        "HORIZONTAL": "По горизонтали"
+      }
+    },
+    "LAYOUTMODE": {
+      "TEXT": "Режим макета",
+      "LIST": {
+        "LIGHT": "Свет",
+        "DARK": "Темный"
+      }
+    },
+    "LAYOUTWIDTH": {
+      "TEXT": "Ширина макета",
+      "LIST": {
+        "FLUID": "Жидкость",
+        "BOXED": "В штучной упаковке"
+      }
+    },
+    "LAYOUTPOSITION": {
+      "TEXT": "Расположение макета",
+      "LIST": {
+        "FIXED": "Фиксированный",
+        "SCROLLABLE": "Прокручиваемый"
+      }
+    },
+    "TOPBARCOLOR": {
+      "TEXT": "Цвет верхней панели",
+      "LIST": {
+        "LIGHT": "Свет",
+        "DARK": "Темный"
+      }
+    },
+    "SIDEBARSIZE": {
+      "TEXT": "Размер боковой панели",
+      "LIST": {
+        "DEFAULT": "По умолчанию",
+        "COMPACT": "Компактный",
+        "SMALL": "Небольшой"
+      }
+    },
+    "SIDEBARCOLOR": {
+      "TEXT": "Цвет боковой панели",
+      "LIST": {
+        "LIGHT": "Свет",
+        "DARK": "Темный",
+        "BRAND": "Марка"
+      }
+    }
+  },
+  "MENUITEMS": {
+    "MENU": {
+      "TEXT": "Меню"
+    },
+    "ELEMENTS": {
+      "TEXT": "Элементы"
+    },
+    "EXTRAPAGES": {
+      "TEXT": "Дополнительные страницы"
+    },
+    "UTILITY": {
+      "TEXT": "Полезность"
+    },
+    "DASHBOARDS": {
+      "TEXT": "Приборная панель",
+      "BADGE": "четыре"
+    },
+    "APPS": {
+      "TEXT": "Программы",
+      "LIST": {
+        "CALENDAR": "Календарь",
+        "CHAT": "Чат",
+        "EMAIL": "Электронное письмо",
+        "INBOX": "Входящие",
+        "READEMAIL": "Читать электронную почту",
+        "INVOICES": "Счета",
+        "INVOICELIST": "Список счетов",
+        "INVOICEDETAIL": "Детали счета",
+        "CONTACTS": "Контакты",
+        "USERGRID": "Сетка пользователя",
+        "USERLIST": "Список пользователей",
+        "PROFILE": "Профиль"
+      }
+    },
+    "AUTHENTICATION": {
+      "TEXT": "Аутентификация",
+      "BADGE": "Новый",
+      "LIST": {
+        "LOGIN": "Авторизоваться",
+        "REGISTER": "регистр",
+        "RECOVERPWD": "Восстановить пароль",
+        "LOCKSCREEN": "Экран блокировки",
+        "LOGOUT": "Выйти",
+        "CONFIRMMAIL": "Подтвердить почту",
+        "EMAILVERIFICATION": "подтверждение адреса электронной почты",
+        "TWOSTEPVERIFICATION": "Двухэтапная проверка"
+      }
+    },
+    "PAGES": {
+      "TEXT": "Страницы",
+      "LIST": {
+        "STARTER": "Стартовая страница",
+        "MAINTENANCE": "Обслуживание",
+        "TIMELINE": "График",
+        "FAQS": "FAQs",
+        "PRICING": "Ценообразование",
+        "ERROR404": "Ошибка 404",
+        "ERROR500": "Ошибка 500"
+      }
+    },
+    "HORIZONTAL": {
+      "TEXT": "По горизонтали"
+    },
+    "COMPONENTS": {
+      "TEXT": "Составные части",
+      "LIST": {
+        "ALERTS": "Оповещения",
+        "BUTTONS": "Кнопки",
+        "CARDS": "Открытки",
+        "CAROUSEL": "Карусель",
+        "DROPDOWNS": "Выпадающие списки",
+        "GRID": "Сетка",
+        "IMAGES": "Изображений",
+        "MODALS": "Модальные окна",
+        "PROGRESSBAR": "Индикаторы прогресса",
+        "TABS": "Табы и аккордеоны",
+        "TYPOGRAPHY": "Типография",
+        "VIDEO": "видео",
+        "GENERAL": "Общий",
+        "COLORS": "Цвета"
+      }
+    },
+    "EXTENDED": {
+      "TEXT": "Расширенный",
+      "LIST": {
+        "LIGHTBOX": "LightBox",
+        "RANGESLIDER": "Ползунок диапазона",
+        "SWEETALERT": "Сладкое оповещение",
+        "RATING": "Рейтинг",
+        "NOTIFICATION": "Уведомление"
+      }
+    },
+    "FORMS": {
+      "TEXT": "Формы",
+      "BADGE": "семь",
+      "LIST": {
+        "ELEMENTS": "Основные элементы",
+        "VALIDATION": "Проверка",
+        "ADVANCED": "Расширенный плагин",
+        "EDITOR": "Редакторы",
+        "FILEUPLOAD": "Файл загружен",
+        "WIZARD": "волшебник",
+        "MASK": "Форма Маска"
+      }
+    },
+    "TABLES": {
+      "TEXT": "Столы",
+      "LIST": {
+        "BASIC": "Bootstrap Basic",
+        "ADVANCED": "Таблицы данных"
+      }
+    },
+    "CHARTS": {
+      "TEXT": "Диаграммы",
+      "LIST": {
+        "APEX": "Apexcharts",
+        "CHARTJS": "Chartjs",
+        "ECHARTS": "Электронные диаграммы"
+      }
+    },
+    "ICONS": {
+      "TEXT": "Иконки",
+      "LIST": {
+        "BOXICONS": "Боксиконы",
+        "MATERIALDESIGN": "Материальный дизайн",
+        "DRIPICONS": "Дрипиконы",
+        "FONTAWESOME": "Font Awesome"
+      }
+    },
+    "MAPS": {
+      "TEXT": "Карты",
+      "LIST": {
+        "GOOGLEMAP": "Google",
+        "LEAFLET": "Leaflet"
+      }
+    },
+    "MULTILEVEL": {
+      "TEXT": "Многоуровневый",
+      "LIST": {
+        "LEVEL1": {
+          "1": "Уровень 1.1",
+          "2": "Уровень 1.2",
+          "LEVEL2": {
+            "1": "Уровень 2.1",
+            "2": "Уровень 2.2"
+          }
+        }
+      }
+    }        
+  }
+}

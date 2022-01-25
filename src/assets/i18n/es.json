@@ -1,0 +1,255 @@
+{
+  "HEADER": {
+    "SEARCH": "Buscar...",
+    "MEGA_MENU": "Mega menú",
+    "NOTIFICATIONS": {
+      "TITLE": "Notificaciones",
+      "VIEW_ALL": "Ver todo",
+      "LOAD_MORE": "Ver más..",
+      "FIRST": {
+        "TITLE": "Se realiza tu pedido",
+        "TEXT": "Si varios idiomas fusionan la gramática",
+        "TIME": "Hace 3 minutos"
+      },
+      "SECOND": {
+        "TITLE": "James Lemire",
+        "TEXT": "Parecerá un inglés simplificado.",
+        "TIME": "Hace 1 hora"
+      },
+      "THIRD": {
+        "TITLE": "Tu artículo es enviado",
+        "TEXT": "Si varios idiomas fusionan la gramática",
+        "TIME": "Hace 3 minutos"
+      },
+      "FOUR": {
+        "TITLE": "Salena Layfield",
+        "TEXT": "Como un escéptico amigo mío occidental de Cambridge.",
+        "TIME": "Hace 1 hora"
+      }
+    }
+  },
+  "RIGHTSIDEBAR": {
+    "LAYOUT": {
+      "TEXT": "Diseño",
+      "LIST": {
+        "VERTICAL": "Vertical",
+        "HORIZONTAL": "Horizontal"
+      }
+    },
+    "LAYOUTMODE": {
+      "TEXT": "Modo de diseño",
+      "LIST": {
+        "LIGHT": "Ligero",
+        "DARK": "Oscuro"
+      }
+    },
+    "LAYOUTWIDTH": {
+      "TEXT": "Ancho de diseño",
+      "LIST": {
+        "FLUID": "Líquido",
+        "BOXED": "En caja"
+      }
+    },
+    "LAYOUTPOSITION": {
+      "TEXT": "Posición de diseño",
+      "LIST": {
+        "FIXED": "Reparado",
+        "SCROLLABLE": "Desplazable"
+      }
+    },
+    "TOPBARCOLOR": {
+      "TEXT": "Color de la barra superior",
+      "LIST": {
+        "LIGHT": "Ligero",
+        "DARK": "Oscuro"
+      }
+    },
+    "SIDEBARSIZE": {
+      "TEXT": "Tamaño de la barra lateral",
+      "LIST": {
+        "DEFAULT": "Defecto",
+        "COMPACT": "Compacto",
+        "SMALL": "Pequeño"
+      }
+    },
+    "SIDEBARCOLOR": {
+      "TEXT": "Color de la barra lateral",
+      "LIST": {
+        "LIGHT": "Ligero",
+        "DARK": "Oscuro",
+        "BRAND": "Marca"
+      }
+    }
+  }, 
+  "MENUITEMS": {
+    "MENU": {
+      "TEXT": "Menú"
+    },
+    "ELEMENTS": {
+      "TEXT": "Elements"
+    },
+    "EXTRAPAGES": {
+      "TEXT": "Páginas extra"
+    },
+    "UTILITY": {
+      "TEXT": "Utilidad"
+    },
+    "DASHBOARDS": {
+      "TEXT": "Tablero",
+      "BADGE": "04",
+      "LIST": {
+        "DEFAULT": "Defecto",
+        "SAAS": "Saas",
+        "CRYPTO": "Cripto",
+        "BLOG": "Blog"
+      }
+    },
+    "LAYOUTS": {
+      "TEXT": "Diseños",
+      "LIST": {
+        "HORIZONTAL": "Horizontal",
+        "LIGHTSIDEBAR": "Barra lateral ligera",
+        "COMPACTSIDEBAR": "Barra lateral compacta",
+        "ICONSIDEBAR": "Barra lateral de iconos",
+        "BOXED": "Diseño en caja",
+        "COLOREDSIDEBAR": "Barra lateral coloreada",
+        "VERTICAL": "Vertical",
+        "LIGHTTOPBAR": "Barra superior ligera",
+        "COLOREDHEADER": "Encabezado de color",
+        "SCROLLABLE": "Desplazable"
+      }
+    },
+    "APPS": {
+      "TEXT": "Aplicaciones",
+      "LIST": {
+        "CALENDAR": "Calendario",
+        "CHAT": "Chat",
+        "EMAIL": "Correo electrónico",
+        "INBOX": "Bandeja de entrada",
+        "READEMAIL": "Leer el correo electrónico",
+        "INVOICES": "Facturas",
+        "INVOICELIST": "Lista de facturas",
+        "INVOICEDETAIL": "Detalle de la factura",
+        "CONTACTS": "Contactos",
+        "USERGRID": "Cuadrícula de usuario",
+        "USERLIST": "Lista de usuarios",
+        "PROFILE": "Perfil"
+      }
+    },
+    "AUTHENTICATION": {
+      "TEXT": "Autenticación",
+      "BADGE": "Nuevo",
+      "LIST": {
+        "LOGIN": "Acceso",
+        "REGISTER": "Registrarse",
+        "RECOVERPWD": "Recuperar contraseña",
+        "LOCKSCREEN": "Bloquear pantalla",
+        "LOGOUT": "Cerrar sesión",
+        "CONFIRMMAIL": "Confirmar correo",
+        "EMAILVERIFICATION": "verificacion de email",
+        "TWOSTEPVERIFICATION": "Verificación de dos pasos"
+      }
+    },
+    "PAGES": {
+      "TEXT": "Paginas",
+      "LIST": {
+        "STARTER": "Página de inicio",
+        "MAINTENANCE": "Mantenimiento",
+        "TIMELINE": "Cronología",
+        "FAQS": "Preguntas frecuentes",
+        "PRICING": "Precios",
+        "ERROR404": "Error 404",
+        "ERROR500": "Error 500"
+      }
+    },
+    "HORIZONTAL": {
+      "TEXT": "Horizontal"
+    },
+    "COMPONENTS": {
+      "TEXT": "Componentes",
+      "LIST": {
+        "ALERTS": "Alertas",
+        "BUTTONS": "Botones",
+        "CARDS": "Tarjetas",
+        "CAROUSEL": "Carrusel",
+        "DROPDOWNS": "Listas deplegables",
+        "GRID": "Red",
+        "IMAGES": "Imagenes",
+        "MODALS": "Modales",
+        "PROGRESSBAR": "Barras de progreso",
+        "TABS": "Pestañas y acordeones",
+        "TYPOGRAPHY": "Tipografía",
+        "VIDEO": "Video",
+        "GENERAL": "General",
+        "COLORS": "Colores"
+      }
+    },
+    "EXTENDED": {
+      "TEXT": "Extendido",
+      "LIST": {
+        "LIGHTBOX": "Caja ligera",
+        "RANGESLIDER": "Control deslizante de rango",
+        "SWEETALERT": "Alerta dulce",
+        "RATING": "Clasificación",
+        "NOTIFICATION": "Notificación"
+      }
+    },
+    "FORMS": {
+      "TEXT": "Formularios",
+      "BADGE": "siete",
+      "LIST": {
+        "ELEMENTS": "Elementos basicos",
+        "VALIDATION": "Validación",
+        "ADVANCED": "Advanced Plugin",
+        "EDITOR": "Editores",
+        "FILEUPLOAD": "Subir archivo",
+        "WIZARD": "Mago",
+        "MASK": "Máscara de forma"
+      }
+    },
+    "TABLES": {
+      "TEXT": "Mesas",
+      "LIST": {
+        "BASIC": "Bootstrap básico",
+        "ADVANCED": "Tablas de datos"
+      }
+    },
+    "CHARTS": {
+      "TEXT": "Gráficos",
+      "LIST": {
+        "APEX": "Apexcharts",
+        "CHARTJS": "Chartjs",
+        "ECHARTS": "Echarts"
+      }
+    },
+    "ICONS": {
+      "TEXT": "Iconos",
+      "LIST": {
+        "BOXICONS": "Boxicons",
+        "MATERIALDESIGN": "Diseño de materiales",
+        "DRIPICONS": "Dripicons",
+        "FONTAWESOME": "Fuente impresionante"
+      }
+    },
+    "MAPS": {
+      "TEXT": "Mapas",
+      "LIST": {
+        "GOOGLEMAP": "Google",
+        "LEAFLET": "Leaflet"
+      }
+    },
+    "MULTILEVEL": {
+      "TEXT": "Multi nivel",
+      "LIST": {
+        "LEVEL1": {
+          "1": "Nivel 1.1",
+          "2": "Nivel 1.2",
+          "LEVEL2": {
+            "1": "Nivel 2.1",
+            "2": "Nivel 2.2"
+          }
+        }
+      }
+    }        
+  }
+}

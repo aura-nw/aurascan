@@ -1,0 +1,39 @@
+<ul class="list-unstyled activity-wid mb-0">
+    <li class="activity-list activity-border" *ngFor="let data of recentActivity">
+        <div class="activity-icon avatar-md">
+            <span class="avatar-title bg-soft-primary text-primary rounded-circle"
+                [ngClass]=" { 'bg-soft-warning text-warning': data.coine === '+0.5 BTC' }">
+                <i class="{{data.icon}}"></i>
+            </span>
+        </div>
+        <div class="timeline-list-item">
+            <div class="d-flex">
+                <div class="flex-grow-1 overflow-hidden me-4">
+                    <h5 class="font-size-14 mb-1">{{data.date}}</h5>
+                    <p class="text-truncate text-muted font-size-13">{{data.content}}</p>
+                </div>
+                <div class="flex-shrink-0 text-end me-3">
+                    <h6 class="mb-1">{{data.coine}}</h6>
+                    <div class="font-size-13">{{data.price}}</div>
+                </div>
+
+                <div class="flex-shrink-0 text-end">
+                    <div class="dropdown" ngbDropdown>
+                        <a class="text-muted dropdown-toggle font-size-24" role="button" data-bs-toggle="dropdown"
+                            aria-haspopup="true" ngbDropdownToggle>
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:void(0)">Action</a>
+                            <a class="dropdown-item" href="javascript:void(0)">Another action</a>
+                            <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="javascript:void(0)">Separated link</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

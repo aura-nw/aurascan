@@ -1,0 +1,70 @@
+<div class="preview-img">
+    <ngb-carousel>
+        <ng-template ngbSlide>
+            <div class="item event-list">
+                <div class="slide-bg" style="background-image: url(./assets/images/bg-1.jpg);"></div>
+            </div>
+        </ng-template>
+        <ng-template ngbSlide>
+            <div class="item event-list">
+                <div class="slide-bg" style="background-image: url(./assets/images/bg-2.jpg);"></div>
+            </div>
+        </ng-template>
+        <ng-template ngbSlide>
+            <div class="item event-list">
+                <div class="slide-bg" style="background-image: url(./assets/images/bg-3.jpg);"></div>
+            </div>
+        </ng-template>
+    </ngb-carousel>
+</div>
+<!-- preview bg -->
+
+<div class="coming-content min-vh-100 py-4 px-3 py-sm-5">
+    <div class="bg-overlay bg-primary"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center py-4 py-sm-5">
+
+                    <div class="mb-5">
+                        <a routerLink="/">
+                            <img src="assets/images/logo_akaChain.png" alt="" height="30" class="me-1"><span class="logo-txt text-white font-size-22">akaChain EXPLORE</span>
+                        </a>
+                    </div>
+                    <h3 class="text-white mt-5">Let's get started with akaChain EXPLORE</h3>
+                    <p class="text-white-50 font-size-16">Donec pede justo fringilla vel aliquet nec vulputate eget arcu. In enim justo, rhoncus ut imperdiet a venenatis vitae, justo felis</p>
+
+                    <div inputDate="December 31, 2021" class="counter-number ico-countdown mt-5">
+                        <div class="coming-box">
+                            <span class="count-title">Days</span>
+                            <div class="count-num">{{_days}}</div>
+                        </div>
+                        <div class="coming-box">
+                            <span class="count-title">Hours</span>
+                            <div class="count-num">{{_hours}}</div>
+                        </div>
+                        <div class="coming-box">
+                            <span class="count-title">Minutes</span>
+                            <div class="count-num">{{_minutes}}</div>
+                        </div>
+                        <div class="coming-box">
+                            <span class="count-title">Seconds</span>
+                            <div class="count-num">{{_seconds}}</div>
+                        </div>
+                    </div>
+                    <form class="app-search mt-5 mx-auto">
+                        <div class="position-relative">
+                            <input type="text" class="form-control" placeholder="Enter your email address">
+                            <button class="btn btn-primary" type="button"><i
+                                    class="bx bx-paper-plane align-middle"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container -->
+</div>
+<!-- coming-content -->

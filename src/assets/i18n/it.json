@@ -1,0 +1,234 @@
+{
+  "HEADER": {
+    "SEARCH": "Ricerca...",
+    "MEGA_MENU": "Menu Mega",
+    "NOTIFICATIONS": {
+      "TITLE": "Notifiche",
+      "VIEW_ALL": "Mostra tutto",
+      "LOAD_MORE": "Visualizza altro..",
+      "FIRST": {
+        "TITLE": "James Lemire",
+        "TEXT": "Sembrerà un inglese semplificato.",
+        "TIME": "1 ora fa"
+      },
+      "SECOND": {
+        "TITLE": "Il tuo ordine è stato effettuato",
+        "TEXT": "Se più lingue uniscono la grammatica",
+        "TIME": "3 minuti fa"
+      },
+      "THIRD": {
+        "TITLE": "Il tuo articolo viene spedito",
+        "TEXT": "Se più lingue uniscono la grammatica",
+        "TIME": "3 minuti fa"
+      },
+      "FOUR": {
+        "TITLE": "Salena Layfield",
+        "TEXT": "Come un mio amico occidentale scettico di Cambridge.",
+        "TIME": "1 ora fa"
+      }
+    }
+  },
+  "RIGHTSIDEBAR": {
+    "LAYOUT": {
+      "TEXT": "disposizione",
+      "LIST": {
+        "VERTICAL": "Verticale",
+        "HORIZONTAL": "Orizzontale"
+      }
+    },
+    "LAYOUTMODE": {
+      "TEXT": "Modalità layout",
+      "LIST": {
+        "LIGHT": "Leggero",
+        "DARK": "Buio"
+      }
+    },
+    "LAYOUTWIDTH": {
+      "TEXT": "Larghezza layout",
+      "LIST": {
+        "FLUID": "Fluido",
+        "BOXED": "Incorniciato"
+      }
+    },
+    "LAYOUTPOSITION": {
+      "TEXT": "Posizione di layout",
+      "LIST": {
+        "FIXED": "Fisso",
+        "SCROLLABLE": "scorrevole"
+      }
+    },
+    "TOPBARCOLOR": {
+      "TEXT": "Topbar Color",
+      "LIST": {
+        "LIGHT": "Leggero",
+        "DARK": "Buio"
+      }
+    },
+    "SIDEBARSIZE": {
+      "TEXT": "Dimensione barra laterale",
+      "LIST": {
+        "DEFAULT": "Predefinito",
+        "COMPACT": "Compatto",
+        "SMALL": "Piccolo"
+      }
+    },
+    "SIDEBARCOLOR": {
+      "TEXT": "Colore barra laterale",
+      "LIST": {
+        "LIGHT": "Leggero",
+        "DARK": "Buio",
+        "BRAND": "Marca"
+      }
+    }
+  }, 
+  "MENUITEMS": {
+    "MENU": {
+      "TEXT": "Menù"
+    },
+    "ELEMENTS": {
+      "TEXT": "Elementi"
+    },
+    "EXTRAPAGES": {
+      "TEXT": "Pagine extra"
+    },
+    "UTILITY": {
+      "TEXT": "Utilità"
+    },
+    "DASHBOARDS": {
+      "TEXT": "Pannello di controllo",
+      "BADGE": "quattro"
+    },
+    "APPS": {
+      "TEXT": "App",
+      "LIST": {
+        "CALENDAR": "Calendario",
+        "CHAT": "Chiacchierare",
+        "EMAIL": "E-mail",
+        "INBOX": "Posta in arrivo",
+        "READEMAIL": "Leggi e-mail",
+        "INVOICES": "grasso",
+        "INVOICELIST": "Elenco fatture",
+        "INVOICEDETAIL": "Dettaglio fattura",
+        "CONTACTS": "Contatti",
+        "USERGRID": "Griglia utente",
+        "USERLIST": "lista degli utenti",
+        "PROFILE": "Profilo"
+      }
+    },
+    "AUTHENTICATION": {
+      "TEXT": "Autenticazione",
+      "BADGE": "Nuovo",
+      "LIST": {
+        "LOGIN": "Login",
+        "REGISTER": "Registrati",
+        "RECOVERPWD": "Recupera la password",
+        "LOCKSCREEN": "Blocca schermo",
+        "LOGOUT": "Disconnettersi",
+        "CONFIRMMAIL": "Conferma posta",
+        "EMAILVERIFICATION": "verifica email",
+        "TWOSTEPVERIFICATION": "Verifica in due passaggi"
+      }
+    },
+    "PAGES": {
+      "TEXT": "Pagine",
+      "LIST": {
+        "STARTER": "Pagina iniziale",
+        "MAINTENANCE": "Manutenzione",
+        "TIMELINE": "Sequenza temporale",
+        "FAQS": "FAQ",
+        "PRICING": "Prezzi",
+        "ERROR404": "Errore 404",
+        "ERROR500": "Errore 500"
+      }
+    },
+    "HORIZONTAL": {
+      "TEXT": "Orizzontale"
+    },
+    "COMPONENTS": {
+      "TEXT": "Componenti",
+      "LIST": {
+        "ALERTS": "Avvisi",
+        "BUTTONS": "pulsanti",
+        "CARDS": "Carte",
+        "CAROUSEL": "Giostra",
+        "DROPDOWNS": "menu a discesa",
+        "GRID": "Griglia",
+        "IMAGES": "immagini",
+        "MODALS": "modali",
+        "PROGRESSBAR": "Barre di avanzamento",
+        "TABS": "Tablature e fisarmoniche",
+        "TYPOGRAPHY": "Tipografia",
+        "VIDEO": "video",
+        "GENERAL": "Generale",
+        "COLORS": "Colori"
+      }
+    },
+    "EXTENDED": {
+      "TEXT": "Esteso",
+      "LIST": {
+        "LIGHTBOX": "LightBox",
+        "RANGESLIDER": "Dispositivo di scorrimento dell'intervallo",
+        "SWEETALERT": "dolce allerta",
+        "RATING": "Valutazione",
+        "NOTIFICATION": "Notifica"
+      }
+    },
+    "FORMS": {
+      "TEXT": "Forme",
+      "BADGE": "sette",
+      "LIST": {
+        "ELEMENTS": "Elementi basici",
+        "VALIDATION": "Convalida",
+        "ADVANCED": "Plugin avanzato",
+        "EDITOR": "Editori",
+        "FILEUPLOAD": "Upload di file",
+        "WIZARD": "procedura guidata",
+        "MASK": "Maschera forma"
+      }
+    },
+    "TABLES": {
+      "TEXT": "Tabelle",
+      "LIST": {
+        "BASIC": "Bootstrap di base",
+        "ADVANCED": "DataTables"
+      }
+    },
+    "CHARTS": {
+      "TEXT": "Grafici",
+      "LIST": {
+        "APEX": "grafici apicali",
+        "CHARTJS": "Chartjs",
+        "ECHARTS": "Echarts"
+      }
+    },
+    "ICONS": {
+      "TEXT": "Icone",
+      "LIST": {
+        "BOXICONS": "Boxicon",
+        "MATERIALDESIGN": "Design dei materiali",
+        "DRIPICONS": "Dripicons",
+        "FONTAWESOME": "Carattere fantastico"
+      }
+    },
+    "MAPS": {
+      "TEXT": "Mappe",
+      "LIST": {
+        "GOOGLEMAP": "Google",
+        "LEAFLET": "Leaflet"
+      }
+    },
+    "MULTILEVEL": {
+      "TEXT": "Multi livello",
+      "LIST": {
+        "LEVEL1": {
+          "1": "Livello 1.1",
+          "2": "Livello 1.2",
+          "LEVEL2": {
+            "1": "Livello 2.1",
+            "2": "Livello 2.2"
+          }
+        }
+      }
+    }        
+  }
+}

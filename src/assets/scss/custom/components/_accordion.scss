@@ -1,0 +1,43 @@
+//
+// accordion.scss
+//
+
+.accordion {
+    .card {
+      box-shadow: none;
+      margin-bottom: 0px !important;
+    }
+  
+    .card-header {
+      padding: 5px;
+      background-color: $gray-100;
+    }
+
+    .card-header button {
+        font-weight: bold;
+      }
+
+  }
+
+body[data-layout-mode="dark"] {
+
+    // accordion
+
+    .accordion-button{
+      border-color: $gray-dark-300;
+      color: $gray-dark-600;
+      &:not(.collapsed){
+          background-color: rgba($primary, 0.2);
+          color: $primary;
+      }
+    }
+
+    .accordion-item{
+        border-color: $gray-dark-300;
+    }
+    
+    .accordion-collapse{
+        border-color: $gray-dark-300;
+    }
+}
+

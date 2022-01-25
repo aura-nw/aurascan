@@ -1,0 +1,234 @@
+{
+  "HEADER": {
+    "SEARCH": "Suche...",
+    "MEGA_MENU": "Mega-Menü",
+    "NOTIFICATIONS": {
+      "TITLE": "Benachrichtigungen",
+      "VIEW_ALL": "Alle ansehen",
+      "LOAD_MORE": "Mehr sehen..",
+      "FIRST": {
+        "TITLE": "Ihre Bestellung ist aufgegeben",
+        "TEXT": "Wenn mehrere Sprachen die Grammatik zusammenführen",
+        "TIME": "Vor 3 Minuten"
+      },
+      "SECOND": {
+        "TITLE": "James Lemire",
+        "TEXT": "Es wird wie vereinfachtes Englisch erscheinen.",
+        "TIME": "Vor 1 Stunden"
+      },
+      "THIRD": {
+        "TITLE": "Ihr Artikel wird versendet",
+        "TEXT": "Wenn mehrere Sprachen die Grammatik zusammenführen",
+        "TIME": "Vor 3 Minuten"
+      },
+      "FOUR": {
+        "TITLE": "Salena Layfield",
+        "TEXT": "Als skeptischer Cambridge-Freund von mir abendländisch.",
+        "TIME": "Vor 1 Stunden"
+      }
+    }
+  },
+  "RIGHTSIDEBAR": {
+    "LAYOUT": {
+      "TEXT": "Layout",
+      "LIST": {
+        "VERTICAL": "Vertikal",
+        "HORIZONTAL": "Horizontal"
+      }
+    },
+    "LAYOUTMODE": {
+      "TEXT": "Layout-Modus",
+      "LIST": {
+        "LIGHT": "Licht",
+        "DARK": "Dunkel"
+      }
+    },
+    "LAYOUTWIDTH": {
+      "TEXT": "Layoutbreite",
+      "LIST": {
+        "FLUID": "Flüssigkeit",
+        "BOXED": "Boxed"
+      }
+    },
+    "LAYOUTPOSITION": {
+      "TEXT": "Layoutposition",
+      "LIST": {
+        "FIXED": "Fest",
+        "SCROLLABLE": "Bildlauffähig"
+      }
+    },
+    "TOPBARCOLOR": {
+      "TEXT": "Farbe der oberen Leiste",
+      "LIST": {
+        "LIGHT": "Licht",
+        "DARK": "Dunkel"
+      }
+    },
+    "SIDEBARSIZE": {
+      "TEXT": "Seitenleistengröße",
+      "LIST": {
+        "DEFAULT": "Standard",
+        "COMPACT": "Kompakt",
+        "SMALL": "Klein"
+      }
+    },
+    "SIDEBARCOLOR": {
+      "TEXT": "Seitenleistenfarbe",
+      "LIST": {
+        "LIGHT": "Licht",
+        "DARK": "Dunkel",
+        "BRAND": "Marke"
+      }
+    }
+  },
+  "MENUITEMS": {
+    "MENU": {
+      "TEXT": "Speisekarte"
+    },
+    "ELEMENTS": {
+      "TEXT": "Elemente"
+    },
+    "EXTRAPAGES": {
+      "TEXT": "Zusätzliche Seiten"
+    },
+    "UTILITY": {
+      "TEXT": "Nützlichkeit"
+    },
+    "DASHBOARDS": {
+      "TEXT": "Instrumententafel",
+      "BADGE": "vier"
+    },
+    "APPS": {
+      "TEXT": "Apps",
+      "LIST": {
+        "CALENDAR": "Kalender",
+        "CHAT": "Plaudern",
+        "EMAIL": "Email",
+        "INBOX": "Posteingang",
+        "READEMAIL": "E-Mail lesen",
+        "INVOICES": "Rechnungen",
+        "INVOICELIST": "Rechnungsliste",
+        "INVOICEDETAIL": "Rechnungsdetails",
+        "CONTACTS": "Kontakte",
+        "USERGRID": "Benutzerraster",
+        "USERLIST": "Benutzerliste",
+        "PROFILE": "Profil"
+      }
+    },
+    "AUTHENTICATION": {
+      "TEXT": "Authentifizierung",
+      "BADGE": "Neu",
+      "LIST": {
+        "LOGIN": "Anmeldung",
+        "REGISTER": "Registrieren",
+        "RECOVERPWD": "Passwort wiederherstellen",
+        "LOCKSCREEN": "Bildschirm sperren",
+        "LOGOUT": "Ausloggen",
+        "CONFIRMMAIL": "E-Mail bestätigen",
+        "EMAILVERIFICATION": "E-Mail-Verifizierung",
+        "TWOSTEPVERIFICATION": "Bestätigung in zwei Schritten"
+      }
+    },
+    "PAGES": {
+      "TEXT": "Seiten",
+      "LIST": {
+        "STARTER": "Startseite",
+        "MAINTENANCE": "Instandhaltung",
+        "TIMELINE": "Zeitleiste",
+        "FAQS": "Häufig gestellte Fragen",
+        "PRICING": "Preisgestaltung",
+        "ERROR404": "Fehler 404",
+        "ERROR500": "Fehler 500"
+      }
+    },
+    "HORIZONTAL": {
+      "TEXT": "Horizontal"
+    },
+    "COMPONENTS": {
+      "TEXT": "Komponenten",
+      "LIST": {
+        "ALERTS": "Benachrichtigungen",
+        "BUTTONS": "Tasten",
+        "CARDS": "Karten",
+        "CAROUSEL": "Karussell",
+        "DROPDOWNS": "Dropdowns",
+        "GRID": "Gitter",
+        "IMAGES": "Bilder",
+        "MODALS": "Modalitäten",
+        "PROGRESSBAR": "Fortschrittsbalken",
+        "TABS": "Tabs & Akkordeons",
+        "TYPOGRAPHY": "Typografie",
+        "VIDEO": "Video",
+        "GENERAL": "Allgemeines",
+        "COLORS": "Farben"
+      }
+    },
+    "EXTENDED": {
+      "TEXT": "Verlängert",
+      "LIST": {
+        "LIGHTBOX": "Leuchtkasten",
+        "RANGESLIDER": "Bereichsschieberegler",
+        "SWEETALERT": "Süße Warnung",
+        "RATING": "Bewertung",
+        "NOTIFICATION": "Benachrichtigung"
+      }
+    },
+    "FORMS": {
+      "TEXT": "Formen",
+      "BADGE": "7",
+      "LIST": {
+        "ELEMENTS": "Grundelemente",
+        "VALIDATION": "Validierung",
+        "ADVANCED": "Erweitertes Plugin",
+        "EDITOR": "Herausgeber",
+        "FILEUPLOAD": "Datei-Upload",
+        "WIZARD": "Magier",
+        "MASK": "Formularmaske"
+      }
+    },
+    "TABLES": {
+      "TEXT": "Tabellen",
+      "LIST": {
+        "BASIC": "Bootstrap-Grundlagen",
+        "ADVANCED": "Datentabellen"
+      }
+    },
+    "CHARTS": {
+      "TEXT": "Diagramme",
+      "LIST": {
+        "APEX": "Apexcharts",
+        "CHARTJS": "Apex-Charts",
+        "ECHARTS": "Karten"
+      }
+    },
+    "ICONS": {
+      "TEXT": "Symbole",
+      "LIST": {
+        "BOXICONS": "Boxicons",
+        "MATERIALDESIGN": "Material Design",
+        "DRIPICONS": "Dripicons",
+        "FONTAWESOME": "Schriftart Super"
+      }
+    },
+    "MAPS": {
+      "TEXT": "Karten",
+      "LIST": {
+        "GOOGLEMAP": "Google",
+        "LEAFLET": "Leaflet"
+      }
+    },
+    "MULTILEVEL": {
+      "TEXT": "Mehrstufig",
+      "LIST": {
+        "LEVEL1": {
+          "1": "Stufe 1.1",
+          "2": "Stufe 1.2",
+          "LEVEL2": {
+            "1": "Stufe 2.1",
+            "2": "Stufe 2.2"
+          }
+        }
+      }
+    }        
+  }
+}

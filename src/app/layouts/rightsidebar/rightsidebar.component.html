@@ -1,0 +1,115 @@
+<!-- Right Sidebar -->
+<div class="right-bar" (clickOutside)="hide()" [exclude]="'.right-bar-toggle'">
+    <ngx-simplebar class="h-100">
+        <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+            <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+            <a href="javascript:void(0);" class="right-bar-toggle ms-auto" (click)="hide();">
+                <i class="mdi mdi-close noti-icon"></i>
+            </a>
+        </div>
+
+        <!-- Settings -->
+        <hr class="m-0" />
+
+        <div class="p-4">
+            <h6 class="mb-3">Layout</h6>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="is-layout" (click)="changeLayout($event)">
+                <label class="form-check-label" for="is-layout">{{ layout == 'vertical' ? 'vertical' : 'horizontal' }}</label>
+            </div>
+
+            <h6 class="mt-4 mb-3">Layout Mode</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="mode" id="layout-mode-light" value="light"
+                    [checked]="mode === 'light'" (change)="changeMode('light')">
+                <label class="form-check-label" for="layout-mode-light">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="mode" id="layout-mode-dark" value="dark"
+                    [checked]="mode === 'dark'" (change)="changeMode('dark')">
+                <label class="form-check-label" for="layout-mode-dark">Dark</label>
+            </div>
+
+            <h6 class="mt-4 mb-3">Layout Width</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fluid"
+                    [checked]="width === 'fluid'" (change)="changeWidth('fluid')">
+                <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed"
+                    [checked]="width === 'boxed'" (change)="changeWidth('boxed')">
+                <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+            </div>
+
+            <h6 class="mt-4 mb-3">Layout Position</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed"
+                    value="fixed" [checked]="position === 'fixed'" (change)="changePosition('fixed')">
+                <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable"
+                    value="scrollable" [checked]="position === 'scrollable'" (change)="changePosition('scrollable')">
+                <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+            </div>
+
+            <h6 class="mt-4 mb-3">Topbar Color</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light"
+                    [checked]="topbar === 'light'" (change)="changeTopbar('light')">
+                <label class="form-check-label" for="topbar-color-light">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark"
+                    [checked]="topbar === 'dark'" (change)="changeTopbar('dark')">
+                <label class="form-check-label" for="topbar-color-dark">Dark</label>
+            </div>
+
+            <div *ngIf="layout !== 'horizontal'">
+                <h6 class="mt-4 mb-3 sidebar-setting">Sidebar Size</h6>
+
+                <div class="form-check sidebar-setting">
+                    <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default"
+                        value="default" [checked]="sidebarsize === 'default'" (change)="changeSidebarSize('default')">
+                    <label class="form-check-label" for="sidebar-size-default">Default</label>
+                </div>
+                <div class="form-check sidebar-setting">
+                    <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact"
+                        value="compact" [checked]="sidebarsize === 'compact'" (change)="changeSidebarSize('compact')">
+                    <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+                </div>
+                <div class="form-check sidebar-setting">
+                    <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small"
+                        value="small" [checked]="sidebarsize === 'small'" (change)="changeSidebarSize('small')">
+                    <label class="form-check-label" for="sidebar-size-small">Small</label>
+                </div>
+
+                <h6 class="mt-4 mb-3 sidebar-setting">Sidebar Color</h6>
+
+                <div class="form-check sidebar-setting">
+                    <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light"
+                        value="light" [checked]="sidebarcolor === 'light'" (change)="changeSidebarColor('light')">
+                    <label class="form-check-label" for="sidebar-color-light">Light</label>
+                </div>
+                <div class="form-check sidebar-setting">
+                    <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark"
+                        value="dark" [checked]="sidebarcolor === 'dark'" (change)="changeSidebarColor('dark')">
+                    <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+                </div>
+                <div class="form-check sidebar-setting">
+                    <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand"
+                        value="brand" [checked]="sidebarcolor === 'brand'" (change)="changeSidebarColor('brand')">
+                    <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+                </div>
+
+            </div>
+        </div>
+
+    </ngx-simplebar>
+</div>
+<!-- /Right-bar -->

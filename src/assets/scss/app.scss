@@ -1,0 +1,80 @@
+/*
+Template Name: Minia - Admin & Dashboard Template
+Author: Themesbrand
+Version: 1.1.0
+Website: https://themesbrand.com/
+Contact: themesbrand@gmail.com
+File: Main Css File
+*/
+
+//Fonts
+@import "custom/fonts/fonts";
+//Core files
+@import "~/node_modules/bootstrap/scss/functions";
+@import "~/node_modules/bootstrap/scss/variables";
+@import "variables";
+@import "~/node_modules/bootstrap/scss/mixins.scss";
+// Structure
+@import "custom/structure/general";
+@import "custom/structure/topbar";
+@import "custom/structure/page-head";
+@import "custom/structure/footer";
+@import "custom/structure/right-sidebar";
+@import "custom/structure/vertical";
+@import "custom/structure/horizontal-nav";
+@import "custom/structure/layouts";
+// Components
+@import "custom/components/waves";
+@import "custom/components/accordion";
+@import "custom/components/avatar";
+@import "custom/components/helper";
+@import "custom/components/modals";
+@import "custom/components/forms";
+@import "custom/components/widgets";
+@import "custom/components/toasts";
+@import "custom/components/demos";
+@import "custom/components/print";
+// Plugins
+@import "custom/plugins/custom-scrollbar";
+@import "custom/plugins/calendar";
+@import "custom/plugins/session-timeout";
+@import "custom/plugins/range-slider";
+@import "custom/plugins/sweatalert2";
+@import "custom/plugins/alertify";
+@import "custom/plugins/pristinejs";
+@import "custom/plugins/choices";
+@import "custom/plugins/switch";
+@import "custom/plugins/colorpicker";
+@import "custom/plugins/datepicker";
+@import "custom/plugins/form-editors";
+@import "custom/plugins/form-upload";
+@import "custom/plugins/form-wizard";
+@import "custom/plugins/datatable";
+@import "custom/plugins/responsive-table";
+@import "custom/plugins/table-editable";
+@import "custom/plugins/apexcharts";
+@import "custom/plugins/echarts";
+@import "custom/plugins/sparkline-chart";
+@import "custom/plugins/google-map";
+@import "custom/plugins/vector-maps";
+@import "custom/plugins/leaflet-maps";
+// Pages
+@import "custom/pages/authentication";
+@import "custom/pages/email";
+@import "custom/pages/chat";
+@import "custom/pages/coming-soon";
+@import "custom/pages/timeline";
+@import "custom/pages/extras-pages";
+// Custom Scss
+@import "./custom.scss";
+// RTL Scss
+// @import "./rtl/bootstrap-rtl";
+// @import "./rtl/components-rtl";
+// @import "./rtl/float-rtl";
+// @import "./rtl/general-rtl";
+// @import "./rtl/components-rtl";
+// @import "./rtl/pages-rtl";
+// @import "./rtl/plugins-rtl";
+// @import "./rtl/spacing-rtl";
+// @import "./rtl/structure-rtl";
+// @import "./rtl/text-rtl";

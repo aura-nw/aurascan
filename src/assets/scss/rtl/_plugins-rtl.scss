@@ -1,0 +1,66 @@
+//
+// plugins-rtl.scss
+//
+
+// lightbox
+
+.modal-video-close-btn {
+  left: 0px;
+  right: auto;
+
+  @media (orientation: landscape) {
+    right: auto;
+    left: -45px;
+  }
+}
+
+// rdw-editor
+
+.rdw-dropdown-carettoclose,
+.rdw-dropdown-carettoopen {
+  right: auto;
+  left: 10%;
+}
+
+// form wizard
+
+.twitter-bs-wizard {
+  .twitter-bs-wizard-nav {
+    .nav-link::after {
+      left: auto;
+      right: 62%;
+    }
+  }
+
+  .twitter-bs-wizard-pager-link li.next {
+    float: left;
+  }
+}
+
+
+// editor
+
+.ck.ck-toolbar>.ck-toolbar__items {
+  flex-direction: row-reverse !important;
+}
+
+.ck.ck-editor__editable_inline {
+  text-align: right !important;
+}
+
+.ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_ne,
+.ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se {
+  right: 0;
+  left: auto !important;
+}
+
+
+.ng-select .ng-select-container .ng-value-container{
+    padding-right: 10px;
+    padding-left: 0;
+}
+
+.ck.ck-editor__editable_inline[dir="ltr"] {
+    text-align: right !important;
+}
+

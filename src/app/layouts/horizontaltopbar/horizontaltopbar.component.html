@@ -1,0 +1,196 @@
+<header id="page-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a routerLink="/" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo_akaChain.png" alt="" height="24">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo_akaChain.png" alt="" height="24"> <span class="logo-txt">akaChain EXPLORE</span>
+                    </span>
+                </a>
+
+                <a routerLink="/" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo_akaChain.png" alt="" height="24">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo_akaChain.png" alt="" height="24"> <span class="logo-txt">akaChain EXPLORE</span>
+                    </span>
+                </a>
+            </div>
+
+            <button type="button" class="btn btn-sm px-3 font-size-16 header-item d-lg-none" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+
+            <!-- App Search-->
+            <form class="app-search d-none d-lg-block">
+                <div class="d-flex">
+                    <div class="position-relative">
+                        <input type="text" class="form-control" placeholder="{{'HEADER.SEARCH' | translate}}" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}" (keyup.enter)="handleSearch()">
+                        <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle" (click)="handleSearch()"></i></button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="d-flex">
+
+            <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
+                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                    <img [src]="currentNetwork.icon" height="15" alt="Github"> {{currentNetwork.label}} <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" ngbDropdownMenu>
+                    <div class="p-2">
+                        <div class="row g-0">
+                            <div class="col" *ngFor="let item of networks; index as i" (click)="onSelectNetwork(item)">
+                                <a class="dropdown-icon-item" href="javascript:void(0)">
+                                    <img [src]="item.icon" alt="logo" height="15">
+                                    <span>{{item.label}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
+                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                 {{currentChanel?.name}} <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" ngbDropdownMenu>
+                    <div class="p-2">
+                        <div class="row g-0">
+                            <div class="col-6" *ngFor="let item of listChannel; index as i" (click)="onSelectChanel(item)">
+                                <a class="dropdown-icon-item" href="javascript:void(0)">
+                                    <!-- <img [src]="item.icon" alt="logo" height="15"> -->
+                                    <span>{{item?.name}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block d-lg-none ms-2" ngbDropdown>
+                <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                    <i-feather name="search" class="icon-lg"></i-feather>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown" ngbDropdownMenu>
+                    <form class="p-3">
+                        <div class="form-group m-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="{{'HEADER.SEARCH' | translate}}" aria-label="Search Result">
+                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- <div class="dropdown d-none d-sm-inline-block" ngbDropdown>
+                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                    <img *ngIf="flagvalue !== undefined" src="{{flagvalue}}" alt="Header Language" height="16">
+                    <img *ngIf="flagvalue === undefined" src="{{valueset}}" alt="Header Language" height="16"> ENG
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a href="javascript:void(0);" class="dropdown-item notify-item" *ngFor="let item of listLang" (click)="setLanguage(item.text, item.lang, item.flag)" [ngClass]="{'active': cookieValue === item.lang}">
+                        <img src="{{item.flag}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">{{item.text}}</span>
+                    </a>
+                </div>
+            </div> -->
+
+            <!-- <div class="dropdown d-none d-sm-inline-block">
+                <button type="button" class="btn header-item" id="mode-setting-btn">
+                    <ng-container *ngIf="layoutMode == 'light'">
+                        <i-feather name="moon" class="icon-lg" (click)="changeMode('dark')"></i-feather>
+                    </ng-container>
+                    <ng-container *ngIf="layoutMode == 'dark'">
+                        <i-feather name="sun" class="icon-lg" (click)="changeMode('light')"></i-feather>
+                    </ng-container>
+                </button>
+            </div> -->
+
+
+            <!-- <div class="dropdown d-inline-block" ngbDropdown>
+                <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                    <img class="rounded-circle header-profile-user" src="https://picsum.photos/200/200"
+                        alt="Header Avatar">
+                    <span class="d-none d-xl-inline-block ms-1 fw-medium">Shawn L.</span>
+                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                    Login
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a class="dropdown-item" routerLink=".apps/profile"><i
+                            class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                    <a class="dropdown-item" routerLink="account/lock-screen"><i
+                            class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="javascript: void(0);" (click)="logout()"><i
+                            class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span
+                            class="align-middle" key="t-logout">{{ 'MENUITEMS.AUTHENTICATION.LIST.LOGOUT' | translate}}</span></a>
+                </div>
+            </div> -->
+            <!-- <button type="button" class="btn header-item bg-soft-light border-start border-end" [routerLink]="'/account/login'">
+                Login
+            </button> -->
+        </div>
+    </div>
+</header>
+<div class="topnav">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
+            <div class="collapse navbar-collapse active" id="topnav-menu-content">
+                <ul class="navbar-nav">
+                    <ng-container *ngFor="let item of menuItems">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" *ngIf="!item.subItems" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components" [routerLink]="item.link" [routerLinkActive]="['active']" role="button">
+                                <i-feather name="{{ item.icon }}"></i-feather>{{ item.label | translate}}
+                                <div class="arrow-down" *ngIf="hasItems(item)"></div>
+                            </a>
+
+                            <a *ngIf="item.subItems" class="nav-link dropdown-toggle arrow-none" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components" role="button">
+                                <i-feather name="{{ item.icon }}"></i-feather>
+                                {{item.label | translate }}
+                                <div class="arrow-down"></div>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="topnav-dashboard" *ngIf="hasItems(item)">
+                                <ng-template ngFor let-i="index" let-subitem [ngForOf]="item.subItems">
+                                    <a class="col dropdown-item side-nav-link-ref" *ngIf="!hasItems(subitem)" href="javascript: void(0);" [routerLink]="subitem.link" routerLinkActive="active">{{subitem.label | translate }}</a>
+
+                                    <div class="dropdown" *ngIf="hasItems(subitem)">
+                                        <a class="dropdown-item dropdown-toggle" href="javascript: void(0);" (click)="onMenuClick($event)">{{ subitem.label | translate }}
+                                            <div class="arrow-down"></div>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <ng-template ngFor let-subSubitem [ngForOf]="subitem.subItems">
+                                                <a class="dropdown-item side-nav-link-ref" *ngIf="!hasItems(subSubitem)" href="javascript: void(0);" [routerLink]="subSubitem.link" routerLinkActive="active">{{ subSubitem.label | translate }}</a>
+                                                <div class="dropdown" *ngIf="hasItems(subSubitem)">
+
+                                                    <a class="dropdown-item dropdown-toggle" href="javascript: void(0);" (click)="onMenuClick($event)">{{ subSubitem.label | translate }}
+                                                        <div class="arrow-down"></div>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <ng-template ngFor let-subSubSubitem [ngForOf]="subSubitem.subItems">
+                                                            <a class="dropdown-item side-nav-link-ref" href="javascript: void(0);" [routerLink]="subSubSubitem.link" routerLinkActive="active">{{ subSubSubitem.label | translate }}</a>
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>

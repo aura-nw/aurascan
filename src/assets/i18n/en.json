@@ -1,0 +1,246 @@
+{
+    "HEADER": {
+        "SEARCH": "Search by Block, Txn Hash,...",
+        "MEGA_MENU": "Mega Menu",
+        "NOTIFICATIONS": {
+            "TITLE": "Notifications",
+            "VIEW_ALL": "View All",
+            "LOAD_MORE": "View More..",
+            "FIRST": {
+                "TITLE": "Your order is placed",
+                "TEXT": "If several languages coalesce the grammar",
+                "TIME": "3 min ago"
+            },
+            "SECOND": {
+                "TITLE": "James Lemire",
+                "TEXT": "It will seem like simplified English.",
+                "TIME": "1 hours ago"
+            },
+            "THIRD": {
+                "TITLE": "Your item is shipped",
+                "TEXT": "If several languages coalesce the grammar",
+                "TIME": "3 min ago"
+            },
+            "FOUR": {
+                "TITLE": "Salena Layfield",
+                "TEXT": "As a skeptical Cambridge friend of mine occidental.",
+                "TIME": "1 hours ago"
+            }
+        }
+    },
+    "RIGHTSIDEBAR": {
+        "LAYOUT": {
+            "TEXT": "Layout",
+            "LIST": {
+                "VERTICAL": "Vertical",
+                "HORIZONTAL": "Horizontal"
+            }
+        },
+        "LAYOUTMODE": {
+            "TEXT": "Layout Mode",
+            "LIST": {
+                "LIGHT": "Light",
+                "DARK": "Dark"
+            }
+        },
+        "LAYOUTWIDTH": {
+            "TEXT": "Layout Width",
+            "LIST": {
+                "FLUID": "Fluid",
+                "BOXED": "Boxed"
+            }
+        },
+        "LAYOUTPOSITION": {
+            "TEXT": "Layout Position",
+            "LIST": {
+                "FIXED": "Fixed",
+                "SCROLLABLE": "Scrollable"
+            }
+        },
+        "TOPBARCOLOR": {
+            "TEXT": "Topbar Color",
+            "LIST": {
+                "LIGHT": "Light",
+                "DARK": "Dark"
+            }
+        },
+        "SIDEBARSIZE": {
+            "TEXT": "Sidebar Size",
+            "LIST": {
+                "DEFAULT": "Default",
+                "COMPACT": "Compact",
+                "SMALL": "Small"
+            }
+        },
+        "SIDEBARCOLOR": {
+            "TEXT": "Sidebar Color",
+            "LIST": {
+                "LIGHT": "Light",
+                "DARK": "Dark",
+                "BRAND": "Brand"
+            }
+        }
+    },
+    "MENUITEMS": {
+        "DASHBOARDS": {
+            "TEXT": "Dashboard",
+            "BADGE": "04"
+        },
+        "NETWORK": {
+            "TEXT": "Network",
+            "BADGE": "03"
+        },
+        "BLOCKS": {
+            "TEXT": "Blocks",
+            "BADGE": "02"
+        },
+        "TRANSACTION": {
+            "TEXT": "Transaction",
+            "BADGE": "01"
+        },
+        "CHAINCODE": {
+            "TEXT": "Chaincodes",
+            "BADGE": "04"
+        },
+        "CHANEL": {
+            "TEXT": "Chanels",
+            "BADGE": "04"
+        },
+        "USER_MANAGEMENT": {
+            "TEXT": "User management",
+            "BADGE": "04"
+        },
+        "APPS": {
+            "TEXT": "Apps",
+            "LIST": {
+                "CALENDAR": "Calendar",
+                "CHAT": "Chat",
+                "EMAIL": "Email",
+                "INBOX": "Inbox",
+                "READEMAIL": "Read Email",
+                "INVOICES": "Invoices",
+                "INVOICELIST": "Invoice List",
+                "INVOICEDETAIL": "Invoice Detail",
+                "CONTACTS": "Contacts",
+                "USERGRID": "User Grid",
+                "USERLIST": "User List",
+                "PROFILE": "Profile"
+            }
+        },
+        "AUTHENTICATION": {
+            "TEXT": "Authentication",
+            "BADGE": "New",
+            "LIST": {
+                "LOGIN": "Login",
+                "REGISTER": "Register",
+                "RECOVERPWD": "Recover Password",
+                "LOCKSCREEN": "Lock screen",
+                "LOGOUT": "Log Out",
+                "CONFIRMMAIL": "Confirm Mail",
+                "EMAILVERIFICATION": "Email Verification",
+                "TWOSTEPVERIFICATION": "Two Step Verification"
+            }
+        },
+        "PAGES": {
+            "TEXT": "Pages",
+            "LIST": {
+                "STARTER": "Starter Page",
+                "MAINTENANCE": "Maintenance",
+                "TIMELINE": "Timeline",
+                "FAQS": "FAQs",
+                "PRICING": "Pricing",
+                "ERROR404": "Error 404",
+                "ERROR500": "Error 500"
+            }
+        },
+        "HORIZONTAL": {
+            "TEXT": "Horizontal"
+        },
+        "COMPONENTS": {
+            "TEXT": "Components",
+            "LIST": {
+                "ALERTS": "Alerts",
+                "BUTTONS": "Buttons",
+                "CARDS": "Cards",
+                "CAROUSEL": "Carousel",
+                "DROPDOWNS": "Dropdowns",
+                "GRID": "Grid",
+                "IMAGES": "Images",
+                "MODALS": "Modals",
+                "PROGRESSBAR": "Progress Bars",
+                "TABS": "Tabs & Accordions",
+                "TYPOGRAPHY": "Typography",
+                "VIDEO": "Video",
+                "GENERAL": "General",
+                "COLORS": "Colors"
+            }
+        },
+        "EXTENDED": {
+            "TEXT": "Extended",
+            "LIST": {
+                "LIGHTBOX": "LightBox",
+                "RANGESLIDER": "Range Slider",
+                "SWEETALERT": "Sweet Alert",
+                "RATING": "Rating",
+                "NOTIFICATION": "Notification"
+            }
+        },
+        "FORMS": {
+            "TEXT": "Forms",
+            "BADGE": "7",
+            "LIST": {
+                "ELEMENTS": "Basic Elements",
+                "VALIDATION": "Validation",
+                "ADVANCED": "Advanced Plugin",
+                "EDITOR": "Editors",
+                "FILEUPLOAD": "File Upload",
+                "WIZARD": "Wizard",
+                "MASK": "Form Mask"
+            }
+        },
+        "TABLES": {
+            "TEXT": "Tables",
+            "LIST": {
+                "BASIC": "Bootstrap Basic",
+                "ADVANCED": "DataTables"
+            }
+        },
+        "CHARTS": {
+            "TEXT": "Charts",
+            "LIST": {
+                "APEX": "Apexcharts",
+                "CHARTJS": "Chartjs",
+                "ECHARTS": "Echarts"
+            }
+        },
+        "ICONS": {
+            "TEXT": "Icons",
+            "LIST": {
+                "BOXICONS": "Boxicons",
+                "MATERIALDESIGN": "Material Design",
+                "DRIPICONS": "Dripicons",
+                "FONTAWESOME": "Font Awesome"
+            }
+        },
+        "MAPS": {
+            "TEXT": "Maps",
+            "LIST": {
+                "GOOGLEMAP": "Google",
+                "LEAFLET": "Leaflet"
+            }
+        },
+        "MULTILEVEL": {
+            "TEXT": "Multi Level",
+            "LIST": {
+                "LEVEL1": {
+                    "1": "Level 1.1",
+                    "2": "Level 1.2",
+                    "LEVEL2": {
+                        "1": "Level 2.1",
+                        "2": "Level 2.2"
+                    }
+                }
+            }
+        }
+    }
+}

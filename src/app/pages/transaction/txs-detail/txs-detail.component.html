@@ -1,0 +1,78 @@
+<app-pagetitle title="TRANSACTION DETAILS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<div class="card">
+    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+        Transaction Information
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Transaction Hash</p>
+            </div>
+            <div class="col-6">{{item?.tx_hash}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Block Height</p>
+            </div>
+            <div class="col-6">{{item?.height}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Payload Proposal Hash</p>
+            </div>
+            <div class="col-6">{{item?.payload_proposal_hash}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Peer Name</p>
+            </div>
+            <div class="col-6">{{item?.creator_msp_id}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Result</p>
+            </div>
+            <div class="col-6">{{item?.validation_code}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Endorser</p>
+            </div>
+            <div class="col-6">{{item?.endorser_msp_id}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Chaincode Name</p>
+            </div>
+            <div class="col-6">{{item?.chaincodename}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Type</p>
+            </div>
+            <div class="col-6">{{item?.type}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Time</p>
+            </div>
+            <div class="col-6">{{item?.timestamp}}({{item?.timestamp | calDate}} ago)</div>
+        </div>
+    </div>
+</div>
+<div class="card" *ngIf="item?.read_set">
+    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+        Read
+    </div>
+    <div class="card-body">
+        <ngx-json-viewer [json]="item?.read_set"></ngx-json-viewer>
+    </div>
+</div>
+<div class="card" *ngIf="item?.write_set">
+    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+        Write
+    </div>
+    <div class="card-body" *ngIf="item?.write_set">
+        <ngx-json-viewer [json]="item?.write_set"></ngx-json-viewer>
+    </div>
+</div>

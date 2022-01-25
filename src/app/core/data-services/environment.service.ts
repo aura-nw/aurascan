@@ -1,0 +1,35 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+export interface IApiUrl {
+  fabric: string;
+  cosmos: string;
+}
+@Injectable({
+  providedIn: 'root',
+})
+export class EnvironmentService {
+  public apiUrl: BehaviorSubject<IApiUrl>;
+
+  constructor(private http: HttpClient) {
+    this.apiUrl = new BehaviorSubject<IApiUrl>({
+      fabric: '',
+      cosmos: ''
+    });
+  }
+
+  load(): Promise<unknown> {
+    return this.http.get('./assets/config/config.json')
+      .toPromise()
+      .then((config: any) => {
+        const data = {
+          fabric: config['fabric'],
+          cosmos: config['cosmos'],
+        };
+        this.apiUrl.next(data);
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
+  }
+}
