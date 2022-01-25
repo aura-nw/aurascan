@@ -5,7 +5,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 
 @Injectable()
 export class CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.fabric}`;
+  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
 
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
@@ -14,7 +14,7 @@ export class CommonService {
     private environmentService: EnvironmentService
   ) {
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
-    this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 1);
+    this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
     this.networkQueryOb = this.networkQuerySubject.asObservable();
   }
 

@@ -38,7 +38,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   valueset: any;
   networks = NETWORK;
   listChannel;
-  currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[0];
+  currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
   currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
 
@@ -71,9 +71,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.activateMenu();
       }
     });
-    if (this.currentChanel?.channel_genesis_hash) {
-      this.authService.change({ channel_genesis_hash: this.currentChanel.channel_genesis_hash });
-    }
+    // if (this.currentChanel?.channel_genesis_hash) {
+    //   this.authService.change({ channel_genesis_hash: this.currentChanel.channel_genesis_hash });
+    // }
 
   }
 
@@ -109,7 +109,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
    */
   initialize(): void {
     this.menuItems = MENU;
-    this.getList();
+    // this.getList();
   }
 
   getList(): void {

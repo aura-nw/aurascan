@@ -40,7 +40,7 @@
 
         <div class="d-flex">
 
-            <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
+            <!-- <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
                 <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
                     <img [src]="currentNetwork.icon" height="15" alt="Github"> {{currentNetwork.label}} <i class="mdi mdi-chevron-down"></i>
                 </button>
@@ -56,9 +56,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
+            <!-- <div class="dropdown d-none d-lg-inline-block ms-1" ngbDropdown>
                 <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
                  {{currentChanel?.name}} <i class="mdi mdi-chevron-down"></i>
                 </button>
@@ -67,14 +67,13 @@
                         <div class="row g-0">
                             <div class="col-6" *ngFor="let item of listChannel; index as i" (click)="onSelectChanel(item)">
                                 <a class="dropdown-icon-item" href="javascript:void(0)">
-                                    <!-- <img [src]="item.icon" alt="logo" height="15"> -->
                                     <span>{{item?.name}}</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="dropdown d-inline-block d-lg-none ms-2" ngbDropdown>
                 <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
