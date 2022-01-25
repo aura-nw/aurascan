@@ -29,6 +29,6 @@ jobs:
           ./ci/build.sh
       - name: Update manifest
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.GITOPS_PASSWORD }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.REGISTRY_PASSWORD }}
         run: |
           ./ci/updateManifest.sh
