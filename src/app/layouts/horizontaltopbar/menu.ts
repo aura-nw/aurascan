@@ -24,19 +24,19 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.TRANSACTION.TEXT',
         icon: 'repeat',
         link: '/transaction',
-    },
-    {
-        id: 5,
-        label: 'MENUITEMS.CHAINCODE.TEXT',
-        icon: 'link',
-        link: '/chaincodes',
-    },
-    {
-        id: 6,
-        label: 'MENUITEMS.CHANEL.TEXT',
-        icon: 'refresh-cw',
-        link: '/chanels',
-    },
+    }
+    // {
+    //     id: 5,
+    //     label: 'MENUITEMS.CHAINCODE.TEXT',
+    //     icon: 'link',
+    //     link: '/chaincodes',
+    // },
+    // {
+    //     id: 6,
+    //     label: 'MENUITEMS.CHANEL.TEXT',
+    //     icon: 'refresh-cw',
+    //     link: '/chanels',
+    // },
     // {
     //     id: 7,
     //     label: 'MENUITEMS.USER_MANAGEMENT.TEXT',

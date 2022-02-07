@@ -7,7 +7,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    apiUrl = `https://fabric-explorerv2-dev.akachains.io/v1`;
+    apiUrl = `https://fabric-Aura EXPLORERrv2-dev.akachains.io/v1`;
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
