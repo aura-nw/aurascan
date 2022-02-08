@@ -17,11 +17,9 @@ export class TransactionComponent implements OnInit {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'creator_msp_id', headerCellDef: 'Peer Name' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'Transaction Hash' },
     { matColumnDef: 'height', headerCellDef: 'Block Height' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Transaction Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'validation_code', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);

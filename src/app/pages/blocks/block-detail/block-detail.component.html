@@ -6,45 +6,51 @@
     <div class="card-body">
         <div class="row mb-3">
             <div class="col-3">
-                <p class="card-text fw-bold">Block Height</p>
+                <p class="card-text fw-bold">Chain Id</p>
+            </div>
+            <div class="col-6">{{item?.chainid}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Height</p>
             </div>
             <div class="col-6">{{item?.height}}</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
-                <p class="card-text fw-bold">Chanel</p>
-            </div>
-            <div class="col-6">{{item?.name}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Number of Transactions</p>
-            </div>
-            <div class="col-6">{{item?.num_txs}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Data Hash</p>
-            </div>
-            <div class="col-6">{{item?.data_hash}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Previous Hash</p>
-            </div>
-            <div class="col-6">{{item?.pre_hash}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Created Time</p>
+                <p class="card-text fw-bold">Block Time</p>
             </div>
             <div class="col-6">{{item?.timestamp}} ({{item?.timestamp | calDate}} ago)</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
-                <p class="card-text fw-bold">Size</p>
+                <p class="card-text fw-bold">Block Hash</p>
             </div>
-            <div class="col-6">{{item?.block_size}} KB</div>
+            <div class="col-6">{{item?.block_hash}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Number of Tx</p>
+            </div>
+            <div class="col-6">{{item?.num_txs}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Gas (used / wanted)</p>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Block Round</p>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Proposer</p>
+            </div>
+            <div class="col-6">{{item?.proposer}}ß</div>
         </div>
     </div>
 </div>
