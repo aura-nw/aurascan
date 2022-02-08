@@ -86,8 +86,8 @@
             "TEXT": "Dashboard",
             "BADGE": "04"
         },
-        "NETWORK": {
-            "TEXT": "Network",
+        "VALIDATORS": {
+            "TEXT": "Validators",
             "BADGE": "03"
         },
         "BLOCKS": {

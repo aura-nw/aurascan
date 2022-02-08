@@ -36,6 +36,16 @@ export class CommonService {
     return this.http.get<any>(`${this.apiUrl}/blocks/${height}`);
   }
 
+  validators(): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/validators`);
+  }
+
+  validatorsDetail(address): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
+  }
+
   getBlocksPer(type): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);

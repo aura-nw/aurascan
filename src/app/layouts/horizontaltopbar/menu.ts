@@ -9,9 +9,9 @@ export const MENU: MenuItem[] = [
     },
     {
         id: 2,
-        label: 'MENUITEMS.NETWORK.TEXT',
+        label: 'MENUITEMS.VALIDATORS.TEXT',
         icon: 'layers',
-        link: '/network',
+        link: '/validators',
     },
     {
         id: 3,

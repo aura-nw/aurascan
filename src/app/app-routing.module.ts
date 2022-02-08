@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: '', component: LayoutComponent, loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
   // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: LayoutComponent, loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
-  { path: 'network', component: LayoutComponent, loadChildren: () => import('./pages/network/network.module').then(m => m.NetworkModule) },
+  { path: 'validators', component: LayoutComponent, loadChildren: () => import('./pages/validators/validators.module').then(m => m.ValidatorsModule) },
   { path: 'blocks', component: LayoutComponent, loadChildren: () => import('./pages/blocks/blocks.module').then(m => m.BlocksModule) },
   { path: 'transaction', component: LayoutComponent, loadChildren: () => import('./pages/transaction/transaction.module').then(m => m.TransactionModule) },
   { path: 'chaincodes', component: LayoutComponent, loadChildren: () => import('./pages/chaincodes/chaincodes.module').then(m => m.ChaincodesModule) },
