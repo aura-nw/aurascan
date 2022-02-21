@@ -17,9 +17,12 @@ export class TransactionComponent implements OnInit {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'Transaction Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'validation_code', headerCellDef: 'Result' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -57,7 +60,13 @@ export class TransactionComponent implements OnInit {
       );
   }
 
-  openTxsDetail(data) {
-    this.router.navigate(['transaction', data.tx_hash]);
+  openTxsDetail(event: any, data: any) {
+    const linkHash = event?.target.classList.contains('hash-link');
+    const linkBlock = event?.target.classList.contains('block-link');
+    if (linkHash) {
+      this.router.navigate(['transaction', data.tx_hash]);
+    } else if (linkBlock) {
+      this.router.navigate(['blocks', data.height]);
+    }
   }
 }

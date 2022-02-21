@@ -16,7 +16,7 @@ export class BlocksComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Block Height' },
     { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
-    // { matColumnDef: 'peer_name', headerCellDef: 'Peer Name' },
+    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];

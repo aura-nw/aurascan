@@ -13,7 +13,11 @@
                         <div *ngSwitchCase="'timestamp'">
                             <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
                         </div>
-                        <div *ngSwitchCase="'tx_hash'" class="g-blue">
+                        <div *ngSwitchCase="'tx_hash'" class="g-blue cursor-pointer hash-link">
+                            {{ (data[template.matColumnDef] | slice:0:6) + '...' + (data[template.matColumnDef] |
+                            slice:data[template.matColumnDef].length-6:data[template.matColumnDef].length) }}
+                        </div>
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                             {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
@@ -25,7 +29,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns" (click)="openTxsDetail($event, row)"></tr>
     <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell g-no-data" colspan="9999">
             {{"NO DATA" | translate}}
