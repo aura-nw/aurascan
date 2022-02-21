@@ -60,13 +60,7 @@ export class TransactionComponent implements OnInit {
       );
   }
 
-  openTxsDetail(event: any, data: any) {
-    const linkHash = event?.target.classList.contains('hash-link');
-    const linkBlock = event?.target.classList.contains('block-link');
-    if (linkHash) {
-      this.router.navigate(['transaction', data.tx_hash]);
-    } else if (linkBlock) {
-      this.router.navigate(['blocks', data.height]);
-    }
+  openTxsDetail(data) {
+    this.router.navigate(['transaction', data.tx_hash]);
   }
 }
