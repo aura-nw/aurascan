@@ -12,9 +12,9 @@ import { LanguageService } from '../../core/services/language.service';
 import { EventService } from '../../core/services/event.service';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { LAYOUT_MODE } from "../layouts.model";
-import { NETWORK } from 'src/app/core/constants/common.constant';
-import { CommonService } from 'src/app/core/services/common.service';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NETWORK } from '../../../app/core/constants/common.constant';
+import { CommonService } from '../../../app/core/services/common.service';
+import { EnvironmentService } from '../../../app/core/data-services/environment.service';
 import { first } from 'rxjs/operators';
 
 @Component({

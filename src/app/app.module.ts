@@ -52,6 +52,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { EnvironmentService } from './core/data-services/environment.service';
 import { NgProgressModule } from "ngx-progressbar";
 import { LoadingInterceptor } from './core/directives/loading.interceptor';
+import { CommonService } from './core/services/common.service';
 // if (environment.defaultauth === 'firebase') {
 //   initFirebaseBackend(environment.firebaseConfig);
 // } else {
@@ -149,6 +150,7 @@ export class MaterialModule { }
       useClass: LoadingInterceptor,
       multi: true
     },
+    CommonService
   ],
   bootstrap: [AppComponent]
 })

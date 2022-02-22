@@ -3,9 +3,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-
+import { TransactionService } from '../../../app/core/services/transaction.service';
+import { TableTemplate } from '../../../app/core/models/common.model';
+import { CommonService } from '../../../app/core/services/common.service';
 
 @Component({
   selector: 'app-transaction',
@@ -30,7 +30,8 @@ export class TransactionComponent implements OnInit {
   pageSizeOptions = [10, 25, 50, 100];
   constructor(
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private transactionService: TransactionService
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class TransactionComponent implements OnInit {
   }
 
   getList(): void {
-    this.commonService
+    this.transactionService
       .txs(this.pageSize, this.pageIndex)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);
