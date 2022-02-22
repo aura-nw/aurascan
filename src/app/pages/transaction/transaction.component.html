@@ -20,6 +20,9 @@
                         <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                             {{ data[template.matColumnDef] }}
                         </div>
+                        <div *ngSwitchCase="'type'" class="g-type">
+                            {{ data[template.matColumnDef] }}
+                        </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>
                     </ng-container>
@@ -37,6 +40,3 @@
     </tr>
 
 </table>
-
-<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
-</mat-paginator>

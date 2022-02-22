@@ -29,7 +29,7 @@ export class TransactionComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
   length;
-  pageSize = 10;
+  pageSize = 20;
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
   typeTransaction = TYPE_TRANSACTION;

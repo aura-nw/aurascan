@@ -261,6 +261,9 @@
                                             <div *ngSwitchCase="'tx_hash'" class="g-ellipsis g-blue">
                                                 {{ data[template.matColumnDef] }}
                                             </div>
+                                            <div *ngSwitchCase="'type'" class="g-type">
+                                                {{ data[template.matColumnDef] }}
+                                            </div>
                                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                                             </div>
                                         </ng-container>

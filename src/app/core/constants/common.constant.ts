@@ -62,5 +62,6 @@ export const TYPE_TRANSACTION = [
     { label: '/AURANW.AURA.WASM.MSGSTORECODE', value: 'Store Code' },
     { label: '/AURANW.AURA.WASM.MSGINSTANTIATECONTRACT', value: 'Instantiate Contract' },
     { label: '/AURANW.AURA.WASM.MSGEXECUTECONTRACT', value: 'Execute Contract' },
-    { label: '/cosmos.distribution.v1beta1.MsgSetWithdrawAddress', value: 'Modify Withdraw Address' }
+    { label: '/cosmos.distribution.v1beta1.MsgSetWithdrawAddress', value: 'Modify Withdraw Address' },
+    { label: 'FAILED', value: 'Fail' }
   ]
