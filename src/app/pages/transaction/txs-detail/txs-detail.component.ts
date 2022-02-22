@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
+import { TransactionService } from '../../../../app/core/services/transaction.service';
 
 @Component({
   selector: 'app-txs-detail',
@@ -21,14 +18,14 @@ export class TxsDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private commonService: CommonService) { }
+    private transactionService: TransactionService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetail();
   }
   getDetail(): void {
-    this.commonService
+    this.transactionService
       .txsDetail(this.id)
       .subscribe(res => {
         this.item = res.data;

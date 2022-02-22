@@ -2,16 +2,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
+import { TableTemplate } from '../../../app/core/models/common.model';
+import { CommonService } from '../../../app/core/services/common.service';
 import { Router } from '@angular/router';
+import { ValidatorService } from '../../../app/core/services/validator.service';
 
 @Component({
   selector: 'app-validators',
   templateUrl: './validators.component.html',
   styleUrls: ['./validators.component.scss']
 })
-export class validatorsComponent implements OnInit {
+export class ValidatorsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'title', headerCellDef: 'Title' },
@@ -36,6 +37,7 @@ export class validatorsComponent implements OnInit {
   constructor(
     private commonService: CommonService,
     private router: Router,
+    private validatorService: ValidatorService
     ) { }
 
   ngOnInit(): void {
@@ -52,7 +54,7 @@ export class validatorsComponent implements OnInit {
   }
 
   getList(): void {
-    this.commonService
+    this.validatorService
       .validators()
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);

@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from '../../../../app/core/services/common.service';
+import { TableTemplate } from '../../../../app/core/models/common.model';
+import { BlockService } from '../../../../app/core/services/block.service';
 
 @Component({
   selector: 'app-block-detail',
@@ -23,9 +23,9 @@ export class BlockDetailComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'status', headerCellDef: 'Result' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'fee', headerCellDef: 'Fee' },
+    { matColumnDef: 'validation_code', headerCellDef: 'Result' },
+    { matColumnDef: 'abc', headerCellDef: 'Amount' },
+    { matColumnDef: 'cde', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
@@ -36,17 +36,19 @@ export class BlockDetailComponent implements OnInit {
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router,
-    private commonService: CommonService) {
+    private blockService: BlockService) {
   }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetail();
   }
+
   getDetail(): void {
-    this.commonService
+    this.blockService
       .blockDetail(this.id)
       .subscribe(res => {
         if (res.status === 404) {

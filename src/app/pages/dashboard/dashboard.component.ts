@@ -8,12 +8,14 @@ import {
   ChartType,
   ApexStroke
 } from 'ng-apexcharts';
-import { CommonService } from 'src/app/core/services/common.service';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from '../../../app/core/services/common.service';
+import { TableTemplate } from '../../../app/core/models/common.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthenticationService } from 'src/app/core/services/auth.service';
+import { AuthenticationService } from '../../../app/core/services/auth.service';
+import { BlockService } from '../../../app/core/services/block.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/common.constant';
 
 export type ChartOptions = {
@@ -30,7 +32,6 @@ export type ChartOptions = {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-
 
 export class DashboardComponent implements OnInit {
   block_height;
@@ -83,7 +84,9 @@ export class DashboardComponent implements OnInit {
     private commonService: CommonService,
     private datePipe: DatePipe,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private blockService: BlockService,
+    private transactionService: TransactionService
   ) {
   }
 
@@ -145,7 +148,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getListBlock(): void {
-    this.commonService
+    this.blockService
       .blocks(5, 0)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);
@@ -154,7 +157,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getListTransaction(): void {
-    this.commonService
+    this.transactionService
       .txs(5, 0)
       .subscribe(res => {
         res.data.forEach((trans) => {
@@ -189,7 +192,7 @@ export class DashboardComponent implements OnInit {
 
   updateBlockAndTxs(type: string): void {
     this.chart = type;
-    this.commonService.getBlockAndTxs(type)
+    this.blockService.getBlockAndTxs(type)
       .subscribe(res => {
         const data0 = res[0].data.map(i => i.count);
         const data1 = res[1].data.map(i => i.count);
@@ -222,11 +225,9 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-
-
   getBlockPer(type: string): void {
     this.chart1 = type;
-    this.commonService
+    this.blockService
       .getBlocksPer(type)
       .subscribe(res => {
         const data = res.data.map(i => i.count);
@@ -288,7 +289,7 @@ export class DashboardComponent implements OnInit {
 
   getTxsPer(type): void {
     this.chart2 = type;
-    this.commonService
+    this.transactionService
       .getTxsPer(type)
       .subscribe(res => {
         const data = res.data.map(i => i.count);

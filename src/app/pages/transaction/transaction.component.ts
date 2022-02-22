@@ -3,10 +3,10 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/common.constant';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
-
 
 @Component({
   selector: 'app-transaction',
@@ -35,7 +35,8 @@ export class TransactionComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   constructor(
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private transactionService: TransactionService
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +53,7 @@ export class TransactionComponent implements OnInit {
   }
 
   getList(): void {
-    this.commonService
+    this.transactionService
       .txs(this.pageSize, this.pageIndex)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {

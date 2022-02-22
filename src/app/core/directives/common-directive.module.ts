@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NumberDirective } from 'src/shared/directives/number.directive';
+import { NumberDirective } from '../../../shared/directives/number.directive';
 
 
 

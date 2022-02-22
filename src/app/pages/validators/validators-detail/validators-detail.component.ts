@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
+import { TableTemplate } from '../../../../app/core/models/common.model';
+import { CommonService } from '../../../../app/core/services/common.service';
+import { ValidatorService } from '../../../../app/core/services/validator.service';
 
 @Component({
   selector: 'app-validators-detail',
@@ -36,9 +37,11 @@ export class ValidatorsDetailComponent implements OnInit {
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private validatorService: ValidatorService) {
   }
 
   ngOnInit(): void {
@@ -46,7 +49,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.getDetail();
   }
   getDetail(): void {
-    this.commonService
+    this.validatorService
       .validatorsDetail(this.id)
       .subscribe(res => {
         if (res.status === 404) {
