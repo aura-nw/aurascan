@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: ':id',
     component: BlockDetailComponent
+  },
+  {
+    path: 'id/:id',
+    component: BlockDetailComponent
   }
 ];
 

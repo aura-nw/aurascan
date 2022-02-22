@@ -29,7 +29,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns" (click)="openTxsDetail($event, row)"></tr>
     <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell g-no-data" colspan="9999">
             {{"NO DATA" | translate}}

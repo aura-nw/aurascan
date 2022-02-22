@@ -3,7 +3,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
+import { CommonService } from '../../../../app/core/services/common.service';
 
 @Component({
   selector: 'app-block-detail',
@@ -23,9 +23,9 @@ export class BlockDetailComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'validation_code', headerCellDef: 'Result' },
-    { matColumnDef: 'abc', headerCellDef: 'Amount' },
-    { matColumnDef: 'cde', headerCellDef: 'Fee' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];

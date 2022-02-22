@@ -87,3 +87,8 @@ export class SecondaryHistoryQueryDto {
   pageIndex: number;
   pageSize: number;
 }
+
+export class ResponseDto {
+  data: any;
+  meta: any;
+}
