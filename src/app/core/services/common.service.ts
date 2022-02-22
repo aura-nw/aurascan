@@ -5,14 +5,14 @@ import { EnvironmentService } from '../data-services/environment.service';
 
 @Injectable()
 export class CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
-
+  apiUrl = '';
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   constructor(
-    private http: HttpClient,
-    private environmentService: EnvironmentService
+    private _http: HttpClient,
+    private _environmentService: EnvironmentService
   ) {
+    this.apiUrl = `${this._environmentService.apiUrl.value.cosmos}`;
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
     this.networkQueryOb = this.networkQuerySubject.asObservable();
@@ -26,81 +26,32 @@ export class CommonService {
     this.networkQuerySubject.next(data);
   }
 
-  blocks(limit, offset): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks?limit=${limit}&offset=${offset}`);
-  }
-
-  blockDetail(height): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/${height}`);
-  }
-
-  validators(): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators`);
-  }
-
-  validatorsDetail(address): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
-  }
-
-  getBlocksPer(type): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-  }
-
-  txs(limit, offset): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/transactions?limit=${limit}&offset=${offset}`);
-  }
-
-  txsDetail(txhash): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/transactions/${txhash}`);
-  }
-
-  getTxsPer(type): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
-  }
-
   status(): Observable<any> {
     this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/status`);
+    return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
   channels(limit, offset): Observable<any> {
     this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/channels?limit=${limit}&offset=${offset}`);
+    return this._http.get<any>(`${this.apiUrl}/channels?limit=${limit}&offset=${offset}`);
   }
 
   chaincodes(limit, offset): Observable<any> {
     this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/chaincodes?limit=${limit}&offset=${offset}`);
+    return this._http.get<any>(`${this.apiUrl}/chaincodes?limit=${limit}&offset=${offset}`);
   }
 
   peers(limit, offset): Observable<any> {
     this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/peers?limit=${limit}&offset=${offset}`);
-  }
-
-  getBlockAndTxs(type): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    let character = this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    let characterHomeworld = this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
-
-    return forkJoin([character, characterHomeworld]);
+    return this._http.get<any>(`${this.apiUrl}/peers?limit=${limit}&offset=${offset}`);
   }
 
   setURL() {
     if (this.networkQuerySubject.value === 1) {
-      this.apiUrl = `${this.environmentService.apiUrl.value.fabric}`;
+      this.apiUrl = `${this._environmentService.apiUrl.value.fabric}`;
     }
     if (this.networkQuerySubject.value === 2) {
-      this.apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+      this.apiUrl = `${this._environmentService.apiUrl.value.cosmos}`;
     }
   }
 }

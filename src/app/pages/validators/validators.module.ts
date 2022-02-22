@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from 'src/app/app.module';
+import { MaterialModule } from '../../../app/app.module';
 import { NgxMaskModule } from 'ngx-mask';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonService } from 'src/app/core/services/common.service';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { validatorsComponent } from './validators.component';
+import { CommonService } from '../../../app/core/services/common.service';
+import { SharedModule } from '../../../app/shared/shared.module';
+import { ValidatorsComponent } from './validators.component';
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
+import { ValidatorService } from '../../../app/core/services/validator.service';
 
 @NgModule({
   declarations: [
-    validatorsComponent,
+    ValidatorsComponent,
     ValidatorsDetailComponent
   ],
   imports: [
@@ -27,6 +28,6 @@ import { ValidatorsRoutingModule } from './validators-routing.module';
     TranslateModule,
     SharedModule
   ],
-  providers: [CommonService]
+  providers: [CommonService, ValidatorService]
 })
 export class ValidatorsModule { }

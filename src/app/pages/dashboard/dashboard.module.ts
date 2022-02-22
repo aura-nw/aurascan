@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { WidgetModule } from 'src/app/shared/widget/widget.module';
+import { WidgetModule } from '../../../app/shared/widget/widget.module';
 import { CountToModule } from 'angular-count-to';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../../app/shared/shared.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CarouselModule } from 'ngx-owl-carousel-o';
@@ -14,14 +14,13 @@ import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { LightboxModule } from 'ngx-lightbox';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { MaterialModule } from 'src/app/app.module';
+import { MaterialModule } from '../../../app/app.module';
 import { NgxMaskModule } from 'ngx-mask';
-import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonService } from 'src/app/core/services/common.service';
-
-
+import { BlockService } from '../../../app/core/services/block.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 
 @NgModule({
   declarations: [
@@ -49,6 +48,6 @@ import { CommonService } from 'src/app/core/services/common.service';
     ReactiveFormsModule,
     TranslateModule
   ],
-  providers: [CommonService, DatePipe]
+  providers: [DatePipe, BlockService, TransactionService]
 })
 export class DashboardModule { }

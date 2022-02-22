@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
+import { TableTemplate } from '../../../app/core/models/common.model';
+import { CommonService } from '../../../app/core/services/common.service';
 
 @Component({
   selector: 'app-chanels',
