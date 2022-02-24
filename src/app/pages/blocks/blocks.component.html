@@ -7,11 +7,18 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
 
-            <td mat-cell *matCellDef="let data" class="cursor-pointer">
+            <td mat-cell *matCellDef="let data">
                 <div>
                     <ng-container [ngSwitch]="template.matColumnDef ">
-                        <div *ngSwitchCase="'height'" class="g-blue">
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                             {{ data[template.matColumnDef]}}
+                        </div>
+                        <div *ngSwitchCase="'block_hash'" class="g-blue cursor-pointer block-link">
+                            {{ (data[template.matColumnDef] | slice:0:6) + '...' + (data[template.matColumnDef] |
+                            slice:data[template.matColumnDef].length-6:data[template.matColumnDef].length) }}
+                        </div>
+                        <div *ngSwitchCase="'proposer'" class="g-blue cursor-pointer validator-link">
+                            {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'timestamp'">
                             <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
@@ -25,7 +32,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openBlockDetail(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openBlockDetail($event, row)"></tr>
     <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell g-no-data" colspan="9999">
             {{"NO DATA" | translate}}

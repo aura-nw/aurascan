@@ -4,9 +4,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/common.constant';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 
 @Component({
   selector: 'app-transaction',
@@ -33,6 +34,8 @@ export class TransactionComponent implements OnInit {
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
   typeTransaction = TYPE_TRANSACTION;
+  statusTransaction = StatusTransaction;
+
   constructor(
     private commonService: CommonService,
     private router: Router,
@@ -57,8 +60,9 @@ export class TransactionComponent implements OnInit {
       .txs(this.pageSize, this.pageIndex)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
-          const tempObj = this.typeTransaction.find(f => f.label === trans.type);
-          trans.type = tempObj?.value;
+          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          trans.type = typeTrans?.value;
+          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
         });
         
         this.dataSource = new MatTableDataSource(res.data);

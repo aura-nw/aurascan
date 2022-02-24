@@ -23,6 +23,10 @@
                         <div *ngSwitchCase="'type'" class="g-type">
                             {{ data[template.matColumnDef] }}
                         </div>
+                        <div *ngSwitchCase="'status'">
+                            <img [src]="data[template.matColumnDef] === statusTransaction.Success ? 'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                            {{ data[template.matColumnDef]}}
+                        </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>
                     </ng-container>

@@ -20,13 +20,16 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Status</p>
             </div>
-            <div class="col-6"></div>
+            <div class="col-6">
+                <img [src]="item?.code === codeTransaction.Success ? 'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                {{item?.status}}
+            </div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
                 <p class="card-text fw-bold">Height</p>
             </div>
-            <div class="col-6"><a routerLink="/blocks/id/{{item?.block.id}}"> {{item?.height}} </a></div>
+            <div class="col-6"><a routerLink="/blocks/id/{{item?.block.id}}">{{item?.height}}</a></div>
         </div>
         <div class="row mb-3">
             <div class="col-3">

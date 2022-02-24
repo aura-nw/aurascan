@@ -58,7 +58,13 @@ export class BlocksComponent implements OnInit {
       }
       );
   }
-  openBlockDetail(data){
-    this.router.navigate(['blocks', data.height]);
+  openBlockDetail(event: any, data: any) {
+    const linkValidator = event?.target.classList.contains('validator-link');
+    const linkBlock = event?.target.classList.contains('block-link');
+    if (linkValidator) {
+      this.router.navigate(['validators', data.operator_address]);
+    } else if (linkBlock) {
+      this.router.navigate(['blocks', data.height]);
+    }
   }
 }

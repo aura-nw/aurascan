@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../app/core/services/auth.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -161,8 +161,8 @@ export class DashboardComponent implements OnInit {
       .txs(5, 0)
       .subscribe(res => {
         res.data.forEach((trans) => {
-          const tempObj = this.typeTransaction.find(f => f.label === trans.type);
-          trans.type = tempObj?.value;
+          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          trans.type = typeTrans?.value;
         });
         this.dataSource2 = new MatTableDataSource(res.data);
       }

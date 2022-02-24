@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { ResponseDto } from 'src/app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 
 @Component({
@@ -15,6 +17,7 @@ export class TxsDetailComponent implements OnInit {
     { label: 'List' },
     { label: 'Detail', active: true }
   ];
+  codeTransaction = CodeTransaction;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -27,7 +30,8 @@ export class TxsDetailComponent implements OnInit {
   getDetail(): void {
     this.transactionService
       .txsDetail(this.id)
-      .subscribe(res => {
+      .subscribe((res: ResponseDto) => {
+        res.data.status = res.data.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
         this.item = res.data;
       },
       error => {
