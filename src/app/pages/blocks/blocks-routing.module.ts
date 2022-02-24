@@ -14,7 +14,7 @@ const routes: Routes = [
     component: BlockDetailComponent
   },
   {
-    path: 'id/:id',
+    path: 'id/:blockId',
     component: BlockDetailComponent
   }
 ];

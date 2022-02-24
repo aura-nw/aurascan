@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableTemplate } from '../../../../app/core/models/common.model';
+import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { BlockService } from '../../../../app/core/services/block.service';
 })
 export class BlockDetailComponent implements OnInit {
   id;
+  blockId;
   item;
   breadCrumbItems = [
     { label: 'Blocks' },
@@ -44,12 +45,25 @@ export class BlockDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
+    this.blockId = this.route.snapshot.paramMap.get('blockId');
     this.getDetail();
   }
 
   getDetail(): void {
+    if (this.id) {
+      this.getDetailByHeight();
+    } else if (this.blockId) {
+      this.getDetailById();
+    }
+  }
+
+  openTxsDetail(data) {
+    this.router.navigate(['transaction', data.tx_hash]);
+  }
+
+  getDetailById() {
     this.blockService
-      .blockDetail(this.id)
+      .blockDetailById(this.blockId)
       .subscribe(res => {
         if (res.status === 404) {
           this.router.navigate(['/']);
@@ -63,10 +77,25 @@ export class BlockDetailComponent implements OnInit {
         error => {
           this.router.navigate(['/']);
         }
-      )
+      );
   }
 
-  openTxsDetail(data) {
-    this.router.navigate(['transaction', data.tx_hash]);
+  getDetailByHeight() {
+    this.blockService
+      .blockDetail(this.id)
+      .subscribe((res: ResponseDto) => {
+        if (res.status === 404) {
+          this.router.navigate(['/']);
+          return;
+        }
+        this.item = res.data;
+        this.dataSource = new MatTableDataSource(res.data?.txs);
+        this.length = res.data?.txs.length;
+        this.dataSource.sort = this.sort;
+      },
+        error => {
+          this.router.navigate(['/']);
+        }
+      );
   }
 }

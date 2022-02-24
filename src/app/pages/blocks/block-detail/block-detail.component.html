@@ -1,4 +1,4 @@
-<app-pagetitle title="Details for Block #{{id}}" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Details for Block #{{id || item?.height}}" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <div class="card">
     <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
         Header

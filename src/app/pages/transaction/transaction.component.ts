@@ -74,7 +74,7 @@ export class TransactionComponent implements OnInit {
     if (linkHash) {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
-      this.router.navigate(['blocks/id', data.height]);
+      this.router.navigate(['blocks/id', data.blockId]);
     }
   }
 }

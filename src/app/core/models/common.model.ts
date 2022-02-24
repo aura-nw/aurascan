@@ -89,6 +89,7 @@ export class SecondaryHistoryQueryDto {
 }
 
 export class ResponseDto {
+  status: any;
   data: any;
   meta: any;
 }
