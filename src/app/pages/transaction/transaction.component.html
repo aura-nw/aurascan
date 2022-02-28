@@ -24,8 +24,12 @@
                             {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'status'">
-                            <img [src]="data[template.matColumnDef] === statusTransaction.Success ? 'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                            <img [src]="data[template.matColumnDef] === statusTransaction.Success ?
+                                'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
                             {{ data[template.matColumnDef]}}
+                        </div>
+                        <div *ngSwitchCase="'fee'">
+                            {{ data[template.matColumnDef]}} <span class="g-purple">AURA</span>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>

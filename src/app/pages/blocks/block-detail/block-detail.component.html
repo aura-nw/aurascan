@@ -50,7 +50,7 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Proposer</p>
             </div>
-            <div class="col-6"><a routerLink="/validators/{{item?.operator_address}}"> {{item?.proposer}}ß </a></div>
+            <div class="col-6"><a routerLink="/validators/{{item?.operator_address}}"> {{item?.proposer}}</a></div>
         </div>
     </div>
 </div>
@@ -73,8 +73,23 @@
                                 <div *ngSwitchCase="'timestamp'">
                                     {{ data[template.matColumnDef] | calDate}} ago
                                 </div>
-                                <div *ngSwitchCase="'tx_hash'" class="g-blue">
+                                <div *ngSwitchCase="'tx_hash'" class="g-blue cursor-pointer hash-link">
+                                    {{ (data[template.matColumnDef] | slice:0:6) + '...' + (data[template.matColumnDef] |
+                                    slice:data[template.matColumnDef].length-6:data[template.matColumnDef].length) }}
+                                </div>
+                                <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                                     {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'type'" class="g-type">
+                                    {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'status'">
+                                    <img [src]="data[template.matColumnDef] === statusTransaction.Success ? 
+                                        'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                                    {{ data[template.matColumnDef]}}
+                                </div>
+                                <div *ngSwitchCase="'fee'">
+                                    {{ data[template.matColumnDef]}} <span class="g-purple">AURA</span>
                                 </div>
                                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                                 </div>
@@ -85,7 +100,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail(row)"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
                     {{"NO DATA" | translate}}

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 
@@ -24,9 +26,9 @@ export class BlockDetailComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'validation_code', headerCellDef: 'Result' },
-    { matColumnDef: 'abc', headerCellDef: 'Amount' },
-    { matColumnDef: 'cde', headerCellDef: 'Fee' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
@@ -36,6 +38,8 @@ export class BlockDetailComponent implements OnInit {
   pageSize = 10;
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
+  typeTransaction = TYPE_TRANSACTION;
+  statusTransaction = StatusTransaction;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,8 +61,14 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  openTxsDetail(data) {
-    this.router.navigate(['transaction', data.tx_hash]);
+  openTxsDetail(event: any, data: any) {
+    const linkHash = event?.target.classList.contains('hash-link');
+    const linkBlock = event?.target.classList.contains('block-link');
+    if (linkHash) {
+      this.router.navigate(['transaction', data.tx_hash]);
+    } else if (linkBlock) {
+      this.router.navigate(['blocks/id', data.blockId]);
+    }
   }
 
   getDetailById() {
@@ -69,6 +79,11 @@ export class BlockDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
+        res.data?.txs.forEach((trans) => {
+          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          trans.type = typeTrans?.value;
+          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+        });
         this.item = res.data;
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.length = res.data?.txs.length;
@@ -88,6 +103,11 @@ export class BlockDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
+        res.data?.txs.forEach((trans) => {
+          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          trans.type = typeTrans?.value;
+          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+        });
         this.item = res.data;
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.length = res.data?.txs.length;
