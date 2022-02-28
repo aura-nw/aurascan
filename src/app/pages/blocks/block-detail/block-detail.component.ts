@@ -106,7 +106,10 @@ export class BlockDetailComponent implements OnInit {
         res.data?.txs.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
-          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+          trans.status = StatusTransaction.Fail;
+          if (trans.code === CodeTransaction.Success) {
+            trans.status = StatusTransaction.Success;
+          }
         });
         this.item = res.data;
         this.dataSource = new MatTableDataSource(res.data?.txs);

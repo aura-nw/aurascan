@@ -62,7 +62,10 @@ export class TransactionComponent implements OnInit {
         res.data.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
-          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+          trans.status = StatusTransaction.Fail;
+          if (trans.code === CodeTransaction.Success) {
+            trans.status = StatusTransaction.Success;
+          }
         });
         
         this.dataSource = new MatTableDataSource(res.data);

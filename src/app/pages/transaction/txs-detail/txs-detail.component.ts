@@ -31,7 +31,10 @@ export class TxsDetailComponent implements OnInit {
     this.transactionService
       .txsDetail(this.id)
       .subscribe((res: ResponseDto) => {
-        res.data.status = res.data.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+        res.data.status = StatusTransaction.Fail;
+        if (res.data.code === CodeTransaction.Success) {
+          res.data.status = StatusTransaction.Success;
+        }
         this.item = res.data;
       },
       error => {
