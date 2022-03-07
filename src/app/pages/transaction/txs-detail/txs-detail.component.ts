@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
-import { ResponseDto } from 'src/app/core/models/common.model';
+import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
+import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-txs-detail',
@@ -18,10 +21,14 @@ export class TxsDetailComponent implements OnInit {
     { label: 'Detail', active: true }
   ];
   codeTransaction = CodeTransaction;
+  typeTransaction = TYPE_TRANSACTION;
+  transactionDetailType;
+  dateFormat;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private transactionService: TransactionService) { }
+    private transactionService: TransactionService,
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -31,8 +38,11 @@ export class TxsDetailComponent implements OnInit {
     this.transactionService
       .txsDetail(this.id)
       .subscribe((res: ResponseDto) => {
-        res.data.status = res.data.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
-        this.item = res.data;
+        const typeTrans = this.typeTransaction.find(f => f.label === res.data.type);
+        this.transactionDetailType = typeTrans?.value;
+        res.data.status = res.data.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+        this.item = res.data;  
+        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
       },
       error => {
         this.router.navigate(['/']);

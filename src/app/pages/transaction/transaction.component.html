@@ -13,9 +13,8 @@
                         <div *ngSwitchCase="'timestamp'">
                             <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
                         </div>
-                        <div *ngSwitchCase="'tx_hash'" class="g-blue cursor-pointer hash-link">
-                            {{ (data[template.matColumnDef] | slice:0:6) + '...' + (data[template.matColumnDef] |
-                            slice:data[template.matColumnDef].length-6:data[template.matColumnDef].length) }}
+                        <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                            {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                             {{ data[template.matColumnDef] }}
@@ -26,10 +25,13 @@
                         <div *ngSwitchCase="'status'">
                             <img [src]="data[template.matColumnDef] === statusTransaction.Success ?
                                 'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
-                            {{ data[template.matColumnDef]}}
+                            {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'fee'">
-                            {{ data[template.matColumnDef]}} <span class="g-purple">AURA</span>
+                            {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
+                        </div>
+                        <div *ngSwitchCase="'amount'">
+                            {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>

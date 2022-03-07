@@ -41,3 +41,7 @@ export const NETWORK = [
         icon: '/assets/images/icons/chain_cosmos.svg'
     }
 ];
+
+export const DATEFORMAT = {
+  DATETIME_UTC: 'yyyy-MM-dd HH:mm:ss'
+};

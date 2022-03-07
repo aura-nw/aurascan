@@ -1,7 +1,7 @@
 <app-pagetitle title="TRANSACTION DETAILS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <div class="card">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-        Transaction Information
+    <div class="card-header bg-transparent border-bottom fw-bold">
+        Information
     </div>
     <div class="card-body">
         <div class="row mb-3">
@@ -30,13 +30,13 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Height</p>
             </div>
-            <div class="col-6"><a routerLink="/blocks/id/{{item?.block.id}}">{{item?.height}}</a></div>
+            <div class="col-6"><a routerLink="/blocks/id/{{item?.block.id}}">{{item?.height | number}}</a></div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
                 <p class="card-text fw-bold">Time</p>
             </div>
-            <div class="col-6">{{item?.timestamp}}({{item?.timestamp | calDate}} ago)</div>
+            <div class="col-6">{{item?.timestamp | calDate}} ago ({{dateFormat}})</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
@@ -48,10 +48,42 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Gas (used / wanted)</p>
             </div>
-            <div class="col-6">{{item?.gas_used}} / {{item?.gas_wanted}}</div>
+            <div class="col-6">{{item?.gas_used | number}} / {{item?.gas_wanted | number}}</div>
         </div>
     </div>
 </div>
+
+<div class="card mt-5" *ngIf="item?.messages">
+    <div class="card-header bg-transparent border-bottom fw-bold">
+        Message
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text g-purple">{{transactionDetailType}}</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">From Address</p>
+            </div>
+            <div class="col-6">{{item?.messages[0]?.from_address}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">To Address</p>
+            </div>
+            <div class="col-6">{{item?.messages[0]?.to_address}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <p class="card-text fw-bold">Amount</p>
+            </div>
+            <div class="col-6">{{item?.messages[0]?.amount[0]?.amount | number}} <span class="g-purple">AURA</span></div>
+        </div>
+    </div>
+</div>
+
 <div class="card" *ngIf="item?.read_set">
     <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
         Read

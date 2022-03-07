@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
 
 @Component({
   selector: 'app-transaction',
@@ -19,7 +19,7 @@ export class TransactionComponent implements OnInit {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
@@ -62,7 +62,9 @@ export class TransactionComponent implements OnInit {
         res.data.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
-          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
+          trans.amount = trans.messages?.length === 1 ? trans.messages[0]?.amount[0]?.amount : 'More';
         });
         
         this.dataSource = new MatTableDataSource(res.data);
