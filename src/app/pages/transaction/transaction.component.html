@@ -1,4 +1,4 @@
-<app-pagetitle title="Transaction" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="TRANSACTION" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
     <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
@@ -31,7 +31,12 @@
                             {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
                         </div>
                         <div *ngSwitchCase="'amount'">
-                            {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                            <ng-container *ngIf="data[template.matColumnDef] > 0">
+                                {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                            </ng-container>
+                            <ng-container *ngIf="data[template.matColumnDef] == 0">
+                                -
+                            </ng-container>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>

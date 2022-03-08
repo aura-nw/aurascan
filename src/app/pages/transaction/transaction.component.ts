@@ -64,9 +64,12 @@ export class TransactionComponent implements OnInit {
           trans.type = typeTrans?.value;
           trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
-          trans.amount = trans.messages?.length === 1 ? trans.messages[0]?.amount[0]?.amount : 'More';
+          trans.amount = 0;
+          if (trans.messages && trans.messages[0]?.amount) {
+            trans.amount = trans.messages?.length === 1 ? trans.messages[0]?.amount[0]?.amount : 'More';
+          }
         });
-        
+
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.dataSource.sort = this.sort;

@@ -73,9 +73,8 @@
                                 <div *ngSwitchCase="'timestamp'">
                                     {{ data[template.matColumnDef] | calDate}} ago
                                 </div>
-                                <div *ngSwitchCase="'tx_hash'" class="g-blue cursor-pointer hash-link">
-                                    {{ (data[template.matColumnDef] | slice:0:6) + '...' + (data[template.matColumnDef] |
-                                    slice:data[template.matColumnDef].length-6:data[template.matColumnDef].length) }}
+                                <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                                    {{ data[template.matColumnDef] }}
                                 </div>
                                 <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                                     {{ data[template.matColumnDef] }}
