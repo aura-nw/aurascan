@@ -15,7 +15,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 export class BlocksComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
     { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },

@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
 
   templatesBlock: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
