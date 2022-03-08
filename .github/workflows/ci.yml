@@ -2,7 +2,7 @@ name: Continuous integration
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, staging ]
 
 jobs:
   build:
