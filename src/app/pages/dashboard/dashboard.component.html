@@ -219,7 +219,7 @@
                         <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
                         data[template.matColumnDef] | calDate}} ago
                       </div>
-                      <div *ngSwitchCase="'block_hash_format'" class="g-blue cursor-pointer" [routerLink]="['/blocks', data.height]">
+                      <div *ngSwitchCase="'proposer'" class="g-blue cursor-pointer" [routerLink]="['/validators', data.operator_address]">
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngSwitchCase="'height'" class="g-blue cursor-pointer" [routerLink]="['/blocks', data.height]">
