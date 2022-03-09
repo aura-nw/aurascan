@@ -26,7 +26,7 @@ export class BlockDetailComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
@@ -87,6 +87,7 @@ export class BlockDetailComponent implements OnInit {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
           trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
@@ -114,6 +115,11 @@ export class BlockDetailComponent implements OnInit {
           trans.type = typeTrans?.value;
           trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
+          trans.amount = 0;
+          //check exit amount of transaction
+          if (trans.messages && trans.messages[0]?.amount) {
+            trans.amount = trans.messages?.length === 1 ? trans.messages[0]?.amount[0]?.amount : 'More';
+          }
         });
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);

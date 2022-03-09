@@ -15,7 +15,7 @@ export class ValidatorsDetailComponent implements OnInit {
   id;
   item;
   breadCrumbItems = [
-    { label: 'validators' },
+    { label: 'Validators' },
     { label: 'List', active: false },
     { label: 'Detail', active: true }
   ];

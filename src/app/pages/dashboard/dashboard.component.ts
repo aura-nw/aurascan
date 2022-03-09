@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
 
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
+    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];

@@ -90,6 +90,14 @@
                                 <div *ngSwitchCase="'fee'">
                                     {{ data[template.matColumnDef]}} <span class="g-purple">AURA</span>
                                 </div>
+                                <div *ngSwitchCase="'amount'">
+                                    <ng-container *ngIf="data[template.matColumnDef] > 0">
+                                        {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="data[template.matColumnDef] == 0">
+                                        -
+                                    </ng-container>
+                                </div>
                                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                                 </div>
                             </ng-container>
