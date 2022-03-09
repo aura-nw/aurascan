@@ -56,9 +56,10 @@ export class ValidatorsDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
+        
         this.item = res.data;
         this.dataSource = new MatTableDataSource(res.data?.txs);
-        this.length = res.data?.txs.length;
+        this.length = res.data?.txs?.length;
         this.dataSource.sort = this.sort;
       },
         error => {

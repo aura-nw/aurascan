@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../app/core/services/auth.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
+import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -59,24 +60,25 @@ export class DashboardComponent implements OnInit {
   public chartBlock: any;
   public chartOptions: Partial<ChartOptions>;
 
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
-    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
+  templatesBlock: Array<TableTemplate> = [
+    { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
+  displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
+  dataSourceBlock: MatTableDataSource<any>;
 
-  templates2: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'height', headerCellDef: 'Block Height' },
+  templatesTx: Array<TableTemplate> = [
+    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
+    { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
-  displayedColumns2: string[] = this.templates2.map((dta) => dta.matColumnDef);
-  dataSource2: MatTableDataSource<any>;
+  displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
+  dataSourceTx: MatTableDataSource<any>;
   currentUser;
+  typeTransaction = TYPE_TRANSACTION;
 
   constructor(
     private commonService: CommonService,
@@ -149,7 +151,10 @@ export class DashboardComponent implements OnInit {
     this.blockService
       .blocks(5, 0)
       .subscribe(res => {
-        this.dataSource = new MatTableDataSource(res.data);
+        res.data.forEach((block) => {
+          block.block_hash_format = block.block_hash.replace(block.block_hash.substring(6, block.block_hash.length - 6), '...');
+        });
+        this.dataSourceBlock = new MatTableDataSource(res.data);
       }
       );
   }
@@ -158,7 +163,12 @@ export class DashboardComponent implements OnInit {
     this.transactionService
       .txs(5, 0)
       .subscribe(res => {
-        this.dataSource2 = new MatTableDataSource(res.data);
+        res.data.forEach((trans) => {
+          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          trans.type = typeTrans?.value;
+          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
+        });
+        this.dataSourceTx = new MatTableDataSource(res.data);
       }
       );
   }
@@ -343,11 +353,13 @@ export class DashboardComponent implements OnInit {
       );
   }
 
-  openBlockDetail(data) {
-    this.router.navigate(['blocks', data.height]);
-  }
-
-  openTxsDetail(data) {
-    this.router.navigate(['transaction', data.tx_hash]);
+  openTxsDetail(event: any, data: any) {
+    const linkHash = event?.target.classList.contains('hash-link');
+    const linkBlock = event?.target.classList.contains('block-link');
+    if (linkHash) {
+      this.router.navigate(['transaction', data.tx_hash]);
+    } else if (linkBlock) {
+      this.router.navigate(['blocks/id', data.blockId]);
+    }
   }
 }
