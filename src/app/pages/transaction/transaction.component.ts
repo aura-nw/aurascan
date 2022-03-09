@@ -65,6 +65,7 @@ export class TransactionComponent implements OnInit {
           trans.status = StatusTransaction.Fail;
           if (trans.code === CodeTransaction.Success) {
             trans.status = StatusTransaction.Success;
+          }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
           trans.amount = 0;
           //check exit amount of transaction
