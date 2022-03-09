@@ -20,7 +20,7 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Block Time</p>
             </div>
-            <div class="col-6">{{item?.timestamp}} ({{item?.timestamp | calDate}} ago)</div>
+            <div class="col-6">{{item?.timestamp | calDate}} ago ({{dateFormat}})</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
@@ -73,9 +73,8 @@
                                 <div *ngSwitchCase="'timestamp'">
                                     {{ data[template.matColumnDef] | calDate}} ago
                                 </div>
-                                <div *ngSwitchCase="'tx_hash'" class="g-blue cursor-pointer hash-link">
-                                    {{ (data[template.matColumnDef] | slice:0:6) + '...' + (data[template.matColumnDef] |
-                                    slice:data[template.matColumnDef].length-6:data[template.matColumnDef].length) }}
+                                <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                                    {{ data[template.matColumnDef] }}
                                 </div>
                                 <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                                     {{ data[template.matColumnDef] }}

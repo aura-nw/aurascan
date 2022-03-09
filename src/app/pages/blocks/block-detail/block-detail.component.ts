@@ -1,7 +1,9 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DATEFORMAT } from 'src/app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
@@ -40,15 +42,17 @@ export class BlockDetailComponent implements OnInit {
   pageSizeOptions = [10, 25, 50, 100];
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
+  dateFormat;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private blockService: BlockService) {
+    private blockService: BlockService,
+    private datePipe: DatePipe) {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get('height');
     this.blockId = this.route.snapshot.paramMap.get('blockId');
     this.getDetail();
   }
@@ -82,9 +86,13 @@ export class BlockDetailComponent implements OnInit {
         res.data?.txs.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
-          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail
+          trans.status = StatusTransaction.Fail;
+          if (trans.code === CodeTransaction.Success) {
+            trans.status = StatusTransaction.Success;
+          }
         });
         this.item = res.data;
+        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.length = res.data?.txs.length;
         this.dataSource.sort = this.sort;
@@ -103,6 +111,7 @@ export class BlockDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
+
         res.data?.txs.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
@@ -110,8 +119,10 @@ export class BlockDetailComponent implements OnInit {
           if (trans.code === CodeTransaction.Success) {
             trans.status = StatusTransaction.Success;
           }
+          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.item = res.data;
+        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.length = res.data?.txs.length;
         this.dataSource.sort = this.sort;
