@@ -86,7 +86,10 @@ export class BlockDetailComponent implements OnInit {
         res.data?.txs.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
-          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+          trans.status = StatusTransaction.Fail;
+          if (trans.code === CodeTransaction.Success) {
+            trans.status = StatusTransaction.Success;
+          }
         });
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
@@ -112,7 +115,10 @@ export class BlockDetailComponent implements OnInit {
         res.data?.txs.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
           trans.type = typeTrans?.value;
-          trans.status = trans.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
+          trans.status = StatusTransaction.Fail;
+          if (trans.code === CodeTransaction.Success) {
+            trans.status = StatusTransaction.Success;
+          }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.item = res.data;

@@ -39,9 +39,12 @@ export class TxsDetailComponent implements OnInit {
     this.transactionService
       .txsDetail(this.id)
       .subscribe((res: ResponseDto) => {
+        res.data.status = StatusTransaction.Fail;
+        if (res.data.code === CodeTransaction.Success) {
+          res.data.status = StatusTransaction.Success;
+        }
         const typeTrans = this.typeTransaction.find(f => f.label === res.data.type);
         this.transactionDetailType = typeTrans?.value;
-        res.data.status = res.data.code === CodeTransaction.Success ? StatusTransaction.Success : StatusTransaction.Fail;
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         //check exit amount of transaction
