@@ -45,3 +45,5 @@ export const NETWORK = [
 export const DATEFORMAT = {
   DATETIME_UTC: 'yyyy-MM-dd HH:mm:ss'
 };
+
+export const NUMBER_CONVERT = 1000000; //10^6 satoshi unit

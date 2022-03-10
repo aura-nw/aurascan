@@ -1,4 +1,4 @@
-.validatorList-searchArea {
+.type-data-group {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
@@ -28,4 +28,8 @@
     background-color: #222 !important;
     color: #fff !important;
   }
+}
+
+.raw-content {
+  white-space: pre-wrap;
 }
