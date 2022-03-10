@@ -21,5 +21,11 @@ export const TYPE_TRANSACTION = [
     { label: '/auranw.aura.wasm.MsgInstantiateContract', value: TypeTransaction.InstantiateContract },
     { label: '/auranw.aura.wasm.MsgExecuteContract', value: TypeTransaction.ExecuteContract },
     { label: '/cosmos.distribution.v1beta1.MsgSetWithdrawAddress', value: TypeTransaction.ModifyWithdrawAddress },
+    { label: '/osmosis.gamm.v1beta1.MsgJoinPool', value: TypeTransaction.JoinPool },
+    { label: '/osmosis.lockup.MsgLockTokens', value: TypeTransaction.LockTokens },
+    { label: '/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountIn', value: TypeTransaction.JoinSwapExternAmountIn },
+    { label: '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn', value: TypeTransaction.SwapExactAmountIn },
+    { label: '/osmosis.lockup.MsgBeginUnlocking', value: TypeTransaction.BeginUnlocking },
+    { label: '/cosmos.gov.v1beta1.MsgVote', value: TypeTransaction.Vote },
     { label: 'FAILED', value: TypeTransaction.Fail }
   ]

@@ -164,7 +164,7 @@ export class DashboardComponent implements OnInit {
       .txs(5, 0)
       .subscribe(res => {
         res.data.forEach((trans) => {
-          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });

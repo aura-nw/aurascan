@@ -25,6 +25,8 @@ export class TxsDetailComponent implements OnInit {
   transactionDetailType;
   dateFormat;
   amount = 0;
+  isRawData = false;
+  jsonStr;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -35,6 +37,7 @@ export class TxsDetailComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetail();
   }
+
   getDetail(): void {
     this.transactionService
       .txsDetail(this.id)
@@ -43,9 +46,10 @@ export class TxsDetailComponent implements OnInit {
         if (res.data.code === CodeTransaction.Success) {
           res.data.status = StatusTransaction.Success;
         }
-        const typeTrans = this.typeTransaction.find(f => f.label === res.data.type);
+        const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === res.data.type.toLowerCase());
         this.transactionDetailType = typeTrans?.value;
         this.item = res.data;
+        this.jsonStr = JSON.stringify(this.item, null, 2);
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         //check exit amount of transaction
         if (this.item.messages && this.item.messages[0]?.amount) {
@@ -56,5 +60,9 @@ export class TxsDetailComponent implements OnInit {
           this.router.navigate(['/']);
         }
       );
+  }
+
+  changeType(type: boolean): void {
+    this.isRawData = type;
   }
 }
