@@ -8,6 +8,7 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
+import { NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-transaction',
@@ -70,7 +71,8 @@ export class TransactionComponent implements OnInit {
           trans.amount = 0;
           //check exit amount of transaction
           if (trans.messages && trans.messages[0]?.amount) {
-            trans.amount = trans.messages?.length === 1 ? trans.messages[0]?.amount[0]?.amount : 'More';
+            let amount =  trans.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
+            trans.amount = trans.messages?.length === 1 ? amount : 'More';
           }
         });
 

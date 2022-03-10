@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DATEFORMAT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto } from '../../../../app/core/models/common.model';
@@ -24,7 +24,7 @@ export class TxsDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   transactionDetailType;
   dateFormat;
-  amount = 0;
+  amount;
   isRawData = false;
   jsonStr;
 
@@ -49,11 +49,13 @@ export class TxsDetailComponent implements OnInit {
         const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === res.data.type.toLowerCase());
         this.transactionDetailType = typeTrans?.value;
         this.item = res.data;
-        this.jsonStr = JSON.stringify(this.item, null, 2);
+        //convert json for display raw data
+        this.jsonStr = JSON.stringify(this.item.tx, null, 2).replace(/\\/g,"");
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         //check exit amount of transaction
         if (this.item.messages && this.item.messages[0]?.amount) {
-          this.amount = this.item.messages?.length === 1 ? this.item.messages[0]?.amount[0]?.amount : 'More';
+          let amount =  this.item.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
+          this.amount = this.item.messages?.length === 1 ? amount : 'More';
         }
       },
         error => {
