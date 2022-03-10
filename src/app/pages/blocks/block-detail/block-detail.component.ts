@@ -84,7 +84,7 @@ export class BlockDetailComponent implements OnInit {
           return;
         }
         res.data?.txs.forEach((trans) => {
-          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
           if (trans.code === CodeTransaction.Success) {
@@ -114,7 +114,7 @@ export class BlockDetailComponent implements OnInit {
         }
 
         res.data?.txs.forEach((trans) => {
-          const typeTrans = this.typeTransaction.find(f => f.label === trans.type);
+          const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
           if (trans.code === CodeTransaction.Success) {

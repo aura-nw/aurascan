@@ -20,6 +20,12 @@ export enum TypeTransaction {
     InstantiateContract = 'Instantiate Contract',
     ExecuteContract = 'Execute Contract',
     ModifyWithdrawAddress = 'Modify Withdraw Address',
+    JoinPool = 'Join pool',
+    LockTokens = 'Lock Tokens (Start Farming)',
+    JoinSwapExternAmountIn = 'Join Swap Extern Amount In',
+    SwapExactAmountIn = 'Swap Exact Amount In',
+    BeginUnlocking = 'Begin Unlocking',
+    Vote = 'Vote',
     Fail = 'Fail' 
 }
 
