@@ -8,7 +8,7 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
-import { NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
+import { NUMBER_CONVERT } from '../../../app/core/constants/common.constant';
 
 @Component({
   selector: 'app-transaction',

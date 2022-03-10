@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DATEFORMAT, NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
+import { DATEFORMAT, NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto } from '../../../../app/core/models/common.model';
