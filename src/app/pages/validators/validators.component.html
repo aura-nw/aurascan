@@ -131,6 +131,13 @@
                 [routerLink]="['/validators', data.operator_address]">
                 <p>{{ data[template.matColumnDef] }}</p>
               </div>
+              <div *ngSwitchCase="'percent_power'" class="text-left">
+                <div class="cumulative-share_container">
+                  <div class="cumulative-share_cum" [ngStyle]="{'width': data.percent}"></div>
+                  <div class="cumulative-share_fill" [ngStyle]="{'width': data.percent_plus}"></div>
+                  <p>{{data['percent_vote'] | percent:'1.2-2'}}</p>
+                </div>
+              </div>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
               </div>
             </ng-container>
