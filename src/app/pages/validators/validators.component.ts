@@ -19,7 +19,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'rank', headerCellDef: 'Rank' },
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
-    { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share' },
+    { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'uptime', headerCellDef: 'Uptime' },
     { matColumnDef: 'fee', headerCellDef: 'Commission' },
@@ -43,6 +43,7 @@ export class ValidatorsComponent implements OnInit {
   textSearch = '';
   // bread crumb items
   breadCrumbItems!: Array<{}>;
+  
   constructor(
     private commonService: CommonService,
     private router: Router,
@@ -73,6 +74,8 @@ export class ValidatorsComponent implements OnInit {
           val.participation = '16' + '/ ' + res.data.totalParti;
           val.rank = 1;
           val.uptime = '100%';
+          val.percent = '55%';
+          val.percent_plus = '5%';
         });
 
         this.dataSource = new MatTableDataSource(res.data);
