@@ -1,3 +1,5 @@
+@import "../../../../assets/scss/custom-material.scss";
+
 .valid-detail-content {
   .card-header {
     font-size: 1rem;
@@ -8,6 +10,10 @@
     .header-title {
       font-weight: 500;
     }
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 500;
   }
   .box-status {
     position: absolute;
@@ -20,6 +26,7 @@
     -moz-column-gap: 1.2rem;
     column-gap: 1.2rem;
     right: 30px;
+    justify-content: flex-end;
     .valid-status {
       background-color: #37cc6e;
       border-radius: 10rem;
@@ -27,11 +34,16 @@
       display: flex;
       -webkit-align-items: center;
       align-items: center;
-      padding: 3px 1.1rem;
-      color: var(--white);
-      font-family: Open Sans, sans-serif;
+      padding: 3px 0.8rem;
+      color: $white;
       font-size: 1rem;
       font-weight: 600;
+      .img-valid {
+        filter: $filter-white-icon;
+        margin-right: 5px;
+        width: auto;
+        height: 15px;
+      }
     }
   }
 }

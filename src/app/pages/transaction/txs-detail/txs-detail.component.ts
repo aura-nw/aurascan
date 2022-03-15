@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DATEFORMAT, NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { DatePipe } from '@angular/common';
@@ -27,6 +27,7 @@ export class TxsDetailComponent implements OnInit {
   amount;
   isRawData = false;
   jsonStr;
+  eTransType = TRANSACTION_TYPE_ENUM;
 
   constructor(private route: ActivatedRoute,
     private router: Router,

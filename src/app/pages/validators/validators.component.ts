@@ -22,7 +22,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'uptime', headerCellDef: 'Uptime' },
-    { matColumnDef: 'fee', headerCellDef: 'Commission' },
+    { matColumnDef: 'commission', headerCellDef: 'Commission' },
     // { matColumnDef: 'percent_power', headerCellDef: 'Percent Power' },
     // { matColumnDef: 'self_stake', headerCellDef: 'Self Stake' },
     // { matColumnDef: 'fee', headerCellDef: 'fee' },
@@ -41,6 +41,7 @@ export class ValidatorsComponent implements OnInit {
   totalPower = 515;
   isActive = true;
   textSearch = '';
+  rawData;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   
@@ -68,17 +69,20 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService
       .validators()
       .subscribe((res: ResponseDto) => {
+        this.rawData = res.data;
         res.data.totalParti = 18;
         res.data.forEach((val) => {
           val.percent_vote = val.power / this.totalPower;
           val.participation = '16' + '/ ' + res.data.totalParti;
-          val.rank = 1;
+          // val.rank = 1;
           val.uptime = '100%';
-          val.percent = '55%';
-          val.percent_plus = '5%';
+          // val.cumulative_share_before = '55%';
+          // val.cumulative_share = '5%';
         });
+        
+        let dataFilter = res.data.filter(event => event.status_validator === this.isActive);
 
-        this.dataSource = new MatTableDataSource(res.data);
+        this.dataSource = new MatTableDataSource(dataFilter);
         this.dataSourceBk = this.dataSource;
         this.length = res.meta.count;
         this.dataSource.sort = this.sort;
@@ -88,12 +92,15 @@ export class ValidatorsComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isActive = type;
+    let data = this.rawData.filter(event => event.status_validator === this.isActive);
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSourceBk = this.dataSource;
   }
 
   searchValidator(): void {
     if (this.textSearch.length > 0) {
       const data = this.dataSource.data.filter((f) =>
-        f.title.toLowerCase().indexOf(this.textSearch) > -1
+        f.title.toLowerCase().indexOf(this.textSearch) > -1 && f.status_validator === this.isActive
       );
       this.dataSource = this.dataSourceBk;
       if (data.length > 0) {
