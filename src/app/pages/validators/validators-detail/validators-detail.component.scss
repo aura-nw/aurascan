@@ -47,3 +47,39 @@
     }
   }
 }
+
+.img-description-layer {
+  position: absolute;
+  top: -60px;
+  left: 40px;
+  height: auto;
+  background: white;
+  opacity: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  font-size: 11px;
+  border-radius: 10px;
+  font-weight: 500;
+  width: max-content;
+  &.box-uptime{
+    top: -20px;
+    left: 0px;
+  }
+}
+
+.img-wrap:hover .img-description-layer {
+  visibility: visible;
+  opacity: 1;
+}
+
+.img-description {
+  transition: 0.2s;
+  transform: translateY(1em);
+}
+
+.img-wrap:hover .img-description {
+  transform: translateY(0);
+}

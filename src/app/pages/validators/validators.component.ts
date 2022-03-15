@@ -71,16 +71,13 @@ export class ValidatorsComponent implements OnInit {
       .subscribe((res: ResponseDto) => {
         this.rawData = res.data;
         res.data.totalParti = 18;
-        res.data.forEach((val) => {
+        res.data.lstValidator.forEach((val) => {
           val.percent_vote = val.power / this.totalPower;
           val.participation = '16' + '/ ' + res.data.totalParti;
-          // val.rank = 1;
           val.uptime = '100%';
-          // val.cumulative_share_before = '55%';
-          // val.cumulative_share = '5%';
         });
         
-        let dataFilter = res.data.filter(event => event.status_validator === this.isActive);
+        let dataFilter = res.data.lstValidator.filter(event => event.status_validator === this.isActive);
 
         this.dataSource = new MatTableDataSource(dataFilter);
         this.dataSourceBk = this.dataSource;
@@ -92,7 +89,7 @@ export class ValidatorsComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isActive = type;
-    let data = this.rawData.filter(event => event.status_validator === this.isActive);
+    let data = this.rawData.lstValidator.filter(event => event.status_validator === this.isActive);
     this.dataSource = new MatTableDataSource(data);
     this.dataSourceBk = this.dataSource;
   }

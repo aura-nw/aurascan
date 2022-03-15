@@ -12,10 +12,16 @@
     <div class="row col-12">
       <div class="col-6">
         <div class="mt-3">
-          <p class="header-title">Operator Address <img class="img-valid" [src]="'assets/images/icons/questionmark-icon.svg'" alt=""></p>
-          <!-- <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-                Tooltip on top
-              </button> -->
+          <div class="d-flex position-relative">
+            <p class="header-title">Operator Address</p>
+            <div class="img-wrap">
+              <img class="img-valid ml-1" [src]="'assets/images/icons/questionmark-icon.svg'" alt="">
+              <div class="img-description-layer">
+                <p class="img-description">Validator operator address at which token <br /> holders delegate their
+                  voting powers to.</p>
+              </div>
+            </div>
+          </div>
           <span>{{item?.operator_address}}</span>
         </div>
       </div>
@@ -84,11 +90,11 @@
             <table mat-table [dataSource]="dataSourceBlock" class="table-reponsive">
               <ng-container *ngFor="let template of templatesBlock; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
-  
+
                   <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
-  
+
                   <td mat-cell *matCellDef="let data">
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef ">
@@ -96,10 +102,12 @@
                           <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
                           data[template.matColumnDef] | calDate}} ago
                         </div>
-                        <div *ngSwitchCase="'block_hash_format'" class="g-blue cursor-pointer" [routerLink]="['/blocks', data.height]">
+                        <div *ngSwitchCase="'block_hash_format'" class="g-blue cursor-pointer"
+                          [routerLink]="['/blocks', data.height]">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer" [routerLink]="['/blocks', data.height]">
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer"
+                          [routerLink]="['/blocks', data.height]">
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
@@ -109,7 +117,7 @@
                   </td>
                 </ng-container>
               </ng-container>
-  
+
               <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
               <tr class="mat-row" *matNoDataRow>
@@ -124,21 +132,27 @@
     </div>
     <div class="col-xl-6">
       <div class="card">
-        <div class="card-header align-items-center d-flex">
-          <p class="card-title mb-0 flex-grow-1">Transactions</p>
+        <div class="card-header d-flex">
+          <p class="card-title mb-0">Uptime</p>
+          <div class="img-wrap">
+            <img class="img-valid ml-1" [src]="'assets/images/icons/questionmark-icon.svg'" alt="">
+            <div class="img-description-layer box-uptime">
+              <p class="img-description">Missed Blocks are displayed with an X</p>
+            </div>
+          </div>
           <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
         </div>
-  
+
         <div class="card-body px-0">
           <ngx-simplebar style="max-height: 400px;">
             <table mat-table [dataSource]="dataSourceTx" class="table-reponsive">
               <ng-container *ngFor="let template of templatesTx; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
-  
+
                   <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
-  
+
                   <td mat-cell *matCellDef="let data">
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef ">
@@ -154,7 +168,7 @@
                         </div>
                         <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                           {{ data[template.matColumnDef] }}
-                      </div>
+                        </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>
                       </ng-container>
@@ -162,7 +176,7 @@
                   </td>
                 </ng-container>
               </ng-container>
-  
+
               <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsTx" (click)="openTxsDetail($event, row)"></tr>
               <tr class="mat-row" *matNoDataRow>
@@ -189,11 +203,11 @@
             <table mat-table [dataSource]="dataSourceBlock" class="table-reponsive">
               <ng-container *ngFor="let template of templatesBlock; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
-  
+
                   <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
-  
+
                   <td mat-cell *matCellDef="let data">
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef ">
@@ -201,10 +215,12 @@
                           <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
                           data[template.matColumnDef] | calDate}} ago
                         </div>
-                        <div *ngSwitchCase="'proposer'" class="g-blue cursor-pointer" [routerLink]="['/validators', data.operator_address]">
+                        <div *ngSwitchCase="'proposer'" class="g-blue cursor-pointer"
+                          [routerLink]="['/validators', data.operator_address]">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer" [routerLink]="['/blocks', data.height]">
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer"
+                          [routerLink]="['/blocks', data.height]">
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
@@ -214,7 +230,7 @@
                   </td>
                 </ng-container>
               </ng-container>
-  
+
               <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
               <tr class="mat-row" *matNoDataRow>
@@ -233,17 +249,17 @@
           <p class="card-title mb-0 flex-grow-1">Power Events</p>
           <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
         </div>
-  
+
         <div class="card-body px-0">
           <ngx-simplebar style="max-height: 400px;">
             <table mat-table [dataSource]="dataSourceTx" class="table-reponsive">
               <ng-container *ngFor="let template of templatesTx; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef">
-  
+
                   <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
-  
+
                   <td mat-cell *matCellDef="let data">
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef ">
@@ -259,7 +275,7 @@
                         </div>
                         <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                           {{ data[template.matColumnDef] }}
-                      </div>
+                        </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>
                       </ng-container>
@@ -267,7 +283,7 @@
                   </td>
                 </ng-container>
               </ng-container>
-  
+
               <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumnsTx" (click)="openTxsDetail($event, row)"></tr>
               <tr class="mat-row" *matNoDataRow>

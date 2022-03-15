@@ -13,7 +13,7 @@
                 <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Height</span>
               </div>
               <h4 class="" style="display: flex;justify-content: flex-end;">
-                <span class="fs-4">{{9593564 | number}}</span>
+                <span class="fs-4">{{rawData?.height | number}}</span>
               </h4>
             </div>
           </div>
@@ -36,7 +36,7 @@
                 <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Validators</span>
               </div>
               <h4 class="" style="display: flex;justify-content: flex-end;">
-                <span class="fs-4">150 / 353</span>
+                <span class="fs-4">{{rawData?.total_validator_active}} / {{rawData?.total_validator}}</span>
               </h4>
             </div>
           </div>
@@ -59,7 +59,7 @@
                 <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Bonded Tokens</span>
               </div>
               <h4 class="" style="display: flex;justify-content: flex-end;">
-                <span class="fs-4">{{174375621 | number}}</span>
+                <span class="fs-4">{{rawData?.bonded_tokens | number}}</span>
               </h4>
             </div>
           </div>
