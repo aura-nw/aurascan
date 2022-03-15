@@ -1,5 +1,5 @@
 <app-pagetitle title="PROPOSAL" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<section class="lasted-list" *ngIf="lastedList.length > 0">
+<section class="lasted-list d-none d-lg-block" *ngIf="lastedList.length > 0">
     <div class="container-fluid">
         <div class="row">
             <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList">
@@ -88,8 +88,8 @@
         </div>
     </div>
 </section>
-<section class="all-list" *ngIf="dataSource">
-    <table mat-table [dataSource]="dataSource" class="table-responsive" matSort>
+<section class="all-list table-responsive" *ngIf="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort>
         <!-- ID Column -->
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>#ID</th>
@@ -99,7 +99,7 @@
         <!-- Title Column -->
         <ng-container matColumnDef="title">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell *matCellDef="let element" class="title-cell">
                 <a [routerLink]="['id', element.id]">{{element.title}}</a>
             </td>
         </ng-container>
