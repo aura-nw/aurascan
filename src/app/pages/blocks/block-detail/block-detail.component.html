@@ -1,4 +1,4 @@
-<app-pagetitle title="Details for Block #{{id}}" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Details for Block #{{id || item?.height}}" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <div class="card">
     <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
         Header
@@ -20,7 +20,7 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Block Time</p>
             </div>
-            <div class="col-6">{{item?.timestamp}} ({{item?.timestamp | calDate}} ago)</div>
+            <div class="col-6">{{item?.timestamp | calDate}} ago ({{dateFormat}})</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
@@ -38,19 +38,19 @@
             <div class="col-3">
                 <p class="card-text fw-bold">Gas (used / wanted)</p>
             </div>
-            <div class="col-6"></div>
+            <div class="col-6">{{item?.gas_used | number}} / {{item?.gas_wanted | number}}</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
                 <p class="card-text fw-bold">Block Round</p>
             </div>
-            <div class="col-6"></div>
+            <div class="col-6">{{item?.round | number}}</div>
         </div>
         <div class="row mb-3">
             <div class="col-3">
                 <p class="card-text fw-bold">Proposer</p>
             </div>
-            <div class="col-6">{{item?.proposer}}ß</div>
+            <div class="col-6"><a routerLink="/validators/{{item?.operator_address}}">{{item?.proposer}}</a></div>
         </div>
     </div>
 </div>
@@ -73,8 +73,30 @@
                                 <div *ngSwitchCase="'timestamp'">
                                     {{ data[template.matColumnDef] | calDate}} ago
                                 </div>
-                                <div *ngSwitchCase="'tx_hash'" class="g-blue">
+                                <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
                                     {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
+                                    {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'type'" class="g-type">
+                                    {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'status'">
+                                    <img [src]="data[template.matColumnDef] === statusTransaction.Success ? 
+                                        'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                                    {{ data[template.matColumnDef]}}
+                                </div>
+                                <div *ngSwitchCase="'fee'">
+                                    {{ data[template.matColumnDef]}} <span class="g-purple">AURA</span>
+                                </div>
+                                <div *ngSwitchCase="'amount'">
+                                    <ng-container *ngIf="data[template.matColumnDef] > 0">
+                                        {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="data[template.matColumnDef] == 0">
+                                        -
+                                    </ng-container>
                                 </div>
                                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                                 </div>
@@ -85,7 +107,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail(row)"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
                     {{"NO DATA" | translate}}

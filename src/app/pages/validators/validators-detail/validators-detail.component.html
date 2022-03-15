@@ -1,74 +1,92 @@
 <app-pagetitle title="VALIDATOR DETAILS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<div class="card">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-        {{item?.title}}
+<div class="valid-detail-content card">
+  <div class="row card-header bg-transparent border-bottom fw-bold">
+    <div class="box-status">
+      <div class="valid-status">
+        Active
+      </div>
     </div>
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Operator Address</p>
-            </div>
-            <div class="col-6">{{item?.operator_address}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Address</p>
-            </div>
-            <div class="col-6">{{item?.acc_address}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Website</p>
-            </div>
-            <div class="col-6">{{item?.website}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Commission</p>
-            </div>
-            <div class="col-6"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Uptime</p>
-            </div>
-            <div class="col-6"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Voting Power</p>
-            </div>
-            <div class="col-6">{{item?.percent_power}}%({{item?.power}})</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Self Stake</p>
-            </div>
-            <div class="col-6">{{item?.self_stake}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">fee</p>
-            </div>
-            <div class="col-6">{{item?.fee}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Blocks Proposed</p>
-            </div>
-            <div class="col-6">{{item?.blocks_proposed}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Delegators</p>
-            </div>
-            <div class="col-6">{{item?.delegators}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Governance Votes</p>
-            </div>
-            <div class="col-6">{{item?.governance_votes}}</div>
-        </div>
+    <div class="col-6">
+      <span class="header-valid">{{item?.title}}</span><br>
     </div>
+    <div class="row col-12">
+      <div class="col-6">
+        <div class="mt-3">
+          <p class="header-title">Operator Address</p>
+          <!-- <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                Tooltip on top
+              </button> -->
+          {{item?.operator_address}}
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mt-3">
+          <p class="header-title">Address</p>
+          <span class="g-blue cursor-pointer">{{item?.acc_address}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Address</p>
+      </div>
+      <div class="col-6">{{item?.acc_address}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Website</p>
+      </div>
+      <div class="col-6">{{item?.website}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Commission</p>
+      </div>
+      <div class="col-6">{{ item?.fee | percent:'1.2-2'}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Uptime</p>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Voting Power</p>
+      </div>
+      <div class="col-6">{{item?.percent_power}}%({{item?.power}})</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Self Stake</p>
+      </div>
+      <div class="col-6">{{item?.self_stake}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">fee</p>
+      </div>
+      <div class="col-6">{{item?.fee}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Blocks Proposed</p>
+      </div>
+      <div class="col-6">{{item?.blocks_proposed}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Delegators</p>
+      </div>
+      <div class="col-6">{{item?.delegators}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text fw-bold">Governance Votes</p>
+      </div>
+      <div class="col-6">{{item?.governance_votes}}</div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,124 @@
+.validator-container {
+  .card-body {
+    padding: 10px 20px;
+    .img-valid {
+      width: auto;
+      height: 40px;
+    }
+    .txt-title {
+      width: auto;
+    }
+  }
+
+  .percent-vote {
+    color: #727781;
+  }
+
+  .box-parti {
+    width: fit-content;
+    padding: 5px 15px;
+    border-radius: 5rem;
+    background-color: #ecf8f4;
+    color: #37cc6e;
+  }
+
+  .box-rank {
+    background-color: #9c6cff;
+    border-radius: 50%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    p {
+      margin: 0px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+
+  .validatorList-searchArea {
+    display: flex;
+    justify-content: flex-end;
+    .validatorList-searchInput {
+      border-radius: 0.5rem;
+      border: 0.1rem solid #bebebe;
+      padding: 0.6rem 1.2rem 0.7rem;
+      margin-bottom: 0.3rem;
+      width: 30%;
+      height: 35px;
+      color: #222;
+      font-size: 1rem;
+    }
+    button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background: none;
+      border: none;
+      border: 0.1rem solid #222;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-align-items: center;
+      align-items: center;
+      margin-left: 1.2rem;
+      // width: 8rem;
+      height: 35px;
+      color: #222;
+      font-size: 15px;
+      padding: 0px 15px;
+      // &:hover{
+      //   position: relative;
+      //   transform: translateY(-2px);
+      // }
+    }
+    .btn-select,
+    button:hover {
+      background-color: #222 !important;
+      color: #fff !important;
+    }
+  }
+
+  .cumulative-share_container {
+    position: relative;
+    border-right: 0.1rem solid #e6e6e6;
+    border-left: 0.1rem solid #e6e6e6;
+    // border-bottom: 0.1rem solid #e6e6e6;
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    height: 48px;
+    .cumulative-share_cum {
+      height: 100%;
+      background: #ecf8f4;
+    }
+    .cumulative-share_fill {
+      height: 100%;
+      background: #c5f1de;
+    }
+    p {
+      position: absolute;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-justify-content: flex-end;
+      justify-content: flex-end;
+      height: 100%;
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 13px;
+      font-weight: 400;
+      text-align: right;
+      color: var(--gunmetal);
+    }
+  }
+}
