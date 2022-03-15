@@ -96,6 +96,7 @@ export function createTranslateLoader(http: HttpClient): any {
     MatNativeDateModule,
     MatFormFieldModule,
   ],
+  declarations: [],
 })
 export class MaterialModule { }
 
