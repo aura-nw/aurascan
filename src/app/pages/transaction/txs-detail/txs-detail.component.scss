@@ -1,0 +1,37 @@
+@import "../../../../assets/scss/custom-material.scss";
+
+.type-data-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    margin-left: 1rem;
+    height: 25px;
+    color: $validator-black;
+    font-size: 13px;
+    padding: 0px 10px;
+    background-color: $validator-btn-color;
+    color: $validator-btn-text;
+  }
+  .btn-select {
+    background-color: $validator-black !important;
+    color: $white !important;
+  }
+}
+
+.raw-content {
+  white-space: pre-wrap;
+}

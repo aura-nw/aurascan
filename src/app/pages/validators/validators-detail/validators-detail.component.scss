@@ -1,0 +1,49 @@
+@import "../../../../assets/scss/custom-material.scss";
+
+.valid-detail-content {
+  .card-header {
+    font-size: 1rem;
+    .header-valid {
+      font-size: 1.8rem;
+      // margin-bottom: 10px;
+    }
+    .header-title {
+      font-weight: 500;
+    }
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .box-status {
+    position: absolute;
+    right: 0;
+    top: 0.7rem;
+    display: -webkit-flex;
+    display: flex;
+    grid-column-gap: 1.2rem;
+    -webkit-column-gap: 1.2rem;
+    -moz-column-gap: 1.2rem;
+    column-gap: 1.2rem;
+    right: 30px;
+    justify-content: flex-end;
+    .valid-status {
+      background-color: #37cc6e;
+      border-radius: 10rem;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-align-items: center;
+      align-items: center;
+      padding: 3px 0.8rem;
+      color: $white;
+      font-size: 1rem;
+      font-weight: 600;
+      .img-valid {
+        filter: $filter-white-icon;
+        margin-right: 5px;
+        width: auto;
+        height: 15px;
+      }
+    }
+  }
+}

@@ -11,11 +11,13 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { TxsDetailComponent } from './txs-detail/txs-detail.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { TransactionService } from '../../../app/core/services/transaction.service';
+import { TransferredDetailComponent } from './txs-detail/transferred-detail/transferred-detail.component';
 
 @NgModule({
   declarations: [
     TransactionComponent,
-    TxsDetailComponent
+    TxsDetailComponent,
+    TransferredDetailComponent
   ],
   imports: [
     CommonModule,

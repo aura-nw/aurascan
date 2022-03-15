@@ -305,3 +305,23 @@ body {
     overflow: hidden !important;
     text-overflow: ellipsis;
 }
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.g-type {
+    display: inline;
+    border-radius: 10rem;
+    padding: 0.2rem 1rem;
+    background-color: #f6f2ff;
+    margin-left: 0.3rem;
+    color: #9c6cff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.g-purple {
+    color: #9c6cff;
+}
