@@ -10,11 +10,7 @@ const routes: Routes = [
     component: BlocksComponent
   },
   {
-    path: ':height',
-    component: BlockDetailComponent
-  },
-  {
-    path: 'id/:blockId',
+    path: ':id',
     component: BlockDetailComponent
   }
 ];
