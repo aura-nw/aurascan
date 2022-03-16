@@ -1,4 +1,4 @@
-<app-pagetitle title="TRANSACTIONS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Transaction" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
     <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
@@ -13,30 +13,8 @@
                         <div *ngSwitchCase="'timestamp'">
                             <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
                         </div>
-                        <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                        <div *ngSwitchCase="'tx_hash'" class="g-blue">
                             {{ data[template.matColumnDef] }}
-                        </div>
-                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
-                            {{ data[template.matColumnDef] }}
-                        </div>
-                        <div *ngSwitchCase="'type'" class="g-type">
-                            {{ data[template.matColumnDef] }}
-                        </div>
-                        <div *ngSwitchCase="'status'">
-                            <img [src]="data[template.matColumnDef] === statusTransaction.Success ?
-                                'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
-                            {{ data[template.matColumnDef] }}
-                        </div>
-                        <div *ngSwitchCase="'fee'">
-                            {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
-                        </div>
-                        <div *ngSwitchCase="'amount'">
-                            <ng-container *ngIf="data[template.matColumnDef] > 0">
-                                {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
-                            </ng-container>
-                            <ng-container *ngIf="data[template.matColumnDef] == 0">
-                                -
-                            </ng-container>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
                         </div>
@@ -47,7 +25,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns" (click)="openTxsDetail($event, row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail(row)"></tr>
     <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell g-no-data" colspan="9999">
             {{"NO DATA" | translate}}
@@ -55,3 +33,6 @@
     </tr>
 
 </table>
+
+<mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
+</mat-paginator>

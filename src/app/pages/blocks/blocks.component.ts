@@ -15,24 +15,25 @@ import { BlockService } from '../../../app/core/services/block.service';
 export class BlocksComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
-    { matColumnDef: 'proposer', headerCellDef: 'Proposer' },
+    { matColumnDef: 'height', headerCellDef: 'Block Height' },
+    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
+    // { matColumnDef: 'peer_name', headerCellDef: 'Peer Name' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
   length;
-  pageSize = 20;
+  pageSize = 10;
   pageIndex = 0;
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
+  pageSizeOptions = [10, 25, 50, 100];
+     // bread crumb items
+     breadCrumbItems!: Array<{}>;
   constructor(
     private commonService: CommonService,
     private router: Router,
     private blockService: BlockService,
-  ) { }
+    ) { }
 
   ngOnInit(): void {
     this.breadCrumbItems = [
@@ -51,24 +52,13 @@ export class BlocksComponent implements OnInit {
     this.blockService
       .blocks(this.pageSize, this.pageIndex)
       .subscribe(res => {
-        res.data.forEach((block) => {
-          block.block_hash_format = block.block_hash.replace(block.block_hash.substring(6, block.block_hash.length - 6), '...');
-        });
-
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.dataSource.sort = this.sort;
       }
       );
   }
-
-  openBlockDetail(event: any, data: any) {
-    const linkValidator = event?.target.classList.contains('validator-link');
-    const linkBlock = event?.target.classList.contains('block-link');
-    if (linkValidator) {
-      this.router.navigate(['validators', data.operator_address]);
-    } else if (linkBlock) {
-      this.router.navigate(['blocks', data.height]);
-    }
+  openBlockDetail(data){
+    this.router.navigate(['blocks', data.height]);
   }
 }
