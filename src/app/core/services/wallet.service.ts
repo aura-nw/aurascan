@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { Key } from "@keplr-wallet/types";
+import { BehaviorSubject, Observable } from "rxjs";
 import { KEPLR_ERRORS, WALLET_PROVIDER } from "../constants/wallet.constant";
 import { getKeplr } from "../utils/keplr";
 
@@ -6,9 +8,34 @@ import { getKeplr } from "../utils/keplr";
   providedIn: "root",
 })
 export class WalletService {
-  constructor() {}
+  // accountObs = n
 
-  connect(wallet: WALLET_PROVIDER, chainId: string): void {
+  wallet$: Observable<Key>;
+  private _wallet$: BehaviorSubject<Key>;
+
+  get wallet(): Key {
+    return this._wallet$.getValue();
+  }
+
+  setWallet(nextState: Key): void {
+    this._wallet$.next(nextState);
+  }
+
+  constructor() {
+
+    const initialValue: Key = {
+      address: null,
+      algo: null,
+      bech32Address: null,
+      isNanoLedger: null,
+      name: null,
+      pubKey: null
+    }
+    this._wallet$ = new BehaviorSubject(null);
+    this.wallet$ = this._wallet$.asObservable();
+  }
+
+  connect(wallet: WALLET_PROVIDER, chainId: string): any {
     switch (wallet) {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(chainId);
@@ -26,6 +53,13 @@ export class WalletService {
 
         if (keplr) {
           await keplr.enable(chainId);
+
+          const account = await keplr.getKey(chainId);
+
+          if (account) {
+            this.setWallet(account);
+          }
+
           return KEPLR_ERRORS.Success;
         }
       } catch (e) {
