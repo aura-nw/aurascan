@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import makeBlockie from "ethereum-blockies-base64";
+import { WALLET_PROVIDER } from "src/app/core/constants/wallet.constant";
+import { WalletService } from "src/app/core/services/wallet.service";
 
 @Component({
   selector: "app-wallet-connect",
@@ -16,15 +18,15 @@ export class WalletConnectComponent implements OnInit {
     : makeBlockie(this.walletName);
 
   ngOnInit(): void {}
-  // constructor(private wallet: WalletService) {}
+  constructor(private wallet: WalletService) {}
 
-  // connectWallet(e): void {
-  //   try {
-  //     this.wallet.connect(WALLET_PROVIDER.KEPLR, "aura-testnet");
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
+  connectWallet(e): void {
+    try {
+      this.wallet.connect(WALLET_PROVIDER.KEPLR, "aura-testnet");
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   shortenWallet(address: string): string {
     return address
