@@ -20,10 +20,16 @@ export class WalletConnectComponent implements OnInit {
     ? makeBlockie(this.walletAddress)
     : makeBlockie(this.walletName);
 
-  wallet$: Observable<Key> = this.walletService.wallet$
+  wallet$: Observable<Key> = this.walletService.wallet$.pipe(
+    tap((wallet) => {
+      if (wallet?.bech32Address) {
+        this.avatarValue = makeBlockie(wallet.bech32Address);
+      }
+    })
+  );
 
   ngOnInit(): void {
-    this.wallet$.subscribe()
+    this.wallet$.subscribe();
   }
   constructor(private walletService: WalletService) {}
 
@@ -33,6 +39,10 @@ export class WalletConnectComponent implements OnInit {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  disconnect(): void {
+    this.walletService.setWallet(null)
   }
 
   shortenWallet(address: string): string {

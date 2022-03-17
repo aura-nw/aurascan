@@ -1,8 +1,19 @@
 <div class="wallet-connect-container">
     <ng-container *ngIf="{wallet: wallet$ | async } as ng">
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet"
-            aria-controls="offcanvasWallet"> Connect To Wallets
+        <button *ngIf="!ng.wallet" class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet"> Connect To Wallet
         </button>
+
+
+        <button type="button" *ngIf="ng.wallet" class="btn btn-light" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
+
+            <div class="d-flex align-items-center gap-1">
+                <img [src]="avatarValue" alt="wallet-avatar" height="20px" width="20px" class="border rounded-circle">
+                {{ shortenWallet(ng.wallet?.bech32Address) }}
+            </div>
+        </button>
+
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" aria-labelledby="offcanvasWalletLabel">
             <div class="offcanvas-body p-0">
@@ -15,21 +26,26 @@
                                         <img [src]="avatarValue" alt="wallet-avatar">
                                     </div>
                                     <div class="wallet-name">
-                                        <span class="text">{{ walletName }}</span>
+                                        <span class="text">{{ ng.wallet?.name || 'My Wallet' }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-end align-items-center">
-                                    <span class="text">{{ shortenWallet(walletAddress) }}</span>
+                                    <span class="text">{{ shortenWallet(ng.wallet?.bech32Address) }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <ng-container *ngIf="ng.wallet as wallet; else walletList">
-                            <!-- <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list> -->
                             {{ wallet.name }}
+
+                            <div class="row mt-3">
+                                <button type="button" class="btn btn-secondary" (click)="disconnect()">
+                                    Disconnect
+                                </button>
+                            </div>
                         </ng-container>
                         <ng-template #walletList>
                             <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
