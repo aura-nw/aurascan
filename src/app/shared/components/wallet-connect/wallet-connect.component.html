@@ -39,6 +39,7 @@
                     </div>
                     <div class="card-body">
                         <ng-container *ngIf="ng.wallet as wallet; else walletList">
+                            <app-wallet-detail></app-wallet-detail>
                             {{ wallet.name }}
 
                             <div class="row mt-3">
