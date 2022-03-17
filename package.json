@@ -42,6 +42,7 @@
     "chart.js": "^2.9.4",
     "echarts": "^5.1.2",
     "echarts-gl": "^2.0.6",
+    "ethereum-blockies-base64": "^1.0.2",
     "firebase": "^8.7.1",
     "flatpickr": "^4.6.9",
     "jquery": "^3.6.0",

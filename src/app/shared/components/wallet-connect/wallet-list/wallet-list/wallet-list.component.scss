@@ -1,0 +1,11 @@
+.wallet-list-container {
+    .wallet-list {
+        .wallet-item {
+            cursor: pointer;
+            .wallet-icon {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+}
