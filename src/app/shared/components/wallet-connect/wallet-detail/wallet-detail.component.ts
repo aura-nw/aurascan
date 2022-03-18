@@ -1,6 +1,11 @@
 import { NgIf } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { ApexAxisChartSeries, ApexOptions, ApexPlotOptions, ChartComponent } from "ng-apexcharts";
+import {
+  ApexAxisChartSeries,
+  ApexOptions,
+  ApexPlotOptions,
+  ChartComponent,
+} from "ng-apexcharts";
 
 import {
   ApexNonAxisChartSeries,
@@ -29,32 +34,37 @@ export type ChartOptions = {
   styleUrls: ["./wallet-detail.component.scss"],
 })
 export class WalletDetailComponent implements OnInit {
-  @ViewChild("chart") chart: ChartComponent;
+  @ViewChild("walletChart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  tokenSymbol = "AURA";
 
-  chartCustomOptions: {name: string, color: string}[] = [
+  balance = {
+    amount: 0,
+    stackedAmount: 0,
+  };
+
+  chartCustomOptions: { name: string; color: string }[] = [
     {
-      name: 'Available',
-      color: '#5e72e4'
+      name: "Available",
+      color: "#11cdef",
     },
     {
-      name: 'Stacked',
-      color: '#11cdef'
-    }
+      name: "Staked",
+      color: "#5e72e4",
+    },
   ];
 
   constructor() {
     this.chartOptions = {
-      series: [0,0],
-      labels: this.chartCustomOptions.map(e => e.name),
-      colors: this.chartCustomOptions.map(e => e.color),
+      series: [0, 0],
+      labels: this.chartCustomOptions.map((e) => e.name),
+      colors: this.chartCustomOptions.map((e) => e.color),
       dataLabels: {
         enabled: false,
       },
       chart: {
         width: 280,
         type: "donut",
-        
       },
       plotOptions: {
         pie: {
@@ -70,7 +80,6 @@ export class WalletDetailComponent implements OnInit {
           },
           donut: {
             size: "85%",
-            background: "transparent",
             labels: {
               show: true,
               total: {
@@ -101,6 +110,17 @@ export class WalletDetailComponent implements OnInit {
             chart: {
               width: 200,
             },
+            plotOptions: {
+              pie: {
+                donut: {
+                  labels: {
+                    total: {
+                      fontSize: "14px",
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       ],
@@ -108,6 +128,6 @@ export class WalletDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.chartOptions.series = [100,2]
+    this.chartOptions.series = [100, 2];
   }
 }

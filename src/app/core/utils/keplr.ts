@@ -1,4 +1,4 @@
-import { Keplr } from '@keplr-wallet/types'
+import { Keplr } from "@keplr-wallet/types";
 
 export async function getKeplr(): Promise<Keplr | undefined> {
   if ((window as any).keplr) {

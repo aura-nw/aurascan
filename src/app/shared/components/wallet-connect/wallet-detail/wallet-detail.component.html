@@ -1,14 +1,51 @@
-<div id="chart" class="wallet-detail-container">
-  <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
-    [fill]="chartOptions.fill" [dataLabels]="chartOptions.dataLabels" [responsive]="chartOptions.responsive"
-    [plotOptions]="chartOptions.plotOptions" [legend]="chartOptions.legend" [colors]="chartOptions.colors">
-  </apx-chart>
+<div class="wallet-detail-container">
+  <div class="d-flex justify-content-center">
+
+    <div id="walletChart">
+      <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
+        [fill]="chartOptions.fill" [dataLabels]="chartOptions.dataLabels" [responsive]="chartOptions.responsive"
+        [plotOptions]="chartOptions.plotOptions" [legend]="chartOptions.legend" [colors]="chartOptions.colors">
+      </apx-chart>
+    </div>
+  </div>
 
   <div class="custom-legend" *ngFor="let chart of chartCustomOptions; index as index">
     <div class="color" [style.background-color]="chart.color"></div>
-    <div class="label">
+    <div class="label" [style.color]="chart.color">
       {{chart.name}}
     </div>
-    <div class="value"></div>
+    <div class="value">
+      <span>{{chartOptions.series[index]}} <span [style.color]="chart.color">{{tokenSymbol}}</span></span>
+    </div>
+  </div>
+
+
+  <div class="row justify-content-center mt-3">
+    <button type="button" class="col-5 btn btn-light">Deposit</button>
+  </div>
+
+  <div class="card mt-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="d-flex align-items-center gap-2 justify-content-between">
+          <div class="">
+            <h4>Pending Staking Reward</h4>
+            <p class="balance">{{ balance.stackedAmount }} <span>{{tokenSymbol}}</span></p>
+          </div>
+          <button class="btn btn-primary">Claim</button>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="d-flex align-items-center gap-2 justify-content-between">
+          <div class="">
+            <h4>Stake</h4>
+            <p class="text-secondary">
+              Earn up to 20% per year
+            </p>
+          </div>
+          <button class="btn btn-secondary">Stake</button>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>
