@@ -1,35 +1,160 @@
-<app-pagetitle title="Validators" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
+<app-pagetitle title="VALIDATORS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<div class="validator-container">
+  <div class="row">
+    <div class="col-xl-3 col-md-6">
+      <!-- card -->
+      <div class="card card-h-100">
+        <!-- card body -->
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row align-items-center">
+                <img src="/assets/images/icons/blocks.png" class="img-valid">
+                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Height</span>
+              </div>
+              <h4 class="" style="display: flex;justify-content: flex-end;">
+                <span class="fs-4">{{9593564 | number}}</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col-->
+
+    <div class="col-xl-3 col-md-6">
+      <!-- card -->
+      <div class="card card-h-100">
+        <!-- card body -->
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row align-items-center">
+                <img src="/assets/images/icons/network.png" class="img-valid">
+                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Validators</span>
+              </div>
+              <h4 class="" style="display: flex;justify-content: flex-end;">
+                <span class="fs-4">150 / 353</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+      <!-- card -->
+      <div class="card card-h-100">
+        <!-- card body -->
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row align-items-center">
+                <img src="/assets/images/icons/global-network.png" class="img-valid">
+                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Bonded Tokens</span>
+              </div>
+              <h4 class="" style="display: flex;justify-content: flex-end;">
+                <span class="fs-4">{{174375621 | number}}</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+      <!-- card -->
+      <div class="card card-h-100">
+        <!-- card body -->
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="row align-items-center">
+                <img src="/assets/images/icons/time.png" class="img-valid">
+                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Block Time</span>
+              </div>
+              <h4 class="" style="display: flex;justify-content: flex-end;">
+                <span class="fs-4">7.51s</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <!-- end card body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+
+  <div class="validatorList-searchArea">
+    <input placeholder="Search Validator" class="validatorList-searchInput" [(ngModel)]="textSearch"
+      (ngModelChange)="searchValidator()">
+    <button class="btn-select" [class.btn-select]="isActive" (click)="changeType(true)">Active</button>
+    <button [class.btn-select]="!isActive" (click)="changeType(false)">Inactive</button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
     <ng-container *ngFor="let template of templates; index as i">
-        <ng-container [matColumnDef]="template.matColumnDef">
+      <ng-container [matColumnDef]="template.matColumnDef">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div [innerHTML]="template.headerCellDef | translate"></div>
+        </th>
 
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
-
-            <td mat-cell *matCellDef="let data">
-                <div>
-                    <ng-container [ngSwitch]="template.matColumnDef ">
-                        <div *ngSwitchCase="'operator_address'" class="g-blue">
-                            {{ data[template.matColumnDef]}}
-                        </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
-                        </div>
-                    </ng-container>
+        <td mat-cell *matCellDef="let data">
+          <div>
+            <ng-container [ngSwitch]="template.matColumnDef ">
+              <div *ngSwitchCase="'operator_address'" class="g-blue cursor-pointer">
+                {{ data[template.matColumnDef]}}
+              </div>
+              <div *ngSwitchCase="'fee'" class="">
+                {{ data[template.matColumnDef] | percent:'1.2-2'}}
+              </div>
+              <div *ngSwitchCase="'power'" class="text-right mr-5">
+                {{ data[template.matColumnDef] | number}}<br>
+                <span class="percent-vote">{{data['percent_vote'] | percent:'1.2-2'}}</span>
+              </div>
+              <div *ngSwitchCase="'participation'" class="box-parti">
+                {{ data[template.matColumnDef] }}
+              </div>
+              <div *ngSwitchCase="'rank'" class="box-rank text-left">
+                <p>{{ data[template.matColumnDef] }}</p>
+              </div>
+              <div *ngSwitchCase="'title'" class="g-blue cursor-pointer"
+                [routerLink]="['/validators', data.operator_address]">
+                <p>{{ data[template.matColumnDef] }}</p>
+              </div>
+              <div *ngSwitchCase="'percent_power'" class="text-left">
+                <div class="cumulative-share_container">
+                  <div class="cumulative-share_cum" [ngStyle]="{'width': data.percent}"></div>
+                  <div class="cumulative-share_fill" [ngStyle]="{'width': data.percent_plus}"></div>
+                  <p>{{data['percent_vote'] | percent:'1.2-2'}}</p>
                 </div>
-            </td>
-        </ng-container>
+              </div>
+              <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+              </div>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openBlockDetail(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell g-no-data" colspan="9999">
-            {{"NO DATA" | translate}}
-        </td>
+      <td class="mat-cell g-no-data" colspan="9999">
+        {{"NO DATA" | translate}}
+      </td>
     </tr>
-
-</table>
+  </table>
+</div>
 
 <!-- <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
 </mat-paginator> -->
