@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Globals } from 'src/app/global/global';
+import { Globals } from '../../../app/global/global';
 
 @Component({
   selector: 'app-pagetitle',

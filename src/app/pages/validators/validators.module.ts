@@ -12,8 +12,8 @@ import { ValidatorsDetailComponent } from './validators-detail/validators-detail
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
-import { BlockService } from 'src/app/core/services/block.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { BlockService } from '../../../app/core/services/block.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 
 @NgModule({
   declarations: [

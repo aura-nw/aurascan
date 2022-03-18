@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CommonDataDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
-import { Globals } from 'src/app/global/global';
+import { Globals } from '../../../app/global/global';
 
 @Component({
   selector: 'app-validators',

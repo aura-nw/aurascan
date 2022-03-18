@@ -5,7 +5,7 @@
 .topnav {
     background: $header-bg;
     padding: 0 calc(#{$grid-gutter-width} / 2);
-    margin-top: 50px;
+    margin-top: $header-height;
     position: fixed;
     left: 0;
     right: 0;

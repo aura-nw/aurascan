@@ -7,7 +7,7 @@ import { TransactionService } from '../../../../app/core/services/transaction.se
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { ValidatorService } from '../../../../app/core/services/validator.service';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
