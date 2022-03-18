@@ -1,0 +1,37 @@
+.valid-detail-content {
+  .card-header {
+    font-size: 1rem;
+    .header-valid {
+      font-size: 1.8rem;
+      // margin-bottom: 10px;
+    }
+    .header-title {
+      font-weight: 500;
+    }
+  }
+  .box-status {
+    position: absolute;
+    right: 0;
+    top: 0.7rem;
+    display: -webkit-flex;
+    display: flex;
+    grid-column-gap: 1.2rem;
+    -webkit-column-gap: 1.2rem;
+    -moz-column-gap: 1.2rem;
+    column-gap: 1.2rem;
+    right: 30px;
+    .valid-status {
+      background-color: #37cc6e;
+      border-radius: 10rem;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-align-items: center;
+      align-items: center;
+      padding: 3px 1.1rem;
+      color: var(--white);
+      font-family: Open Sans, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+}

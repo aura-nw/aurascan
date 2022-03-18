@@ -1,0 +1,35 @@
+.type-data-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+    margin-left: 1rem;
+    height: 25px;
+    color: #222;
+    font-size: 13px;
+    padding: 0px 10px;
+    background-color: #e6e6e6;
+    color: #89909b;
+  }
+  .btn-select {
+    background-color: #222 !important;
+    color: #fff !important;
+  }
+}
+
+.raw-content {
+  white-space: pre-wrap;
+}

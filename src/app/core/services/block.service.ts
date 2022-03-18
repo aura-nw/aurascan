@@ -20,6 +20,11 @@ export class BlockService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/blocks?limit=${limit}&offset=${offset}`);
   }
 
+  blockDetailById(blockId): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/blocks/id/${blockId}`);
+  }
+
   blockDetail(height): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/blocks/${height}`);
