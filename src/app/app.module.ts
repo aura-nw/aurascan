@@ -53,6 +53,8 @@ import { EnvironmentService } from './core/data-services/environment.service';
 import { NgProgressModule } from "ngx-progressbar";
 import { LoadingInterceptor } from './core/directives/loading.interceptor';
 import { CommonService } from './core/services/common.service';
+import { DatePipe } from '@angular/common';
+import { Globals } from './global/global';
 // if (environment.defaultauth === 'firebase') {
 //   initFirebaseBackend(environment.firebaseConfig);
 // } else {
@@ -137,6 +139,8 @@ export class MaterialModule { }
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     // { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     EnvironmentService,
+    DatePipe,
+    Globals,
     {
       provide: APP_INITIALIZER,
       useFactory: (environmentService: EnvironmentService) => () => environmentService.load(),

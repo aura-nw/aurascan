@@ -1,74 +1,282 @@
-<app-pagetitle title="VALIDATOR DETAILS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<div class="card">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-        {{item?.title}}
+<app-pagetitle title="VALIDATOR DETAILS" [breadcrumbItems]="breadCrumbItems" [displayInfo]="true"></app-pagetitle>
+<div class="valid-detail-content card">
+  <div class="row card-header bg-transparent border-bottom fw-bold">
+    <div class="box-status">
+      <div class="valid-status">
+        <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt=""> Active
+      </div>
     </div>
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Operator Address</p>
-            </div>
-            <div class="col-6">{{item?.operator_address}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Address</p>
-            </div>
-            <div class="col-6">{{item?.acc_address}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Website</p>
-            </div>
-            <div class="col-6">{{item?.website}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Commission</p>
-            </div>
-            <div class="col-6"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Uptime</p>
-            </div>
-            <div class="col-6"></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Voting Power</p>
-            </div>
-            <div class="col-6">{{item?.percent_power}}%({{item?.power}})</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Self Stake</p>
-            </div>
-            <div class="col-6">{{item?.self_stake}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">fee</p>
-            </div>
-            <div class="col-6">{{item?.fee}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Blocks Proposed</p>
-            </div>
-            <div class="col-6">{{item?.blocks_proposed}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Delegators</p>
-            </div>
-            <div class="col-6">{{item?.delegators}}</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Governance Votes</p>
-            </div>
-            <div class="col-6">{{item?.governance_votes}}</div>
-        </div>
+    <div class="col-6">
+      <span class="header-valid">{{item?.title}}</span><br>
     </div>
+    <div class="row col-12">
+      <div class="col-6">
+        <div class="mt-3">
+          <div class="d-flex position-relative">
+            <p class="header-title">Operator Address</p>
+            <div class="img-wrap">
+              <img class="img-question ml-1" [src]="'assets/images/icons/questionmark-icon.svg'" alt="">
+              <div class="img-description-layer">
+                <p class="img-description">Validator operator address at which token <br /> holders delegate their
+                  voting powers to.</p>
+              </div>
+            </div>
+          </div>
+          <span>{{item?.operator_address}}</span>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mt-3">
+          <p class="header-title">Address</p>
+          <span class="g-blue cursor-pointer">{{item?.acc_address}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Website</p>
+      </div>
+      <div class="col-6">{{item?.website}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Commission</p>
+      </div>
+      <div class="col-6">{{ item?.commission | percent:'1.2-2'}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Uptime</p>
+      </div>
+      <div class="col-6">{{item?.up_time}}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Voting Power</p>
+      </div>
+      <div class="col-6">{{item?.percent_power}}%({{item?.power | number}} <span class="g-purple">AURA</span>)</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Bonded Height</p>
+      </div>
+      <div class="col-6">1</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Self Bonded</p>
+      </div>
+      <div class="col-6">{{item?.power | number}} <span class="g-purple">AURA</span> ({{item?.percent_power}}%)</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <p class="card-text">Details</p>
+      </div>
+      <div class="col-6">{{item?.details}}</div>
+    </div>
+  </div>
+
+  <div class="row box-data-content">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header align-items-center d-flex">
+          <p class="card-title mb-0 flex-grow-1">Proposed Blocks</p>
+          <div class="box-info"><img src="/assets/images/icons/blocks.png" class="img-valid">
+            <b>Total :</b>&nbsp; {{lengthBlock |number}} blocks
+          </div>
+        </div>
+        <div class="card-body px-0">
+          <ngx-simplebar style="max-height: 400px;">
+            <table mat-table [dataSource]="dataSourceBlock" class="table-reponsive">
+              <ng-container *ngFor="let template of templatesBlock; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef ">
+                        <div *ngSwitchCase="'timestamp'">
+                          <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
+                          data[template.matColumnDef] | calDate}} ago
+                        </div>
+                        <div *ngSwitchCase="'block_hash_format'" class="g-blue cursor-pointer"
+                          [routerLink]="['/blocks', data.height]">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer"
+                          [routerLink]="['/blocks', data.height]">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{"NO DATA" | translate}}
+                </td>
+              </tr>
+            </table>
+          </ngx-simplebar>
+
+          <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexBlock" [pageSize]="pageSize"
+            (page)="changePage($event, 'block')">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header d-flex">
+          <div class="flex-grow-1 d-flex align-items-center">
+            <p class="card-title mb-0">Uptime</p>
+            <div class="img-wrap">
+              <img class="img-question ml-1" [src]="'assets/images/icons/questionmark-icon.svg'" alt="">
+              <div class="img-description-layer box-uptime">
+                <p class="img-description">Missed Blocks are displayed with an X</p>
+              </div>
+            </div>
+          </div>
+          <div class="box-info">Last 100 Blocks</div>
+        </div>
+
+        <div class="card-body px-0 uptime-content">
+          <ng-container *ngFor="let a of fakeArray; let index = index">
+            <a class="block-uptime tool-tip" [ngStyle]="{'background-color': '#9c6cff'}" href="/blocks/1458829"
+              currentitem="false">
+              <span class="tooltiptext">{{index}}</span>
+              <div class="uptime-missed">
+                <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="">
+              </div>
+            </a>
+
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row box-data-content">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header align-items-center d-flex">
+          <p class="card-title mb-0 flex-grow-1">Delegators</p>
+          <div class="box-info">
+            <img src="/assets/images/icons/validators.svg" class="img-valid">33,179 ( Ref Block: 9787500 )
+          </div>
+        </div>
+        <div class="card-body px-0">
+          <ngx-simplebar style="max-height: 400px;">
+            <table mat-table [dataSource]="dataSourceDelegator" class="table-reponsive">
+              <ng-container *ngFor="let template of templatesDelegator; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef ">
+                        <div *ngSwitchCase="'delegator_address_format'" class="g-blue cursor-pointer"
+                          [routerLink]="['/account', data.delegator_address]">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'amount'">
+                          {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsDelegator"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsDelegator"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{"NO DATA" | translate}}
+                </td>
+              </tr>
+            </table>
+          </ngx-simplebar>
+
+          <mat-paginator [length]="lengthDelegator" [pageIndex]="pageIndexDelegator" [pageSize]="pageSize"
+            (page)="changePage($event, 'delegator')">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header align-items-center d-flex">
+          <p class="card-title mb-0 flex-grow-1">Power Events</p>
+          <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
+        </div>
+
+        <div class="card-body px-0">
+          <ngx-simplebar style="max-height: 400px;">
+            <table mat-table [dataSource]="dataSourcePower" class="table-reponsive">
+              <ng-container *ngFor="let template of templatesPower; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef ">
+                        <div *ngSwitchCase="'timestamp'">
+                          <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
+                          data[template.matColumnDef] | calDate}} ago
+                        </div>
+                        <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'type'" class="g-type">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsPower"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsPower" (click)="openTxsDetail($event, row)">
+              </tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{"NO DATA" | translate}}
+                </td>
+              </tr>
+            </table>
+          </ngx-simplebar>
+
+          <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
+            (page)="changePage($event, 'power')">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
