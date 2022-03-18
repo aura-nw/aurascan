@@ -2,12 +2,17 @@
     .text {
         font-size: 16px;
     }
+    .img-wallet {
+        width: 32px;
+        cursor: pointer;
+        height: auto;
+    }
     .wallet-avatar {
         width: 40px;
         height: 40px;
         border: 1px solid #d2d2d2;
         border-radius: 100%;
-        
+
         overflow: hidden;
         img {
             width: 100%;
@@ -15,6 +20,5 @@
         }
     }
     .wallet-name {
-         
     }
 }

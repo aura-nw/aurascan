@@ -1,8 +1,10 @@
 <div class="wallet-connect-container">
     <ng-container *ngIf="{wallet: wallet$ | async } as ng">
-        <button *ngIf="!ng.wallet" class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet"> Connect To Wallet
-        </button>
+        <!-- <button *ngIf="!ng.wallet" class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
+        </button> -->
+        <img class="img-wallet" *ngIf="!ng.wallet" src="./../../../../assets/images/wallet.png" alt="" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
 
 
         <button type="button" *ngIf="ng.wallet" class="btn btn-light" data-bs-toggle="offcanvas"
