@@ -1,5 +1,14 @@
-<div id="chart">
+<div id="chart" class="wallet-detail-container">
   <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
-    [fill]="chartOptions.fill" [dataLabels]="chartOptions.dataLabels" [responsive]="chartOptions.responsive">
+    [fill]="chartOptions.fill" [dataLabels]="chartOptions.dataLabels" [responsive]="chartOptions.responsive"
+    [plotOptions]="chartOptions.plotOptions" [legend]="chartOptions.legend" [colors]="chartOptions.colors">
   </apx-chart>
+
+  <div class="custom-legend" *ngFor="let chart of chartCustomOptions; index as index">
+    <div class="color" [style.background-color]="chart.color"></div>
+    <div class="label">
+      {{chart.name}}
+    </div>
+    <div class="value"></div>
+  </div>
 </div>

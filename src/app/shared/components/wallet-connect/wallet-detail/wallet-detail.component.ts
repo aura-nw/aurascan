@@ -1,5 +1,6 @@
+import { NgIf } from "@angular/common";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { ChartComponent } from "ng-apexcharts";
+import { ApexAxisChartSeries, ApexOptions, ApexPlotOptions, ChartComponent } from "ng-apexcharts";
 
 import {
   ApexNonAxisChartSeries,
@@ -9,6 +10,7 @@ import {
   ApexDataLabels,
   ApexLegend,
 } from "ng-apexcharts";
+
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
   chart: ApexChart;
@@ -17,6 +19,8 @@ export type ChartOptions = {
   fill: ApexFill;
   legend: ApexLegend;
   dataLabels: ApexDataLabels;
+  plotOptions: ApexPlotOptions;
+  colors: string[];
 };
 
 @Component({
@@ -28,23 +32,67 @@ export class WalletDetailComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
+  chartCustomOptions: {name: string, color: string}[] = [
+    {
+      name: 'Available',
+      color: '#5e72e4'
+    },
+    {
+      name: 'Stacked',
+      color: '#11cdef'
+    }
+  ];
+
   constructor() {
     this.chartOptions = {
-      series: [44,2],
-      chart: {
-        width: 380,
-        type: "donut",
-      },
+      series: [0,0],
+      labels: this.chartCustomOptions.map(e => e.name),
+      colors: this.chartCustomOptions.map(e => e.color),
       dataLabels: {
         enabled: false,
       },
-      fill: {
-        type: "gradient",
+      chart: {
+        width: 280,
+        type: "donut",
+        
+      },
+      plotOptions: {
+        pie: {
+          startAngle: 180,
+          endAngle: -180,
+          expandOnClick: false,
+          offsetX: 0,
+          offsetY: 0,
+          customScale: 1,
+          dataLabels: {
+            offset: 0,
+            minAngleToShowLabel: 1,
+          },
+          donut: {
+            size: "85%",
+            background: "transparent",
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                showAlways: true,
+                label: "Total Balance",
+                fontSize: "18px",
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontWeight: 600,
+                color: "#373d3f",
+                formatter: function (w) {
+                  return w.globals.seriesTotals.reduce((a, b) => {
+                    return a + b;
+                  }, 0);
+                },
+              },
+            },
+          },
+        },
       },
       legend: {
-        formatter: function (val, opts) {
-          return val + " - " + opts.w.globals.series[opts.seriesIndex];
-        },
+        show: false,
       },
       responsive: [
         {
@@ -53,14 +101,13 @@ export class WalletDetailComponent implements OnInit {
             chart: {
               width: 200,
             },
-            legend: {
-              position: "bottom",
-            },
           },
         },
       ],
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.chartOptions.series = [100,2]
+  }
 }
