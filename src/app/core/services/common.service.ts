@@ -46,6 +46,11 @@ export class CommonService {
     return this._http.get<any>(`${this.apiUrl}/peers?limit=${limit}&offset=${offset}`);
   }
 
+  delegators(limit, offset, address): Observable<any> {
+    this.setURL();
+    return this._http.get<any>(`${this.apiUrl}/validators/${address}/delegations?limit=${limit}&offset=${offset}`);
+  }
+
   setURL() {
     if (this.networkQuerySubject.value === 1) {
       this.apiUrl = `${this._environmentService.apiUrl.value.fabric}`;
