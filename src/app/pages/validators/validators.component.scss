@@ -1,4 +1,4 @@
-@import "../../../assets/scss/custom-material.scss";
+@import "../../../assets/scss/color.scss";
 
 .validator-container {
   .box-info {
@@ -34,6 +34,11 @@
         font-weight: 500;
         font-size: 1.3rem;
       }
+    }
+  }
+  .table-reponsive {
+    td, th {
+      text-align: left;
     }
   }
 
