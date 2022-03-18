@@ -1,4 +1,4 @@
-<app-pagetitle title="TRANSACTIONS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="TRANSACTIONS" [breadcrumbItems]="breadCrumbItems" [displayInfo]="true"></app-pagetitle>
 <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort>
     <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
