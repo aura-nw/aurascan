@@ -42,7 +42,7 @@ export class WalletConnectComponent implements OnInit {
   }
 
   disconnect(): void {
-    this.walletService.setWallet(null)
+    this.walletService.disconnect();
   }
 
   shortenWallet(address: string): string {

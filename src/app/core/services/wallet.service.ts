@@ -1,8 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Key } from "@keplr-wallet/types";
 import { BehaviorSubject, Observable } from "rxjs";
-import { KEPLR_ERRORS, WALLET_PROVIDER } from "../constants/wallet.constant";
+import {
+  KEPLR_ERRORS,
+  LAST_USED_PROVIDER,
+  WALLET_PROVIDER,
+} from "../constants/wallet.constant";
+import { WalletStorage } from "../models/wallet";
 import { getKeplr } from "../utils/keplr";
+import local from "../utils/storage/local";
 
 @Injectable({
   providedIn: "root",
@@ -22,17 +28,22 @@ export class WalletService {
   }
 
   constructor() {
-
     const initialValue: Key = {
       address: null,
       algo: null,
       bech32Address: null,
       isNanoLedger: null,
       name: null,
-      pubKey: null
-    }
+      pubKey: null,
+    };
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
+    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+
+    if (lastProvider) {
+      const { provider, chainId } = lastProvider;
+      this.connect(provider, chainId);
+    }
   }
 
   connect(wallet: WALLET_PROVIDER, chainId: string): any {
@@ -44,6 +55,12 @@ export class WalletService {
         this.connectCoin98(chainId);
         break;
     }
+  }
+
+  disconnect(): void {
+    this.setWallet(null);
+
+    local.removeItem(LAST_USED_PROVIDER);
   }
 
   private connectKeplr(chainId: string): KEPLR_ERRORS {
@@ -58,6 +75,10 @@ export class WalletService {
 
           if (account) {
             this.setWallet(account);
+            local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+              provider: WALLET_PROVIDER.KEPLR,
+              chainId,
+            });
           }
 
           return KEPLR_ERRORS.Success;

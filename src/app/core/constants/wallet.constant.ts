@@ -4,6 +4,8 @@ export enum WALLET_PROVIDER {
   COIN98 = "COIN98",
 }
 
+export const LAST_USED_PROVIDER = 'LAST_USED_PROVIDER'
+
 export const ChainsInfo: { [chainId: string]: any } = {
   ["aura-testnet"]: {
     features: ["no-legacy-stdTx"],
