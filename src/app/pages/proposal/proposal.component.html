@@ -1,5 +1,5 @@
 <app-pagetitle title="PROPOSAL" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<section class="lasted-list d-none d-lg-block" *ngIf="lastedList.length > 0">
+<section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
     <div class="container-fluid">
         <div class="row">
             <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList">

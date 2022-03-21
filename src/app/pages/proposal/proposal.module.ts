@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     ProposalComponent,
     ProposalDetailComponent,
-    ProposalVoteComponent
+    ProposalVoteComponent,
   ],
     imports: [
         CommonModule,
@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
         SharedModule,
         MaterialModule,
         TranslateModule,
-        FormsModule
+        FormsModule,
     ],
     providers: [ProposalService]
 })
