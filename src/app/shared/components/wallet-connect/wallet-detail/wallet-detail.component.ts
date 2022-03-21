@@ -1,5 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { ApexPlotOptions, ChartComponent } from "ng-apexcharts";
+import {
+  ApexPlotOptions,
+  ApexStates,
+  ApexTooltip,
+  ChartComponent,
+} from "ng-apexcharts";
 
 import {
   ApexNonAxisChartSeries,
@@ -21,6 +26,8 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   colors: string[];
+  states: ApexStates;
+  tooltip: ApexTooltip;
 };
 
 @Component({
@@ -62,6 +69,21 @@ export class WalletDetailComponent implements OnInit {
       chart: {
         width: 280,
         type: "donut",
+      },
+      states: {
+        hover: {
+          filter: {
+            type: "none",
+          },
+        },
+        active: {
+          filter: {
+            type: "none",
+          },
+        },
+      },
+      tooltip: {
+        enabled: false,
       },
       plotOptions: {
         pie: {
