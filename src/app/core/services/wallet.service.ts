@@ -1,12 +1,15 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Key } from "@keplr-wallet/types";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import {
   KEPLR_ERRORS,
   LAST_USED_PROVIDER,
   WALLET_PROVIDER,
 } from "../constants/wallet.constant";
-import { WalletStorage } from "../models/wallet";
+import { EnvironmentService } from "../data-services/environment.service";
+import { IResponsesTemplates as IResponsesTemplate } from "../models/common.model";
+import { Balances, WalletStorage } from "../models/wallet";
 import { getKeplr } from "../utils/keplr";
 import local from "../utils/storage/local";
 
@@ -14,6 +17,7 @@ import local from "../utils/storage/local";
   providedIn: "root",
 })
 export class WalletService {
+  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
   // accountObs = n
 
   wallet$: Observable<Key>;
@@ -27,7 +31,10 @@ export class WalletService {
     this._wallet$.next(nextState);
   }
 
-  constructor() {
+  constructor(
+    private http: HttpClient,
+    private environmentService: EnvironmentService
+  ) {
     const initialValue: Key = {
       address: null,
       algo: null,
@@ -107,5 +114,12 @@ export class WalletService {
     return new Promise((resolve) => {
       resolve(false);
     });
+  }
+
+  public getBalances(address: string): Observable<IResponsesTemplate<Balances>> {
+    if(!address) {
+      return of(null)
+    }
+    return this.http.get<any>(`${this.apiUrl}/wallets/${address}`);
   }
 }

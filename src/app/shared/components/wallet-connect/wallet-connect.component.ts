@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { parseCoins } from "@cosmjs/amino";
 import { Key } from "@keplr-wallet/types";
+import BigNumber from "bignumber.js";
 import makeBlockie from "ethereum-blockies-base64";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";

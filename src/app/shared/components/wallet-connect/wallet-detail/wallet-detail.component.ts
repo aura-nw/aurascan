@@ -1,11 +1,6 @@
-import { NgIf } from "@angular/common";
-import { Component, OnInit, ViewChild } from "@angular/core";
-import {
-  ApexAxisChartSeries,
-  ApexOptions,
-  ApexPlotOptions,
-  ChartComponent,
-} from "ng-apexcharts";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { parseCoins } from "@cosmjs/stargate";
+import { ApexPlotOptions, ChartComponent } from "ng-apexcharts";
 
 import {
   ApexNonAxisChartSeries,
@@ -15,6 +10,7 @@ import {
   ApexDataLabels,
   ApexLegend,
 } from "ng-apexcharts";
+import { WalletService } from "src/app/core/services/wallet.service";
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -34,6 +30,8 @@ export type ChartOptions = {
   styleUrls: ["./wallet-detail.component.scss"],
 })
 export class WalletDetailComponent implements OnInit {
+  @Input() address: string = null;
+
   @ViewChild("walletChart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   tokenSymbol = "AURA";
@@ -54,11 +52,11 @@ export class WalletDetailComponent implements OnInit {
     },
   ];
 
-  constructor() {
+  constructor(private walletService: WalletService) {
     this.chartOptions = {
       series: [0, 0],
-      labels: this.chartCustomOptions.map((e) => e.name),
-      colors: this.chartCustomOptions.map((e) => e.color),
+      labels: this.chartCustomOptions.map((e) => e.name).concat("Total"),
+      colors: this.chartCustomOptions.map((e) => e.color).concat("#ced4da"),
       dataLabels: {
         enabled: false,
       },
@@ -91,9 +89,19 @@ export class WalletDetailComponent implements OnInit {
                 fontWeight: 600,
                 color: "#373d3f",
                 formatter: function (w) {
-                  return w.globals.seriesTotals.reduce((a, b) => {
-                    return a + b;
-                  }, 0);
+                  return w.globals.seriesTotals.reduce(
+                    (
+                      previousValue: number,
+                      currentValue: number,
+                      index: number
+                    ) => {
+                      if (index === 2) {
+                        return previousValue;
+                      }
+                      return previousValue + currentValue;
+                    },
+                    0
+                  );
                 },
               },
             },
@@ -128,6 +136,26 @@ export class WalletDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.chartOptions.series = [100, 2];
+    this.chartOptions.series = [0, 0, 100];
+    this.walletService.getBalances(this.address).subscribe((response) => {
+      if (!response) {
+        return;
+      }
+      if (response.error) {
+        return;
+      } else {
+        const { data } = response;
+
+        if (+data.balance === 0) {
+          this.chartOptions.series = [0, 0, 100];
+        } else {
+          this.chartOptions.series = [+data.balance, data.delegated];
+        }
+      }
+    });
   }
+
+  // toAmount(amount: string): string {
+  //   return parseCoins(amount)[0].amount
+  // }
 }

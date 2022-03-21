@@ -6,6 +6,7 @@ import { WalletDetailComponent } from "./wallet-detail/wallet-detail.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { MatMenuModule } from "@angular/material/menu";
 import { FeatherModule } from "angular-feather";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -13,7 +14,13 @@ import { FeatherModule } from "angular-feather";
     WalletListComponent,
     WalletDetailComponent,
   ],
-  imports: [CommonModule, NgApexchartsModule, MatMenuModule, FeatherModule],
+  imports: [
+    CommonModule,
+    NgApexchartsModule,
+    MatMenuModule,
+    FeatherModule,
+    RouterModule
+  ],
   exports: [WalletConnectComponent],
 })
 export class WalletConnectModule {}
