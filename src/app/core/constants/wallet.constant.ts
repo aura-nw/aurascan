@@ -205,3 +205,15 @@ export enum KEPLR_ERRORS {
   RequestRejected = "REQUEST REJECTED",
   NotInstall = "NOT INSTALL",
 }
+
+export const SIGNING_MESSAGE_TYPES = {
+  SEND: `SendTx`,
+  STAKE: `StakeTx`,
+  RESTAKE: `RestakeTx`,
+  UNSTAKE: `UnstakeTx`,
+  VOTE: `VoteTx`,
+  DEPOSIT: `DepositTx`,
+  CLAIM_REWARDS: `ClaimRewardsTx`,
+  SUBMIT_PROPOSAL: `SubmitProposalTx`,
+  UNKNOWN: `UnknownTx`,
+}
