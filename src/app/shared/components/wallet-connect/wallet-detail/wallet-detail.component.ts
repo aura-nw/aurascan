@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { parseCoins } from "@cosmjs/stargate";
 import { ApexPlotOptions, ChartComponent } from "ng-apexcharts";
 
 import {
@@ -154,8 +153,4 @@ export class WalletDetailComponent implements OnInit {
       }
     });
   }
-
-  // toAmount(amount: string): string {
-  //   return parseCoins(amount)[0].amount
-  // }
 }
