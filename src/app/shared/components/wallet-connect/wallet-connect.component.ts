@@ -1,12 +1,11 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { parseCoins } from "@cosmjs/amino";
 import { Key } from "@keplr-wallet/types";
-import BigNumber from "bignumber.js";
 import makeBlockie from "ethereum-blockies-base64";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { WALLET_PROVIDER } from "src/app/core/constants/wallet.constant";
 import { WalletService } from "src/app/core/services/wallet.service";
+import { createSignBroadcast } from "src/app/core/utils/signing/transaction-manager";
 
 @Component({
   selector: "app-wallet-connect",
@@ -53,5 +52,9 @@ export class WalletConnectComponent implements OnInit {
           address.length - 6
         )}`
       : "";
+  }
+
+  test(): void {
+    createSignBroadcast(null);
   }
 }
