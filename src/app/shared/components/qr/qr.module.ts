@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QrComponent } from './qr.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 
@@ -9,7 +10,11 @@ import { QrComponent } from './qr.component';
     QrComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    QRCodeModule
+  ],
+  exports: [
+    QrComponent
   ]
 })
 export class QrModule { }

@@ -16,63 +16,65 @@
             aria-labelledby="offcanvasWalletLabel">
             <div class="offcanvas-body p-0">
                 <div class="wallet-container">
-                <div class="card border-0">
-                    <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="d-flex align-items-center gap-1" [class.disabled-pointer]="!ng.wallet?.name"
-                                    [matMenuTriggerFor]="menu">
-                                    <div class="wallet-avatar">
-                                        <img [src]="avatarValue" alt="wallet-avatar">
-                                    </div>
-                                    <div class="wallet-name">
-                                        <span class="text">
-                                            <span class="cursor-pointer">
-                                                {{ ng.wallet?.name || 'My Wallet' }}
-                                                <i-feather [hidden]="!ng.wallet?.name" name="chevron-down"></i-feather>
+                    <div class="card border-0">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="d-flex align-items-center gap-1"
+                                        [class.disabled-pointer]="!ng.wallet?.name" [matMenuTriggerFor]="menu">
+                                        <div class="wallet-avatar">
+                                            <img [src]="avatarValue" alt="wallet-avatar">
+                                        </div>
+                                        <div class="wallet-name">
+                                            <span class="text">
+                                                <span class="cursor-pointer">
+                                                    {{ ng.wallet?.name || 'My Wallet' }}
+                                                    <i-feather [hidden]="!ng.wallet?.name" name="chevron-down">
+                                                    </i-feather>
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                     </div>
+                                    <mat-menu #menu="matMenu" class="custom-menu">
+                                        <div class="menu-row" mat-menu-item>
+                                            <img class="menu-img" width="20px"
+                                                src="./../../../../assets/images/icon-keplr.svg" alt="">
+                                            <span class="menu-content">Keplr</span>
+                                            <i-feather name="check" class="menu-checked"></i-feather>
+                                        </div>
+                                        <div class="menu-row" mat-menu-item>
+                                            <img class="menu-img" width="20px"
+                                                src="./../../../../assets/images/log-out.svg" alt="">
+                                            <span class="menu-content" (click)="disconnect()">Log out</span>
+                                        </div>
+                                    </mat-menu>
                                 </div>
-                                <mat-menu #menu="matMenu" class="custom-menu">
-                                    <div class="menu-row" mat-menu-item>
-                                        <img class="menu-img" width="20px"
-                                            src="./../../../../assets/images/icon-keplr.svg" alt="">
-                                        <span class="menu-content">Keplr</span>
-                                        <i-feather name="check" class="menu-checked"></i-feather>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <span class="text">{{ shortenWallet(ng.wallet?.bech32Address) }}</span>
                                     </div>
-                                    <div class="menu-row" mat-menu-item>
-                                        <img class="menu-img" width="20px" src="./../../../../assets/images/log-out.svg"
-                                            alt="">
-                                        <span class="menu-content" (click)="disconnect()">Log out</span>
-                                    </div>
-                                </mat-menu>
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <span class="text">{{ shortenWallet(ng.wallet?.bech32Address) }}</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <ng-container *ngIf="ng.wallet as wallet; else walletList">
+                                <app-wallet-detail [trigger]="trigger" [chainId]="chainId"
+                                    [address]="wallet.bech32Address" (depositEvent)="toggleShowQR()">
+                                </app-wallet-detail>
+                            </ng-container>
+                            <ng-template #walletList>
+                                <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
+                            </ng-template>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <ng-container *ngIf="ng.wallet as wallet; else walletList">
-                            <app-wallet-detail [trigger]="trigger" [chainId]="chainId" [address]="wallet.bech32Address" (depositEvent)="toggleShowQR()">
-                            </app-wallet-detail>
-                        </ng-container>
-                        <ng-template #walletList>
-                            <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
-                        </ng-template>
+
+                    <div class="qr-modal" *ngIf="isShowQR">
+                        <div class="modal-content" (clickOutside)="toggleShowQR()">
+                            <h2 class="text-center"> Scan QR code </h2>
+                            <app-qr [address]="ng.wallet?.bech32Address || ''"> </app-qr>
+                        </div>
                     </div>
                 </div>
-
-                <div class="qr-modal" *ngIf="isShowQR">
-                    <div class="modal-content" (clickOutside)="toggleShowQR()">
-                      hello wor
-                    </div>
-                  </div>
-            </div>
-
             </div>
         </div>
     </ng-container>

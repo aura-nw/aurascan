@@ -8,6 +8,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { FeatherModule } from "angular-feather";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
+import { QrModule } from "../qr/qr.module";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ClickOutsideModule } from "ng-click-outside";
     MatMenuModule,
     FeatherModule,
     RouterModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    QrModule
   ],
   exports: [WalletConnectComponent],
 })
