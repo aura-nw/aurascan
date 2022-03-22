@@ -20,7 +20,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
-    { matColumnDef: 'participation', headerCellDef: 'Participation' },
+    // { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
   ];

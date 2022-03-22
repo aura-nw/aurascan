@@ -6,4 +6,5 @@
   Unbonding = 'Unbonding',
   Redelegation = 'Redelegation',
   Vestings = 'Vestings',
+  Token = 'Token',
 }

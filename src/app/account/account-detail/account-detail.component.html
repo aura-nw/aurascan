@@ -28,7 +28,8 @@
           </mat-select>
         </div>
       </div>
-      <app-table [dataSource]="dataSourceToken" [templates]="templatesToken" [displayedColumns]="displayedColumnsToken">
+      <app-table [dataSource]="dataSourceToken" [templates]="templatesToken" [displayedColumns]="displayedColumnsToken"
+        [pageData]="pageDataToken" [pageEventType]="pageEventType.Token" (pageEvent)="changePage($event)">
       </app-table>
     </div>
   </div>

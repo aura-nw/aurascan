@@ -58,12 +58,12 @@
       </div>
       <div class="col-6">{{item?.percent_power}}%({{item?.power | number}} <span class="g-purple">AURA</span>)</div>
     </div>
-    <div class="row mb-3">
+    <!-- <div class="row mb-3">
       <div class="col-3">
         <p class="card-text">Bonded Height</p>
       </div>
       <div class="col-6">1</div>
-    </div>
+    </div> -->
     <div class="row mb-3">
       <div class="col-3">
         <p class="card-text">Self Bonded</p>
@@ -131,7 +131,7 @@
           </ngx-simplebar>
 
           <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexBlock" [pageSize]="pageSize"
-            (page)="changePage($event, 'block')">
+            (page)="changePage($event, 'block')" *ngIf="lengthBlock">
           </mat-paginator>
         </div>
       </div>
@@ -214,7 +214,7 @@
           </ngx-simplebar>
 
           <mat-paginator [length]="lengthDelegator" [pageIndex]="pageIndexDelegator" [pageSize]="pageSize"
-            (page)="changePage($event, 'delegator')">
+            (page)="changePage($event, 'delegator')" *ngIf="lengthDelegator">
           </mat-paginator>
         </div>
       </div>
@@ -271,8 +271,8 @@
             </table>
           </ngx-simplebar>
 
-          <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
-            (page)="changePage($event, 'power')">
+          <mat-paginator [length]="lengthPower" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
+            (page)="changePage($event, 'power')" *ngIf="lengthPower">
           </mat-paginator>
         </div>
       </div>

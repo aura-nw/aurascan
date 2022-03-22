@@ -84,6 +84,12 @@ export class AccountDetailComponent implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX
   };
 
+  pageDataToken: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageIndex: PAGE_EVENT.PAGE_INDEX
+  };
+
   pageDataDelegation: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
@@ -250,6 +256,10 @@ export class AccountDetailComponent implements OnInit {
         this.pageDataVesting.pageIndex = page.pageIndex;
         // this.getListPower();
         break;
+      case this.pageEventType.Token:
+        this.pageDataToken.pageIndex = page.pageIndex;
+        // this.getListPower();
+        break;
       default:
         this.pageData.pageIndex = page.pageIndex;
         this.getList();
@@ -279,24 +289,18 @@ export class AccountDetailComponent implements OnInit {
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
-        this.pageDataDelegation.length = res.meta.count;
         this.dataSource.sort = this.sort;
       }
       );
   }
 
   searchValidator(): void {
-    // if (this.textSearch.length > 0) {
-    //   const data = this.dataSource.data.filter((f) =>
-    //     f.title.toLowerCase().indexOf(this.textSearch) > -1 && f.status_validator === this.isActive
-    //   );
-    //   this.dataSource = this.dataSourceBk;
-    //   if (data.length > 0) {
-    //     this.dataSource = new MatTableDataSource(data);
-    //   }
-    // } else {
-    //   this.dataSource = this.dataSourceBk;
-    // }
+    if (this.textSearch.length > 0) {
+      const data = this.dataSourceToken.data.filter((f) =>
+        f.title.toLowerCase().indexOf(this.textSearch) > -1
+      );
+      this.dataSource = new MatTableDataSource(data);
+    }
   }
 
   /**

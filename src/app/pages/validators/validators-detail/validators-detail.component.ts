@@ -37,6 +37,7 @@ export class ValidatorsDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   lengthBlock;
   lengthDelegator;
+  lengthPower;
   pageSize = 5;
   pageIndexBlock = 0;
   pageIndexDelegator = 0;
