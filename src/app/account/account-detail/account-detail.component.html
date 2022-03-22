@@ -19,10 +19,10 @@
         <span class="title-assets">Assets</span>
         <div class="account-list-search-area">
           <input placeholder="Search Asset" class="account-list-search-input" [(ngModel)]="textSearch"
-            (ngModelChange)="searchValidator()">
+            (ngModelChange)="searchToken()">
           <span class="txt-asset">Asset Type</span>
-          <mat-select [(ngModel)]="type" class="list-token">
-            <mat-option *ngFor="let item of assetsType" [value]="item.value">
+          <mat-select [(ngModel)]="type" class="list-token" (selectionChange)="searchToken()">
+            <mat-option *ngFor="let item of assetsType" [value]="item.label">
               {{(item.value |translate)}}
             </mat-option>
           </mat-select>

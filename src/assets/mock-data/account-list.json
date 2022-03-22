@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "name": "ATOM",
+    "subName": "Cosmos Staking Coin",
+    "amount": "11.078"
+  },
+  {
+    "id": "2",
+    "name": "OSMO",
+    "subName": "channel-141",
+    "amount": "0.288"
+  },
+  {
+    "id": "3",
+    "name": "GDEX-1",
+    "subName": "pool/1",
+    "amount": "0.199"
+  }
+]
+
