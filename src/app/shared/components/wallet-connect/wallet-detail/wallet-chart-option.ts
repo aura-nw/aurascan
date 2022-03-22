@@ -25,6 +25,7 @@ export type ChartOptions = {
   colors: string[];
   states: ApexStates;
   tooltip: ApexTooltip;
+  stoke: ApexStroke
 };
 
 export const chartCustomOptions: { name: string; color: string }[] = [
@@ -44,6 +45,9 @@ export const CHART_OPTIONS: Partial<ChartOptions> = {
   colors: chartCustomOptions.map((e) => e.color).concat("#ced4da"),
   dataLabels: {
     enabled: false,
+  },
+  stoke: {
+    width: 0
   },
   chart: {
     width: 280,
@@ -90,7 +94,7 @@ export const CHART_OPTIONS: Partial<ChartOptions> = {
         minAngleToShowLabel: 1,
       },
       donut: {
-        size: "85%",
+        size: "82%",
         labels: {
           show: true,
           total: {
