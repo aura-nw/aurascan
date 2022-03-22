@@ -15,6 +15,7 @@
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet
             aria-labelledby="offcanvasWalletLabel">
             <div class="offcanvas-body p-0">
+                <div class="wallet-container">
                 <div class="card border-0">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
@@ -56,7 +57,7 @@
                     </div>
                     <div class="card-body">
                         <ng-container *ngIf="ng.wallet as wallet; else walletList">
-                            <app-wallet-detail [trigger]="trigger" [chainId]="chainId" [address]="wallet.bech32Address">
+                            <app-wallet-detail [trigger]="trigger" [chainId]="chainId" [address]="wallet.bech32Address" (depositEvent)="toggleShowQR()">
                             </app-wallet-detail>
                         </ng-container>
                         <ng-template #walletList>
@@ -64,6 +65,14 @@
                         </ng-template>
                     </div>
                 </div>
+
+                <div class="qr-modal" *ngIf="isShowQR">
+                    <div class="modal-content" (clickOutside)="toggleShowQR()">
+                      hello wor
+                    </div>
+                  </div>
+            </div>
+
             </div>
         </div>
     </ng-container>

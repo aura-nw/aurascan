@@ -7,6 +7,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { MatMenuModule } from "@angular/material/menu";
 import { FeatherModule } from "angular-feather";
 import { RouterModule } from "@angular/router";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { RouterModule } from "@angular/router";
     NgApexchartsModule,
     MatMenuModule,
     FeatherModule,
-    RouterModule
+    RouterModule,
+    ClickOutsideModule
   ],
   exports: [WalletConnectComponent],
 })

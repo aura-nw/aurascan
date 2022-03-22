@@ -1,9 +1,7 @@
 import {
-  AfterViewChecked,
   AfterViewInit,
   Component,
   ElementRef,
-  Input,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -14,7 +12,6 @@ import { tap } from "rxjs/operators";
 import { WALLET_PROVIDER } from "src/app/core/constants/wallet.constant";
 import { EnvironmentService } from "src/app/core/data-services/environment.service";
 import { WalletService } from "src/app/core/services/wallet.service";
-import { createSignBroadcast } from "src/app/core/utils/signing/transaction-manager";
 
 @Component({
   selector: "app-wallet-connect",
@@ -26,6 +23,7 @@ export class WalletConnectComponent implements OnInit, AfterViewInit {
 
   walletName = "My Wallet";
 
+  isShowQR = true;
   trigger: "hide" | "show" = "hide";
 
   avatarValue = this.walletAddress
@@ -47,7 +45,10 @@ export class WalletConnectComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.wallet$.subscribe();
   }
-  constructor(private walletService: WalletService, private envService: EnvironmentService) {}
+  constructor(
+    private walletService: WalletService,
+    private envService: EnvironmentService
+  ) {}
 
   ngAfterViewInit(): void {
     this.offcanvasWallet.nativeElement.addEventListener(
@@ -65,7 +66,7 @@ export class WalletConnectComponent implements OnInit, AfterViewInit {
     );
   }
 
-  connectWallet(provider: WALLET_PROVIDER): void {    
+  connectWallet(provider: WALLET_PROVIDER): void {
     try {
       this.walletService.connect(provider, this.chainId);
     } catch (error) {
@@ -85,7 +86,7 @@ export class WalletConnectComponent implements OnInit, AfterViewInit {
       : "";
   }
 
-  test(): void {
-    createSignBroadcast(null);
+  toggleShowQR(): void {
+    this.isShowQR = !this.isShowQR;
   }
 }

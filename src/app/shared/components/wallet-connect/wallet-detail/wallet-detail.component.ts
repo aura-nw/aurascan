@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from "@angular/core";
@@ -30,6 +32,8 @@ export class WalletDetailComponent implements OnInit, OnChanges {
   @Input() address: string = null;
   @Input() chainId: string = null;
   @Input() trigger: "show" | "hide" = "hide";
+
+  @Output() depositEvent = new EventEmitter();
 
   @ViewChild("walletChart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
@@ -128,5 +132,10 @@ export class WalletDetailComponent implements OnInit, OnChanges {
 
       this.isClaiming = false;
     }
+  }
+
+  deposit(e): void {
+    e.stopPropagation();
+    this.depositEvent.emit();
   }
 }

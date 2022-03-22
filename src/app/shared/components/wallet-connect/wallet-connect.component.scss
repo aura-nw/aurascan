@@ -19,4 +19,36 @@
             height: auto;
         }
     }
+
+    .wallet-container {
+        position: relative;
+
+        .qr-modal {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 1552;
+
+            display: flex;
+            justify-content: center;
+
+            background-color: rgba(255, 255, 255, 0.75);
+
+            .modal-content {
+                margin-top: 80px;
+                height: fit-content;
+                width: 80%;
+
+                box-shadow: 1px 1px 1px 1px rgba(219, 219, 225, 0.5);
+
+                border: 1px solid rgb(204, 204, 204);
+                background: rgb(255, 255, 255);
+                overflow: auto;
+                border-radius: 4px;
+                outline: none;
+                padding: 20px;
+            }
+        }
+    }
 }
