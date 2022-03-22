@@ -179,3 +179,41 @@ export function assertIsBroadcastTxSuccess(res): DeliverTxResponse {
   "gasWanted": 200000
 }
 */
+
+
+
+/* 
+{
+  "chain_id": "aura-testnet",
+  "account_number": "45",
+  "sequence": "13",
+  "fee": {
+    "gas": "280000",
+    "amount": [
+      {
+        "denom": "uaura",
+        "amount": "700000"
+      }
+    ]
+  },
+  "msgs": [
+    {
+      "type": "cosmos-sdk/MsgWithdrawDelegationReward",
+      "value": {
+        "delegator_address": "aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx",
+        "validator_address": "auravaloper1ml6dsgu7tq09elyeuyxmve2l5wkvfzkl8wzz28"
+      }
+    },
+    {
+      "type": "cosmos-sdk/MsgWithdrawDelegationReward",
+      "value": {
+        "delegator_address": "aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx",
+        "validator_address": "auravaloper1hnyjager4zrrq6cr85cd5a7rd37z6hsp92elnw"
+      }
+    }
+  ],
+  "memo": ""
+}
+
+
+*/

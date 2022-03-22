@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Key } from "@keplr-wallet/types";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import {
+  ChainsInfo,
   KEPLR_ERRORS,
   LAST_USED_PROVIDER,
   WALLET_PROVIDER,
@@ -90,10 +91,16 @@ export class WalletService {
 
           return KEPLR_ERRORS.Success;
         }
-      } catch (e) {
-        switch (e) {
+      } catch (e: any) {
+        const error = this.getError(e.message)
+        
+        switch (error) {
           case KEPLR_ERRORS.NoChainInfo:
-            console.log(e);
+            if (ChainsInfo[chainId]) {
+              (await getKeplr()).experimentalSuggestChain(ChainsInfo[chainId]);
+            } else {
+              alert(e)
+            }
             break;
           case KEPLR_ERRORS.RequestRejected:
             console.log(e);
@@ -123,5 +130,13 @@ export class WalletService {
       return of(null);
     }
     return this.http.get<any>(`${this.apiUrl}/wallets/${address}`);
+  }
+
+  private getError(err: any): KEPLR_ERRORS {
+    if(err.toUpperCase().includes(KEPLR_ERRORS.NoChainInfo)) {
+      return KEPLR_ERRORS.NoChainInfo
+    }
+
+    return KEPLR_ERRORS.Failed
   }
 }

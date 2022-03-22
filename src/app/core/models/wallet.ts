@@ -1,7 +1,7 @@
 import { WALLET_PROVIDER } from "../constants/wallet.constant";
 
 export interface IWalletInfo {
-  name: string;
+  name: WALLET_PROVIDER;
   icon: string;
 }
 export type WalletStorage = {

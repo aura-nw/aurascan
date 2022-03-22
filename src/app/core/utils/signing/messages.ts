@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js'
-import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
+import BigNumber from "bignumber.js";
+import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import {
   MsgDelegate,
   MsgUndelegate,
-} from 'cosmjs-types/cosmos/staking/v1beta1/tx'
-import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx'
+} from "cosmjs-types/cosmos/staking/v1beta1/tx";
+import { MsgWithdrawDelegatorReward } from "cosmjs-types/cosmos/distribution/v1beta1/tx";
 // Bank
 
 /* istanbul ignore next */
@@ -13,11 +13,11 @@ export function SendTx(senderAddress, { to, amounts }, network) {
     fromAddress: senderAddress,
     toAddress: to[0],
     amount: amounts.map((amount) => Coin(amount, network.coinLookup)),
-  })
+  });
   return {
-    typeUrl: '/cosmos.bank.v1beta1.MsgSend',
+    typeUrl: "/cosmos.bank.v1beta1.MsgSend",
     value: msg,
-  }
+  };
   // return {
   //   type: `cosmos-sdk/MsgSend`,
   //   value: {
@@ -35,11 +35,11 @@ export function StakeTx(senderAddress, { to, amount }, network) {
     delegatorAddress: senderAddress,
     validatorAddress: to[0],
     amount: Coin(amount, network.coinLookup),
-  })
+  });
   return {
-    typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
+    typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
     value: msg,
-  }
+  };
   // return {
   //   type: `cosmos-sdk/MsgDelegate`,
   //   value: {
@@ -53,13 +53,13 @@ export function StakeTx(senderAddress, { to, amount }, network) {
 export function UnstakeTx(senderAddress, { from, amount }, network) {
   /* istanbul ignore next */
   return {
-    typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
+    typeUrl: "/cosmos.staking.v1beta1.MsgUndelegate",
     value: MsgUndelegate.fromPartial({
       delegatorAddress: senderAddress,
       validatorAddress: from[0],
       amount: Coin(amount, network.coinLookup),
     }),
-  }
+  };
   // return {
   //   type: `cosmos-sdk/MsgUndelegate`,
   //   value: {
@@ -91,19 +91,12 @@ export function ClaimRewardsTx(
   const msg = MsgWithdrawDelegatorReward.fromPartial({
     delegatorAddress: senderAddress,
     validatorAddress: from[0],
-  })
-  return {
-    typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
-    value: msg,
-  }
+  });
 
-  // return from.map((validatorAddress) => ({
-  //   typeUrl: `/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward`,
-  //   value: {
-  //     delegatorAddress: senderAddress,
-  //     validatorAddress: validatorAddress,
-  //   },
-  // }))
+  return {
+    typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+    value: msg,
+  };
 }
 
 export function VoteTx(senderAddress, { proposalId, voteOption }) {
@@ -112,7 +105,7 @@ export function VoteTx(senderAddress, { proposalId, voteOption }) {
     Abstain: 2,
     No: 3,
     NoWithVeto: 4,
-  }[voteOption]
+  }[voteOption];
   /* istanbul ignore next */
   return {
     type: `cosmos-sdk/MsgVote`,
@@ -121,7 +114,7 @@ export function VoteTx(senderAddress, { proposalId, voteOption }) {
       proposal_id: proposalId,
       option: chainVoteOption,
     },
-  }
+  };
 }
 
 export function DepositTx(senderAddress, { proposalId, amount }, network) {
@@ -133,17 +126,17 @@ export function DepositTx(senderAddress, { proposalId, amount }, network) {
       proposal_id: proposalId,
       amount: [Coin(amount, network.coinLookup)],
     },
-  }
+  };
 }
 
 export function Coin({ amount, denom }, coinLookup) {
-  const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom)
+  const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom);
   return {
     amount: new BigNumber(amount)
       .dividedBy(lookup.chainToViewConversionFactor)
       .toFixed(),
     denom: lookup.chainDenom,
-  }
+  };
 }
 
 export const messageCreators = {
@@ -153,4 +146,4 @@ export const messageCreators = {
   ClaimRewardsTx,
   VoteTx,
   DepositTx,
-}
+};

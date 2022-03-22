@@ -12,7 +12,8 @@
             </div>
         </button>
 
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet aria-labelledby="offcanvasWalletLabel">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet
+            aria-labelledby="offcanvasWalletLabel">
             <div class="offcanvas-body p-0">
                 <div class="card border-0">
                     <div class="card-header">
@@ -55,7 +56,8 @@
                     </div>
                     <div class="card-body">
                         <ng-container *ngIf="ng.wallet as wallet; else walletList">
-                            <app-wallet-detail [trigger]="trigger" [address]="wallet.bech32Address"></app-wallet-detail>
+                            <app-wallet-detail [trigger]="trigger" [chainId]="chainId" [address]="wallet.bech32Address">
+                            </app-wallet-detail>
                         </ng-container>
                         <ng-template #walletList>
                             <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>

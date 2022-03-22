@@ -24,10 +24,11 @@ import {
 @Component({
   selector: "app-wallet-detail",
   templateUrl: "./wallet-detail.component.html",
-  styleUrls: ["./wallet-detail.component.scss"]
+  styleUrls: ["./wallet-detail.component.scss"],
 })
 export class WalletDetailComponent implements OnInit, OnChanges {
   @Input() address: string = null;
+  @Input() chainId: string = null;
   @Input() trigger: "show" | "hide" = "hide";
 
   @ViewChild("walletChart") chart: ChartComponent;
@@ -41,7 +42,11 @@ export class WalletDetailComponent implements OnInit, OnChanges {
     denom: "",
   };
 
+  delegatorList = [];
+
   chartCustomOptions = chartCustomOptions;
+
+  isClaiming: boolean = false;
 
   constructor(private walletService: WalletService) {
     this.chartOptions = CHART_OPTIONS;
@@ -73,6 +78,10 @@ export class WalletDetailComponent implements OnInit, OnChanges {
           .map((a) => a.balance.amount)
           .reduce((a, b) => a + b);
 
+        this.delegatorList = stake_reward.rewards.map((dta) => {
+          return dta.validator_address;
+        });
+
         this.balance = {
           available: balanceOf(balance.balances[0].amount),
           totalReward: balanceOf(stake_reward.total[0].amount),
@@ -95,25 +104,29 @@ export class WalletDetailComponent implements OnInit, OnChanges {
   }
 
   async clampReward() {
+    this.isClaiming = true;
     const { hash } = await createSignBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
       message: {
         amounts: [
           {
             denom: this.balance.denom,
-            amount: this.balance.totalReward - 100,
+            amount: this.balance.totalReward,
           },
         ],
-        from: ["auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna"],
+        from: [...this.delegatorList],
       },
       senderAddress: this.address,
-      network: ChainsInfo["aura-devnet"],
+      network: ChainsInfo[this.chainId],
       signingType: "keplr",
-      chainId: "aura-devnet",
+      chainId: this.chainId,
     });
 
     if (hash) {
+      this.balance.totalReward = 0;
       this.loadWalletDetail();
+
+      this.isClaiming = false;
     }
   }
 }
