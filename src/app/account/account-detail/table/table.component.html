@@ -28,4 +28,4 @@
   </table>
 </ngx-simplebar>
 
-<mat-paginator (page)="handlePageEvent($event)" [length]="pageData?.length" [pageSize]="pageData?.pageSize" [pageIndex]="pageData?.pageIndex">
+<mat-paginator (page)="handlePageEvent($event)" [length]="pageData?.length" [pageSize]="pageData?.pageSize" [pageIndex]="pageData?.pageIndex" *ngIf="pageData?.length">
