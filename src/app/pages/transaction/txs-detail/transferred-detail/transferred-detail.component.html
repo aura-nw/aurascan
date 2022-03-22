@@ -6,7 +6,8 @@
     <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
       <div class="row mb-3">
         <div class="col-3">
-          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg"
+              class="m-1 mb-0 mt-0 msg-image">
             {{transactionDetailType}}</p>
         </div>
       </div>
@@ -14,13 +15,19 @@
         <div class="col-3">
           <p class="card-text fw-bold">From Address</p>
         </div>
-        <div class="col-6">{{transactionDetail?.messages[0]?.from_address}}</div>
+        <div class="col-6 g-blue cursor-pointer"
+          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
+          {{transactionDetail?.messages[0]?.from_address}}
+        </div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">To Address</p>
         </div>
-        <div class="col-6">{{transactionDetail?.messages[0]?.to_address}}</div>
+        <div class="col-6 g-blue cursor-pointer"
+          [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
+          {{transactionDetail?.messages[0]?.to_address}}
+        </div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
@@ -40,7 +47,8 @@
     <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
       <div class="row mb-3">
         <div class="col-3">
-          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg"
+              class="m-1 mb-0 mt-0 msg-image">
             {{transactionDetailType}}</p>
         </div>
       </div>
@@ -54,7 +62,9 @@
         <div class="col-3">
           <p class="card-text fw-bold">Sender</p>
         </div>
-        <div class="col-6">{{transactionDetail?.messages[0]?.sender}}</div>
+        <div class="col-6" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+          {{transactionDetail?.messages[0]?.sender}}
+        </div>
       </div>
       <!-- <div class="row mb-3">
         <div class="col-3">
@@ -74,7 +84,8 @@
     <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
       <div class="row mb-3">
         <div class="col-3">
-          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg"
+              class="m-1 mb-0 mt-0 msg-image">
             {{transactionDetailType}}</p>
         </div>
       </div>
@@ -88,7 +99,9 @@
         <div class="col-3">
           <p class="card-text fw-bold">Sender</p>
         </div>
-        <div class="col-6">{{transactionDetail?.messages[0]?.sender}}</div>
+        <div class="col-6" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+          {{transactionDetail?.messages[0]?.sender}}
+        </div>
       </div>
       <!-- <div class="row mb-3">
         <div class="col-3">

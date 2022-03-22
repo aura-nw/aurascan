@@ -62,6 +62,7 @@
     "ngx-progressbar": "^6.1.1",
     "ngx-ui-switch": "^12.0.1",
     "ngx-youtube-player": "^9.1.0",
+    "qrcode": "^1.5.0",
     "rxjs": "~6.6.0",
     "simplebar-angular": "^2.3.4",
     "sweetalert2": "^11.0.18",
