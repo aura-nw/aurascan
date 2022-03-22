@@ -24,6 +24,12 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.TRANSACTION.TEXT',
         icon: 'repeat',
         link: '/transaction',
+    },
+    {
+        id: 5,
+        label: 'MENUITEMS.PROPOSAL.TEXT',
+        icon: 'file-text',
+        link: '/proposal',
     }
     // {
     //     id: 5,
