@@ -1,3 +1,5 @@
+@import "../../../../assets/scss/color.scss";
+
 .type-data-group {
   display: flex;
   justify-content: flex-end;
@@ -18,15 +20,15 @@
     align-items: center;
     margin-left: 1rem;
     height: 25px;
-    color: #222;
+    color: $validator-black;
     font-size: 13px;
     padding: 0px 10px;
-    background-color: #e6e6e6;
-    color: #89909b;
+    background-color: $validator-btn-color;
+    color: $validator-btn-text;
   }
   .btn-select {
-    background-color: #222 !important;
-    color: #fff !important;
+    background-color: $validator-black !important;
+    color: $white !important;
   }
 }
 

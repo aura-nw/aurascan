@@ -61,42 +61,14 @@
   </div>
 
   <div class="card mt-5" *ngIf="item?.messages">
-    <div class="card-header bg-transparent border-bottom fw-bold">
-      Message
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple"><img src="/assets/images/icons/send-icon.png" height="20" class="m-1 mb-0 mt-0">
-            {{transactionDetailType}}</p>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">From Address</p>
-        </div>
-        <div class="col-6">{{item?.messages[0]?.from_address}}</div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">To Address</p>
-        </div>
-        <div class="col-6">{{item?.messages[0]?.to_address}}</div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Amount</p>
-        </div>
-        <div class="col-6">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number }} <span class="g-purple">AURA</span>
-          </ng-container>
-          <ng-container *ngIf="amount == 0">
-            -
-          </ng-container>
-        </div>
-      </div>
-    </div>
+    <app-transferred-detail [transactionDetail]="item">
+    </app-transferred-detail>
+    <!-- <app-transferred-detail *ngSwitchCase="eTransType.ExecuteContract" [transactionDetail]="item">
+    </app-transferred-detail>
+    <app-transferred-detail *ngSwitchCase="eTransType.InstantiateContract" [transactionDetail]="item">
+    </app-transferred-detail>
+    <app-transferred-detail *ngSwitchCase="eTransType.InstantiateContract" [transactionDetail]="item">
+    </app-transferred-detail> -->
   </div>
 
   <div class="card" *ngIf="item?.read_set">
