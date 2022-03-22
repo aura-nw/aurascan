@@ -329,3 +329,7 @@ body {
 .cdk-overlay-container {
     z-index: 1051;
 }
+
+.disabled-pointer {
+    pointer-events: none;
+}

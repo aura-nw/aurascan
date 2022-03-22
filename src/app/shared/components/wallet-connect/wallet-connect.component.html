@@ -1,8 +1,5 @@
 <div class="wallet-connect-container">
     <ng-container *ngIf="{wallet: wallet$ | async } as ng">
-        <!-- <button *ngIf="!ng.wallet" class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
-        </button> -->
         <img class="img-wallet" *ngIf="!ng.wallet" src="./../../../../assets/images/wallet.png" alt=""
             data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
 
@@ -15,13 +12,14 @@
             </div>
         </button>
 
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" aria-labelledby="offcanvasWalletLabel">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet aria-labelledby="offcanvasWalletLabel">
             <div class="offcanvas-body p-0">
                 <div class="card border-0">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div class="d-flex align-items-center gap-1" [matMenuTriggerFor]="menu">
+                                <div class="d-flex align-items-center gap-1" [class.disabled-pointer]="!ng.wallet?.name"
+                                    [matMenuTriggerFor]="menu">
                                     <div class="wallet-avatar">
                                         <img [src]="avatarValue" alt="wallet-avatar">
                                     </div>
@@ -29,7 +27,7 @@
                                         <span class="text">
                                             <span class="cursor-pointer">
                                                 {{ ng.wallet?.name || 'My Wallet' }}
-                                                <i-feather name="chevron-down"></i-feather>
+                                                <i-feather [hidden]="!ng.wallet?.name" name="chevron-down"></i-feather>
                                             </span>
                                         </span>
                                     </div>
@@ -44,7 +42,7 @@
                                     <div class="menu-row" mat-menu-item>
                                         <img class="menu-img" width="20px" src="./../../../../assets/images/log-out.svg"
                                             alt="">
-                                        <span class="menu-content">Log out</span>
+                                        <span class="menu-content" (click)="disconnect()">Log out</span>
                                     </div>
                                 </mat-menu>
                             </div>
@@ -57,14 +55,7 @@
                     </div>
                     <div class="card-body">
                         <ng-container *ngIf="ng.wallet as wallet; else walletList">
-                            <app-wallet-detail [address]="wallet.bech32Address"></app-wallet-detail>
-                            <!-- {{ wallet.name }} -->
-
-                            <div class="row mt-3">
-                                <button type="button" class="btn btn-secondary" (click)="disconnect()">
-                                    Disconnect
-                                </button>
-                            </div>
+                            <app-wallet-detail [trigger]="trigger" [address]="wallet.bech32Address"></app-wallet-detail>
                         </ng-container>
                         <ng-template #walletList>
                             <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>

@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from "@angular/core";
 import { ChartComponent } from "ng-apexcharts";
 import {
   ChainsInfo,
@@ -11,7 +18,6 @@ import { createSignBroadcast } from "src/app/core/utils/signing/transaction-mana
 import {
   chartCustomOptions,
   ChartOptions,
-  CHART_NO_VALUE,
   CHART_OPTIONS,
 } from "./wallet-chart-option";
 
@@ -20,8 +26,9 @@ import {
   templateUrl: "./wallet-detail.component.html",
   styleUrls: ["./wallet-detail.component.scss"],
 })
-export class WalletDetailComponent implements OnInit {
+export class WalletDetailComponent implements OnInit, OnChanges {
   @Input() address: string = null;
+  @Input() trigger: "show" | "hide" = "hide";
 
   @ViewChild("walletChart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
@@ -38,6 +45,14 @@ export class WalletDetailComponent implements OnInit {
 
   constructor(private walletService: WalletService) {
     this.chartOptions = CHART_OPTIONS;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && changes["trigger"]) {
+      if (changes["trigger"]?.currentValue === "show") {
+        this.loadWalletDetail();
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -76,7 +91,6 @@ export class WalletDetailComponent implements OnInit {
   }
 
   setChartBalances(amount: number | string, staking: number | string): void {
-    this.chartOptions.series = CHART_NO_VALUE;
     this.chartOptions.series = [+amount, +staking, 0];
   }
 
@@ -87,7 +101,7 @@ export class WalletDetailComponent implements OnInit {
         amounts: [
           {
             denom: this.balance.denom,
-            amount: this.balance.totalReward,
+            amount: this.balance.totalReward - 100,
           },
         ],
         from: ["auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna"],

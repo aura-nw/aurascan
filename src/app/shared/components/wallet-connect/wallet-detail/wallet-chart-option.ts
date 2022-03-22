@@ -8,6 +8,7 @@ import {
   ApexPlotOptions,
   ApexStates,
   ApexTooltip,
+  ApexStroke,
 } from "ng-apexcharts";
 
 export const CHART_NO_VALUE = [0, 0, 1];
@@ -57,7 +58,7 @@ export const CHART_OPTIONS: Partial<ChartOptions> = {
       },
       dynamicAnimation: {
         enabled: true,
-        speed: 1000
+        speed: 1000,
       },
     },
   },

@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { Key } from "@keplr-wallet/types";
 import makeBlockie from "ethereum-blockies-base64";
 import { Observable } from "rxjs";
@@ -12,10 +20,12 @@ import { createSignBroadcast } from "src/app/core/utils/signing/transaction-mana
   templateUrl: "./wallet-connect.component.html",
   styleUrls: ["./wallet-connect.component.scss"],
 })
-export class WalletConnectComponent implements OnInit {
+export class WalletConnectComponent implements OnInit, AfterViewInit {
   walletAddress: string = null;
 
   walletName = "My Wallet";
+
+  trigger: "hide" | "show" = "hide";
 
   avatarValue = this.walletAddress
     ? makeBlockie(this.walletAddress)
@@ -29,10 +39,28 @@ export class WalletConnectComponent implements OnInit {
     })
   );
 
+  @ViewChild("offcanvasWallet") offcanvasWallet: ElementRef;
+
   ngOnInit(): void {
     this.wallet$.subscribe();
   }
   constructor(private walletService: WalletService) {}
+
+  ngAfterViewInit(): void {
+    this.offcanvasWallet.nativeElement.addEventListener(
+      "show.bs.offcanvas",
+      () => {
+        this.trigger = "show";
+      }
+    );
+
+    this.offcanvasWallet.nativeElement.addEventListener(
+      "hide.bs.offcanvas",
+      () => {
+        this.trigger = "hide";
+      }
+    );
+  }
 
   connectWallet(e): void {
     try {
