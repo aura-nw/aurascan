@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { ChartComponent } from "ng-apexcharts";
-import { SIGNING_MESSAGE_TYPES } from "src/app/core/constants/wallet.constant";
+import {
+  ChainsInfo,
+  SIGNING_MESSAGE_TYPES,
+} from "src/app/core/constants/wallet.constant";
 
 import { WalletService } from "src/app/core/services/wallet.service";
 import { balanceOf } from "src/app/core/utils/common/parsing";
@@ -8,6 +11,7 @@ import { createSignBroadcast } from "src/app/core/utils/signing/transaction-mana
 import {
   chartCustomOptions,
   ChartOptions,
+  CHART_NO_VALUE,
   CHART_OPTIONS,
 } from "./wallet-chart-option";
 
@@ -27,6 +31,7 @@ export class WalletDetailComponent implements OnInit {
     available: 0,
     totalStaked: 0,
     totalReward: 0,
+    denom: "",
   };
 
   chartCustomOptions = chartCustomOptions;
@@ -36,6 +41,10 @@ export class WalletDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadWalletDetail();
+  }
+
+  loadWalletDetail(): void {
     this.walletService.getWalletDetail(this.address).subscribe((response) => {
       if (!response) {
         return;
@@ -49,9 +58,12 @@ export class WalletDetailComponent implements OnInit {
           .map((a) => a.balance.amount)
           .reduce((a, b) => a + b);
 
-        this.balance.available = balanceOf(balance.balances[0].amount);
-        this.balance.totalReward = balanceOf(stake_reward.total[0].amount);
-        this.balance.totalStaked = +totalStake;
+        this.balance = {
+          available: balanceOf(balance.balances[0].amount),
+          totalReward: balanceOf(stake_reward.total[0].amount),
+          totalStaked: +totalStake,
+          denom: balance.balances[0].denom,
+        };
 
         if (+balance.balances[0].amount !== 0) {
           this.setChartBalances(
@@ -64,31 +76,30 @@ export class WalletDetailComponent implements OnInit {
   }
 
   setChartBalances(amount: number | string, staking: number | string): void {
+    this.chartOptions.series = CHART_NO_VALUE;
     this.chartOptions.series = [+amount, +staking, 0];
   }
 
-  clampReward(): void {
-    createSignBroadcast({
+  async clampReward() {
+    const { hash } = await createSignBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
       message: {
         amounts: [
           {
-            denom: "AURA",
-            amount: 3.802484,
+            denom: this.balance.denom,
+            amount: this.balance.totalReward,
           },
         ],
-        from: ["auravaloper1hnyjager4zrrq6cr85cd5a7rd37z6hsp92elnw"],
+        from: ["auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna"],
       },
       senderAddress: this.address,
-      accountInfo: null,
-      network: null,
-      signingType: null,
-      password: null,
-      HDPath: null,
-      feeDenom: null,
-      chainId: null,
-      memo: null,
-      ledgerTransport: null,
+      network: ChainsInfo["aura-devnet"],
+      signingType: "keplr",
+      chainId: "aura-devnet",
     });
+
+    if (hash) {
+      this.loadWalletDetail();
+    }
   }
 }

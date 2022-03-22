@@ -47,6 +47,19 @@ export const CHART_OPTIONS: Partial<ChartOptions> = {
   chart: {
     width: 280,
     type: "donut",
+    animations: {
+      enabled: true,
+      easing: "linear",
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 1000,
+      },
+      dynamicAnimation: {
+        enabled: true,
+        speed: 1000
+      },
+    },
   },
   states: {
     hover: {

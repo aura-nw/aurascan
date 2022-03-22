@@ -1,124 +1,24 @@
-import { SigningStargateClient } from "@cosmjs/stargate";
-import {
-  makeSignDoc,
-  encodePubkey,
-  // coins,
-} from "@cosmjs/proto-signing";
-import { toBase64 } from "@cosmjs/encoding";
+import { DeliverTxResponse, SigningStargateClient } from "@cosmjs/stargate";
 import { getSigner } from "./signer";
 import { messageCreators } from "./messages";
-// import fees from '~/common/fees'
-// import network from '~/common/network'
-// import { signWithExtension } from '~/common/extension-utils'
-
-// export function getFees(transactionType, feeDenom) {
-//   const { gasEstimate, feeOptions } = fees.getFees(transactionType)
-//   const fee = feeOptions.find(({ denom }) => denom === feeDenom)
-//   const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
-//   // converting view fee to on chain fee
-//   const convertedFee = [
-//     {
-//       amount: BigNumber(fee.amount)
-//         .div(coinLookup.chainToViewConversionFactor)
-//         .toString(),
-//       denom: coinLookup.chainDenom,
-//     },
-//   ]
-//   return {
-//     gasEstimate: String(gasEstimate),
-//     fee: convertedFee,
-//   }
-// }
 
 export async function createSignBroadcast({
   messageType,
   message,
   senderAddress,
-  accountInfo,
   network,
   signingType,
-  password,
-  HDPath,
-  feeDenom,
   chainId,
-  memo,
-  ledgerTransport,
 }): Promise<any> {
-  const feeData = {
-    gasEstimate: String(8000000),
-    fee: 1,
-  };
-  const transactionData = {
-    ...feeData,
-    memo,
-    chainId,
-    accountNumber: accountInfo.accountNumber,
-    accountSequence: accountInfo.sequence,
-  };
-  // console.log('account', accountInfo)
-  let signedTx;
-  let broadcastResult;
+  let broadcastResult: DeliverTxResponse;
   if (signingType === "extension") {
-    // signedTx = await signWithExtension(
-    //   messageType,
-    //   message,
-    //   transactionData,
-    //   senderAddress,
-    //   network
-    // )
   } else {
-    const signer = await getSigner(
-      signingType,
-      {
-        address: senderAddress,
-        password,
-      },
-      chainId,
-      ledgerTransport
-    );
+    const signer = await getSigner(signingType, chainId);
 
-    const account = await signer.getAccounts();
-
-    const messages = messageCreators[messageType](
-      senderAddress,
-      message,
-      network
-    );
-
-    const bodyBytes: any = [].concat(messages);
-
-    const signDoc = makeSignDoc(
-      bodyBytes,
-      {
-        amount: transactionData.fee[0].amount,
-        gas: transactionData.gasEstimate,
-      } as any,
-      chainId,
-      memo || ""
-      // accountInfo.accountNumber,
-      // accountInfo.sequence
-    );
-
-    const pubkey = encodePubkey({
-      type: "tendermint/PubKeySecp256k1",
-      value: toBase64(account[0].pubkey),
-    });
-    const sequence = accountInfo.sequence;
-    // const authInfoBytes = makeAuthInfoBytes(
-    //   [{ pubkey, sequence }],
-    //   transactionData.fee,
-    //   transactionData.gasEstimate
-    // )
-    // console.log('authInfoBytes', authInfoBytes)
-    // const { signed, signature } = await signer.sign(senderAddress, signDoc)
     const client = await SigningStargateClient.connectWithSigner(
-      network.rpcURL,
+      network.rpc,
       signer
     );
-    // console.log('client', client)
-    // signedTx = makeStdTx(signed, signature)
-    // console.log('signedTx', signed)
-    // console.log('signature', signature)
 
     // success
     const messagesSend = messageCreators[messageType](
@@ -131,19 +31,25 @@ export async function createSignBroadcast({
       amount: [
         {
           denom: "uaura",
-          amount: "20",
+          amount: "1",
         },
       ],
       gas: "200000",
     };
-    broadcastResult = await client.signAndBroadcast(
-      senderAddress,
-      [messagesSend],
-      fee
-    );
-    console.log("broadcastResult", broadcastResult);
 
-    assertIsBroadcastTxSuccess(broadcastResult);
+    try {
+      broadcastResult = await client.signAndBroadcast(
+        senderAddress,
+        [messagesSend],
+        fee
+      );
+
+      console.log("broadcastResult", broadcastResult);
+
+      assertIsBroadcastTxSuccess(broadcastResult);
+    } catch (e) {
+      console.error(e);
+    }
 
     return {
       hash: broadcastResult.transactionHash,
@@ -151,7 +57,7 @@ export async function createSignBroadcast({
   }
 }
 
-export function assertIsBroadcastTxSuccess(res) {
+export function assertIsBroadcastTxSuccess(res): DeliverTxResponse {
   if (!res) throw new Error(`Error sending transaction`);
   if (Array.isArray(res)) {
     if (res.length === 0) throw new Error(`Error sending transaction`);
@@ -165,7 +71,7 @@ export function assertIsBroadcastTxSuccess(res) {
 
   // Sometimes we get back failed transactions, which shows only by them having a `code` property
   if (res.code) {
-    const message = res.raw_log.message
+    const message = res.raw_log?.message
       ? JSON.parse(res.raw_log).message
       : res.raw_log;
     throw new Error(message);
@@ -262,3 +168,14 @@ export function assertIsBroadcastTxSuccess(res) {
   "chainId": "aura-testnet"
 }
  */
+
+/* 
+{
+  "code": 0,
+  "height": 68078,
+  "rawLog": "[{\"events\":[{\"type\":\"coin_received\",\"attributes\":[{\"key\":\"receiver\",\"value\":\"aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx\"},{\"key\":\"amount\",\"value\":\"1319861uaura\"}]},{\"type\":\"coin_spent\",\"attributes\":[{\"key\":\"spender\",\"value\":\"aura1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8ufn7tx\"},{\"key\":\"amount\",\"value\":\"1319861uaura\"}]},{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward\"},{\"key\":\"sender\",\"value\":\"aura1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8ufn7tx\"},{\"key\":\"module\",\"value\":\"distribution\"},{\"key\":\"sender\",\"value\":\"aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx\"}]},{\"type\":\"transfer\",\"attributes\":[{\"key\":\"recipient\",\"value\":\"aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx\"},{\"key\":\"sender\",\"value\":\"aura1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8ufn7tx\"},{\"key\":\"amount\",\"value\":\"1319861uaura\"}]},{\"type\":\"withdraw_rewards\",\"attributes\":[{\"key\":\"amount\",\"value\":\"1319861uaura\"},{\"key\":\"validator\",\"value\":\"auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna\"}]}]}]",
+  "transactionHash": "B71FCB70C151A20A69A509E47781D2533B6C21C5384CC5FC545F5C6022B2C6D6",
+  "gasUsed": 119198,
+  "gasWanted": 200000
+}
+*/
