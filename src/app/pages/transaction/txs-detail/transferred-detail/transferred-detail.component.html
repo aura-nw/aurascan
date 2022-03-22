@@ -1,0 +1,108 @@
+<div>
+  <div class="card-header bg-transparent border-bottom fw-bold">
+    Message
+  </div>
+  <div class="card-body">
+    <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image">
+            {{transactionDetailType}}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">From Address</p>
+        </div>
+        <div class="col-6">{{transactionDetail?.messages[0]?.from_address}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">To Address</p>
+        </div>
+        <div class="col-6">{{transactionDetail?.messages[0]?.to_address}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Amount</p>
+        </div>
+        <div class="col-6">
+          <ng-container *ngIf="amount > 0">
+            {{ amount | number }} <span class="g-purple">AURA</span>
+          </ng-container>
+          <ng-container *ngIf="amount == 0">
+            -
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image">
+            {{transactionDetailType}}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Contract</p>
+        </div>
+        <div class="col-6">{{transactionDetail?.messages[0]?.contract}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Sender</p>
+        </div>
+        <div class="col-6">{{transactionDetail?.messages[0]?.sender}}</div>
+      </div>
+      <!-- <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Amount</p>
+        </div>
+        <div class="col-6">
+          <ng-container *ngIf="amount > 0">
+            {{ amount | number }} <span class="g-purple">AURA</span>
+          </ng-container>
+          <ng-container *ngIf="amount == 0">
+            -
+          </ng-container>
+        </div>
+      </div> -->
+    </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image">
+            {{transactionDetailType}}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Label</p>
+        </div>
+        <div class="col-6">{{transactionDetail?.messages[0]?.label}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Sender</p>
+        </div>
+        <div class="col-6">{{transactionDetail?.messages[0]?.sender}}</div>
+      </div>
+      <!-- <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Amount</p>
+        </div>
+        <div class="col-6">
+          <ng-container *ngIf="amount > 0">
+            {{ amount | number }} <span class="g-purple">AURA</span>
+          </ng-container>
+          <ng-container *ngIf="amount == 0">
+            -
+          </ng-container>
+        </div>
+      </div> -->
+    </ng-container>
+  </div>
+</div>

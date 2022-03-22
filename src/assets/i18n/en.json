@@ -98,10 +98,6 @@
             "TEXT": "Transaction",
             "BADGE": "01"
         },
-        "PROPOSAL": {
-            "TEXT": "Proposal",
-            "BADGE": "04"
-        },
         "CHAINCODE": {
             "TEXT": "Chaincodes",
             "BADGE": "04"
@@ -245,14 +241,6 @@
                     }
                 }
             }
-        }
-    },
-    "PAGES": {
-        "PROPOSAL": {
-            "yes": "Yes",
-            "no": "No",
-            "noWithVeto": "No with veto",
-            "abstain": "Abstain"
         }
     }
 }

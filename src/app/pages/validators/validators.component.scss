@@ -1,4 +1,23 @@
+@import "../../../assets/scss/custom-material.scss";
+
 .validator-container {
+  .box-info {
+    background-color: $validator-bg-header;
+    border-radius: 5px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    padding: 20px 1.2rem;
+    height: 30px;
+    font-size: 16px;
+    margin-bottom: 1rem;
+    .img-valid {
+      width: auto;
+      height: 20px;
+      margin-right: 10px;
+    }
+  }
   .card-body {
     padding: 10px 20px;
     .img-valid {
@@ -7,6 +26,14 @@
     }
     .txt-title {
       width: auto;
+    }
+    .valid-header {
+      display: flex;
+      justify-content: flex-end;
+      span {
+        font-weight: 500;
+        font-size: 1.3rem;
+      }
     }
   }
 
@@ -20,6 +47,10 @@
     border-radius: 5rem;
     background-color: #ecf8f4;
     color: #37cc6e;
+    &.parti-down {
+      background-color: #e6e6e6;
+      color: #4b525d;
+    }
   }
 
   .box-rank {
@@ -41,17 +72,17 @@
     }
   }
 
-  .validatorList-searchArea {
+  .validator-list-search-area {
     display: flex;
     justify-content: flex-end;
-    .validatorList-searchInput {
+    .validator-list-search-input {
       border-radius: 0.5rem;
       border: 0.1rem solid #bebebe;
       padding: 0.6rem 1.2rem 0.7rem;
       margin-bottom: 0.3rem;
       width: 30%;
       height: 35px;
-      color: #222;
+      color: $validator-black;
       font-size: 1rem;
     }
     button {
@@ -60,7 +91,7 @@
       appearance: none;
       background: none;
       border: none;
-      border: 0.1rem solid #222;
+      border: 0.1rem solid $validator-black;
       border-radius: 0.5rem;
       cursor: pointer;
       display: -webkit-flex;
@@ -72,18 +103,14 @@
       margin-left: 1.2rem;
       // width: 8rem;
       height: 35px;
-      color: #222;
+      color: $validator-black;
       font-size: 15px;
       padding: 0px 15px;
-      // &:hover{
-      //   position: relative;
-      //   transform: translateY(-2px);
-      // }
     }
     .btn-select,
     button:hover {
-      background-color: #222 !important;
-      color: #fff !important;
+      background-color: $validator-black !important;
+      color: $white !important;
     }
   }
 

@@ -13,10 +13,9 @@ const routes: Routes = [
   { path: 'chaincodes', component: LayoutComponent, loadChildren: () => import('./pages/chaincodes/chaincodes.module').then(m => m.ChaincodesModule) },
   { path: 'chanels', component: LayoutComponent, loadChildren: () => import('./pages/chanels/chanels.module').then(m => m.ChanelsModule) },
   { path: 'user-management', component: LayoutComponent, loadChildren: () => import('./pages/user-management/user-management.module').then(m => m.UserManagementModule) },
-  { path: 'proposal', component: LayoutComponent, loadChildren: () => import('./pages/proposal/proposal.module').then(m => m.ProposalModule) },
   { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
   { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
-  { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
+  { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) }
 ];
 
 @NgModule({
