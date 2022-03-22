@@ -3,7 +3,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BlockService } from '../../../../app/core/services/block.service';
-import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { ValidatorService } from '../../../../app/core/services/validator.service';
@@ -42,7 +41,6 @@ export class ValidatorsDetailComponent implements OnInit {
   pageIndexBlock = 0;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
-  pageSizeOptions = [10, 25, 50, 100];
 
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
@@ -70,14 +68,13 @@ export class ValidatorsDetailComponent implements OnInit {
   dataSourcePower: MatTableDataSource<any>;
 
   typeTransaction = TYPE_TRANSACTION;
-  fakeArray = new Array(100);
+  arrayUpTime = new Array(100);
   isUptimeMiss = true;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private validatorService: ValidatorService,
     private blockService: BlockService,
-    private transactionService: TransactionService,
     private commonService: CommonService
   ) {
   }
@@ -86,6 +83,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetail();
     this.getListBlockWithOperator();
+    this.getListUpTime();
     this.getListDelegators();
     // this.getListPower();
   }
@@ -118,6 +116,15 @@ export class ValidatorsDetailComponent implements OnInit {
         });
         this.lengthBlock = res.meta?.count;
         this.dataSourceBlock = new MatTableDataSource(res.data);
+      }
+      );
+  }
+
+  getListUpTime(): void {
+    this.blockService
+      .getLastBlock()
+      .subscribe(res => {
+        this.arrayUpTime = res.data;
       }
       );
   }

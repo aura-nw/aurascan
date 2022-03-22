@@ -1,1 +1,151 @@
 <app-pagetitle title="ACCOUNT DETAIL" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<div class="account-detail-content card">
+  <div class="row card-header bg-transparent border-bottom fw-bold">
+    <div class="col-3">
+      <div class="box-account">
+        <div class="box-qr">
+          <canvas id="canvas" #canvas></canvas>
+        </div>
+        <p>Address</p>
+        <p class="address-account">{{id}}</p>
+        <div class="box-total">
+          <p>Total Value</p>
+          <p>$787.88</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="box-assets">
+        <span class="title-assets">Assets</span>
+        <div class="account-list-search-area">
+          <input placeholder="Search Asset" class="account-list-search-input" [(ngModel)]="textSearch"
+            (ngModelChange)="searchValidator()">
+          <span class="txt-asset">Asset Type</span>
+          <mat-select [(ngModel)]="type" class="list-token">
+            <mat-option *ngFor="let item of assetsType" [value]="item.value">
+              {{(item.value |translate)}}
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <app-table [dataSource]="dataSourceToken" [templates]="templatesToken" [displayedColumns]="displayedColumnsToken">
+      </app-table>
+    </div>
+  </div>
+  <div class="card-body row">
+    <div class="col-9">
+      <mat-tab-group>
+        <mat-tab label="Delegations">
+          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
+            [displayedColumns]="displayedColumnsDelegation" [pageData]="pageDataDelegation"
+            [pageEventType]="pageEventType.Delegation" (pageEvent)="changePage($event)">
+          </app-table>
+        </mat-tab>
+        <mat-tab label="Unbondings">
+          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
+            [displayedColumns]="displayedColumnsDelegation" [pageEventType]="pageEventType.Unbonding"
+            (pageEvent)="changePage($event)"></app-table>
+        </mat-tab>
+        <mat-tab label="Redelegations">
+          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
+            [displayedColumns]="displayedColumnsDelegation" [pageEventType]="pageEventType.Redelegation"
+            (pageEvent)="changePage($event)"></app-table>
+        </mat-tab>
+        <mat-tab label="Vestings">
+          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
+            [displayedColumns]="displayedColumnsDelegation" [pageEventType]="pageEventType.Vestings"
+            (pageEvent)="changePage($event)"></app-table>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div class="col-3">
+      <div id="walletChart">
+        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
+          [fill]="chartOptions.fill" [dataLabels]="chartOptions.dataLabels" [responsive]="chartOptions.responsive"
+          [plotOptions]="chartOptions.plotOptions" [legend]="chartOptions.legend" [colors]="chartOptions.colors">
+        </apx-chart>
+      </div>
+      <div class="box-balance">
+        <span class="balance-name g-purple">AURA</span>
+        <span class="balance-amount">10.301957</span>
+      </div>
+      <ng-container *ngFor="let item of chartCustomOptions">
+        <div class="d-flex">
+          <div class="item-color-balance" [ngStyle]="{'background-color': item.color }"></div>
+          <span>{{ item.name }}</span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <p class="card-title mb-0 flex-grow-1">Transactions</p>
+      </div>
+      <div class="card-body px-0">
+        <ngx-simplebar style="max-height: 400px;">
+          <table mat-table [dataSource]="dataSource" class="table-reponsive">
+            <ng-container *ngFor="let template of templates; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
+
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+
+                <td mat-cell *matCellDef="let data">
+                  <div>
+                    <ng-container [ngSwitch]="template.matColumnDef ">
+                      <div *ngSwitchCase="'timestamp'">
+                        <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
+                        data[template.matColumnDef] | calDate}} ago
+                      </div>
+                      <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'type'" class="g-type">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'status'">
+                        <img [src]="data[template.matColumnDef] === statusTransaction.Success ?
+                                  'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'fee'">
+                        {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
+                      </div>
+                      <div *ngSwitchCase="'amount'">
+                        <ng-container *ngIf="data[template.matColumnDef] > 0">
+                          {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                        </ng-container>
+                        <ng-container *ngIf="data[template.matColumnDef] == 0">
+                          -
+                        </ng-container>
+                      </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{"NO DATA" | translate}}
+              </td>
+            </tr>
+          </table>
+        </ngx-simplebar>
+
+        <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" (page)="changePage($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

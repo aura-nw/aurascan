@@ -48,4 +48,9 @@ export class BlockService extends CommonService {
 
     return forkJoin([character, characterHomeworld]);
   }
+
+  getLastBlock(): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/blocks/latest/agg`);
+  }
 }

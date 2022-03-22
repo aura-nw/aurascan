@@ -68,7 +68,7 @@
       <div class="col-3">
         <p class="card-text">Self Bonded</p>
       </div>
-      <div class="col-6">{{item?.power | number}} <span class="g-purple">AURA</span> ({{item?.percent_power}}%)</div>
+      <div class="col-6">{{item?.self_bonded | number}} <span class="g-purple">AURA</span> ({{item?.percent_self_bonded}})</div>
     </div>
     <div class="row mb-3">
       <div class="col-3">
@@ -152,15 +152,14 @@
         </div>
 
         <div class="card-body px-0 uptime-content">
-          <ng-container *ngFor="let a of fakeArray; let index = index">
-            <a class="block-uptime tool-tip" [ngStyle]="{'background-color': '#9c6cff'}" href="/blocks/1458829"
+          <ng-container *ngFor="let item of arrayUpTime; let index = index">
+            <a class="block-uptime tool-tip" [ngStyle]="{'background-color': '#9c6cff'}" href="/blocks/{{item?.height}}"
               currentitem="false">
-              <span class="tooltiptext">{{index}}</span>
+              <span class="tooltiptext">{{item?.height || index}}</span>
               <div class="uptime-missed">
                 <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="">
               </div>
             </a>
-
           </ng-container>
         </div>
       </div>
@@ -172,9 +171,9 @@
       <div class="card">
         <div class="card-header align-items-center d-flex">
           <p class="card-title mb-0 flex-grow-1">Delegators</p>
-          <div class="box-info">
+          <!-- <div class="box-info">
             <img src="/assets/images/icons/validators.svg" class="img-valid">33,179 ( Ref Block: 9787500 )
-          </div>
+          </div> -->
         </div>
         <div class="card-body px-0">
           <ngx-simplebar style="max-height: 400px;">
