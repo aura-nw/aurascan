@@ -9,7 +9,7 @@ import {
 } from "../constants/wallet.constant";
 import { EnvironmentService } from "../data-services/environment.service";
 import { IResponsesTemplates as IResponsesTemplate } from "../models/common.model";
-import { Balances, WalletStorage } from "../models/wallet";
+import { IWalletDetail, WalletStorage } from "../models/wallet";
 import { getKeplr } from "../utils/keplr";
 import local from "../utils/storage/local";
 
@@ -116,9 +116,11 @@ export class WalletService {
     });
   }
 
-  public getBalances(address: string): Observable<IResponsesTemplate<Balances>> {
-    if(!address) {
-      return of(null)
+  public getWalletDetail(
+    address: string
+  ): Observable<IResponsesTemplate<IWalletDetail>> {
+    if (!address) {
+      return of(null);
     }
     return this.http.get<any>(`${this.apiUrl}/wallets/${address}`);
   }

@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { ChartComponent } from "ng-apexcharts";
+import { SIGNING_MESSAGE_TYPES } from "src/app/core/constants/wallet.constant";
 
 import { WalletService } from "src/app/core/services/wallet.service";
+import { balanceOf } from "src/app/core/utils/common/parsing";
+import { createSignBroadcast } from "src/app/core/utils/signing/transaction-manager";
 import {
   chartCustomOptions,
   ChartOptions,
@@ -21,8 +24,9 @@ export class WalletDetailComponent implements OnInit {
   tokenSymbol = "AURA";
 
   balance = {
-    amount: 0,
-    stackedAmount: 0,
+    available: 0,
+    totalStaked: 0,
+    totalReward: 0,
   };
 
   chartCustomOptions = chartCustomOptions;
@@ -32,7 +36,7 @@ export class WalletDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.walletService.getBalances(this.address).subscribe((response) => {
+    this.walletService.getWalletDetail(this.address).subscribe((response) => {
       if (!response) {
         return;
       }
@@ -40,9 +44,20 @@ export class WalletDetailComponent implements OnInit {
         return;
       } else {
         const { data } = response;
+        const { balance, delegated, stake_reward } = data;
+        const totalStake = delegated.delegation_responses
+          .map((a) => a.balance.amount)
+          .reduce((a, b) => a + b);
 
-        if (+data.balance !== 0) {
-          this.setChartBalances(data.balance, data.delegated);
+        this.balance.available = balanceOf(balance.balances[0].amount);
+        this.balance.totalReward = balanceOf(stake_reward.total[0].amount);
+        this.balance.totalStaked = +totalStake;
+
+        if (+balance.balances[0].amount !== 0) {
+          this.setChartBalances(
+            balanceOf(balance.balances[0].amount),
+            balanceOf(totalStake)
+          );
         }
       }
     });
@@ -50,5 +65,30 @@ export class WalletDetailComponent implements OnInit {
 
   setChartBalances(amount: number | string, staking: number | string): void {
     this.chartOptions.series = [+amount, +staking, 0];
+  }
+
+  clampReward(): void {
+    createSignBroadcast({
+      messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
+      message: {
+        amounts: [
+          {
+            denom: "AURA",
+            amount: 3.802484,
+          },
+        ],
+        from: ["auravaloper1hnyjager4zrrq6cr85cd5a7rd37z6hsp92elnw"],
+      },
+      senderAddress: this.address,
+      accountInfo: null,
+      network: null,
+      signingType: null,
+      password: null,
+      HDPath: null,
+      feeDenom: null,
+      chainId: null,
+      memo: null,
+      ledgerTransport: null,
+    });
   }
 }

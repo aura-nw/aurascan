@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import makeBlockie from "ethereum-blockies-base64";
-import { WalletInfo } from "src/app/core/models/wallet";
+import { IWalletInfo } from "src/app/core/models/wallet";
 
 @Component({
   selector: "app-wallet-list",
@@ -8,7 +8,7 @@ import { WalletInfo } from "src/app/core/models/wallet";
   styleUrls: ["./wallet-list.component.scss"],
 })
 export class WalletListComponent {
-  @Input() walletList: WalletInfo[] = [
+  @Input() walletList: IWalletInfo[] = [
     {
       name: "Keplr",
       icon: '../../../../../../assets/images/icon-keplr.svg',
@@ -21,7 +21,7 @@ export class WalletListComponent {
 
   @Output() onConnect = new EventEmitter<string>();
 
-  connect(wallet: WalletInfo): void {
+  connect(wallet: IWalletInfo): void {
     this.onConnect.emit(wallet.name);
   }
 }

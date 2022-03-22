@@ -88,19 +88,23 @@ export const CHART_OPTIONS: Partial<ChartOptions> = {
             fontWeight: 600,
             color: "#373d3f",
             formatter: function (w) {
-              return w.globals.seriesTotals.reduce(
-                (
-                  previousValue: number,
-                  currentValue: number,
-                  index: number
-                ) => {
-                  if (index === 2) {
-                    return previousValue;
-                  }
-                  return previousValue + currentValue;
-                },
-                0
-              );
+              return Number(
+                w.globals.seriesTotals.reduce(
+                  (
+                    previousValue: number,
+                    currentValue: number,
+                    index: number
+                  ) => {
+                    if (index === 2) {
+                      return previousValue;
+                    }
+                    return previousValue + currentValue;
+                  },
+                  0
+                )
+              )
+                .toFixed(1)
+                .toString();
             },
           },
         },

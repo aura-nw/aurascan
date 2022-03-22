@@ -32,9 +32,9 @@
         <div class="d-flex align-items-center gap-2 justify-content-between">
           <div class="">
             <h4>Pending Staking Reward</h4>
-            <p class="balance">{{ balance.stackedAmount }} <span>{{tokenSymbol}}</span></p>
+            <p class="balance">{{ balance.totalReward }} <span>{{tokenSymbol}}</span></p>
           </div>
-          <button class="btn btn-primary">Claim</button>
+          <button class="btn btn-primary" (click)="clampReward()">Claim</button>
         </div>
       </li>
       <li class="list-group-item">
