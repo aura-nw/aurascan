@@ -26,7 +26,6 @@
         "@asymmetrik/ngx-leaflet": "^8.1.0",
         "@ckeditor/ckeditor5-angular": "^2.0.2",
         "@ckeditor/ckeditor5-build-classic": "^29.0.0",
-        "@cosmjs/amino": "^0.28.0",
         "@cosmjs/stargate": "^0.28.0",
         "@fullcalendar/angular": "^5.8.0",
         "@fullcalendar/daygrid": "^5.8.0",

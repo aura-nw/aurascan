@@ -24,7 +24,7 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "allowedCommonJsDependencies": [
-                            "rxjs", "core-js", "chart.js", "chartist"
+                            "rxjs", "core-js", "chart.js", "chartist", "qrcode", "@cosmjs/stargate", "ngx-lightbox"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
@@ -45,8 +45,7 @@
                             "src/assets/scss/bootstrap.scss",
                             "src/assets/scss/app.scss",
                             "src/assets/scss/custom-material.scss",
-                            "src/assets/scss/icons.scss",
-                            "./node_modules/ngx-toastr/toastr.css"
+                            "src/assets/scss/icons.scss"
                         ],
                         "scripts": [
                             "node_modules/apexcharts/dist/apexcharts.min.js",
@@ -62,7 +61,7 @@
                             "budgets": [{
                                     "type": "initial",
                                     "maximumWarning": "5mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "8mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
