@@ -9,6 +9,7 @@ import { FeatherModule } from "angular-feather";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 import { QrModule } from "../qr/qr.module";
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { QrModule } from "../qr/qr.module";
     FeatherModule,
     RouterModule,
     ClickOutsideModule,
-    QrModule
+    QrModule,
+    TranslateModule
   ],
   exports: [WalletConnectComponent],
 })

@@ -70,7 +70,7 @@
 
                     <div class="qr-modal" *ngIf="isShowQR">
                         <div class="modal-content" (clickOutside)="toggleShowQR()">
-                            <h2 class="text-center"> Scan QR code </h2>
+                            <h2 class="text-center"> {{"WALLET.SCAN_QR" | translate }} </h2>
                             <app-qr [address]="ng.wallet?.bech32Address || ''"> </app-qr>
                         </div>
                     </div>
