@@ -69,9 +69,11 @@
         "ngx-mask": "^12.0.0",
         "ngx-owl-carousel-o": "^6.0.0",
         "ngx-progressbar": "^6.1.1",
+        "ngx-toastr": "^14.2.2",
         "ngx-ui-switch": "^12.0.1",
         "ngx-youtube-player": "^9.1.0",
         "path": "^0.12.7",
+        "qrcode": "^1.5.0",
         "rxjs": "~6.6.0",
         "simplebar-angular": "^2.3.4",
         "stream-browserify": "^3.0.0",
@@ -79,8 +81,7 @@
         "sweetalert2": "^11.0.18",
         "tslib": "^2.1.0",
         "util": "^0.12.4",
-        "zone.js": "~0.11.4",
-        "qrcode": "^1.5.0"
+        "zone.js": "~0.11.4"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^12.2.9",

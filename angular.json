@@ -45,7 +45,8 @@
                             "src/assets/scss/bootstrap.scss",
                             "src/assets/scss/app.scss",
                             "src/assets/scss/custom-material.scss",
-                            "src/assets/scss/icons.scss"
+                            "src/assets/scss/icons.scss",
+                            "./node_modules/ngx-toastr/toastr.css"
                         ],
                         "scripts": [
                             "node_modules/apexcharts/dist/apexcharts.min.js",
