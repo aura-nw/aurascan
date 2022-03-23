@@ -134,7 +134,7 @@ export class MaterialModule { }
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({ positionClass: 'inline' }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
