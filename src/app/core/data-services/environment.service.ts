@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 export interface IApiUrl {
   fabric: string;
   cosmos: string;
+  chainId: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ export class EnvironmentService {
   constructor(private http: HttpClient) {
     this.apiUrl = new BehaviorSubject<IApiUrl>({
       fabric: '',
-      cosmos: ''
+      cosmos: '',
+      chainId: ''
     });
   }
 
@@ -25,6 +27,7 @@ export class EnvironmentService {
         const data = {
           fabric: config['fabric'],
           cosmos: config['cosmos'],
+          chainId: config['chainId'] || 'aura-testnet'
         };
         this.apiUrl.next(data);
       })

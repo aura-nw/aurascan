@@ -1,5 +1,7 @@
 @import "~@angular/material/theming";
-$custom-typography: mat-typography-config( $font-family: 'Roboto, "Helvetica Neue", sans-serif', );
+$custom-typography: mat-typography-config(
+    $font-family: 'Roboto, "Helvetica Neue", sans-serif',
+);
 @include angular-material-typography($custom-typography);
 * {
     font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -39,4 +41,27 @@ th.mat-header-cell {
     color: #5156be;
     font-weight: bold;
     font-size: 14px;
+}
+
+.custom-menu.mat-menu-panel {
+    margin-top: 12px;
+    min-width: 180px;
+    -webkit-box-shadow: rgb(0 0 0 / 16%) 0px 4px 16px;
+    box-shadow: rgb(0 0 0 / 16%) 0px 4px 16px;
+
+    .menu-row {
+        display: flex;
+        justify-content: space-between;
+        .menu-img {
+            width: 24px;
+            margin-right: 12px;
+        }
+        .menu-content {
+            font-size: 16px;
+            flex-grow: 1;
+        }
+        .menu-checked {
+            color: #00bd49;
+        }
+    }
 }

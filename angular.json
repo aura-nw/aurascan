@@ -45,10 +45,14 @@
                             "src/assets/scss/bootstrap.scss",
                             "src/assets/scss/app.scss",
                             "src/assets/scss/custom-material.scss",
-                            "src/assets/scss/icons.scss"
+                            "src/assets/scss/icons.scss",
+                            "./node_modules/ngx-toastr/toastr.css"
                         ],
                         "scripts": [
-                            "node_modules/apexcharts/dist/apexcharts.min.js"
+                            "node_modules/apexcharts/dist/apexcharts.min.js",
+                            "./node_modules/@popperjs/core/dist/umd/popper.min.js",
+                            "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+                            "./node_modules/jquery/dist/jquery.min.js"
                         ],
                         "serviceWorker": true,
                         "ngswConfigPath": "ngsw-config.json"

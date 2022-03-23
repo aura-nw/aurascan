@@ -4,6 +4,26 @@ export class ResponseTemplate<T> {
   Data: T;
   AdditionalData: any;
 }
+
+export interface IResponsesSuccess<T> {
+  data: T;
+  meta: any;
+}
+export interface IResponsesError {
+  error: {
+    statusCode: number;
+    message: string;
+    errorName: string;
+    path: string;
+    requestId: string;
+    timestamp: Date;
+  };
+}
+
+export interface IResponsesTemplates<T>
+  extends IResponsesSuccess<T>,
+    IResponsesError {}
+
 export class TableTemplate {
   matColumnDef: string;
   headerCellDef: string;
@@ -38,7 +58,7 @@ export class IWSItemIao {
   type: string;
 }
 
-export type TypeSecondary = 'BUY_AT' | 'SELL_AT' | '';
+export type TypeSecondary = "BUY_AT" | "SELL_AT" | "";
 
 export class SecondaryOrderBookDto {
   status: string;
