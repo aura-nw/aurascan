@@ -7,11 +7,11 @@
                     <div class="d-flex justify-content-between mb-2">
                         <div class="card__title">#{{lastedItem.id}}</div>
                         <div *ngIf="getStatus(lastedItem.status)"
-                                class="proposal-status proposal-status--has-elevation text-uppercase {{getStatus(lastedItem.status).class}}">
+                                class="aura-status aura-status--has-elevation text-uppercase {{getStatus(lastedItem.status).class}}">
                             <span class="status">{{getStatus(lastedItem.status).value}}</span>
                         </div>
                     </div>
-                    <a [routerLink]="['id', lastedItem.id]" class="card__title">{{lastedItem.title}}</a>
+                    <a [routerLink]="[lastedItem.id]" class="card__title">{{lastedItem.title}}</a>
                     <div class="d-flex justify-content-between mt-3 proposal-lasted__content">
                         <div>
                             <div class="d-flex mb-2">
@@ -27,7 +27,7 @@
                                 <div>{{ lastedItem.votingEnd }}</div>
                             </div>
                         </div>
-                        <a href="#" class="button button-circle">
+                        <a [routerLink]="[lastedItem.id]" class="button button-circle">
                             <mat-icon>keyboard_arrow_right</mat-icon>
                         </a>
                     </div>
@@ -108,7 +108,7 @@
         <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
             <td mat-cell *matCellDef="let element">
-                <div class="proposal-status {{getStatus(element.status).class}} text-uppercase" *ngIf="getStatus(element.status)">
+                <div class="aura-status {{getStatus(element.status).class}} text-uppercase" *ngIf="getStatus(element.status)">
                     <span class="status">{{getStatus(element.status).value}}</span>
                 </div>
             </td>
@@ -129,7 +129,7 @@
         <!-- Total Deposit Column -->
         <ng-container matColumnDef="totalDeposit">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Deposit</th>
-            <td mat-cell *matCellDef="let element">{{element.totalDeposit}}</td>
+            <td mat-cell *matCellDef="let element">{{element.totalDeposit}} <span class="g-purple">ATOM</span></td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

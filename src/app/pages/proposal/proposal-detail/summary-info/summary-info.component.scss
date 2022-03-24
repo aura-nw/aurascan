@@ -1,0 +1,40 @@
+.card {
+  &__header {
+    border-bottom: 1px solid var(--bs-light);
+  }
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  &__info {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--bs-secondary);
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--bs-gray-700);
+    }
+  }
+}
+.editorial-container {
+  max-height: 360px;
+  overflow-y: scroll;
+  padding: 16px;
+  background-color: var(--bs-gray-100);
+}
+.proposal__summary-total {
+  border-radius: 5px;
+  border: 1px solid var(--bs-gray-400);
+  box-shadow: none;
+  padding: 24px;
+  b { color: var(--bs-gray-700)}
+}
+.spacer-custom {
+  @media (min-width: 576px) {
+    margin-left: 16px;
+  }
+}
+.vote-bar {
+  height: 30px;
+}

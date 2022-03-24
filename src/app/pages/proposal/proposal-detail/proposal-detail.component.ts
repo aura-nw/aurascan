@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./proposal-detail.component.scss']
 })
 export class ProposalDetailComponent implements OnInit {
+  // bread crumb items
+  breadCrumbItems!: Array<{}>;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.breadCrumbItems = [
+      { label: 'Proposal' },
+      { label: 'List'},
+      { label: 'Activate governance discussions on the ...', active: true }
+    ];
   }
 
 }
