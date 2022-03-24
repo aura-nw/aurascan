@@ -36,25 +36,25 @@
                             <ul *ngIf="lastedItem.voteResult">
                                 <li class="primary"
                                     *ngIf="lastedItem.voteResult.yes"
-                                    style="width: {{lastedItem.voteResult.yes}}%"
+                                    [style.width]="lastedItem.voteResult.yes + '%'"
                                     matTooltip="Yes {{lastedItem.voteResult.yes}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                                 <li class="danger"
                                     *ngIf="lastedItem.voteResult.no"
-                                    style="width: {{lastedItem.voteResult.no}}%"
+                                    [style.width]="lastedItem.voteResult.no + '%'"
                                     matTooltip="No {{lastedItem.voteResult.no}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                                 <li class="info"
                                     *ngIf="lastedItem.voteResult.noWithVeto"
-                                    style="width: {{lastedItem.voteResult.noWithVeto}}%"
+                                    [style.width]="lastedItem.voteResult.noWithVeto + '%'"
                                     matTooltip="No with veto {{lastedItem.voteResult.noWithVeto}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                                 <li class="secondary"
                                     *ngIf="lastedItem.voteResult.abstain"
-                                    style="width: {{lastedItem.voteResult.abstain}}%"
+                                    [style.width]="lastedItem.voteResult.abstain + '%'"
                                     matTooltip="Abstain {{lastedItem.voteResult.abstain}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
