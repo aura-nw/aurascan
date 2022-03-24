@@ -1,702 +1,302 @@
 [
   {
-    "rank": 1,
-    "validator": "Brookfield Infrastructure Partners LP",
-    "txHash": "896f68945b176f114c33de1668cd2705010a76433dd8368ed26ba3ca42455d52",
+    "voter": "NASDAQ TEST STOCK",
+    "txHash": "10e74630de9260bf7792f570dc92d765c42c07710cac2009e6512dcc9035ac8a",
     "answer": "YES",
-    "time": "2/26/2022"
+    "time": "1/11/2022"
   },
   {
-    "rank": 2,
-    "validator": "Regulus Therapeutics Inc.",
-    "txHash": "40ac452ef18e4c0a7ae0544c1764cbf8160dca4347fc6cee429219f04aa2ac31",
+    "voter": "Capital One Financial Corporation",
+    "txHash": "93ffbc9898d0d863ac2e8e7a405bb72f021a64cf1e66cbbcea59b6310e12cea5",
     "answer": "YES",
-    "time": "8/7/2021"
+    "time": "12/18/2021"
   },
   {
-    "rank": 3,
-    "validator": "SteadyMed Ltd.",
-    "txHash": "ef9b3cefbfb89a15deac20881f4a82c5a1e4c4aae92d27f9da4b26f6cb0e7cb3",
-    "answer": "NO",
-    "time": "7/5/2021"
-  },
-  {
-    "rank": 4,
-    "validator": "Washington Federal, Inc.",
-    "txHash": "69d4f6497b24da1580ef22b0a1e96d3e3b8b0f65adfd4ab81af53ba58b428c95",
+    "voter": "Cresud S.A.C.I.F. y A.",
+    "txHash": "ab0eabe3a4bdde740c486f6b83ab5ee2556ef0875ce106ebb7d31df04f75c659",
     "answer": "YES",
-    "time": "3/30/2021"
+    "time": "2/5/2022"
   },
   {
-    "rank": 5,
-    "validator": "Unifi, Inc.",
-    "txHash": "e13a459ae035999b4b9ef5d0e66ee54d8ea9ae41a3d6d5ed824290559d034bc3",
+    "voter": "Points International, Ltd.",
+    "txHash": "b28c556863c4b5bed65fa4bc7c83b4ce9d38656e99205443d585bc9b6e807bf1",
+    "answer": "YES",
+    "time": "3/14/2022"
+  },
+  {
+    "voter": "VeriSign, Inc.",
+    "txHash": "1e2cc6ba63beefec93a0013f9f9368f63e98dfd85cdaf0e09987edf8f4974f94",
+    "answer": "YES",
+    "time": "11/16/2021"
+  },
+  {
+    "voter": "Abraxas Petroleum Corporation",
+    "txHash": "375bbb74e5eca0579b7a459b249e77d59f3b51dcc7b27c94e2e50140d8085d6a",
     "answer": "NO",
-    "time": "12/4/2021"
+    "time": "11/22/2021"
   },
   {
-    "rank": 6,
-    "validator": "Cato Corporation (The)",
-    "txHash": "be2107aa01147dd91fd10deb4c62152c496126a64a872812e4523e489b4a6675",
+    "voter": "Retail Opportunity Investments Corp.",
+    "txHash": "7e949a3479446c8cd138146eb924a6ccf0041fcaebce76fa3bd2daa741f46f2d",
     "answer": "NO",
-    "time": "4/11/2021"
+    "time": "11/17/2021"
   },
   {
-    "rank": 7,
-    "validator": "Pieris Pharmaceuticals, Inc.",
-    "txHash": "a4d5e70684dd811e28fba8596d09211638b8eb110c2dd496b716c3ac5faf23d5",
+    "voter": "Famous Dave's of America, Inc.",
+    "txHash": "735a5e07fd39f3c0aa590faa6bb81d8cc340f34118d272310f699058de8b8513",
+    "answer": "YES",
+    "time": "6/23/2021"
+  },
+  {
+    "voter": "SolarEdge Technologies, Inc.",
+    "txHash": "18608a1abe62ae783b0d207a55aa44098ea8da6a89c96d97ecafc294530c9707",
     "answer": "NO",
-    "time": "2/23/2022"
+    "time": "10/7/2021"
   },
   {
-    "rank": 8,
-    "validator": "Invesco Value Municipal Income Trust",
-    "txHash": "0cf9cb09776fa36e7edfe29c2eeb2974b0588932fe11b230afd90419d64f4c8c",
+    "voter": "Latin American Discovery Fund, Inc. (The)",
+    "txHash": "78faa0456fbaceec1f6d8cf2543eba64200569dac98a96cdc013967a84da2d93",
+    "answer": "NO",
+    "time": "8/21/2021"
+  },
+  {
+    "voter": "United Financial Bancorp, Inc. ",
+    "txHash": "b7126190c6efd3fca2018bc1f523b3c84175cd52d44e914d148bea1d7b34a84b",
+    "answer": "YES",
+    "time": "4/16/2021"
+  },
+  {
+    "voter": "Tortoise Power and Energy Infrastructure Fund, Inc",
+    "txHash": "7f05905fb2403fa52a883d8c6e0e8516878588af64ac0fb3b9f85707aad41832",
+    "answer": "YES",
+    "time": "8/21/2021"
+  },
+  {
+    "voter": "Novan, Inc.",
+    "txHash": "ce19819f3549a1082e6ff8c37512c59d735cf0348a29286debb2abf6a1eefcc6",
+    "answer": "NO",
+    "time": "6/12/2021"
+  },
+  {
+    "voter": "Citizens Holding Company",
+    "txHash": "39876cd842260152d207874bc8e811c43580aef5ed98cd56d8e3eea69dee65c6",
+    "answer": "NO",
+    "time": "2/7/2022"
+  },
+  {
+    "voter": "West Bancorporation",
+    "txHash": "1aeea0e342544a7ce5326b2749cec1ef81563368ee8e70e6453538c0c0622ee9",
+    "answer": "NO",
+    "time": "6/29/2021"
+  },
+  {
+    "voter": "Pacific Special Acquisition Corp.",
+    "txHash": "738c2aa51c220ed9c964e2ee04d8989e5cd8d33cccbe8d1f3835e60302e99fde",
+    "answer": "YES",
+    "time": "6/29/2021"
+  },
+  {
+    "voter": "Fiserv, Inc.",
+    "txHash": "ce5f88be2dfb746d85a80c59f7f47b338f7bdd9a9426f2a70bf6574f8ef6ada1",
+    "answer": "YES",
+    "time": "4/2/2021"
+  },
+  {
+    "voter": "Westinghouse Air Brake Technologies Corporation",
+    "txHash": "2d74dc54cc59cfc26214ad200adb4ff2ab43692f52a32a195971ee0a400267ef",
+    "answer": "NO",
+    "time": "10/21/2021"
+  },
+  {
+    "voter": "Unisys Corporation",
+    "txHash": "57eafc7b249a4c6846f28e6fa50455a1816b827d4cb4548a4cf6364ac0c2337a",
+    "answer": "NO",
+    "time": "3/31/2021"
+  },
+  {
+    "voter": "Videocon d2h Limited",
+    "txHash": "b0059adfc5af57103810347573c678eeaebb97416770c0001adbe61292a427c3",
+    "answer": "NO",
+    "time": "11/24/2021"
+  },
+  {
+    "voter": "MobileIron, Inc.",
+    "txHash": "943cc2dfbbd10ae6b610617c1d2c551bf241300020859dcbb14c101d913e48f5",
+    "answer": "NO",
+    "time": "6/8/2021"
+  },
+  {
+    "voter": "Enbridge Inc",
+    "txHash": "4c6a0eec4889d06e64438863f27dfc1b1101d46eb58ccfb6b41a045a8a184860",
+    "answer": "YES",
+    "time": "5/24/2021"
+  },
+  {
+    "voter": "Commercial Vehicle Group, Inc.",
+    "txHash": "361131398acc6227b41628edbff08b5f8c2c11208c1642604ac2c737c2b44254",
+    "answer": "NO",
+    "time": "2/25/2022"
+  },
+  {
+    "voter": "PNC Financial Services Group, Inc. (The)",
+    "txHash": "8a45328d6be1b849d9bb33f275501145a9f2b5599963978ce6dac44b147b0691",
+    "answer": "YES",
+    "time": "9/18/2021"
+  },
+  {
+    "voter": "Reven Housing REIT, Inc.",
+    "txHash": "46ee72e22125b167bc7f8f41de92284733bd760a48bb59370a85b8f65c141b29",
+    "answer": "NO",
+    "time": "12/27/2021"
+  },
+  {
+    "voter": "iShares MSCI EAFE Small-Cap ETF",
+    "txHash": "00131914ecaeb2b5ca7cc9a6f8f7729977ffc794f229237df233a80786e5eb5c",
+    "answer": "NO",
+    "time": "7/13/2021"
+  },
+  {
+    "voter": "Credit Suisse AG",
+    "txHash": "1aed59c276ccc1a71504581dbdf2502721b6e457c89e06e4c4d8168a4ea877a5",
+    "answer": "YES",
+    "time": "10/19/2021"
+  },
+  {
+    "voter": "Scorpio Tankers Inc.",
+    "txHash": "878330e03435098fd528a07a1ccdaf63073460309790f5c374bd68710d25b1c7",
     "answer": "YES",
     "time": "5/3/2021"
   },
   {
-    "rank": 9,
-    "validator": "Verso Corporation",
-    "txHash": "b6313dd97e3950d63bda458aa65bc24d7af5b0fb76b72f03c197995f035b27e3",
+    "voter": "Preformed Line Products Company",
+    "txHash": "225515e6d033c41cc56802151c74b3843d4894ab3db75926824c3c7ceed7a5d2",
     "answer": "YES",
-    "time": "11/1/2021"
+    "time": "4/22/2021"
   },
   {
-    "rank": 10,
-    "validator": "Scorpio Bulkers Inc.",
-    "txHash": "d6ed38d1597ae80bf2f1d959719bb865c68191d65ceb4d4286e8a60078f36b1d",
-    "answer": "YES",
-    "time": "1/17/2022"
-  },
-  {
-    "rank": 11,
-    "validator": "PC Connection, Inc.",
-    "txHash": "d90c870b2fcc490865696dd9aca39b76544ab86b60b761aa3e4245240286a61a",
-    "answer": "YES",
-    "time": "9/12/2021"
-  },
-  {
-    "rank": 12,
-    "validator": "PetroChina Company Limited",
-    "txHash": "b775e8dcb7ee9d78bc9803916be0c3465ee28c62bfb0aadb82e3b65421d54dc5",
+    "voter": "Dollar General Corporation",
+    "txHash": "d8455aafcd0be43ae8d83798604d4d0f5ae02bf48b13c19b36dcbf22472adfc0",
     "answer": "NO",
-    "time": "11/20/2021"
+    "time": "7/3/2021"
   },
   {
-    "rank": 13,
-    "validator": "Tekla Healthcare Investors",
-    "txHash": "01f1bfa993385a59e8fa3283a7cca76b7182ca140fdff3d69066fa608ff47c37",
-    "answer": "NO",
-    "time": "7/7/2021"
-  },
-  {
-    "rank": 14,
-    "validator": "Vanguard Intermediate-Term Corporate Bond ETF",
-    "txHash": "9e2db525cf5168cb35c4462d649b8f5fa0fe5ba863fbf6309bbacd15c05dcda7",
-    "answer": "NO",
-    "time": "8/26/2021"
-  },
-  {
-    "rank": 15,
-    "validator": "Capital One Financial Corporation",
-    "txHash": "0f0f19cc05bf36e1a542fa8f1c7890952a5dc737cdbf4afb3827e6d2e37fc0ae",
+    "voter": "Kayne Anderson MLP Investment Company",
+    "txHash": "c01b9003fa25d18b51358a03cb9dc9b380a7797fe3c5bd5fed4f43f44b9b14c2",
     "answer": "YES",
-    "time": "3/9/2022"
-  },
-  {
-    "rank": 16,
-    "validator": "Calamos Convertible and High Income Fund",
-    "txHash": "85575136ae845b3a9a9758ccfd1cf81cb9bdce63d2c8c8b3cc72abd95640ce5e",
-    "answer": "NO",
-    "time": "3/3/2022"
-  },
-  {
-    "rank": 17,
-    "validator": "ParkerVision, Inc.",
-    "txHash": "90018f7408c069a0da5c7cc94dfc1880dd2b07ff77d38b2018d5a37aa0bfb8ba",
-    "answer": "YES",
-    "time": "5/8/2021"
-  },
-  {
-    "rank": 18,
-    "validator": "White Mountains Insurance Group, Ltd.",
-    "txHash": "77f6ed432e06e37c8e9e5329aa636ed6e816a55256f1f7ac5c08b034c3f8100c",
-    "answer": "YES",
-    "time": "12/24/2021"
-  },
-  {
-    "rank": 19,
-    "validator": "Jounce Therapeutics, Inc.",
-    "txHash": "4d2648569751cdb3c7fff3224196337974bda059ba65ac9f5ee7400f5f34c264",
-    "answer": "NO",
-    "time": "1/25/2022"
-  },
-  {
-    "rank": 20,
-    "validator": "Heico Corporation",
-    "txHash": "5e0a080d961dd1b6968da486f2aa6bf875ac3e9f7232917f606cb825d37f4f31",
-    "answer": "NO",
-    "time": "4/2/2021"
-  },
-  {
-    "rank": 21,
-    "validator": "China XD Plastics Company Limited",
-    "txHash": "046a504cbd1c47b437da2abb032a6790f9bf907c5aad1d1e0fe622bc54a3fc2a",
-    "answer": "YES",
-    "time": "5/28/2021"
-  },
-  {
-    "rank": 22,
-    "validator": "InnerWorkings, Inc.",
-    "txHash": "39fb7f0a95389971d8b4394ea8f6ebd6d5aa39e902e4e6ca762a90496cdb7e0b",
-    "answer": "YES",
-    "time": "6/25/2021"
-  },
-  {
-    "rank": 23,
-    "validator": "iShares MSCI Europe Financials Sector Index Fund",
-    "txHash": "2189b14570646bad470fb2471f3b1d256a881accf1ccefa8ea175c0bd0a974c9",
-    "answer": "YES",
-    "time": "12/17/2021"
-  },
-  {
-    "rank": 24,
-    "validator": "Biohaven Pharmaceutical Holding Company Ltd.",
-    "txHash": "78704b1586347b4a0b8a46cff9f7ade9b19fa00df35faa6c9b8aea3524a0740e",
-    "answer": "NO",
-    "time": "5/26/2021"
-  },
-  {
-    "rank": 25,
-    "validator": "Leucadia National Corporation",
-    "txHash": "22db1276413c36c3bab421a5bb87da0b8a322751691e1ddcc359d5d19476670f",
-    "answer": "YES",
-    "time": "11/7/2021"
-  },
-  {
-    "rank": 26,
-    "validator": "Apache Corporation",
-    "txHash": "25ac60d1cfa90ce2d151f15a87822444de019ad0a990cbb3509402b62d2c2576",
-    "answer": "NO",
-    "time": "7/7/2021"
-  },
-  {
-    "rank": 27,
-    "validator": "Benitec Biopharma Limited",
-    "txHash": "71121a9b37f515fb21b655ba0206a6b3ea8d8e80faa59a7f77a2b4073d2a76d3",
-    "answer": "NO",
-    "time": "4/16/2021"
-  },
-  {
-    "rank": 28,
-    "validator": "Xperi Corporation",
-    "txHash": "d06d6f8da6a1713036f39c97cc2b9f3aa031302cbf61f2ee42f5a40e2e804081",
-    "answer": "YES",
-    "time": "2/3/2022"
-  },
-  {
-    "rank": 29,
-    "validator": "Macro Bank Inc.",
-    "txHash": "909f28f84e4c6c93571bd70dd114aee1c819f19700ed449c20ffe452191f7249",
-    "answer": "NO",
-    "time": "6/14/2021"
-  },
-  {
-    "rank": 30,
-    "validator": "Azure Power Global Limited",
-    "txHash": "59f16627fe16fdb3cf52849c5d5abda2c68499bdc2d84cc26abe3c17b9cd1d0e",
-    "answer": "YES",
-    "time": "11/2/2021"
-  },
-  {
-    "rank": 31,
-    "validator": "Zions Bancorporation",
-    "txHash": "9847cdc5e09b63f0ff542711aad6af495a0ca3899ed6e95b2d6f970708d318e2",
-    "answer": "NO",
-    "time": "7/11/2021"
-  },
-  {
-    "rank": 32,
-    "validator": "Seaspan Corporation",
-    "txHash": "f3fc6a1e02156418c9e0adee6f34580bf8f8d3f5680d124af6b1b1be131c1955",
-    "answer": "YES",
-    "time": "4/1/2021"
-  },
-  {
-    "rank": 33,
-    "validator": "Kelly Services, Inc.",
-    "txHash": "25b0c7441b4fb3d6a76de7ee55ea57a3e0e03f26aefa2058c3b5f8ba0557edd0",
-    "answer": "YES",
-    "time": "12/21/2021"
-  },
-  {
-    "rank": 34,
-    "validator": "M&T Bank Corporation",
-    "txHash": "e8308f4268feaddae29d745a5697bfd8ff304d1620e3d701361cc7da2ccc8534",
-    "answer": "YES",
-    "time": "3/24/2021"
-  },
-  {
-    "rank": 35,
-    "validator": "CPI Card Group Inc.",
-    "txHash": "2be6dda4caa9c5c3343ff0e489317b2bc5ce40b50d586845b8aa0be9ff675cb4",
-    "answer": "YES",
-    "time": "6/30/2021"
-  },
-  {
-    "rank": 36,
-    "validator": "Broadwind Energy, Inc.",
-    "txHash": "39c0251538a22fadeb0f0b36b9ce52a8bfc865bfa73fcf3fd5522c9a6814a2be",
-    "answer": "YES",
-    "time": "8/2/2021"
-  },
-  {
-    "rank": 37,
-    "validator": "LKQ Corporation",
-    "txHash": "6857a8108b588a00854d725cc0725dc9cd0c38cc72de5fedeaaafd2bb44690d3",
-    "answer": "NO",
-    "time": "1/10/2022"
-  },
-  {
-    "rank": 38,
-    "validator": "PowerShares DWA Developed Markets Momentum Portfolio",
-    "txHash": "566d3cdecffc46a6bf29a418c15d9d4de3bf3a92d7fc41204848828a375f717b",
-    "answer": "NO",
-    "time": "12/19/2021"
-  },
-  {
-    "rank": 39,
-    "validator": "BP Prudhoe Bay Royalty Trust",
-    "txHash": "462739ebfda7f111444d80b384a6bfaa451304efccb63043aac5051e76d1f3cd",
-    "answer": "NO",
-    "time": "8/30/2021"
-  },
-  {
-    "rank": 40,
-    "validator": "The Hackett Group, Inc.",
-    "txHash": "7c43280d3851beda8dbe8e0bb5502b1498f58af27229cfba815c930a69f9cf05",
-    "answer": "YES",
-    "time": "5/8/2021"
-  },
-  {
-    "rank": 41,
-    "validator": "United Parcel Service, Inc.",
-    "txHash": "6d24df931f7b84842b9b2a549390999e0ab85e1eda4cefc53f7a4d2951dc4139",
-    "answer": "YES",
-    "time": "8/27/2021"
-  },
-  {
-    "rank": 42,
-    "validator": "Equity Commonwealth",
-    "txHash": "5bc50fd8a7a9c958b37b45188dbed6e4d0ca2cc66f17abd61834995f5b50ddb6",
-    "answer": "YES",
-    "time": "8/10/2021"
-  },
-  {
-    "rank": 43,
-    "validator": "Macquarie Global Infrastructure Total Return Fund Inc.",
-    "txHash": "d2ef08d5504da439a3b5cedde3d962e5407001dab22079cd25c226be92b70cae",
-    "answer": "NO",
-    "time": "10/12/2021"
-  },
-  {
-    "rank": 44,
-    "validator": "Monro Muffler Brake, Inc.",
-    "txHash": "eab567731ebc2b5d6a38c7fb8565029a8a26b3ecdf6e5629f710c5c3fd5fec65",
-    "answer": "YES",
-    "time": "9/5/2021"
-  },
-  {
-    "rank": 45,
-    "validator": "Highway Holdings Limited",
-    "txHash": "0591dfed5de6ccf283427b4a3259807a45938afb1ccaf385084129591352b15d",
-    "answer": "NO",
-    "time": "8/4/2021"
-  },
-  {
-    "rank": 46,
-    "validator": "Inpixon ",
-    "txHash": "71064031aa7520594890b8cd8619f50983aeb90c2fb9ea4dff7edcfe3a76995a",
-    "answer": "YES",
-    "time": "6/30/2021"
-  },
-  {
-    "rank": 47,
-    "validator": "BancorpSouth, Inc.",
-    "txHash": "e9e81886405dc5637b8f3c5b357a3a1f8103768792b9f0a0d9ee952187630714",
-    "answer": "YES",
-    "time": "5/29/2021"
-  },
-  {
-    "rank": 48,
-    "validator": "iShares FTSE EPRA/NAREIT Global Real Estate ex-U.S. Index Fund",
-    "txHash": "9c433d940beda90b51ca63c5abe7851e686d1e07c307c131dba01b8a2648a29b",
-    "answer": "YES",
-    "time": "7/15/2021"
-  },
-  {
-    "rank": 49,
-    "validator": "Spirit Realty Capital, Inc.",
-    "txHash": "843cd405d34175179a1488ff6dd0074a16f7261bbae1d371f2791cf2a0d4c1a9",
-    "answer": "NO",
-    "time": "7/15/2021"
-  },
-  {
-    "rank": 50,
-    "validator": "Lightbridge Corporation",
-    "txHash": "f1ee0c9993d3f4e9d50e37a21e3e03105a955f671d11dbc560f6a24659a4d151",
-    "answer": "NO",
-    "time": "8/10/2021"
-  },
-  {
-    "rank": 51,
-    "validator": "Sanmina Corporation",
-    "txHash": "b5b8f5d73a1e692b38fe36809b4f48e84be46bfd2f823e2fdd5b7e608f0bc086",
-    "answer": "NO",
-    "time": "9/12/2021"
-  },
-  {
-    "rank": 52,
-    "validator": "Taiwan Semiconductor Manufacturing Company Ltd.",
-    "txHash": "07ad07a850ab2d9604bc7c8b737c647d703cc68b878c562708f84b676e19ab03",
-    "answer": "NO",
     "time": "7/14/2021"
   },
   {
-    "rank": 53,
-    "validator": "Fanhua Inc.",
-    "txHash": "f65fdf0eeaf984dd7e4aed1fc43cd8d1eb348914a6db8696eec491fed6411b6a",
+    "voter": "The First of Long Island Corporation",
+    "txHash": "1cf9eeb32acc5b18ca3b2ac25be0083bd678c01bc07156cde078eb9b3f5635f0",
+    "answer": "YES",
+    "time": "7/14/2021"
+  },
+  {
+    "voter": "iPath US Treasury Long Bond Bear ETN",
+    "txHash": "b7efe11e7779850bed0d3ca0500f8384aa8a26c29099f239f4d62f7b1e1cd20b",
     "answer": "NO",
-    "time": "9/26/2021"
+    "time": "8/8/2021"
   },
   {
-    "rank": 54,
-    "validator": "CF Corporation",
-    "txHash": "bc8a8b77ea7791bc4560907bcffd6dee7d610232bad19d940ed8eacbdd1e3f15",
+    "voter": "AirMedia Group Inc",
+    "txHash": "c154de41249c602918d1571473ca68b5857d7c0f8ab2167acdba97e26de76a70",
     "answer": "NO",
-    "time": "6/10/2021"
+    "time": "9/11/2021"
   },
   {
-    "rank": 55,
-    "validator": "LiNiu Technology Group",
-    "txHash": "73b9b0d2da66752077621dc09ed78e55e64c3b845951f98fc3951c3a5ca9302e",
+    "voter": "MEI Pharma, Inc.",
+    "txHash": "70b51d2e40b1ffe69a1ee4840bcc05b98911711a70f24e0b08b44d9b3cf2a755",
     "answer": "NO",
-    "time": "5/16/2021"
+    "time": "5/9/2021"
   },
   {
-    "rank": 56,
-    "validator": "Macatawa Bank Corporation",
-    "txHash": "3301e264ffdc249b1298ba0ad731e3dc0200a631c43335f1a8e0763cec4da8a1",
+    "voter": "Old Second Bancorp, Inc.",
+    "txHash": "43fe00263638c008e64731944a984283e6d66be6f9c9fde264ecc2d36c8322f3",
     "answer": "YES",
-    "time": "5/27/2021"
+    "time": "3/3/2022"
   },
   {
-    "rank": 57,
-    "validator": "Prudential Bancorp, Inc.",
-    "txHash": "33c52fdc03c5faf826f183eafdcf689e95455ef87ed03cbf478b8e79b55ed5df",
-    "answer": "YES",
-    "time": "11/10/2021"
-  },
-  {
-    "rank": 58,
-    "validator": "Spirit Aerosystems Holdings, Inc.",
-    "txHash": "f1284218b6351e3f14248b5213dabade1ac5265d62d4170ee8dada75b361ed7f",
+    "voter": "Columbia Property Trust, Inc.",
+    "txHash": "02858e4cee076e8bb04fe32fd9e6779e0250fd77e8f4b5919bbcfc52a3c46a5a",
     "answer": "NO",
-    "time": "5/11/2021"
+    "time": "10/20/2021"
   },
   {
-    "rank": 59,
-    "validator": "Acadia Realty Trust",
-    "txHash": "1333ede14ace7fcd8ab504678b60f9df56d90ad7192bfda94744d6bcc0fa9819",
+    "voter": "Global Self Storage, Inc.",
+    "txHash": "2272f6575f7166af5d3cc30f30a7789538f98f507cdac193d5abc667ef856121",
+    "answer": "NO",
+    "time": "6/25/2021"
+  },
+  {
+    "voter": "NASDAQ TEST STOCK",
+    "txHash": "c8cb53fbea4086b0e7070d82ddd7211b212499fa36142336934fbec7ef502b12",
     "answer": "YES",
-    "time": "7/7/2021"
+    "time": "2/11/2022"
   },
   {
-    "rank": 60,
-    "validator": "Radian Group Inc.",
-    "txHash": "c8460b86cb627ffbc10eb421b0aac015c7d29672d3f9eac51c871ccb34d8c828",
+    "voter": "Kennedy-Wilson Holdings Inc.",
+    "txHash": "1184dea47abed92868ce9f02b3c3006c9e306f7ea4875104276279dec7247725",
+    "answer": "NO",
+    "time": "6/22/2021"
+  },
+  {
+    "voter": "Noah Holdings Ltd.",
+    "txHash": "0ddc40679dcb448deb89a4079b6c21aeef81833998cee1ef01afac456aa48762",
+    "answer": "NO",
+    "time": "4/5/2021"
+  },
+  {
+    "voter": "Customers Bancorp, Inc",
+    "txHash": "0cc3318c9bc70c37f8e03a1d0da9d66c96c152032c17df8d3d46ce5d6c7ce97f",
     "answer": "YES",
-    "time": "6/18/2021"
+    "time": "4/14/2021"
   },
   {
-    "rank": 61,
-    "validator": "FinTech Acquisition Corp. II",
-    "txHash": "f85c3e29c1d79f3c2d5acdc5bbfa414632b4c3d9b9eb3470c140765d7bd66031",
+    "voter": "Globus Medical, Inc.",
+    "txHash": "97c6177df991da63465bbbe89ff526defe0d0de1dfaa6458be1063df8ca04664",
+    "answer": "NO",
+    "time": "6/11/2021"
+  },
+  {
+    "voter": "M I Acquisitions, Inc.",
+    "txHash": "f6d95be47971835de7ef3cdef0496b78ba662bf7c5dd8ae625ad7c08f81187b3",
     "answer": "YES",
-    "time": "7/30/2021"
+    "time": "2/20/2022"
   },
   {
-    "rank": 62,
-    "validator": "Blackrock Enhanced Government Fund, Inc",
-    "txHash": "c7e9ef967a51cd308a0b228620d830d0b12688016acb14e047249920b4b8dbaa",
+    "voter": "Autoliv, Inc.",
+    "txHash": "9ed88f74a26631bf7ab7c2af8f32b9032b66d30131d2d7b9278b5549ca72051f",
     "answer": "YES",
     "time": "1/15/2022"
   },
   {
-    "rank": 63,
-    "validator": "Grupo Televisa S.A.",
-    "txHash": "17068c8892dfecb1948e27e46ebefd232174a485bfab2a18c74db33e5b8ac4ec",
+    "voter": "Lands' End, Inc.",
+    "txHash": "81f8ea19161a51ef0083eabc27d42a6ea89714b5c42f319ada016b6f2c27a5e8",
     "answer": "YES",
-    "time": "5/25/2021"
+    "time": "9/21/2021"
   },
   {
-    "rank": 64,
-    "validator": "Kura Oncology, Inc.",
-    "txHash": "c03d89f29c285bc23916294070c8710117f1d378eb7eb0d63c2268533fbf5f44",
-    "answer": "YES",
-    "time": "3/28/2021"
-  },
-  {
-    "rank": 65,
-    "validator": "Nexstar Media Group, Inc.",
-    "txHash": "80ff196a3b13d8df9ef775919abf50b17b029ec82d36375fe8acb74e1bc12677",
-    "answer": "YES",
-    "time": "1/10/2022"
-  },
-  {
-    "rank": 66,
-    "validator": "Everi Holdings Inc.",
-    "txHash": "196e2f362587c9965dfb9d9f3d6fee160094c766ecc0c3d0e854f149c9fd680a",
-    "answer": "YES",
-    "time": "12/26/2021"
-  },
-  {
-    "rank": 67,
-    "validator": "Dave & Buster's Entertainment, Inc.",
-    "txHash": "b17975bec1ed5f60fda46e3f98068579484a6f37afd324ee3b1418541fefe4ff",
-    "answer": "YES",
-    "time": "11/13/2021"
-  },
-  {
-    "rank": 68,
-    "validator": "Wells Fargo & Company",
-    "txHash": "2186bc6f728d8f67313020b2cca8c9bac8edc8336501a458a6bdaa84a36da1a1",
+    "voter": "Banco Bradesco Sa",
+    "txHash": "15d2f64773c6aa0835001d38ca2762ab85405aba1a8b1dd7ea307c1e933af2f2",
     "answer": "NO",
-    "time": "9/9/2021"
+    "time": "11/25/2021"
   },
   {
-    "rank": 69,
-    "validator": "Bridgeline Digital, Inc.",
-    "txHash": "7aa9f7477c763bc8a0d616330e0e972441f33ffdd7b5cc56c4118ccd93294d58",
-    "answer": "NO",
-    "time": "10/4/2021"
-  },
-  {
-    "rank": 70,
-    "validator": "Nuveen Select Maturities Municipal Fund",
-    "txHash": "89586c6d35adc5ae0e5d1a2fe6e214086a1c64b202542f0de6da64f24f20782e",
-    "answer": "NO",
-    "time": "3/23/2022"
-  },
-  {
-    "rank": 71,
-    "validator": "Sphere 3D Corp.",
-    "txHash": "e11464c587ea135506b1eebdd9a0a6176649136dfd2ed8bfac56aab867114f01",
+    "voter": "Kimball Electronics, Inc.",
+    "txHash": "db74e32dfa5286edd84366f9004f4333e47b939544360842263a757605b7a67f",
     "answer": "YES",
-    "time": "4/23/2021"
+    "time": "9/25/2021"
   },
   {
-    "rank": 72,
-    "validator": "Lam Research Corporation",
-    "txHash": "f35ddaf98190d90050c67cc5eeed17dfb07a265161b92254e11e94b1432dd918",
+    "voter": "Highway Holdings Limited",
+    "txHash": "1e692eda649d673a919db929b1ccd30a3e0519d71a8d4c69acf63f548f2a7d14",
     "answer": "NO",
-    "time": "6/24/2021"
+    "time": "12/15/2021"
   },
   {
-    "rank": 73,
-    "validator": "Pacific Coast Oil Trust",
-    "txHash": "e71419cb18e0cb4e0d833dc8d43aadad46b8509908830cccf34767d2179968ea",
+    "voter": "KBL Merger Corp. IV",
+    "txHash": "45d7696f33e6cfdc8930d4a4a972ab410738b1d1001e32f9d4ca4496c9ac4adc",
     "answer": "NO",
-    "time": "9/18/2021"
-  },
-  {
-    "rank": 74,
-    "validator": "Eaton Corporation, PLC",
-    "txHash": "3c6a684bd5fd085a68a780abfd492a1b9f4709b450a1e5bd53ffead1d28601d7",
-    "answer": "YES",
-    "time": "12/5/2021"
-  },
-  {
-    "rank": 75,
-    "validator": "Exterran Corporation",
-    "txHash": "adb52d06f483b319eb660f3cb87b463f0514c46ddb4a3dca9727cf51a8a9e30f",
-    "answer": "YES",
-    "time": "9/23/2021"
-  },
-  {
-    "rank": 76,
-    "validator": "Tidewater Inc.",
-    "txHash": "4d607f5a3a3f50d55d2c6cae6b8a799ef4026ebce5c0a80864f4c892f9b98c79",
-    "answer": "NO",
-    "time": "8/25/2021"
-  },
-  {
-    "rank": 77,
-    "validator": "Advanced Semiconductor Engineering, Inc.",
-    "txHash": "4b8cfae68cf547f5f6e1625d9c6f35ed265a2d6e62e86ba5bf5933051e0e5c00",
-    "answer": "YES",
-    "time": "12/30/2021"
-  },
-  {
-    "rank": 78,
-    "validator": "OneMain Holdings, Inc.",
-    "txHash": "ee3a11599e8cee8c5711ab1fc101382fe189a5eb03ea6642fff1bec889895d04",
-    "answer": "NO",
-    "time": "7/8/2021"
-  },
-  {
-    "rank": 79,
-    "validator": "MabVax Therapeutics Holdings, Inc.",
-    "txHash": "7d04d5a0d86202db07be1089ff15fd389913f172f48989a01bae8dfaf72d8096",
-    "answer": "NO",
-    "time": "7/24/2021"
-  },
-  {
-    "rank": 80,
-    "validator": "TIM Participacoes S.A.",
-    "txHash": "2e8fda5826c51395b8d8509418deb9677de02935f71947db71a53413d32f28e5",
-    "answer": "NO",
-    "time": "10/11/2021"
-  },
-  {
-    "rank": 81,
-    "validator": "Electronics for Imaging, Inc.",
-    "txHash": "10c98fbcfa1a3c4ace4b9b2dae685ddd573865590a355a6c9cfaf299f043c4d0",
-    "answer": "NO",
-    "time": "3/9/2022"
-  },
-  {
-    "rank": 82,
-    "validator": "AMERISAFE, Inc.",
-    "txHash": "ec604fce201c4dbba4d0247e8e7b01e54adfe9860efacc141ef5274d89c832f1",
-    "answer": "NO",
-    "time": "7/24/2021"
-  },
-  {
-    "rank": 83,
-    "validator": "Citigroup Inc.",
-    "txHash": "f1c2acee69e5697c6802dfe906752e143a70379a176f84ef9e85ae9120ae37c1",
-    "answer": "YES",
-    "time": "7/15/2021"
-  },
-  {
-    "rank": 84,
-    "validator": "AG Mortgage Investment Trust, Inc.",
-    "txHash": "a91c71cabe5bf16931c741a998989777ff91e910ae4d17714bfd417dba9abf15",
-    "answer": "NO",
-    "time": "1/27/2022"
-  },
-  {
-    "rank": 85,
-    "validator": "WesBanco, Inc.",
-    "txHash": "dbfc8effd597c6c3348089cba14483019d0dbc7d2b85eb96508802724b5ea887",
-    "answer": "NO",
-    "time": "1/29/2022"
-  },
-  {
-    "rank": 86,
-    "validator": "Key Energy Services, Inc.",
-    "txHash": "c9b190d7964167cb47aaec41038b98f55e1d3d5814995a4f816297687cceca6e",
-    "answer": "YES",
-    "time": "11/5/2021"
-  },
-  {
-    "rank": 87,
-    "validator": "Atmos Energy Corporation",
-    "txHash": "eaf6fa99f4d536aed37de25fba05a3394485b3694dadfe175d0e1ccb155c0f29",
-    "answer": "NO",
-    "time": "1/19/2022"
-  },
-  {
-    "rank": 88,
-    "validator": "Payment Data Systems, Inc.",
-    "txHash": "6bcc8e0f9d2b2b5b4d9aa92e5f13387a01d7efb1cae303db32c4604ad75b063a",
-    "answer": "NO",
-    "time": "3/14/2022"
-  },
-  {
-    "rank": 89,
-    "validator": "Alon USA Energy, Inc.",
-    "txHash": "6fce9d9e78a22b15a68d45886ac3ffca6305b82b6a2b9754af84219af0bd9e7f",
-    "answer": "YES",
-    "time": "7/13/2021"
-  },
-  {
-    "rank": 90,
-    "validator": "Nuveen Credit Opportunities 2022 Target Term Fund",
-    "txHash": "32be6fa8def5e0ec973af43f145dc1197dca90b54143a866794ef8ca27d4291d",
-    "answer": "YES",
-    "time": "3/9/2022"
-  },
-  {
-    "rank": 91,
-    "validator": "Echo Global Logistics, Inc.",
-    "txHash": "8c1c539d42f824c7ce0c6374a6e1e89f425773d732781b2acdbd2f3d00563fff",
-    "answer": "YES",
-    "time": "1/2/2022"
-  },
-  {
-    "rank": 92,
-    "validator": "Boeing Company (The)",
-    "txHash": "cc9eaa1e462c6a7d593f16ce03b35688e8ece1ce2da8ad88f5ae4b94e292b89d",
-    "answer": "YES",
-    "time": "2/13/2022"
-  },
-  {
-    "rank": 93,
-    "validator": "Invesco Value Municipal Income Trust",
-    "txHash": "e0969c340d0fac712ab063daa0a693d68e285b04695f282c517b4c467e21990e",
-    "answer": "YES",
-    "time": "7/25/2021"
-  },
-  {
-    "rank": 94,
-    "validator": "Nationstar Mortgage Holdings Inc.",
-    "txHash": "478c818864c6e5a65950475ff7cee183df8101447cff267cf73acc199ee73aa3",
-    "answer": "NO",
-    "time": "4/22/2021"
-  },
-  {
-    "rank": 95,
-    "validator": "WisdomTree Interest Rate Hedged High Yield Bond Fund",
-    "txHash": "9970ca511100f16d9315c996759a1288a15da6a5958ffbae7261456f93bd32ae",
-    "answer": "YES",
-    "time": "9/15/2021"
-  },
-  {
-    "rank": 96,
-    "validator": "Trimble Inc.",
-    "txHash": "676a76706f063457ef6285b08d0674c2f46adae10cb10e46c2783ffb3e8bd4e7",
-    "answer": "NO",
-    "time": "12/21/2021"
-  },
-  {
-    "rank": 97,
-    "validator": "Tanger Factory Outlet Centers, Inc.",
-    "txHash": "872597c71dd3b3858e1c6abdec4f93d366deb963d87f61c484197dc5ea6b9227",
-    "answer": "NO",
-    "time": "2/6/2022"
-  },
-  {
-    "rank": 98,
-    "validator": "Siebert Financial Corp.",
-    "txHash": "c774db3ee0e7c932482b7d940d87bdcdc27bd625cff8d7559e31b99c1feda897",
-    "answer": "YES",
-    "time": "3/10/2022"
-  },
-  {
-    "rank": 99,
-    "validator": "Saul Centers, Inc.",
-    "txHash": "7cf50506f2b3fb2941ebabd5749864c14b1f3d546e6ed116620794560203b896",
-    "answer": "YES",
-    "time": "10/10/2021"
-  },
-  {
-    "rank": 100,
-    "validator": "Centrais Electricas Brasileiras S.A.- Eletrobras",
-    "txHash": "a8c31875368dbbf8e21e2153fd60ba8f788f0d2e6ca1d061a442b375ec5b0c2b",
-    "answer": "YES",
-    "time": "1/7/2022"
+    "time": "6/5/2021"
   }
 ]

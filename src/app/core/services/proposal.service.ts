@@ -29,10 +29,10 @@ export class ProposalService extends CommonService {
   }
 
   getValidatorVotes(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-votes.json');
+    return this.http.get('../../assets/mock-data/proposal-v-votes.json');
   }
 
   getDepositors(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-votes.json');
+    return this.http.get('../../assets/mock-data/proposal-list-depositor.json');
   }
 }

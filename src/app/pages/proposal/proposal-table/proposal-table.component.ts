@@ -16,6 +16,13 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'voter', headerCellDef: 'Rank' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'time', headerCellDef: 'Time' },
+  ];
+
+  validatorsVotesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank' },
     { matColumnDef: 'validator', headerCellDef: 'Validator' },
     { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
@@ -23,19 +30,10 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
-  vTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
-    { matColumnDef: 'validator', headerCellDef: 'Validator' },
+  depositorsTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'depositors', headerCellDef: 'Depositors' },
     { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
-    { matColumnDef: 'time', headerCellDef: 'Time' },
-  ];
-
-  dTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
-    { matColumnDef: 'validator', headerCellDef: 'Validator' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
@@ -62,9 +60,9 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       case 'VOTES':
         return this.votesTemplates;
       case 'DEPOSITORS':
-        return this.dTemplates;
+        return this.depositorsTemplates;
       case 'VALIDATORS_VOTES':
-        return this.vTemplates;
+        return this.validatorsVotesTemplates;
       default:
         return [];
     }
