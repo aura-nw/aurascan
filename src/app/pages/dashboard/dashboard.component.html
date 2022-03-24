@@ -2,7 +2,7 @@
 <app-pagetitle title="Dashboard" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <!-- end page title -->
 <div class="row">
-    <!-- <div class="col-xl-6">
+  <!-- <div class="col-xl-6">
         <div class="card card-h-100">
             <div class="card-body">
                 <div class="align-items-center mb-4">
@@ -64,222 +64,241 @@
             </div>
         </div>
     </div> -->
-    <div class="col-xl-12">
-        <div class="card card-h-100">
-            <div class="card-body">
-                <div class="align-items-center mb-4">
-                    <div class="d-flex flex-wrap align-items-center mb-4">
-                        <h5 class="card-title me-2">Block/Transaction</h5>
-                        <div class="ms-auto">
-                            <div>
-                                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='60m'" (click)="updateBlockAndTxs('60m')">
-                                    60m
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='24h'" (click)="updateBlockAndTxs('24h')">
-                                    24h
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='30d'" (click)="updateBlockAndTxs('30d')">
-                                    30d
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='12M'" (click)="updateBlockAndTxs('12M')">
-                                    12M
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-100" *ngIf="chartOptions">
-                        <div id="chart">
-                            <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip" [dataLabels]="chartOptions.dataLabels"></apx-chart>
-                        </div>
-                    </div>
-                </div>
+  <div class="col-xl-12">
+    <div class="card card-h-100">
+      <div class="card-body">
+        <div class="align-items-center mb-4">
+          <div class="d-flex flex-wrap align-items-center mb-4">
+            <h5 class="card-title me-2">Block/Transaction</h5>
+            <div class="ms-auto">
+              <div>
+                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='60m'"
+                  (click)="updateBlockAndTxs('60m')">
+                  60m
+                </button>
+                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='24h'"
+                  (click)="updateBlockAndTxs('24h')">
+                  24h
+                </button>
+                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='30d'"
+                  (click)="updateBlockAndTxs('30d')">
+                  30d
+                </button>
+                <button type="button" class="btn btn-soft-secondary btn-sm ms-1" [class.active]="chart==='12M'"
+                  (click)="updateBlockAndTxs('12M')">
+                  12M
+                </button>
+              </div>
             </div>
+          </div>
+          <div class="w-100" *ngIf="chartOptions">
+            <div id="chart">
+              <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+                [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip" [dataLabels]="chartOptions.dataLabels">
+              </apx-chart>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-xl-4 col-md-6">
-        <!-- card -->
-        <div class="card card-h-100">
-            <!-- card body -->
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-6">
-                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Blocks</span>
-                        <h4 class="mb-3">
-                            <span class="fs-4 fw-bold">{{block_height}}</span>
-                        </h4>
-                    </div>
-                    <div class="col-6">
-                        <div class="d-flex justify-content-end align-items-center">
-                            <img src="/assets/images/icons/blocks.png" height="50">
-                        </div>
-                    </div>
-                </div>
-                <div class="text-nowrap" *ngIf="block_height">
-                    <span class="ms-1 text-muted font-size-13">Update </span>
-                    <span class="badge bg-soft-success text-success">5 minute</span>
-                    <span class="ms-1 text-muted font-size-13"> ago</span>
-                </div>
+  <div class="col-xl-4 col-md-6">
+    <!-- card -->
+    <div class="card card-h-100">
+      <!-- card body -->
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <span class="text-muted mb-3 lh-1 d-block text-truncate">Blocks</span>
+            <h4 class="mb-3">
+              <span class="fs-4 fw-bold">{{block_height}}</span>
+            </h4>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-end align-items-center">
+              <img src="/assets/images/icons/blocks.png" height="50">
             </div>
-            <!-- end card body -->
+          </div>
         </div>
-        <!-- end card -->
+        <div class="text-nowrap" *ngIf="block_height">
+          <span class="ms-1 text-muted font-size-13">Update </span>
+          <span class="badge bg-soft-success text-success">5 minute</span>
+          <span class="ms-1 text-muted font-size-13"> ago</span>
+        </div>
+      </div>
+      <!-- end card body -->
     </div>
-    <!-- end col-->
+    <!-- end card -->
+  </div>
+  <!-- end col-->
 
-    <div class="col-xl-4 col-md-6">
-        <!-- card -->
-        <div class="card card-h-100">
-            <!-- card body -->
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-6">
-                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Transaction</span>
-                        <h4 class="mb-3">
-                            <span class="fs-4 fw-bold">{{total_txs_num}}</span>
-                        </h4>
-                    </div>
-                    <div class="col-6">
-                        <div class="d-flex justify-content-end align-items-center">
-                            <img src="/assets/images/icons/transaction.png" height="50">
-                        </div>
-                    </div>
-                </div>
-                <div class="text-nowrap" *ngIf="total_txs_num">
-                    <span class="ms-1 text-muted font-size-13">Update </span>
-                    <span class="badge bg-soft-success text-success">5 minute</span>
-                    <span class="ms-1 text-muted font-size-13"> ago</span>
-                </div>
+  <div class="col-xl-4 col-md-6">
+    <!-- card -->
+    <div class="card card-h-100">
+      <!-- card body -->
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <span class="text-muted mb-3 lh-1 d-block text-truncate">Transaction</span>
+            <h4 class="mb-3">
+              <span class="fs-4 fw-bold">{{total_txs_num}}</span>
+            </h4>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-end align-items-center">
+              <img src="/assets/images/icons/transaction.png" height="50">
             </div>
-            <!-- end card body -->
+          </div>
         </div>
-        <!-- end card -->
+        <div class="text-nowrap" *ngIf="total_txs_num">
+          <span class="ms-1 text-muted font-size-13">Update </span>
+          <span class="badge bg-soft-success text-success">5 minute</span>
+          <span class="ms-1 text-muted font-size-13"> ago</span>
+        </div>
+      </div>
+      <!-- end card body -->
     </div>
-    <!-- end col -->
+    <!-- end card -->
+  </div>
+  <!-- end col -->
 
-    <div class="col-xl-4 col-md-6">
-        <!-- card -->
-        <div class="card card-h-100">
-            <!-- card body -->
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-6">
-                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Node</span>
-                        <h4 class="mb-3">
-                            <span class="fs-4 fw-bold">{{total_validator_num}}</span>
-                        </h4>
-                    </div>
-                    <div class="col-6">
-                        <div class="d-flex justify-content-end align-items-center">
-                            <img src="/assets/images/icons/anchor-point.png" height="50">
-                        </div>
-                    </div>
-                </div>
-                <div class="text-nowrap" *ngIf="total_validator_num">
-                    <span class="ms-1 text-muted font-size-13">Update </span>
-                    <span class="badge bg-soft-success text-success">5 minute</span>
-                    <span class="ms-1 text-muted font-size-13"> ago</span>
-                </div>
+  <div class="col-xl-4 col-md-6">
+    <!-- card -->
+    <div class="card card-h-100">
+      <!-- card body -->
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <span class="text-muted mb-3 lh-1 d-block text-truncate">Node</span>
+            <h4 class="mb-3">
+              <span class="fs-4 fw-bold">{{total_validator_num}}</span>
+            </h4>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-end align-items-center">
+              <img src="/assets/images/icons/anchor-point.png" height="50">
             </div>
-            <!-- end card body -->
+          </div>
         </div>
-        <!-- end card -->
+        <div class="text-nowrap" *ngIf="total_validator_num">
+          <span class="ms-1 text-muted font-size-13">Update </span>
+          <span class="badge bg-soft-success text-success">5 minute</span>
+          <span class="ms-1 text-muted font-size-13"> ago</span>
+        </div>
+      </div>
+      <!-- end card body -->
     </div>
-    <!-- end col -->
+    <!-- end card -->
+  </div>
+  <!-- end col -->
 </div>
 <div class="row">
-    <div class="col-xl-6">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1"> <img src="/assets/images/icons/block.png" height="20" class="m-1 mb-0 mt-0"> Blocks</h4>
-                <button type="button" class="btn btn-link waves-effect" [routerLink]="'/blocks'">View more</button>
-            </div>
-            <div class="card-body px-0">
-                <ngx-simplebar style="max-height: 400px;">
-                    <table mat-table [dataSource]="dataSource" class="table-reponsive">
-                        <ng-container *ngFor="let template of templates; index as i">
-                            <ng-container [matColumnDef]="template.matColumnDef">
+  <div class="col-xl-6">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1 text-uppercase"> <img src="/assets/images/icons/block.png" height="20"
+            class="m-1 mb-0 mt-0"> Blocks</h4>
+        <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/blocks'">Show more</button>
+      </div>
+      <div class="card-body px-0">
+        <ngx-simplebar style="max-height: 400px;">
+          <table mat-table [dataSource]="dataSourceBlock" class="table-reponsive">
+            <ng-container *ngFor="let template of templatesBlock; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
 
-                                <th mat-header-cell *matHeaderCellDef>
-                                    <div [innerHTML]="template.headerCellDef | translate"></div>
-                                </th>
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
 
-                                <td mat-cell *matCellDef="let data">
-                                    <div>
-                                        <ng-container [ngSwitch]="template.matColumnDef ">
-                                            <div *ngSwitchCase="'timestamp'">
-                                                <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
-                                            </div>
-                                            <div *ngSwitchCase="'block_hash'" class="g-ellipsis g-blue">
-                                                {{ data[template.matColumnDef] }}
-                                            </div>
-                                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </td>
-                            </ng-container>
-                        </ng-container>
+                <td mat-cell *matCellDef="let data">
+                  <div>
+                    <ng-container [ngSwitch]="template.matColumnDef ">
+                      <div *ngSwitchCase="'timestamp'">
+                        <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
+                        data[template.matColumnDef] | calDate}} ago
+                      </div>
+                      <div *ngSwitchCase="'proposer'" class="g-blue cursor-pointer" [routerLink]="['/validators', data.operator_address]">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'height'" class="g-blue cursor-pointer" [routerLink]="['/blocks', data.height]">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openBlockDetail(row)"></tr>
-                        <tr class="mat-row" *matNoDataRow>
-                            <td class="mat-cell g-no-data" colspan="9999">
-                                {{"NO DATA" | translate}}
-                            </td>
-                        </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{"NO DATA" | translate}}
+              </td>
+            </tr>
 
-                    </table>
-                </ngx-simplebar>
-            </div>
-        </div>
+          </table>
+        </ngx-simplebar>
+      </div>
     </div>
-    <div class="col-xl-6">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1"><img src="/assets/images/icons/circular-arrows.png" height="20" class="m-1 mb-0 mt-0"> Transaction</h4>
-                <button type="button" class="btn btn-link waves-effect" [routerLink]="'/transaction'">View more</button>
-            </div>
+  </div>
+  <div class="col-xl-6">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1 text-uppercase"><img src="/assets/images/icons/circular-arrows.png" height="20"
+            class="m-1 mb-0 mt-0"> Transactions</h4>
+        <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button>
+      </div>
 
-            <div class="card-body px-0">
-                <ngx-simplebar style="max-height: 400px;">
-                    <table mat-table [dataSource]="dataSource2" class="table-reponsive">
-                        <ng-container *ngFor="let template of templates2; index as i">
-                            <ng-container [matColumnDef]="template.matColumnDef">
+      <div class="card-body px-0">
+        <ngx-simplebar style="max-height: 400px;">
+          <table mat-table [dataSource]="dataSourceTx" class="table-reponsive">
+            <ng-container *ngFor="let template of templatesTx; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef">
 
-                                <th mat-header-cell *matHeaderCellDef>
-                                    <div [innerHTML]="template.headerCellDef | translate"></div>
-                                </th>
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
 
-                                <td mat-cell *matCellDef="let data">
-                                    <div>
-                                        <ng-container [ngSwitch]="template.matColumnDef ">
-                                            <div *ngSwitchCase="'timestamp'">
-                                                <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{ data[template.matColumnDef] | calDate}} ago
-                                            </div>
-                                            <div *ngSwitchCase="'tx_hash'" class="g-ellipsis g-blue">
-                                                {{ data[template.matColumnDef] }}
-                                            </div>
-                                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </td>
-                            </ng-container>
-                        </ng-container>
+                <td mat-cell *matCellDef="let data">
+                  <div>
+                    <ng-container [ngSwitch]="template.matColumnDef ">
+                      <div *ngSwitchCase="'timestamp'">
+                        <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
+                        data[template.matColumnDef] | calDate}} ago
+                      </div>
+                      <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'type'" class="g-type">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                      <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
+                        {{ data[template.matColumnDef] }}
+                    </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns2" (click)="openTxsDetail(row)"></tr>
-                        <tr class="mat-row" *matNoDataRow>
-                            <td class="mat-cell g-no-data" colspan="9999">
-                                {{"NO DATA" | translate}}
-                            </td>
-                        </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTx" (click)="openTxsDetail($event, row)"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{"NO DATA" | translate}}
+              </td>
+            </tr>
 
-                    </table>
-                </ngx-simplebar>
-            </div>
-        </div>
+          </table>
+        </ngx-simplebar>
+      </div>
     </div>
+  </div>
 </div>

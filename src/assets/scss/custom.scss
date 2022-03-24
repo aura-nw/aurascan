@@ -1,3 +1,6 @@
+
+// regular style toast
+@import '~ngx-toastr/toastr';
 // Custom Dashboard Css
 .activity-wid .activity-list:last-child::before {
     display: none;
@@ -304,4 +307,32 @@ body {
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.g-type {
+    display: inline;
+    border-radius: 10rem;
+    padding: 0.2rem 1rem;
+    background-color: #f6f2ff;
+    margin-left: 0.3rem;
+    color: #9c6cff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.g-purple {
+    color: #9c6cff;
+}
+
+.cdk-overlay-container {
+    z-index: 1051;
+}
+
+.disabled-pointer {
+    pointer-events: none;
 }

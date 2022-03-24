@@ -1,0 +1,75 @@
+[
+  {
+    "id": "23",
+    "title": "Enable IBC transfers",
+    "status": "1",
+    "proposer": "B-Harvest",
+    "proposerId": "cosmos10e4vsut6suau8tk9m6dnrm0slgd6npe3hjqndl",
+    "votingStart": "2022-03-14 16:43:54",
+    "votingEnd": "2022-03-28 16:43:54",
+    "submitTime": "2022-01-09 07:29:44",
+    "totalDeposit": "64.000000 ATOM",
+    "voteResult": {
+      "yes": 50,
+      "no": 15,
+      "noWithVeto": 20,
+      "abstain": 15
+    },
+    "currentVote": "Yes"
+  },
+  {
+    "id": "24",
+    "title": "Use EVM (instead of EVMOS) as the symbol for Evmos' native coin",
+    "status": "1",
+    "proposer": "cosmos1k...fj995sm6",
+    "proposerId": "cosmos1k7hcerv45y2jgx4wwnj29mqfwgf7x9fj995sm6",
+    "votingStart": "2022-01-09 07:55:02",
+    "votingEnd": "2022-01-23 07:55:02",
+    "submitTime": "2022-01-09 07:29:44",
+    "totalDeposit": "64.000000 ATOM",
+    "voteResult": {
+      "yes": 8,
+      "no": 70,
+      "noWithVeto": 20,
+      "abstain": 2
+    },
+    "currentVote": "No"
+  },
+  {
+    "id": "25",
+    "title": "Signal Proposal to Adopt the Liquidity Module onto the Cosmos Hub",
+    "status": "0",
+    "proposer": "cosmos1h...msmr8cdx",
+    "proposerId": "cosmos1hxv7mpztvln45eghez6evw2ypcw4vjmsmr8cdx",
+    "votingStart": "2021-11-29 17:57:56",
+    "votingEnd": "2021-12-13 17:57:56",
+    "submitTime": "2021-12-13 17:57:56",
+    "totalDeposit": "64.000000 ATOM",
+    "voteResult": {
+      "yes": 3,
+      "no": 17,
+      "noWithVeto": 80,
+      "abstain": 0
+    },
+    "currentVote": "No with veto"
+  },
+  {
+    "id": "26",
+    "title": "Governance Split Votes",
+    "status": "2",
+    "proposer": "B-Harvest",
+    "proposerId": "cosmos10e4vsut6suau8tk9m6dnrm0slgd6npe3hjqndl",
+    "votingStart": "2021-10-26 17:37:52",
+    "votingEnd": "2021-11-09 17:37:52",
+    "submitTime": "2021-11-09 17:37:52",
+    "totalDeposit": "64.000000 ATOM",
+    "voteResult": {
+      "yes": 20,
+      "no": 10,
+      "noWithVeto": 10,
+      "abstain": 60
+    },
+    "currentVote": ""
+  }
+]
+

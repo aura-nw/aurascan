@@ -41,3 +41,17 @@ export const NETWORK = [
         icon: '/assets/images/icons/chain_cosmos.svg'
     }
 ];
+
+export const DATEFORMAT = {
+    DATETIME_UTC: 'yyyy-MM-dd HH:mm:ss'
+};
+
+export const NUMBER_CONVERT = 1000000; //10^6 satoshi unit
+
+export const PAGE_EVENT = {
+    LENGTH: 0,
+    PAGE_SIZE: 5,
+    PAGE_INDEX: 0,
+    PREVIOUS_PAGE_INDEX: 0,
+    LENGTH_DEFAULT: 500
+};

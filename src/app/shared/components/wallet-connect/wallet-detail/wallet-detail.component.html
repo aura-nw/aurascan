@@ -1,0 +1,65 @@
+<div class="wallet-detail-container">
+  <div class="d-flex justify-content-center">
+    <div id="walletChart">
+      <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [labels]="chartOptions.labels"
+        [fill]="chartOptions.fill"
+        [dataLabels]="chartOptions.dataLabels"
+        [responsive]="chartOptions.responsive"
+        [plotOptions]="chartOptions.plotOptions"
+        [legend]="chartOptions.legend"
+        [colors]="chartOptions.colors"
+        [tooltip]="chartOptions.tooltip"
+        [states]="chartOptions.states"
+        [stroke]="chartOptions.stoke"
+      >
+      </apx-chart>
+    </div>
+  </div>
+
+  <div class="custom-legend" *ngFor="let chart of chartCustomOptions; index as index">
+    <div class="color" [style.background-color]="chart.color"></div>
+    <div class="label" [style.color]="chart.color">
+      {{ chart.name }}
+    </div>
+    <div class="value">
+      <span
+        >{{ chartOptions.series[index] }} <span [style.color]="chart.color">{{ tokenSymbol }}</span></span
+      >
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-3">
+    <button type="button" class="col-5 btn btn-light" (click)="deposit($event)">{{ 'WALLET.DEPOSIT' | translate }}</button>
+  </div>
+
+  <div class="card mt-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="d-flex align-items-center gap-2 justify-content-between">
+          <div class="">
+            <h4> {{ "WALLET.MSG_PENDING_STAKE_REWARD" | translate }}</h4>
+            <p class="balance">
+              {{ balance.totalReward }} <span>{{ tokenSymbol }}</span>
+            </p>
+          </div>
+          <button class="btn btn-primary" (click)="clampReward()" [disabled]="balance.totalReward <= 0 || isClaiming">
+            <span *ngIf="!isClaiming">{{ "WALLET.CLAIM" | translate }}</span>
+            <span *ngIf="isClaiming" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="d-flex align-items-center gap-2 justify-content-between">
+          <div class="">
+            <h4>{{ "WALLET.STAKE" | translate }}</h4>
+            <p class="text-secondary">{{ "WALLET.MSG_EARN" | translate }}</p>
+          </div>
+          <button class="btn btn-secondary" [routerLink]="'../validators'">{{ "WALLET.STAKE" | translate }}</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+@import "../../../../assets/scss/color.scss";
+
+.table {
+  width: 100%;
+  .button {
+    border: none;
+    width: 24px;
+    .mc-button-white{
+      margin: 0px 10px;
+    }
+  }
+}
+
+.wap-table-container{
+   overflow-x: auto;
+  overflow-y: hidden;
+}

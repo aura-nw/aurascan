@@ -1,0 +1,74 @@
+@import "../../../assets/scss/color.scss";
+
+.account-detail-content {
+  .box-account {
+    position: relative;
+    background-color: $account-box-total !important;
+    width: 100%;
+    padding: 2rem 1.2rem 1.3rem 2rem;
+    min-height: 35rem;
+    color: $white;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 0.5rem;
+    .box-qr {
+      margin-bottom: 1rem;
+    }
+    .address-account {
+      color: $validator-btn-text;
+    }
+    .box-total {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 18px;
+    }
+  }
+  .box-assets {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
+    .title-assets {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    .account-list-search-area {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .list-token {
+        width: 150px;
+      }
+      .txt-asset {
+        margin-right: 25px;
+      }
+      .account-list-search-input {
+        border-radius: 0.5rem;
+        border: 0.1rem solid #bebebe;
+        padding: 0.6rem 0.6rem 0.7rem;
+        margin-bottom: 0.3rem;
+        width: 400px;
+        height: 30px;
+        color: $validator-black;
+        font-size: 14px;
+        margin-right: 1rem;
+      }
+    }
+  }
+  .card-body {
+    .item-color-balance {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0.2rem 1rem 0 0;
+      font-weight: 500;
+    }
+    .box-balance {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      margin: 1.5rem 10px;
+      font-weight: 500;
+    }
+  }
+}

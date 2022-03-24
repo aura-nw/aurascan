@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Globals } from '../../../app/global/global';
 
 @Component({
   selector: 'app-pagetitle',
@@ -18,8 +19,9 @@ export class PagetitleComponent implements OnInit {
   }>;
 
   @Input() title: string | undefined;
+  @Input() displayInfo: boolean;
 
-  constructor() { }
+  constructor(public global: Globals) { }
 
   ngOnInit(): void {
   }

@@ -53,6 +53,9 @@ import { EnvironmentService } from './core/data-services/environment.service';
 import { NgProgressModule } from "ngx-progressbar";
 import { LoadingInterceptor } from './core/directives/loading.interceptor';
 import { CommonService } from './core/services/common.service';
+import { DatePipe } from '@angular/common';
+import { Globals } from './global/global';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 // if (environment.defaultauth === 'firebase') {
 //   initFirebaseBackend(environment.firebaseConfig);
 // } else {
@@ -130,13 +133,16 @@ export class MaterialModule { }
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    ToastrModule.forRoot({ positionClass: 'inline' }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     // { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     EnvironmentService,
+    DatePipe,
+    Globals,
     {
       provide: APP_INITIALIZER,
       useFactory: (environmentService: EnvironmentService) => () => environmentService.load(),

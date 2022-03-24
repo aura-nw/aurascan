@@ -24,7 +24,7 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "allowedCommonJsDependencies": [
-                            "rxjs", "core-js", "chart.js", "chartist"
+                            "rxjs", "core-js", "chart.js", "chartist", "qrcode", "@cosmjs/stargate", "ngx-lightbox"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
@@ -48,7 +48,10 @@
                             "src/assets/scss/icons.scss"
                         ],
                         "scripts": [
-                            "node_modules/apexcharts/dist/apexcharts.min.js"
+                            "node_modules/apexcharts/dist/apexcharts.min.js",
+                            "./node_modules/@popperjs/core/dist/umd/popper.min.js",
+                            "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+                            "./node_modules/jquery/dist/jquery.min.js"
                         ],
                         "serviceWorker": true,
                         "ngswConfigPath": "ngsw-config.json"
@@ -58,7 +61,7 @@
                             "budgets": [{
                                     "type": "initial",
                                     "maximumWarning": "5mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "8mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",

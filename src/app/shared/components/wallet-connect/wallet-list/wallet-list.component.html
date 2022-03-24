@@ -1,0 +1,13 @@
+<div class="wallet-list-container">
+    <p>{{ "WALLET.MSG_CONNECT" | translate }}</p>
+    <div class="wallet-list card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item wallet-item" *ngFor="let wallet of walletList">
+                <div class="d-flex align-items-center gap-2" (click)="connect(wallet)">
+                    <img class="wallet-icon" [src]="wallet.icon">
+                    <span>{{wallet.name}}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

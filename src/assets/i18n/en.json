@@ -98,6 +98,10 @@
             "TEXT": "Transaction",
             "BADGE": "01"
         },
+        "PROPOSAL": {
+            "TEXT": "Proposal",
+            "BADGE": "04"
+        },
         "CHAINCODE": {
             "TEXT": "Chaincodes",
             "BADGE": "04"
@@ -242,5 +246,22 @@
                 }
             }
         }
+    },
+    "PAGES": {
+        "PROPOSAL": {
+            "yes": "Yes",
+            "no": "No",
+            "noWithVeto": "No with veto",
+            "abstain": "Abstain"
+        }
+    },
+    "WALLET": {
+        "SCAN_QR": "Scan QR code",
+        "MSG_CONNECT": "Connect with one wallet provider or create a new one",
+        "MSG_PENDING_STAKE_REWARD": "Pending Staking Reward",
+        "MSG_EARN": "Earn up to 20% per year",
+        "STAKE": "Stake",
+        "CLAIM": "Claim",
+        "DEPOSIT": "Deposit"
     }
 }

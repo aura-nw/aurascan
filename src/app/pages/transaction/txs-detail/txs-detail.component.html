@@ -1,66 +1,99 @@
 <app-pagetitle title="TRANSACTION DETAILS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
-<div class="card">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-        Transaction Information
+
+<div class="type-data-group">
+  <button class="btn-select" [class.btn-select]="!isRawData" (click)="changeType(false)">Parsing Data</button>
+  <button [class.btn-select]="isRawData" (click)="changeType(true)">Raw Data</button>
+</div>
+
+<ng-container *ngIf="!isRawData">
+  <div class="card">
+    <div class="card-header bg-transparent border-bottom fw-bold">
+      Information
     </div>
     <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Chain Id</p>
-            </div>
-            <div class="col-6"></div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Chain Id</p>
         </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">TxHash</p>
-            </div>
-            <div class="col-6">{{item?.tx_hash}}</div>
+        <div class="col-6">{{item?.block.chainid}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">TxHash</p>
         </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Status</p>
-            </div>
-            <div class="col-6"></div>
+        <div class="col-6">{{item?.tx_hash}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Status</p>
         </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Height</p>
-            </div>
-            <div class="col-6">{{item?.height}}</div>
+        <div class="col-6">
+          <img [src]="item?.code === codeTransaction.Success ?
+                    'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+          {{item?.status}}
         </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Time</p>
-            </div>
-            <div class="col-6">{{item?.timestamp}}({{item?.timestamp | calDate}} ago)</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Height</p>
         </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Fee</p>
-            </div>
-            <div class="col-6"></div>
+        <div class="col-6"><a routerLink="/blocks/id/{{item?.block.id}}">{{item?.height | number}}</a></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Time</p>
         </div>
-        <div class="row mb-3">
-            <div class="col-3">
-                <p class="card-text fw-bold">Gas (used / wanted)</p>
-            </div>
-            <div class="col-6">{{item?.gas_used}} / {{item?.gas_wanted}}</div>
+        <div class="col-6">{{item?.timestamp | calDate}} ago ({{dateFormat}})</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Fee</p>
         </div>
+        <div class="col-6">{{item?.fee}} <span class="g-purple">AURA</span></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Gas (used / wanted)</p>
+        </div>
+        <div class="col-6">{{item?.gas_used | number}} / {{item?.gas_wanted | number}}</div>
+      </div>
     </div>
-</div>
-<div class="card" *ngIf="item?.read_set">
+  </div>
+
+  <div class="card mt-5" *ngIf="item?.messages">
+    <app-transferred-detail [transactionDetail]="item">
+    </app-transferred-detail>
+    <!-- <app-transferred-detail *ngSwitchCase="eTransType.ExecuteContract" [transactionDetail]="item">
+    </app-transferred-detail>
+    <app-transferred-detail *ngSwitchCase="eTransType.InstantiateContract" [transactionDetail]="item">
+    </app-transferred-detail>
+    <app-transferred-detail *ngSwitchCase="eTransType.InstantiateContract" [transactionDetail]="item">
+    </app-transferred-detail> -->
+  </div>
+
+  <div class="card" *ngIf="item?.read_set">
     <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-        Read
+      Read
     </div>
     <div class="card-body">
-        <ngx-json-viewer [json]="item?.read_set"></ngx-json-viewer>
+      <ngx-json-viewer [json]="item?.read_set"></ngx-json-viewer>
     </div>
-</div>
-<div class="card" *ngIf="item?.write_set">
+  </div>
+  <div class="card" *ngIf="item?.write_set">
     <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-        Write
+      Write
     </div>
     <div class="card-body" *ngIf="item?.write_set">
-        <ngx-json-viewer [json]="item?.write_set"></ngx-json-viewer>
+      <ngx-json-viewer [json]="item?.write_set"></ngx-json-viewer>
     </div>
-</div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isRawData">
+  <div class="card">
+    <div class="card-header bg-transparent border-bottom fw-bold">
+      Raw Data
+    </div>
+    <pre id="json" class="raw-content">{{jsonStr}}</pre>
+  </div>
+</ng-container>
