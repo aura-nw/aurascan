@@ -14,6 +14,9 @@ import { SummaryInfoComponent } from './proposal-detail/summary-info/summary-inf
 import { VotesComponent } from './proposal-detail/votes/votes.component';
 import { ValidatorsVotesComponent } from './proposal-detail/validators-votes/validators-votes.component';
 import { DepositorsComponent } from './proposal-detail/depositors/depositors.component';
+import { ProposalTableComponent } from './proposal-table/proposal-table.component';
+import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { NgbDropdownModule, NgbAlertModule, NgbCarouselModule, NgbProgressbarModule, NgbNavModule, NgbCollapseModule, NgbAccordionModule, NgbPopoverModule, NgbTooltipModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -25,6 +28,7 @@ import { DepositorsComponent } from './proposal-detail/depositors/depositors.com
     VotesComponent,
     ValidatorsVotesComponent,
     DepositorsComponent,
+    ProposalTableComponent,
   ],
     imports: [
         CommonModule,
@@ -33,6 +37,17 @@ import { DepositorsComponent } from './proposal-detail/depositors/depositors.com
         MaterialModule,
         TranslateModule,
         FormsModule,
+        CommonPipeModule    
+        ,NgbDropdownModule,
+        NgbAlertModule,
+        NgbCarouselModule,
+        NgbProgressbarModule,
+        NgbNavModule,
+        NgbCollapseModule,
+        NgbAccordionModule,
+        NgbPopoverModule,
+        NgbTooltipModule,
+        NgbPaginationModule,
     ],
     providers: [ProposalService]
 })

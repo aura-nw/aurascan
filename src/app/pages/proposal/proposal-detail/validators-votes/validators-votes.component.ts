@@ -11,5 +11,8 @@ export class ValidatorsVotesComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  changeTab(tabId): void {
+    console.log(tabId);
+    
+  }
 }

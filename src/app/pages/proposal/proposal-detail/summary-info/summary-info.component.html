@@ -1,137 +1,158 @@
-<mat-card>
-    <div class="d-flex justify-content-between mb-2 card__header">
-        <div class="card__title">
-            <div>#63</div>
-            <h2>Activate governance discussions on the Discourse forum using community pool funds</h2>
+<div class="card">
+  <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+    <div class="d-flex justify-content-between mb-2">
+      <div class="card__title">
+        <div>#63</div>
+        <h2>Activate governance discussions on the Discourse forum using community pool funds</h2>
+      </div>
+      <div class="flex-shrink-0">
+        <div *ngIf="true" class="aura-status aura-status--has-elevation text-uppercase info">
+          <span class="status">VOTING PERIOD</span>
         </div>
-        <div>
-            <div *ngIf="true"
-                 class="aura-status aura-status--has-elevation text-uppercase info">
-                <span class="status">VOTING PERIOD</span>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+  <div class="card-body">
     <div class="card__info">
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Proposer</div>
-            <div class="col-12 col-md-10 info"><a href="#">c5mtuje84sx5dsqw4gtr4w8lthpzw</a></div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Proposer</div>
+        <div class="col-12 col-md-10 info">
+          <a href="#">c5mtuje84sx5dsqw4gtr4w8lthpzw</a>
         </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Initial Deposit</div>
-            <div class="col-12 col-md-10 info">1.000000 <span class="g-purple">ATOM</span></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Initial Deposit</div>
+        <div class="col-12 col-md-10 info">1.000000 <span class="g-purple">ATOM</span></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Total Deposit</div>
+        <div class="col-12 col-md-10 info">64.000000 <span class="g-purple">ATOM</span></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Voting Start</div>
+        <div class="col-12 col-md-10 info">2022-03-16 07:15:13</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Voting End</div>
+        <div class="col-12 col-md-10 info">2022-03-30 07:15:13</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Type</div>
+        <div class="col-12 col-md-10 info">CommunityPoolSpend</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Submit Time</div>
+        <div class="col-12 col-md-10 info">2022-03-16 03:05:19</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Deposit End Time</div>
+        <div class="col-12 col-md-10 info">2022-03-30 03:05:19</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Details</div>
+        <div class="col-12 col-md-10 info">
+          <div class="editorial-container">
+            <h2>Summary</h2>
+            <p>
+              Proposal to request for 1000 ATOM from the community spending pool to be sent to a multisig who will put
+              funds towards stewardship of the Discourse forum to make it an authoritative record of governance
+              decisions as well as a vibrant space to draft and discuss proposals.
+            </p>
+            <h2>Details</h2>
+            <p>
+              We are requesting 1000 ATOM from the community spending pool to activate and steward the Cosmos Hub
+              (Discourse) forum for the next six months. Off-chain governance conversations are currently highly
+              fragmented, with no shared public venue for discussing proposals as they proceed through the process of
+              being drafted and voted on. It means there is no record of discussion that voters can confidently point to
+              for context, potentially leading to governance decisions becoming delegitimized by stakeholders. The
+              requested amount will be sent to a multisig comprising individuals (members listed below) who can ensure
+              that the tokens are spent judiciously. We believe stewardship of the forum requires:
+            </p>
+            <ul>
+              <li>
+                <b>Moderation:</b> Format, edit, and categorize posts; Standardize titles and tags; Monitor and approve
+                new posts; Archive posts.
+              </li>
+              <li>
+                <b>Facilitation:</b> Ask clarifying questions in post threads; Summarize discussions; Provide historical
+                precedence to discussions.
+              </li>
+              <li>
+                <b>Engagement:</b> Circulate important posts on other social channels to increase community
+                participation; Solicit input from key stakeholders.
+              </li>
+              <li>
+                <b>Guidance:</b> Orient and assist newcomers; Guide proposers through governance process; Answer
+                questions regarding the forum or Cosmos ecosystem. The work to steward the forum will be carried out by
+                members of <a href="#">Hypha Worker Co-op</a> and individuals selected from the community to carry out
+                scoped tasks in exchange for ATOM from this budget.
+              </li>
+            </ul>
+            <h2>Multisig Members</h2>
+            <ul>
+              <li>Hypha: Mai Ishikawa Sutton (Hypha Co-op)</li>
+              <li>Validator: Daniel Hwang (Stakefish)</li>
+              <li>Cosmos Hub developer: Lauren Gallinaro (Interchain Berlin)</li>
+              <p>
+                We feel the membership of the multisig should be rotated following the six-month pilot period to
+                preserve insight from the distinct specializations (i.e., Cosmos Hub validators and developers).
+              </p>
+            </ul>
+            <h2>Timeline and Deliverables</h2>
+            <p>We estimate the total work to take 250-300 hours over six months where we hope to produce:</p>
+            <ul>
+              <li>
+                <b>Moving summaries:</b> Provide succinct summaries of the proposals and include all publicly stated
+                reasons why various entities are choosing to vote for/against a given proposal. These summaries will be
+                written objectively, not siding with any one entity.
+              </li>
+              <li>
+                <b>Validator platforms:</b> Create a section of the Forum where we collate all validators' visions for
+                Cosmos Hub governance to allow them to state their positions publicly. We will work with the smaller
+                validators to ensure they are equally represented.
+              </li>
+              <li>
+                <b>Regular check-ins with the Cosmonaut DAO:</b> Collaborate with the future Cosmonaut DAO to ensure
+                maximal accessibility and engagement. Community management is a critical, complementary aspect of
+                increasing participation in governance.
+              </li>
+              <li>
+                <b>Announcement channel:</b> Create a read-only announcement channel in the Cosmos Community Discord, so
+                that new proposals and major discussions can be easily followed.
+              </li>
+            </ul>
+            <p>
+              At the end of the period, we will produce a report reflecting on our successes and failures, and
+              recommendations for how the work of maintaining a governance venue can be continuously sustained (e.g.,
+              through a DAO). We see this initiative as a process of discovery, where we are learning by doing.
+            </p>
+          </div>
         </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Total Deposit</div>
-            <div class="col-12 col-md-10 info">64.000000 <span class="g-purple">ATOM</span></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Voting Start</div>
-            <div class="col-12 col-md-10 info">2022-03-16 07:15:13</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Voting End</div>
-            <div class="col-12 col-md-10 info">2022-03-30 07:15:13</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Type</div>
-            <div class="col-12 col-md-10 info">CommunityPoolSpend</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Submit Time</div>
-            <div class="col-12 col-md-10 info">2022-03-16 03:05:19</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Deposit End Time</div>
-            <div class="col-12 col-md-10 info">2022-03-30 03:05:19</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Details</div>
-            <div class="col-12 col-md-10 info">
-                <div class="editorial-container">
-                    <h2>Summary</h2>
-                    <p>Proposal to request for 1000 ATOM from the community spending pool to be sent to a multisig
-                        who will put funds towards stewardship of the Discourse forum to make it
-                        an authoritative record of governance decisions as well
-                        as a vibrant space to draft and discuss proposals.</p>
-                    <h2>Details</h2>
-                    <p>We are requesting 1000 ATOM from the community spending pool to activate and steward the Cosmos Hub (Discourse) forum for the next six months.
-                        Off-chain governance conversations are currently highly fragmented,
-                        with no shared public venue for discussing proposals as they proceed through the process of being drafted and voted on.
-                        It means there is no record of discussion that voters can confidently point to for context, potentially leading to governance decisions becoming delegitimized by stakeholders.
-                        The requested amount will be sent to a multisig comprising individuals (members listed below)
-                        who can ensure that the tokens are spent judiciously. We believe stewardship of the forum requires:</p>
-                    <ul>
-                        <li><b>Moderation:</b> Format, edit, and categorize posts; Standardize titles and tags; Monitor and approve new posts; Archive posts.</li>
-                        <li><b>Facilitation:</b> Ask clarifying questions in post threads; Summarize discussions; Provide historical precedence to discussions.</li>
-                        <li><b>Engagement:</b> Circulate important posts on other social channels to increase community participation; Solicit input from key stakeholders.</li>
-                        <li><b>Guidance:</b> Orient and assist newcomers; Guide proposers through governance process;
-                            Answer questions regarding the forum or Cosmos ecosystem.
-                            The work to steward the forum will be carried out by members of <a href="#">Hypha Worker Co-op</a>
-                            and individuals selected from the community to carry out scoped tasks in exchange for ATOM from this budget.</li>
-                    </ul>
-                    <h2>Multisig Members</h2>
-                    <ul>
-                        <li>Hypha: Mai Ishikawa Sutton (Hypha Co-op)</li>
-                        <li>Validator: Daniel Hwang (Stakefish)</li>
-                        <li>Cosmos Hub developer: Lauren Gallinaro (Interchain Berlin)</li>
-                        <p>We feel the membership of the multisig should be rotated following the six-month pilot period
-                            to preserve insight from the distinct specializations (i.e., Cosmos Hub validators and developers).</p>
-                    </ul>
-                    <h2>Timeline and Deliverables</h2>
-                    <p>We estimate the total work to take 250-300 hours over six months where we hope to produce:</p>
-                    <ul>
-                        <li><b>Moving summaries:</b> Provide succinct summaries of the proposals and include all publicly stated reasons why various entities are choosing to vote for/against a given proposal.
-                            These summaries will be written objectively, not siding with any one entity.</li>
-                        <li><b>Validator platforms:</b> Create a section of the Forum where we collate all validators' visions for Cosmos Hub governance to allow them to state their positions publicly.
-                            We will work with the smaller validators to ensure they are equally represented.</li>
-                        <li><b>Regular check-ins with the Cosmonaut DAO:</b> Collaborate with the future Cosmonaut DAO to ensure maximal accessibility and engagement.
-                            Community management is a critical, complementary aspect of increasing participation in governance.</li>
-                        <li><b>Announcement channel:</b>  Create a read-only announcement channel in the Cosmos Community Discord, so that new proposals and major discussions can be easily followed.</li>
-                    </ul>
-                    <p>At the end of the period, we will produce a report reflecting on our successes and failures, and recommendations for how the work of maintaining a governance venue can be continuously sustained
-                        (e.g., through a DAO). We see this initiative as a process of discovery, where we are learning by doing.</p>
-                </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 title">Request Amount</div>
+        <div class="col-12 col-md-10 info">1,000.000000 <span class="g-purple">ATOM</span></div>
+      </div>
+      <div class="proposal__summary-total">
+        <div class="d-md-flex flex-md-row-reverse justify-content-between">
+          <div class="text-md-end mb-2 mb-md-0">
+            <div class="d-sm-flex">
+              <div><b>Current Turnout :</b> 31.70%</div>
+              <div class="spacer-custom my-2 my-sm-0"><b>Quorum :</b> 40.00%</div>
             </div>
+            <small>59 M of 185 M has voted</small>
+          </div>
+          <div><b>Total :</b> 58,787,660.197391 <span class="g-purple">ATOM</span></div>
         </div>
-        <div class="row mb-3">
-            <div class="col-12 col-md-2 title">Request Amount</div>
-            <div class="col-12 col-md-10 info">1,000.000000 <span class="g-purple">ATOM</span></div>
+        <div class="vote-bar mt-3">
+          <ul>
+            <li class="primary" style="width: 60%" matTooltip="Yes 63%" [matTooltipPosition]="'above'"></li>
+            <li class="danger" style="width: 10%" matTooltip="No 10%" [matTooltipPosition]="'above'"></li>
+            <li class="info" style="width: 10%" matTooltip="No with veto 10%" [matTooltipPosition]="'above'"></li>
+            <li class="secondary" style="width: 20%" matTooltip="Abstain 20%" [matTooltipPosition]="'above'"></li>
+          </ul>
         </div>
-        <div class="proposal__summary-total">
-            <div class="d-md-flex flex-md-row-reverse justify-content-between">
-                <div class="text-md-end mb-2 mb-md-0">
-                    <div class="d-sm-flex">
-                        <div><b>Current Turnout :</b> 31.70%</div>
-                        <div class="spacer-custom my-2 my-sm-0"><b>Quorum :</b> 40.00%</div>
-                    </div>
-                    <small>59 M of 185 M has voted</small>
-                </div>
-                <div><b>Total :</b> 58,787,660.197391 <span class="g-purple">ATOM</span></div>
-            </div>
-            <div class="vote-bar mt-3">
-                <ul>
-                    <li class="primary"
-                        style="width: 60%"
-                        matTooltip="Yes 63%"
-                        [matTooltipPosition]="'above'"
-                    ></li>
-                    <li class="danger"
-                        style="width: 10%"
-                        matTooltip="No 10%"
-                        [matTooltipPosition]="'above'"
-                    ></li>
-                    <li class="info"
-                        style="width: 10%"
-                        matTooltip="No with veto 10%"
-                        [matTooltipPosition]="'above'"
-                    ></li>
-                    <li class="secondary"
-                        style="width: 20%"
-                        matTooltip="Abstain 20%"
-                        [matTooltipPosition]="'above'"
-                    ></li>
-                </ul>
-            </div>
-        </div>
+      </div>
     </div>
-</mat-card>
+  </div>
+</div>

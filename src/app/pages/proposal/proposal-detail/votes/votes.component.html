@@ -1,1 +1,15 @@
-<p>votes works!</p>
+<div class="card">
+  <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">Votes</div>
+  <div class="card-body">
+    <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav-tabs nav-tabs-custom nav-justified">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(index)">
+            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+            <span class="d-none d-sm-block tab-title">{{tab}}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>
