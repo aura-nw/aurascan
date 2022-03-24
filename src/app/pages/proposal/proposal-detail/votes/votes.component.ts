@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
+import { ProposalService } from '../../../../core/services/proposal.service';
+
+export interface IVotes {
+  rank: string;
+  validator: string;
+  txHash: string;
+  answer: string;
+  time: string;
+}
 
 @Component({
   selector: 'app-votes',
@@ -7,13 +16,22 @@ import { Component, OnInit } from '@angular/core'
 })
 export class VotesComponent implements OnInit {
   // TABS = ['ALL', 'YES', 'NO', 'NO WITH VETO', 'ABSTAIN', 'DID NOT VOTE']
-  TABS = ['ALL', 'YES', 'NO', 'NO WITH VETO', 'ABSTAIN',]
+  TABS = ['ALL', 'YES', 'NO', 'NO WITH VETO', 'ABSTAIN'];
 
-  constructor() {}
+  voteDataList: IVotes[] = [];
 
-  ngOnInit(): void {}
+  _voteList: IVotes[] = [];
+
+  constructor(private proposalService: ProposalService) {}
+
+  ngOnInit(): void {
+    this.proposalService.getVotes().subscribe((data) => {
+      this._voteList = data;
+      this.changeTab(0)
+    });
+  }
 
   changeTab(tabId): void {
-    console.log(tabId)
+    this.voteDataList = [...this._voteList].slice(tabId * 20, tabId * 20 + 20)
   }
 }

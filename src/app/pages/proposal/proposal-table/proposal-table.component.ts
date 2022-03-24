@@ -1,44 +1,45 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
-import { TableTemplate } from "src/app/core/models/common.model";
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { TableTemplate } from 'src/app/core/models/common.model';
 
 @Component({
-  selector: "app-proposal-table",
-  templateUrl: "./proposal-table.component.html",
-  styleUrls: ["./proposal-table.component.scss"],
+  selector: 'app-proposal-table',
+  templateUrl: './proposal-table.component.html',
+  styleUrls: ['./proposal-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProposalTableComponent implements OnInit {
-  @Input() type: "VOTES" | "VALIDATORS_VOTES" | "DEPOSITORS";
+export class ProposalTableComponent implements OnInit, OnChanges {
+  @Input() type: 'VOTES' | 'VALIDATORS_VOTES' | 'DEPOSITORS' = 'VOTES';
+
+  @Input() data: any;
 
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: "rank", headerCellDef: "Rank" },
-    { matColumnDef: "validator", headerCellDef: "Validator" },
-    { matColumnDef: "txHash", headerCellDef: "TxHash" },
-    { matColumnDef: "answer", headerCellDef: "Answer" },
-    { matColumnDef: "time", headerCellDef: "Time" },
+    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    { matColumnDef: 'validator', headerCellDef: 'Validator' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
   vTemplates: Array<TableTemplate> = [
-    { matColumnDef: "rank", headerCellDef: "Rank" },
-    { matColumnDef: "validator", headerCellDef: "Validator" },
-    { matColumnDef: "txHash", headerCellDef: "TxHash" },
-    { matColumnDef: "answer", headerCellDef: "Answer" },
-    { matColumnDef: "time", headerCellDef: "Time" },
+    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    { matColumnDef: 'validator', headerCellDef: 'Validator' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
   dTemplates: Array<TableTemplate> = [
-    { matColumnDef: "rank", headerCellDef: "Rank" },
-    { matColumnDef: "validator", headerCellDef: "Validator" },
-    { matColumnDef: "txHash", headerCellDef: "TxHash" },
-    { matColumnDef: "answer", headerCellDef: "Answer" },
-    { matColumnDef: "time", headerCellDef: "Time" },
+    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    { matColumnDef: 'validator', headerCellDef: 'Validator' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
-  displayedColumns: string[] = this.votesTemplates.map(
-    (dta) => dta.matColumnDef
-  );
+  displayedColumns: string[] = this.getTemplate(this.type).map((template) => template.matColumnDef);
 
   dataSource: MatTableDataSource<any>;
   length;
@@ -47,7 +48,25 @@ export class ProposalTableComponent implements OnInit {
 
   constructor() {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataSource = new MatTableDataSource(this.data);
+    // this.sort = this.dataSource.sort
+  }
+
   ngOnInit(): void {}
 
   openBlockDetail(e, row): void {}
+
+  getTemplate(type: 'VOTES' | 'VALIDATORS_VOTES' | 'DEPOSITORS'): Array<TableTemplate> {
+    switch (type) {
+      case 'VOTES':
+        return this.votesTemplates;
+      case 'DEPOSITORS':
+        return this.dTemplates;
+      case 'VALIDATORS_VOTES':
+        return this.vTemplates;
+      default:
+        return [];
+    }
+  }
 }

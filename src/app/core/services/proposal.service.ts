@@ -23,4 +23,8 @@ export class ProposalService extends CommonService {
   getLastedProposal(): Observable<any> {
     return this.http.get(this.listLastedProposal);
   }
+
+  getVotes(): Observable<any> {
+    return this.http.get('../../assets/mock-data/proposal-votes.json');
+  }
 }
