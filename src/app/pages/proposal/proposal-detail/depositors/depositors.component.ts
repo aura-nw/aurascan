@@ -12,7 +12,6 @@ export class DepositorsComponent implements OnInit {
   ngOnInit(): void {
   }
   changeTab(tabId): void {
-    console.log(tabId);
     
   }
 }

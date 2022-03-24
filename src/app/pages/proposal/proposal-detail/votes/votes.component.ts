@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProposalService } from '../../../../core/services/proposal.service';
 
 export interface IVotes {
-  rank: string;
-  validator: string;
+  voter: string;
   txHash: string;
   answer: string;
   time: string;

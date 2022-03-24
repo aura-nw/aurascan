@@ -1,39 +1,19 @@
 <div class="card">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
-      validators Votes
-    </div>
-    <div class="card-body">
-      <ul
-        ngbNav
-        #customNav="ngbNav"
-        [activeId]="2"
-        class="nav-tabs nav-tabs-custom nav-justified"
-      >
-        <li [ngbNavItem]="1">
-          <a ngbNavLink (click)="changeTab(1)">
+  <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">Validators Votes</div>
+  <div class="card-body">
+    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="nav-tabs nav-tabs-custom nav-justified">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(index)">
             <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-            <span class="d-none d-sm-block">Home</span>
+            <span class="d-none d-sm-block tab-title">{{ tab }}</span>
           </a>
         </li>
-        <li [ngbNavItem]="2">
-          <a ngbNavLink (click)="changeTab(2)">
-            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-            <span class="d-none d-sm-block">Profile</span>
-          </a>
-        </li>
-        <li [ngbNavItem]="3">
-          <a ngbNavLink (click)="changeTab(3)">
-            <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-            <span class="d-none d-sm-block">Messages</span>
-          </a>
-        </li>
-        <li [ngbNavItem]="4">
-          <a ngbNavLink (click)="changeTab(4)">
-            <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
-            <span class="d-none d-sm-block">Settings</span>
-          </a>
-        </li>
-      </ul>
+      </ng-container>
+    </ul>
+
+    <div class="mt-3">
+      <app-proposal-table [type]="'VALIDATORS_VOTES'" [data]="voteDataList"></app-proposal-table>
     </div>
   </div>
-  
+</div>
