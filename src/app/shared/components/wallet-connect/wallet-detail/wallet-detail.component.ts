@@ -63,7 +63,7 @@ export class WalletDetailComponent implements OnInit, OnChanges {
       } else {
         const { data } = response
         const { balance, delegated, stake_reward } = data
-        const totalStake = delegated.delegation_responses.map((a) => a.balance.amount).reduce((a, b) => a + b)
+        const totalStake = delegated.delegation_responses.map((a) => a.balance.amount).reduce((a, b) => (Number(a) + Number(b)).toString())
 
         this.delegatorList = stake_reward.rewards.map((dta) => {
           return dta.validator_address
