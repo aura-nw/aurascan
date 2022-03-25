@@ -62,7 +62,7 @@ export class ValidatorsDetailComponent implements OnInit {
   templatesPower: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'tx_hash_format', headerCellDef: 'TxHash' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'fee', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
@@ -86,6 +86,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.getListBlockWithOperator();
     this.getListUpTime();
     this.getListDelegators();
+    this.getListPower();
     // this.getListPower();
   }
 
@@ -144,13 +145,14 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getListPower(): void {
-    this.commonService
-      .delegators(5, this.pageIndexDelegator, this.id)
+    this.validatorService
+      .validatorsDetailListPower(5, this.pageIndexDelegator, this.id)
       .subscribe(res => {
         res.data.forEach((power) => {
           power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
         });
         this.dataSourcePower = new MatTableDataSource(res.data);
+        this.lengthPower = res.meta?.count;
       }
       );
   }
