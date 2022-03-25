@@ -71,6 +71,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
 
     this.dataSource = new MatTableDataSource(this.data);
+    this.dataSource.sort = this.sort;
   }
 
   openBlockDetail(e, row): void {}
