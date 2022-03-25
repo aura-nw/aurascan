@@ -11,6 +11,7 @@ import {
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { shortenAddress } from 'src/app/core/utils/common/shorten';
 
 @Component({
   selector: 'app-proposal-table',
@@ -25,23 +26,23 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter', headerCellDef: 'Voter' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction' },
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'answer', headerCellDef: 'Answer' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank'},
-    { matColumnDef: 'validator', headerCellDef: 'Validator' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction' },
+    { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
+    { matColumnDef: 'validator', headerCellDef: 'Validator', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'answer', headerCellDef: 'Answer' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositors', headerCellDef: 'Depositors' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction' },
+    { matColumnDef: 'depositors', headerCellDef: 'Depositors', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
@@ -81,5 +82,9 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
       default:
         return [];
     }
+  }
+
+  shortenAddress(address: string): string {
+    return shortenAddress(address, 8);
   }
 }

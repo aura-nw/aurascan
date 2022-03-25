@@ -8,6 +8,7 @@ export class TableTemplate {
   matColumnDef: string;
   headerCellDef: string;
   isUrl?: string;
+  isShort?: boolean;
   cssClass?: string;
 }
 

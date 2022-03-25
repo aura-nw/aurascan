@@ -9,10 +9,14 @@
 
           <td mat-cell *matCellDef="let data">
             <div [classList]="[template.cssClass]">
-              <ng-container *ngIf="template.isUrl">
-                <a [routerLink]="[template.isUrl, data[template.matColumnDef]]">{{ data[template.matColumnDef] }}</a>
+              <ng-container *ngIf="template.isUrl && data[template.matColumnDef]">
+                <a [routerLink]="[template.isUrl, data[template.matColumnDef]]">
+                  {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])}}
+                </a>
               </ng-container>
-              <ng-container *ngIf="!template.isUrl">{{ data[template.matColumnDef] }}</ng-container>
+              <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' }}
+              </ng-container>
             </div>
           </td>
         </ng-container>
