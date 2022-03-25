@@ -19,6 +19,7 @@ import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { CommonService } from '../core/services/common.service';
 import { FormsModule } from '@angular/forms';
+import { WalletConnectModule } from '../shared/components/wallet-connect/wallet-connect.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { FormsModule } from '@angular/forms';
     NgbDropdownModule,
     SimplebarAngularModule,
     ClickOutsideModule,
-    FormsModule
+    FormsModule,
+    WalletConnectModule
   ],
   providers: [LanguageService, CommonService],
   exports: [VerticalComponent]

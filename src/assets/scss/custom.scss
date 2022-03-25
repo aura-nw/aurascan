@@ -1,3 +1,6 @@
+
+// regular style toast
+@import '~ngx-toastr/toastr';
 // Custom Dashboard Css
 .activity-wid .activity-list:last-child::before {
     display: none;
@@ -324,4 +327,12 @@ body {
 
 .g-purple {
     color: #9c6cff;
+}
+
+.cdk-overlay-container {
+    z-index: 1051;
+}
+
+.disabled-pointer {
+    pointer-events: none;
 }
