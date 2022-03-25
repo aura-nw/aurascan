@@ -26,22 +26,22 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter', headerCellDef: 'Voter' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction' },
     { matColumnDef: 'answer', headerCellDef: 'Answer' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank'},
     { matColumnDef: 'validator', headerCellDef: 'Validator' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction' },
     { matColumnDef: 'answer', headerCellDef: 'Answer' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
     { matColumnDef: 'depositors', headerCellDef: 'Depositors' },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash' },
+    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
@@ -55,12 +55,8 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
 
-  constructor() {
-    console.log('New Table');
-  }
-  ngOnDestroy(): void {
-    console.log('ngOnDestroy');
-  }
+  constructor() {}
+  ngOnDestroy(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.data);
@@ -73,8 +69,6 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource = new MatTableDataSource(this.data);
     this.dataSource.sort = this.sort;
   }
-
-  openBlockDetail(e, row): void {}
 
   getTemplate(type: 'VOTES' | 'VALIDATORS_VOTES' | 'DEPOSITORS'): Array<TableTemplate> {
     switch (type) {

@@ -7,6 +7,8 @@ export class ResponseTemplate<T> {
 export class TableTemplate {
   matColumnDef: string;
   headerCellDef: string;
+  isUrl?: string;
+  cssClass?: string;
 }
 
 export class ATBalanceDto {
