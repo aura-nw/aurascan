@@ -17,6 +17,7 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { FeatherModule } from 'angular-feather';
 import { TableModule } from './table/table.module';
+import { AccountService } from '../../../app/core/services/account.service';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,6 @@ import { TableModule } from './table/table.module';
     FeatherModule,
     TableModule
   ],
-  providers: [TransactionService]
+  providers: [TransactionService, AccountService]
 })
 export class AccountDetailModule { }

@@ -62,7 +62,7 @@
         <div class="col-3">
           <p class="card-text fw-bold">Sender</p>
         </div>
-        <div class="col-6" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{transactionDetail?.messages[0]?.sender}}
         </div>
       </div>

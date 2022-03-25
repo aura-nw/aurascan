@@ -18,9 +18,10 @@ import {
   ChartComponent
 } from "ng-apexcharts";
 import * as qrCode from 'qrcode';
-import { PageEventType } from '../../../app/core/constants/account.enum';
 import { PageEvent } from '@angular/material/paginator';
-// import { PageEvent } from '@angular/material/paginator';
+import { AccountService } from '../../../app/core/services/account.service';
+import { TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
+import { PageEventType } from '../../../app/core/constants/account.enum';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -67,6 +68,7 @@ export class AccountDetailComponent implements OnInit {
   ];
   displayedColumnsToken: string[] = this.templatesToken.map((dta) => dta.matColumnDef);
   dataSourceToken: MatTableDataSource<any>;
+  dataSourceTokenBk: MatTableDataSource<any>;
 
   templatesDelegation: Array<TableTemplate> = [
     { matColumnDef: 'validator', headerCellDef: 'Validator' },
@@ -75,7 +77,6 @@ export class AccountDetailComponent implements OnInit {
   ];
   displayedColumnsDelegation: string[] = this.templatesDelegation.map((dta) => dta.matColumnDef);
   dataSourceDelegation: MatTableDataSource<any>;
-
   pageType = '';
 
   pageData: PageEvent = {
@@ -122,10 +123,7 @@ export class AccountDetailComponent implements OnInit {
   pageEventType = PageEventType;
   type = 'All';
   imgGenerateQR: boolean;
-
-  assetsType = [
-    { key: 'All', value: 'All Assets' }
-  ];
+  assetsType = TYPE_ACCOUNT;
 
   chartCustomOptions: { name: string; color: string }[] = [
     {
@@ -152,7 +150,8 @@ export class AccountDetailComponent implements OnInit {
 
   constructor(
     private transactionService: TransactionService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private accountService: AccountService) {
     this.chartOptions = {
       series: [0, 0],
       labels: this.chartCustomOptions.map((e) => e.name),
@@ -232,6 +231,7 @@ export class AccountDetailComponent implements OnInit {
     ];
     this.id = this.route.snapshot.paramMap.get('id');
     this.getList();
+    this.getAccountDetail();
     this.createQRCode();
     this.chartOptions.series = [100, 50, 30, 20, 10];
   }
@@ -294,12 +294,26 @@ export class AccountDetailComponent implements OnInit {
       );
   }
 
-  searchValidator(): void {
+  getAccountDetail(): void {
+    this.accountService.getAccoutDetail(this.pageSize, this.pageIndex)
+      .subscribe(res => {
+        this.dataSourceToken = new MatTableDataSource<any>(res);
+        this.dataSourceTokenBk = this.dataSourceToken;
+      })
+  }
+
+  searchToken(): void {
     if (this.textSearch.length > 0) {
-      const data = this.dataSourceToken.data.filter((f) =>
-        f.title.toLowerCase().indexOf(this.textSearch) > -1
+      const data = this.dataSourceTokenBk.data.filter((f) =>
+        f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1
       );
-      this.dataSource = new MatTableDataSource(data);
+      this.dataSourceToken = this.dataSourceTokenBk;
+      if (data.length > 0) {
+        this.dataSourceToken = new MatTableDataSource(data);
+      }
+    }
+    else {
+      this.dataSourceToken = this.dataSourceTokenBk;
     }
   }
 
