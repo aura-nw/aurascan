@@ -305,7 +305,7 @@ export class AccountDetailComponent implements OnInit {
   searchToken(): void {
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter((f) =>
-        f.name.toLowerCase().indexOf(this.textSearch.toLowerCase()) > -1
+        f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1
       );
       this.dataSourceToken = this.dataSourceTokenBk;
       if (data.length > 0) {

@@ -129,6 +129,9 @@
         width: auto;
         height: 15px;
       }
+      &.status-inactive{
+        background-color: #4b525d;
+      }
     }
   }
   .card-text {
