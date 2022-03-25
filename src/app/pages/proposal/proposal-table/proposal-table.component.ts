@@ -48,6 +48,8 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   displayedColumns: string[];
 
+  template: Array<TableTemplate> = [];
+
   dataSource: MatTableDataSource<any>;
   length;
   pageSize = 20;
@@ -65,7 +67,10 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
+
+    this.dataSource = new MatTableDataSource(this.data);
   }
 
   openBlockDetail(e, row): void {}
