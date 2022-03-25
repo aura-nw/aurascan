@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-summary-info',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./summary-info.component.scss']
 })
 export class SummaryInfoComponent implements OnInit {
+  @Input() proposalId: number;
 
   constructor() { }
 
