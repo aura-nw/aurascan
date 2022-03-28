@@ -85,7 +85,7 @@
         color: $black;
         text-align: center;
         border-radius: 6px;
-        padding: 5px 0;
+        padding: 5px 10px;
         position: absolute;
         z-index: 1;
         bottom: 10px;
@@ -128,6 +128,9 @@
         margin-right: 5px;
         width: auto;
         height: 15px;
+      }
+      &.status-inactive{
+        background-color: #4b525d;
       }
     }
   }

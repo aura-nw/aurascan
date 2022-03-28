@@ -51,11 +51,11 @@ export class TxsDetailComponent implements OnInit {
         this.transactionDetailType = typeTrans?.value;
         this.item = res.data;
         //convert json for display raw data
-        this.jsonStr = JSON.stringify(this.item.tx, null, 2).replace(/\\/g,"");
+        this.jsonStr = JSON.stringify(this.item.tx, null, 2).replace(/\\/g, "");
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         //check exit amount of transaction
         if (this.item.messages && this.item.messages[0]?.amount) {
-          let amount =  this.item.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
+          let amount = this.item.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
           this.amount = this.item.messages?.length === 1 ? amount : 'More';
         }
       },
