@@ -8,7 +8,7 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
-import { NUMBER_CONVERT } from '../../../app/core/constants/common.constant';
+import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 
 @Component({
   selector: 'app-transaction',
@@ -33,7 +33,7 @@ export class TransactionComponent implements OnInit {
   length;
   pageSize = 20;
   pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
+  pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
 

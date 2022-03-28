@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { CommonDataDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
@@ -20,7 +21,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
-    // { matColumnDef: 'participation', headerCellDef: 'Participation' },
+    { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
   ];
@@ -28,10 +29,8 @@ export class ValidatorsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   dataSourceBk: MatTableDataSource<any>;
   length;
-  pageSize = 1000;
   pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
-  totalPower = 515;
+  pageSizeOptions = PAGE_SIZE_OPTIONS;
   isActive = true;
   textSearch = '';
   rawData;
@@ -71,8 +70,7 @@ export class ValidatorsComponent implements OnInit {
         this.rawData = res.data;
         res.data.totalParti = 18;
         res.data.forEach((val) => {
-          val.percent_vote = val.power / this.totalPower;
-          val.participation = '16' + '/ ' + 18;
+          val.participation = 16 + ' / ' + 18;
         });
 
         let dataFilter = res.data.filter(event => event.status_validator === this.isActive);
