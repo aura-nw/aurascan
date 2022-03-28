@@ -26,3 +26,19 @@ export enum ACCOUNT_TYPE_ENUM {
   PoolCoin = 'poolCoin',
   MajorPoolCoin = 'majorPoolCoin',
 }
+
+export enum ACCOUNT_WALLET_COLOR_ENUM {
+  Available = 'Available',
+  DelegatableVesting = 'DelegatableVesting',
+  Delegated = 'Delegated',
+  Unbonding = 'Unbonding',
+  StakingReward = 'StakingReward',
+}
+
+export enum WalletAcount{
+  Available = '#9C6CFF',
+  DelegatableVesting = '#783296',
+  Delegated = '#573655',
+  Unbonding = '#9C96C8',
+  StakingReward = '#574D56'
+}

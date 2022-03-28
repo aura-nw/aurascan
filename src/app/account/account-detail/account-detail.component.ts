@@ -20,7 +20,7 @@ import {
 import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
 import { AccountService } from '../../../app/core/services/account.service';
-import { TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import { PageEventType } from '../../../app/core/constants/account.enum';
 
 export type ChartOptions = {
@@ -125,28 +125,7 @@ export class AccountDetailComponent implements OnInit {
   imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
 
-  chartCustomOptions: { name: string; color: string }[] = [
-    {
-      name: "Available",
-      color: "#9C6CFF",
-    },
-    {
-      name: "Delegatable Vesting",
-      color: "#783296",
-    },
-    {
-      name: "Delegated",
-      color: "#9C96C8",
-    },
-    {
-      name: "Unbonding",
-      color: "#C8C8C8",
-    },
-    {
-      name: "Staking Reward",
-      color: "#F0F0F0",
-    }
-  ];
+  chartCustomOptions: { name: string; color: string }[] = ACCOUNT_WALLET_COLOR;
 
   constructor(
     private transactionService: TransactionService,

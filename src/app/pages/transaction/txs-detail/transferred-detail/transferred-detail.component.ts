@@ -19,13 +19,13 @@ export class TransferredDetailComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === this.transactionDetail.type.toLowerCase());
+    const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase());
     this.transactionDetailType = typeTrans?.value;
     let amount = 0;
-    let itemMessage = this.transactionDetail.messages[0];
+    let itemMessage = this.transactionDetail?.messages[0];
 
-    if (itemMessage?.amount && (this.transactionDetail.type === this.eTransType.Undelegate 
-      || this.transactionDetail.type === this.eTransType.Delegate)) {
+    if (itemMessage?.amount && (this.transactionDetail?.type === this.eTransType.Undelegate 
+      || this.transactionDetail?.type === this.eTransType.Delegate)) {
       amount = itemMessage?.amount.amount;
     } else if (itemMessage?.amount) {
       amount = itemMessage?.amount[0].amount;
@@ -33,10 +33,9 @@ export class TransferredDetailComponent implements OnInit {
       amount = itemMessage?.funds[0].amount;
     }
 
-    // this.transactionDetail.messages[0]?.amount[0]?.amount || this.transactionDetail.messages[0]?.funds[0]?.amount;
-    if (this.transactionDetail.messages && amount) {
+    if (this.transactionDetail?.messages && amount) {
       amount = amount / NUMBER_CONVERT;
-      this.amount = this.transactionDetail.messages?.length === 1 ? amount : 'More';
+      this.amount = this.transactionDetail?.messages?.length === 1 ? amount : 'More';
     }
   }
 }
