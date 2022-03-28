@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProposalService } from 'src/app/core/services/proposal.service';
+import { ProposalService } from '../../../../../app/core/services/proposal.service';
 
 export interface IDepositor {
   depositors: string;

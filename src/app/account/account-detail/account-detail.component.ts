@@ -21,7 +21,7 @@ import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
 import { AccountService } from '../../../app/core/services/account.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
-import { ACCOUNT_WALLET_COLOR_ENUM, PageEventType, WalletAcount } from '../../../app/core/constants/account.enum';
+import { ACCOUNT_TYPE_ENUM, ACCOUNT_WALLET_COLOR_ENUM, PageEventType, TypeAccount, WalletAcount } from '../../../app/core/constants/account.enum';
 import { getAmount } from '../../../app/global/global';
 
 export type ChartOptions = {
@@ -152,6 +152,7 @@ export class AccountDetailComponent implements OnInit {
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
   tokenPrice = 0;
+  selected = ACCOUNT_TYPE_ENUM.All;
 
   chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
@@ -341,6 +342,9 @@ export class AccountDetailComponent implements OnInit {
 
       this.item.balances.forEach((token) => {
         token.price = 0;
+        if (token.name === 'AURA') {
+          token.amount = this.item.total;
+        }
         token.total_value = token.price * token.amount;
       });
 

@@ -55,3 +55,5 @@ export const PAGE_EVENT = {
     PREVIOUS_PAGE_INDEX: 0,
     LENGTH_DEFAULT: 500
 };
+
+export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
