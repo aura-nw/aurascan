@@ -36,7 +36,8 @@
                 <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Validators</span>
               </div>
               <h4 class="valid-header">
-                <span class="fs-4">{{globals?.dataHeader?.total_validator_active_num}} / {{globals?.dataHeader?.total_validator_num}}</span>
+                <span class="fs-4">{{globals?.dataHeader?.total_validator_active_num}} /
+                  {{globals?.dataHeader?.total_validator_num}}</span>
               </h4>
             </div>
           </div>
@@ -105,12 +106,12 @@
     <ng-container *ngFor="let template of templates; index as i">
       <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
         <ng-container *ngSwitchCase="'percent_power'">
-          <th mat-header-cell *matHeaderCellDef >
+          <th mat-header-cell *matHeaderCellDef>
             <div style="font-weight: 500;" [innerHTML]="template.headerCellDef | translate"></div>
           </th>
         </ng-container>
         <ng-container *ngSwitchCase="'rank'">
-          <th mat-header-cell *matHeaderCellDef >
+          <th mat-header-cell *matHeaderCellDef>
             <div style="font-weight: 500;" [innerHTML]="template.headerCellDef | translate"></div>
           </th>
         </ng-container>
@@ -167,6 +168,35 @@
     </tr>
   </table>
 </div>
+
+<div class="col-lg-6">
+  <div class="card">
+    <div class="card-body">
+      <div>
+        <!-- Static Backdrop modal Button -->
+        <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop" (click)="viewDelegate(staticDataModal)">
+          Static backdrop modal
+        </button>
+
+        <!-- Static Backdrop Modal -->
+        <ng-template #staticDataModal let-modal>
+          <div class="modal-header">
+            <h5 class="modal-title mt-0">Center modal</h5>
+          </div>
+          <div class="modal-body">
+            <p>I will not close if you click outside me. Don't even try to
+              press escape key.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            <button type="button" class="btn btn-primary">Understood</button>
+          </div>
+        </ng-template>
+      </div>
+    </div><!-- end card body -->
+  </div><!-- end card -->
+</div><!-- end col -->
 
 <!-- <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
 </mat-paginator> -->

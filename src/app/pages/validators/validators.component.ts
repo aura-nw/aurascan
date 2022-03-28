@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonDataDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
@@ -20,9 +21,17 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
-    // { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
+    {
+      matColumnDef: 'ACTION', headerCellDef: 'Action',
+      columnAction: [
+        {
+          iconName: '',
+          func: (data) => this.viewDelegate(data.type)
+        }
+      ]
+    }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
@@ -42,8 +51,8 @@ export class ValidatorsComponent implements OnInit {
 
   constructor(
     private validatorService: ValidatorService,
-    private commonService: CommonService,
-    public globals: Globals
+    public globals: Globals,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -157,5 +166,9 @@ export class ValidatorsComponent implements OnInit {
     } else {
       this.dataSource = this.dataSourceBk;
     }
+  }
+
+  viewDelegate(staticDataModal: any) {
+    this.modalService.open(staticDataModal, { backdrop: 'static', keyboard: false, centered: true, windowClass: 'modal-holder' });
   }
 }
