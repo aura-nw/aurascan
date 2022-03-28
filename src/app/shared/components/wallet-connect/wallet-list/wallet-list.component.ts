@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import makeBlockie from "ethereum-blockies-base64";
-import { WALLET_PROVIDER } from "src/app/core/constants/wallet.constant";
-import { IWalletInfo } from "src/app/core/models/wallet";
+import { WALLET_PROVIDER } from "../../../../../app/core/constants/wallet.constant";
+import { IWalletInfo } from "../../../../../app/core/models/wallet";
 
 @Component({
   selector: "app-wallet-list",
