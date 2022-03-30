@@ -25,12 +25,12 @@ export const MENU: MenuItem[] = [
         icon: 'repeat',
         link: '/transaction',
     },
-    {
-        id: 5,
-        label: 'MENUITEMS.PROPOSAL.TEXT',
-        icon: 'file-text',
-        link: '/proposal',
-    }
+    // {
+    //     id: 5,
+    //     label: 'MENUITEMS.PROPOSAL.TEXT',
+    //     icon: 'file-text',
+    //     link: '/proposal',
+    // }
     // {
     //     id: 5,
     //     label: 'MENUITEMS.CHAINCODE.TEXT',
