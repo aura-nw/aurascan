@@ -151,6 +151,12 @@
                   <p>{{data['cumulative_share_after'] + '%'}}</p>
                 </div>
               </div>
+              <div *ngSwitchCase="'action'">
+                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop" (click)="viewDelegate(staticDataModal)">
+                  Static backdrop modal
+                </button>
+              </div>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
               </div>
             </ng-container>
@@ -173,12 +179,6 @@
   <div class="card">
     <div class="card-body">
       <div>
-        <!-- Static Backdrop modal Button -->
-        <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop" (click)="viewDelegate(staticDataModal)">
-          Static backdrop modal
-        </button>
-
         <!-- Static Backdrop Modal -->
         <ng-template #staticDataModal let-modal>
           <div class="modal-header">

@@ -23,15 +23,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
-    {
-      matColumnDef: 'ACTION', headerCellDef: 'Action',
-      columnAction: [
-        {
-          iconName: '',
-          func: (data) => this.viewDelegate(data.type)
-        }
-      ]
-    }
+    { matColumnDef: 'action', headerCellDef: 'Action' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
