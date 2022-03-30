@@ -3,15 +3,15 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { Key } from "@keplr-wallet/types";
 import makeBlockie from "ethereum-blockies-base64";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { WALLET_PROVIDER } from "../../../../app/core/constants/wallet.constant";
-import { EnvironmentService } from "../../../../app/core/data-services/environment.service";
-import { WalletService } from "../../../../app/core/services/wallet.service";
+import { WALLET_PROVIDER } from "../../../core/constants/wallet.constant";
+import { EnvironmentService } from "../../../core/data-services/environment.service";
+import { WalletService } from "../../../core/services/wallet.service";
 
 @Component({
   selector: "app-wallet-connect",
