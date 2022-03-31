@@ -1,30 +1,30 @@
-<app-pagetitle title="PROPOSAL" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="PROPOSAL"></app-pagetitle>
 <section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
     <div class="container-fluid">
         <div class="row">
             <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList">
                 <mat-card>
                     <div class="d-flex justify-content-between mb-2">
-                        <div class="card__title">#{{lastedItem.id}}</div>
-                        <div *ngIf="getStatus(lastedItem.status)"
+                        <div class="card__title">#{{lastedItem.pro_id}}</div>
+                        <div *ngIf="getStatus(lastedItem.pro_status)"
                                 class="proposal-status proposal-status--has-elevation text-uppercase {{getStatus(lastedItem.status).class}}">
-                            <span class="status">{{getStatus(lastedItem.status).value}}</span>
+                            <span class="status">{{getStatus(lastedItem.pro_status).value}}</span>
                         </div>
                     </div>
-                    <a [routerLink]="['id', lastedItem.id]" class="card__title">{{lastedItem.title}}</a>
+                    <a [routerLink]="['id', lastedItem.pro_id]" class="card__title">{{lastedItem.pro_title}}</a>
                     <div class="d-flex justify-content-between mt-3 proposal-lasted__content">
                         <div>
                             <div class="d-flex mb-2">
                                 <div class="title">Proposer</div>
-                                <div><a href="#">{{ lastedItem.proposer }}</a></div>
+                                <div><a href="#">{{ lastedItem.pro_proposer }}</a></div>
                             </div>
                             <div class="d-flex mb-2">
                                 <div class="title">Voting Start</div>
-                                <div>{{ lastedItem.votingStart }}</div>
+                                <div>{{ lastedItem.pro_voting_start_time }}</div>
                             </div>
                             <div class="d-flex mb-2">
                                 <div class="title">Voting End</div>
-                                <div>{{ lastedItem.votingEnd }}</div>
+                                <div>{{ lastedItem.pro_voting_end_time }}</div>
                             </div>
                         </div>
                         <a href="#" class="button button-circle">
@@ -35,27 +35,26 @@
                         <div class="vote-bar">
                             <ul *ngIf="lastedItem.voteResult">
                                 <li class="primary"
-                                    *ngIf="lastedItem.voteResult.yes"
-                                    style="width: {{lastedItem.voteResult.yes}}%"
-                                    matTooltip="Yes {{lastedItem.voteResult.yes}}%"
+                                    style="width: {{lastedItem.pro_votes_yes}}%"
+                                    matTooltip="Yes {{lastedItem.pro_votes_yes}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                                 <li class="danger"
-                                    *ngIf="lastedItem.voteResult.no"
-                                    style="width: {{lastedItem.voteResult.no}}%"
-                                    matTooltip="No {{lastedItem.voteResult.no}}%"
+                                    *ngIf="lastedItem.pro_votes_no"
+                                    style="width: {{lastedItem.pro_votes_no}}%"
+                                    matTooltip="No {{lastedItem.pro_votes_no}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                                 <li class="info"
-                                    *ngIf="lastedItem.voteResult.noWithVeto"
-                                    style="width: {{lastedItem.voteResult.noWithVeto}}%"
-                                    matTooltip="No with veto {{lastedItem.voteResult.noWithVeto}}%"
+                                    *ngIf="lastedItem.pro_votes_no_with_veto"
+                                    style="width: {{lastedItem.pro_votes_no_with_veto}}%"
+                                    matTooltip="No with veto {{lastedItem.pro_votes_no_with_veto}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                                 <li class="secondary"
-                                    *ngIf="lastedItem.voteResult.abstain"
-                                    style="width: {{lastedItem.voteResult.abstain}}%"
-                                    matTooltip="Abstain {{lastedItem.voteResult.abstain}}%"
+                                    *ngIf="lastedItem.pro_votes_abstain"
+                                    style="width: {{lastedItem.pro_votes_abstain}}%"
+                                    matTooltip="Abstain {{lastedItem.pro_votes_abstain}}%"
                                     [matTooltipPosition]="'above'"
                                 ></li>
                             </ul>
@@ -64,13 +63,13 @@
                         <div class="most-vote">
                             <div class="title">Most voted on</div>
                             <div class="value" [ngClass]="{
-                                 'primary': filterGetHighestVote(lastedItem.voteResult)[0] === 'yes',
-                                 'danger': filterGetHighestVote(lastedItem.voteResult)[0] === 'no',
-                                 'info': filterGetHighestVote(lastedItem.voteResult)[0] === 'noWithVeto',
-                                 'secondary': filterGetHighestVote(lastedItem.voteResult)[0] === 'abstain'
+                                 'primary': lastedItem.pro_votes_yes,
+                                 'danger': lastedItem.pro_votes_no,
+                                 'info': lastedItem.pro_votes_no_with_veto,
+                                 'secondary': lastedItem.pro_votes_abstain
                             }">
-                                {{ 'PAGES.PROPOSAL.'+ filterGetHighestVote(lastedItem.voteResult)[0] | translate }}&nbsp;
-                                {{filterGetHighestVote(lastedItem.voteResult)[1]}}%
+                                <!-- {{ 'PAGES.PROPOSAL.'+ filterGetHighestVote(lastedItem.voteResult)[0] | translate }}&nbsp;
+                                {{filterGetHighestVote(lastedItem.voteResult)[1]}}% -->
                             </div>
                         </div>
                     </div>
@@ -79,8 +78,8 @@
                         <div class="d-flex justify-content-end mt-3 align-items-center">
                             <div class="message" *ngIf="lastedItem.currentVote != ''">You vote '{{ lastedItem.currentVote }}' for this proposal</div>
                             <a class="btn-detail" href="#" mat-stroked-button color="primary">Details</a>
-                            <button mat-flat-button color="primary" [disabled]="lastedItem.status != 2" (click)="openVoteDialog(lastedItem.id, lastedItem.title)">
-                                {{lastedItem.status != 2 ? 'Voting Ended' : 'Vote'}}</button>
+                            <button mat-flat-button color="primary" [disabled]="lastedItem.pro_status != 2" (click)="openVoteDialog(lastedItem.pro_id, lastedItem.pro_title)">
+                                {{lastedItem.pro_status != 2 ? 'Voting Ended' : 'Vote'}}</button>
                         </div>
                     </div>
                 </mat-card>
@@ -93,14 +92,14 @@
         <!-- ID Column -->
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>#ID</th>
-            <td mat-cell *matCellDef="let element">#{{element.id}}</td>
+            <td mat-cell *matCellDef="let element">#{{element.pro_id}}</td>
         </ng-container>
 
         <!-- Title Column -->
         <ng-container matColumnDef="title">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
             <td mat-cell *matCellDef="let element" class="title-cell">
-                <a [routerLink]="['id', element.id]">{{element.title}}</a>
+                <a [routerLink]="['id', element.id]">{{element.pro_title}}</a>
             </td>
         </ng-container>
 
@@ -108,8 +107,8 @@
         <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
             <td mat-cell *matCellDef="let element">
-                <div class="proposal-status {{getStatus(element.status).class}} text-uppercase" *ngIf="getStatus(element.status)">
-                    <span class="status">{{getStatus(element.status).value}}</span>
+                <div class="proposal-status {{getStatus(element.pro_status).class}} text-uppercase" *ngIf="getStatus(element.pro_status)">
+                    <span class="status">{{getStatus(element.pro_status).value}}</span>
                 </div>
             </td>
         </ng-container>
@@ -117,19 +116,19 @@
         <!-- Voting Start Column -->
         <ng-container matColumnDef="votingStart">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Voting Start</th>
-            <td mat-cell *matCellDef="let element">{{element.votingStart}}</td>
+            <td mat-cell *matCellDef="let element">{{element.pro_voting_start_time}}</td>
         </ng-container>
 
         <!-- Submit Time Column -->
         <ng-container matColumnDef="submitTime">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Submit Time</th>
-            <td mat-cell *matCellDef="let element">{{element.submitTime}}</td>
+            <td mat-cell *matCellDef="let element">{{element.pro_submit_time}}</td>
         </ng-container>
 
         <!-- Total Deposit Column -->
         <ng-container matColumnDef="totalDeposit">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Deposit</th>
-            <td mat-cell *matCellDef="let element">{{element.totalDeposit}}</td>
+            <td mat-cell *matCellDef="let element">{{element.pro_total_deposits}}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

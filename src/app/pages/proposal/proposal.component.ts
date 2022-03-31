@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {TableTemplate} from "../../core/models/common.model";
+import {ResponseDto, TableTemplate} from "../../core/models/common.model";
 import {PageEvent} from "@angular/material/paginator";
 import {ProposalService} from "../../core/services/proposal.service";
 import {MatSort} from "@angular/material/sort";
@@ -58,16 +58,28 @@ export class ProposalComponent implements OnInit {
   getList(): void {
     this.proposalService
         .getProposal(this.pageSize, this.pageIndex)
-        .subscribe(res => {
-          this.dataSource = new MatTableDataSource<any>(res);
-          this.length = res.length;
+        .subscribe((res: ResponseDto) => {
+          this.dataSource = new MatTableDataSource<any>(res.data);
+          this.length = res.data.length;
           this.dataSource.sort = this.sort;
+          this.lastedList = res.data;
+          this.lastedList.forEach((pro)=>{
+            const totalVoteYes = pro.pro_votes_yes;
+            const totalVoteNo = pro.pro_votes_no;
+            const totalVoteNoWithVeto = pro.pro_votes_no_with_veto;
+            const totalVoteAbstain = pro.pro_votes_abstain;
+            const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
+            pro.pro_votes_yes = totalVoteYes*100/totalVote;
+            pro.pro_votes_no = totalVoteNo*100/totalVote;
+            pro.pro_votes_no_with_veto = totalVoteNoWithVeto*100/totalVote;
+            pro.pro_votes_abstain = totalVoteAbstain*100/totalVote;
+          })
         })
-    this.proposalService
-        .getLastedProposal()
-        .subscribe(res => {
-          this.lastedList = res
-        })
+    // this.proposalService
+    //     .getLastedProposal()
+    //     .subscribe(res => {
+    //       this.lastedList = res
+    //     })
   }
 
   getStatus(key: string) {

@@ -17,7 +17,8 @@ export class ProposalService extends CommonService {
   }
 
   getProposal(limit, offset): Observable<any> {
-    return this.http.get(this.listProposal);
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/proposals`);
   }
 
   getLastedProposal(): Observable<any> {
