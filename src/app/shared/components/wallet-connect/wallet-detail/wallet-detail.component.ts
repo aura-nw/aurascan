@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ChartComponent } from 'ng-apexcharts'
-import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../../../app/core/constants/wallet.constant'
-import { NgxToastrService } from '../../../../../app/core/services/ngx-toastr.service'
-import { WalletService } from '../../../../../app/core/services/wallet.service'
-import { balanceOf } from '../../../../../app/core/utils/common/parsing'
-import { createSignBroadcast } from '../../../../../app/core/utils/signing/transaction-manager'
+import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../../core/constants/wallet.constant'
+import { NgxToastrService } from '../../../../core/services/ngx-toastr.service'
+import { WalletService } from '../../../../core/services/wallet.service'
+import { balanceOf } from '../../../../core/utils/common/parsing'
+import { createSignBroadcast } from '../../../../core/utils/signing/transaction-manager'
 import { chartCustomOptions, ChartOptions, CHART_OPTIONS } from './wallet-chart-option'
+
 
 @Component({
   selector: 'app-wallet-detail',
