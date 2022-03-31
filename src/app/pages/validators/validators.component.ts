@@ -81,6 +81,7 @@ export class ValidatorsComponent implements OnInit {
         this.dataSource = new MatTableDataSource(dataSort);
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
+        this.searchValidator();
       }
       );
   }
@@ -90,6 +91,7 @@ export class ValidatorsComponent implements OnInit {
     let data = this.rawData.filter(event => event.status_validator === this.isActive);
     this.dataSource = new MatTableDataSource(data);
     this.dataSourceBk = this.dataSource;
+    this.searchValidator();
   }
 
   sortData(sort: Sort) {

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input,  Output } from "@angular/core";
 import { WALLET_PROVIDER } from "../../../../core/constants/wallet.constant";
 import { IWalletInfo } from "../../../../core/models/wallet";
+
 @Component({
   selector: "app-wallet-list",
   templateUrl: "./wallet-list.component.html",

@@ -63,12 +63,6 @@
   <div class="card mt-5" *ngIf="item?.messages">
     <app-transferred-detail [transactionDetail]="item">
     </app-transferred-detail>
-    <!-- <app-transferred-detail *ngSwitchCase="eTransType.ExecuteContract" [transactionDetail]="item">
-    </app-transferred-detail>
-    <app-transferred-detail *ngSwitchCase="eTransType.InstantiateContract" [transactionDetail]="item">
-    </app-transferred-detail>
-    <app-transferred-detail *ngSwitchCase="eTransType.InstantiateContract" [transactionDetail]="item">
-    </app-transferred-detail> -->
   </div>
 
   <div class="card" *ngIf="item?.read_set">

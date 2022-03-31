@@ -1,12 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {TableTemplate} from "../../core/models/common.model";
-import {PageEvent} from "@angular/material/paginator";
-import {ProposalService} from "../../core/services/proposal.service";
-import {MatSort} from "@angular/material/sort";
-import { PROPOSAL_STATUS } from 'src/app/core/constants/status.constant';
-import {MatDialog} from "@angular/material/dialog";
-import {ProposalVoteComponent} from "./proposal-vote/proposal-vote.component";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from "@angular/material/table";
+import { TableTemplate } from "../../core/models/common.model";
+import { PageEvent } from "@angular/material/paginator";
+import { ProposalService } from "../../core/services/proposal.service";
+import { MatSort } from "@angular/material/sort";
+import { PROPOSAL_STATUS } from '../../../app/core/constants/status.constant';
+import { MatDialog } from "@angular/material/dialog";
+import { ProposalVoteComponent } from "./proposal-vote/proposal-vote.component";
 
 @Component({
   selector: 'app-proposal',
@@ -16,7 +16,7 @@ import {ProposalVoteComponent} from "./proposal-vote/proposal-vote.component";
 export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteAvailable = true;
-  voteValue: {keyVote: number} = null;
+  voteValue: { keyVote: number } = null;
   @ViewChild(MatSort) sort: MatSort;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -37,8 +37,8 @@ export class ProposalComponent implements OnInit {
   lastedList = [];
 
   constructor(
-      private proposalService: ProposalService,
-      public dialog: MatDialog,
+    private proposalService: ProposalService,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -57,21 +57,21 @@ export class ProposalComponent implements OnInit {
 
   getList(): void {
     this.proposalService
-        .getProposal(this.pageSize, this.pageIndex)
-        .subscribe(res => {
-          this.dataSource = new MatTableDataSource<any>(res);
-          this.length = res.length;
-          this.dataSource.sort = this.sort;
-        })
+      .getProposal(this.pageSize, this.pageIndex)
+      .subscribe(res => {
+        this.dataSource = new MatTableDataSource<any>(res);
+        this.length = res.length;
+        this.dataSource.sort = this.sort;
+      })
     this.proposalService
-        .getLastedProposal()
-        .subscribe(res => {
-          this.lastedList = res
-        })
+      .getLastedProposal()
+      .subscribe(res => {
+        this.lastedList = res
+      })
   }
 
   getStatus(key: string) {
-    let resObj: {value: string, class: string} = null;
+    let resObj: { value: string, class: string } = null;
     const statusObj = this.statusConstant.find(s => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
@@ -82,7 +82,7 @@ export class ProposalComponent implements OnInit {
     return resObj;
   }
 
-  filterGetHighestVote(voteResult: {yes: number, no: number, noWithVeto: number, abstain: number}) {
+  filterGetHighestVote(voteResult: { yes: number, no: number, noWithVeto: number, abstain: number }) {
     let Sorted = Object.entries(voteResult).sort((prev, next) => prev[1] - next[1])
     return Sorted[3];
   }
@@ -91,12 +91,10 @@ export class ProposalComponent implements OnInit {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
       height: '400px',
       width: '600px',
-      data: {id, title, voteValue: this.voteValue},
+      data: { id, title, voteValue: this.voteValue },
     });
     dialogRef.afterClosed().subscribe(result => {
       this.voteValue = result;
     });
   }
-
-
 }

@@ -252,8 +252,8 @@
                         <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'type'" class="g-type">
-                          {{ data[template.matColumnDef] }}
+                        <div *ngSwitchCase="'fee'">
+                          {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
                         </div>
                         <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                           {{ data[template.matColumnDef] }}
