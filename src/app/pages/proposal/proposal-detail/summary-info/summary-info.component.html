@@ -1,13 +1,15 @@
-<div class="card">
+<div class="card" *ngIf="proposalDetail">
   <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
     <div class="d-flex justify-content-between">
       <div class="card__title">
-        <div> #{{proposalId}}</div>
-        <h2>Activate governance discussions on the Discourse forum using community pool funds</h2>
+        <div>#{{ proposalId }}</div>
+        <h2>{{ proposalDetail.pro_title }}</h2>
       </div>
       <div class="flex-shrink-0">
-        <div *ngIf="true" class="aura-status aura-status--has-elevation text-uppercase info">
-          <span class="status">VOTING PERIOD</span>
+        <div
+          class="aura-status aura-status--has-elevation text-uppercase {{ getStatus(proposalDetail.pro_status).class }}"
+        >
+          <span class="status">{{ getStatus(proposalDetail.pro_status).value }}</span>
         </div>
       </div>
     </div>
@@ -17,36 +19,36 @@
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Proposer</div>
         <div class="col-12 col-md-10 info">
-          <a href="#">c5mtuje84sx5dsqw4gtr4w8lthpzw</a>
+          <a href="#">{{proposalDetail.pro_proposer}}</a>
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Initial Deposit</div>
-        <div class="col-12 col-md-10 info">1.000000 <span class="g-purple">ATOM</span></div>
+        <div class="col-12 col-md-10 info">1.000000 <span class="g-purple">AURA</span></div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Total Deposit</div>
-        <div class="col-12 col-md-10 info">64.000000 <span class="g-purple">ATOM</span></div>
+        <div class="col-12 col-md-10 info">{{proposalDetail.pro_total_deposits}}<span class="g-purple">AURA</span></div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Voting Start</div>
-        <div class="col-12 col-md-10 info">2022-03-16 07:15:13</div>
+        <div class="col-12 col-md-10 info">{{proposalDetail.pro_voting_start_time}}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Voting End</div>
-        <div class="col-12 col-md-10 info">2022-03-30 07:15:13</div>
+        <div class="col-12 col-md-10 info">{{proposalDetail.pro_voting_end_time}}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Type</div>
-        <div class="col-12 col-md-10 info">CommunityPoolSpend</div>
+        <div class="col-12 col-md-10 info">{{proposalDetail.pro_type}}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Submit Time</div>
-        <div class="col-12 col-md-10 info">2022-03-16 03:05:19</div>
+        <div class="col-12 col-md-10 info">{{proposalDetail.pro_submit_time}}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Deposit End Time</div>
-        <div class="col-12 col-md-10 info">2022-03-30 03:05:19</div>
+        <div class="col-12 col-md-10 info">{{proposalDetail.pro_deposit_end_time}}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Details</div>

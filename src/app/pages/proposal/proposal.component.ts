@@ -1,14 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {ResponseDto, TableTemplate} from "../../core/models/common.model";
-import {PageEvent} from "@angular/material/paginator";
-import {ProposalService} from "../../core/services/proposal.service";
-import {MatSort} from "@angular/material/sort";
-import { PROPOSAL_STATUS, PROPOSAL_VOTE } from 'src/app/core/constants/status.constant';
-import {MatDialog} from "@angular/material/dialog";
-import {ProposalVoteComponent} from "./proposal-vote/proposal-vote.component";
 import { DatePipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from "@angular/material/dialog";
+import { PageEvent } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { DATEFORMAT } from '../../core/constants/common.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/status.constant';
+import { ResponseDto, TableTemplate } from "../../core/models/common.model";
+import { ProposalService } from "../../core/services/proposal.service";
+import { ProposalVoteComponent } from "./proposal-vote/proposal-vote.component";
 
 @Component({
   selector: 'app-proposal',
@@ -18,7 +18,6 @@ import { DATEFORMAT } from '../../core/constants/common.constant';
 export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
-  voteAvailable = true;
   voteValue: {keyVote: number} = null;
   @ViewChild(MatSort) sort: MatSort;
   // bread crumb items
@@ -83,11 +82,6 @@ export class ProposalComponent implements OnInit {
             pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
           })
         })
-    // this.proposalService
-    //     .getLastedProposal()
-    //     .subscribe(res => {
-    //       this.lastedList = res
-    //     })
   }
 
   getStatus(key: string) {
@@ -131,11 +125,6 @@ export class ProposalComponent implements OnInit {
       }
     }
     return resObj;
-  }
-
-  filterGetHighestVote(voteResult: {yes: number, no: number, noWithVeto: number, abstain: number}) {
-    let Sorted = Object.entries(voteResult).sort((prev, next) => prev[1] - next[1])
-    return Sorted[3];
   }
 
   openVoteDialog(id: string, title: string) {
