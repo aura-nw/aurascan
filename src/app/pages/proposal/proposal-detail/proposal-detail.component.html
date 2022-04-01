@@ -1,1 +1,13 @@
-<p>proposal-detail works!</p>
+<app-pagetitle title="PROPOSAL DETAILS" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<section class="summary">
+    <app-summary-info [proposalId]="proposalId"></app-summary-info>
+</section>
+<section class="votes">
+    <app-votes></app-votes>
+</section>
+<section class="validator-votes">
+    <app-validators-votes></app-validators-votes>
+</section>
+<section class="depositors">
+    <app-depositors></app-depositors>
+</section>

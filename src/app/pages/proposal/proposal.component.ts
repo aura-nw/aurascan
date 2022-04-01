@@ -68,10 +68,10 @@ export class ProposalComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.lastedList = res.data;
           this.lastedList.forEach((pro)=>{
-            const totalVoteYes = pro.pro_votes_yes;
-            const totalVoteNo = pro.pro_votes_no;
-            const totalVoteNoWithVeto = pro.pro_votes_no_with_veto;
-            const totalVoteAbstain = pro.pro_votes_abstain;
+            const totalVoteYes = 17;
+            const totalVoteNo = 11;
+            const totalVoteNoWithVeto = 12;
+            const totalVoteAbstain = 13;
             const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
             pro.pro_votes_yes = totalVoteYes*100/totalVote;
             pro.pro_votes_no = totalVoteNo*100/totalVote;
