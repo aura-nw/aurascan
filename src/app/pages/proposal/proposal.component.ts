@@ -76,7 +76,7 @@ export class ProposalComponent implements OnInit {
             pro.pro_votes_no = totalVoteNo*100/totalVote;
             pro.pro_votes_no_with_veto = totalVoteNoWithVeto*100/totalVote;
             pro.pro_votes_abstain = totalVoteAbstain*100/totalVote;
-
+            pro.pro_vote_total = totalVote;
             pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
             pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
             pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
@@ -97,7 +97,11 @@ export class ProposalComponent implements OnInit {
   }
 
   getHighestVote(yes: number, no: number, noWithVeto: number, abstain: number) {
-    const highest = Math.max(yes, no, noWithVeto, abstain);
+    let highest = Math.max(yes, no, noWithVeto, abstain);
+    if(!highest)
+    {
+      highest = 0;
+    }
     let key;
     let resObj: {value: number, name: string, class: string} = null;
     if(highest === yes)

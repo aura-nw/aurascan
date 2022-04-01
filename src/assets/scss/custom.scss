@@ -390,7 +390,7 @@ body {
             background-color: rgba(0, 177, 253, 0.1);
         }
     }
-    &.secondary {
+    &.warning {
         color: var(--bs-warning);
         span.status {
             &:before {

@@ -17,7 +17,7 @@ export const PROPOSAL_STATUS = [
     {
         key: 'PROPOSAL_STATUS_DEPOSIT_PERIOD',
         value: 'deposit period',
-        class: 'secondary'
+        class: 'warning'
     }
 ];
 
