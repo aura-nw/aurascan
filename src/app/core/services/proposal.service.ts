@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -17,10 +17,23 @@ export class ProposalService extends CommonService {
   }
 
   getProposal(limit, offset): Observable<any> {
-    return this.http.get(this.listProposal);
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/proposals`);
   }
 
-  getLastedProposal(): Observable<any> {
-    return this.http.get(this.listLastedProposal);
+  getProposalDetail(proposalId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
+  }
+
+  getVotes(): Observable<any> {
+    return this.http.get('../../assets/mock-data/proposal-votes.json');
+  }
+
+  getValidatorVotes(): Observable<any> {
+    return this.http.get('../../assets/mock-data/proposal-v-votes.json');
+  }
+
+  getDepositors(): Observable<any> {
+    return this.http.get('../../assets/mock-data/proposal-list-depositor.json');
   }
 }

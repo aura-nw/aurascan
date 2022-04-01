@@ -27,6 +27,9 @@ export interface IResponsesTemplates<T>
 export class TableTemplate {
   matColumnDef: string;
   headerCellDef: string;
+  isUrl?: string;
+  isShort?: boolean;
+  cssClass?: string;
 }
 
 export class ATBalanceDto {

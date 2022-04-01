@@ -137,7 +137,7 @@
                 {{ data[template.matColumnDef] }}
               </div>
               <div *ngSwitchCase="'rank'" class="box-rank text-left">
-                <p>{{ data[template.matColumnDef] }}</p>
+                {{ data[template.matColumnDef] }}
               </div>
               <div *ngSwitchCase="'title'" class="g-blue cursor-pointer"
                 [routerLink]="['/validators', data.operator_address]">
