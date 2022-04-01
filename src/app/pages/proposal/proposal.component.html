@@ -96,20 +96,28 @@
                     lastedItem.pro_votes_no,
                     lastedItem.pro_votes_no_with_veto,
                     lastedItem.pro_votes_abstain
-                  ).value | mask : "separator.2"
+                  ).value | mask: 'separator.2'
                 }}%
               </div>
             </div>
           </div>
-          <!-- <div *ngIf="voteAvailable" class="pt-3">
-                        <mat-divider></mat-divider>
-                        <div class="d-flex justify-content-end mt-3 align-items-center">
-                            <div class="message" *ngIf="lastedItem.currentVote != ''">You vote '{{ lastedItem.currentVote }}' for this proposal</div>
-                            <a class="btn-detail" href="#" mat-stroked-button color="primary">Details</a>
-                            <button mat-flat-button color="primary" [disabled]="lastedItem.pro_status != 2" (click)="openVoteDialog(lastedItem.pro_id, lastedItem.pro_title)">
-                                {{lastedItem.pro_status != 2 ? 'Voting Ended' : 'Vote'}}</button>
-                        </div>
-                    </div> -->
+          <div class="pt-3">
+            <mat-divider></mat-divider>
+            <div class="d-flex justify-content-end mt-3 align-items-center">
+              <!-- <div class="message" *ngIf="lastedItem.currentVote != ''">
+                You vote '{{ lastedItem.currentVote }}' for this proposal
+              </div> -->
+              <a class="btn-detail" href="#" mat-stroked-button color="primary">Details</a>
+              <button
+                mat-flat-button
+                color="primary"
+                [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                (click)="openVoteDialog(lastedItem.pro_id, lastedItem.pro_title)"
+              >
+                {{ lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}
+              </button>
+            </div>
+          </div>
         </mat-card>
       </div>
     </div>
