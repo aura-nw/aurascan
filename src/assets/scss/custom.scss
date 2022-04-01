@@ -390,6 +390,17 @@ body {
             background-color: rgba(0, 177, 253, 0.1);
         }
     }
+    &.secondary {
+        color: var(--bs-warning);
+        span.status {
+            &:before {
+                background-color: var(--bs-warning);
+            }
+        }
+        &.aura-status--has-elevation {
+            background-color: rgba(243, 165, 47, 0.1);
+        }
+    }
 }
 // vote bar (similar process bar)
 

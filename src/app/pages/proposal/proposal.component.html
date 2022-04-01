@@ -88,7 +88,7 @@
                 You vote '{{ lastedItem.currentVote }}' for this proposal
               </div> -->
               <a class="btn-detail" [routerLink]="[lastedItem.pro_id]" mat-stroked-button color="primary">Details</a>
-              <button mat-flat-button color="primary"
+              <button mat-flat-button color="primary" *ngIf="lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
                 [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                 (click)="openVoteDialog(lastedItem.pro_id, lastedItem.pro_title)">
                 {{ lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}

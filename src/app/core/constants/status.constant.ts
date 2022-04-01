@@ -13,6 +13,11 @@ export const PROPOSAL_STATUS = [
         key: 'PROPOSAL_STATUS_VOTING_PERIOD',
         value: 'voting period',
         class: 'info'
+    },
+    {
+        key: 'PROPOSAL_STATUS_DEPOSIT_PERIOD',
+        value: 'deposit period',
+        class: 'secondary'
     }
 ];
 
