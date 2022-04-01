@@ -38,16 +38,16 @@
             <div class="mt-3 d-flex">
               <div class="vote-bar">
                 <ul>
-                  <li class="primary" style="width: {{ lastedItem.pro_votes_yes }}%"
+                  <li class="primary" [style.width]="lastedItem.pro_votes_yes + '%'"
                     matTooltip="Yes {{ lastedItem.pro_votes_yes }}%" [matTooltipPosition]="'above'"></li>
-                  <li class="danger" *ngIf="lastedItem.pro_votes_no" style="width: {{ lastedItem.pro_votes_no }}%"
+                  <li class="danger" *ngIf="lastedItem.pro_votes_no" [style.width]="lastedItem.pro_votes_no + '%'"
                     matTooltip="No {{ lastedItem.pro_votes_no }}%" [matTooltipPosition]="'above'"></li>
                   <li class="info" *ngIf="lastedItem.pro_votes_no_with_veto"
-                    style="width: {{ lastedItem.pro_votes_no_with_veto }}%"
+                    [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
                     matTooltip="No with veto {{ lastedItem.pro_votes_no_with_veto }}%" [matTooltipPosition]="'above'">
                   </li>
                   <li class="secondary" *ngIf="lastedItem.pro_votes_abstain"
-                    style="width: {{ lastedItem.pro_votes_abstain }}%"
+                    [style.width]="lastedItem.pro_votes_abstain + '%'"
                     matTooltip="Abstain {{ lastedItem.pro_votes_abstain }}%" [matTooltipPosition]="'above'"></li>
                 </ul>
               </div>
