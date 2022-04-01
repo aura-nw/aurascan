@@ -10,6 +10,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {ProposalService} from "../../core/services/proposal.service";
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { FormsModule } from '@angular/forms';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { FormsModule } from '@angular/forms';
         MaterialModule,
         TranslateModule,
         FormsModule,
+        NgxMaskModule
     ],
     providers: [ProposalService]
 })

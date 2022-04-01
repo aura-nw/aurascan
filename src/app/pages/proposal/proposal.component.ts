@@ -81,9 +81,6 @@ export class ProposalComponent implements OnInit {
             pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
             pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
             pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
-            let abc = this.getHighestVote(totalVoteYes, totalVoteNo, totalVoteNoWithVeto, totalVoteAbstain);
-            console.log(abc);
-            
           })
         })
     // this.proposalService
@@ -128,7 +125,7 @@ export class ProposalComponent implements OnInit {
     const statusObj = this.voteConstant.find(s => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
-        value: Math.round(highest),
+        value: highest,
         class: statusObj.class,
         name: statusObj.value
       }
