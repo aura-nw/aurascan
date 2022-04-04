@@ -1,0 +1,41 @@
+<div class="proposal-table-container">
+  <ng-container *ngIf="data.length > 0; else noValues">
+    <table mat-table [dataSource]="dataSource" class="table-reponsive table-striped" matSort>
+      <ng-container *ngFor="let template of template; index as i">
+        <ng-container [matColumnDef]="template.matColumnDef">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <div [innerHTML]="template.headerCellDef | translate"></div>
+          </th>
+
+          <td mat-cell *matCellDef="let data">
+            <div [classList]="[template.cssClass]">
+              <ng-container *ngIf="template.isUrl && data[template.matColumnDef]">
+                <a [routerLink]="[template.isUrl, data[template.matColumnDef]]">
+                  {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])}}
+                </a>
+              </ng-container>
+              <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' }}
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell g-no-data" colspan="9999">
+          {{ 'NO DATA' | translate }}
+        </td>
+      </tr>
+    </table>
+  </ng-container>
+
+  <ng-template #noValues>
+    <div class="d-flex flex-column justify-content-center align-items-center m-5 p-5">
+      <img src="/assets/images/icons/noValues.svg" alt="" />
+      No Values
+    </div>
+  </ng-template>
+</div>
