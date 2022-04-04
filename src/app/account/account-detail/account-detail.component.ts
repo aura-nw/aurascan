@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
@@ -21,7 +21,7 @@ import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
 import { AccountService } from '../../../app/core/services/account.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
-import { PageEventType } from '../../../app/core/constants/account.enum';
+import { ACCOUNT_WALLET_COLOR_ENUM, PageEventType, WalletAcount } from '../../../app/core/constants/account.enum';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -48,6 +48,7 @@ export class AccountDetailComponent implements OnInit {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   id;
+  item;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
@@ -71,12 +72,37 @@ export class AccountDetailComponent implements OnInit {
   dataSourceTokenBk: MatTableDataSource<any>;
 
   templatesDelegation: Array<TableTemplate> = [
-    { matColumnDef: 'validator', headerCellDef: 'Validator' },
+    { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'reward', headerCellDef: 'Reward' }
   ];
   displayedColumnsDelegation: string[] = this.templatesDelegation.map((dta) => dta.matColumnDef);
   dataSourceDelegation: MatTableDataSource<any>;
+
+  templatesUnBonding: Array<TableTemplate> = [
+    { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'completion_time', headerCellDef: 'Completion Time' }
+  ];
+  displayedColumnsUnBonding: string[] = this.templatesUnBonding.map((dta) => dta.matColumnDef);
+  dataSourceUnBonding: MatTableDataSource<any>;
+
+  templatesReDelegation: Array<TableTemplate> = [
+    { matColumnDef: 'from', headerCellDef: 'From' },
+    { matColumnDef: 'to', headerCellDef: 'To' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'time', headerCellDef: 'Time' }
+  ];
+  displayedColumnsReDelegation: string[] = this.templatesReDelegation.map((dta) => dta.matColumnDef);
+  dataSourceReDelegation: MatTableDataSource<any>;
+
+  templatesVesting: Array<TableTemplate> = [
+    { matColumnDef: 'validator_address', headerCellDef: 'Validator' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'reward', headerCellDef: 'Reward' }
+  ];
+  displayedColumnsVesting: string[] = this.templatesVesting.map((dta) => dta.matColumnDef);
+  dataSourceVesting: MatTableDataSource<any>;
   pageType = '';
 
   pageData: PageEvent = {
@@ -125,11 +151,12 @@ export class AccountDetailComponent implements OnInit {
   imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
 
-  chartCustomOptions: { name: string; color: string }[] = ACCOUNT_WALLET_COLOR;
+  chartCustomOptions: { name: string; color: string, amount: string }[] = ACCOUNT_WALLET_COLOR;
 
   constructor(
     private transactionService: TransactionService,
     private route: ActivatedRoute,
+    private router: Router,
     private accountService: AccountService) {
     this.chartOptions = {
       series: [0, 0],
@@ -209,10 +236,10 @@ export class AccountDetailComponent implements OnInit {
       { label: 'Detail', active: true }
     ];
     this.id = this.route.snapshot.paramMap.get('id');
-    this.getList();
     this.getAccountDetail();
+    this.getListTransaction();
     this.createQRCode();
-    this.chartOptions.series = [100, 50, 30, 20, 10];
+    this.chartOptions.series;
   }
 
   changePage(page: any): void {
@@ -221,7 +248,7 @@ export class AccountDetailComponent implements OnInit {
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
-        this.getList();
+        this.getListTransaction();
         break;
       case this.pageEventType.Unbonding:
         this.pageDataUnbonding.pageIndex = page.pageIndex;
@@ -241,14 +268,14 @@ export class AccountDetailComponent implements OnInit {
         break;
       default:
         this.pageData.pageIndex = page.pageIndex;
-        this.getList();
+        this.getListTransaction();
         break;
     }
   }
 
-  getList(): void {
+  getListTransaction(): void {
     this.transactionService
-      .txs(this.pageSize, this.pageIndex)
+      .txsWithAddress(this.pageSize, this.pageIndex * this.pageSize, this.id)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
@@ -274,10 +301,37 @@ export class AccountDetailComponent implements OnInit {
   }
 
   getAccountDetail(): void {
-    this.accountService.getAccoutDetail(this.pageSize, this.pageIndex)
+    this.accountService.getAccoutDetail(this.id)
       .subscribe(res => {
-        this.dataSourceToken = new MatTableDataSource<any>(res);
+        this.item = res.data;
+        this.chartOptions.series = [];
+        this.chartCustomOptions.forEach(f => {
+          switch (f.name) {
+            case ACCOUNT_WALLET_COLOR_ENUM.Available:
+              f.amount = this.item.available;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
+              f.amount = this.item.delegated;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
+              f.amount = this.item.stake_reward;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.Commission:
+              f.amount = this.item.commission;
+              break;
+            default:
+              break;
+          }
+          f.amount = f.amount || '0';
+          this.chartOptions.series.push(Number(f.amount));
+        });
+
+        this.dataSourceToken = new MatTableDataSource(this.item.balances);
         this.dataSourceTokenBk = this.dataSourceToken;
+        this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
+        this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
+        // this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
+        // this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
       })
   }
 
@@ -287,9 +341,7 @@ export class AccountDetailComponent implements OnInit {
         f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1
       );
       this.dataSourceToken = this.dataSourceTokenBk;
-      if (data.length > 0) {
-        this.dataSourceToken = new MatTableDataSource(data);
-      }
+      this.dataSourceToken = new MatTableDataSource(data);
     }
     else {
       this.dataSourceToken = this.dataSourceTokenBk;
@@ -325,5 +377,15 @@ export class AccountDetailComponent implements OnInit {
       };
       this.imgGenerateQR = true;
     } catch (e) { }
+  }
+
+  openTxsDetail(event: any, data: any) {
+    const linkHash = event?.target.classList.contains('hash-link');
+    const linkBlock = event?.target.classList.contains('block-link');
+    if (linkHash) {
+      this.router.navigate(['transaction', data.tx_hash]);
+    } else if (linkBlock) {
+      this.router.navigate(['blocks/id', data.blockId]);
+    }
   }
 }

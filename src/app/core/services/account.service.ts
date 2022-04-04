@@ -15,7 +15,7 @@ export class AccountService extends CommonService {
     super(http, environmentService);
   }
 
-  getAccoutDetail(limit, offset): Observable<any> {
-    return this.http.get(this.accountDetail);
+  getAccoutDetail(account_id): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
   }
 }

@@ -10,7 +10,7 @@
         <p class="address-account">{{id}}</p>
         <div class="box-total">
           <p>Total Value</p>
-          <p>$787.88</p>
+          <p>$0</p>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
         </div>
       </div>
       <app-table [dataSource]="dataSourceToken" [templates]="templatesToken" [displayedColumns]="displayedColumnsToken"
-        [pageData]="pageDataToken" [pageEventType]="pageEventType.Token" (pageEvent)="changePage($event)">
+        [pageData]="pageDataToken" [pageEventType]="pageEventType.Token" (pageEvent)="changePage($event)" [textNull]="'NO COINS'">
       </app-table>
     </div>
   </div>
@@ -43,18 +43,18 @@
           </app-table>
         </mat-tab>
         <mat-tab label="Unbondings">
-          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
-            [displayedColumns]="displayedColumnsDelegation" [pageEventType]="pageEventType.Unbonding"
+          <app-table [dataSource]="dataSourceUnBonding" [templates]="templatesUnBonding"
+            [displayedColumns]="displayedColumnsUnBonding" [pageEventType]="pageEventType.Unbonding"
             (pageEvent)="changePage($event)"></app-table>
         </mat-tab>
         <mat-tab label="Redelegations">
-          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
-            [displayedColumns]="displayedColumnsDelegation" [pageEventType]="pageEventType.Redelegation"
+          <app-table [dataSource]="dataSourceReDelegation" [templates]="templatesReDelegation"
+            [displayedColumns]="displayedColumnsReDelegation" [pageEventType]="pageEventType.Redelegation"
             (pageEvent)="changePage($event)"></app-table>
         </mat-tab>
         <mat-tab label="Vestings">
-          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
-            [displayedColumns]="displayedColumnsDelegation" [pageEventType]="pageEventType.Vestings"
+          <app-table [dataSource]="dataSourceVesting" [templates]="templatesVesting"
+            [displayedColumns]="displayedColumnsVesting" [pageEventType]="pageEventType.Vestings"
             (pageEvent)="changePage($event)"></app-table>
         </mat-tab>
       </mat-tab-group>
@@ -68,12 +68,15 @@
       </div>
       <div class="box-balance">
         <span class="balance-name g-purple">AURA</span>
-        <span class="balance-amount">10.301957</span>
+        <span class="balance-amount">{{item?.total | number}}</span>
       </div>
       <ng-container *ngFor="let item of chartCustomOptions">
-        <div class="d-flex">
-          <div class="item-color-balance" [ngStyle]="{'background-color': item.color }"></div>
-          <span>{{ item.name }}</span>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="item-color-balance" [ngStyle]="{'background-color': item.color }"></div>
+            <span>{{ item.name }}</span>
+          </div>
+          <span>{{ item.amount | number }}</span>
         </div>
       </ng-container>
     </div>
@@ -135,7 +138,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
                 {{"NO DATA" | translate}}

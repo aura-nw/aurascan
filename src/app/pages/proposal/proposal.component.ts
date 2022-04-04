@@ -18,7 +18,7 @@ import { ProposalVoteComponent } from "./proposal-vote/proposal-vote.component";
 export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
-  voteValue: {keyVote: number} = null;
+  voteValue: { keyVote: number } = null;
   @ViewChild(MatSort) sort: MatSort;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -39,9 +39,9 @@ export class ProposalComponent implements OnInit {
   lastedList = [];
 
   constructor(
-      private proposalService: ProposalService,
-      public dialog: MatDialog,
-      private datePipe: DatePipe
+    private proposalService: ProposalService,
+    public dialog: MatDialog,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -60,32 +60,32 @@ export class ProposalComponent implements OnInit {
 
   getList(): void {
     this.proposalService
-        .getProposal(this.pageSize, this.pageIndex)
-        .subscribe((res: ResponseDto) => {
-          this.dataSource = new MatTableDataSource<any>(res.data);
-          this.length = res.data.length;
-          this.dataSource.sort = this.sort;
-          this.lastedList = res.data;
-          this.lastedList.forEach((pro)=>{
-            const totalVoteYes = pro.pro_votes_yes;
-            const totalVoteNo = pro.pro_votes_no;
-            const totalVoteNoWithVeto = pro.pro_votes_no_with_veto;
-            const totalVoteAbstain = pro.pro_votes_abstain;
-            const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
-            pro.pro_votes_yes = totalVoteYes*100/totalVote;
-            pro.pro_votes_no = totalVoteNo*100/totalVote;
-            pro.pro_votes_no_with_veto = totalVoteNoWithVeto*100/totalVote;
-            pro.pro_votes_abstain = totalVoteAbstain*100/totalVote;
-            pro.pro_vote_total = totalVote;
-            pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-            pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-            pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
-          })
+      .getProposal(this.pageSize, this.pageIndex)
+      .subscribe((res: ResponseDto) => {
+        this.dataSource = new MatTableDataSource<any>(res.data);
+        this.length = res.data.length;
+        this.dataSource.sort = this.sort;
+        this.lastedList = res.data;
+        this.lastedList.forEach((pro) => {
+          const totalVoteYes = pro.pro_votes_yes;
+          const totalVoteNo = pro.pro_votes_no;
+          const totalVoteNoWithVeto = pro.pro_votes_no_with_veto;
+          const totalVoteAbstain = pro.pro_votes_abstain;
+          const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
+          pro.pro_votes_yes = totalVoteYes * 100 / totalVote;
+          pro.pro_votes_no = totalVoteNo * 100 / totalVote;
+          pro.pro_votes_no_with_veto = totalVoteNoWithVeto * 100 / totalVote;
+          pro.pro_votes_abstain = totalVoteAbstain * 100 / totalVote;
+          pro.pro_vote_total = totalVote;
+          pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
+          pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
+          pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
         })
+      })
   }
 
   getStatus(key: string) {
-    let resObj: {value: string, class: string} = null;
+    let resObj: { value: string, class: string } = null;
     const statusObj = this.statusConstant.find(s => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
@@ -98,26 +98,21 @@ export class ProposalComponent implements OnInit {
 
   getHighestVote(yes: number, no: number, noWithVeto: number, abstain: number) {
     let highest = Math.max(yes, no, noWithVeto, abstain);
-    if(!highest)
-    {
+    if (!highest) {
       highest = 0;
     }
     let key;
-    let resObj: {value: number, name: string, class: string} = null;
-    if(highest === yes)
-    {
+    let resObj: { value: number, name: string, class: string } = null;
+    if (highest === yes) {
       key = 0;
     }
-    else if (highest === no)
-    {
+    else if (highest === no) {
       key = 1;
     }
-    else if (highest === noWithVeto)
-    {
+    else if (highest === noWithVeto) {
       key = 2;
     }
-    else
-    {
+    else {
       key = 3;
     }
     const statusObj = this.voteConstant.find(s => s.key === key);
@@ -135,7 +130,7 @@ export class ProposalComponent implements OnInit {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
       height: '400px',
       width: '600px',
-      data: {id, title, voteValue: this.voteValue},
+      data: { id, title, voteValue: this.voteValue },
     });
     dialogRef.afterClosed().subscribe(result => {
       this.voteValue = result;

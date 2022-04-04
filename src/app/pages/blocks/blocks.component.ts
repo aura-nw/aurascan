@@ -49,7 +49,7 @@ export class BlocksComponent implements OnInit {
 
   getList(): void {
     this.blockService
-      .blocks(this.pageSize, this.pageIndex)
+      .blocks(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe(res => {
         res.data.forEach((block) => {
           block.block_hash_format = block.block_hash.replace(block.block_hash.substring(6, block.block_hash.length - 6), '...');

@@ -48,7 +48,7 @@ export class ChaincodesComponent implements OnInit {
 
   getList(): void {
     this.commonService
-      .chaincodes(this.pageSize, this.pageIndex)
+      .chaincodes(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.data.meta.count;
