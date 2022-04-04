@@ -18,12 +18,12 @@ export class DepositorsComponent implements OnInit {
   _voteList: IDepositor[] = [];
   constructor(private proposalService: ProposalService) {}
   ngOnInit(): void {
-    this.proposalService.getDepositors().subscribe((data) => {
-      this._voteList = data;
-      this.changeTab(0);
-    });
+    // this.proposalService.getDepositors().subscribe((data) => {
+    //   this._voteList = data;
+    //   this.changeTab(0);
+    // });
   }
   changeTab(tabId): void {
-    this.voteDataList = [...this._voteList].slice(tabId * 8, tabId * 8 + 8);
+    //this.voteDataList = [...this._voteList].slice(tabId * 8, tabId * 8 + 8);
   }
 }

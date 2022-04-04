@@ -21,12 +21,12 @@ export class ValidatorsVotesComponent implements OnInit {
   _voteList: IValidatorVotes[] = [];
   constructor(private proposalService: ProposalService) {}
   ngOnInit(): void {
-    this.proposalService.getValidatorVotes().subscribe((data) => {
-      this._voteList = data;
-      this.changeTab(0);
-    });
+    // this.proposalService.getValidatorVotes().subscribe((data) => {
+    //   this._voteList = data;
+    //   this.changeTab(0);
+    // });
   }
   changeTab(tabId): void {
-    this.voteDataList = [...this._voteList].slice(tabId * 8, tabId * 8 + 8);
+    //this.voteDataList = [...this._voteList].slice(tabId * 8, tabId * 8 + 8);
   }
 }

@@ -24,13 +24,13 @@ export class VotesComponent implements OnInit {
   constructor(private proposalService: ProposalService) {}
 
   ngOnInit(): void {
-    this.proposalService.getVotes().subscribe((data) => {
-      this._voteList = data;
-      this.changeTab(0)
-    });
+    // this.proposalService.getVotes().subscribe((data) => {
+    //   this._voteList = data;
+    //   this.changeTab(0)
+    // });
   }
 
   changeTab(tabId): void {
-    this.voteDataList = [...this._voteList].slice(tabId * 20, tabId * 20 + 20)
+    //this.voteDataList = [...this._voteList].slice(tabId * 20, tabId * 20 + 20)
   }
 }
