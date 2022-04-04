@@ -10,6 +10,14 @@ import {TranslateModule} from "@ngx-translate/core";
 import {ProposalService} from "../../core/services/proposal.service";
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { FormsModule } from '@angular/forms';
+import { SummaryInfoComponent } from './proposal-detail/summary-info/summary-info.component';
+import { VotesComponent } from './proposal-detail/votes/votes.component';
+import { ValidatorsVotesComponent } from './proposal-detail/validators-votes/validators-votes.component';
+import { DepositorsComponent } from './proposal-detail/depositors/depositors.component';
+import { ProposalTableComponent } from './proposal-table/proposal-table.component';
+import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { NgbDropdownModule, NgbAlertModule, NgbCarouselModule, NgbProgressbarModule, NgbNavModule, NgbCollapseModule, NgbAccordionModule, NgbPopoverModule, NgbTooltipModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 @NgModule({
@@ -17,6 +25,11 @@ import { FormsModule } from '@angular/forms';
     ProposalComponent,
     ProposalDetailComponent,
     ProposalVoteComponent,
+    SummaryInfoComponent,
+    VotesComponent,
+    ValidatorsVotesComponent,
+    DepositorsComponent,
+    ProposalTableComponent,
   ],
     imports: [
         CommonModule,
@@ -25,6 +38,18 @@ import { FormsModule } from '@angular/forms';
         MaterialModule,
         TranslateModule,
         FormsModule,
+        CommonPipeModule,
+        NgbDropdownModule,
+        NgbAlertModule,
+        NgbCarouselModule,
+        NgbProgressbarModule,
+        NgbNavModule,
+        NgbCollapseModule,
+        NgbAccordionModule,
+        NgbPopoverModule,
+        NgbTooltipModule,
+        NgbPaginationModule,
+        NgxMaskModule
     ],
     providers: [ProposalService]
 })

@@ -1,60 +1,5 @@
-.proposal-status {
-  color: var(--bs-danger);
-  display: flex;
-  align-items: center;
-  border-radius: 90px;
-  &--has-elevation {
-    padding: 5px 10px 5px 28px;
-  }
-  span.status {
-    position: relative;
-    font-weight: 500;
-    &:before {
-      content: '';
-      position: absolute;
-      left: -16px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-  }
-  &.primary {
-    color: var(--bs-success);
-    span.status {
-      &:before {
-        background-color: var(--bs-success);
-      }
-    }
-    &.proposal-status--has-elevation {
-      background-color: rgba(55,204,110,.1);
-    }
-  }
-  &.danger {
-    color: var(--bs-danger);
-    span.status {
-      &:before {
-        background-color: var(--bs-danger);
-      }
-    }
-    &.proposal-status--has-elevation {
-      background-color: rgba(255,39,69,.1);
-    }
-  }
-  &.info {
-    color: var(--bs-info);
-    span.status {
-      &:before {
-        background-color: var(--bs-info);
-      }
-    }
-    &.proposal-status--has-elevation {
-      background-color: rgba(0,177,253,.1);
-    }
-  }
-}
 .proposal-lasted {
+  margin-bottom: 20px;
   &__content {
     .title {
       width: 100px;
@@ -63,6 +8,9 @@
   }
   .vote-bar {
     margin-right: 20px;
+    ul {
+      background-color: #e3e3e3;
+    }
   }
   .most-vote {
     margin-left: 20px;
@@ -72,7 +20,7 @@
     .value {
       position: relative;
       padding-left: 18px;
-      font-size: 13px;
+      font-size: 13px;  
       &:before {
         content: '';
         position: absolute;
@@ -120,27 +68,6 @@
 }
 .vote-bar {
   width: 60%;
-  ul {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    list-style: none;
-    display: flex;
-    li {
-      &.primary {
-        background-color: var(--bs-success);
-      }
-      &.danger {
-        background-color: var(--bs-danger);
-      }
-      &.info {
-        background-color: var(--bs-info);
-      }
-      &.secondary {
-        background-color: var(--bs-secondary);
-      }
-    }
-  }
 }
 table {
   min-width: 800px;

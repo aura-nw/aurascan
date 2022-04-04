@@ -56,6 +56,7 @@ import { CommonService } from './core/services/common.service';
 import { DatePipe } from '@angular/common';
 import { Globals } from './global/global';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { NgxMaskModule } from 'ngx-mask';
 // if (environment.defaultauth === 'firebase') {
 //   initFirebaseBackend(environment.firebaseConfig);
 // } else {
@@ -135,6 +136,7 @@ export class MaterialModule { }
       registrationStrategy: 'registerWhenStable:30000'
     }),
     ToastrModule.forRoot({ positionClass: 'inline' }),
+    NgxMaskModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

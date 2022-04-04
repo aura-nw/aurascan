@@ -192,7 +192,6 @@ export class DashboardComponent implements OnInit {
   //       const data1 = res[1].data.map(i => i.count);
   //       let categories = res[0].data.map(i => i.timestamp);
   //     });
-
   // }
 
   updateBlockAndTxs(type: string): void {
