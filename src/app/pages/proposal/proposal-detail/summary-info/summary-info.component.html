@@ -74,7 +74,7 @@
             <small>59 M of 185 M has voted</small>
           </div> -->
           <div>
-            <b>Total :</b> {{ proposalDetail.pro_total_vote | mask: 'separator.6' }} <span class="g-purple">AURA</span>
+            <b>Total :</b> {{ (proposalDetail.pro_total_vote | mask: 'separator.6') || '0.00' }} <span class="g-purple">AURA</span>
           </div>
         </div>
         <div class="vote-bar mt-3">
