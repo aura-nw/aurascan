@@ -39,6 +39,9 @@
 }
 .vote-bar {
   height: 30px;
+  ul {
+    background-color: #e3e3e3;
+  }
 }
 
 .vote-legend {
@@ -92,7 +95,9 @@
 
         .decimal {
           font-size: 14px;
-          margin-right: 4px;
+        }
+        .g-purple{
+          margin-left: 4px;
         }
       }
     }

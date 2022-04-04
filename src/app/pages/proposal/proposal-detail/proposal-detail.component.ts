@@ -9,10 +9,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 export class ProposalDetailComponent implements OnInit {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
-
   proposalId: number;
-
-  
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     activatedRoute.url.subscribe((e) => {
@@ -27,7 +24,6 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('this.proposalId', this.proposalId);
     this.breadCrumbItems = [
       { label: 'Proposal' },
       { label: 'List' },
