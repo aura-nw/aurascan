@@ -40,11 +40,6 @@ export class SummaryInfoComponent implements OnInit {
         DATEFORMAT.DATETIME_UTC,
       );
 
-      this.proposalDetail.pro_vote_yes = '10';
-      this.proposalDetail.pro_vote_no = '11';
-      this.proposalDetail.pro_vote_no_with_veto = '12';
-      this.proposalDetail.pro_vote_abstain = '13';
-
       this.proposalDetail.pro_total_vote =
         +this.proposalDetail.pro_vote_yes +
         +this.proposalDetail.pro_vote_no +
