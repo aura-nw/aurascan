@@ -1,7 +1,7 @@
 /**
  * PageEventType
  */
- export enum PageEventType {
+export enum PageEventType {
   Delegation = 'Delegation',
   Unbonding = 'Unbonding',
   Redelegation = 'Redelegation',
@@ -29,16 +29,18 @@ export enum ACCOUNT_TYPE_ENUM {
 
 export enum ACCOUNT_WALLET_COLOR_ENUM {
   Available = 'Available',
-  DelegatableVesting = 'DelegatableVesting',
+  DelegatableVesting = 'Delegatable Vesting',
   Delegated = 'Delegated',
   Unbonding = 'Unbonding',
-  StakingReward = 'StakingReward',
+  StakingReward = 'Staking Reward',
+  Commission = 'Commission',
 }
 
-export enum WalletAcount{
+export enum WalletAcount {
   Available = '#9C6CFF',
   DelegatableVesting = '#783296',
   Delegated = '#573655',
   Unbonding = '#9C96C8',
-  StakingReward = '#574D56'
+  StakingReward = '#574D56',
+  Commission = '#96648C',
 }

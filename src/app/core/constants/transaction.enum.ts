@@ -48,7 +48,7 @@ export enum TRANSACTION_TYPE_ENUM {
   Unjail = '/cosmos.slashing.v1beta1.MsgUnjail',
   StoreCode = '/auranw.aura.wasm.MsgStoreCode',
   InstantiateContract = '/auranw.aura.wasm.MsgInstantiateContract',
-  ExecuteContract = '/auranw.aura.wasm.MsgExecuteContract',
+  ExecuteContract = '/cosmwasm.wasm.v1.MsgExecuteContract',
   ModifyWithdrawAddress = '/cosmos.distribution.v1beta1.MsgSetWithdrawAddress',
   JoinPool = '/osmosis.gamm.v1beta1.MsgJoinPool',
   LockTokens = '/osmosis.lockup.MsgLockTokens',

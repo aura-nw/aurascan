@@ -10,9 +10,10 @@ export const TYPE_ACCOUNT = [
 ]
 
 export const ACCOUNT_WALLET_COLOR = [
-  { name: ACCOUNT_WALLET_COLOR_ENUM.Available, color: WalletAcount.Available },
-  { name: ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting, color: WalletAcount.DelegatableVesting },
-  { name: ACCOUNT_WALLET_COLOR_ENUM.Delegated, color: WalletAcount.Delegated },
-  { name: ACCOUNT_WALLET_COLOR_ENUM.Unbonding, color: WalletAcount.Unbonding },
-  { name: ACCOUNT_WALLET_COLOR_ENUM.StakingReward, color: WalletAcount.StakingReward },
+  { name: ACCOUNT_WALLET_COLOR_ENUM.Available, color: WalletAcount.Available, amount: '0.000000' },
+  { name: ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting, color: WalletAcount.DelegatableVesting, amount: '0.000000' },
+  { name: ACCOUNT_WALLET_COLOR_ENUM.Delegated, color: WalletAcount.Delegated, amount: '0.000000' },
+  { name: ACCOUNT_WALLET_COLOR_ENUM.Unbonding, color: WalletAcount.Unbonding, amount: '0.000000' },
+  { name: ACCOUNT_WALLET_COLOR_ENUM.StakingReward, color: WalletAcount.StakingReward, amount: '0.000000' },
+  { name: ACCOUNT_WALLET_COLOR_ENUM.Commission, color: WalletAcount.Commission, amount: '0.000000' }
 ]

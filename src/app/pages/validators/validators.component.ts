@@ -20,7 +20,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
-    // { matColumnDef: 'participation', headerCellDef: 'Participation' },
+    { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
   ];
@@ -39,6 +39,7 @@ export class ValidatorsComponent implements OnInit {
   dataHeader = new CommonDataDto();
   // bread crumb items
   breadCrumbItems!: Array<{}>;
+  isPartiDown = true;
 
   constructor(
     private validatorService: ValidatorService,
@@ -69,10 +70,11 @@ export class ValidatorsComponent implements OnInit {
       .validators()
       .subscribe((res: ResponseDto) => {
         this.rawData = res.data;
-        res.data.totalParti = 18;
         res.data.forEach((val) => {
-          val.percent_vote = val.power / this.totalPower;
-          val.participation = '16' + '/ ' + 18;
+          if (val.target_count > 0 && val.vote_count / val.target_count > 0.5) {
+            this.isPartiDown = false;
+          }
+          val.participation = val.vote_count + '/ ' + val.target_count;
         });
 
         let dataFilter = res.data.filter(event => event.status_validator === this.isActive);

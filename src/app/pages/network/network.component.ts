@@ -46,7 +46,7 @@ export class NetworkComponent implements OnInit {
 
   getList(): void {
     this.commonService
-      .peers(this.pageSize, this.pageIndex)
+      .peers(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.data.meta.count;
