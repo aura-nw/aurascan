@@ -58,7 +58,7 @@ export class TransactionComponent implements OnInit {
 
   getList(): void {
     this.transactionService
-      .txs(this.pageSize, this.pageIndex)
+      .txs(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());

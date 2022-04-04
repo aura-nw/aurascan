@@ -46,7 +46,7 @@ export class ChanelsComponent implements OnInit {
 
   getList(): void {
     this.commonService
-      .channels(this.pageSize, this.pageIndex)
+      .channels(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.data.meta.count;

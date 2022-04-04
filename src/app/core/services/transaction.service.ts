@@ -29,4 +29,9 @@ export class TransactionService extends CommonService {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
   }
+
+  txsWithAddress(limit, offset, address): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/account/${address}/transaction?limit=${limit}&offset=${offset}`);
+  }
 }

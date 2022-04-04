@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit {
   transactionsAll: any;
   transactionsBuy: any;
   transactionsSell: any;
+  pageSize = 5;
 
   public chartTxs: any;
   public chartBlock: any;
@@ -149,7 +150,7 @@ export class DashboardComponent implements OnInit {
 
   getListBlock(): void {
     this.blockService
-      .blocks(5, 0)
+      .blocks(this.pageSize, 0)
       .subscribe(res => {
         res.data.forEach((block) => {
           block.block_hash_format = block.block_hash.replace(block.block_hash.substring(6, block.block_hash.length - 6), '...');
@@ -161,7 +162,7 @@ export class DashboardComponent implements OnInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txs(5, 0)
+      .txs(this.pageSize, 0)
       .subscribe(res => {
         res.data.forEach((trans) => {
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());

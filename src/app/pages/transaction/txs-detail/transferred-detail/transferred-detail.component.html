@@ -134,5 +134,37 @@
         </div>
       </div>
     </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg"
+              class="m-1 mb-0 mt-0 msg-image">
+            {{transactionDetailType}}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Proposal Id</p>
+        </div>
+        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">{{transactionDetail?.messages[0]?.proposal_id}}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Voter</p>
+        </div>
+        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
+          {{transactionDetail?.messages[0]?.voter}}
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Option</p>
+        </div>
+        <div class="col-6">
+          {{transactionDetail?.messages[0]?.option === 'VOTE_OPTION_YES' ? 'Yes' : 'No'}}
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>

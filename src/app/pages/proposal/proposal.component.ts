@@ -57,7 +57,7 @@ export class ProposalComponent implements OnInit {
 
   getList(): void {
     this.proposalService
-      .getProposal(this.pageSize, this.pageIndex)
+      .getProposal(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource<any>(res);
         this.length = res.length;
