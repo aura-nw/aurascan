@@ -6,8 +6,13 @@
         <div class="box-qr">
           <canvas id="canvas" #canvas></canvas>
         </div>
-        <p>Address</p>
-        <p class="address-account">{{id}}</p>
+        <div>
+          Address
+          <span class="account-info-copied">
+            <p class="txt-copied" [ngClass]="isCopy ? 'show-copy' : ''">copied!</p>
+          </span>
+        </div>
+        <p class="address-account cursor-pointer mt-2" (click)="copyMessage(id)">{{ id }}</p>
         <div class="box-total">
           <p>Total Value</p>
           <p>$0</p>
@@ -18,18 +23,29 @@
       <div class="box-assets">
         <span class="title-assets">Assets</span>
         <div class="account-list-search-area">
-          <input placeholder="Search Asset" class="account-list-search-input" [(ngModel)]="textSearch"
-            (ngModelChange)="searchToken()">
+          <input
+            placeholder="Search Asset"
+            class="account-list-search-input"
+            [(ngModel)]="textSearch"
+            (ngModelChange)="searchToken()"
+          />
           <span class="txt-asset">Asset Type</span>
           <mat-select [(ngModel)]="type" class="list-token" (selectionChange)="searchToken()">
             <mat-option *ngFor="let item of assetsType" [value]="item.label">
-              {{(item.value |translate)}}
+              {{ item.value | translate }}
             </mat-option>
           </mat-select>
         </div>
       </div>
-      <app-table [dataSource]="dataSourceToken" [templates]="templatesToken" [displayedColumns]="displayedColumnsToken"
-        [pageData]="pageDataToken" [pageEventType]="pageEventType.Token" (pageEvent)="changePage($event)" [textNull]="'NO COINS'">
+      <app-table
+        [dataSource]="dataSourceToken"
+        [templates]="templatesToken"
+        [displayedColumns]="displayedColumnsToken"
+        [pageData]="pageDataToken"
+        [pageEventType]="pageEventType.Token"
+        (pageEvent)="changePage($event)"
+        [textNull]="'NO COINS'"
+      >
       </app-table>
     </div>
   </div>
@@ -37,43 +53,68 @@
     <div class="col-9">
       <mat-tab-group>
         <mat-tab label="Delegations">
-          <app-table [dataSource]="dataSourceDelegation" [templates]="templatesDelegation"
-            [displayedColumns]="displayedColumnsDelegation" [pageData]="pageDataDelegation"
-            [pageEventType]="pageEventType.Delegation" (pageEvent)="changePage($event)">
+          <app-table
+            [dataSource]="dataSourceDelegation"
+            [templates]="templatesDelegation"
+            [displayedColumns]="displayedColumnsDelegation"
+            [pageData]="pageDataDelegation"
+            [pageEventType]="pageEventType.Delegation"
+            (pageEvent)="changePage($event)"
+          >
           </app-table>
         </mat-tab>
         <mat-tab label="Unbondings">
-          <app-table [dataSource]="dataSourceUnBonding" [templates]="templatesUnBonding"
-            [displayedColumns]="displayedColumnsUnBonding" [pageEventType]="pageEventType.Unbonding"
-            (pageEvent)="changePage($event)"></app-table>
+          <app-table
+            [dataSource]="dataSourceUnBonding"
+            [templates]="templatesUnBonding"
+            [displayedColumns]="displayedColumnsUnBonding"
+            [pageEventType]="pageEventType.Unbonding"
+            (pageEvent)="changePage($event)"
+          ></app-table>
         </mat-tab>
         <mat-tab label="Redelegations">
-          <app-table [dataSource]="dataSourceReDelegation" [templates]="templatesReDelegation"
-            [displayedColumns]="displayedColumnsReDelegation" [pageEventType]="pageEventType.Redelegation"
-            (pageEvent)="changePage($event)"></app-table>
+          <app-table
+            [dataSource]="dataSourceReDelegation"
+            [templates]="templatesReDelegation"
+            [displayedColumns]="displayedColumnsReDelegation"
+            [pageEventType]="pageEventType.Redelegation"
+            (pageEvent)="changePage($event)"
+          ></app-table>
         </mat-tab>
         <mat-tab label="Vestings">
-          <app-table [dataSource]="dataSourceVesting" [templates]="templatesVesting"
-            [displayedColumns]="displayedColumnsVesting" [pageEventType]="pageEventType.Vestings"
-            (pageEvent)="changePage($event)"></app-table>
+          <app-table
+            [dataSource]="dataSourceVesting"
+            [templates]="templatesVesting"
+            [displayedColumns]="displayedColumnsVesting"
+            [pageEventType]="pageEventType.Vestings"
+            (pageEvent)="changePage($event)"
+          ></app-table>
         </mat-tab>
       </mat-tab-group>
     </div>
     <div class="col-3">
       <div id="walletChart">
-        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
-          [fill]="chartOptions.fill" [dataLabels]="chartOptions.dataLabels" [responsive]="chartOptions.responsive"
-          [plotOptions]="chartOptions.plotOptions" [legend]="chartOptions.legend" [colors]="chartOptions.colors">
+        <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [labels]="chartOptions.labels"
+          [fill]="chartOptions.fill"
+          [dataLabels]="chartOptions.dataLabels"
+          [responsive]="chartOptions.responsive"
+          [plotOptions]="chartOptions.plotOptions"
+          [legend]="chartOptions.legend"
+          [colors]="chartOptions.colors"
+        >
         </apx-chart>
       </div>
       <div class="box-balance">
         <span class="balance-name g-purple">AURA</span>
-        <span class="balance-amount">{{item?.total | number}}</span>
+        <span class="balance-amount">{{ item?.total | number }}</span>
       </div>
       <ng-container *ngFor="let item of chartCustomOptions">
         <div class="d-flex justify-content-between">
           <div class="d-flex">
-            <div class="item-color-balance" [ngStyle]="{'background-color': item.color }"></div>
+            <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
             <span>{{ item.name }}</span>
           </div>
           <span>{{ item.amount | number }}</span>
@@ -88,21 +129,20 @@
         <p class="card-title mb-0 flex-grow-1">Transactions</p>
       </div>
       <div class="card-body px-0">
-        <ngx-simplebar style="max-height: 400px;">
+        <ngx-simplebar style="max-height: 400px">
           <table mat-table [dataSource]="dataSource" class="table-reponsive">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-
                 <th mat-header-cell *matHeaderCellDef>
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
 
                 <td mat-cell *matCellDef="let data">
                   <div>
-                    <ng-container [ngSwitch]="template.matColumnDef ">
+                    <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'timestamp'">
-                        <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0"> {{
-                        data[template.matColumnDef] | calDate}} ago
+                        <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0" />
+                        {{ data[template.matColumnDef] | calDate }} ago
                       </div>
                       <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
                         {{ data[template.matColumnDef] }}
@@ -114,8 +154,14 @@
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngSwitchCase="'status'">
-                        <img [src]="data[template.matColumnDef] === statusTransaction.Success ?
-                                  'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
+                        <img
+                          [src]="
+                            data[template.matColumnDef] === statusTransaction.Success
+                              ? 'assets/images/icons/success.svg'
+                              : 'assets/images/icons/fail.svg'
+                          "
+                          alt=""
+                        />
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngSwitchCase="'fee'">
@@ -125,12 +171,9 @@
                         <ng-container *ngIf="data[template.matColumnDef] > 0">
                           {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
                         </ng-container>
-                        <ng-container *ngIf="data[template.matColumnDef] == 0">
-                          -
-                        </ng-container>
+                        <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
                       </div>
-                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
-                      </div>
+                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                     </ng-container>
                   </div>
                 </td>
@@ -141,7 +184,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
-                {{"NO DATA" | translate}}
+                {{ 'NO DATA' | translate }}
               </td>
             </tr>
           </table>

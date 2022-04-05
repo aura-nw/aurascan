@@ -15,8 +15,8 @@ import {
   ApexDataLabels,
   ApexLegend,
   ApexPlotOptions,
-  ChartComponent
-} from "ng-apexcharts";
+  ChartComponent,
+} from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
 import { AccountService } from '../../../app/core/services/account.service';
@@ -38,11 +38,10 @@ export type ChartOptions = {
 @Component({
   selector: 'app-account-detail',
   templateUrl: './account-detail.component.html',
-  styleUrls: ['./account-detail.component.scss']
+  styleUrls: ['./account-detail.component.scss'],
 })
-
 export class AccountDetailComponent implements OnInit {
-  @ViewChild("walletChart") chart: ChartComponent;
+  @ViewChild('walletChart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   @ViewChild(MatSort) sort: MatSort;
   // bread crumb items
@@ -57,7 +56,7 @@ export class AccountDetailComponent implements OnInit {
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'fee', headerCellDef: 'Fee' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'timestamp', headerCellDef: 'Time' }
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
@@ -65,7 +64,7 @@ export class AccountDetailComponent implements OnInit {
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'name', headerCellDef: 'Name' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'value', headerCellDef: 'Total Value' }
+    { matColumnDef: 'value', headerCellDef: 'Total Value' },
   ];
   displayedColumnsToken: string[] = this.templatesToken.map((dta) => dta.matColumnDef);
   dataSourceToken: MatTableDataSource<any>;
@@ -74,7 +73,7 @@ export class AccountDetailComponent implements OnInit {
   templatesDelegation: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'reward', headerCellDef: 'Reward' }
+    { matColumnDef: 'reward', headerCellDef: 'Reward' },
   ];
   displayedColumnsDelegation: string[] = this.templatesDelegation.map((dta) => dta.matColumnDef);
   dataSourceDelegation: MatTableDataSource<any>;
@@ -82,7 +81,7 @@ export class AccountDetailComponent implements OnInit {
   templatesUnBonding: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Validator' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'completion_time', headerCellDef: 'Completion Time' }
+    { matColumnDef: 'completion_time', headerCellDef: 'Completion Time' },
   ];
   displayedColumnsUnBonding: string[] = this.templatesUnBonding.map((dta) => dta.matColumnDef);
   dataSourceUnBonding: MatTableDataSource<any>;
@@ -91,15 +90,15 @@ export class AccountDetailComponent implements OnInit {
     { matColumnDef: 'from', headerCellDef: 'From' },
     { matColumnDef: 'to', headerCellDef: 'To' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'time', headerCellDef: 'Time' }
+    { matColumnDef: 'time', headerCellDef: 'Time' },
   ];
   displayedColumnsReDelegation: string[] = this.templatesReDelegation.map((dta) => dta.matColumnDef);
   dataSourceReDelegation: MatTableDataSource<any>;
 
   templatesVesting: Array<TableTemplate> = [
-    { matColumnDef: 'validator_address', headerCellDef: 'Validator' },
+    { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'reward', headerCellDef: 'Reward' }
+    { matColumnDef: 'vesting_schedule', headerCellDef: 'Vesting Schedule' },
   ];
   displayedColumnsVesting: string[] = this.templatesVesting.map((dta) => dta.matColumnDef);
   dataSourceVesting: MatTableDataSource<any>;
@@ -108,37 +107,37 @@ export class AccountDetailComponent implements OnInit {
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   pageDataToken: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   pageDataDelegation: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   pageDataUnbonding: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   pageDataRedelegation: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   pageDataVesting: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: PAGE_EVENT.PAGE_SIZE,
-    pageIndex: PAGE_EVENT.PAGE_INDEX
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
   length;
@@ -150,14 +149,16 @@ export class AccountDetailComponent implements OnInit {
   type = 'All';
   imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
+  isCopy = false;
 
-  chartCustomOptions: { name: string; color: string, amount: string }[] = ACCOUNT_WALLET_COLOR;
+  chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
   constructor(
     private transactionService: TransactionService,
     private route: ActivatedRoute,
     private router: Router,
-    private accountService: AccountService) {
+    private accountService: AccountService,
+  ) {
     this.chartOptions = {
       series: [0, 0],
       labels: this.chartCustomOptions.map((e) => e.name),
@@ -167,7 +168,7 @@ export class AccountDetailComponent implements OnInit {
       },
       chart: {
         width: 280,
-        type: "donut",
+        type: 'donut',
       },
       plotOptions: {
         pie: {
@@ -182,17 +183,17 @@ export class AccountDetailComponent implements OnInit {
             minAngleToShowLabel: 1,
           },
           donut: {
-            size: "55%",
+            size: '55%',
             labels: {
               show: false,
               total: {
                 show: false,
                 showAlways: true,
-                label: "Total Balance",
-                fontSize: "18px",
-                fontFamily: "Helvetica, Arial, sans-serif",
+                label: 'Total Balance',
+                fontSize: '18px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
                 fontWeight: 600,
-                color: "#373d3f",
+                color: '#373d3f',
                 formatter: function (w) {
                   return w.globals.seriesTotals.reduce((a, b) => {
                     return a + b;
@@ -218,7 +219,7 @@ export class AccountDetailComponent implements OnInit {
                 donut: {
                   labels: {
                     total: {
-                      fontSize: "14px",
+                      fontSize: '14px',
                     },
                   },
                 },
@@ -231,15 +232,30 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.breadCrumbItems = [
-      { label: 'Account' },
-      { label: 'Detail', active: true }
-    ];
+    this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
     this.id = this.route.snapshot.paramMap.get('id');
     this.getAccountDetail();
     this.getListTransaction();
     this.createQRCode();
     this.chartOptions.series;
+  }
+
+  copyMessage(val: string) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.isCopy = true;
+    setTimeout(() => {
+      this.isCopy = false;
+    }, 1000);
   }
 
   changePage(page: any): void {
@@ -278,7 +294,7 @@ export class AccountDetailComponent implements OnInit {
       .txsWithAddress(this.pageSize, this.pageIndex * this.pageSize, this.id)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
-          const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
+          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
           if (trans.code === CodeTransaction.Success) {
@@ -296,54 +312,51 @@ export class AccountDetailComponent implements OnInit {
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
         this.dataSource.sort = this.sort;
-      }
-      );
+      });
   }
 
   getAccountDetail(): void {
-    this.accountService.getAccoutDetail(this.id)
-      .subscribe(res => {
-        this.item = res.data;
-        this.chartOptions.series = [];
-        this.chartCustomOptions.forEach(f => {
-          switch (f.name) {
-            case ACCOUNT_WALLET_COLOR_ENUM.Available:
-              f.amount = this.item.available;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
-              f.amount = this.item.delegated;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
-              f.amount = this.item.stake_reward;
-              break;
-            case ACCOUNT_WALLET_COLOR_ENUM.Commission:
-              f.amount = this.item.commission;
-              break;
-            default:
-              break;
-          }
-          f.amount = f.amount || '0';
-          this.chartOptions.series.push(Number(f.amount));
-        });
+    this.accountService.getAccoutDetail(this.id).subscribe((res) => {
+      this.item = res.data;
+      this.chartOptions.series = [];
+      this.chartCustomOptions.forEach((f) => {
+        switch (f.name) {
+          case ACCOUNT_WALLET_COLOR_ENUM.Available:
+            f.amount = this.item.available;
+            break;
+          case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
+            f.amount = this.item.delegated;
+            break;
+          case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
+            f.amount = this.item.stake_reward;
+            break;
+          case ACCOUNT_WALLET_COLOR_ENUM.Commission:
+            f.amount = this.item.commission;
+            break;
+          default:
+            break;
+        }
+        f.amount = f.amount || '0';
+        this.chartOptions.series.push(Number(f.amount));
+      });
 
-        this.dataSourceToken = new MatTableDataSource(this.item.balances);
-        this.dataSourceTokenBk = this.dataSourceToken;
-        this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
-        this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
-        // this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
-        // this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
-      })
+      this.dataSourceToken = new MatTableDataSource(this.item.balances);
+      this.dataSourceTokenBk = this.dataSourceToken;
+      this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
+      this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
+      // this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
+      // this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
+    });
   }
 
   searchToken(): void {
     if (this.textSearch.length > 0) {
-      const data = this.dataSourceTokenBk.data.filter((f) =>
-        f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1
+      const data = this.dataSourceTokenBk.data.filter(
+        (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
       this.dataSourceToken = this.dataSourceTokenBk;
       this.dataSourceToken = new MatTableDataSource(data);
-    }
-    else {
+    } else {
       this.dataSourceToken = this.dataSourceTokenBk;
     }
   }
@@ -371,12 +384,12 @@ export class AccountDetailComponent implements OnInit {
           canvas.width / 2 - imgDim.width / 2,
           canvas.height / 2 - imgDim.height / 2,
           imgDim.width,
-          imgDim.height
+          imgDim.height,
         );
         context.save();
       };
       this.imgGenerateQR = true;
-    } catch (e) { }
+    } catch (e) {}
   }
 
   openTxsDetail(event: any, data: any) {

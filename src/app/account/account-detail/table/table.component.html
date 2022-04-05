@@ -19,6 +19,9 @@
               <div *ngSwitchCase="'completion_time'">
                 {{ data['completion_time_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
               </div>
+              <div *ngSwitchCase="'vesting_schedule'">
+                {{ data['vesting_schedule_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
+              </div>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
               </div>
             </ng-container>
