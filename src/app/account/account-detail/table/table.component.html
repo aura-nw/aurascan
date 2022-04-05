@@ -16,11 +16,18 @@
               <div *ngSwitchCase="'amount'">
                 {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
               </div>
+              <div *ngSwitchCase="'reward'">
+                {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+              </div>
               <div *ngSwitchCase="'completion_time'">
                 {{ data['completion_time_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
               </div>
               <div *ngSwitchCase="'vesting_schedule'">
                 {{ data['vesting_schedule_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
+              </div>
+              <div *ngSwitchCase="'total_value'">
+                $ {{data[template.matColumnDef] | number}}<br>
+                <span class="price-token">$ {{ data['price'] }}</span>
               </div>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
               </div>

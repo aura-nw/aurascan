@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { shortenAddress } from 'src/app/core/utils/common/shorten';
+import { TableTemplate } from '../../../../app/core/models/common.model';
+import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 
 @Component({
   selector: 'app-proposal-table',

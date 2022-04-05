@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DATEFORMAT, NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
+import { DATEFORMAT, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
@@ -39,7 +39,7 @@ export class BlockDetailComponent implements OnInit {
   length;
   pageSize = 10;
   pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
+  pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
   dateFormat;

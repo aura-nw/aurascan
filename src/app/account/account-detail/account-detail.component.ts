@@ -21,7 +21,8 @@ import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
 import { AccountService } from '../../../app/core/services/account.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
-import { ACCOUNT_WALLET_COLOR_ENUM, PageEventType, WalletAcount } from '../../../app/core/constants/account.enum';
+import { ACCOUNT_TYPE_ENUM, ACCOUNT_WALLET_COLOR_ENUM, PageEventType, TypeAccount, WalletAcount } from '../../../app/core/constants/account.enum';
+import { getAmount } from '../../../app/global/global';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -64,7 +65,7 @@ export class AccountDetailComponent implements OnInit {
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'name', headerCellDef: 'Name' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'value', headerCellDef: 'Total Value' },
+    { matColumnDef: 'total_value', headerCellDef: 'Total Value' },
   ];
   displayedColumnsToken: string[] = this.templatesToken.map((dta) => dta.matColumnDef);
   dataSourceToken: MatTableDataSource<any>;
@@ -150,6 +151,8 @@ export class AccountDetailComponent implements OnInit {
   imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
+  tokenPrice = 0;
+  selected = ACCOUNT_TYPE_ENUM.All;
 
   chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
@@ -294,6 +297,8 @@ export class AccountDetailComponent implements OnInit {
       .txsWithAddress(this.pageSize, this.pageIndex * this.pageSize, this.id)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
+          //get amount of transaction
+          trans.amount = getAmount(trans.messages, trans.type);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
@@ -301,13 +306,8 @@ export class AccountDetailComponent implements OnInit {
             trans.status = StatusTransaction.Success;
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
-          trans.amount = 0;
-          //check exit amount of transaction
-          if (trans.messages && trans.messages[0]?.amount) {
-            let amount = trans.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
-            trans.amount = trans.messages?.length === 1 ? amount : 'More';
-          }
         });
+
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
@@ -340,12 +340,21 @@ export class AccountDetailComponent implements OnInit {
         this.chartOptions.series.push(Number(f.amount));
       });
 
+      this.item.balances.forEach((token) => {
+        token.price = 0;
+        if (token.name === 'AURA') {
+          token.amount = this.item.total;
+        }
+        token.total_value = token.price * token.amount;
+      });
+
       this.dataSourceToken = new MatTableDataSource(this.item.balances);
+      this.tokenPrice = 0;
       this.dataSourceTokenBk = this.dataSourceToken;
       this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
       this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
-      // this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
-      // this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
+      this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
+      this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
     });
   }
 
