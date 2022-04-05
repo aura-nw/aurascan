@@ -353,8 +353,8 @@ export class AccountDetailComponent implements OnInit {
       this.dataSourceTokenBk = this.dataSourceToken;
       this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
       this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
-      this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
-      this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
+      // this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
+      // this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
     });
   }
 

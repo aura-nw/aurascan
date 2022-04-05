@@ -29,7 +29,7 @@
             [(ngModel)]="textSearch"
             (ngModelChange)="searchToken()"
           />
-          <span class="txt-asset">Asset Type</span>
+          <span class="txt-asset fw-normal">Asset Type</span>
           <mat-select class="list-token" (selectionChange)="searchToken()" [(value)]="selected">
             <mat-option *ngFor="let item of assetsType" [value]="item.label">
               {{ item.value | translate }}
