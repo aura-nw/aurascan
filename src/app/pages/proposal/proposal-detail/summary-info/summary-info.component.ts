@@ -41,42 +41,42 @@ export class SummaryInfoComponent implements OnInit {
       );
 
       this.proposalDetail.pro_total_vote =
-        +this.proposalDetail.pro_vote_yes +
-        +this.proposalDetail.pro_vote_no +
-        +this.proposalDetail.pro_vote_no_with_veto +
-        +this.proposalDetail.pro_vote_abstain;
+        +this.proposalDetail.pro_votes_yes +
+        +this.proposalDetail.pro_votes_no +
+        +this.proposalDetail.pro_votes_no_with_veto +
+        +this.proposalDetail.pro_votes_abstain;
 
-      this.proposalDetail.pro_vote_yes_bar = (+this.proposalDetail.pro_vote_yes * 100) / +this.proposalDetail.pro_total_vote;
-      this.proposalDetail.pro_vote_no_bar = (+this.proposalDetail.pro_vote_no * 100) / +this.proposalDetail.pro_total_vote;
-      this.proposalDetail.pro_vote_no_with_veto_bar = (+this.proposalDetail.pro_vote_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
-      this.proposalDetail.pro_vote_abstain_bar = (+this.proposalDetail.pro_vote_abstain * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_yes_bar = (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_no_bar = (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_no_with_veto_bar = (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_abstain_bar = (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
 
       this.proposalDetail.yesPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_vote_yes * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
+        ? ((+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
         : ['0', '00'];
       this.proposalDetail.noPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_vote_no * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
+        ? ((+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
         : ['0', '00'];
       this.proposalDetail.noWithVetoPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_vote_no_with_veto * 100) / +this.proposalDetail.pro_total_vote)
+        ? ((+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote)
             .toString()
             .split('.')
         : ['0', '00'];
       this.proposalDetail.abstainPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_vote_abstain * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
+        ? ((+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
         : ['0', '00'];
 
       this.proposalDetail.pro_vote_yes = this.proposalDetail.pro_vote_yes
-        ? this.proposalDetail.pro_vote_yes?.toString().split('.')
+        ? this.proposalDetail.pro_votes_yes?.toString().split('.')
         : ['0', '00'];
       this.proposalDetail.pro_vote_no = this.proposalDetail.pro_vote_no
-        ? this.proposalDetail.pro_vote_no?.toString().split('.')
+        ? this.proposalDetail.pro_votes_no?.toString().split('.')
         : ['0', '00'];
       this.proposalDetail.pro_vote_no_with_veto = this.proposalDetail.pro_vote_no_with_veto
-        ? this.proposalDetail.pro_vote_no_with_veto?.toString().split('.')
+        ? this.proposalDetail.pro_votes_no_with_veto?.toString().split('.')
         : ['0', '00'];
       this.proposalDetail.pro_vote_abstain = this.proposalDetail.pro_vote_abstain
-        ? this.proposalDetail.pro_vote_abstain?.toString().split('.')
+        ? this.proposalDetail.pro_votes_abstain?.toString().split('.')
         : ['0', '00'];
     });
   }
