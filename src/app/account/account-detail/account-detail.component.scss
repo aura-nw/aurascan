@@ -22,6 +22,28 @@
       bottom: 1rem;
       font-size: 18px;
     }
+    .account-info-copied {
+      position: relative;
+      background-color: transparent;
+      margin-left: 1rem;
+      overflow: hidden;
+      width: 5.2rem;
+      height: 3rem;
+      .txt-copied {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        height: 100%;
+        opacity: 0;
+        color: var(--white);
+        -webkit-transition: all 0.3s linear;
+        transition: all 0.3s linear;
+      }
+      .txt-copied.show-copy {
+        opacity: 1;
+      }
+    }
+    
   }
   .box-assets {
     display: flex;

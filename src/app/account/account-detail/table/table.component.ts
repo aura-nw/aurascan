@@ -40,6 +40,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
         if (f.completion_time) {
           f.completion_time_format = this.datePipe.transform(f.completion_time, DATEFORMAT.DATETIME_UTC);
         }
+        if (f.vesting_schedule) {
+          f.vesting_schedule_format = this.datePipe.transform(f.vesting_schedule, DATEFORMAT.DATETIME_UTC);
+        }
       });
     }
   }

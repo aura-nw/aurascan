@@ -89,7 +89,7 @@ export class WalletService {
             });
           }
         } else {
-          this.setWallet(null);
+          this.disconnect();
           window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
         }
       } catch (e: any) {
@@ -98,7 +98,7 @@ export class WalletService {
         };
 
         handleErrors();
-        this.setWallet(null);
+        this.disconnect();
       }
     };
     checkWallet();
