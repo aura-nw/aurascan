@@ -60,28 +60,28 @@ export class ProposalComponent implements OnInit {
 
   getList(): void {
     this.proposalService
-      .getProposal(this.pageSize, this.pageIndex)
-      .subscribe((res: ResponseDto) => {
-        this.dataSource = new MatTableDataSource<any>(res.data);
-        this.length = res.data.length;
-        this.dataSource.sort = this.sort;
-        this.lastedList = res.data;
-        this.lastedList.forEach((pro) => {
-          const totalVoteYes = pro.pro_votes_yes;
-          const totalVoteNo = pro.pro_votes_no;
-          const totalVoteNoWithVeto = pro.pro_votes_no_with_veto;
-          const totalVoteAbstain = pro.pro_votes_abstain;
-          const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
-          pro.pro_votes_yes = totalVoteYes * 100 / totalVote;
-          pro.pro_votes_no = totalVoteNo * 100 / totalVote;
-          pro.pro_votes_no_with_veto = totalVoteNoWithVeto * 100 / totalVote;
-          pro.pro_votes_abstain = totalVoteAbstain * 100 / totalVote;
-          pro.pro_vote_total = totalVote;
-          pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-          pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-          pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+        .getProposal(this.pageSize, this.pageIndex)
+        .subscribe((res: ResponseDto) => {
+          this.dataSource = new MatTableDataSource<any>(res.data);
+          this.length = res.data.length;
+          this.dataSource.sort = this.sort;
+          this.lastedList = res.data;
+          this.lastedList.forEach((pro)=>{
+            const totalVoteYes = +pro.pro_votes_yes;
+            const totalVoteNo = +pro.pro_votes_no;
+            const totalVoteNoWithVeto = +pro.pro_votes_no_with_veto;
+            const totalVoteAbstain = +pro.pro_votes_abstain;
+            const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
+            pro.pro_votes_yes = totalVoteYes*100/totalVote;
+            pro.pro_votes_no = totalVoteNo*100/totalVote;
+            pro.pro_votes_no_with_veto = totalVoteNoWithVeto*100/totalVote;
+            pro.pro_votes_abstain = totalVoteAbstain*100/totalVote;
+            pro.pro_vote_total = totalVote;
+            pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
+            pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
+            pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+          })
         })
-      })
   }
 
   getStatus(key: string) {
