@@ -25,7 +25,7 @@
               <div *ngSwitchCase="'vesting_schedule'">
                 {{ data['vesting_schedule_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
               </div>
-              <div *ngSwitchCase="'total_value'">
+              <div *ngSwitchCase="'total_value'" class="fw-normal">
                 $ {{data[template.matColumnDef] | number}}<br>
                 <span class="price-token">$ {{ data['price'] }}</span>
               </div>
