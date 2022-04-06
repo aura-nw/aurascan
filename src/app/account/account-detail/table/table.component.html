@@ -9,15 +9,25 @@
 
         <td mat-cell *matCellDef="let data">
           <div>
-            <ng-container [ngSwitch]="template.matColumnDef ">
+            <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
               <div *ngSwitchCase="'validator_name'" class="g-blue cursor-pointer"  [routerLink]="['/validators', data['validator_address']]">
                 {{ data[template.matColumnDef] }}
               </div>
-              <div *ngSwitchCase="'amount'">
+              <div *ngSwitchCase="'amount'" class="fw-normal">
+                {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+              </div>
+              <div *ngSwitchCase="'reward'" class="fw-normal">
                 {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
               </div>
               <div *ngSwitchCase="'completion_time'">
                 {{ data['completion_time_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
+              </div>
+              <div *ngSwitchCase="'vesting_schedule'">
+                {{ data['vesting_schedule_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
+              </div>
+              <div *ngSwitchCase="'total_value'" class="fw-normal">
+                $ {{data[template.matColumnDef] | number}}<br>
+                <span class="price-token">$ {{ data['price'] }}</span>
               </div>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
               </div>
