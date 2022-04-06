@@ -15,8 +15,7 @@ import { NgxToastrService } from './ngx-toastr.service';
 })
 export class WalletService {
   apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
-  // accountObs = n
-
+  chainId = this.environmentService.apiUrl.value.chainId
   wallet$: Observable<Key>;
   private _wallet$: BehaviorSubject<Key>;
 
@@ -56,7 +55,7 @@ export class WalletService {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(chainId);
         window.addEventListener('keplr_keystorechange', (event) => {
-          this.connect(WALLET_PROVIDER.KEPLR, 'aura-testnet');
+          this.connect(WALLET_PROVIDER.KEPLR, chainId);
         });
         break;
       case WALLET_PROVIDER.COIN98:
