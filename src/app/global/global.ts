@@ -7,6 +7,7 @@ Injectable()
 
 export class Globals {
   dataHeader = new CommonDataDto();
+  stableToken = 'AURA';
 }
 
 export function getAmount(arrayMsg, type) {
