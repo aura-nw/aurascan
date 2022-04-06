@@ -154,7 +154,7 @@
               <div *ngSwitchCase="'action'">
                 <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
                   data-bs-target="#staticBackdrop" (click)="viewDelegate(staticDataModal)">
-                  Static backdrop modal
+                  Delegate
                 </button>
               </div>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
@@ -182,15 +182,32 @@
         <!-- Static Backdrop Modal -->
         <ng-template #staticDataModal let-modal>
           <div class="modal-header">
-            <h5 class="modal-title mt-0">Center modal</h5>
+            <div class="row col-12">
+              <div class="col-6">
+                Inotel
+                Commission - 6%
+              </div>
+              <div class="col-6">
+                Voting power - 5.58% (64.00000 AURA)
+                Delegators - 27,733
+              </div>
+            </div>
           </div>
           <div class="modal-body">
-            <p>I will not close if you click outside me. Don't even try to
-              press escape key.</p>
+            <div>
+              Staking will lock your funds for 14+ days<br>
+              You will need to undelegate in order for yoru staked assets to be liquid again. This process will take 14 days to complete.
+            </div>
+            <p>My delegation</p>
+            <p>0 Aura</p>
+            <p>Available Balance</p>
+            <p>0.001 AURA</p>
+            Amount to Delegate
+            Max
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-            <button type="button" class="btn btn-primary">Understood</button>
+            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cancel</button>
+            <button type="button" class="btn btn-primary">Delegate</button>
           </div>
         </ng-template>
       </div>

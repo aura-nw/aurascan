@@ -228,7 +228,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'amount'">
-                          {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
+                          {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                       </ng-container>

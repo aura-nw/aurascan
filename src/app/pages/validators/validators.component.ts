@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { CommonDataDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -160,5 +161,9 @@ export class ValidatorsComponent implements OnInit {
     else {
       this.dataSource = this.dataSourceBk;
     }
+  }
+
+  viewDelegate(staticDataModal: any) {
+    this.modalService.open(staticDataModal, { backdrop: 'static', keyboard: false, centered: true, windowClass: 'modal-holder' });
   }
 }
