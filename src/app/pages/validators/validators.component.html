@@ -134,11 +134,11 @@
                 {{ data[template.matColumnDef] | number}}<br>
                 <span class="percent-vote">{{data['percent_power'] + '%'}}</span>
               </div>
-              <div *ngSwitchCase="'participation'" class="box-parti" [ngClass]="{'parti-down': false}">
+              <div *ngSwitchCase="'participation'" class="box-parti" [ngClass]="{'parti-down': isPartiDown}">
                 {{ data[template.matColumnDef] }}
               </div>
               <div *ngSwitchCase="'rank'" class="box-rank text-left">
-                <p>{{ data[template.matColumnDef] }}</p>
+                {{ data[template.matColumnDef] }}
               </div>
               <div *ngSwitchCase="'title'" class="g-blue cursor-pointer"
                 [routerLink]="['/validators', data.operator_address]">
@@ -169,7 +169,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell g-no-data" colspan="9999">
-        {{"NO DATA" | translate}}
+        {{"NO VALIDATORS" | translate}}
       </td>
     </tr>
   </table>

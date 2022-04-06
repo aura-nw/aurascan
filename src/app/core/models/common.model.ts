@@ -27,17 +27,9 @@ export interface IResponsesTemplates<T>
 export class TableTemplate {
   matColumnDef: string;
   headerCellDef: string;
-  columnAction?: ColumnEvent[];
-}
-
-export class ColumnEvent {
-  iconName: string;
-  func: any;
-  canView?: boolean;
-  isButton?: boolean = false;
-  label?: string;
-  customizeClass?: string;
-  disableKey?: string;
+  isUrl?: string;
+  isShort?: boolean;
+  cssClass?: string;
 }
 
 export class ATBalanceDto {

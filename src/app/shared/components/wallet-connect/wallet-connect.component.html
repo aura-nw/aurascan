@@ -3,16 +3,29 @@
         <img class="img-wallet" *ngIf="!ng.wallet" src="./../../../../assets/images/wallet.png" alt=""
             data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
 
-        <button type="button" *ngIf="ng.wallet" class="btn btn-light" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
-
+        <button type="button" *ngIf="ng.wallet" class="btn btn-light" [matMenuTriggerFor]="menu">
             <div class="d-flex align-items-center gap-1">
                 <img [src]="avatarValue" alt="wallet-avatar" height="20px" width="20px" class="border rounded-circle">
                 {{ ng.wallet?.name }}
             </div>
         </button>
 
-        <!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet
+
+        <mat-menu #menu="matMenu" class="custom-menu">
+            <!-- <div class="menu-row" mat-menu-item>
+                <img class="menu-img" width="20px"
+                    src="./../../../../assets/images/icon-keplr.svg" alt="">
+                <span class="menu-content">Keplr</span>
+                <i-feather name="check" class="menu-checked"></i-feather>
+            </div> -->
+            <div class="menu-row" mat-menu-item>
+                <img class="menu-img" width="20px"
+                    src="./../../../../assets/images/log-out.svg" alt="">
+                <span class="menu-content" (click)="disconnect()">Log out</span>
+            </div>
+        </mat-menu>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet
             aria-labelledby="offcanvasWalletLabel">
             <div class="offcanvas-body p-0">
                 <div class="wallet-container">
@@ -21,7 +34,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
                                     <div class="d-flex align-items-center gap-1"
-                                        [class.disabled-pointer]="!ng.wallet?.name" [matMenuTriggerFor]="menu">
+                                        [class.disabled-pointer]="!ng.wallet?.name">
                                         <div class="wallet-avatar">
                                             <img [src]="avatarValue" alt="wallet-avatar">
                                         </div>
@@ -57,25 +70,27 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <ng-container *ngIf="ng.wallet as wallet; else walletList">
+                            <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
+                                <!-- <ng-container *ngIf="ng.wallet as wallet; else walletList">
                                 <app-wallet-detail [trigger]="trigger" [chainId]="chainId"
                                     [address]="wallet.bech32Address" (depositEvent)="toggleShowQR()">
                                 </app-wallet-detail>
                             </ng-container>
                             <ng-template #walletList>
                                 <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
-                            </ng-template>
+                            </ng-template> -->
                         </div>
                     </div>
 
-                    <div class="qr-modal" *ngIf="isShowQR">
+                    <!-- <div class="qr-modal" *ngIf="isShowQR">
                         <div class="modal-content" (clickOutside)="toggleShowQR()">
                             <h2 class="text-center"> {{"WALLET.SCAN_QR" | translate }} </h2>
                             <app-qr [address]="ng.wallet?.bech32Address || ''"> </app-qr>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-        </div> -->
+            <button #buttonDismiss class="d-none" data-bs-dismiss="offcanvas"> </button>
+        </div>
     </ng-container>
 </div>

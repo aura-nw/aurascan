@@ -8,7 +8,8 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
-import { NUMBER_CONVERT } from '../../../app/core/constants/common.constant';
+import { getAmount } from '../../../app/global/global';
+import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 
 @Component({
   selector: 'app-transaction',
@@ -33,7 +34,7 @@ export class TransactionComponent implements OnInit {
   length;
   pageSize = 20;
   pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
+  pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
 
@@ -58,9 +59,11 @@ export class TransactionComponent implements OnInit {
 
   getList(): void {
     this.transactionService
-      .txs(this.pageSize, this.pageIndex)
+      .txs(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
+          //get amount of transaction
+          trans.amount = getAmount(trans.messages, trans.type);
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
@@ -68,12 +71,6 @@ export class TransactionComponent implements OnInit {
             trans.status = StatusTransaction.Success;
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
-          trans.amount = 0;
-          //check exit amount of transaction
-          if (trans.messages && trans.messages[0]?.amount) {
-            let amount =  trans.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
-            trans.amount = trans.messages?.length === 1 ? amount : 'More';
-          }
         });
 
         this.dataSource = new MatTableDataSource(res.data);

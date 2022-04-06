@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { CommonDataDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
@@ -21,6 +21,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
+    { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'action', headerCellDef: 'Action' }
@@ -29,10 +30,8 @@ export class ValidatorsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   dataSourceBk: MatTableDataSource<any>;
   length;
-  pageSize = 1000;
   pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
-  totalPower = 515;
+  pageSizeOptions = PAGE_SIZE_OPTIONS;
   isActive = true;
   textSearch = '';
   rawData;
@@ -40,6 +39,7 @@ export class ValidatorsComponent implements OnInit {
   dataHeader = new CommonDataDto();
   // bread crumb items
   breadCrumbItems!: Array<{}>;
+  isPartiDown = true;
 
   constructor(
     private validatorService: ValidatorService,
@@ -70,10 +70,11 @@ export class ValidatorsComponent implements OnInit {
       .validators()
       .subscribe((res: ResponseDto) => {
         this.rawData = res.data;
-        res.data.totalParti = 18;
         res.data.forEach((val) => {
-          val.percent_vote = val.power / this.totalPower;
-          val.participation = '16' + '/ ' + 18;
+          if (val.target_count > 0 && val.vote_count / val.target_count > 0.5) {
+            this.isPartiDown = false;
+          }
+          val.participation = val.vote_count + '/ ' + val.target_count;
         });
 
         let dataFilter = res.data.filter(event => event.status_validator === this.isActive);
@@ -82,6 +83,7 @@ export class ValidatorsComponent implements OnInit {
         this.dataSource = new MatTableDataSource(dataSort);
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
+        this.searchValidator();
       }
       );
   }
@@ -91,6 +93,7 @@ export class ValidatorsComponent implements OnInit {
     let data = this.rawData.filter(event => event.status_validator === this.isActive);
     this.dataSource = new MatTableDataSource(data);
     this.dataSourceBk = this.dataSource;
+    this.searchValidator();
   }
 
   sortData(sort: Sort) {
@@ -148,19 +151,14 @@ export class ValidatorsComponent implements OnInit {
 
   searchValidator(): void {
     if (this.textSearch.length > 0) {
-      const data = this.dataSource.data.filter((f) =>
-        f.title.toLowerCase().indexOf(this.textSearch) > -1 && f.status_validator === this.isActive
+      const data = this.dataSourceBk.data.filter((f) =>
+        f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1 && f.status_validator === this.isActive
       );
       this.dataSource = this.dataSourceBk;
-      if (data.length > 0) {
-        this.dataSource = new MatTableDataSource(data);
-      }
-    } else {
+      this.dataSource = new MatTableDataSource(data);
+    }
+    else {
       this.dataSource = this.dataSourceBk;
     }
-  }
-
-  viewDelegate(staticDataModal: any) {
-    this.modalService.open(staticDataModal, { backdrop: 'static', keyboard: false, centered: true, windowClass: 'modal-holder' });
   }
 }

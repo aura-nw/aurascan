@@ -9,6 +9,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonPipeModule } from '../../../../app/core/pipes/common-pipe.module';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [TableComponent],
@@ -21,7 +22,8 @@ import { SimplebarAngularModule } from 'simplebar-angular';
     MatPaginatorModule,
     TranslateModule,
     CommonPipeModule,
-    SimplebarAngularModule
+    SimplebarAngularModule,
+    RouterModule
   ],
   exports: [TableComponent]
 })

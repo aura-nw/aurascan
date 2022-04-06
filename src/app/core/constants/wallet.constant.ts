@@ -204,6 +204,7 @@ export enum KEPLR_ERRORS {
   NotRegistered = "CHAIN IS NOT REGISTERED",
   RequestRejected = "REQUEST REJECTED",
   NotInstall = "NOT INSTALL",
+  NOT_EXIST = "KEY DOESN'T EXIST"
 }
 
 export const SIGNING_MESSAGE_TYPES = {

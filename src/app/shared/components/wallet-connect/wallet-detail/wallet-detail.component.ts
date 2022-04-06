@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ChartComponent } from 'ng-apexcharts'
-import { ChainsInfo, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant'
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service'
-
-import { WalletService } from 'src/app/core/services/wallet.service'
-import { balanceOf } from 'src/app/core/utils/common/parsing'
-import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager'
+import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../../core/constants/wallet.constant'
+import { NgxToastrService } from '../../../../core/services/ngx-toastr.service'
+import { WalletService } from '../../../../core/services/wallet.service'
+import { balanceOf } from '../../../../core/utils/common/parsing'
+import { createSignBroadcast } from '../../../../core/utils/signing/transaction-manager'
 import { chartCustomOptions, ChartOptions, CHART_OPTIONS } from './wallet-chart-option'
+
 
 @Component({
   selector: 'app-wallet-detail',
@@ -63,7 +63,7 @@ export class WalletDetailComponent implements OnInit, OnChanges {
       } else {
         const { data } = response
         const { balance, delegated, stake_reward } = data
-        const totalStake = delegated.delegation_responses.map((a) => a.balance.amount).reduce((a, b) => a + b)
+        const totalStake = delegated.delegation_responses.map((a) => a.balance.amount).reduce((a, b) => (Number(a) + Number(b)).toString())
 
         this.delegatorList = stake_reward.rewards.map((dta) => {
           return dta.validator_address

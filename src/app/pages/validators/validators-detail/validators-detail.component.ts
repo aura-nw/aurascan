@@ -62,7 +62,7 @@ export class ValidatorsDetailComponent implements OnInit {
   templatesPower: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'tx_hash_format', headerCellDef: 'TxHash' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'fee', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
@@ -86,6 +86,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.getListBlockWithOperator();
     this.getListUpTime();
     this.getListDelegators();
+    this.getListPower();
     // this.getListPower();
   }
 
@@ -97,7 +98,6 @@ export class ValidatorsDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
-
         this.item = res.data;
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.dataSource.sort = this.sort;
@@ -110,7 +110,7 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getListBlockWithOperator(): void {
     this.blockService
-      .blockWithOperator(5, this.pageIndexBlock, this.id)
+      .blockWithOperator(this.pageSize, this.pageIndexBlock * this.pageSize, this.id)
       .subscribe(res => {
         res.data.forEach((block) => {
           block.block_hash_format = block.block_hash.replace(block.block_hash.substring(6, block.block_hash.length - 6), '...');
@@ -123,7 +123,7 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getListUpTime(): void {
     this.blockService
-      .getLastBlock()
+      .getLastBlock(this.id)
       .subscribe(res => {
         this.arrayUpTime = res.data;
       }
@@ -132,7 +132,7 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getListDelegators(): void {
     this.commonService
-      .delegators(5, this.pageIndexDelegator, this.id)
+      .delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.id)
       .subscribe(res => {
         res.data.forEach((delegator) => {
           delegator.delegator_address_format = delegator.delegator_address.replace(delegator.delegator_address.substring(6, delegator.delegator_address.length - 6), '...');
@@ -144,13 +144,18 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getListPower(): void {
-    this.commonService
-      .delegators(5, this.pageIndexDelegator, this.id)
+    this.validatorService
+      .validatorsDetailListPower(this.pageSize, this.pageIndexPower * this.pageSize, this.id)
       .subscribe(res => {
         res.data.forEach((power) => {
+          power.isStakeMode = false;
+          if (power.type === 'delegate') {
+            power.isStakeMode = true;
+          }
           power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
         });
         this.dataSourcePower = new MatTableDataSource(res.data);
+        this.lengthPower = res.meta?.count;
       }
       );
   }

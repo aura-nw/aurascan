@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 
@@ -27,7 +28,7 @@ export class ChaincodesComponent implements OnInit {
   length;
   pageSize = 10;
   pageIndex = 0;
-  pageSizeOptions = [10, 25, 50, 100];
+  pageSizeOptions = PAGE_SIZE_OPTIONS;
   constructor(
     private commonService: CommonService,
     private router: Router
@@ -48,7 +49,7 @@ export class ChaincodesComponent implements OnInit {
 
   getList(): void {
     this.commonService
-      .chaincodes(this.pageSize, this.pageIndex)
+      .chaincodes(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe(res => {
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.data.meta.count;
