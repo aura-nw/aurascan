@@ -14,22 +14,22 @@
                 {{ data[template.matColumnDef] }}
               </div>
               <div *ngSwitchCase="'amount'" class="fw-normal">
-                {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                {{ data[template.matColumnDef] | number }} <span class="g-purple">{{global.stableToken}}</span>
               </div>
               <div *ngSwitchCase="'reward'" class="fw-normal">
-                {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                {{ data[template.matColumnDef] | number }} <span class="g-purple">{{global.stableToken}}</span>
               </div>
               <div *ngSwitchCase="'completion_time'">
                 {{ data['completion_time_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
               </div>
               <div *ngSwitchCase="'vesting_schedule'">
-                {{ data['vesting_schedule_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
+                {{ data['vesting_schedule_format'] }} <br>({{data['date_format'] | calDate}} remaining)
               </div>
               <div *ngSwitchCase="'total_value'" class="fw-normal">
                 $ {{data[template.matColumnDef] | number}}<br>
                 <span class="price-token">$ {{ data['price'] }}</span>
               </div>
-              <div *ngSwitchDefault>{{ data[template.matColumnDef] }}
+              <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}
               </div>
             </ng-container>
           </div>

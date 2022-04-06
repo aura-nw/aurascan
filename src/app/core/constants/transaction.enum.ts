@@ -26,6 +26,7 @@ export enum TypeTransaction {
   SwapExactAmountIn = 'Swap Exact Amount In',
   BeginUnlocking = 'Begin Unlocking',
   Vote = 'Vote',
+  Vesting = 'Vesting',
   Fail = 'Fail'
 }
 
@@ -56,6 +57,7 @@ export enum TRANSACTION_TYPE_ENUM {
   SwapExactAmountIn = '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn',
   BeginUnlocking = '/osmosis.lockup.MsgBeginUnlocking',
   Vote = '/cosmos.gov.v1beta1.MsgVote',
+  Vesting = '/cosmos.vesting.v1beta1.MsgCreateVestingAccount',
   Fail = 'FAILED'
 }
 

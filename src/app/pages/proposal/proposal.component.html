@@ -175,7 +175,7 @@
               <ng-container matColumnDef="totalDeposit">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Deposit</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.pro_total_deposits }} <span class="g-purple">AURA</span>
+                  {{ element.pro_total_deposits }} <span class="g-purple">{{global.stableToken}}</span>
                 </td>
               </ng-container>
 
