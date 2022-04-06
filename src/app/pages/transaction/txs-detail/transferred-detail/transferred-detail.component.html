@@ -35,7 +35,7 @@
         </div>
         <div class="col-6">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number }} <span class="g-purple">AURA</span>
+            {{ amount | number }} <span class="g-purple">{{global.stableToken}}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0">
             -
@@ -126,7 +126,7 @@
         </div>
         <div class="col-6">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number }} <span class="g-purple">AURA</span>
+            {{ amount | number }} <span class="g-purple">{{global.stableToken}}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0">
             -

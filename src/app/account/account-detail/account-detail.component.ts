@@ -22,7 +22,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { AccountService } from '../../../app/core/services/account.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import { ACCOUNT_TYPE_ENUM, ACCOUNT_WALLET_COLOR_ENUM, PageEventType, TypeAccount, WalletAcount } from '../../../app/core/constants/account.enum';
-import { getAmount } from '../../../app/global/global';
+import { getAmount, Globals } from '../../../app/global/global';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -161,6 +161,7 @@ export class AccountDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
+    public global: Globals
   ) {
     this.chartOptions = {
       series: [0, 0],
@@ -235,7 +236,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
+    // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
     this.id = this.route.snapshot.paramMap.get('id');
     this.getAccountDetail();
     this.getListTransaction();
@@ -318,6 +319,8 @@ export class AccountDetailComponent implements OnInit {
   getAccountDetail(): void {
     this.accountService.getAccoutDetail(this.id).subscribe((res) => {
       this.item = res.data;
+      console.log(this.item);
+      
       this.chartOptions.series = [];
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
@@ -342,7 +345,7 @@ export class AccountDetailComponent implements OnInit {
 
       this.item.balances.forEach((token) => {
         token.price = 0;
-        if (token.name === 'AURA') {
+        if (token.name === this.global.stableToken) {
           token.amount = this.item.total;
         }
         token.total_value = token.price * token.amount;
@@ -353,8 +356,8 @@ export class AccountDetailComponent implements OnInit {
       this.dataSourceTokenBk = this.dataSourceToken;
       this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
       this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
-      // this.dataSourceReDelegation = new MatTableDataSource(this.item?.unbonding_delegations);
-      // this.dataSourceVesting = new MatTableDataSource(this.item?.unbonding_delegations);
+      this.dataSourceReDelegation = new MatTableDataSource(this.item?.redelegations);
+      this.dataSourceVesting = new MatTableDataSource(this.item?.vesting);
     });
   }
 

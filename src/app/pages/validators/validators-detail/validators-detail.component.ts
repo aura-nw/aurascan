@@ -8,6 +8,7 @@ import { CommonService } from '../../../../app/core/services/common.service';
 import { ValidatorService } from '../../../../app/core/services/validator.service';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { PageEvent } from '@angular/material/paginator';
+import { Globals } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-validators-detail',
@@ -76,7 +77,8 @@ export class ValidatorsDetailComponent implements OnInit {
     private router: Router,
     private validatorService: ValidatorService,
     private blockService: BlockService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    public global: Globals
   ) {
   }
 

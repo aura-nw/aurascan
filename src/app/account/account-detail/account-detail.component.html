@@ -108,7 +108,7 @@
         </apx-chart>
       </div>
       <div class="box-balance">
-        <span class="balance-name g-purple">AURA</span>
+        <span class="balance-name g-purple">{{global.stableToken}}</span>
         <span class="balance-amount">{{ item?.total | number }}</span>
       </div>
       <ng-container *ngFor="let item of chartCustomOptions">
@@ -165,11 +165,11 @@
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngSwitchCase="'fee'">
-                        {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
+                        {{ data[template.matColumnDef] }} <span class="g-purple">{{global.stableToken}}</span>
                       </div>
                       <div *ngSwitchCase="'amount'">
                         <ng-container *ngIf="data[template.matColumnDef] > 0">
-                          {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
+                          {{ data[template.matColumnDef] | number }} <span class="g-purple">{{global.stableToken}}</span>
                         </ng-container>
                         <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
                       </div>

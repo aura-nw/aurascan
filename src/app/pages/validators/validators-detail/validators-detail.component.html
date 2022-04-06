@@ -73,7 +73,7 @@
       <div class="col-3">
         <p class="card-text">Voting Power</p>
       </div>
-      <div class="col-6">{{ item?.percent_power }}%({{ item?.power | number }} <span class="g-purple">AURA</span>)</div>
+      <div class="col-6">{{ item?.percent_power }}%({{ item?.power | number }} <span class="g-purple">{{global.stableToken}}</span>)</div>
     </div>
     <div class="row mb-3">
       <div class="col-3">
@@ -86,7 +86,7 @@
         <p class="card-text">Self Bonded</p>
       </div>
       <div class="col-6">
-        {{ item?.self_bonded | number }} <span class="g-purple">AURA</span> ({{ item?.percent_self_bonded }})
+        {{ item?.self_bonded | number }} <span class="g-purple">{{global.stableToken}}</span> ({{ item?.percent_self_bonded }})
       </div>
     </div>
     <!-- <div class="row mb-3">
@@ -228,7 +228,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'amount'">
-                          {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
+                          {{ data[template.matColumnDef] }} <span class="g-purple">{{global.stableToken}}</span>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                       </ng-container>

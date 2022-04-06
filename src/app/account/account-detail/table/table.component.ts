@@ -4,13 +4,14 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Globals } from '../../../../app/global/global';
 import { DATEFORMAT } from '../../../../app/core/constants/common.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() dataSource: MatTableDataSource<any>;
@@ -24,15 +25,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(
     public translate: TranslateService,
     private route: Router,
-    private datePipe: DatePipe
-  ) {
-  }
+    private datePipe: DatePipe,
+    public global: Globals,
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   ngOnChanges(): void {
     if (this.dataSource) {

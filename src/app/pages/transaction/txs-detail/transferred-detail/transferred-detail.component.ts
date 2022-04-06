@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { TRANSACTION_TYPE_ENUM } from '../../../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../../../app/core/constants/transaction.constant';
-import { getAmount } from '../../../../../app/global/global';
+import { getAmount, Globals } from '../../../../../app/global/global';
 
 @Component({
   selector: 'app-transferred-detail',
@@ -16,7 +16,7 @@ export class TransferredDetailComponent implements OnInit {
   amount;
   @Input() transactionDetail: any;
 
-  constructor() {}
+  constructor(public global: Globals) {}
 
   ngOnInit(): void {
     //get amount of transaction

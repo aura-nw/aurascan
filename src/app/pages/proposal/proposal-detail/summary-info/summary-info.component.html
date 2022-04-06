@@ -26,12 +26,12 @@
       </div>
       <div class="row mb-3" *ngIf="false">
         <div class="col-12 col-md-2 title">Initial Deposit</div>
-        <div class="col-12 col-md-10 info">1.000000 <span class="g-purple">AURA</span></div>
+        <div class="col-12 col-md-10 info">1.000000 <span class="g-purple">{{global.stableToken}}</span></div>
       </div>
       <div class="row mb-3" *ngIf="proposalDetail.pro_total_deposits">
         <div class="col-12 col-md-2 title">Total Deposit</div>
         <div class="col-12 col-md-10 info">
-          {{ proposalDetail.pro_total_deposits }}<span class="g-purple">AURA</span>
+          {{ proposalDetail.pro_total_deposits }}<span class="g-purple">{{global.stableToken}}</span>
         </div>
       </div>
       <div class="row mb-3" *ngIf="proposalDetail.pro_voting_start_time">
@@ -74,7 +74,7 @@
             <small>59 M of 185 M has voted</small>
           </div> -->
           <div>
-            <b>Total :</b> {{ (proposalDetail.pro_total_vote | mask: 'separator.6') || '0.00' }} <span class="g-purple">AURA</span>
+            <b>Total :</b> {{ (proposalDetail.pro_total_vote | mask: 'separator.6') || '0.00' }} <span class="g-purple">{{global.stableToken}}</span>
           </div>
         </div>
         <div class="vote-bar mt-3">
@@ -116,7 +116,7 @@
               <p class="item item-amount">
                 {{ this.proposalDetail.pro_vote_yes[0] }}
                 <span class="decimal">.{{ this.proposalDetail.pro_vote_yes[1] }}</span>
-                <span class="g-purple">AURA</span>
+                <span class="g-purple">{{global.stableToken}}</span>
               </p>
             </li>
             <li data-style="danger">
@@ -128,7 +128,7 @@
               <p class="item item-amount">
                 {{ this.proposalDetail.pro_vote_no[0] }}
                 <span class="decimal">.{{ this.proposalDetail.pro_vote_no[1] }}</span>
-                <span class="g-purple">AURA</span>
+                <span class="g-purple">{{global.stableToken}}</span>
               </p>
             </li>
             <li data-style="info">
@@ -140,7 +140,7 @@
               <p class="item item-amount">
                 {{ this.proposalDetail.pro_vote_no_with_veto[0]
                 }}<span class="decimal">.{{ this.proposalDetail.pro_vote_no_with_veto[1] }}</span>
-                <span class="g-purple">AURA</span>
+                <span class="g-purple">{{global.stableToken}}</span>
               </p>
             </li>
             <li data-style="secondary">
@@ -152,7 +152,7 @@
               <p class="item item-amount">
                 {{ this.proposalDetail.pro_vote_abstain[0]
                 }}<span class="decimal">.{{ this.proposalDetail.pro_vote_abstain[1] }}</span>
-                <span class="g-purple">AURA</span>
+                <span class="g-purple">{{global.stableToken}}</span>
               </p>
             </li>
           </ul>
