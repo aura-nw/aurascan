@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_STATUS } from '../../../../core/constants/status.constant';
 import { ResponseDto } from '../../../../core/models/common.model';
@@ -14,7 +15,7 @@ export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
-  constructor(private proposalService: ProposalService, private datePipe: DatePipe) {}
+  constructor(private proposalService: ProposalService, private datePipe: DatePipe, public global: Globals) {}
 
   ngOnInit(): void {
     this.getDetail();
