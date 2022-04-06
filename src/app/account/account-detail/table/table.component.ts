@@ -40,7 +40,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
           f.completion_time_format = this.datePipe.transform(f.completion_time, DATEFORMAT.DATETIME_UTC);
         }
         if (f.vesting_schedule) {
-          f.vesting_schedule_format = this.datePipe.transform(f.vesting_schedule, DATEFORMAT.DATETIME_UTC);
+          f.date_format = new Date(Number(f.vesting_schedule) * 1000);
+          f.type_format = (f.type.toLowerCase().indexOf('perio') > -1) ? 'Periodic' : 'Delayed';
+          f.vesting_schedule_format = this.datePipe.transform(f.date_format, DATEFORMAT.DATETIME_UTC);
         }
       });
     }
