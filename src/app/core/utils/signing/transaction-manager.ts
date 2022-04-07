@@ -60,9 +60,7 @@ export async function createSignBroadcastForVote({
   if (signingType === 'extension') {
   } else {
     const signer = await getSigner(signingType, chainId);
-
     const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
-    console.log(chainId, signer);
 
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message);
@@ -83,7 +81,7 @@ export async function createSignBroadcastForVote({
     } catch (e: any) {
       error = e.message;
     }
-
+    
     return {
       hash: broadcastResult?.transactionHash || null,
       error,

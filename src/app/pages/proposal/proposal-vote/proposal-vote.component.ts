@@ -3,7 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
-import { createSignBroadcast, createSignBroadcastForVote } from '../../../core/utils/signing/transaction-manager';
+import { WalletService } from '../../../core/services/wallet.service';
+import { createSignBroadcastForVote } from '../../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -17,6 +18,7 @@ export class ProposalVoteComponent implements OnInit {
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
+    private walletService: WalletService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.keyVote = data.voteValue?.keyVote ?? null;
@@ -24,28 +26,26 @@ export class ProposalVoteComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async clampReward() {
+  async proposalVote() {
     const { hash, error } = await createSignBroadcastForVote({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
-        voteOption: 'Yes',
-          proposalId: 4,
+          voteOption: this.keyVote,
+          proposalId: this.data.id,
       },
-      senderAddress: 'aura1q3truhus7zwhazzuaczygc5fy3u4a2frknavq2',
+      senderAddress: this.walletService.wallet.bech32Address,
       network: ChainsInfo[this.chainId],
       signingType: 'keplr',
       chainId: this.chainId,
     });
 
     if (error) {
-      console.log(error);
-      
-      // this.toastr.error(error);
+      this.toastr.error(error);
     }
   }
 
   onSubmitVoteForm() {
-    this.clampReward();
+    this.proposalVote();
     this.dialogRef.close({ keyVote: this.keyVote });
   }
 }
