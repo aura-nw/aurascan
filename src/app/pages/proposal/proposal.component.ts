@@ -95,20 +95,25 @@ export class ProposalComponent implements OnInit {
 
   getHighestVote(yes: number, no: number, noWithVeto: number, abstain: number) {
     let highest = Math.max(yes, no, noWithVeto, abstain);
+    let resObj: { value: number; name: string; class: string } = null;
+    let key;
+
     if (!highest) {
       highest = 0;
-    }
-    let key;
-    let resObj: { value: number; name: string; class: string } = null;
-    if (highest === yes) {
       key = 0;
-    } else if (highest === no) {
-      key = 1;
-    } else if (highest === noWithVeto) {
-      key = 2;
-    } else {
-      key = 3;
     }
+    else{
+      if (highest === yes) {
+        key = 0;
+      } else if (highest === no) {
+        key = 1;
+      } else if (highest === noWithVeto) {
+        key = 2;
+      } else {
+        key = 3;
+      }
+    }
+   
     const statusObj = this.voteConstant.find((s) => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
