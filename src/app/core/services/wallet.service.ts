@@ -56,7 +56,7 @@ export class WalletService {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(chainId);
         window.addEventListener('keplr_keystorechange', (event) => {
-          this.connect(WALLET_PROVIDER.KEPLR, 'aura-testnet');
+          this.connect(WALLET_PROVIDER.KEPLR, chainId);
         });
         break;
       case WALLET_PROVIDER.COIN98:
