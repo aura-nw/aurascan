@@ -12,6 +12,7 @@ import { TxsDetailComponent } from './txs-detail/txs-detail.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { TransferredDetailComponent } from './txs-detail/transferred-detail/transferred-detail.component';
+import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { TransferredDetailComponent } from './txs-detail/transferred-detail/tran
     ReactiveFormsModule,
     TranslateModule,
     SharedModule,
-    NgxJsonViewerModule
+    NgxJsonViewerModule,
+    TableNoDataModule
   ],
   providers: [TransactionService]
 })
