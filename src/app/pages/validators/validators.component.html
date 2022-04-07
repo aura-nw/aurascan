@@ -1,10 +1,8 @@
 <app-pagetitle title="VALIDATORS" [breadcrumbItems]="breadCrumbItems" [displayInfo]="true"></app-pagetitle>
 <div class="validator-container">
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-xl-3 col-md-6">
-      <!-- card -->
       <div class="card card-h-100">
-        <!-- card body -->
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-12">
@@ -18,16 +16,11 @@
             </div>
           </div>
         </div>
-        <!-- end card body -->
       </div>
-      <!-- end card -->
     </div>
-    <!-- end col-->
 
     <div class="col-xl-3 col-md-6">
-      <!-- card -->
       <div class="card card-h-100">
-        <!-- card body -->
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-12">
@@ -42,16 +35,11 @@
             </div>
           </div>
         </div>
-        <!-- end card body -->
       </div>
-      <!-- end card -->
     </div>
-    <!-- end col -->
 
     <div class="col-xl-3 col-md-6">
-      <!-- card -->
       <div class="card card-h-100">
-        <!-- card body -->
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-12">
@@ -65,16 +53,11 @@
             </div>
           </div>
         </div>
-        <!-- end card body -->
       </div>
-      <!-- end card -->
     </div>
-    <!-- end col -->
 
     <div class="col-xl-3 col-md-6">
-      <!-- card -->
       <div class="card card-h-100">
-        <!-- card body -->
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-12">
@@ -88,12 +71,9 @@
             </div>
           </div>
         </div>
-        <!-- end card body -->
       </div>
-      <!-- end card -->
     </div>
-    <!-- end col -->
-  </div>
+  </div> -->
 
   <div class="validator-list-search-area">
     <input placeholder="Search Validator" class="validator-list-search-input" [(ngModel)]="textSearch"
@@ -152,8 +132,8 @@
                 </div>
               </div>
               <div *ngSwitchCase="'action'">
-                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
-                  data-bs-target="#staticBackdrop" (click)="viewDelegate(staticDataModal)">
+                <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
+                 (click)="viewDelegate(staticDataModal, data)">
                   Delegate
                 </button>
               </div>
@@ -177,42 +157,54 @@
 
 <div class="col-lg-6">
   <div class="card">
-    <div class="card-body">
-      <div>
-        <!-- Static Backdrop Modal -->
-        <ng-template #staticDataModal let-modal>
-          <div class="modal-header">
-            <div class="row col-12">
-              <div class="col-6">
-                Inotel
-                Commission - 6%
-              </div>
-              <div class="col-6">
-                Voting power - 5.58% (64.00000 AURA)
-                Delegators - 27,733
-              </div>
+    <!-- Static Backdrop Modal -->
+    <ng-template #staticDataModal let-modal>
+      <div class="box-staking">
+        <div class="modal-header">
+          <div class="row col-12">
+            <div class="col-5 box-validator">
+              <p class="font-weight-bold">{{dataModal?.title}}</p>
+              Commission - {{dataModal?.commission | percent: '1.2-2'}}
+            </div>
+            <div class="col-7">
+              <p>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }} <span class="g-purple">{{globals.stableToken}}</span>)</p>
+              Delegators - {{totalDelegator}}
             </div>
           </div>
-          <div class="modal-body">
-            <div>
-              Staking will lock your funds for 14+ days<br>
+        </div>
+        <div class="modal-body">
+          <div class="box-notice row">
+            <div class="col-2">
+              <img class="warning-icon" src="/assets/images/icons/warning.png">
+            </div>
+            <div class="col-10">
+              <span class="header-warning">Staking will lock your funds for 14+ days</span><br>
               You will need to undelegate in order for yoru staked assets to be liquid again. This process will take 14 days to complete.
             </div>
-            <p>My delegation</p>
-            <p>0 Aura</p>
-            <p>Available Balance</p>
-            <p>0.001 AURA</p>
-            Amount to Delegate
-            Max
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cancel</button>
-            <button type="button" class="btn btn-primary">Delegate</button>
+          <div class="box-token mt-3">
+            <p class="font-weight-bold">My delegation</p>
+            <p>{{delegatedToken | number}} {{globals.stableToken}}</p>
+            <p class="font-weight-bold">Available Balance</p>
+            <p>{{availableToken | number}} {{globals.stableToken}}</p>
+            <p class="font-weight-bold">Amount to Delegate</p>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+                [(ngModel)]="amountFormat" (blur)="resetCheck()">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">MAX</button>
+                <span class="input-group-text">{{globals.stableToken}}</span>
+              </div>
+            </div>
           </div>
-        </ng-template>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" (click)="closeDialog(modal)">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="handleStaking()" [disabled]="isExceedAmount">Delegate</button>
+        </div>
       </div>
-    </div><!-- end card body -->
-  </div><!-- end card -->
+    </ng-template>
+  </div>
 </div><!-- end col -->
 
 <!-- <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">

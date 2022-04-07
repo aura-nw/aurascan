@@ -14,6 +14,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
+import { AccountService } from '../../../app/core/services/account.service';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,6 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
     SharedModule,
     SimplebarAngularModule
   ],
-  providers: [CommonService, ValidatorService, BlockService, TransactionService]
+  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService]
 })
 export class ValidatorsModule { }
