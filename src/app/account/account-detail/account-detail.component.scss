@@ -67,13 +67,16 @@
       .account-list-search-input {
         border-radius: 0.5rem;
         border: 0.1rem solid #bebebe;
-        padding: 0.6rem 0.6rem 0.7rem;
+        padding: 0.6rem 0.6rem 0.7rem 25px;
         margin-bottom: 0.3rem;
         width: 400px;
         height: 30px;
         color: $validator-black;
         font-size: 14px;
         margin-right: 1rem;
+        background: url("../../../assets/images/icons/search-icon.png") no-repeat;
+        background-size: 13px;
+        background-position: 5px 6px;
       }
     }
   }
@@ -91,6 +94,21 @@
       font-size: 18px;
       margin: 1.5rem 10px;
       font-weight: 500;
+    }
+  }
+  .box-chart {
+    width: 180px;
+    height: 180px;
+    border: 1px solid #D3D3D3;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    div {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #D3D3D3;
+      border-radius: 50%;
     }
   }
 }

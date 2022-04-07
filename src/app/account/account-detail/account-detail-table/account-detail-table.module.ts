@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableComponent } from './table.component';
+import { AccountDetailTableComponent } from './account-detail-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonPipeModule } from '../../../../app/core/pipes/common-pipe.module';
+import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { RouterModule } from '@angular/router';
+import { TableNoDataModule } from '../../../../app/shared/table-no-data/table-no-data.module';
 
 @NgModule({
-  declarations: [TableComponent],
+  declarations: [AccountDetailTableComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -23,8 +24,9 @@ import { RouterModule } from '@angular/router';
     TranslateModule,
     CommonPipeModule,
     SimplebarAngularModule,
-    RouterModule
+    RouterModule,
+    TableNoDataModule
   ],
-  exports: [TableComponent]
+  exports: [AccountDetailTableComponent]
 })
-export class TableModule { }
+export class AccountDetailTableModule { }

@@ -14,6 +14,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
+import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
     ReactiveFormsModule,
     TranslateModule,
     SharedModule,
-    SimplebarAngularModule
+    SimplebarAngularModule,
+    TableNoDataModule
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService]
 })
