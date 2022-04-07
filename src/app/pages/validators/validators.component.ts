@@ -14,6 +14,7 @@ import { ChainsInfo, KEPLR_ERRORS, SIGNING_MESSAGE_TYPES } from 'src/app/core/co
 import { getSigner } from '../../core/utils/signing/signer';
 import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
 import { messageCreators } from '../../core/utils/signing/messages';
+import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',
@@ -53,7 +54,7 @@ export class ValidatorsComponent implements OnInit {
   totalDelegator = 0;
   amountFormat;
   isExceedAmount = false;
-  userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
+  userAddress = 'aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx';
   validatorAddress;
 
   constructor(
@@ -185,7 +186,6 @@ export class ValidatorsComponent implements OnInit {
   viewDelegate(staticDataModal: any, address) {
     this.clicked = true;
     this.validatorAddress = address.operator_address;
-    
 
     console.log(this.walletService.wallet);
     this.getDetail(this.validatorAddress, staticDataModal);
@@ -264,20 +264,44 @@ export class ValidatorsComponent implements OnInit {
       //   "signingType": "keplr",
       //   "chainId": "aura-testnet"
       // }`);
-      this.createSignBroadcast({
-        messageType: SIGNING_MESSAGE_TYPES.STAKE,
-        message: {
-            to:[ this.validatorAddress],
-            amount: 4
-            
-        },
-        senderAddress: this.userAddress,
-        network: ChainsInfo[
-          'aura-testnet'
-        ],
-        signingType: 'keplr',
-        chainId:'aura-testnet'
-      });
+
+      const xxx = async () => {
+        // const { hash, error } = await createSignBroadcast({
+        //   messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
+        //   message: {
+        //     amounts: [
+        //       {
+        //         denom: 'uaura',
+        //         amount: 12312312
+        //       },
+        //     ],
+        //     from: ["auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna"],
+        //   },
+        //   senderAddress: "aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx",
+        //   network: ChainsInfo['aura-devnet'],
+        //   signingType: 'keplr',
+        //   chainId: 'aura-devnet'
+        // })
+
+        const { hash, error } = await createSignBroadcast({
+          messageType: SIGNING_MESSAGE_TYPES.STAKE,
+          message: {
+            to: ['auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna'],
+            amount: {
+              amount: 20 * Math.pow(10, 6),
+              denom: 'uaura',
+            },
+          },
+          senderAddress: this.userAddress,
+          network: ChainsInfo['aura-devnet'],
+          signingType: 'keplr',
+          chainId: 'aura-devnet',
+        });
+
+
+        console.log({ hash, error } )
+      };
+      xxx();
     }
   }
 
@@ -311,6 +335,8 @@ export class ValidatorsComponent implements OnInit {
       };
 
       try {
+        console.log(messagesSend);
+
         broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
 
         this.assertIsBroadcastTxSuccess(broadcastResult);

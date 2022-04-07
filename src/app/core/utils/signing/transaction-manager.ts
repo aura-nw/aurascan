@@ -33,12 +33,16 @@ export async function createSignBroadcast({
     }
 
     try {
+
+      console.log('messagesSend', messagesSend)
       broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee)
 
       assertIsBroadcastTxSuccess(broadcastResult)
     } catch (e: any) {
       error = e.message
     }
+
+    
 
     return {
       hash: broadcastResult?.transactionHash || null,
