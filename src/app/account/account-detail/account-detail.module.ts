@@ -4,10 +4,8 @@ import { AccountDetailRoutingModule } from './account-detail-routing.module';
 import { AccountDetailComponent } from './account-detail.component';
 import { SharedModule } from "../../shared/shared.module";
 import { AccountInfoComponent } from './account-info/account-info.component';
-import { TokenTableComponent } from './token-table/token-table.component';
 import { StackingTabComponent } from './stacking-tab/stacking-tab.component';
 import { StackingAccountComponent } from './stacking-account/stacking-account.component';
-import { TransactionsComponent } from './transactions/transactions.component';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { FormsModule } from '@angular/forms';
@@ -16,17 +14,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { FeatherModule } from 'angular-feather';
-import { TableModule } from './table/table.module';
+import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountService } from '../../../app/core/services/account.service';
+import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 
 @NgModule({
   declarations: [
     AccountDetailComponent,
     AccountInfoComponent,
-    TokenTableComponent,
     StackingTabComponent,
     StackingAccountComponent,
-    TransactionsComponent,
     // TableComponent
   ],
   imports: [
@@ -41,7 +38,8 @@ import { AccountService } from '../../../app/core/services/account.service';
     TranslateModule,
     NgApexchartsModule,
     FeatherModule,
-    TableModule
+    AccountDetailTableModule,
+    TableNoDataModule
   ],
   providers: [TransactionService, AccountService]
 })

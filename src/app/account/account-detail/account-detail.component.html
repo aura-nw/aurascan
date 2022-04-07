@@ -15,7 +15,7 @@
         <p class="address-account cursor-pointer mt-2" (click)="copyMessage(id)">{{ id }}</p>
         <div class="box-total">
           <p>Total Value</p>
-          <p>${{tokenPrice * item?.total | number}}</p>
+          <p>${{ tokenPrice * item?.total | number }}</p>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
           </mat-select>
         </div>
       </div>
-      <app-table
+      <app-account-table *ngIf="dataSourceToken"
         [dataSource]="dataSourceToken"
         [templates]="templatesToken"
         [displayedColumns]="displayedColumnsToken"
@@ -46,14 +46,14 @@
         (pageEvent)="changePage($event)"
         [textNull]="'NO COINS'"
       >
-      </app-table>
+      </app-account-table>
     </div>
   </div>
   <div class="card-body row">
     <div class="col-9">
       <mat-tab-group>
         <mat-tab label="Delegations">
-          <app-table
+          <app-account-table
             [dataSource]="dataSourceDelegation"
             [templates]="templatesDelegation"
             [displayedColumns]="displayedColumnsDelegation"
@@ -61,54 +61,66 @@
             [pageEventType]="pageEventType.Delegation"
             (pageEvent)="changePage($event)"
           >
-          </app-table>
+          </app-account-table>
         </mat-tab>
         <mat-tab label="Unbondings">
-          <app-table
+          <app-account-table
             [dataSource]="dataSourceUnBonding"
             [templates]="templatesUnBonding"
             [displayedColumns]="displayedColumnsUnBonding"
+            [pageData]="pageDataUnbonding"
             [pageEventType]="pageEventType.Unbonding"
             (pageEvent)="changePage($event)"
-          ></app-table>
+          ></app-account-table>
         </mat-tab>
         <mat-tab label="Redelegations">
-          <app-table
+          <app-account-table
             [dataSource]="dataSourceReDelegation"
             [templates]="templatesReDelegation"
             [displayedColumns]="displayedColumnsReDelegation"
+            [pageData]="pageDataRedelegation"
             [pageEventType]="pageEventType.Redelegation"
             (pageEvent)="changePage($event)"
-          ></app-table>
+          ></app-account-table>
         </mat-tab>
         <mat-tab label="Vestings">
-          <app-table
+          <app-account-table
             [dataSource]="dataSourceVesting"
             [templates]="templatesVesting"
             [displayedColumns]="displayedColumnsVesting"
+            [pageData]="pageDataVesting"
             [pageEventType]="pageEventType.Vestings"
             (pageEvent)="changePage($event)"
-          ></app-table>
+          ></app-account-table>
         </mat-tab>
       </mat-tab-group>
     </div>
     <div class="col-3">
       <div id="walletChart">
-        <apx-chart
-          [series]="chartOptions.series"
-          [chart]="chartOptions.chart"
-          [labels]="chartOptions.labels"
-          [fill]="chartOptions.fill"
-          [dataLabels]="chartOptions.dataLabels"
-          [responsive]="chartOptions.responsive"
-          [plotOptions]="chartOptions.plotOptions"
-          [legend]="chartOptions.legend"
-          [colors]="chartOptions.colors"
-        >
-        </apx-chart>
+        <ng-container *ngIf="item?.total > 0; else chartNoValue">
+          <apx-chart
+            [series]="chartOptions.series"
+            [chart]="chartOptions.chart"
+            [labels]="chartOptions.labels"
+            [fill]="chartOptions.fill"
+            [dataLabels]="chartOptions.dataLabels"
+            [responsive]="chartOptions.responsive"
+            [plotOptions]="chartOptions.plotOptions"
+            [legend]="chartOptions.legend"
+            [colors]="chartOptions.colors"
+          >
+          </apx-chart>
+        </ng-container>
+        <ng-template #chartNoValue>
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="box-chart">
+              <div></div>
+            </div>
+          </div>
+        </ng-template>
       </div>
       <div class="box-balance">
-        <span class="balance-name g-purple">AURA</span>
+        <span class="balance-name g-purple">{{ global.stableToken }}</span>
         <span class="balance-amount">{{ item?.total | number }}</span>
       </div>
       <ng-container *ngFor="let item of chartCustomOptions">
@@ -130,64 +142,70 @@
       </div>
       <div class="card-body px-0">
         <ngx-simplebar style="max-height: 400px">
-          <table mat-table [dataSource]="dataSource" class="table-reponsive">
-            <ng-container *ngFor="let template of templates; index as i">
-              <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate"></div>
-                </th>
+          <ng-container *ngIf="length > 0; else noValues">
+            <table mat-table [dataSource]="dataSource" class="table-reponsive">
+              <ng-container *ngFor="let template of templates; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
 
-                <td mat-cell *matCellDef="let data">
-                  <div>
-                    <ng-container [ngSwitch]="template.matColumnDef">
-                      <div *ngSwitchCase="'timestamp'">
-                        <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0" />
-                        {{ data[template.matColumnDef] | calDate }} ago
-                      </div>
-                      <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'type'" class="g-type">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'status'">
-                        <img
-                          [src]="
-                            data[template.matColumnDef] === statusTransaction.Success
-                              ? 'assets/images/icons/success.svg'
-                              : 'assets/images/icons/fail.svg'
-                          "
-                          alt=""
-                        />
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'fee'">
-                        {{ data[template.matColumnDef] }} <span class="g-purple">AURA</span>
-                      </div>
-                      <div *ngSwitchCase="'amount'">
-                        <ng-container *ngIf="data[template.matColumnDef] > 0">
-                          {{ data[template.matColumnDef] | number }} <span class="g-purple">AURA</span>
-                        </ng-container>
-                        <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
-                      </div>
-                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                    </ng-container>
-                  </div>
-                </td>
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef">
+                        <div *ngSwitchCase="'timestamp'">
+                          <img src="/assets/images/icons/time.png" height="20" class="m-1 mb-0 mt-0" />
+                          {{ data[template.matColumnDef] | calDate }} ago
+                        </div>
+                        <div *ngSwitchCase="'tx_hash_format'" class="g-blue cursor-pointer hash-link">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'type'" class="g-type">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'status'">
+                          <img
+                            [src]="
+                              data[template.matColumnDef] === statusTransaction.Success
+                                ? 'assets/images/icons/success.svg'
+                                : 'assets/images/icons/fail.svg'
+                            "
+                            alt=""
+                          />
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'fee'">
+                          {{ data[template.matColumnDef] }} <span class="g-purple">{{ global.stableToken }}</span>
+                        </div>
+                        <div *ngSwitchCase="'amount'">
+                          <ng-container *ngIf="data[template.matColumnDef] > 0">
+                            {{ data[template.matColumnDef] | number }}
+                            <span class="g-purple">{{ global.stableToken }}</span>
+                          </ng-container>
+                          <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
               </ng-container>
-            </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell g-no-data" colspan="9999">
-                {{ 'NO DATA' | translate }}
-              </td>
-            </tr>
-          </table>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{ 'NO DATA' | translate }}
+                </td>
+              </tr>
+            </table>
+          </ng-container>
+          <ng-template #noValues>
+            <app-table-no-data></app-table-no-data>
+          </ng-template>
         </ngx-simplebar>
 
         <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" (page)="changePage($event)">
