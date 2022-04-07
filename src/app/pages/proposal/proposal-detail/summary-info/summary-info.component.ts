@@ -47,10 +47,14 @@ export class SummaryInfoComponent implements OnInit {
         +this.proposalDetail.pro_votes_no_with_veto +
         +this.proposalDetail.pro_votes_abstain;
 
-      this.proposalDetail.pro_vote_yes_bar = (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote;
-      this.proposalDetail.pro_vote_no_bar = (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote;
-      this.proposalDetail.pro_vote_no_with_veto_bar = (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
-      this.proposalDetail.pro_vote_abstain_bar = (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_yes_bar =
+        (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_no_bar =
+        (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_no_with_veto_bar =
+        (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.pro_vote_abstain_bar =
+        (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
 
       this.proposalDetail.yesPercent = this.proposalDetail.pro_total_vote
         ? ((+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
@@ -79,6 +83,14 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.pro_vote_abstain = this.proposalDetail.pro_vote_abstain
         ? this.proposalDetail.pro_votes_abstain?.toString().split('.')
         : ['0', '00'];
+
+      this.proposalDetail.pro_total_deposits = this.proposalDetail.pro_total_deposits
+        ? this.proposalDetail.pro_total_deposits?.toString().split('.')
+        : ['0', '0'];
+
+      this.proposalDetail.pro_total_vote = this.proposalDetail.pro_total_vote
+        ? this.proposalDetail.pro_total_vote?.toString().split('.')
+        : ['0', '000000'];
     });
   }
 
