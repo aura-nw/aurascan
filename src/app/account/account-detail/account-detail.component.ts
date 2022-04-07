@@ -16,6 +16,7 @@ import {
   ApexLegend,
   ApexPlotOptions,
   ChartComponent,
+  ApexStroke,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
@@ -40,6 +41,7 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   colors: string[];
+  stoke: ApexStroke;
 };
 
 @Component({
@@ -247,7 +249,6 @@ export class AccountDetailComponent implements OnInit {
     this.getAccountDetail();
     this.getListTransaction();
     this.createQRCode();
-    this.chartOptions.series;
   }
 
   copyMessage(val: string) {
@@ -326,6 +327,11 @@ export class AccountDetailComponent implements OnInit {
     this.accountService.getAccoutDetail(this.id).subscribe((res) => {
       this.item = res.data;
       this.chartOptions.series = [];
+      if (this.item.commission > 0) {
+        this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
+        this.chartCustomOptions.push({name: ACCOUNT_WALLET_COLOR_ENUM.Commission, color: WalletAcount.Commission, amount: '0.000000'});
+      }
+      
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
           case ACCOUNT_WALLET_COLOR_ENUM.Available:
@@ -343,6 +349,9 @@ export class AccountDetailComponent implements OnInit {
           case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
             f.amount = this.item.unbonding;
             break;
+          // case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
+          //   f.amount = this.item.vesting.amount;
+          //   break;
           default:
             break;
         }
@@ -357,15 +366,24 @@ export class AccountDetailComponent implements OnInit {
         }
         token.total_value = token.price * token.amount;
       });
-
-      this.dataSourceToken = new MatTableDataSource(this.item.balances);
       this.tokenPrice = 0;
+
+      this.dataSourceToken = new MatTableDataSource(this.item?.balances);
+      this.pageDataToken.length = this.item?.balances.length;
       this.dataSourceTokenBk = this.dataSourceToken;
+
       this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
+      this.pageDataDelegation.length = this.item?.delegations.length;
+
       this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
+      this.pageDataUnbonding.length = this.item?.unbonding_delegations.length;
+
       this.dataSourceReDelegation = new MatTableDataSource(this.item?.redelegations);
+      this.pageDataRedelegation.length = this.item?.redelegations.length;
+
       if (this.item?.vesting) {
         this.dataSourceVesting = new MatTableDataSource([this.item?.vesting]);
+        this.pageDataVesting.length = 1;
       }
     });
   }

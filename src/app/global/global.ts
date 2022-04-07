@@ -21,7 +21,7 @@ export function getAmount(arrayMsg, type) {
     amount = itemMessage?.amount.amount;
   } else if (itemMessage?.amount) {
     amount = itemMessage?.amount[0].amount;
-  } else if (itemMessage?.funds) {
+  } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
     amount = itemMessage?.funds[0].amount;
   }
 
