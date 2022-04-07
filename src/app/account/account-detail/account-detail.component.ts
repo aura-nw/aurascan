@@ -340,6 +340,9 @@ export class AccountDetailComponent implements OnInit {
           case ACCOUNT_WALLET_COLOR_ENUM.Commission:
             f.amount = this.item.commission;
             break;
+          case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
+            f.amount = this.item.unbonding;
+            break;
           default:
             break;
         }
