@@ -34,7 +34,10 @@ export function StakeTx(senderAddress, { to, amount }, network) {
   const msg = MsgDelegate.fromPartial({
     delegatorAddress: senderAddress,
     validatorAddress: to[0],
-    amount: Coin(amount, network.coinLookup),
+    amount:  {
+      amount: amount,
+      denom: 'uaura'
+  },
   });
   return {
     typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",

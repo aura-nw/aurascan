@@ -10,7 +10,7 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
 import { WalletService } from '../../../app/core/services/wallet.service';
-import { KEPLR_ERRORS } from 'src/app/core/constants/wallet.constant';
+import { ChainsInfo, KEPLR_ERRORS, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { getSigner } from '../../core/utils/signing/signer';
 import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
 import { messageCreators } from '../../core/utils/signing/messages';
@@ -69,8 +69,6 @@ export class ValidatorsComponent implements OnInit {
     this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
     this.getList();
     this.getAccountDetail();
-
-    // console.log(this.walletService.wallet.bech32Address);
 
     setInterval(() => {
       this.getList();
@@ -187,6 +185,9 @@ export class ValidatorsComponent implements OnInit {
   viewDelegate(staticDataModal: any, address) {
     this.clicked = true;
     this.validatorAddress = address.operator_address;
+    
+
+    console.log(this.walletService.wallet);
     this.getDetail(this.validatorAddress, staticDataModal);
   }
 
@@ -234,36 +235,49 @@ export class ValidatorsComponent implements OnInit {
   handleStaking() {
     this.checkAmountStaking();
     if (!this.isExceedAmount) {
-      let dataStake = {
-        "messageType": "StakeTx",
-        "message": {
-          "delegatorAddress": [this.userAddress],
-          "validatorAddress": [this.validatorAddress],
-          "amount": 4
+      // let dataStake = JSON.parse(`{
+      //   "messageType": "StakeTx",
+      //   "message": {
+      //     "delegatorAddress": [this.userAddress],
+      //     "validatorAddress": [this.validatorAddress],
+      //     "amount": 4
+      //   },
+      //   "senderAddress": this.userAddress,
+      //   "network": {
+      //     "id": "aura-testnet",
+      //     "name": "Aura",
+      //     "description": "Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.",
+      //     "logo": "logo.svg",
+      //     "website": "https://aura.network",
+      //     "api": "https://rpc-testnet.aura.network",
+      //     "rpc": "https://rpc-testnet.aura.network/",
+      //     "stakingDenom": "AURA",
+      //     "coinLookup": [
+      //       {
+      //         "viewDenom": "AURA",
+      //         "chainDenom": "uaura",
+      //         "chainToViewConversionFactor": 0.000001,
+      //         "icon": "currencies/muon.png"
+      //       }
+      //     ],
+      //   },
+      //   "signingType": "keplr",
+      //   "chainId": "aura-testnet"
+      // }`);
+      this.createSignBroadcast({
+        messageType: SIGNING_MESSAGE_TYPES.STAKE,
+        message: {
+            to:[ this.validatorAddress],
+            amount: 4
+            
         },
-        "senderAddress": this.userAddress,
-        "network": {
-          "id": "aura-devnet",
-          "name": "Aura",
-          "description": "Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.",
-          "logo": "logo.svg",
-          "website": "https://aura.network",
-          "apiURL": "https://rpc-devnet.aura.network",
-          "rpcURL": "http://34.199.79.132:1317/",
-          "stakingDenom": "AURA",
-          "coinLookup": [
-            {
-              "viewDenom": "AURA",
-              "chainDenom": "uaura",
-              "chainToViewConversionFactor": 0.000001,
-              "icon": "currencies/muon.png"
-            }
-          ],
-        },
-        "signingType": "keplr",
-        "chainId": "aura-devnet"
-      };
-      this.createSignBroadcast(dataStake);
+        senderAddress: this.userAddress,
+        network: ChainsInfo[
+          'aura-testnet'
+        ],
+        signingType: 'keplr',
+        chainId:'aura-testnet'
+      });
     }
   }
 
@@ -279,7 +293,9 @@ export class ValidatorsComponent implements OnInit {
     } else {
       const signer = await getSigner(signingType, chainId);
 
-      const client = await SigningStargateClient.connectWithSigner(network.rpcURL, signer);
+      // debugger
+
+      const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
 
       // success
       const messagesSend = messageCreators[messageType](senderAddress, message, network);
