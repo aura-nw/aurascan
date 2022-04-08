@@ -26,6 +26,7 @@ export enum TypeTransaction {
   SwapExactAmountIn = 'Swap Exact Amount In',
   BeginUnlocking = 'Begin Unlocking',
   Vote = 'Vote',
+  Vesting = 'Vesting',
   Fail = 'Fail'
 }
 
@@ -46,8 +47,8 @@ export enum TRANSACTION_TYPE_ENUM {
   EditValidator = '/cosmos.staking.v1beta1.MsgEditValidator',
   CreateValidator = '/cosmos.staking.v1beta1.MsgCreateValidator',
   Unjail = '/cosmos.slashing.v1beta1.MsgUnjail',
-  StoreCode = '/auranw.aura.wasm.MsgStoreCode',
-  InstantiateContract = '/auranw.aura.wasm.MsgInstantiateContract',
+  StoreCode = '/cosmwasm.wasm.v1.MsgStoreCode',
+  InstantiateContract = '/cosmwasm.wasm.v1.MsgInstantiateContract',
   ExecuteContract = '/cosmwasm.wasm.v1.MsgExecuteContract',
   ModifyWithdrawAddress = '/cosmos.distribution.v1beta1.MsgSetWithdrawAddress',
   JoinPool = '/osmosis.gamm.v1beta1.MsgJoinPool',
@@ -56,6 +57,7 @@ export enum TRANSACTION_TYPE_ENUM {
   SwapExactAmountIn = '/osmosis.gamm.v1beta1.MsgSwapExactAmountIn',
   BeginUnlocking = '/osmosis.lockup.MsgBeginUnlocking',
   Vote = '/cosmos.gov.v1beta1.MsgVote',
+  Vesting = '/cosmos.vesting.v1beta1.MsgCreateVestingAccount',
   Fail = 'FAILED'
 }
 

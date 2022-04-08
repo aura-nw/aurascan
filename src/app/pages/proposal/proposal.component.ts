@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/status.constant';
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
@@ -38,7 +39,12 @@ export class ProposalComponent implements OnInit {
   pageIndex = 0;
   lastedList = [];
 
-  constructor(private proposalService: ProposalService, public dialog: MatDialog, private datePipe: DatePipe) {}
+  constructor(
+    private proposalService: ProposalService,
+    public dialog: MatDialog,
+    private datePipe: DatePipe,
+    public global: Globals,
+  ) {}
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Proposal' }, { label: 'List', active: true }];

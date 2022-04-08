@@ -8,7 +8,7 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
-import { getAmount } from '../../../app/global/global';
+import { getAmount, Globals } from '../../../app/global/global';
 import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 
 @Component({
@@ -41,7 +41,8 @@ export class TransactionComponent implements OnInit {
   constructor(
     private commonService: CommonService,
     private router: Router,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    public global: Globals
   ) { }
 
   ngOnInit(): void {
