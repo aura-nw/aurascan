@@ -161,6 +161,7 @@ export class AccountDetailComponent implements OnInit {
   isCopy = false;
   tokenPrice = 0;
   selected = ACCOUNT_TYPE_ENUM.All;
+  searchNullData = false;
 
   chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
@@ -315,7 +316,6 @@ export class AccountDetailComponent implements OnInit {
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
-
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
@@ -389,10 +389,14 @@ export class AccountDetailComponent implements OnInit {
   }
 
   searchToken(): void {
+    this.searchNullData = false;
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
+      if (data.length === 0) {
+        this.searchNullData = true;
+      }
       this.dataSourceToken = this.dataSourceTokenBk;
       this.dataSourceToken = new MatTableDataSource(data);
     } else {

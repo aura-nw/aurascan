@@ -8,6 +8,7 @@ Injectable()
 export class Globals {
   dataHeader = new CommonDataDto();
   stableToken = 'AURA';
+  formatNumberToken = '1.6-6';
 }
 
 export function getAmount(arrayMsg, type) {

@@ -69,11 +69,19 @@ export class ValidatorsComponent implements OnInit {
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
     this.getList();
-    this.getAccountDetail();
 
     setInterval(() => {
       this.getList();
     }, 20000);
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.walletService.wallet) {
+        this.userAddress = this.walletService.wallet.bech32Address;
+        this.getAccountDetail();
+      }
+    }, 2000);
   }
 
   changePage(page: PageEvent): void {
@@ -186,8 +194,6 @@ export class ValidatorsComponent implements OnInit {
   viewDelegate(staticDataModal: any, address) {
     this.clicked = true;
     this.validatorAddress = address.operator_address;
-
-    console.log(this.walletService.wallet);
     this.getDetail(this.validatorAddress, staticDataModal);
   }
 
@@ -271,7 +277,7 @@ export class ValidatorsComponent implements OnInit {
           message: {
             to: ['auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna'],
             amount: {
-              amount: 20 * Math.pow(10, 6),
+              amount: Number(this.amountFormat) * Math.pow(10, 6),
               denom: 'uaura',
             },
           },
@@ -285,7 +291,7 @@ export class ValidatorsComponent implements OnInit {
         element.click();
         this.getAccountDetail();
 
-        console.log({ hash, error } )
+        console.log({ hash, error });
       };
       xxx();
     }

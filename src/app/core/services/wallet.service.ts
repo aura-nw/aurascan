@@ -15,8 +15,7 @@ import { NgxToastrService } from './ngx-toastr.service';
 })
 export class WalletService {
   apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
-  // accountObs = n
-
+  chainId = this.environmentService.apiUrl.value.chainId
   wallet$: Observable<Key>;
   private _wallet$: BehaviorSubject<Key>;
 

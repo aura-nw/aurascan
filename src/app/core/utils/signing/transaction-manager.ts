@@ -1,7 +1,7 @@
-import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate'
-import { getSigner } from './signer'
-import { messageCreators } from './messages'
-import { KEPLR_ERRORS } from '../../constants/wallet.constant'
+import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
+import { getSigner } from './signer';
+import { messageCreators } from './messages';
+import { KEPLR_ERRORS } from '../../constants/wallet.constant';
 
 export async function createSignBroadcast({
   messageType,
@@ -11,16 +11,16 @@ export async function createSignBroadcast({
   signingType,
   chainId,
 }): Promise<any> {
-  let error: KEPLR_ERRORS
-  let broadcastResult: DeliverTxResponse
+  let error: KEPLR_ERRORS;
+  let broadcastResult: DeliverTxResponse;
   if (signingType === 'extension') {
   } else {
-    const signer = await getSigner(signingType, chainId)
+    const signer = await getSigner(signingType, chainId);
 
-    const client = await SigningStargateClient.connectWithSigner(network.rpc, signer)
+    const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
 
     // success
-    const messagesSend = messageCreators[messageType](senderAddress, message, network)
+    const messagesSend = messageCreators[messageType](senderAddress, message, network);
 
     const fee: any = {
       amount: [
@@ -30,51 +30,89 @@ export async function createSignBroadcast({
         },
       ],
       gas: '200000',
-    }
+    };
 
     try {
+      broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
 
-      console.log('messagesSend', messagesSend)
-      broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee)
-
-      assertIsBroadcastTxSuccess(broadcastResult)
+      assertIsBroadcastTxSuccess(broadcastResult);
     } catch (e: any) {
-      error = e.message
+      error = e.message;
     }
-
-    
 
     return {
       hash: broadcastResult?.transactionHash || null,
       error,
+    };
+  }
+}
+
+export async function createSignBroadcastForVote({
+  messageType,
+  message,
+  senderAddress,
+  network,
+  signingType,
+  chainId,
+}): Promise<any> {
+  let error: KEPLR_ERRORS;
+  let broadcastResult: DeliverTxResponse;
+  if (signingType === 'extension') {
+  } else {
+    const signer = await getSigner(signingType, chainId);
+    const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
+
+    // success
+    const messagesSend = messageCreators[messageType](senderAddress, message);
+
+    const fee: any = {
+      amount: [
+        {
+          denom: 'uaura',
+          amount: '1',
+        },
+      ],
+      gas: '200000',
+    };
+    try {
+      broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
+
+      assertIsBroadcastTxSuccess(broadcastResult);
+    } catch (e: any) {
+      error = e.message;
     }
+    
+    return {
+      hash: broadcastResult?.transactionHash || null,
+      error,
+    };
   }
 }
 
 export function assertIsBroadcastTxSuccess(res): DeliverTxResponse {
-  if (!res) throw new Error(`Error sending transaction`)
+  if (!res) throw new Error(`Error sending transaction`);
   if (Array.isArray(res)) {
-    if (res.length === 0) throw new Error(`Error sending transaction`)
+    if (res.length === 0) throw new Error(`Error sending transaction`);
 
-    res.forEach(assertIsBroadcastTxSuccess)
+    res.forEach(assertIsBroadcastTxSuccess);
   }
 
   if (res.error) {
-    throw new Error(res.error)
+    throw new Error(res.error);
   }
 
   // Sometimes we get back failed transactions, which shows only by them having a `code` property
   if (res.code) {
-    const message = res.raw_log?.message ? JSON.parse(res.raw_log).message : res.raw_log
-    throw new Error(message)
+    const message = res.raw_log?.message ? JSON.parse(res.raw_log).message : res.raw_log;
+    throw new Error(message);
   }
 
   if (!res.transactionHash) {
-    const message = res.message
-    throw new Error(message)
+    const message = res.message;
+    throw new Error(message);
   }
 
-  return res
+  return res;
 }
 
 // export async function pollTxInclusion(txHash, iteration = 0) {
