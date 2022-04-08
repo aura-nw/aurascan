@@ -161,6 +161,7 @@ export class AccountDetailComponent implements OnInit {
   isCopy = false;
   tokenPrice = 0;
   selected = ACCOUNT_TYPE_ENUM.All;
+  searchNullData = false;
 
   chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
@@ -389,10 +390,14 @@ export class AccountDetailComponent implements OnInit {
   }
 
   searchToken(): void {
+    this.searchNullData = false;
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
+      if (data.length === 0) {
+        this.searchNullData = true;
+      }
       this.dataSourceToken = this.dataSourceTokenBk;
       this.dataSourceToken = new MatTableDataSource(data);
     } else {
