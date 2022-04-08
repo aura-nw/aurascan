@@ -127,6 +127,14 @@
                 <div *ngSwitchCase="'rank'" class="box-rank text-left">
                   {{ data[template.matColumnDef] }}
                 </div>
+                <div *ngSwitchCase="'up_time'">
+                  <ng-container *ngIf="data['jailed'] === '0'">
+                    {{ data[template.matColumnDef] }}
+                  </ng-container>
+                  <ng-container *ngIf="data['jailed'] !== '0'">
+                    0%
+                  </ng-container>
+                </div>
                 <div
                   *ngSwitchCase="'title'"
                   class="g-blue cursor-pointer"
@@ -205,7 +213,7 @@
               <input type="number" class="form-control" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
                 [(ngModel)]="amountFormat" (blur)="resetCheck()">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">MAX</button>
+                <button class="btn btn-outline-secondary" type="button" (click)="getMaxToken()">MAX</button>
                 <span class="input-group-text">{{globals.stableToken}}</span>
               </div>
             </div>

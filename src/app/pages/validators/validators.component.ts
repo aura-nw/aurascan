@@ -10,10 +10,7 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
 import { WalletService } from '../../../app/core/services/wallet.service';
-import { ChainsInfo, KEPLR_ERRORS, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
-import { getSigner } from '../../core/utils/signing/signer';
-import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
-import { messageCreators } from '../../core/utils/signing/messages';
+import { ChainsInfo, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
@@ -54,7 +51,7 @@ export class ValidatorsComponent implements OnInit {
   totalDelegator = 0;
   amountFormat;
   isExceedAmount = false;
-  userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
+  userAddress;
   validatorAddress;
 
   constructor(
@@ -241,59 +238,28 @@ export class ValidatorsComponent implements OnInit {
   handleStaking() {
     this.checkAmountStaking();
     if (!this.isExceedAmount) {
-      // let dataStake = JSON.parse(`{
-      //   "messageType": "StakeTx",
-      //   "message": {
-      //     "delegatorAddress": [this.userAddress],
-      //     "validatorAddress": [this.validatorAddress],
-      //     "amount": 4
-      //   },
-      //   "senderAddress": this.userAddress,
-      //   "network": {
-      //     "id": "aura-testnet",
-      //     "name": "Aura",
-      //     "description": "Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.",
-      //     "logo": "logo.svg",
-      //     "website": "https://aura.network",
-      //     "api": "https://rpc-testnet.aura.network",
-      //     "rpc": "https://rpc-testnet.aura.network/",
-      //     "stakingDenom": "AURA",
-      //     "coinLookup": [
-      //       {
-      //         "viewDenom": "AURA",
-      //         "chainDenom": "uaura",
-      //         "chainToViewConversionFactor": 0.000001,
-      //         "icon": "currencies/muon.png"
-      //       }
-      //     ],
-      //   },
-      //   "signingType": "keplr",
-      //   "chainId": "aura-testnet"
-      // }`);
-
-      const xxx = async () => {
+      const excuteStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
-            to: ['auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna'],
+            to: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
               denom: 'uaura',
             },
           },
           senderAddress: this.userAddress,
-          network: ChainsInfo['aura-devnet'],
+          network: ChainsInfo[this.walletService.chainId],
           signingType: 'keplr',
-          chainId: 'aura-devnet',
+          chainId: this.walletService.chainId,
         });
 
         let element: HTMLElement = document.getElementById('dialog-close-btn') as HTMLElement;
         element.click();
+        this.amountFormat = null;
         this.getAccountDetail();
-
-        console.log({ hash, error });
       };
-      xxx();
+      excuteStaking();
     }
   }
 
@@ -302,68 +268,7 @@ export class ValidatorsComponent implements OnInit {
     modal.close('Close click');
   }
 
-  // async createSignBroadcast({ messageType, message, senderAddress, network, signingType, chainId }): Promise<any> {
-  //   let error: KEPLR_ERRORS;
-  //   let broadcastResult: DeliverTxResponse;
-  //   if (signingType === 'extension') {
-  //   } else {
-  //     const signer = await getSigner(signingType, chainId);
-
-  //     const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
-
-  //     // success
-  //     const messagesSend = messageCreators[messageType](senderAddress, message, network);
-
-  //     const fee: any = {
-  //       amount: [
-  //         {
-  //           denom: 'uaura',
-  //           amount: '1',
-  //         },
-  //       ],
-  //       gas: '200000',
-  //     };
-
-  //     try {
-  //       console.log(messagesSend);
-
-  //       broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
-
-  //       this.assertIsBroadcastTxSuccess(broadcastResult);
-  //     } catch (e: any) {
-  //       error = e.message;
-  //     }
-
-  //     return {
-  //       hash: broadcastResult?.transactionHash || null,
-  //       error,
-  //     };
-  //   }
-  // }
-
-  // assertIsBroadcastTxSuccess(res): DeliverTxResponse {
-  //   if (!res) throw new Error(`Error sending transaction`);
-  //   if (Array.isArray(res)) {
-  //     if (res.length === 0) throw new Error(`Error sending transaction`);
-
-  //     res.forEach(this.assertIsBroadcastTxSuccess);
-  //   }
-
-  //   if (res.error) {
-  //     throw new Error(res.error);
-  //   }
-
-  //   // Sometimes we get back failed transactions, which shows only by them having a `code` property
-  //   if (res.code) {
-  //     const message = res.raw_log?.message ? JSON.parse(res.raw_log).message : res.raw_log;
-  //     throw new Error(message);
-  //   }
-
-  //   if (!res.transactionHash) {
-  //     const message = res.message;
-  //     throw new Error(message);
-  //   }
-
-  //   return res;
-  // }
+  getMaxToken(): void{
+    this.amountFormat = this.availableToken;
+  }
 }
