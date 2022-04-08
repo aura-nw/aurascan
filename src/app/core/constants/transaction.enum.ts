@@ -6,6 +6,7 @@ export enum TypeTransaction {
   IBCUpdateClient = 'IBC Update Client',
   IBCTimeout = 'IBC Timeout',
   Send = 'Send',
+  Received = 'Receive',
   MultiSend = 'Multi Send',
   Delegate = 'Delegate',
   Undelegate = 'Undelegate',
