@@ -15,7 +15,7 @@
         <p class="address-account cursor-pointer mt-2" (click)="copyMessage(id)">{{ id }}</p>
         <div class="box-total">
           <p>Total Value</p>
-          <p>${{ tokenPrice * item?.total | number: '1.2-2' }}</p>
+          <p>${{ tokenPrice * item?.total | number: global.formatNumber2Decimal }}</p>
         </div>
       </div>
     </div>

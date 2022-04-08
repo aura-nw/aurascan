@@ -135,7 +135,7 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'commission'" class="">
-                  {{ data[template.matColumnDef] | percent: '1.2-2' }}
+                  {{ data[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
                 </div>
                 <div *ngSwitchCase="'power'" class="">
                   {{ data[template.matColumnDef] | number }}<br />

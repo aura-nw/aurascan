@@ -28,7 +28,7 @@
                 </div>
                 <div *ngSwitchCase="'total_value'" class="fw-normal">
                   $ {{data[template.matColumnDef] | number: global.formatNumberToken}}<br>
-                  <span class="price-token">$ {{ data['price'] }}</span>
+                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>
                 </div>
                 <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}
                 </div>
