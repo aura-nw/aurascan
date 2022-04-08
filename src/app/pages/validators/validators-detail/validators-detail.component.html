@@ -239,7 +239,7 @@
                             {{ data[template.matColumnDef] }}
                           </div>
                           <div *ngSwitchCase="'amount'">
-                            {{ data[template.matColumnDef] | number }}
+                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                             <span class="g-purple">{{ global.stableToken }}</span>
                           </div>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -302,7 +302,7 @@
                             {{ data[template.matColumnDef] }}
                           </div>
                           <div *ngSwitchCase="'fee'" [ngStyle]="{ color: data['isStakeMode'] ? '#37cc6e' : '#ff2745' }">
-                            {{ data['isStakeMode'] ? '+' : '-' }} {{ data[template.matColumnDef] | number: '1.6-6' }}
+                            {{ data['isStakeMode'] ? '+' : '-' }} {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                           </div>
                           <div *ngSwitchCase="'height'" class="g-blue cursor-pointer block-link">
                             {{ data[template.matColumnDef] }}

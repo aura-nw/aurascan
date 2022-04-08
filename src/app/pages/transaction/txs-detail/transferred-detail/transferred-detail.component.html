@@ -116,8 +116,9 @@
           <p class="card-text fw-bold">Validator Address</p>
         </div>
         <div class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
-          {{transactionDetail?.messages[0]?.validator_address}}
+          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+          {{transactionDetail?.messages[0]?.validator_address}}<br>
+          <ng-container *ngIf="validatorName">({{validatorName}})</ng-container>
         </div>
       </div>
       <div class="row mb-3" *ngIf="transactionDetail?.type !== eTransType.GetReward ">
