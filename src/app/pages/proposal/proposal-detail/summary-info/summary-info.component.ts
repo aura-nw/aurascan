@@ -41,12 +41,15 @@ export class SummaryInfoComponent implements OnInit {
         DATEFORMAT.DATETIME_UTC,
       );
 
+      this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
+
       this.proposalDetail.pro_total_vote =
         +this.proposalDetail.pro_votes_yes +
         +this.proposalDetail.pro_votes_no +
         +this.proposalDetail.pro_votes_no_with_veto +
         +this.proposalDetail.pro_votes_abstain;
 
+      //vote bar data
       this.proposalDetail.pro_vote_yes_bar =
         (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote;
       this.proposalDetail.pro_vote_no_bar =
@@ -56,41 +59,49 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.pro_vote_abstain_bar =
         (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
 
-      this.proposalDetail.yesPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
-        : ['0', '00'];
-      this.proposalDetail.noPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
-        : ['0', '00'];
-      this.proposalDetail.noWithVetoPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote)
-            .toString()
-            .split('.')
-        : ['0', '00'];
-      this.proposalDetail.abstainPercent = this.proposalDetail.pro_total_vote
-        ? ((+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
-        : ['0', '00'];
+      // this.proposalDetail.yesPercent = this.proposalDetail.pro_total_vote
+      //   ? ((+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
+      //   : ['0', '00'];
+      // this.proposalDetail.noPercent = this.proposalDetail.pro_total_vote
+      //   ? ((+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
+      //   : ['0', '00'];
+      // this.proposalDetail.noWithVetoPercent = this.proposalDetail.pro_total_vote
+      //   ? ((+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote)
+      //       .toString()
+      //       .split('.')
+      //   : ['0', '00'];
+      // this.proposalDetail.abstainPercent = this.proposalDetail.pro_total_vote
+      //   ? ((+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
+      //   : ['0', '00'];
+      this.proposalDetail.yesPercent =
+        (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote || 0;
+      this.proposalDetail.noPercent =
+        (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote || 0;
+      this.proposalDetail.noWithVetoPercent =
+        (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
+      this.proposalDetail.abstainPercent =
+        (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
 
-      this.proposalDetail.pro_vote_yes = this.proposalDetail.pro_vote_yes
-        ? this.proposalDetail.pro_votes_yes?.toString().split('.')
-        : ['0', '00'];
-      this.proposalDetail.pro_vote_no = this.proposalDetail.pro_vote_no
-        ? this.proposalDetail.pro_votes_no?.toString().split('.')
-        : ['0', '00'];
-      this.proposalDetail.pro_vote_no_with_veto = this.proposalDetail.pro_vote_no_with_veto
-        ? this.proposalDetail.pro_votes_no_with_veto?.toString().split('.')
-        : ['0', '00'];
-      this.proposalDetail.pro_vote_abstain = this.proposalDetail.pro_vote_abstain
-        ? this.proposalDetail.pro_votes_abstain?.toString().split('.')
-        : ['0', '00'];
+      // this.proposalDetail.pro_votes_yes = this.proposalDetail.pro_votes_yes
+      //   ? this.proposalDetail.pro_votes_yes?.toString().split('.')
+      //   : ['0', '00'];
+      // this.proposalDetail.pro_votes_no = this.proposalDetail.pro_votes_no
+      //   ? this.proposalDetail.pro_votes_no?.toString().split('.')
+      //   : ['0', '00'];
+      // this.proposalDetail.pro_votes_no_with_veto = this.proposalDetail.pro_votes_no_with_veto
+      //   ? this.proposalDetail.pro_votes_no_with_veto?.toString().split('.')
+      //   : ['0', '00'];
+      // this.proposalDetail.pro_votes_abstain = this.proposalDetail.pro_votes_abstain
+      //   ? this.proposalDetail.pro_votes_abstain?.toString().split('.')
+      //   : ['0', '00'];
 
-      this.proposalDetail.pro_total_deposits = this.proposalDetail.pro_total_deposits
-        ? this.proposalDetail.pro_total_deposits?.toString().split('.')
-        : ['0', '0'];
+      // this.proposalDetail.pro_total_deposits = this.proposalDetail.pro_total_deposits
+      //   ? this.proposalDetail.pro_total_deposits?.toString().split('.')
+      //   : ['0', '0'];
 
-      this.proposalDetail.pro_total_vote = this.proposalDetail.pro_total_vote
-        ? this.proposalDetail.pro_total_vote?.toString().split('.')
-        : ['0', '000000'];
+      // this.proposalDetail.pro_total_vote = this.proposalDetail.pro_total_vote
+      //   ? this.proposalDetail.pro_total_vote?.toString().split('.')
+      //   : ['0', '000000'];
     });
   }
 
