@@ -3,7 +3,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
-import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { TransactionService } from '../../../app/core/services/transaction.service';
@@ -313,6 +313,9 @@ export class AccountDetailComponent implements OnInit {
           trans.status = StatusTransaction.Fail;
           if (trans.code === CodeTransaction.Success) {
             trans.status = StatusTransaction.Success;
+          }
+          if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.id) {
+            trans.type = TypeTransaction.Received;
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });

@@ -61,7 +61,7 @@
       <div class="col-3">
         <p class="card-text">Commission</p>
       </div>
-      <div class="col-6">{{ item?.commission | percent: '1.2-2' }}</div>
+      <div class="col-6">{{ item?.commission | percent: global.formatNumber2Decimal }}</div>
     </div>
     <div class="row mb-3">
       <div class="col-3">
@@ -189,16 +189,15 @@
           </div>
           <div class="box-info">Last 100 Blocks</div>
         </div>
-
         <div class="card-body px-0 uptime-content">
-          <ng-container *ngFor="let item of arrayUpTime; let index = index">
+          <ng-container *ngFor="let itemBlock of arrayUpTime; let index = index">
             <a
               class="block-uptime tool-tip"
-              [ngStyle]="{ 'background-color': item?.isSync ? 'none' : '#9c6cff' }"
-              href="/blocks/{{ item?.height }}"
+              [ngStyle]="{ 'background-color': (itemBlock?.isSync || (item?.jailed === '1')) ? 'none' : '#9c6cff' }"
+              href="/blocks/{{ itemBlock?.height }}"
               currentitem="false"
             >
-              <span class="tooltiptext">{{ item?.height || index }}</span>
+              <span class="tooltiptext">{{ itemBlock?.height || 0 }}</span>
               <div class="uptime-missed">
                 <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="" />
               </div>
