@@ -54,7 +54,7 @@ export class ValidatorsComponent implements OnInit {
   totalDelegator = 0;
   amountFormat;
   isExceedAmount = false;
-  userAddress = 'aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx';
+  userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
   validatorAddress;
 
   constructor(
@@ -266,23 +266,6 @@ export class ValidatorsComponent implements OnInit {
       // }`);
 
       const xxx = async () => {
-        // const { hash, error } = await createSignBroadcast({
-        //   messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
-        //   message: {
-        //     amounts: [
-        //       {
-        //         denom: 'uaura',
-        //         amount: 12312312
-        //       },
-        //     ],
-        //     from: ["auravaloper1jawldvd82kkw736c96s4jhcg8wz2ewwrnauhna"],
-        //   },
-        //   senderAddress: "aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx",
-        //   network: ChainsInfo['aura-devnet'],
-        //   signingType: 'keplr',
-        //   chainId: 'aura-devnet'
-        // })
-
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
@@ -298,6 +281,9 @@ export class ValidatorsComponent implements OnInit {
           chainId: 'aura-devnet',
         });
 
+        let element: HTMLElement = document.getElementById('dialog-close-btn') as HTMLElement;
+        element.click();
+        this.getAccountDetail();
 
         console.log({ hash, error } )
       };
@@ -310,70 +296,68 @@ export class ValidatorsComponent implements OnInit {
     modal.close('Close click');
   }
 
-  async createSignBroadcast({ messageType, message, senderAddress, network, signingType, chainId }): Promise<any> {
-    let error: KEPLR_ERRORS;
-    let broadcastResult: DeliverTxResponse;
-    if (signingType === 'extension') {
-    } else {
-      const signer = await getSigner(signingType, chainId);
+  // async createSignBroadcast({ messageType, message, senderAddress, network, signingType, chainId }): Promise<any> {
+  //   let error: KEPLR_ERRORS;
+  //   let broadcastResult: DeliverTxResponse;
+  //   if (signingType === 'extension') {
+  //   } else {
+  //     const signer = await getSigner(signingType, chainId);
 
-      // debugger
+  //     const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
 
-      const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
+  //     // success
+  //     const messagesSend = messageCreators[messageType](senderAddress, message, network);
 
-      // success
-      const messagesSend = messageCreators[messageType](senderAddress, message, network);
+  //     const fee: any = {
+  //       amount: [
+  //         {
+  //           denom: 'uaura',
+  //           amount: '1',
+  //         },
+  //       ],
+  //       gas: '200000',
+  //     };
 
-      const fee: any = {
-        amount: [
-          {
-            denom: 'uaura',
-            amount: '1',
-          },
-        ],
-        gas: '200000',
-      };
+  //     try {
+  //       console.log(messagesSend);
 
-      try {
-        console.log(messagesSend);
+  //       broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
 
-        broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
+  //       this.assertIsBroadcastTxSuccess(broadcastResult);
+  //     } catch (e: any) {
+  //       error = e.message;
+  //     }
 
-        this.assertIsBroadcastTxSuccess(broadcastResult);
-      } catch (e: any) {
-        error = e.message;
-      }
+  //     return {
+  //       hash: broadcastResult?.transactionHash || null,
+  //       error,
+  //     };
+  //   }
+  // }
 
-      return {
-        hash: broadcastResult?.transactionHash || null,
-        error,
-      };
-    }
-  }
+  // assertIsBroadcastTxSuccess(res): DeliverTxResponse {
+  //   if (!res) throw new Error(`Error sending transaction`);
+  //   if (Array.isArray(res)) {
+  //     if (res.length === 0) throw new Error(`Error sending transaction`);
 
-  assertIsBroadcastTxSuccess(res): DeliverTxResponse {
-    if (!res) throw new Error(`Error sending transaction`);
-    if (Array.isArray(res)) {
-      if (res.length === 0) throw new Error(`Error sending transaction`);
+  //     res.forEach(this.assertIsBroadcastTxSuccess);
+  //   }
 
-      res.forEach(this.assertIsBroadcastTxSuccess);
-    }
+  //   if (res.error) {
+  //     throw new Error(res.error);
+  //   }
 
-    if (res.error) {
-      throw new Error(res.error);
-    }
+  //   // Sometimes we get back failed transactions, which shows only by them having a `code` property
+  //   if (res.code) {
+  //     const message = res.raw_log?.message ? JSON.parse(res.raw_log).message : res.raw_log;
+  //     throw new Error(message);
+  //   }
 
-    // Sometimes we get back failed transactions, which shows only by them having a `code` property
-    if (res.code) {
-      const message = res.raw_log?.message ? JSON.parse(res.raw_log).message : res.raw_log;
-      throw new Error(message);
-    }
+  //   if (!res.transactionHash) {
+  //     const message = res.message;
+  //     throw new Error(message);
+  //   }
 
-    if (!res.transactionHash) {
-      const message = res.message;
-      throw new Error(message);
-    }
-
-    return res;
-  }
+  //   return res;
+  // }
 }
