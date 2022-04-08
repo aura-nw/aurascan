@@ -445,3 +445,28 @@ body {
     -webkit-align-items: center;
     align-items: center;
 }
+.modal-dialog{
+    max-width: 600px;
+    .modal-content {
+        padding: 15px;
+        .box-staking {
+            .box-notice {
+                color: #FC7C5F;
+                border: 1px solid #FC7C5F;
+                border-radius: 10px;
+                padding: 20px 10px;
+                .warning-icon {
+                    width: 60px;
+                    height: auto;
+                }
+                .header-warning{
+                    font-weight: bold;
+                    font-size: 16px;
+                }
+            }
+            .box-token, .box-validator {
+                color: #5E5E80;
+            }
+        }
+    }
+}

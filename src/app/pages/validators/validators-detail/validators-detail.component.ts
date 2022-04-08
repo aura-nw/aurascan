@@ -89,7 +89,6 @@ export class ValidatorsDetailComponent implements OnInit {
     this.getListUpTime();
     this.getListDelegators();
     this.getListPower();
-    // this.getListPower();
   }
 
   getDetail(): void {
@@ -101,6 +100,7 @@ export class ValidatorsDetailComponent implements OnInit {
           return;
         }
         this.item = res.data;
+        this.item.up_time = this.item.jailed === '0' ? this.item.up_time : '0%';
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.dataSource.sort = this.sort;
       },

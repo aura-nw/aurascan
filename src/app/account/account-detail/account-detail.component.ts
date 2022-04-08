@@ -319,7 +319,6 @@ export class AccountDetailComponent implements OnInit {
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
-
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
