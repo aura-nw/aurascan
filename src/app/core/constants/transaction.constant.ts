@@ -28,5 +28,7 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.BeginUnlocking, value: TypeTransaction.BeginUnlocking },
   { label: TRANSACTION_TYPE_ENUM.Vote, value: TypeTransaction.Vote },
   { label: TRANSACTION_TYPE_ENUM.Vesting, value: TypeTransaction.Vesting },
+  { label: TRANSACTION_TYPE_ENUM.Deposit, value: TypeTransaction.Deposit },
+  { label: TRANSACTION_TYPE_ENUM.SubmitProposalTx, value: TypeTransaction.SubmitProposalTx },
   { label: TRANSACTION_TYPE_ENUM.Fail, value: TypeTransaction.Fail },
 ];

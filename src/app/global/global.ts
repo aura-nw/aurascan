@@ -25,6 +25,8 @@ export function getAmount(arrayMsg, type) {
     amount = itemMessage?.amount[0].amount;
   } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
     amount = itemMessage?.funds[0].amount;
+  } else if (type === eTransType.SubmitProposalTx){
+    amount = itemMessage?.initial_deposit[0]?.amount;
   }
 
   if (itemMessage && amount) {

@@ -28,6 +28,8 @@ export enum TypeTransaction {
   BeginUnlocking = 'Begin Unlocking',
   Vote = 'Vote',
   Vesting = 'Vesting',
+  Deposit = 'Deposit',
+  SubmitProposalTx = 'Submit Proposal',
   Fail = 'Fail'
 }
 
@@ -59,6 +61,8 @@ export enum TRANSACTION_TYPE_ENUM {
   BeginUnlocking = '/osmosis.lockup.MsgBeginUnlocking',
   Vote = '/cosmos.gov.v1beta1.MsgVote',
   Vesting = '/cosmos.vesting.v1beta1.MsgCreateVestingAccount',
+  Deposit = '/cosmos.gov.v1beta1.MsgDeposit',
+  SubmitProposalTx = '/cosmos.gov.v1beta1.MsgSubmitProposal',
   Fail = 'FAILED'
 }
 
