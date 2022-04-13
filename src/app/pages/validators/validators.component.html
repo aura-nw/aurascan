@@ -88,7 +88,7 @@
         </div>
       </div>
       <div class="box-claim">
-        Claim Reward: {{claimReward || 0 | number: globals.formatNumberToken}} <span class="ml-1">{{globals.stableToken}}</span>
+        Claim Reward: {{stakingToken || 0 | number: globals.formatNumberToken}} <span class="ml-1">{{globals.stableToken}}</span>
       </div>
     </div>
     <div class="card-body">
@@ -96,6 +96,11 @@
         <table mat-table [dataSource]="dataSourceWallet" class="table-reponsive" matSort (matSortChange)="sortData($event)">
           <ng-container *ngFor="let template of templatesWallet; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
               <ng-container *ngSwitchDefault>
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                   <div [innerHTML]="template.headerCellDef | translate"></div>
@@ -113,7 +118,7 @@
                     </div>
                     <div *ngSwitchCase="'action'">
                       <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
-                       (click)="viewManageStake(modalManage, data['validator_address'])">
+                       (click)="viewPopupDetail(modalManage, data['validator_address'])">
                         Manage
                       </button>
                     </div>
@@ -133,9 +138,6 @@
           </tr>
         </table>
       </ng-container>
-      <!-- <ng-template #noValues>
-        <app-table-no-data></app-table-no-data>
-      </ng-template> -->
     </div>
   </div>
 
@@ -151,7 +153,8 @@
   </div>
 
   <ng-container *ngIf="dataSource; else noValues">
-    <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort (matSortChange)="sortData($event)">
+    <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort (matSortChange)="sortData($event)" 
+      ng-container *ngIf="!searchNullData; else noValues">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
           <ng-container *ngSwitchCase="'percent_power'">
@@ -162,6 +165,11 @@
           <ng-container *ngSwitchCase="'rank'">
             <th mat-header-cell *matHeaderCellDef>
               <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
+            </th>
+          </ng-container>
+          <ng-container *ngSwitchCase="'action'">
+            <th mat-header-cell *matHeaderCellDef>
+              <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
           </ng-container>
           <ng-container *ngSwitchDefault>
@@ -212,8 +220,8 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'action'">
-                  <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
-                   (click)="viewDelegate(modalManage, data.operator_address)">
+                  <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked" *ngIf="data['jailed'] === '0'"
+                   (click)="viewPopupDetail(staticDataModal, data.operator_address)">
                     Delegate
                   </button>
                 </div>
@@ -262,7 +270,7 @@
             </div>
             <div class="col-10">
               <span class="header-warning">Staking will lock your funds for 14+ days</span><br>
-              You will need to undelegate in order for yoru staked assets to be liquid again. This process will take 14 days to complete.
+              You will need to undelegate in order for your staked assets to be liquid again. This process will take 14 days to complete.
             </div>
           </div>
           <div class="box-token mt-3">

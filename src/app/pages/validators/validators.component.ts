@@ -16,8 +16,7 @@ import session from '../../core/utils/storage/session';
 import { WalletStorage } from '../../../app/core/models/wallet';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { STAKING_TYPE_ENUM } from '../../../app/core/constants/validator.enum';
-import { TYPE_ACCOUNT } from 'src/app/core/constants/account.constant';
-import { ACCOUNT_TYPE_ENUM } from 'src/app/core/constants/account.enum';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-validators',
@@ -65,6 +64,7 @@ export class ValidatorsComponent implements OnInit {
   clicked = false;
   delegatedToken = 0;
   availableToken = 0;
+  stakingToken = 0;
   totalDelegator = 0;
   claimReward = 0;
   amountFormat;
@@ -73,6 +73,7 @@ export class ValidatorsComponent implements OnInit {
   validatorAddress;
   selected = STAKING_TYPE_ENUM.Undelegate;
   listTypeStake = TYPE_STAKING;
+  searchNullData = false;
 
   constructor(
     private validatorService: ValidatorService,
@@ -84,36 +85,23 @@ export class ValidatorsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.walletService.disconnect();
-    console.log(this.listTypeStake);
-    
-    const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
-
-    if (lastProvider) {
-      const { provider, chainId } = lastProvider;
-      this.walletService.connect(provider, chainId);
-    }
-
     this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
     this.getList();
+    this.getDataWallet();
 
     setInterval(() => {
       this.getList();
-    }, 20000);
+      this.getDataWallet();
+    }, 10000);
   }
 
   ngAfterViewInit(): void {
-    // setTimeout(() => {
-      console.log(this.walletService);
-
-      this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
-      
-      // if (this.walletService.wallet) {
-        // this.userAddress = this.walletService.wallet.bech32Address;
-        this.getAccountDetail();
-        this.getInfoWallet();
-      // }
-    // }, 2000);
+    setTimeout(() => {
+      if (this.walletService.wallet) {
+        this.userAddress = this.walletService.wallet.bech32Address;
+        this.getDataWallet();
+      }
+    }, 2000);
   }
 
   changePage(page: PageEvent): void {
@@ -210,41 +198,44 @@ export class ValidatorsComponent implements OnInit {
   }
 
   searchValidator(): void {
-    if (this.textSearch.length > 0) {
-      const data = this.dataSourceBk.data.filter(
+    this.searchNullData = false;
+    let data;
+    if (this.textSearch.length > 0 || !this.isActive) {
+      data = this.dataSourceBk.data.filter(
         (f) =>
           f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1 &&
           f.status_validator === this.isActive,
       );
       this.dataSource = this.dataSourceBk;
       this.dataSource = new MatTableDataSource(data);
+      if (data === undefined || data?.length === 0) {
+        this.searchNullData = true;
+      }
     } else {
       this.dataSource = this.dataSourceBk;
     }
   }
 
-  viewDelegate(staticDataModal: any, address) {
-    this.clicked = true;
-    this.getDetail(address, staticDataModal);
-    setTimeout(() => {
-      this.clicked = false;
-    }, 2000);
+  viewPopupDetail(staticDataModal: any, address) {
+    const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
+
+    if (lastProvider) {
+      const { provider, chainId } = lastProvider;
+      this.walletService.connect(provider, chainId);
+      this.clicked = true;
+      this.getValidatorDetail(address, staticDataModal);
+      setTimeout(() => {
+        this.clicked = false;
+      }, 2000);
+    }
   }
 
-  viewManageStake(modalManage: any, address) {
-    this.clicked = true;
-    this.getDetail(address, modalManage);
-    setTimeout(() => {
-      this.clicked = false;
-    }, 2000);
-  }
-
-  getDetail(address, staticDataModal): void {
+  getValidatorDetail(address, modal): void {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
         this.dataModal = res.data;
         this.getListDelegators(address);
-        this.modalService.open(staticDataModal, {
+        this.modalService.open(modal, {
           keyboard: false,
           centered: true,
           windowClass: 'modal-holder',
@@ -254,36 +245,37 @@ export class ValidatorsComponent implements OnInit {
     );
   }
 
-  getAccountDetail(): void {
-    this.accountService.getAccoutDetail(this.userAddress).subscribe((res) => {
-      this.delegatedToken = res?.data?.delegated;
-      this.availableToken = res?.data?.available;
-    });
-  }
+  //Get data for wallet info and list staking
+  getDataWallet() {
+    if (this.userAddress) {
+      forkJoin({
+        dataWallet: this.accountService.getAccoutDetail(this.userAddress),
+        dataListDelegator:  this.validatorService.validatorsDetailWallet(this.userAddress),
+      }).subscribe(
+        res => {
+          if (res.dataWallet) {
+            this.delegatedToken = res?.dataWallet?.data?.delegated;
+            this.availableToken = res?.dataWallet?.data?.available;
+            this.stakingToken = res?.dataWallet?.data?.stake_reward;
+          }
 
-  getInfoWallet(): void {
-    this.validatorService.validatorsDetailWallet(this.userAddress).subscribe(
-      (res) => {
-        console.log(res);
-        this.claimReward = res?.data?.delegations?.balance?.reward / NUMBER_CONVERT;
-        if (res?.data?.delegations.length > 0) {
-          res?.data?.delegations.forEach((f) => {
-            f.amount_staked = f.amount_staked / NUMBER_CONVERT;
-            f.pending_reward = f.pending_reward / NUMBER_CONVERT;
-          });
-          this.dataSourceWallet = new MatTableDataSource(res?.data?.delegations);
-          this.lengthWallet = res?.data?.delegations?.length;
+          if (res.dataListDelegator) {
+            if (res?.dataListDelegator?.data?.delegations.length > 0) {
+              res?.dataListDelegator?.data?.delegations.forEach((f) => {
+                f.amount_staked = f.amount_staked / NUMBER_CONVERT;
+                f.pending_reward = f.pending_reward / NUMBER_CONVERT;
+              });
+              this.dataSourceWallet = new MatTableDataSource(res?.dataListDelegator.data?.delegations);
+              this.lengthWallet = res?.dataListDelegator.data?.delegations?.length;
+            }
+          }
         }
-        console.log(this.lengthWallet);
-        
-        console.log(this.dataSourceWallet);
-        
-      },
-      (error) => {},
-    );
+      );
+    }
   }
 
   getListDelegators(address): void {
+    //get total delegator
     this.commonService.delegators(5, 0, address).subscribe((res) => {
       this.totalDelegator = res?.meta?.count;
     });
@@ -304,8 +296,6 @@ export class ValidatorsComponent implements OnInit {
   handleStaking() {
     this.checkAmountStaking();
     if (!this.isExceedAmount) {
-      console.log(this.walletService);
-      
       const excuteStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
@@ -325,8 +315,7 @@ export class ValidatorsComponent implements OnInit {
         let element: HTMLElement = document.getElementById('dialog-close-btn') as HTMLElement;
         element.click();
         this.amountFormat = null;
-        this.getAccountDetail();
-        console.log( { hash, error } );
+        this.getDataWallet();
       };
       
       excuteStaking();
@@ -338,7 +327,6 @@ export class ValidatorsComponent implements OnInit {
   }
 
   changePopup(){
-    console.log(this.selected);
     
   }
 

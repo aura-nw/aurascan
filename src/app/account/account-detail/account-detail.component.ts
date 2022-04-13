@@ -307,7 +307,7 @@ export class AccountDetailComponent implements OnInit {
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
           //get amount of transaction
-          trans.amount = getAmount(trans.messages, trans.type);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
@@ -329,8 +329,6 @@ export class AccountDetailComponent implements OnInit {
   getAccountDetail(): void {
     this.accountService.getAccoutDetail(this.id).subscribe((res) => {
       this.item = res.data;
-      console.log(this.item);
-      
       this.chartOptions.series = [];
       if (this.item.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
@@ -355,7 +353,7 @@ export class AccountDetailComponent implements OnInit {
             f.amount = this.item.unbonding;
             break;
           case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-            f.amount = this.item.vesting.amount;
+            f.amount = this.item.vesting?.amount;
             break;
           default:
             break;
