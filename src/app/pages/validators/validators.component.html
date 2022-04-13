@@ -283,7 +283,7 @@
               <input type="number" class="input-amount-token" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
                 [(ngModel)]="amountFormat" (blur)="resetCheck()">
               <button class="btn btn-outline-secondary btn-max-token" type="button" (click)="getMaxToken()">MAX</button>
-              <div class="input-group-append d-flex">
+              <div class="input-group-append d-flex label-token">
                 <span class="input-group-text">{{globals.stableToken}}</span>
               </div>
             </div>
@@ -355,11 +355,11 @@
               <button type="button" tabindex="0" role="menuitem" class="dropdown-item">Redelegate</button>
             </div>
           </div> -->
-          <mat-select class="list-token" [(value)]="selected">
+          <!-- <mat-select class="list-token" [(value)]="selected">
             <mat-option *ngFor="let item of listTypeStake" [value]="item.label">
               {{ item.value | translate }}
             </mat-option>
-          </mat-select>
+          </mat-select> -->
           <button type="button" class="btn btn-primary" (click)="handleStaking()" [disabled]="isExceedAmount">Delegate</button>
         </div>
       </div>
