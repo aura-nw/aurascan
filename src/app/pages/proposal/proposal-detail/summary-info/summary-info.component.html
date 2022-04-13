@@ -87,8 +87,6 @@
           </div> -->
           <div>
             <b>Total : </b>
-            <!-- <span>{{ proposalDetail.pro_total_vote[0] | number}}</span>
-            <span class="decimal">.{{ proposalDetail.pro_total_vote[1] | mask: '000000' }}</span> -->
             {{ proposalDetail.pro_total_vote | number: '1.6' }}
             <span class="g-purple"> {{ global.stableToken }}</span>
           </div>
@@ -126,13 +124,9 @@
             <li data-style="primary">
               <p class="item item-label">Yes</p>
               <p class="item item-percent">
-                <!-- <span>{{ this.proposalDetail.yesPercent[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.yesPercent[1] }}%</span> -->
                 {{ this.proposalDetail.yesPercent | number: '1.2' }}%
               </p>
               <p class="item item-amount">
-                <!-- <span>{{ this.proposalDetail.pro_votes_yes[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.pro_votes_yes[1] }}</span> -->
                 {{ this.proposalDetail.pro_votes_yes || 0 | number: '1.6' }}
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
@@ -140,13 +134,9 @@
             <li data-style="danger">
               <p class="item item-label">No</p>
               <p class="item item-percent">
-                <!-- <span>{{ this.proposalDetail.noPercent[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.noPercent[1]}}%</span> -->
                 {{ this.proposalDetail.noPercent | number: '1.2' }}%
               </p>
               <p class="item item-amount">
-                <!-- <span>{{ this.proposalDetail.pro_votes_no[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.pro_votes_no[1] }}</span> -->
                 {{ this.proposalDetail.pro_votes_no || 0 | number: '1.6' }}
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
@@ -154,13 +144,9 @@
             <li data-style="info">
               <p class="item item-label">No with veto</p>
               <p class="item item-percent">
-                <!-- <span>{{ this.proposalDetail.noWithVetoPercent[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.noWithVetoPercent[1] | mask: '00' }}%</span> -->
                 {{ this.proposalDetail.noWithVetoPercent | number: '1.2' }}%
               </p>
               <p class="item item-amount">
-                <!-- <span>{{ this.proposalDetail.pro_votes_no_with_veto[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.pro_votes_no_with_veto[1] }}</span> -->
                 {{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: '1.6' }}
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
@@ -168,13 +154,9 @@
             <li data-style="secondary">
               <p class="item item-label">Abstain</p>
               <p class="item item-percent">
-                <!-- <span>{{ this.proposalDetail.abstainPercent[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.abstainPercent[1] | mask: '00' }}%</span> -->
                 {{ this.proposalDetail.abstainPercent | number: '1.2' }}%
               </p>
               <p class="item item-amount">
-                <!-- <span>{{ this.proposalDetail.pro_votes_abstain[0] }}</span>
-                <span class="decimal">.{{ this.proposalDetail.pro_votes_abstain[1] }}</span> -->
                 {{ this.proposalDetail.pro_votes_abstain || 0 | number: '1.6' }}
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>

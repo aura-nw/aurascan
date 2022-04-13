@@ -79,9 +79,9 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.noPercent =
         (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.noWithVetoPercent =
-        (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
+        (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.abstainPercent =
-        (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
+        (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote || 0;
     });
   }
 
