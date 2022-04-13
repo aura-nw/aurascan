@@ -34,7 +34,7 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
-    { matColumnDef: 'action', headerCellDef: 'Action' },
+    { matColumnDef: 'action', headerCellDef: '' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
@@ -46,9 +46,11 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'validator_name', headerCellDef: 'Name' },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
     { matColumnDef: 'pending_reward', headerCellDef: 'Pending Reward' },
+    { matColumnDef: 'action', headerCellDef: '' }
   ];
-  displayedColumnsWallet: string[] = this.templates.map((dta) => dta.matColumnDef);
+  displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);
   dataSourceWallet: MatTableDataSource<any>;
+  lengthWallet = 0;
   
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   isActive = true;
@@ -101,7 +103,7 @@ export class ValidatorsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
+    // setTimeout(() => {
       console.log(this.walletService);
 
       this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
@@ -111,7 +113,7 @@ export class ValidatorsComponent implements OnInit {
         this.getAccountDetail();
         this.getInfoWallet();
       // }
-    }, 2000);
+    // }, 2000);
   }
 
   changePage(page: PageEvent): void {
@@ -230,10 +232,10 @@ export class ValidatorsComponent implements OnInit {
     }, 2000);
   }
 
-  viewUnDelegate(modalUnDelegate: any, address) {
+  viewManageStake(modalManage: any, address) {
     this.clicked = true;
     this.validatorAddress = address.operator_address;
-    this.getDetail(this.validatorAddress, modalUnDelegate);
+    this.getDetail(this.validatorAddress, modalManage);
     setTimeout(() => {
       this.clicked = false;
     }, 2000);
@@ -267,8 +269,17 @@ export class ValidatorsComponent implements OnInit {
         console.log(res);
         this.claimReward = res?.data?.delegations?.balance?.reward / NUMBER_CONVERT;
         if (res?.data?.delegations.length > 0) {
+          res?.data?.delegations.forEach((f) => {
+            f.amount_staked = f.amount_staked / NUMBER_CONVERT;
+            f.pending_reward = f.pending_reward / NUMBER_CONVERT;
+          });
           this.dataSourceWallet = new MatTableDataSource(res?.data?.delegations);
+          this.lengthWallet = res?.data?.delegations?.length;
         }
+        console.log(this.lengthWallet);
+        
+        console.log(this.dataSourceWallet);
+        
       },
       (error) => {},
     );

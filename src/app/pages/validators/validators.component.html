@@ -92,7 +92,7 @@
       </div>
     </div>
     <div class="card-body">
-      <ng-container *ngIf="dataSourceWallet">
+      <ng-container *ngIf="lengthWallet > 0">
         <table mat-table [dataSource]="dataSourceWallet" class="table-reponsive" matSort (matSortChange)="sortData($event)">
           <ng-container *ngFor="let template of templatesWallet; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
@@ -105,12 +105,15 @@
               <td mat-cell *matCellDef="let data">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <div *ngSwitchCase="'operator_address'" class="g-blue cursor-pointer">
-                      {{ data[template.matColumnDef] }}
+                    <div *ngSwitchCase="'amount_staked'" class="">
+                      {{ data[template.matColumnDef] | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span>
+                    </div>
+                    <div *ngSwitchCase="'pending_reward'" class="">
+                      {{ data[template.matColumnDef] | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span>
                     </div>
                     <div *ngSwitchCase="'action'">
                       <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
-                       (click)="viewUnDelegate(modalUnDelegate, data)">
+                       (click)="viewManageStake(modalManage, data['validator_address'])">
                         Delegate
                       </button>
                     </div>
@@ -210,7 +213,7 @@
                 </div>
                 <div *ngSwitchCase="'action'">
                   <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
-                   (click)="viewDelegate(modalUnDelegate, data)">
+                   (click)="viewDelegate(modalManage, data)">
                     Delegate
                   </button>
                 </div>
@@ -290,7 +293,7 @@
 <div class="col-lg-6">
   <div class="">
     <!-- Static Backdrop Modal -->
-    <ng-template #modalUnDelegate let-modal>
+    <ng-template #modalManage let-modal>
       <div class="box-staking">
         <div class="modal-header">
           <div class="row col-12">
