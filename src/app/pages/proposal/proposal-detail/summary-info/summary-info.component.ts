@@ -1,10 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_STATUS } from '../../../../core/constants/status.constant';
+import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
+import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
+import { WalletService } from '../../../../core/services/wallet.service';
+import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
 
 @Component({
   selector: 'app-summary-info',
@@ -15,7 +20,17 @@ export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
-  constructor(private proposalService: ProposalService, private datePipe: DatePipe, public global: Globals) {}
+  voteValue: { keyVote: number } = null;
+  chainId = this.environmentService.apiUrl.value.chainId;
+
+  constructor(
+    private proposalService: ProposalService,
+    private datePipe: DatePipe,
+    public global: Globals,
+    private walletService: WalletService,
+    public dialog: MatDialog,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.getDetail();
@@ -59,20 +74,6 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.pro_vote_abstain_bar =
         (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
 
-      // this.proposalDetail.yesPercent = this.proposalDetail.pro_total_vote
-      //   ? ((+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
-      //   : ['0', '00'];
-      // this.proposalDetail.noPercent = this.proposalDetail.pro_total_vote
-      //   ? ((+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
-      //   : ['0', '00'];
-      // this.proposalDetail.noWithVetoPercent = this.proposalDetail.pro_total_vote
-      //   ? ((+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote)
-      //       .toString()
-      //       .split('.')
-      //   : ['0', '00'];
-      // this.proposalDetail.abstainPercent = this.proposalDetail.pro_total_vote
-      //   ? ((+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote).toString().split('.')
-      //   : ['0', '00'];
       this.proposalDetail.yesPercent =
         (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.noPercent =
@@ -81,27 +82,6 @@ export class SummaryInfoComponent implements OnInit {
         (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
       this.proposalDetail.abstainPercent =
         (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
-
-      // this.proposalDetail.pro_votes_yes = this.proposalDetail.pro_votes_yes
-      //   ? this.proposalDetail.pro_votes_yes?.toString().split('.')
-      //   : ['0', '00'];
-      // this.proposalDetail.pro_votes_no = this.proposalDetail.pro_votes_no
-      //   ? this.proposalDetail.pro_votes_no?.toString().split('.')
-      //   : ['0', '00'];
-      // this.proposalDetail.pro_votes_no_with_veto = this.proposalDetail.pro_votes_no_with_veto
-      //   ? this.proposalDetail.pro_votes_no_with_veto?.toString().split('.')
-      //   : ['0', '00'];
-      // this.proposalDetail.pro_votes_abstain = this.proposalDetail.pro_votes_abstain
-      //   ? this.proposalDetail.pro_votes_abstain?.toString().split('.')
-      //   : ['0', '00'];
-
-      // this.proposalDetail.pro_total_deposits = this.proposalDetail.pro_total_deposits
-      //   ? this.proposalDetail.pro_total_deposits?.toString().split('.')
-      //   : ['0', '0'];
-
-      // this.proposalDetail.pro_total_vote = this.proposalDetail.pro_total_vote
-      //   ? this.proposalDetail.pro_total_vote?.toString().split('.')
-      //   : ['0', '000000'];
     });
   }
 
@@ -115,5 +95,27 @@ export class SummaryInfoComponent implements OnInit {
       };
     }
     return resObj;
+  }
+
+  openVoteDialog(id: string, title: string) {
+    if (this.walletService.wallet) {
+      let dialogRef = this.dialog.open(ProposalVoteComponent, {
+        height: '400px',
+        width: '600px',
+        data: { id, title, voteValue: this.voteValue },
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        this.voteValue = result;
+      });
+    } else {
+      try {
+        const connect = async () => {
+          await this.walletService.connect(WALLET_PROVIDER.KEPLR, this.chainId);
+        };
+        connect();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 }
