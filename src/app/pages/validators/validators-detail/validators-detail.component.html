@@ -2,11 +2,15 @@
 <div class="valid-detail-content card">
   <div class="row card-header bg-transparent border-bottom fw-bold">
     <div class="box-status">
-      <div class="valid-status" [ngClass]="{ 'status-inactive': item?.jailed !== '0' }">
-        <ng-container *ngIf="item?.jailed === '0'">
+      <div class="valid-status" [ngClass]="{ 'status-inactive': item?.status === statusValidator.Inactive}" 
+        [ngClass]="{ 'status-jailed': item?.jailed}">
+        <ng-container *ngIf="item?.jailed">
+          <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> Jailed
+        </ng-container>
+        <ng-container *ngIf="!item?.jailed && item?.status === statusValidator.Active">
           <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" /> Active
         </ng-container>
-        <ng-container *ngIf="item?.jailed !== '0'">
+        <ng-container *ngIf="!item?.jailed && item?.status === statusValidator.Inactive">
           <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> inActive
         </ng-container>
       </div>
@@ -193,7 +197,7 @@
           <ng-container *ngFor="let itemBlock of arrayUpTime; let index = index">
             <a
               class="block-uptime tool-tip"
-              [ngStyle]="{ 'background-color': (itemBlock?.isSync || (item?.jailed === '1')) ? 'none' : '#9c6cff' }"
+              [ngStyle]="{ 'background-color': (itemBlock?.isSync || (item?.status !== statusValidator.Active)) ? 'none' : '#9c6cff' }"
               href="/blocks/{{ itemBlock?.height }}"
               currentitem="false"
             >

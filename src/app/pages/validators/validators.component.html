@@ -77,6 +77,70 @@
     </div>
   </div> -->
 
+  <div class="row col-md-12 card box-info-user">
+    <div class="row card-header">
+      <div class="col-6">
+        <div class="d-flex">
+          Available Balance: {{availableToken || 0 | number: globals.formatNumberToken}} <span class="ml-1 g-purple">{{globals.stableToken}}</span>
+        </div>
+        <div class="d-flex">
+          Total Staked: {{delegatedToken || 0 | number: globals.formatNumberToken}} <span class="ml-1 g-purple">{{globals.stableToken}}</span>
+        </div>
+      </div>
+      <div class="box-claim">
+        Claim Reward: {{stakingToken || 0 | number: globals.formatNumberToken}} <span class="ml-1">{{globals.stableToken}}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <ng-container *ngIf="lengthWallet > 0">
+        <table mat-table [dataSource]="dataSourceWallet" class="table-reponsive" matSort (matSortChange)="sortData($event)">
+          <ng-container *ngFor="let template of templatesWallet; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+    
+              <td mat-cell *matCellDef="let data">
+                <div>
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <div *ngSwitchCase="'amount_staked'" class="">
+                      {{ data[template.matColumnDef] | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span>
+                    </div>
+                    <div *ngSwitchCase="'pending_reward'" class="">
+                      {{ data[template.matColumnDef] | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span>
+                    </div>
+                    <div *ngSwitchCase="'action'">
+                      <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
+                       (click)="viewPopupDetail(modalManage, data['validator_address'])">
+                        Manage
+                      </button>
+                    </div>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
+          </ng-container>
+    
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsWallet"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ 'NO VALIDATORS' | translate }}
+            </td>
+          </tr>
+        </table>
+      </ng-container>
+    </div>
+  </div>
+
   <div class="validator-list-search-area">
     <input
       placeholder="Search Validator"
@@ -84,12 +148,13 @@
       [(ngModel)]="textSearch"
       (ngModelChange)="searchValidator()"
     />
-    <button class="btn-select" [class.btn-select]="isActive" (click)="changeType(true)">Active</button>
-    <button [class.btn-select]="!isActive" (click)="changeType(false)">Inactive</button>
+    <button class="btn-select" [class.btn-select]="isActive" (click)="changeType(statusValidator.Active)">Active</button>
+    <button [class.btn-select]="!isActive" (click)="changeType(statusValidator.Inactive)">Inactive</button>
   </div>
 
   <ng-container *ngIf="dataSource; else noValues">
-    <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort (matSortChange)="sortData($event)">
+    <table mat-table [dataSource]="dataSource" class="table-reponsive" matSort (matSortChange)="sortData($event)" 
+      ng-container *ngIf="!searchNullData; else noValues">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
           <ng-container *ngSwitchCase="'percent_power'">
@@ -100,6 +165,11 @@
           <ng-container *ngSwitchCase="'rank'">
             <th mat-header-cell *matHeaderCellDef>
               <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
+            </th>
+          </ng-container>
+          <ng-container *ngSwitchCase="'action'">
+            <th mat-header-cell *matHeaderCellDef>
+              <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
           </ng-container>
           <ng-container *ngSwitchDefault>
@@ -128,10 +198,10 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'up_time'">
-                  <ng-container *ngIf="data['jailed'] === '0'">
+                  <ng-container *ngIf="data['status'] === statusValidator.Active">
                     {{ data[template.matColumnDef] }}
                   </ng-container>
-                  <ng-container *ngIf="data['jailed'] !== '0'">
+                  <ng-container *ngIf="data['status'] !== statusValidator.Active">
                     0%
                   </ng-container>
                 </div>
@@ -150,8 +220,8 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'action'">
-                  <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
-                   (click)="viewDelegate(staticDataModal, data)">
+                  <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked" *ngIf="data['status'] === statusValidator.Active"
+                   (click)="viewPopupDetail(staticDataModal, data.operator_address)">
                     Delegate
                   </button>
                 </div>
@@ -200,20 +270,20 @@
             </div>
             <div class="col-10">
               <span class="header-warning">Staking will lock your funds for 14+ days</span><br>
-              You will need to undelegate in order for yoru staked assets to be liquid again. This process will take 14 days to complete.
+              You will need to undelegate in order for your staked assets to be liquid again. This process will take 14 days to complete.
             </div>
           </div>
           <div class="box-token mt-3">
             <p class="font-weight-bold">My delegation</p>
             <p>{{delegatedToken | number}} {{globals.stableToken}}</p>
             <p class="font-weight-bold">Available Balance</p>
-            <p>{{availableToken | number}} {{globals.stableToken}}</p>
+            <p>{{availableToken | number: globals.formatNumberToken}} {{globals.stableToken}}</p>
             <p class="font-weight-bold">Amount to Delegate</p>
-            <div class="input-group mb-3">
-              <input type="number" class="form-control" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+            <div class="input-group mb-3 row">
+              <input type="number" class="input-amount-token" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
                 [(ngModel)]="amountFormat" (blur)="resetCheck()">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" (click)="getMaxToken()">MAX</button>
+              <button class="btn btn-outline-secondary btn-max-token" type="button" (click)="getMaxToken()">MAX</button>
+              <div class="input-group-append d-flex">
                 <span class="input-group-text">{{globals.stableToken}}</span>
               </div>
             </div>
@@ -221,6 +291,75 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="dialog-close-btn" class="btn btn-light" (click)="closeDialog(modal)">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="handleStaking()" [disabled]="isExceedAmount">Delegate</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div><!-- end col -->
+
+<div class="col-lg-6">
+  <div class="">
+    <!-- Static Backdrop Modal -->
+    <ng-template #modalManage let-modal>
+      <div class="box-staking">
+        <div class="modal-header">
+          <div class="row col-12">
+            <div class="col-5 box-validator">
+              <p class="font-weight-bold">{{dataModal?.title}}</p>
+              Commission - {{dataModal?.commission | percent: '1.2-2'}}
+            </div>
+            <div class="col-7">
+              <p>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }} <span class="g-purple">{{globals.stableToken}}</span>)</p>
+              Delegators - {{totalDelegator}}
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="box-info-delegate row">
+            <div class="col-12 d-flex justify-content-between">
+              <p>My delegation</p>
+              <p>{{validatorDetail.amount_staked || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
+            </div>
+            <div class="col-12 d-flex justify-content-between">
+              <p>Pending Reward</p>
+              <p>{{validatorDetail.pending_reward || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
+            </div>
+            <div class="col-12 d-flex justify-content-between">
+              <p>Total Reward</p>
+              <p>{{stakingToken || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
+            </div>
+            <div class="col-12 d-flex justify-content-between">
+              <p>Available Balance</p>
+              <p>{{availableToken || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
+            </div>
+          </div>
+          <div class="box-notice undelegate row">
+            <div class="col-2">
+              <img class="warning-icon" src="/assets/images/icons/warning.png">
+            </div>
+            <div class="col-10 text-center">
+              You can <b>"Delegate"</b> more to this validator<br>
+              Or use <b>"Redelagate"</b> to switch your assets to another validator.<br>
+              Or use <b>"Undelegate"</b> to start the unbonding period.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!-- <div class="btn-group" style="margin-right: 0.5rem;">
+            <button type="button" id="caret" class="btn">Undelegate</button>
+            <button type="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle btn">
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-toggle">
+              <button type="button" tabindex="0" role="menuitem" class="dropdown-item">Redelegate</button>
+            </div>
+          </div> -->
+          <mat-select class="list-token" [(value)]="selected">
+            <mat-option *ngFor="let item of listTypeStake" [value]="item.label">
+              {{ item.value | translate }}
+            </mat-option>
+          </mat-select>
           <button type="button" class="btn btn-primary" (click)="handleStaking()" [disabled]="isExceedAmount">Delegate</button>
         </div>
       </div>
