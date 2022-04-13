@@ -12,6 +12,7 @@ import { EnvironmentService } from '../../core/data-services/environment.service
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
+import { shortenAddress, shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 
 @Component({
@@ -150,5 +151,9 @@ export class ProposalComponent implements OnInit {
         console.error(error);
       }
     }
+  }
+
+  shortenAddress(address: string): string {
+    return shortenAddressStartEnd(address, 6, 10);
   }
 }

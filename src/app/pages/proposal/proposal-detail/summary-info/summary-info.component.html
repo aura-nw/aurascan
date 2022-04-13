@@ -12,11 +12,12 @@
           *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
           [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
           (click)="openVoteDialog(proposalDetail.pro_id, proposalDetail.pro_title)"
+          class="button"
         >
           {{ proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}
         </button>
         <div
-          class="TEST aura-status aura-status--has-elevation text-uppercase {{
+          class="button d-flex aura-status aura-status--has-elevation text-capitalize {{
             getStatus(proposalDetail?.pro_status)?.class
           }}"
         >
@@ -29,7 +30,7 @@
     <div class="card__info">
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Proposer</div>
-        <div class="col-12 col-md-10 info" *ngIf="proposalDetail.pro_proposer">
+        <div class="col-12 col-md-10 info">
           <a href="/account/{{ proposalDetail.pro_proposer_address }}">{{
             proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
           }}</a>
