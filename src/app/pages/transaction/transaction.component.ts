@@ -7,10 +7,9 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { getAmount, Globals } from '../../../app/global/global';
 import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
-
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
@@ -64,7 +63,7 @@ export class TransactionComponent implements OnInit {
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
           //get amount of transaction
-          trans.amount = getAmount(trans.messages, trans.type);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;

@@ -29,11 +29,11 @@ export class TransferredDetailComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate) {
+    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
       this.getDetail();
     }
     //get amount of transaction
-    this.amount = getAmount(this.transactionDetail?.messages, this.transactionDetail?.type);
+    this.amount = getAmount(this.transactionDetail?.messages, this.transactionDetail?.type, this.transactionDetail?.raw_log);
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
     );

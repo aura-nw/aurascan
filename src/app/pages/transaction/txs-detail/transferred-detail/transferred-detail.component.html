@@ -35,7 +35,7 @@
         </div>
         <div class="col-6">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number }} <span class="g-purple">{{global.stableToken}}</span>
+            {{ amount | number: global.formatNumberToken }} <span class="g-purple">{{global.stableToken}}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0">
             -
@@ -121,13 +121,13 @@
           <ng-container *ngIf="validatorName">({{validatorName}})</ng-container>
         </div>
       </div>
-      <div class="row mb-3" *ngIf="transactionDetail?.type !== eTransType.GetReward ">
+      <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Amount</p>
         </div>
         <div class="col-6">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number }} <span class="g-purple">{{global.stableToken}}</span>
+            {{ amount | number: global.formatNumberToken }} <span class="g-purple">{{global.stableToken}}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0">
             -
@@ -198,6 +198,37 @@
         </div>
         <div class="col-6">
           {{dateVesting}}
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text g-purple header-title"><img src="assets/images/icons/trans-send.svg"
+              class="m-1 mb-0 mt-0 msg-image">
+            {{transactionDetailType}}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Initial Deposit</p>
+        </div>
+        <div class="col-6">
+          <ng-container *ngIf="amount > 0">
+            {{ amount | number: global.formatNumberToken }} <span class="g-purple">{{global.stableToken}}</span>
+          </ng-container>
+          <ng-container *ngIf="amount == 0">
+            -
+          </ng-container>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <p class="card-text fw-bold">Proposer</p>
+        </div>
+        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
+          {{transactionDetail?.messages[0]?.proposer}}
         </div>
       </div>
     </ng-container>

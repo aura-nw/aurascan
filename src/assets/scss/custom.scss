@@ -327,7 +327,7 @@ body {
 }
 
 .cdk-overlay-container {
-    z-index: 1051;
+    z-index: 1070;
 }
 
 .disabled-pointer {
@@ -464,9 +464,49 @@ body {
                     font-size: 16px;
                 }
             }
+            .box-notice.undelegate {
+                color: #8888FF;
+                border: 1px solid #BCDDFF;
+            }
             .box-token, .box-validator {
                 color: #5E5E80;
             }
+            .box-token {
+                .input-amount-token {
+                    width: 85%;
+                    border: 1px solid #ced4da;
+                    height: 40px;
+                }
+                .btn-max-token {
+                    margin-left: -60px !important;
+                    height: 25px;
+                    background: #5156be;
+                    display: flex;
+                    align-self: center;
+                    align-items: center;
+                    z-index: 1;
+                    color: #fff;
+                    margin-right: 5px;
+                    border-radius: 5px;
+                    width: auto;
+                }
+                .label-token{
+                    width: 80px;
+                }
+              }
+              .box-staking {
+                .btn-group{
+                    // background: #f7fafc;
+                    .dropdown-toggle::after {
+                        border: solid black;
+                        border-width: 0 3px 3px 0;
+                        display: inline-block;
+                        padding: 3px;
+                        transform: rotate(45deg);
+                        -webkit-transform: rotate(45deg);
+                    }
+                }
+              }
         }
     }
 }

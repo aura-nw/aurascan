@@ -3,13 +3,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Globals } from '../../../../app/global/global';
+import { Globals, getAmount } from '../../../../app/global/global';
 import { DATEFORMAT, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
-
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',
@@ -86,6 +85,7 @@ export class BlockDetailComponent implements OnInit {
           return;
         }
         res.data?.txs.forEach((trans) => {
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
