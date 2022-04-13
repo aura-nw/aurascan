@@ -283,7 +283,7 @@
               <input type="number" class="input-amount-token" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
                 [(ngModel)]="amountFormat" (blur)="resetCheck()">
               <button class="btn btn-outline-secondary btn-max-token" type="button" (click)="getMaxToken()">MAX</button>
-              <div class="input-group-append d-flex">
+              <div class="input-group-append d-flex label-token">
                 <span class="input-group-text">{{globals.stableToken}}</span>
               </div>
             </div>
