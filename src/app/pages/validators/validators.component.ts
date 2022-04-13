@@ -225,8 +225,7 @@ export class ValidatorsComponent implements OnInit {
 
   viewDelegate(staticDataModal: any, address) {
     this.clicked = true;
-    this.validatorAddress = address.operator_address;
-    this.getDetail(this.validatorAddress, staticDataModal);
+    this.getDetail(address, staticDataModal);
     setTimeout(() => {
       this.clicked = false;
     }, 2000);
@@ -234,8 +233,7 @@ export class ValidatorsComponent implements OnInit {
 
   viewManageStake(modalManage: any, address) {
     this.clicked = true;
-    this.validatorAddress = address.operator_address;
-    this.getDetail(this.validatorAddress, modalManage);
+    this.getDetail(address, modalManage);
     setTimeout(() => {
       this.clicked = false;
     }, 2000);
@@ -245,7 +243,7 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
         this.dataModal = res.data;
-        this.getListDelegators();
+        this.getListDelegators(address);
         this.modalService.open(staticDataModal, {
           keyboard: false,
           centered: true,
@@ -285,8 +283,8 @@ export class ValidatorsComponent implements OnInit {
     );
   }
 
-  getListDelegators(): void {
-    this.commonService.delegators(5, 0, this.dataModal.operator_address).subscribe((res) => {
+  getListDelegators(address): void {
+    this.commonService.delegators(5, 0, address).subscribe((res) => {
       this.totalDelegator = res?.meta?.count;
     });
   }

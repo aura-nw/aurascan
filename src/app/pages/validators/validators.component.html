@@ -114,7 +114,7 @@
                     <div *ngSwitchCase="'action'">
                       <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
                        (click)="viewManageStake(modalManage, data['validator_address'])">
-                        Delegate
+                        Manage
                       </button>
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -213,7 +213,7 @@
                 </div>
                 <div *ngSwitchCase="'action'">
                   <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked"
-                   (click)="viewDelegate(modalManage, data)">
+                   (click)="viewDelegate(modalManage, data.operator_address)">
                     Delegate
                   </button>
                 </div>
