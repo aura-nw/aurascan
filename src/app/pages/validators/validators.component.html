@@ -355,11 +355,11 @@
               <button type="button" tabindex="0" role="menuitem" class="dropdown-item">Redelegate</button>
             </div>
           </div> -->
-          <mat-select class="list-token" [(value)]="selected">
+          <!-- <mat-select class="list-token" [(value)]="selected">
             <mat-option *ngFor="let item of listTypeStake" [value]="item.label">
               {{ item.value | translate }}
             </mat-option>
-          </mat-select>
+          </mat-select> -->
           <button type="button" class="btn btn-primary" (click)="handleStaking()" [disabled]="isExceedAmount">Delegate</button>
         </div>
       </div>
