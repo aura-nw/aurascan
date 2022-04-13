@@ -7,8 +7,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/status.constant';
+import { WALLET_PROVIDER } from '../../core/constants/wallet.constant';
+import { EnvironmentService } from '../../core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
 import { ProposalService } from '../../core/services/proposal.service';
+import { WalletService } from '../../core/services/wallet.service';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 
 @Component({
@@ -20,6 +23,7 @@ export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
+  chainId = this.environmentService.apiUrl.value.chainId;
   @ViewChild(MatSort) sort: MatSort;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
@@ -44,6 +48,8 @@ export class ProposalComponent implements OnInit {
     public dialog: MatDialog,
     private datePipe: DatePipe,
     public global: Globals,
+    private walletService: WalletService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -101,8 +107,7 @@ export class ProposalComponent implements OnInit {
     if (!highest) {
       highest = 0;
       key = 0;
-    }
-    else{
+    } else {
       if (highest === yes) {
         key = 0;
       } else if (highest === no) {
@@ -113,7 +118,7 @@ export class ProposalComponent implements OnInit {
         key = 3;
       }
     }
-   
+
     const statusObj = this.voteConstant.find((s) => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
@@ -126,13 +131,24 @@ export class ProposalComponent implements OnInit {
   }
 
   openVoteDialog(id: string, title: string) {
-    let dialogRef = this.dialog.open(ProposalVoteComponent, {
-      height: '400px',
-      width: '600px',
-      data: { id, title, voteValue: this.voteValue },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.voteValue = result;
-    });
+    if (this.walletService.wallet) {
+      let dialogRef = this.dialog.open(ProposalVoteComponent, {
+        height: '400px',
+        width: '600px',
+        data: { id, title, voteValue: this.voteValue },
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        this.voteValue = result;
+      });
+    } else {
+      try {
+        const connect = async () => {
+          await this.walletService.connect(WALLET_PROVIDER.KEPLR, this.chainId);
+        };
+        connect();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 }

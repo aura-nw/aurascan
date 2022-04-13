@@ -6,6 +6,11 @@
     font-size: 18px;
     font-weight: 600;
   }
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
   &__info {
     font-size: 15px;
     font-weight: 400;
@@ -69,16 +74,16 @@
       -webkit-justify-content: space-between;
       justify-content: space-between;
 
-      &[data-style="primary"] {
+      &[data-style='primary'] {
         border-left-color: var(--bs-success);
       }
-      &[data-style="danger"] {
+      &[data-style='danger'] {
         border-left-color: var(--bs-danger);
       }
-      &[data-style="info"] {
+      &[data-style='info'] {
         border-left-color: var(--bs-info);
       }
-      &[data-style="secondary"] {
+      &[data-style='secondary'] {
         border-left-color: var(--bs-secondary);
       }
 
@@ -99,7 +104,7 @@
         .decimal {
           font-size: 14px;
         }
-        .g-purple{
+        .g-purple {
           margin-left: 4px;
         }
       }

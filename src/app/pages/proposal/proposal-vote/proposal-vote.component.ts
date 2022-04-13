@@ -4,7 +4,7 @@ import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/walle
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
-import { createSignBroadcastForVote } from '../../../core/utils/signing/transaction-manager';
+import { createSignBroadcast, createSignBroadcastForVote } from '../../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -27,11 +27,11 @@ export class ProposalVoteComponent implements OnInit {
   ngOnInit(): void {}
 
   async proposalVote() {
-    const { hash, error } = await createSignBroadcastForVote({
+    const { hash, error } = await createSignBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
           voteOption: this.keyVote,
-          proposalId: this.data.id,
+          proposalId: this.data.id + '',
       },
       senderAddress: this.walletService.wallet.bech32Address,
       network: ChainsInfo[this.chainId],
