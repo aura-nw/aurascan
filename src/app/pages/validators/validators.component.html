@@ -148,8 +148,8 @@
       [(ngModel)]="textSearch"
       (ngModelChange)="searchValidator()"
     />
-    <button class="btn-select" [class.btn-select]="isActive" (click)="changeType(true)">Active</button>
-    <button [class.btn-select]="!isActive" (click)="changeType(false)">Inactive</button>
+    <button class="btn-select" [class.btn-select]="isActive" (click)="changeType(statusValidator.Active)">Active</button>
+    <button [class.btn-select]="!isActive" (click)="changeType(statusValidator.Inactive)">Inactive</button>
   </div>
 
   <ng-container *ngIf="dataSource; else noValues">
@@ -198,10 +198,10 @@
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'up_time'">
-                  <ng-container *ngIf="data['jailed'] === '0'">
+                  <ng-container *ngIf="data['status'] === statusValidator.Active">
                     {{ data[template.matColumnDef] }}
                   </ng-container>
-                  <ng-container *ngIf="data['jailed'] !== '0'">
+                  <ng-container *ngIf="data['status'] !== statusValidator.Active">
                     0%
                   </ng-container>
                 </div>
@@ -220,7 +220,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="'action'">
-                  <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked" *ngIf="data['jailed'] === '0'"
+                  <button type="button" class="btn btn-primary waves-effect waves-light" [disabled]="clicked" *ngIf="data['status'] === statusValidator.Active"
                    (click)="viewPopupDetail(staticDataModal, data.operator_address)">
                     Delegate
                   </button>
@@ -319,19 +319,19 @@
           <div class="box-info-delegate row">
             <div class="col-12 d-flex justify-content-between">
               <p>My delegation</p>
-              <p><span class="g-purple">{{globals.stableToken}}</span></p>
+              <p>{{validatorDetail.amount_staked || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
             </div>
             <div class="col-12 d-flex justify-content-between">
               <p>Pending Reward</p>
-              <p><span class="g-purple">{{globals.stableToken}}</span></p>
+              <p>{{validatorDetail.pending_reward || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
             </div>
             <div class="col-12 d-flex justify-content-between">
               <p>Total Reward</p>
-              <p><span class="g-purple">{{globals.stableToken}}</span></p>
+              <p>{{stakingToken || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
             </div>
             <div class="col-12 d-flex justify-content-between">
               <p>Available Balance</p>
-              <p><span class="g-purple">{{globals.stableToken}}</span></p>
+              <p>{{availableToken || 0 | number: globals.formatNumberToken}} <span class="g-purple">{{globals.stableToken}}</span></p>
             </div>
           </div>
           <div class="box-notice undelegate row">

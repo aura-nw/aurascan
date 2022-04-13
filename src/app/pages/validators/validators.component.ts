@@ -10,12 +10,12 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
 import { WalletService } from '../../../app/core/services/wallet.service';
-import { ChainsInfo, LAST_USED_PROVIDER, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { ChainsInfo, LAST_USED_PROVIDER, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 import session from '../../core/utils/storage/session';
 import { WalletStorage } from '../../../app/core/models/wallet';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
-import { STAKING_TYPE_ENUM } from '../../../app/core/constants/validator.enum';
+import { STAKING_TYPE_ENUM, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -74,6 +74,10 @@ export class ValidatorsComponent implements OnInit {
   selected = STAKING_TYPE_ENUM.Undelegate;
   listTypeStake = TYPE_STAKING;
   searchNullData = false;
+  listStakingValidator;
+  validatorDetail;
+  statusValidator = STATUS_VALIDATOR;
+  typeValidator = STATUS_VALIDATOR.Active;
 
   constructor(
     private validatorService: ValidatorService,
@@ -92,7 +96,7 @@ export class ValidatorsComponent implements OnInit {
     setInterval(() => {
       this.getList();
       this.getDataWallet();
-    }, 10000);
+    }, 60000);
   }
 
   ngAfterViewInit(): void {
@@ -100,14 +104,9 @@ export class ValidatorsComponent implements OnInit {
       if (this.walletService.wallet) {
         this.userAddress = this.walletService.wallet.bech32Address;
         this.getDataWallet();
+        
       }
     }, 2000);
-  }
-
-  changePage(page: PageEvent): void {
-    this.dataSource = null;
-    this.pageIndex = page.pageIndex;
-    this.getList();
   }
 
   getList(): void {
@@ -120,7 +119,7 @@ export class ValidatorsComponent implements OnInit {
         val.participation = val.vote_count + '/ ' + val.target_count;
       });
 
-      let dataFilter = res.data.filter((event) => event.status_validator === this.isActive);
+      let dataFilter = res.data.filter((event) => event.status === this.statusValidator.Active);
       //sort and calculator cumulative
       let dataSort = this.calculatorCumulative(dataFilter);
       this.dataSource = new MatTableDataSource(dataSort);
@@ -130,9 +129,9 @@ export class ValidatorsComponent implements OnInit {
     });
   }
 
-  changeType(type: boolean): void {
-    this.isActive = type;
-    let data = this.rawData.filter((event) => event.status_validator === this.isActive);
+  changeType(type): void {
+    this.typeValidator = type;
+    let data = this.rawData.filter((event) => event.status === type);
     this.dataSource = new MatTableDataSource(data);
     this.dataSourceBk = this.dataSource;
     this.searchValidator();
@@ -163,7 +162,7 @@ export class ValidatorsComponent implements OnInit {
       }
     });
 
-    let dataFilter = this.sortedData.filter((event) => event.status_validator === this.isActive);
+    let dataFilter = this.sortedData.filter((event) => event.status === this.typeValidator);
     //sort and calculator cumulative
     let dataSort = this.calculatorCumulative(dataFilter);
     this.dataSource = new MatTableDataSource(dataSort);
@@ -200,11 +199,11 @@ export class ValidatorsComponent implements OnInit {
   searchValidator(): void {
     this.searchNullData = false;
     let data;
-    if (this.textSearch.length > 0 || !this.isActive) {
+    if (this.textSearch.length > 0 || this.typeValidator === STATUS_VALIDATOR.Inactive) {
       data = this.dataSourceBk.data.filter(
         (f) =>
           f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1 &&
-          f.status_validator === this.isActive,
+          f.status_validator === this.typeValidator,
       );
       this.dataSource = this.dataSourceBk;
       this.dataSource = new MatTableDataSource(data);
@@ -234,6 +233,7 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
         this.dataModal = res.data;
+        this.validatorDetail = this.listStakingValidator?.find(f => f.validator_address === address);
         this.getListDelegators(address);
         this.modalService.open(modal, {
           keyboard: false,
@@ -260,6 +260,8 @@ export class ValidatorsComponent implements OnInit {
           }
 
           if (res.dataListDelegator) {
+            this.listStakingValidator = res.dataListDelegator?.data?.delegations;
+            
             if (res?.dataListDelegator?.data?.delegations.length > 0) {
               res?.dataListDelegator?.data?.delegations.forEach((f) => {
                 f.amount_staked = f.amount_staked / NUMBER_CONVERT;
@@ -295,7 +297,7 @@ export class ValidatorsComponent implements OnInit {
 
   handleStaking() {
     this.checkAmountStaking();
-    if (!this.isExceedAmount) {
+    if (!this.isExceedAmount && this.amountFormat > 0) {
       const excuteStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
