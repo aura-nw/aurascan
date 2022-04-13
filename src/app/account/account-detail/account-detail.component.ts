@@ -329,6 +329,8 @@ export class AccountDetailComponent implements OnInit {
   getAccountDetail(): void {
     this.accountService.getAccoutDetail(this.id).subscribe((res) => {
       this.item = res.data;
+      console.log(this.item);
+      
       this.chartOptions.series = [];
       if (this.item.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
@@ -352,9 +354,9 @@ export class AccountDetailComponent implements OnInit {
           case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
             f.amount = this.item.unbonding;
             break;
-          // case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-          //   f.amount = this.item.vesting.amount;
-          //   break;
+          case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
+            f.amount = this.item.vesting.amount;
+            break;
           default:
             break;
         }
