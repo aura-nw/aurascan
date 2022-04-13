@@ -111,7 +111,7 @@ export function VoteTx(senderAddress, { proposalId, voteOption }) {
     typeUrl: "/cosmos.gov.v1beta1.MsgVote",
     value: {
       voter: senderAddress,
-      proposal_id: proposalId,
+      proposalId,
       option: chainVoteOption,
     },
   };
