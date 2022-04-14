@@ -231,8 +231,6 @@ export class ValidatorsComponent implements OnInit {
       this.walletService.connectKeplr(this.walletService.chainId);
 
       this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
-        console.log('View PopUp');
-        
         if (wallet && wallet.bech32Address) {
           this.clicked = true;
           this.getValidatorDetail(address, staticDataModal);
@@ -250,7 +248,6 @@ export class ValidatorsComponent implements OnInit {
         this.getListDelegators(address);
 
         this.clicked = false;
-
         this.modalService.open(modal, {
           keyboard: false,
           centered: true,
