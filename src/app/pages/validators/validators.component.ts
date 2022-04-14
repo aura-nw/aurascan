@@ -230,9 +230,7 @@ export class ValidatorsComponent implements OnInit {
     const view = async () => {
       this.walletService.connectKeplr(this.walletService.chainId);
 
-      this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
-        console.log('View PopUp');
-        
+      this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {        
         if (wallet && wallet.bech32Address) {
           this.clicked = true;
           this.getValidatorDetail(address, staticDataModal);

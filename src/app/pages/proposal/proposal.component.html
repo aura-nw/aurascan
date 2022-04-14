@@ -2,7 +2,7 @@
 <section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
   <div class="container-fluid">
     <div class="row row-eq-height">
-      <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4)">
+      <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
         <div class="card mb-0 h-100">
           <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
@@ -107,9 +107,9 @@
           </div>
           <div class="card-footer">
             <div class="d-flex justify-content-end align-items-center">
-              <!-- <div class="message" *ngIf="getVotedProposal(lastedItem.pro_id) | async as vote">
-                You vote '{{ vote }}' for this proposal
-              </div> -->
+                <div class="message" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote ">
+                  You vote '{{ proposalVotes[idx].vote }}' for this proposal
+                </div>
               <a class="btn-detail" [routerLink]="[lastedItem.pro_id]" mat-stroked-button color="primary">Details</a>
               <button
                 mat-flat-button
