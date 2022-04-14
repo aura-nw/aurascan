@@ -34,7 +34,7 @@ export function getAmount(arrayMsg, type, rawRog = '') {
 
   if (itemMessage && amount >= 0) {
     amount = (amount / NUMBER_CONVERT) || 0;
-    amountFormat = arrayMsg.length === 1 ? amount : 'More';
+    amountFormat = (arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward) ? amount : 'More';
   }
 
   return amountFormat;
