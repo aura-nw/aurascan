@@ -107,8 +107,8 @@
           </div>
           <div class="card-footer">
             <div class="d-flex justify-content-end align-items-center">
-              <!-- <div class="message" *ngIf="lastedItem.currentVote != ''">
-                You vote '{{ lastedItem.currentVote }}' for this proposal
+              <!-- <div class="message" *ngIf="getVotedProposal(lastedItem.pro_id) | async as vote">
+                You vote '{{ vote }}' for this proposal
               </div> -->
               <a class="btn-detail" [routerLink]="[lastedItem.pro_id]" mat-stroked-button color="primary">Details</a>
               <button

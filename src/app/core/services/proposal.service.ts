@@ -25,8 +25,8 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
   }
 
-  getVotes(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-votes.json');
+  getVotes(proposalId, voter): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/votes/${voter}`);
   }
 
   getValidatorVotes(): Observable<any> {
