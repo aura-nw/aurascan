@@ -18,7 +18,7 @@ import { ProposalTableComponent } from './proposal-table/proposal-table.componen
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { NgbDropdownModule, NgbAlertModule, NgbCarouselModule, NgbProgressbarModule, NgbNavModule, NgbCollapseModule, NgbAccordionModule, NgbPopoverModule, NgbTooltipModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask';
-
+import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,8 @@ import { NgxMaskModule } from 'ngx-mask';
         NgbPopoverModule,
         NgbTooltipModule,
         NgbPaginationModule,
-        NgxMaskModule
+        NgxMaskModule,
+        TableNoDataModule
     ],
     providers: [ProposalService]
 })

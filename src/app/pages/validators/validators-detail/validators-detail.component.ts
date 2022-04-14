@@ -9,6 +9,7 @@ import { ValidatorService } from '../../../../app/core/services/validator.servic
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { Globals } from '../../../../app/global/global';
+import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
 
 @Component({
   selector: 'app-validators-detail',
@@ -72,6 +73,8 @@ export class ValidatorsDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   arrayUpTime = new Array(100);
   isUptimeMiss = true;
+  statusValidator = STATUS_VALIDATOR;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -89,7 +92,6 @@ export class ValidatorsDetailComponent implements OnInit {
     this.getListUpTime();
     this.getListDelegators();
     this.getListPower();
-    // this.getListPower();
   }
 
   getDetail(): void {
@@ -101,6 +103,7 @@ export class ValidatorsDetailComponent implements OnInit {
           return;
         }
         this.item = res.data;
+        this.item.up_time = this.item.status === this.statusValidator.Active ? this.item.up_time : '0%';
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.dataSource.sort = this.sort;
       },

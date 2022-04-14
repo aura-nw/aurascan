@@ -15,7 +15,7 @@
         <p class="address-account cursor-pointer mt-2" (click)="copyMessage(id)">{{ id }}</p>
         <div class="box-total">
           <p>Total Value</p>
-          <p>${{ tokenPrice * item?.total | number }}</p>
+          <p>${{ tokenPrice * item?.total | number: global.formatNumber2Decimal }}</p>
         </div>
       </div>
     </div>
@@ -37,7 +37,8 @@
           </mat-select>
         </div>
       </div>
-      <app-account-table *ngIf="dataSourceToken"
+      <ng-container *ngIf="!searchNullData; else noValues">
+        <app-account-table *ngIf="dataSourceToken"
         [dataSource]="dataSourceToken"
         [templates]="templatesToken"
         [displayedColumns]="displayedColumnsToken"
@@ -47,6 +48,10 @@
         [textNull]="'NO COINS'"
       >
       </app-account-table>
+      </ng-container>
+      <ng-template #noValues>
+        <app-table-no-data></app-table-no-data>
+      </ng-template>
     </div>
   </div>
   <div class="card-body row">
@@ -121,7 +126,7 @@
       </div>
       <div class="box-balance">
         <span class="balance-name g-purple">{{ global.stableToken }}</span>
-        <span class="balance-amount">{{ item?.total | number }}</span>
+        <span class="balance-amount">{{ item?.total | number: global.formatNumberToken }}</span>
       </div>
       <ng-container *ngFor="let item of chartCustomOptions">
         <div class="d-flex justify-content-between">
@@ -129,7 +134,7 @@
             <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
             <span>{{ item.name }}</span>
           </div>
-          <span>{{ item.amount | number }}</span>
+          <span>{{ item.amount | number: global.formatNumberToken }}</span>
         </div>
       </ng-container>
     </div>
@@ -182,7 +187,7 @@
                         </div>
                         <div *ngSwitchCase="'amount'">
                           <ng-container *ngIf="data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | number }}
+                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                             <span class="g-purple">{{ global.stableToken }}</span>
                           </ng-container>
                           <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>

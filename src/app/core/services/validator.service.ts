@@ -29,4 +29,9 @@ export class ValidatorService extends CommonService {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators/events/${address}?limit=${limit}&offset=${offset}`);
   }
+
+  validatorsDetailWallet(address): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}`);
+  }
 }

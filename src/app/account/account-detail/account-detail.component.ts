@@ -3,7 +3,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
-import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { TransactionService } from '../../../app/core/services/transaction.service';
@@ -161,6 +161,7 @@ export class AccountDetailComponent implements OnInit {
   isCopy = false;
   tokenPrice = 0;
   selected = ACCOUNT_TYPE_ENUM.All;
+  searchNullData = false;
 
   chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
@@ -244,6 +245,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
     this.id = this.route.snapshot.paramMap.get('id');
     this.getAccountDetail();
@@ -306,16 +308,18 @@ export class AccountDetailComponent implements OnInit {
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
           //get amount of transaction
-          trans.amount = getAmount(trans.messages, trans.type);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
           if (trans.code === CodeTransaction.Success) {
             trans.status = StatusTransaction.Success;
           }
+          if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.id) {
+            trans.type = TypeTransaction.Received;
+          }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
-
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
@@ -349,9 +353,9 @@ export class AccountDetailComponent implements OnInit {
           case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
             f.amount = this.item.unbonding;
             break;
-          // case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-          //   f.amount = this.item.vesting.amount;
-          //   break;
+          case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
+            f.amount = this.item.vesting?.amount;
+            break;
           default:
             break;
         }
@@ -389,10 +393,14 @@ export class AccountDetailComponent implements OnInit {
   }
 
   searchToken(): void {
+    this.searchNullData = false;
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
+      if (data.length === 0) {
+        this.searchNullData = true;
+      }
       this.dataSourceToken = this.dataSourceTokenBk;
       this.dataSourceToken = new MatTableDataSource(data);
     } else {

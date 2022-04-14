@@ -4,6 +4,7 @@ import { TYPE_TRANSACTION } from '../../../../../app/core/constants/transaction.
 import { getAmount, Globals } from '../../../../../app/global/global';
 import { DatePipe } from '@angular/common';
 import { DATEFORMAT } from '../../../../../app/core/constants/common.constant';
+import { ValidatorService } from '../../../../../app/core/services/validator.service';
 
 @Component({
   selector: 'app-transferred-detail',
@@ -18,20 +19,33 @@ export class TransferredDetailComponent implements OnInit {
   amount;
   dateVesting;
   isVestingDelay;
+  validatorName = '';
   @Input() transactionDetail: any;
 
-  constructor(public global: Globals, private datePipe: DatePipe,) {}
+  constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
 
   ngOnInit(): void {
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
+    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
+      this.getDetail();
+    }
     //get amount of transaction
-    this.amount = getAmount(this.transactionDetail?.messages, this.transactionDetail?.type);
+    this.amount = getAmount(this.transactionDetail?.messages, this.transactionDetail?.type, this.transactionDetail?.raw_log);
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
     );
     this.transactionDetailType = typeTrans?.value;
+  }
+
+  getDetail(): void {
+    this.validatorService.validatorsDetail(this.transactionDetail?.messages[0]?.validator_address).subscribe(
+      (res) => {
+        this.validatorName = res?.data?.title;
+      },
+      (error) => {},
+    );
   }
 }

@@ -15,7 +15,7 @@ import { NgxToastrService } from './ngx-toastr.service';
 })
 export class WalletService {
   apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
-  chainId = this.environmentService.apiUrl.value.chainId
+  chainId = this.environmentService.apiUrl.value.chainId;
   wallet$: Observable<Key>;
   private _wallet$: BehaviorSubject<Key>;
 
@@ -48,15 +48,19 @@ export class WalletService {
       const { provider, chainId } = lastProvider;
       this.connect(provider, chainId);
     }
+
+    window.addEventListener('keplr_keystorechange', (event) => {
+      const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
+      if (lastProvider) {
+        this.connect(WALLET_PROVIDER.KEPLR, this.chainId);
+      }
+    });
   }
 
   connect(wallet: WALLET_PROVIDER, chainId: string): any {
     switch (wallet) {
       case WALLET_PROVIDER.KEPLR:
         this.connectKeplr(chainId);
-        window.addEventListener('keplr_keystorechange', (event) => {
-          this.connect(WALLET_PROVIDER.KEPLR, chainId);
-        });
         break;
       case WALLET_PROVIDER.COIN98:
         this.connectCoin98(chainId);
@@ -70,12 +74,13 @@ export class WalletService {
     session.removeItem(LAST_USED_PROVIDER);
   }
 
-  private connectKeplr(chainId: string): void {
+  connectKeplr(chainId: string): void {
     const checkWallet = async () => {
       try {
         const keplr = await getKeplr();
 
         if (keplr) {
+          await this.keplrSuggestChain(chainId);
           await keplr.enable(chainId);
 
           const account = await keplr.getKey(chainId);
@@ -134,7 +139,7 @@ export class WalletService {
     const error = this.getError(err.message);
     switch (error) {
       case KEPLR_ERRORS.NoChainInfo:
-        this.keplrSuggestChain(chainId);
+        // this.keplrSuggestChain(chainId);
         break;
       case KEPLR_ERRORS.NOT_EXIST:
         window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
@@ -149,7 +154,7 @@ export class WalletService {
       (await getKeplr())
         .experimentalSuggestChain(ChainsInfo[chainId])
         .then(() => {
-          this.connectKeplr(chainId);
+          // this.connectKeplr(chainId);
         })
         .catch((e: Error) => {
           this.toastr.error(e.message);

@@ -55,11 +55,11 @@ export const ChainsInfo: { [chainId: string]: any } = {
     walletUrlForStaking: "https://aura.network",
   },
   ["aura-devnet"]: {
-    features: ["no-legacy-stdTx"],
+    features: ['no-legacy-stdTx'],
     chainId: "aura-devnet",
-    chainName: "aura devnet",
-    rpc: "http://34.199.79.132:26657",
-    rest: "http://34.199.79.132:1317",
+		chainName: "aura devnet",
+		rpc: "http://34.199.79.132:26657",
+		rest: "http://34.199.79.132:1317",
     bip44: {
       coinType: 118,
     },
@@ -71,22 +71,18 @@ export const ChainsInfo: { [chainId: string]: any } = {
       bech32PrefixConsAddr: "aura" + "valcons",
       bech32PrefixConsPub: "aura" + "valconspub",
     },
-    currencies: [
-      {
-        coinDenom: "AURA",
-        coinMinimalDenom: "uaura",
-        coinDecimals: 6,
-        // coinGeckoId: "aura",
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDenom: "AURA",
-        coinMinimalDenom: "uaura",
-        coinDecimals: 6,
-        // coinGeckoId: "uaura",
-      },
-    ],
+    currencies: [{
+      coinDenom: "AURA",
+      coinMinimalDenom: "uaura",
+      coinDecimals: 6,
+      // coinGeckoId: "aura",
+    }, ],
+    feeCurrencies: [{
+      coinDenom: "AURA",
+      coinMinimalDenom: "uaura",
+      coinDecimals: 6,
+      // coinGeckoId: "uaura",
+    }, ],
     stakeCurrency: {
       coinDenom: "AURA",
       coinMinimalDenom: "uaura",
@@ -97,9 +93,9 @@ export const ChainsInfo: { [chainId: string]: any } = {
     gasPriceStep: {
       low: 1,
       average: 2.5,
-      high: 4,
+      high: 4
     },
-    walletUrlForStaking: "https://aura.network",
+    walletUrlForStaking: "https://stake.aura.network"
   },
   ["bombay-12"]: {
     features: ["no-legacy-stdTx"],
