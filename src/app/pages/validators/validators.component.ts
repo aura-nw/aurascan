@@ -65,7 +65,6 @@ export class ValidatorsComponent implements OnInit {
   dataHeader = new CommonDataDto();
   // bread crumb items
   breadCrumbItems!: Array<{}>;
-  isPartiDown = true;
   dataModal;
   clicked = false;
   delegatedToken = 0;
@@ -125,8 +124,8 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
       this.rawData = res.data;
       res.data.forEach((val) => {
-        if (val.target_count > 0 && val.vote_count / val.target_count > 0.5) {
-          this.isPartiDown = false;
+        if (val.target_count > 0 && ((val.vote_count / val.target_count) <= 0.5)) {
+          val.isPartiDown = true;
         }
         val.participation = val.vote_count + '/ ' + val.target_count;
       });

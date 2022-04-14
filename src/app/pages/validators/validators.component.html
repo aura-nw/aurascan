@@ -191,7 +191,7 @@
                   {{ data[template.matColumnDef] | number }}<br />
                   <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                 </div>
-                <div *ngSwitchCase="'participation'" class="box-parti" [ngClass]="{ 'parti-down': isPartiDown }">
+                <div *ngSwitchCase="'participation'" class="box-parti" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'rank'" class="box-rank text-left">

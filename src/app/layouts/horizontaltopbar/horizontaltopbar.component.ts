@@ -12,7 +12,7 @@ import { LanguageService } from '../../core/services/language.service';
 import { EventService } from '../../core/services/event.service';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { LAYOUT_MODE } from "../layouts.model";
-import { NETWORK } from '../../../app/core/constants/common.constant';
+import { NETWORK, VALIDATOR_ADDRESS_PREFIX } from '../../../app/core/constants/common.constant';
 import { CommonService } from '../../../app/core/services/common.service';
 import { EnvironmentService } from '../../../app/core/data-services/environment.service';
 import { first } from 'rxjs/operators';
@@ -310,10 +310,17 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   handleSearch() {
-    if (this.searchValue.length > 20) {
+    this.searchValue = this.searchValue.trim();
+    if (this.searchValue.length > 60) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['transaction', this.searchValue]);
       });
+    }
+    else if ((this.searchValue.length > 40)) {
+      let urlLink = this.searchValue.startsWith(VALIDATOR_ADDRESS_PREFIX) ? 'validators' : 'account';
+      // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([urlLink, this.searchValue]);
+      // });
     } else {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['blocks', this.searchValue]);
