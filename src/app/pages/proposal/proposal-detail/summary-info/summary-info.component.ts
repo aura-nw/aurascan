@@ -101,6 +101,7 @@ export class SummaryInfoComponent implements OnInit {
         proId: this.proposalDetail.pro_id,
         vote: null,
       });
+      this.getVotedProposal();
     });
   }
 
