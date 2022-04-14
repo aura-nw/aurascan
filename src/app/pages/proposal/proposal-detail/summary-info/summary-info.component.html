@@ -1,11 +1,14 @@
 <div class="card" *ngIf="proposalDetail">
-  <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+  <div class="card-header bg-transparent border-bottom">
     <div class="d-flex justify-content-between">
-      <div class="card__title">
+      <div class="card__title fw-bold">
         <div>#{{ proposalId }}</div>
         <h2>{{ proposalDetail.pro_title }}</h2>
       </div>
       <div class="card__status">
+        <div class="message" *ngIf="true">
+          You vote '' for this proposal
+        </div>
         <button
           mat-flat-button
           color="primary"
@@ -39,13 +42,14 @@
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Initial Deposit</div>
         <div class="col-12 col-md-10 info">
+          {{ proposalDetail.initial_deposit | number: '1.6-6' }}
           <span class="g-purple">{{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Total Deposit</div>
         <div class="col-12 col-md-10 info">
-          {{ proposalDetail.pro_total_deposits | number: '1.6' }}
+          {{ proposalDetail.pro_total_deposits | number: '1.6-6' }}
           <span class="g-purple"> {{ global.stableToken }}</span>
         </div>
       </div>
