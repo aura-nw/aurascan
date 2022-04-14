@@ -108,7 +108,7 @@
           <div class="card-footer">
             <div class="d-flex justify-content-end align-items-center">
                 <div class="message" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote ">
-                  You vote '{{ proposalVotes[idx].vote }}' for this proposal
+                  You voted '{{ proposalVotes[idx].vote }}' for this proposal
                 </div>
               <a class="btn-detail" [routerLink]="[lastedItem.pro_id]" mat-stroked-button color="primary">Details</a>
               <button
