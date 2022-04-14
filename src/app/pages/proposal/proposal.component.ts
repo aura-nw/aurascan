@@ -176,11 +176,17 @@ export class ProposalComponent implements OnInit {
   }
 
   openVoteDialog(id: string, title: string) {
+    console.log(this.proposalVotes[id]);
+
     if (this.walletService.wallet) {
       let dialogRef = this.dialog.open(ProposalVoteComponent, {
         height: '400px',
         width: '600px',
-        data: { id, title, voteValue: this.voteValue },
+        data: {
+          id,
+          title,
+          voteValue:  this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+        },
       });
       dialogRef.afterClosed().subscribe((result) => {
         this.voteValue = result;
@@ -195,6 +201,14 @@ export class ProposalComponent implements OnInit {
         console.error(error);
       }
     }
+  }
+
+  parsingStatus(sts) {
+    return (
+      this.voteConstant.find((s) => {
+        return s.value?.toUpperCase() === sts?.toUpperCase();
+      })?.voteOption || sts
+    );
   }
 
   shortenAddress(address: string): string {
