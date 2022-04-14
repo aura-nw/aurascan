@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { PROPOSAL_STATUS } from '../../../../core/constants/status.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/status.constant';
 import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
@@ -21,8 +23,13 @@ export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
+  voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
+  proposalVotes: {
+    proId: number;
+    vote: string | null;
+  }[] = [];
 
   constructor(
     private proposalService: ProposalService,
@@ -35,6 +42,7 @@ export class SummaryInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDetail();
+    this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 
   getDetail(): void {
@@ -88,6 +96,11 @@ export class SummaryInfoComponent implements OnInit {
         (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.abstainPercent =
         (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
+
+      this.proposalVotes.push({
+        proId: this.proposalDetail.pro_id,
+        vote: null,
+      });
     });
   }
 
@@ -122,6 +135,29 @@ export class SummaryInfoComponent implements OnInit {
       } catch (error) {
         console.error(error);
       }
+    }
+  }
+
+  getVotedProposal() {
+    const addr = this.walletService.wallet?.bech32Address || null;
+    if (this.proposalVotes.length > 0 && addr) {
+      forkJoin({
+        0: this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr),
+      })
+        .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
+        .subscribe((res) => {
+          this.proposalVotes = res.map((i, idx) => {
+            return {
+              proId: this.proposalVotes[idx].proId,
+              vote: this.voteConstant.find((s) => s.enum === i)?.value || null,
+            };
+          });
+        });
+    } else {
+      this.proposalVotes = this.proposalVotes.map((e) => ({
+        ...e,
+        vote: null,
+      }));
     }
   }
 }

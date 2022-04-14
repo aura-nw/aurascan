@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { forkJoin, Observable, of } from 'rxjs';
-import { delay, last, map, take } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/status.constant';
@@ -185,7 +185,7 @@ export class ProposalComponent implements OnInit {
         data: {
           id,
           title,
-          voteValue:  this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+          voteValue: this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
         },
       });
       dialogRef.afterClosed().subscribe((result) => {
