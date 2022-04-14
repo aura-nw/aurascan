@@ -10,13 +10,19 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
 import { WalletService } from '../../../app/core/services/wallet.service';
-import { ChainsInfo, LAST_USED_PROVIDER, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
+import {
+  ChainsInfo,
+  LAST_USED_PROVIDER,
+  SIGNING_MESSAGE_TYPES,
+  WALLET_PROVIDER,
+} from '../../../app/core/constants/wallet.constant';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 import session from '../../core/utils/storage/session';
 import { WalletStorage } from '../../../app/core/models/wallet';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { STAKING_TYPE_ENUM, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { forkJoin } from 'rxjs';
+import { takeUntil, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-validators',
@@ -84,27 +90,34 @@ export class ValidatorsComponent implements OnInit {
     private modalService: NgbModal,
     private accountService: AccountService,
     private commonService: CommonService,
-    private walletService: WalletService
+    private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
     this.getList();
-    this.getDataWallet();
+    // this.getDataWallet();
 
     setInterval(() => {
       this.getList();
       this.getDataWallet();
     }, 60000);
+
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.userAddress = wallet.bech32Address;
+        this.getDataWallet();
+      }
+    });
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      if (this.walletService.wallet) {
-        this.userAddress = this.walletService.wallet.bech32Address;
-        this.getDataWallet();
-      }
-    }, 2000);
+    // setTimeout(() => {
+    //   if (this.walletService.wallet) {
+    //     this.userAddress = this.walletService.wallet.bech32Address;
+    //     this.getDataWallet();
+    //   }
+    // }, 2000);
   }
 
   getList(): void {
@@ -213,26 +226,31 @@ export class ValidatorsComponent implements OnInit {
     }
   }
 
-  viewPopupDetail(staticDataModal: any, address) {
-    const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
+  viewPopupDetail(staticDataModal: any, address: string) {
+    const view = async () => {
+      this.walletService.connectKeplr(this.walletService.chainId);
 
-    if (lastProvider) {
-      const { provider, chainId } = lastProvider;
-      this.walletService.connect(provider, chainId);
-      this.clicked = true;
-      this.getValidatorDetail(address, staticDataModal);
-      setTimeout(() => {
-        this.clicked = false;
-      }, 2000);
-    }
+      this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
+        console.log('View PopUp');
+        
+        if (wallet && wallet.bech32Address) {
+          this.clicked = true;
+          this.getValidatorDetail(address, staticDataModal);
+        }
+      });
+    };
+    view();
   }
 
   getValidatorDetail(address, modal): void {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
         this.dataModal = res.data;
-        this.validatorDetail = this.listStakingValidator?.find(f => f.validator_address === address);
+        this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.getListDelegators(address);
+
+        this.clicked = false;
+
         this.modalService.open(modal, {
           keyboard: false,
           centered: true,
@@ -248,29 +266,27 @@ export class ValidatorsComponent implements OnInit {
     if (this.userAddress) {
       forkJoin({
         dataWallet: this.accountService.getAccoutDetail(this.userAddress),
-        dataListDelegator:  this.validatorService.validatorsDetailWallet(this.userAddress),
-      }).subscribe(
-        res => {
-          if (res.dataWallet) {
-            this.delegatedToken = res?.dataWallet?.data?.delegated;
-            this.availableToken = res?.dataWallet?.data?.available;
-            this.stakingToken = res?.dataWallet?.data?.stake_reward;
-          }
+        dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
+      }).subscribe((res) => {
+        if (res.dataWallet) {
+          this.delegatedToken = res?.dataWallet?.data?.delegated;
+          this.availableToken = res?.dataWallet?.data?.available;
+          this.stakingToken = res?.dataWallet?.data?.stake_reward;
+        }
 
-          if (res.dataListDelegator) {
-            this.listStakingValidator = res.dataListDelegator?.data?.delegations;
-            
-            if (res?.dataListDelegator?.data?.delegations.length > 0) {
-              res?.dataListDelegator?.data?.delegations.forEach((f) => {
-                f.amount_staked = f.amount_staked / NUMBER_CONVERT;
-                f.pending_reward = f.pending_reward / NUMBER_CONVERT;
-              });
-              this.dataSourceWallet = new MatTableDataSource(res?.dataListDelegator.data?.delegations);
-              this.lengthWallet = res?.dataListDelegator.data?.delegations?.length;
-            }
+        if (res.dataListDelegator) {
+          this.listStakingValidator = res.dataListDelegator?.data?.delegations;
+
+          if (res?.dataListDelegator?.data?.delegations.length > 0) {
+            res?.dataListDelegator?.data?.delegations.forEach((f) => {
+              f.amount_staked = f.amount_staked / NUMBER_CONVERT;
+              f.pending_reward = f.pending_reward / NUMBER_CONVERT;
+            });
+            this.dataSourceWallet = new MatTableDataSource(res?.dataListDelegator.data?.delegations);
+            this.lengthWallet = res?.dataListDelegator.data?.delegations?.length;
           }
         }
-      );
+      });
     }
   }
 

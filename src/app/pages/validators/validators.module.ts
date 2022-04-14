@@ -16,7 +16,6 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { AccountService } from '../../../app/core/services/account.service';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
-import { WalletService } from '../../../app/core/services/wallet.service';
 
 @NgModule({
   declarations: [
@@ -36,6 +35,6 @@ import { WalletService } from '../../../app/core/services/wallet.service';
     SimplebarAngularModule,
     TableNoDataModule
   ],
-  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, WalletService]
+  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService]
 })
 export class ValidatorsModule { }
