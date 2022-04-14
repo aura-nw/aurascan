@@ -9,6 +9,7 @@ import { EnvironmentService } from '../../../../core/data-services/environment.s
 import { ResponseDto } from '../../../../core/models/common.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
+import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
 
 @Component({
@@ -55,33 +56,38 @@ export class SummaryInfoComponent implements OnInit {
         this.proposalDetail.pro_deposit_end_time,
         DATEFORMAT.DATETIME_UTC,
       );
+      this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
+      this.proposalDetail.pro_votes_yes = balanceOf(this.proposalDetail.pro_votes_yes);
+      this.proposalDetail.pro_votes_no = balanceOf(this.proposalDetail.pro_votes_no);
+      this.proposalDetail.pro_votes_no_with_veto = balanceOf(this.proposalDetail.pro_votes_no_with_veto);
+      this.proposalDetail.pro_votes_abstain = balanceOf(this.proposalDetail.pro_votes_abstain);
 
       this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
 
       this.proposalDetail.pro_total_vote =
-        +this.proposalDetail.pro_votes_yes +
-        +this.proposalDetail.pro_votes_no +
-        +this.proposalDetail.pro_votes_no_with_veto +
-        +this.proposalDetail.pro_votes_abstain;
+        this.proposalDetail.pro_votes_yes +
+        this.proposalDetail.pro_votes_no +
+        this.proposalDetail.pro_votes_no_with_veto +
+        this.proposalDetail.pro_votes_abstain;
 
       //vote bar data
       this.proposalDetail.pro_vote_yes_bar =
-        (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote;
+        (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
       this.proposalDetail.pro_vote_no_bar =
-        (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote;
+        (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
       this.proposalDetail.pro_vote_no_with_veto_bar =
-        (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote;
+        (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
       this.proposalDetail.pro_vote_abstain_bar =
-        (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote;
+        (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
 
       this.proposalDetail.yesPercent =
-        (+this.proposalDetail.pro_votes_yes * 100) / +this.proposalDetail.pro_total_vote || 0;
+        (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.noPercent =
-        (+this.proposalDetail.pro_votes_no * 100) / +this.proposalDetail.pro_total_vote || 0;
+        (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.noWithVetoPercent =
-        (+this.proposalDetail.pro_votes_no_with_veto * 100) / +this.proposalDetail.pro_total_vote || 0;
+        (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.abstainPercent =
-        (+this.proposalDetail.pro_votes_abstain * 100) / +this.proposalDetail.pro_total_vote || 0;
+        (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
     });
   }
 

@@ -9,7 +9,7 @@
               <div class="card__title">#{{ lastedItem.pro_id }}</div>
               <div
                 *ngIf="getStatus(lastedItem.pro_status)"
-                class="aura-status aura-status--has-elevation text-uppercase {{
+                class="aura-status aura-status--has-elevation text-capitalize {{
                   getStatus(lastedItem.pro_status).class
                 }}"
               >
@@ -23,7 +23,7 @@
                   <div class="title">Proposer</div>
                   <div>
                     <a href="/account/{{ lastedItem.pro_proposer_address }}">{{
-                      lastedItem.pro_proposer ? lastedItem.pro_proposer : lastedItem.pro_proposer_address
+                      lastedItem.pro_proposer ? lastedItem.pro_proposer : shortenAddress(lastedItem.pro_proposer_address)
                     }}</a>
                   </div>
                 </div>
@@ -107,13 +107,12 @@
           </div>
           <div class="card-footer">
             <div class="d-flex justify-content-end align-items-center">
-              <!-- <div class="message" *ngIf="lastedItem.currentVote != ''">
-                You vote '{{ lastedItem.currentVote }}' for this proposal
+              <!-- <div class="message" *ngIf="getVotedProposal(lastedItem.pro_id) | async as vote">
+                You vote '{{ vote }}' for this proposal
               </div> -->
               <a class="btn-detail" [routerLink]="[lastedItem.pro_id]" mat-stroked-button color="primary">Details</a>
               <button
                 mat-flat-button
-                color="primary"
                 *ngIf="lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
                 [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                 (click)="openVoteDialog(lastedItem.pro_id, lastedItem.pro_title)"

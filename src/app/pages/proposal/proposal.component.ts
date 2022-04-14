@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable, of } from 'rxjs';
+import { delay, last, map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/status.constant';
@@ -12,6 +14,8 @@ import { EnvironmentService } from '../../core/data-services/environment.service
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
+import { balanceOf } from '../../core/utils/common/parsing';
+import { shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 
 @Component({
@@ -60,7 +64,7 @@ export class ProposalComponent implements OnInit {
   changePage(page: PageEvent): void {
     this.dataSource = null;
     this.pageIndex = page.pageIndex;
-    this.getList();
+    this.getList();   
   }
 
   getList(): void {
@@ -83,8 +87,28 @@ export class ProposalComponent implements OnInit {
         pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+        pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
       });
     });
+  }
+
+  getVotedProposal(proposalId): Observable<any> {
+    if (this.walletService.wallet) {
+      return this.proposalService.getVotes(proposalId, this.walletService.wallet.bech32Address)
+      .pipe(
+        map((res: ResponseDto) => {
+          if (res) {
+            const voteOption = res.data.proposalVote.option;
+            const statusObj = this.voteConstant.find((s) => s.enum === voteOption);
+            if (statusObj !== undefined) {
+              return statusObj.value;
+            }
+          }
+          return null;
+        }),
+      );
+    }
+    return of(null);
   }
 
   getStatus(key: string) {
@@ -109,13 +133,13 @@ export class ProposalComponent implements OnInit {
       key = 0;
     } else {
       if (highest === yes) {
-        key = 0;
-      } else if (highest === no) {
         key = 1;
-      } else if (highest === noWithVeto) {
-        key = 2;
-      } else {
+      } else if (highest === no) {
         key = 3;
+      } else if (highest === noWithVeto) {
+        key = 4;
+      } else {
+        key = 2;
       }
     }
 
@@ -150,5 +174,9 @@ export class ProposalComponent implements OnInit {
         console.error(error);
       }
     }
+  }
+
+  shortenAddress(address: string): string {
+    return shortenAddressStartEnd(address, 6, 10);
   }
 }
