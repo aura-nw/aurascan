@@ -176,8 +176,6 @@ export class ProposalComponent implements OnInit {
   }
 
   openVoteDialog(id: string, title: string) {
-    console.log(this.proposalVotes[id]);
-
     if (this.walletService.wallet) {
       let dialogRef = this.dialog.open(ProposalVoteComponent, {
         height: '400px',
