@@ -245,6 +245,7 @@ export class AccountDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
     this.id = this.route.snapshot.paramMap.get('id');
     this.getAccountDetail();

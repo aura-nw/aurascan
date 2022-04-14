@@ -72,7 +72,7 @@ export class BlockDetailComponent implements OnInit {
     if (linkHash) {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
-      this.router.navigate(['blocks/id', data.blockId]);
+      this.router.navigate(['blocks', data.height]);
     }
   }
 
@@ -116,6 +116,7 @@ export class BlockDetailComponent implements OnInit {
         }
 
         res.data?.txs.forEach((trans) => {
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
           const typeTrans = this.typeTransaction.find(f => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
@@ -123,12 +124,6 @@ export class BlockDetailComponent implements OnInit {
             trans.status = StatusTransaction.Success;
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
-          trans.amount = 0;
-          //check exit amount of transaction
-          if (trans.messages && trans.messages[0]?.amount) {
-            let amount =  trans.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
-            trans.amount = trans.messages?.length === 1 ? amount : 'More';
-          }
         });
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
