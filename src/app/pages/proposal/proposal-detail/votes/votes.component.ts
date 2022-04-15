@@ -81,13 +81,11 @@ export class VotesComponent implements OnInit {
         if (res['all']) {
           this.voteDataList = [...this.voteData.all.proposalVotes];
         }
-        console.log('voteDataList', this.voteDataList);
       });
     }
   }
 
   changeTab(tabId): void {
-    let payload = this.query[tabId];
     switch (tabId) {
       case '':
         this.voteDataList = this.voteData.all.proposalVotes;

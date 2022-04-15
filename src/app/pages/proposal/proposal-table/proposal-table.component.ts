@@ -28,9 +28,9 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
-    { matColumnDef: 'time', headerCellDef: 'Time' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'option', headerCellDef: 'Answer' },
+    { matColumnDef: 'created_at', headerCellDef: 'Time' },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
