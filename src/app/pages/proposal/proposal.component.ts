@@ -150,16 +150,16 @@ export class ProposalComponent implements OnInit {
 
     if (!highest) {
       highest = 0;
-      key = 0;
+      key = 'VOTE_OPTION_UNSPECIFIED';
     } else {
       if (highest === yes) {
-        key = 1;
+        key = 'VOTE_OPTION_YES';
       } else if (highest === no) {
-        key = 3;
+        key = 'VOTE_OPTION_NO';
       } else if (highest === noWithVeto) {
-        key = 4;
+        key = 'VOTE_OPTION_NO_WITH_VETO';
       } else {
-        key = 2;
+        key = 'VOTE_OPTION_ABSTAIN';
       }
     }
 

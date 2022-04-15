@@ -20,12 +20,9 @@ export class DepositorsComponent implements OnInit {
   constructor(private proposalService: ProposalService) {}
 
   ngOnInit(): void {
-    this.proposalService.getDepositors(this.proposalId).subscribe((data) => {
-      this._voteList = data;
-      this.changeTab(0);
+    this.proposalService.getDepositors(this.proposalId).subscribe((res) => {
+      this.voteDataList = [...res.data.result];
+      console.log(this.voteDataList);
     });
-  }
-  changeTab(tabId): void {
-    //this.voteDataList = [...this._voteList].slice(tabId * 8, tabId * 8 + 8);
   }
 }
