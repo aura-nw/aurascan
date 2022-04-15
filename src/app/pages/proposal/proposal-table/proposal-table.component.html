@@ -15,12 +15,25 @@
                 </a>
               </ng-container>
               <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
-                <ng-container *ngIf="template.matColumnDef !== 'amount'">
-                  {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' }}
-                </ng-container>
-                <ng-container *ngIf="template.matColumnDef === 'amount'">
-                  {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' | number: global.formatNumberToken}}
-                  <span class="g-purple">{{global.stableToken}}</span>
+                <ng-container [ngSwitch]="template.matColumnDef">
+                  <ng-container *ngSwitchCase="'amount'">
+                    {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-' | number: global.formatNumberToken}}
+                    <span class="g-purple">{{global.stableToken}}</span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'option'">
+                    {{getVoteValue(data[template.matColumnDef])}}
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'created_at'">
+                    {{getDateValue(data[template.matColumnDef])[0]}}
+                    <br>
+                    ({{getDateValue(data[template.matColumnDef])[1]}})
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-' }}
+                  </ng-container>
                 </ng-container>
               </ng-container>
             </div>

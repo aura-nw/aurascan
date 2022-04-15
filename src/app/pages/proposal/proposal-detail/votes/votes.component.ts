@@ -54,7 +54,6 @@ export class VotesComponent implements OnInit {
   constructor(private proposalService: ProposalService) {}
 
   ngOnInit(): void {
-    console.log(this.query);
     if (this.proposalId) {
       const payloads: IListVoteQuery[] = this.TABS.map((vote) => ({
         limit: this.LIMIT_DEFAULT,
@@ -103,7 +102,5 @@ export class VotesComponent implements OnInit {
         this.voteDataList = this.voteData.noWithVeto.proposalVotes;
         break;
     }
-
-    console.log('this.voteDataList', this.voteDataList);
   }
 }
