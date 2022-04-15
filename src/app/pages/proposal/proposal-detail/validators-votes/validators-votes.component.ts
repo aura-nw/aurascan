@@ -20,7 +20,7 @@ export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;
   _voteList: IValidatorVotes[] = [];
 
-  
+
 
   constructor(private proposalService: ProposalService) {}
   ngOnInit(): void {
@@ -32,7 +32,7 @@ export class ValidatorsVotesComponent implements OnInit {
     };
     this.proposalService.getValidatorVotes(data).subscribe((res) => {
       this._voteList = res.proposalVotes;
-      this.changeTab(0);
+      //this.changeTab(0);
     });
   }
   changeTab(tabId): void {
