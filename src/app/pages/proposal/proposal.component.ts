@@ -150,7 +150,7 @@ export class ProposalComponent implements OnInit {
 
     if (!highest) {
       highest = 0;
-      key = 'VOTE_OPTION_UNSPECIFIED';
+      key = 'VOTE_OPTION_YES';
     } else {
       if (highest === yes) {
         key = 'VOTE_OPTION_YES';

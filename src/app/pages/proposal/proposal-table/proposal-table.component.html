@@ -15,7 +15,13 @@
                 </a>
               </ng-container>
               <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
-                {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' }}
+                <ng-container *ngIf="template.matColumnDef !== 'amount'">
+                  {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' }}
+                </ng-container>
+                <ng-container *ngIf="template.matColumnDef === 'amount'">
+                  {{ (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) || '-' | number: global.formatNumberToken}}
+                  <span class="g-purple">{{global.stableToken}}</span>
+                </ng-container>
               </ng-container>
             </div>
           </td>
