@@ -5,8 +5,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/status.constant';
-import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
@@ -117,25 +116,24 @@ export class SummaryInfoComponent implements OnInit {
     return resObj;
   }
 
-  openVoteDialog(id: string, title: string) {
-    if (this.walletService.wallet) {
-      let dialogRef = this.dialog.open(ProposalVoteComponent, {
-        height: '400px',
-        width: '600px',
-        data: { id, title, voteValue: this.voteValue },
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        this.voteValue = result;
+  openVoteDialog(proposalDetail) {
+    const id = proposalDetail.pro_id;
+    const title = proposalDetail.pro_title;
+    const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
+    if (expiredTime > 0) {
+      this.walletService.connectKeplr(this.chainId, (account) => {
+        let dialogRef = this.dialog.open(ProposalVoteComponent, {
+          height: '400px',
+          width: '600px',
+          data: { id, title, voteValue: this.voteValue },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          this.voteValue = result;
+          this.getDetail();
+        });
       });
     } else {
-      try {
-        const connect = async () => {
-          await this.walletService.connect(WALLET_PROVIDER.KEPLR, this.chainId);
-        };
-        connect();
-      } catch (error) {
-        console.error(error);
-      }
+      this.getDetail();
     }
   }
 
@@ -150,7 +148,7 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalVotes = res.map((i, idx) => {
             return {
               proId: this.proposalVotes[idx].proId,
-              vote: this.voteConstant.find((s) => s.enum === i)?.value || null,
+              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
             };
           });
         });
