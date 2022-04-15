@@ -174,21 +174,31 @@ export class ProposalComponent implements OnInit {
     return resObj;
   }
 
-  openVoteDialog(id: string, title: string) {
-    this.walletService.connectKeplr(this.chainId, (account) => {
-      let dialogRef = this.dialog.open(ProposalVoteComponent, {
-        height: '400px',
-        width: '600px',
-        data: {
-          id,
-          title,
-          voteValue: this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
-        },
+  openVoteDialog(item) {
+    const id = item.pro_id;
+    const title = item.pro_title;
+    const expiredTime = (new Date(item.pro_voting_end_time).getTime() - new Date().getTime());
+    if(expiredTime > 0)
+    {
+      this.walletService.connectKeplr(this.chainId, (account) => {
+        let dialogRef = this.dialog.open(ProposalVoteComponent, {
+          height: '400px',
+          width: '600px',
+          data: {
+            id,
+            title,
+            voteValue: this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+          },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          this.voteValue = result;
+          this.getList();
+        });
       });
-      dialogRef.afterClosed().subscribe((result) => {
-        this.voteValue = result;
-      });
-    });
+    }
+    else{
+      this.getList();
+    }
   }
 
   parsingStatus(sts) {

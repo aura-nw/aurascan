@@ -14,7 +14,7 @@
           color="primary"
           *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
           [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-          (click)="openVoteDialog(proposalDetail.pro_id, proposalDetail.pro_title)"
+          (click)="openVoteDialog(proposalDetail)"
           class="button"
         >
           {{ proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}
@@ -42,14 +42,14 @@
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Initial Deposit</div>
         <div class="col-12 col-md-10 info">
-          {{ proposalDetail.initial_deposit | number: '1.6-6' }}
+          {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
           <span class="g-purple">{{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 title">Total Deposit</div>
         <div class="col-12 col-md-10 info">
-          {{ proposalDetail.pro_total_deposits | number: '1.6-6' }}
+          {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
           <span class="g-purple"> {{ global.stableToken }}</span>
         </div>
       </div>
@@ -94,7 +94,7 @@
           </div> -->
           <div>
             <b>Total : </b>
-            {{ proposalDetail.pro_total_vote | number: '1.6-6' }}
+            {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
             <span class="g-purple"> {{ global.stableToken }}</span>
           </div>
         </div>
@@ -130,33 +130,41 @@
           <ul>
             <li data-style="primary">
               <p class="item item-label">Yes</p>
-              <p class="item item-percent">{{ this.proposalDetail.yesPercent | number: '1.2-2' }}%</p>
+              <p class="item item-percent">
+                {{ this.proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+              </p>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: '1.6-6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
             </li>
             <li data-style="danger">
               <p class="item item-label">No</p>
-              <p class="item item-percent">{{ this.proposalDetail.noPercent | number: '1.2-2' }}%</p>
+              <p class="item item-percent">
+                {{ this.proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
+              </p>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no || 0 | number: '1.6-6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
             </li>
             <li data-style="info">
               <p class="item item-label">No with veto</p>
-              <p class="item item-percent">{{ this.proposalDetail.noWithVetoPercent | number: '1.2-2' }}%</p>
+              <p class="item item-percent">
+                {{ this.proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+              </p>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: '1.6-6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
             </li>
             <li data-style="secondary">
               <p class="item item-label">Abstain</p>
-              <p class="item item-percent">{{ this.proposalDetail.abstainPercent | number: '1.2-2' }}%</p>
+              <p class="item item-percent">
+                {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+              </p>
               <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: '1.6-6' }}</span>
+                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
                 <span class="g-purple">{{ global.stableToken }}</span>
               </p>
             </li>
