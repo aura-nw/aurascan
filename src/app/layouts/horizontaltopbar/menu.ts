@@ -9,26 +9,26 @@ export const MENU: MenuItem[] = [
     },
     {
         id: 2,
-        label: 'MENUITEMS.VALIDATORS.TEXT',
-        icon: 'layers',
-        link: '/validators',
-    },
-    {
-        id: 3,
         label: 'MENUITEMS.BLOCKS.TEXT',
-        icon: 'box',
+        icon: 'block',
         link: '/blocks',
     },
     {
-        id: 4,
+        id: 3,
         label: 'MENUITEMS.TRANSACTION.TEXT',
-        icon: 'repeat',
+        icon: 'credit-card',
         link: '/transaction',
+    },
+    {
+        id: 4,
+        label: 'MENUITEMS.VALIDATORS.TEXT',
+        icon: 'user',
+        link: '/validators',
     },
     {
         id: 5,
         label: 'MENUITEMS.PROPOSAL.TEXT',
-        icon: 'file-text',
+        icon: 'archive',
         link: '/proposal',
     }
     // {

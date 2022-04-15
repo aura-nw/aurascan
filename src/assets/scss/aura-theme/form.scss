@@ -1,0 +1,36 @@
+.aura-form {
+  .form-control:focus {
+    box-shadow: none;
+  }
+  &.single-input-field {
+    .input-group {
+      border: 2px solid var(--aura-neutrals-3);
+      border-radius: 90px;
+      padding: 6px;
+      justify-content: space-between;
+      input {
+        max-width: 80%;
+        padding: 0;
+        padding-left: var(--spacer-1);
+        border: none;
+        background-color: transparent;
+        color: var(--aura-light-gray);
+        font-size: 14px;
+        line-height: 24px;
+        font-family: SFProDisplay;
+        &::placeholder {
+          color: var(--aura-dark-gray);
+        }
+      }
+      button[type='submit'] {
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+        padding: 0;
+        &:before {
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}

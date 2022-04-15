@@ -1,12 +1,8 @@
-.btn-soft-secondary {
-    &.active {
-        color: #ffffff;
-        background-color: rgb(81 86 190);
+.button {
+    &-primary {
+        padding: 8px 20px;
     }
-}
-
-.btn-show-more {
-    background-color: #222;
-    color: #ffffff;
-    text-decoration: none;
+    &-outline {
+        padding: 8px 24px;
+    }
 }

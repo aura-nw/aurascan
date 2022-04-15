@@ -1,0 +1,46 @@
+.navbar-header {
+  .divider.divider-vertical {
+    min-height: 48px;
+  }
+  form.aura-form.single-input-field {
+    .input-group {
+      border: 1.75px solid var(--aura-light-gray);
+      border-radius: 25px;
+      padding: var(--spacer-3) 22px var(--spacer-3) var(--spacer-6);
+      input {
+        font-size: 1.6rem;
+        line-height: 2.4rem;
+      }
+    }
+    button.btn-search {
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    @media (min-width: 992px) {
+      min-width: 504px;
+    }
+  }
+}
+.topnav {
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        i.icon, span {
+          color: var(--aura-light-gray);
+          transition: color .35s ease-in-out;
+        }
+        &:hover, &.active {
+          i.icon, span {
+            color: var(--aura-white);
+          }
+        }
+      }
+      i.icon {
+        font-size: 3.2rem;
+      }
+    }
+  }
+}

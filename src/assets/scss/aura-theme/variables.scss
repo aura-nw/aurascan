@@ -1,0 +1,21 @@
+@import "spacer";
+:root {
+  /* Single Basic color */
+  --aura-light-gray: #777E91;
+  --aura-dark-gray: #38383D;
+  --aura-white: #FCFCFD;
+  --aura-black: #141416;
+  --aura-black-1: #444444;
+  --aura-green: #5EE6D0;
+  /* Level Basic color */
+  --aura-primary-4: #45B36B;
+  --aura-neutrals-2: #23262F;
+  --aura-neutrals-3: #353945;
+  --aura-neutrals-4: #777E90;
+  --aura-neutrals-6: #E6E8EC;
+  --aura-neutrals-8: #FCFCFD;
+  /* Gradient color */
+  --aura-gradient-simple: linear-gradient(108.46deg, #5EE6D0 12.51%, #BFC6FF 51.13%, #FFBA69 87.49%);
+  --aura-gradient-bw: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.64) 50.17%, #000000 100%);
+  @include spacer-variables();
+}

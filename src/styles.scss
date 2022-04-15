@@ -1,4 +1,3 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '~@angular/material' as mat;
@@ -12,7 +11,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$minia-primary: mat.define-palette(mat.$indigo-palette);
+$minia-primary: mat.define-palette(mat.$grey-palette);
 $minia-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -20,7 +19,7 @@ $minia-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$minia-theme: mat.define-light-theme((
+$minia-theme: mat.define-dark-theme((
   color: (
     primary: $minia-primary,
     accent: $minia-accent,
@@ -32,6 +31,23 @@ $minia-theme: mat.define-light-theme((
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($minia-theme);
+
+
+
+// Custom Aura Theme
+@import "assets/fonts/AuraIcon/auraIcoStyle.css";
+@import "assets/fonts/Redig/Redig.css";
+@import "assets/fonts/SfProDisplay/SfProDisplay.css";
+@import "assets/scss/aura-theme/variables";
+@import "assets/scss/aura-theme/reboot";
+@import "assets/scss/aura-theme/spacer";
+@import "assets/scss/aura-theme/typo";
+@import "assets/scss/aura-theme/divider";
+@import "assets/scss/aura-theme/icons-variable";
+@import "assets/scss/aura-theme/icons";
+@import "assets/scss/aura-theme/form";
+@import "assets/scss/aura-theme/button";
+@import "assets/scss/aura-theme/table";
 
 /* You can add global styles to this file, and also import other style files */
 
