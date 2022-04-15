@@ -176,7 +176,7 @@ export class ProposalComponent implements OnInit {
   }
 
   openVoteDialog(id: string, title: string) {
-    if (this.walletService.wallet) {
+    this.walletService.connectKeplr(this.chainId, (account) => {
       let dialogRef = this.dialog.open(ProposalVoteComponent, {
         height: '400px',
         width: '600px',
@@ -189,16 +189,7 @@ export class ProposalComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         this.voteValue = result;
       });
-    } else {
-      try {
-        const connect = async () => {
-          await this.walletService.connect(WALLET_PROVIDER.KEPLR, this.chainId);
-        };
-        connect();
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    });
   }
 
   parsingStatus(sts) {
