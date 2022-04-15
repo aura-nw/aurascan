@@ -29,7 +29,11 @@ export class VotesComponent implements OnInit {
       'VOTE_OPTION_NO',
       'VOTE_OPTION_NO_WITH_VETO',
     ].includes(vote.key),
-  ).map((vote) => ({ ...vote, value: vote.value.toUpperCase() }));
+  ).map((vote) => ({
+    ...vote,
+    value: vote.value.toUpperCase(),
+    key: vote.key === 'VOTE_OPTION_UNSPECIFIED' ? '' : vote.key,
+  }));
 
   voteDataList: IVotes[] = [];
 
@@ -74,7 +78,10 @@ export class VotesComponent implements OnInit {
         res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
         res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
 
-        this.voteDataList = this.voteData.all;
+        if (res['all']) {
+          this.voteDataList = [...this.voteData.all.proposalVotes];
+        }
+        console.log('voteDataList', this.voteDataList);
       });
     }
   }
@@ -82,21 +89,23 @@ export class VotesComponent implements OnInit {
   changeTab(tabId): void {
     let payload = this.query[tabId];
     switch (tabId) {
-      case 'VOTE_OPTION_UNSPECIFIED':
-        this.voteDataList = this.voteData.all;
+      case '':
+        this.voteDataList = this.voteData.all.proposalVotes;
         break;
       case 'VOTE_OPTION_YES':
-        this.voteDataList = this.voteData.yes;
+        this.voteDataList = this.voteData.yes.proposalVotes;
         break;
       case 'VOTE_OPTION_ABSTAIN':
-        this.voteDataList = this.voteData.abstain;
+        this.voteDataList = this.voteData.abstain.proposalVotes;
         break;
       case 'VOTE_OPTION_NO':
-        this.voteDataList = this.voteData.no;
+        this.voteDataList = this.voteData.no.proposalVotes;
         break;
       case 'VOTE_OPTION_NO_WITH_VETO':
-        this.voteDataList = this.voteData.noWithVeto;
+        this.voteDataList = this.voteData.noWithVeto.proposalVotes;
         break;
     }
+
+    console.log('this.voteDataList', this.voteDataList);
   }
 }
