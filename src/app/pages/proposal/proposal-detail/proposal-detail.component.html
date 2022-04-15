@@ -6,8 +6,8 @@
     <app-votes></app-votes>
 </section>
 <section class="validator-votes">
-    <app-validators-votes></app-validators-votes>
+    <app-validators-votes [proposalId]="proposalId"></app-validators-votes>
 </section>
 <section class="depositors">
-    <app-depositors></app-depositors>
+    <app-depositors [proposalId]="proposalId"></app-depositors>
 </section>

@@ -29,11 +29,11 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/votes/${voter}`);
   }
 
-  getValidatorVotes(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-v-votes.json');
+  getValidatorVotes(proposalId, option, limit, offset): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
   }
 
-  getDepositors(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-list-depositor.json');
+  getDepositors(proposalId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
   }
 }

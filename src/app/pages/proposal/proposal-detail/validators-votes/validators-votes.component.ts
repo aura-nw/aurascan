@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 
 export interface IValidatorVotes {
@@ -17,11 +17,11 @@ export interface IValidatorVotes {
 export class ValidatorsVotesComponent implements OnInit {
   TABS = ['ALL', 'YES', 'NO', 'NO WITH VETO', 'ABSTAIN', 'DID NOT VOTE'];
   voteDataList: IValidatorVotes[] = [];
-
+  @Input() proposalId: number;
   _voteList: IValidatorVotes[] = [];
   constructor(private proposalService: ProposalService) {}
   ngOnInit(): void {
-    // this.proposalService.getValidatorVotes().subscribe((data) => {
+    // this.proposalService.getValidatorVotes(this.proposalId,).subscribe((data) => {
     //   this._voteList = data;
     //   this.changeTab(0);
     // });
