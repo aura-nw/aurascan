@@ -12,6 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
+import { Globals } from '../../../global/global';
 
 @Component({
   selector: 'app-proposal-table',
@@ -56,7 +57,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
 
-  constructor() {}
+  constructor(public global: Globals,) {}
   ngOnDestroy(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {

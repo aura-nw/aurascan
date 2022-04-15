@@ -20,19 +20,17 @@ export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;
   _voteList: IValidatorVotes[] = [];
 
-
-
   constructor(private proposalService: ProposalService) {}
   ngOnInit(): void {
-    let data = {
+    let payLoad = {
       proposalId: this.proposalId,
       option: '',
       limit: 5,
       offset: 0,
     };
-    this.proposalService.getValidatorVotes(data).subscribe((res) => {
-      this._voteList = res.proposalVotes;
-      //this.changeTab(0);
+    this.proposalService.getValidatorVotes(payLoad).subscribe((res) => {
+      this._voteList = res.data.result.proposalVotes;
+      this.changeTab(0);
     });
   }
   changeTab(tabId): void {
@@ -60,7 +58,7 @@ export class ValidatorsVotesComponent implements OnInit {
         break;
     }
     this.proposalService.getValidatorVotes(data).subscribe((res) => {
-      this._voteList = res.proposalVotes;
+      this._voteList = res.data.result.proposalVotes;
     });
     this.voteDataList = [...this._voteList];
   }
