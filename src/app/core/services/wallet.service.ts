@@ -74,7 +74,7 @@ export class WalletService {
     session.removeItem(LAST_USED_PROVIDER);
   }
 
-  connectKeplr(chainId: string): void {
+  connectKeplr(chainId: string, callback?: (account) => void): void {
     const checkWallet = async () => {
       try {
         const keplr = await getKeplr();
@@ -91,6 +91,10 @@ export class WalletService {
               provider: WALLET_PROVIDER.KEPLR,
               chainId,
             });
+
+            if(callback) {
+              callback(account)
+            }
           }
         } else {
           this.disconnect();

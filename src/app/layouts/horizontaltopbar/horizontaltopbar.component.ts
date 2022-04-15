@@ -301,7 +301,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           // this.router.navigate(['/']);
           // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
           //   this.router.navigate(['/']));
-            window.location.reload();
+          window.location.reload();
         },
         error => {
         });
@@ -318,9 +318,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
     else if ((this.searchValue.length > 40)) {
       let urlLink = this.searchValue.startsWith(VALIDATOR_ADDRESS_PREFIX) ? 'validators' : 'account';
-      // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([urlLink, this.searchValue]);
-      // });
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([urlLink, this.searchValue]);
+      });
     } else {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['blocks', this.searchValue]);

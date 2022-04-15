@@ -4,12 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, of } from 'rxjs';
-import { delay, last, map } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
-import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/status.constant';
-import { WALLET_PROVIDER } from '../../core/constants/wallet.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
 import { ProposalService } from '../../core/services/proposal.service';
@@ -47,24 +46,31 @@ export class ProposalComponent implements OnInit {
   pageIndex = 0;
   lastedList = [];
 
+  proposalVotes: {
+    proId: number;
+    vote: string | null;
+  }[] = [];
+
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
     private datePipe: DatePipe,
     public global: Globals,
-    private walletService: WalletService,
+    public walletService: WalletService,
     private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Proposal' }, { label: 'List', active: true }];
     this.getList();
+
+    this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 
   changePage(page: PageEvent): void {
     this.dataSource = null;
     this.pageIndex = page.pageIndex;
-    this.getList();   
+    this.getList();
   }
 
   getList(): void {
@@ -73,7 +79,7 @@ export class ProposalComponent implements OnInit {
       this.length = res.data.length;
       this.dataSource.sort = this.sort;
       this.lastedList = res.data;
-      this.lastedList.forEach((pro) => {
+      this.lastedList.forEach((pro, index) => {
         const totalVoteYes = +pro.pro_votes_yes;
         const totalVoteNo = +pro.pro_votes_no;
         const totalVoteNoWithVeto = +pro.pro_votes_no_with_veto;
@@ -88,27 +94,41 @@ export class ProposalComponent implements OnInit {
         pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
+        if (index < 4) {
+          this.proposalVotes.push({
+            proId: pro.pro_id,
+            vote: null,
+          });
+        }
       });
+      this.getVotedProposal();
     });
   }
 
-  getVotedProposal(proposalId): Observable<any> {
-    if (this.walletService.wallet) {
-      return this.proposalService.getVotes(proposalId, this.walletService.wallet.bech32Address)
-      .pipe(
-        map((res: ResponseDto) => {
-          if (res) {
-            const voteOption = res.data.proposalVote.option;
-            const statusObj = this.voteConstant.find((s) => s.enum === voteOption);
-            if (statusObj !== undefined) {
-              return statusObj.value;
-            }
-          }
-          return null;
-        }),
-      );
+  getVotedProposal() {
+    const addr = this.walletService.wallet?.bech32Address || null;
+    if (this.proposalVotes.length > 0 && addr) {
+      forkJoin({
+        0: this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr),
+        1: this.proposalService.getVotes(this.proposalVotes[1]?.proId, addr),
+        2: this.proposalService.getVotes(this.proposalVotes[2]?.proId, addr),
+        3: this.proposalService.getVotes(this.proposalVotes[3]?.proId, addr),
+      })
+        .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
+        .subscribe((res) => {
+          this.proposalVotes = res.map((i, idx) => {
+            return {
+              proId: this.proposalVotes[idx].proId,
+              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
+            };
+          });
+        });
+    } else {
+      this.proposalVotes = this.proposalVotes.map((e) => ({
+        ...e,
+        vote: null,
+      }));
     }
-    return of(null);
   }
 
   getStatus(key: string) {
@@ -130,16 +150,16 @@ export class ProposalComponent implements OnInit {
 
     if (!highest) {
       highest = 0;
-      key = 0;
+      key = 'VOTE_OPTION_YES';
     } else {
       if (highest === yes) {
-        key = 1;
+        key = 'VOTE_OPTION_YES';
       } else if (highest === no) {
-        key = 3;
+        key = 'VOTE_OPTION_NO';
       } else if (highest === noWithVeto) {
-        key = 4;
+        key = 'VOTE_OPTION_NO_WITH_VETO';
       } else {
-        key = 2;
+        key = 'VOTE_OPTION_ABSTAIN';
       }
     }
 
@@ -154,26 +174,39 @@ export class ProposalComponent implements OnInit {
     return resObj;
   }
 
-  openVoteDialog(id: string, title: string) {
-    if (this.walletService.wallet) {
-      let dialogRef = this.dialog.open(ProposalVoteComponent, {
-        height: '400px',
-        width: '600px',
-        data: { id, title, voteValue: this.voteValue },
+  openVoteDialog(item) {
+    const id = item.pro_id;
+    const title = item.pro_title;
+    const expiredTime = (new Date(item.pro_voting_end_time).getTime() - new Date().getTime());
+    if(expiredTime > 0)
+    {
+      this.walletService.connectKeplr(this.chainId, (account) => {
+        let dialogRef = this.dialog.open(ProposalVoteComponent, {
+          height: '400px',
+          width: '600px',
+          data: {
+            id,
+            title,
+            voteValue: this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+          },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          this.voteValue = result;
+          this.getList();
+        });
       });
-      dialogRef.afterClosed().subscribe((result) => {
-        this.voteValue = result;
-      });
-    } else {
-      try {
-        const connect = async () => {
-          await this.walletService.connect(WALLET_PROVIDER.KEPLR, this.chainId);
-        };
-        connect();
-      } catch (error) {
-        console.error(error);
-      }
     }
+    else{
+      this.getList();
+    }
+  }
+
+  parsingStatus(sts) {
+    return (
+      this.voteConstant.find((s) => {
+        return s.value?.toUpperCase() === sts?.toUpperCase();
+      })?.voteOption || sts
+    );
   }
 
   shortenAddress(address: string): string {

@@ -12,7 +12,7 @@ import { createSignBroadcast } from '../../../core/utils/signing/transaction-man
   styleUrls: ['./proposal-vote.component.scss'],
 })
 export class ProposalVoteComponent implements OnInit {
-  keyVote: number = null;
+  keyVote: string = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   constructor(
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
@@ -21,7 +21,7 @@ export class ProposalVoteComponent implements OnInit {
     private walletService: WalletService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    this.keyVote = data.voteValue?.keyVote ?? null;
+    this.keyVote = data.voteValue ?? null;
   }
 
   ngOnInit(): void {}

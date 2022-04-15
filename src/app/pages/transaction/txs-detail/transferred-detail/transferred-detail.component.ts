@@ -5,6 +5,7 @@ import { getAmount, Globals } from '../../../../../app/global/global';
 import { DatePipe } from '@angular/common';
 import { DATEFORMAT } from '../../../../../app/core/constants/common.constant';
 import { ValidatorService } from '../../../../../app/core/services/validator.service';
+import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 
 @Component({
   selector: 'app-transferred-detail',
@@ -14,6 +15,7 @@ import { ValidatorService } from '../../../../../app/core/services/validator.ser
 })
 export class TransferredDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
+  voteConstant = PROPOSAL_VOTE;
   transactionDetailType;
   eTransType = TRANSACTION_TYPE_ENUM;
   amount;
@@ -47,5 +49,13 @@ export class TransferredDetailComponent implements OnInit {
       },
       (error) => {},
     );
+  }
+
+  parsingOptionVote(option) {
+    const statusObj = this.voteConstant.find((s) => s.key === option);
+    if (statusObj !== undefined) {
+      return statusObj.value;
+    }
+    return null;
   }
 }
