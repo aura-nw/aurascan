@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/status.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { WALLET_PROVIDER } from '../../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
@@ -150,7 +150,7 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalVotes = res.map((i, idx) => {
             return {
               proId: this.proposalVotes[idx].proId,
-              vote: this.voteConstant.find((s) => s.enum === i)?.value || null,
+              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
             };
           });
         });
