@@ -24,7 +24,7 @@ export const PROPOSAL_STATUS = [
 export const PROPOSAL_VOTE = [
     {
         key: 'VOTE_OPTION_UNSPECIFIED',
-        value: '',
+        value: 'All',
         class: '',
         voteOption: ''
     },
@@ -33,12 +33,6 @@ export const PROPOSAL_VOTE = [
         value: 'Yes',
         class: 'primary',
         voteOption: 'Yes'
-    },
-    {
-        key: 'VOTE_OPTION_ABSTAIN',
-        value: 'Abstain',
-        class: 'secondary',
-        voteOption: 'Abstain'
     },
     {
         key: 'VOTE_OPTION_NO',
@@ -51,5 +45,11 @@ export const PROPOSAL_VOTE = [
         value: 'No with veto',
         class: 'info',
         voteOption: 'NoWithVeto'
+    },
+    {
+        key: 'VOTE_OPTION_ABSTAIN',
+        value: 'Abstain',
+        class: 'secondary',
+        voteOption: 'Abstain'
     }
 ];
