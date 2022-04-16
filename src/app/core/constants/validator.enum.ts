@@ -8,3 +8,10 @@ export enum STATUS_VALIDATOR {
   Inactive = 2,
   Active = 3
 }
+
+export enum DIALOG_STAKE_MODE {
+  Delegate = 'delegate',
+  Manage = 'manage',
+  Undelegate = 'undelegate',
+  Redelegate = 'redelegate',
+}
