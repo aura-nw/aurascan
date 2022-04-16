@@ -17,6 +17,7 @@ import { AuthenticationService } from '../../../app/core/services/auth.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
+import {Globals} from "../../global/global";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -72,8 +73,8 @@ export class DashboardComponent implements OnInit {
 
   templatesTx: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
-    { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
+    { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' }
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
@@ -87,7 +88,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private blockService: BlockService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    public global: Globals
   ) {
   }
 

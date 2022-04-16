@@ -1,0 +1,27 @@
+.aura-table {
+  background: transparent;
+  mat-footer-row, mat-header-row, mat-row, td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+    border-bottom-color: var(--aura-light-gray);
+  }
+  th.mat-header-cell {
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: var(--aura-light-gray);
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    color: var(--aura-white);
+    &.none-border-top {
+      border-top: none;
+    }
+  }
+  .mat-cell, .mat-footer-cell {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+  th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 16px;
+  }
+}
+mat-paginator {
+  background-color: transparent !important;
+}

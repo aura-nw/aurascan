@@ -57,7 +57,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   @Output() mobileMenuButtonClicked = new EventEmitter();
 
   constructor(
-    private router: Router,
+    public router: Router,
     public translate: TranslateService,
     public languageService: LanguageService,
     public _cookiesService: CookieService,

@@ -180,7 +180,7 @@ export class AccountDetailComponent implements OnInit {
         enabled: false,
       },
       chart: {
-        width: 280,
+        width: 261,
         type: 'donut',
       },
       plotOptions: {
@@ -418,9 +418,9 @@ export class AccountDetailComponent implements OnInit {
       };
 
       const canvas: any = document.getElementById('canvas');
-      await qrCode.toDataURL(canvas, data.values, { width: 125, margin: 5 });
+      await qrCode.toDataURL(canvas, data.values, { width: 295, margin: 5 });
       // adding a log at center
-      const imgDim = { width: 125, height: 125 };
+      const imgDim = { width: 295, height: 295 };
       const context = canvas.getContext('2d');
       const logoImg: any = new Image();
       logoImg.crossOrigin = 'anonymous';

@@ -1,6 +1,6 @@
 <ngx-simplebar style="max-height: 400px">
   <ng-container *ngIf="pageData?.length > 0; else noValues">
-    <table mat-table [dataSource]="dataSource" class="table-reponsive">
+    <table mat-table [dataSource]="dataSource" class="table-reponsive aura-table">
       <ng-container *ngFor="let template of templates; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
 
@@ -11,24 +11,25 @@
           <td mat-cell *matCellDef="let data">
             <div>
               <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                <div *ngSwitchCase="'validator_name'" class="g-blue cursor-pointer"  [routerLink]="['/validators', data['validator_address']]">
+                <div *ngSwitchCase="'validator_name'" class="text--green cursor-pointer"  [routerLink]="['/validators', data['validator_address']]">
                   {{ data[template.matColumnDef] }}
                 </div>
                 <div *ngSwitchCase="'amount'" class="fw-normal">
-                  {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="g-purple">{{global.stableToken}}</span>
+                  {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--green">{{global.stableToken}}</span>
                 </div>
                 <div *ngSwitchCase="'reward'" class="fw-normal">
-                  {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="g-purple">{{global.stableToken}}</span>
+                  {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--green">{{global.stableToken}}</span>
                 </div>
                 <div *ngSwitchCase="'completion_time'">
-                  {{ data['completion_time_format'] }} <br>({{data[template.matColumnDef] | calDate}} remaining)
+                  {{ data['completion_time_format'] }}
+                  <div class="small-body">({{data[template.matColumnDef] | calDate}} remaining)</div>
                 </div>
                 <div *ngSwitchCase="'vesting_schedule'">
                   {{ data['vesting_schedule_format'] }} <br>({{data['date_format'] | calDate}} remaining)
                 </div>
                 <div *ngSwitchCase="'total_value'" class="fw-normal">
-                  $ {{data[template.matColumnDef] | number: global.formatNumberToken}}<br>
-                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>
+                  $ {{data[template.matColumnDef] | number: global.formatNumberToken}}
+<!--                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>-->
                 </div>
                 <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}
                 </div>
@@ -52,4 +53,4 @@
   </ng-template>
 </ngx-simplebar>
 
-<mat-paginator (page)="handlePageEvent($event)" [length]="pageData?.length" [pageSize]="pageData?.pageSize" [pageIndex]="pageData?.pageIndex" *ngIf="pageData?.length">
+<!--<mat-paginator (page)="handlePageEvent($event)" [length]="pageData?.length" [pageSize]="pageData?.pageSize" [pageIndex]="pageData?.pageIndex" *ngIf="pageData?.length">-->

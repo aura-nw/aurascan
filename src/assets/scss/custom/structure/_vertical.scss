@@ -1,6 +1,6 @@
-//
-// _menu.scss
-// 
+/*
+ * _menu.scss
+ */
 
 .metismenu {
     margin: 0;
@@ -31,7 +31,6 @@
         transition-property: height, visibility;
     }
 }
-
 
 .vertical-menu {
     width: $sidebar-width;
@@ -225,7 +224,7 @@
     }
 }
 
-// Enlarge menu
+/* Enlarge menu */
 body[data-sidebar-size="sm"] {
     min-height: 1000px;
 
@@ -247,7 +246,7 @@ body[data-sidebar-size="sm"] {
         }
     }
 
-    // Side menu
+    /* Side menu */
     .vertical-menu {
         position: absolute;
         width: $sidebar-collapsed-width !important;
@@ -266,7 +265,7 @@ body[data-sidebar-size="sm"] {
             bottom: 0 !important;
         }
 
-        // Sidebar Menu
+        /* Sidebar Menu */
         #sidebar-menu {
 
             .menu-title,
@@ -493,7 +492,7 @@ body[data-sidebar="dark"] {
 
     
 
-    // Enlarge menu
+    /* Enlarge menu */
     &[data-sidebar-size="sm"] {
 
         &[data-topbar="dark"]{
@@ -504,10 +503,10 @@ body[data-sidebar="dark"] {
         #vertical-menu-btn{
             color :$header-item-color;
         }
-        // Side menu
+        /* Side menu */
         .vertical-menu {
             
-            // Sidebar Menu
+            /* Sidebar Menu */
             #sidebar-menu {
 
                 > ul {
@@ -614,7 +613,7 @@ body[data-layout="horizontal"] {
     }
 }
 
-// Compact Sidebar
+/* Compact Sidebar */
 
 body[data-sidebar-size="md"] {
     .navbar-brand-box{
@@ -688,7 +687,7 @@ body[data-sidebar-size="md"] {
     }
 }
 
-// colored sidebar
+/* colored sidebar */
 
 body[data-sidebar="brand"] {
     .vertical-menu{
@@ -843,7 +842,7 @@ body[data-sidebar="brand"] {
 }
 
 
-// Dark Layout
+/* Dark Layout */
 
 body[data-layout-mode="dark"] {
     &[data-sidebar=dark], &[data-sidebar=brand] {
@@ -865,7 +864,7 @@ body[data-layout-mode="dark"] {
     }
 }
 
-// RTL
+/* RTL */
 [dir="rtl"]{
     #sidebar-menu{
         .has-arrow:after{
