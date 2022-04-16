@@ -10,6 +10,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    .button{
+      height: 50px;
+    }
+    .message {
+      color: var(--bs-primary);
+    }
   }
   &__info {
     font-size: 15px;
@@ -19,9 +25,6 @@
       font-size: 15px;
       font-weight: 600;
       color: var(--bs-gray-700);
-    }
-    .decimal {
-      font-size: 14px;
     }
   }
 }

@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
+import { IResponsesTemplates } from '../models/common.model';
+import { IListVoteQuery, IListVotes, IListVotesRes } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -25,15 +27,19 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
   }
 
-  getVotes(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-votes.json');
+  getVotes(proposalId, voter): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/votes/${voter}`);
   }
 
-  getValidatorVotes(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-v-votes.json');
+  getValidatorVotes(data): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/proposals/votes/get-by-validator`,data);
   }
 
-  getDepositors(): Observable<any> {
-    return this.http.get('../../assets/mock-data/proposal-list-depositor.json');
+  getDepositors(proposalId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
+  }
+
+  getListVote(payload: IListVoteQuery):Observable<IResponsesTemplates<IListVotesRes>> {
+    return this.http.post<IResponsesTemplates<IListVotesRes>>(`${this.apiUrl}/proposals/votes/get-by-option`, payload);
   }
 }

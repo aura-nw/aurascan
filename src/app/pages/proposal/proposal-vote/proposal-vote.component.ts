@@ -4,7 +4,7 @@ import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/walle
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
-import { createSignBroadcast, createSignBroadcastForVote } from '../../../core/utils/signing/transaction-manager';
+import { createSignBroadcast } from '../../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -12,7 +12,7 @@ import { createSignBroadcast, createSignBroadcastForVote } from '../../../core/u
   styleUrls: ['./proposal-vote.component.scss'],
 })
 export class ProposalVoteComponent implements OnInit {
-  keyVote: number = null;
+  keyVote: string = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   constructor(
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
@@ -21,7 +21,7 @@ export class ProposalVoteComponent implements OnInit {
     private walletService: WalletService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    this.keyVote = data.voteValue?.keyVote ?? null;
+    this.keyVote = data.voteValue ?? null;
   }
 
   ngOnInit(): void {}
@@ -30,14 +30,19 @@ export class ProposalVoteComponent implements OnInit {
     const { hash, error } = await createSignBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
-          voteOption: this.keyVote,
-          proposalId: this.data.id + '',
+        voteOption: this.keyVote,
+        proposalId: this.data.id + '',
       },
       senderAddress: this.walletService.wallet.bech32Address,
       network: ChainsInfo[this.chainId],
       signingType: 'keplr',
       chainId: this.chainId,
     });
+
+    // if(hash)
+    // {
+    //   this.toastr.success(hash);
+    // }
 
     if (error) {
       this.toastr.error(error);
@@ -47,5 +52,9 @@ export class ProposalVoteComponent implements OnInit {
   onSubmitVoteForm() {
     this.proposalVote();
     this.dialogRef.close({ keyVote: this.keyVote });
+  }
+
+  closeVoteForm() {
+    this.dialogRef.close();
   }
 }

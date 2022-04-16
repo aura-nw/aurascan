@@ -47,48 +47,6 @@ export async function createSignBroadcast({
   }
 }
 
-export async function createSignBroadcastForVote({
-  messageType,
-  message,
-  senderAddress,
-  network,
-  signingType,
-  chainId,
-}): Promise<any> {
-  let error: KEPLR_ERRORS;
-  let broadcastResult: DeliverTxResponse;
-  if (signingType === 'extension') {
-  } else {
-    const signer = await getSigner(signingType, chainId);
-    const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
-
-    // success
-    const messagesSend = messageCreators[messageType](senderAddress, message);
-
-    const fee: any = {
-      amount: [
-        {
-          denom: 'uaura',
-          amount: '1',
-        },
-      ],
-      gas: '200000',
-    };
-    try {
-      broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
-
-      assertIsBroadcastTxSuccess(broadcastResult);
-    } catch (e: any) {
-      error = e.message;
-    }
-    
-    return {
-      hash: broadcastResult?.transactionHash || null,
-      error,
-    };
-  }
-}
-
 export function assertIsBroadcastTxSuccess(res): DeliverTxResponse {
   if (!res) throw new Error(`Error sending transaction`);
   if (Array.isArray(res)) {

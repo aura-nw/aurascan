@@ -2,14 +2,14 @@
 <section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
   <div class="container-fluid">
     <div class="row row-eq-height">
-      <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4)">
+      <div class="col-6 mb-3 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
         <div class="card mb-0 h-100">
           <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
               <div class="card__title">#{{ lastedItem.pro_id }}</div>
               <div
                 *ngIf="getStatus(lastedItem.pro_status)"
-                class="aura-status aura-status--has-elevation text-uppercase {{
+                class="aura-status aura-status--has-elevation text-capitalize {{
                   getStatus(lastedItem.pro_status).class
                 }}"
               >
@@ -23,7 +23,9 @@
                   <div class="title">Proposer</div>
                   <div>
                     <a href="/account/{{ lastedItem.pro_proposer_address }}">{{
-                      lastedItem.pro_proposer ? lastedItem.pro_proposer : lastedItem.pro_proposer_address
+                      lastedItem.pro_proposer
+                        ? lastedItem.pro_proposer
+                        : shortenAddress(lastedItem.pro_proposer_address)
                     }}</a>
                   </div>
                 </div>
@@ -107,16 +109,16 @@
           </div>
           <div class="card-footer">
             <div class="d-flex justify-content-end align-items-center">
-              <!-- <div class="message" *ngIf="lastedItem.currentVote != ''">
-                You vote '{{ lastedItem.currentVote }}' for this proposal
-              </div> -->
+              <div class="message" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
+                You voted '{{ proposalVotes[idx].vote }}' for this proposal
+              </div>
               <a class="btn-detail" [routerLink]="[lastedItem.pro_id]" mat-stroked-button color="primary">Details</a>
               <button
                 mat-flat-button
                 color="primary"
                 *ngIf="lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
                 [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-                (click)="openVoteDialog(lastedItem.pro_id, lastedItem.pro_title)"
+                (click)="openVoteDialog(lastedItem)"
               >
                 {{ lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}
               </button>
@@ -177,7 +179,8 @@
               <ng-container matColumnDef="totalDeposit">
                 <th mat-header-cell *matHeaderCellDef>Total Deposit</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.pro_total_deposits | number: global.formatNumberToken }} <span class="g-purple">{{global.stableToken}}</span>
+                  {{ element.pro_total_deposits | number: global.formatNumberToken }}
+                  <span class="g-purple">{{ global.stableToken }}</span>
                 </td>
               </ng-container>
 
