@@ -57,7 +57,10 @@ export function UnstakeTx(senderAddress, { from, amount }, network) {
     value: MsgUndelegate.fromPartial({
       delegatorAddress: senderAddress,
       validatorAddress: from[0],
-      amount: Coin(amount, network.coinLookup),
+      amount: {
+        amount: amount.amount + '',
+        denom: 'uaura',
+      }
     }),
   };
   // return {
@@ -87,10 +90,10 @@ export function ClaimRewardsTx(
   //   }
 
   // }
-
+  
   const msg = MsgWithdrawDelegatorReward.fromPartial({
     delegatorAddress: senderAddress,
-    validatorAddress: from[0],
+    validatorAddress: from[0].validator_address,
   });
 
   return {
@@ -137,6 +140,32 @@ export function Coin({ amount, denom }, coinLookup) {
   };
 }
 
+// ReStaking
+export function RestakeTx(senderAddress, { src_address, to_address, amount }, network) {
+  /* istanbul ignore next */
+  const msg = {
+    delegator_address: senderAddress,
+    validator_src_address: src_address,
+    validator_dst_address: to_address,
+    amount: {
+      amount: amount.amount + '',
+      denom: 'uaura',
+    },
+  };
+  return {
+    typeUrl: 'cosmos-sdk.MsgBeginRedelegate',
+    value: msg,
+  };
+  // return {
+  //   type: `cosmos-sdk/MsgDelegate`,
+  //   value: {
+  //     delegator_address: senderAddress,
+  //     validator_address: to[0],
+  //     amount: Coin(amount, network.coinLookup),
+  //   },
+  // }
+}
+
 export const messageCreators = {
   SendTx,
   StakeTx,
@@ -144,4 +173,5 @@ export const messageCreators = {
   ClaimRewardsTx,
   VoteTx,
   DepositTx,
+  RestakeTx
 };
