@@ -129,3 +129,11 @@ export class CommonDataDto {
   bonded_tokens_format: number;
   community_pool_format: number;
 }
+
+export class DataDelegatoDto {
+  delegatedToken: string;
+  availableToken: string;
+  stakingToken: string;
+  dialogMode: string = '';
+  validatorDetail: any;
+}

@@ -16,6 +16,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { AccountService } from '../../../app/core/services/account.service';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-delegate.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-da
     TranslateModule,
     SharedModule,
     SimplebarAngularModule,
-    TableNoDataModule
+    TableNoDataModule,
+    DetailPopupDelegateModule
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService]
 })
