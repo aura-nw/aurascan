@@ -42,7 +42,7 @@ h5,
   @include mono-font-size(2.6, 3.2, -0.01, "SFProDisplay");
 }
 .title-small {
-  @include mono-font-size(2, 3, -0.01, "SFProDisplay");
+  @include mono-font-size(2, 2.3, -0.01, "SFProDisplay");
 }
 .sub-text {
   @include mono-font-size(2.4, 4, 0.02, "SFProDisplay");
@@ -123,4 +123,17 @@ $textColors: (
   background: var(--aura-gradient-simple);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+$textColorsStatus: (
+  "primary"  : '#5EE6D0',
+  "danger"   : '#E65E5E',
+  "info"     : '#5E84E6',
+  "secondary": '#E3E65E',
+);
+
+@each $status, $color in $textColorsStatus {
+  .text--#{$status} {
+    color: #{$color} !important;
+  }
 }

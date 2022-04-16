@@ -37,10 +37,10 @@ export enum ACCOUNT_WALLET_COLOR_ENUM {
 }
 
 export enum WalletAcount {
-  Available = '#9C6CFF',
-  DelegatableVesting = '#783296',
-  Delegated = '#573655',
-  Unbonding = '#9C96C8',
-  StakingReward = '#574D56',
+  Available = '#348073',
+  DelegatableVesting = '#49B3A1',
+  Delegated = '#5EE6D0',
+  Unbonding = '#7AF3E0',
+  StakingReward = '#AAF8EB',
   Commission = '#96648C',
 }
