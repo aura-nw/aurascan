@@ -39,6 +39,8 @@ export class VotesComponent implements OnInit {
 
   _voteList: IVotes[] = [];
 
+  countVote = [];
+
   LIMIT_DEFAULT = 45;
 
   query = [];
@@ -79,6 +81,13 @@ export class VotesComponent implements OnInit {
 
         if (res['all']) {
           this.voteDataList = [...this.voteData.all.proposalVotes];
+          this.countVote = [
+            this.voteData.all.countTotal,
+            this.voteData.all.countYes,
+            this.voteData.all.countNo,
+            this.voteData.all.countNoWithVeto,
+            this.voteData.all.countAbstain,
+          ];
         }
       });
     }

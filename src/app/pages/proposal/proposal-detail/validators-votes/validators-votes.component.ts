@@ -46,6 +46,8 @@ export class ValidatorsVotesComponent implements OnInit {
 
   _voteList: IValidatorVotes[] = [];
 
+  countVote = [];
+
   LIMIT_DEFAULT = 45;
 
   query = [];
@@ -75,22 +77,22 @@ export class ValidatorsVotesComponent implements OnInit {
       merge(
         this.proposalService
           .getValidatorVotes(payloads[0])
-          .pipe(map((item) => ({ all: item.data.result.proposalVotes }))),
+          .pipe(map((item) => ({ all: item.data.result }))),
         this.proposalService
           .getValidatorVotes(payloads[1])
-          .pipe(map((item) => ({ yes: item.data.result.proposalVotes }))),
+          .pipe(map((item) => ({ yes: item.data.result }))),
         this.proposalService
           .getValidatorVotes(payloads[2])
-          .pipe(map((item) => ({ abstain: item.data.result.proposalVotes }))),
+          .pipe(map((item) => ({ abstain: item.data.result }))),
         this.proposalService
           .getValidatorVotes(payloads[3])
-          .pipe(map((item) => ({ no: item.data.result.proposalVotes }))),
+          .pipe(map((item) => ({ no: item.data.result }))),
         this.proposalService
           .getValidatorVotes(payloads[4])
-          .pipe(map((item) => ({ noWithVeto: item.data.result.proposalVotes }))),
+          .pipe(map((item) => ({ noWithVeto: item.data.result }))),
         this.proposalService
           .getValidatorVotes(payloads[5])
-          .pipe(map((item) => ({ didNotVote: item.data.result.proposalVotes }))),
+          .pipe(map((item) => ({ didNotVote: item.data.result }))),
       ).subscribe((res) => {
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
@@ -100,7 +102,15 @@ export class ValidatorsVotesComponent implements OnInit {
         res['didNotVote'] && ((dta) => (this.voteData.didNotVote = dta))(res['didNotVote']);
 
         if (res['all']) {
-          this.voteDataList = [...this.voteData.all];
+          this.voteDataList = [...this.voteData.all.proposalVotes];
+          this.countVote = [
+            this.voteData.all.countTotal,
+            this.voteData.all.countYes,
+            this.voteData.all.countNo,
+            this.voteData.all.countNoWithVeto,
+            this.voteData.all.countAbstain,
+            this.voteData.all.countDidNotVote,
+          ];
         }
       });
     }
@@ -109,22 +119,22 @@ export class ValidatorsVotesComponent implements OnInit {
   changeTab(tabId): void {
     switch (tabId) {
       case '':
-        this.voteDataList = this.voteData.all;
+        this.voteDataList = this.voteData.all.proposalVotes;
         break;
       case 'VOTE_OPTION_YES':
-        this.voteDataList = this.voteData.yes;
+        this.voteDataList = this.voteData.yes.proposalVotes;
         break;
       case 'VOTE_OPTION_ABSTAIN':
-        this.voteDataList = this.voteData.abstain;
+        this.voteDataList = this.voteData.abstain.proposalVotes;
         break;
       case 'VOTE_OPTION_NO':
-        this.voteDataList = this.voteData.no;
+        this.voteDataList = this.voteData.no.proposalVotes;
         break;
       case 'VOTE_OPTION_NO_WITH_VETO':
-        this.voteDataList = this.voteData.noWithVeto;
+        this.voteDataList = this.voteData.noWithVeto.proposalVotes;
         break;
       default:
-        this.voteDataList = this.voteData.didNotVote;
+        this.voteDataList = this.voteData.didNotVote.proposalVotes;
         break;
     }
   }
