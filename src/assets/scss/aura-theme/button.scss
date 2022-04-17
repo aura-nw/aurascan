@@ -44,6 +44,11 @@
             width: 100%;
         }
     }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
 }
 
 .button-outline {

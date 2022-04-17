@@ -2,22 +2,22 @@ export const PROPOSAL_STATUS = [
     {
         key: 'PROPOSAL_STATUS_REJECTED',
         value: 'rejected',
-        class: 'danger'
+        class: 'text--danger'
     },
     {
         key: 'PROPOSAL_STATUS_PASSED',
         value: 'passed',
-        class: 'primary'
+        class: 'text--primary'
     },
     {
         key: 'PROPOSAL_STATUS_VOTING_PERIOD',
         value: 'voting period',
-        class: 'info'
+        class: 'text--info'
     },
     {
         key: 'PROPOSAL_STATUS_DEPOSIT_PERIOD',
         value: 'deposit period',
-        class: 'warning'
+        class: 'text--warning'
     }
 ];
 

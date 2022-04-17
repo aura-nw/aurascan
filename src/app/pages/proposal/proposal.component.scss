@@ -20,9 +20,9 @@
     .value {
       position: relative;
       padding-left: 18px;
-      font-size: 13px;  
+      font-size: 13px;
       &:before {
-        content: '';
+        content: "";
         position: absolute;
         left: 0;
         top: 50%;
@@ -30,10 +30,18 @@
         width: 10px;
         height: 10px;
       }
-      &.primary:before { background-color: var(--bs-success)}
-      &.danger:before { background-color: var(--bs-danger)}
-      &.info:before { background-color: var(--bs-info)}
-      &.secondary:before { background-color: var(--bs-secondary)}
+      &.primary:before {
+        background-color: var(--bs-success);
+      }
+      &.danger:before {
+        background-color: var(--bs-danger);
+      }
+      &.info:before {
+        background-color: var(--bs-info);
+      }
+      &.secondary:before {
+        background-color: var(--bs-secondary);
+      }
     }
   }
   .message {
@@ -62,4 +70,9 @@ table {
 }
 .title-cell {
   padding-right: 24px;
+}
+
+.top-border {
+  border-top: solid 1px var(--aura-light-gray);
+  padding-top: var(--spacer-5);
 }
