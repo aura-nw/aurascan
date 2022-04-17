@@ -23,7 +23,10 @@
 }
 
 .card-header {
-    padding: var(--spacer-5);
+    padding: var(--spacer-6);
+    background-color: var(--aura-dark-gray);
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom: none !important;
 }
 
 .card-header-tabs {
@@ -31,10 +34,10 @@
 }
 
 .card-body {
-    padding: var(--spacer-5) var(--spacer-5) var(--spacer-10) var(--spacer-5);
+    padding: var(--spacer-6) !important;
 }
 body[data-layout-mode="dark"] {
-    .card, .card-header,
+    .card,
     .modal-content, .offcanvas {
         background-color: #20262B;
         border-color: #20262B;

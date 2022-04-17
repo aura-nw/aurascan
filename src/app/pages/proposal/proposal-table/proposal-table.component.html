@@ -1,6 +1,6 @@
 <div class="proposal-table-container">
   <ng-container *ngIf="data.length > 0; else noValues">
-    <table mat-table [dataSource]="dataSource" class="table-reponsive table-striped" matSort>
+    <table mat-table [dataSource]="dataSource" class="  table-striped" matSort>
       <ng-container *ngFor="let template of template; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>

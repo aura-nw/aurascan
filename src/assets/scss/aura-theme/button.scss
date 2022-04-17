@@ -6,7 +6,6 @@
     text-decoration: none;
     outline: none;
     cursor: pointer;
-    @extend .body;
     &.button-outline {
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -127,4 +126,23 @@
       opacity: 1;
   }
 
+}
+
+.button-switch-stage {
+  padding: var(--spacer-1);
+  background-color: var(--aura-dark-gray);
+  border-radius: var(--spacer-2);
+  display: flex;
+  button {
+    padding: 0 var(--spacer-6);
+    border-radius: 6px;
+    height: 40px;
+    background: transparent;
+    color: var(--aura-neutrals-4);
+    transition: all .35s ease-in-out;
+    &.active {
+      background: var(--aura-gradient-simple);
+      color: var(--aura-black);
+    }
+  }
 }

@@ -41,16 +41,16 @@ $minia-theme: mat.define-dark-theme((
 @import "assets/scss/aura-theme/variables";
 @import "assets/scss/aura-theme/reboot";
 @import "assets/scss/aura-theme/spacer";
+@import "assets/scss/aura-theme/button";
 @import "assets/scss/aura-theme/typo";
 @import "assets/scss/aura-theme/divider";
 @import "assets/scss/aura-theme/icons-variable";
 @import "assets/scss/aura-theme/icons";
 @import "assets/scss/aura-theme/form";
-@import "assets/scss/aura-theme/button";
 @import "assets/scss/aura-theme/table";
 @import "assets/scss/aura-theme/tabs";
 
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: "SFProDisplay", sans-serif; }
