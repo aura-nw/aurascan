@@ -4,7 +4,7 @@ $custom-typography: mat-typography-config(
 );
 @include angular-material-typography($custom-typography);
 * {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family:'SFProDisplay' , Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mat-table {

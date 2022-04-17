@@ -132,12 +132,13 @@ export class ProposalComponent implements OnInit {
   }
 
   getStatus(key: string) {
-    let resObj: { value: string; class: string } = null;
+    let resObj: { value: string; class: string, key: string} = null;
     const statusObj = this.statusConstant.find((s) => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
         value: statusObj.value,
         class: statusObj.class,
+        key: statusObj.key
       };
     }
     return resObj;
