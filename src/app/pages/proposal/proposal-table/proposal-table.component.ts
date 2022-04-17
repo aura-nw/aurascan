@@ -15,7 +15,7 @@ import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
-import { formatDateTime, formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 import { Globals } from '../../../global/global';
 
 @Component({
@@ -39,10 +39,10 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   validatorsVotesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
-    { matColumnDef: 'validator', headerCellDef: 'Validator', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
-    { matColumnDef: 'time', headerCellDef: 'Time' },
+    { matColumnDef: 'validator_name', headerCellDef: 'Validator', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'option', headerCellDef: 'Answer' },
+    { matColumnDef: 'created_at', headerCellDef: 'Time' },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
@@ -61,7 +61,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
 
-  constructor(public global: Globals, private datePipe: DatePipe) {}
+  constructor(public global: Globals) {}
   ngOnDestroy(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -71,7 +71,6 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-
     this.dataSource = new MatTableDataSource(this.data);
     this.dataSource.sort = this.sort;
   }
@@ -95,24 +94,21 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   getVoteValue(voteKey) {
     const vote = PROPOSAL_VOTE.find((vote) => vote.key === voteKey);
-    return vote ? vote.value : voteKey;
+    return vote ? vote.value : 'Did not vote';
   }
 
   getDateValue(created_at) {
-    try {
-      // return (
-      //   formatTimeInWords(new Date(created_at).getTime()) +
-      //   ' (' +
-      //   this.datePipe.transform(created_at, DATEFORMAT.DATETIME_UTC) +
-      //   ')'
-      // );
-
-      return [
-        formatTimeInWords(new Date(created_at).getTime()),
-        formatWithSchema(new Date(created_at).getTime(), DATEFORMAT.DATETIME_UTC)
-      ]
-    } catch (e) {
-      return [created_at,''];
+    if (created_at) {
+      try {
+        return [
+          formatTimeInWords(new Date(created_at).getTime()),
+          `(${formatWithSchema(new Date(created_at).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [created_at, ''];
+      }
+    } else {
+      return ['-', ''];
     }
   }
 }

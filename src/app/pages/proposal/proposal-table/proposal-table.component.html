@@ -27,7 +27,7 @@
                   <ng-container *ngSwitchCase="'created_at'">
                     {{getDateValue(data[template.matColumnDef])[0]}}
                     <br>
-                    ({{getDateValue(data[template.matColumnDef])[1]}})
+                    {{getDateValue(data[template.matColumnDef])[1]}}
                   </ng-container>
 
                   <ng-container *ngSwitchDefault>
