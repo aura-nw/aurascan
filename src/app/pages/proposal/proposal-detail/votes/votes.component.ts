@@ -69,9 +69,9 @@ export class VotesComponent implements OnInit {
       merge(
         this.proposalService.getListVote(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
         this.proposalService.getListVote(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService.getListVote(payloads[2]).pipe(map((item) => ({ abstain: item.data.result }))),
-        this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
+        this.proposalService.getListVote(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
+        this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
+        this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
       ).subscribe((res) => {
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);

@@ -75,24 +75,12 @@ export class ValidatorsVotesComponent implements OnInit {
       this.query = payloads;
 
       merge(
-        this.proposalService
-          .getValidatorVotes(payloads[0])
-          .pipe(map((item) => ({ all: item.data.result }))),
-        this.proposalService
-          .getValidatorVotes(payloads[1])
-          .pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService
-          .getValidatorVotes(payloads[2])
-          .pipe(map((item) => ({ abstain: item.data.result }))),
-        this.proposalService
-          .getValidatorVotes(payloads[3])
-          .pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService
-          .getValidatorVotes(payloads[4])
-          .pipe(map((item) => ({ noWithVeto: item.data.result }))),
-        this.proposalService
-          .getValidatorVotes(payloads[5])
-          .pipe(map((item) => ({ didNotVote: item.data.result }))),
+        this.proposalService.getValidatorVotes(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
+        this.proposalService.getValidatorVotes(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
+        this.proposalService.getValidatorVotes(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
+        this.proposalService.getValidatorVotes(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
+        this.proposalService.getValidatorVotes(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
+        this.proposalService.getValidatorVotes(payloads[5]).pipe(map((item) => ({ didNotVote: item.data.result }))),
       ).subscribe((res) => {
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
