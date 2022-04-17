@@ -30,6 +30,7 @@ export class TableTemplate {
   isUrl?: string;
   isShort?: boolean;
   cssClass?: string;
+  paramField?: string;
 }
 
 export class ATBalanceDto {

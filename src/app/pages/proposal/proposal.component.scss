@@ -10,6 +10,8 @@
     margin-right: 20px;
     ul {
       background-color: #e3e3e3;
+      border-radius: 4px;
+      overflow: hidden;
     }
   }
   .most-vote {
@@ -70,9 +72,4 @@ table {
 }
 .title-cell {
   padding-right: 24px;
-}
-
-.top-border {
-  border-top: solid 1px var(--aura-light-gray);
-  padding-top: var(--spacer-5);
 }

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,7 +30,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
     { matColumnDef: 'created_at', headerCellDef: 'Time' },
@@ -39,14 +38,14 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   validatorsVotesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
-    { matColumnDef: 'validator_name', headerCellDef: 'Validator', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'validator_name', headerCellDef: 'Validator', isUrl: '/validators', paramField: 'operator_address' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
     { matColumnDef: 'created_at', headerCellDef: 'Time' },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/account', isShort: true },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'created_at', headerCellDef: 'Time' },
@@ -89,7 +88,11 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   shortenAddress(address: string): string {
-    return shortenAddress(address, 8);
+    if(address)
+    {
+      return shortenAddress(address, 8);
+    }
+    return '';
   }
 
   getVoteValue(voteKey) {

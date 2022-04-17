@@ -63,6 +63,7 @@ export class SummaryInfoComponent implements OnInit {
         this.proposalDetail.pro_deposit_end_time,
         DATEFORMAT.DATETIME_UTC,
       );
+      this.proposalDetail.initial_deposit = balanceOf(this.proposalDetail.initial_deposit);
       this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
       this.proposalDetail.pro_votes_yes = balanceOf(this.proposalDetail.pro_votes_yes);
       this.proposalDetail.pro_votes_no = balanceOf(this.proposalDetail.pro_votes_no);
@@ -105,12 +106,13 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   getStatus(key: string) {
-    let resObj: { value: string; class: string } = null;
+    let resObj: { value: string; class: string, key: string } = null;
     const statusObj = this.statusConstant.find((s) => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
         value: statusObj.value,
         class: statusObj.class,
+        key: statusObj.key,
       };
     }
     return resObj;
