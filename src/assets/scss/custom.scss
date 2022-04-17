@@ -1,6 +1,5 @@
-
 // regular style toast
-@import '~ngx-toastr/toastr';
+@import "~ngx-toastr/toastr";
 // Custom Dashboard Css
 .activity-wid .activity-list:last-child::before {
     display: none;
@@ -343,35 +342,53 @@ body {
         }
     }
 }
-.modal-dialog{
+.box-rank {
+    background-color: #9c6cff;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+.modal-dialog {
     max-width: 600px;
     .modal-content {
         padding: 15px;
         .box-staking {
             .box-notice {
-                color: #FC7C5F;
-                border: 1px solid #FC7C5F;
+                color: #fc7c5f;
+                border: 1px solid #fc7c5f;
                 border-radius: 10px;
                 padding: 20px 10px;
                 .warning-icon {
                     width: 60px;
                     height: auto;
                 }
-                .header-warning{
+                .header-warning {
                     font-weight: bold;
                     font-size: 16px;
                 }
             }
             .box-notice.undelegate {
-                color: #8888FF;
-                border: 1px solid #BCDDFF;
+                color: #8888ff;
+                border: 1px solid #bcddff;
             }
-            .box-token, .box-validator {
-                color: #5E5E80;
+            .box-token,
+            .box-validator {
+                color: #5e5e80;
             }
-            .box-select-redelegate{
+            .box-select-redelegate {
                 width: 100%;
-                background: #F7FAFC;
+                background: #f7fafc;
                 border-radius: 10px;
                 display: flex;
                 justify-content: center;
@@ -404,7 +421,7 @@ body {
         border-radius: 5px;
         width: auto;
     }
-    .label-token{
+    .label-token {
         width: 80px;
     }
 }
@@ -413,25 +430,29 @@ body {
     border-radius: 8px;
     text-transform: capitalize;
     padding: 12px 16px;
-  
-    &__PROPOSAL_STATUS_DEPOSIT_PERIOD {
-      background: rgba(227, 230, 94, 0.2);
-      color: #e3e65e;
-    }
-  
-    &__PROPOSAL_STATUS_VOTING_PERIOD{
-      background: rgba(94, 132, 230, 0.2);
-      color: #5e84e6;
-    }
-  
-    &__PROPOSAL_STATUS_REJECTED {
-      background: rgba(230, 94, 94, 0.2);
-      color: #e65e5e;
-    }
-  
-    &__PROPOSAL_STATUS_PASSED {
-      background: rgba(94, 230, 208, 0.2);
-      color: #5ee6d0;
-    }
-  }
 
+    &__PROPOSAL_STATUS_DEPOSIT_PERIOD {
+        background: rgba(227, 230, 94, 0.2);
+        color: #e3e65e;
+    }
+
+    &__PROPOSAL_STATUS_VOTING_PERIOD {
+        background: rgba(94, 132, 230, 0.2);
+        color: #5e84e6;
+    }
+
+    &__PROPOSAL_STATUS_REJECTED {
+        background: rgba(230, 94, 94, 0.2);
+        color: #e65e5e;
+    }
+
+    &__PROPOSAL_STATUS_PASSED {
+        background: rgba(94, 230, 208, 0.2);
+        color: #5ee6d0;
+    }
+}
+
+.top-border {
+    border-top: solid 1px var(--aura-light-gray);
+    padding-top: var(--spacer-5);
+}

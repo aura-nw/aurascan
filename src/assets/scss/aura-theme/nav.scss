@@ -1,0 +1,36 @@
+.aura-nav-tabs.nav-tabs-custom {
+    .nav-item {
+        .nav-link {
+            &::after {
+                color: var(--aura-white);
+                background: var(--aura-white);
+            }
+
+            &.active {
+                color: var(--aura-white);
+            }
+        }
+    }
+}
+
+body[data-layout-mode="dark"] {
+    .aura-nav-tabs.nav-tabs {
+        .nav-link {
+            color: var(--aura-green-disabled);
+
+            font-family: "SF Pro Display";
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+
+            &.active {
+                background-color: transparent;
+                border-color: var(--aura-white);
+
+                color: var(--aura-white);
+            }
+        }
+    }
+}
