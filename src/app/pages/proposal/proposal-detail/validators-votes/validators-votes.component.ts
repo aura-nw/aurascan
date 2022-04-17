@@ -20,9 +20,8 @@ export interface IValidatorVotes {
 })
 export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;
-  //TABS = ['ALL', 'YES', 'NO', 'NO WITH VETO', 'ABSTAIN', 'DID NOT VOTE'];
   TABS = PROPOSAL_VOTE.concat({
-    key: '',
+    key: 'null',
     value: 'Did not vote',
     class: '',
     voteOption: '',
@@ -34,7 +33,7 @@ export class ValidatorsVotesComponent implements OnInit {
         'VOTE_OPTION_ABSTAIN',
         'VOTE_OPTION_NO',
         'VOTE_OPTION_NO_WITH_VETO',
-        ''
+        'null',
       ].includes(vote.key),
     )
     .map((vote) => ({
@@ -98,7 +97,7 @@ export class ValidatorsVotesComponent implements OnInit {
         res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
         res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
         res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
-        res['didNotVote'] && ((dta) => (this.voteData.noWithVeto = dta))(res['didNotVote']);
+        res['didNotVote'] && ((dta) => (this.voteData.didNotVote = dta))(res['didNotVote']);
 
         if (res['all']) {
           this.voteDataList = [...this.voteData.all];
@@ -110,19 +109,22 @@ export class ValidatorsVotesComponent implements OnInit {
   changeTab(tabId): void {
     switch (tabId) {
       case '':
-        this.voteDataList = this.voteData.all.proposalVotes;
+        this.voteDataList = this.voteData.all;
         break;
       case 'VOTE_OPTION_YES':
-        this.voteDataList = this.voteData.yes.proposalVotes;
+        this.voteDataList = this.voteData.yes;
         break;
       case 'VOTE_OPTION_ABSTAIN':
-        this.voteDataList = this.voteData.abstain.proposalVotes;
+        this.voteDataList = this.voteData.abstain;
         break;
       case 'VOTE_OPTION_NO':
-        this.voteDataList = this.voteData.no.proposalVotes;
+        this.voteDataList = this.voteData.no;
         break;
       case 'VOTE_OPTION_NO_WITH_VETO':
-        this.voteDataList = this.voteData.noWithVeto.proposalVotes;
+        this.voteDataList = this.voteData.noWithVeto;
+        break;
+      default:
+        this.voteDataList = this.voteData.didNotVote;
         break;
     }
   }

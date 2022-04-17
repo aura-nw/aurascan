@@ -7,7 +7,7 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -61,7 +61,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
 
-  constructor(public global: Globals, private datePipe: DatePipe) {}
+  constructor(public global: Globals) {}
   ngOnDestroy(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -71,7 +71,6 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-
     this.dataSource = new MatTableDataSource(this.data);
     this.dataSource.sort = this.sort;
   }
@@ -95,24 +94,21 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   getVoteValue(voteKey) {
     const vote = PROPOSAL_VOTE.find((vote) => vote.key === voteKey);
-    return vote ? vote.value : voteKey;
+    return vote ? vote.value : 'Did not vote';
   }
 
   getDateValue(created_at) {
-    try {
-      // return (
-      //   formatTimeInWords(new Date(created_at).getTime()) +
-      //   ' (' +
-      //   this.datePipe.transform(created_at, DATEFORMAT.DATETIME_UTC) +
-      //   ')'
-      // );
-
-      return [
-        formatTimeInWords(new Date(created_at).getTime()),
-        formatWithSchema(new Date(created_at).getTime(), DATEFORMAT.DATETIME_UTC)
-      ]
-    } catch (e) {
-      return [created_at,''];
+    if (created_at) {
+      try {
+        return [
+          formatTimeInWords(new Date(created_at).getTime()),
+          `(${formatWithSchema(new Date(created_at).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [created_at, ''];
+      }
+    } else {
+      return ['-', ''];
     }
   }
 }
