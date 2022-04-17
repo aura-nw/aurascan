@@ -30,7 +30,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
     { matColumnDef: 'created_at', headerCellDef: 'Time' },
@@ -45,7 +45,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/account', isShort: true },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'created_at', headerCellDef: 'Time' },

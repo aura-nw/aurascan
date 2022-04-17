@@ -23,7 +23,12 @@
   }
 
   td a {
-    color: var(--aura-green) !important;
+    color: var(--aura-green);
+
+    &.disabled-link {
+      pointer-events: none;
+      color: var(--aura-white);
+  }
   }
 }
 mat-paginator {

@@ -15,7 +15,7 @@
                 </a>
               </ng-container>
               <ng-container *ngIf="template.isUrl && template.isShort">
-                <a [routerLink]="[template.isUrl, data[template.matColumnDef]]">
+                <a [routerLink]="[template.isUrl, data[template.matColumnDef]]" [class.disabled-link]="!data[template.matColumnDef]">
                   {{ shortenAddress(data[template.matColumnDef]) || '-'}}
                 </a>
               </ng-container>
