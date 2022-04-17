@@ -1,6 +1,6 @@
 <div class="card">
-  <div class="card-header bg-transparent border-bottom fw-bold">Validators Votes</div>
   <div class="card-body">
+    <div class="fw-bold card__title">Validators Votes</div>
     <ul ngbNav #customNav="ngbNav" [activeId]="0" class="nav-tabs nav-tabs-custom nav-justified">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
