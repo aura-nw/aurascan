@@ -4,6 +4,7 @@
 
 .card {
     margin-bottom: $grid-gutter-width;
+    border-radius: 12px;
 }
 
 .card-drop {
@@ -21,20 +22,25 @@
     font-size: 13px;
 }
 
+.card-header {
+    padding: var(--spacer-6);
+    background-color: var(--aura-dark-gray);
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom: none !important;
+}
 
 .card-header-tabs {
     margin-top: -$card-cap-padding-y;
 }
 
-.card-header-pills {
-    margin: -(calc($card-cap-padding-y / 2));
+.card-body {
+    padding: var(--spacer-6) !important;
 }
-
 body[data-layout-mode="dark"] {
-    .card, .card-header,
+    .card,
     .modal-content, .offcanvas {
-        background-color: $gray-dark-200;
-        border-color: lighten($gray-dark-200,4%);
+        background-color: #20262B;
+        border-color: #20262B;
     }
 
     .card-title-desc{

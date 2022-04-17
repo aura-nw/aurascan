@@ -310,97 +310,12 @@ body {
     cursor: pointer !important;
 }
 
-.g-type {
-    display: inline;
-    border-radius: 10rem;
-    padding: 0.2rem 1rem;
-    background-color: #f6f2ff;
-    margin-left: 0.3rem;
-    color: #9c6cff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.g-purple {
-    color: #9c6cff;
-}
-
 .cdk-overlay-container {
     z-index: 1070;
 }
 
 .disabled-pointer {
     pointer-events: none;
-}
-
-// status
-.aura-status {
-    color: var(--bs-danger);
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    &--has-elevation {
-        padding: 12px 16px 12px 16px;
-    }
-    span.status {
-        position: relative;
-        font-weight: 500;
-        // &:before {
-        //     content: "";
-        //     position: absolute;
-        //     left: -16px;
-        //     top: 50%;
-        //     transform: translateY(-50%);
-        //     width: 8px;
-        //     height: 8px;
-        //     border-radius: 50%;
-        // }
-    }
-    &.primary {
-        color: var(--bs-success);
-        // span.status {
-        //     &:before {
-        //         background-color: var(--bs-success);
-        //     }
-        // }
-        &.aura-status--has-elevation {
-            background-color: rgba(94, 230, 208, 0.2);
-        }
-    }
-    &.danger {
-        color: var(--bs-danger);
-        // span.status {
-        //     &:before {
-        //         background-color: var(--bs-danger);
-        //     }
-        // }
-        &.aura-status--has-elevation {
-            background-color: rgba(230, 94, 94, 0.2);
-        }
-    }
-    &.info {
-        color: var(--bs-info);
-        // span.status {
-        //     &:before {
-        //         background-color: var(--bs-info);
-        //     }
-        // }
-        &.aura-status--has-elevation {
-            background-color: rgba(94, 132, 230, 0.2);
-        }
-    }
-    &.warning {
-        color: var(--bs-warning);
-        // span.status {
-        //     &:before {
-        //         background-color: var(--bs-warning);
-        //     }
-        // }
-        &.aura-status--has-elevation {
-            background-color: rgba(227, 230, 94, 0.2);
-        }
-    }
 }
 // vote bar (similar process bar)
 
@@ -428,23 +343,6 @@ body {
         }
     }
 }
-.box-rank {
-    background-color: #9c6cff;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-align-items: center;
-    align-items: center;
-}
 .modal-dialog{
     max-width: 600px;
     .modal-content {
@@ -471,42 +369,42 @@ body {
             .box-token, .box-validator {
                 color: #5E5E80;
             }
-            .box-token {
-                .input-amount-token {
-                    width: 85%;
-                    border: 1px solid #ced4da;
-                    height: 40px;
+            .box-select-redelegate{
+                width: 100%;
+                background: #F7FAFC;
+                border-radius: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                align-content: center;
+                .mat-form-field {
+                    margin-top: 20px;
                 }
-                .btn-max-token {
-                    margin-left: -60px !important;
-                    height: 25px;
-                    background: #5156be;
-                    display: flex;
-                    align-self: center;
-                    align-items: center;
-                    z-index: 1;
-                    color: #fff;
-                    margin-right: 5px;
-                    border-radius: 5px;
-                    width: auto;
-                }
-                .label-token{
-                    width: 80px;
-                }
-              }
-              .box-staking {
-                .btn-group{
-                    // background: #f7fafc;
-                    .dropdown-toggle::after {
-                        border: solid black;
-                        border-width: 0 3px 3px 0;
-                        display: inline-block;
-                        padding: 3px;
-                        transform: rotate(45deg);
-                        -webkit-transform: rotate(45deg);
-                    }
-                }
-              }
+            }
         }
+    }
+}
+
+.box-token {
+    .input-amount-token {
+        width: 85%;
+        border: 1px solid #ced4da;
+        height: 40px;
+    }
+    .btn-max-token {
+        margin-left: -60px !important;
+        height: 25px;
+        background: #5156be;
+        display: flex;
+        align-self: center;
+        align-items: center;
+        z-index: 1;
+        color: #fff;
+        margin-right: 5px;
+        border-radius: 5px;
+        width: auto;
+    }
+    .label-token{
+        width: 80px;
     }
 }

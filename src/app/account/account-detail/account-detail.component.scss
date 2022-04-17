@@ -1,100 +1,57 @@
 @import "../../../assets/scss/color.scss";
-
-.account-detail-content {
+section.account-detail {
+  color: var(--aura-white);
   .box-account {
-    position: relative;
-    background-color: $account-box-total !important;
     width: 100%;
-    padding: 2rem 1.2rem 1.3rem 2rem;
-    min-height: 35rem;
-    color: $white;
-    font-weight: 500;
-    font-size: 14px;
-    border-radius: 0.5rem;
-    .box-qr {
-      margin-bottom: 1rem;
-    }
-    .address-account {
-      color: $validator-btn-text;
-    }
-    .box-total {
-      position: absolute;
-      bottom: 1rem;
-      font-size: 18px;
-    }
-    .account-info-copied {
-      position: relative;
-      background-color: transparent;
-      margin-left: 1rem;
-      overflow: hidden;
-      width: 5.2rem;
-      height: 3rem;
-      .txt-copied {
-        position: absolute;
-        top: 0;
-        left: 100%;
-        height: 100%;
-        opacity: 0;
-        color: var(--white);
-        -webkit-transition: all 0.3s linear;
-        transition: all 0.3s linear;
-      }
-      .txt-copied.show-copy {
-        opacity: 1;
-      }
-    }
-    
-  }
-  .box-assets {
+    padding: var(--spacer-6);
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 10px 20px;
-    align-items: center;
-    .title-assets {
-      font-size: 1.5rem;
-      font-weight: 500;
-    }
-    .account-list-search-area {
+    .qr-code {
       display: flex;
-      justify-content: flex-end;
       align-items: center;
-      .list-token {
-        width: 150px;
-      }
-      .txt-asset {
-        margin-right: 25px;
-      }
-      .account-list-search-input {
-        border-radius: 0.5rem;
-        border: 0.1rem solid #bebebe;
-        padding: 0.6rem 0.6rem 0.7rem 25px;
-        margin-bottom: 0.3rem;
-        width: 400px;
-        height: 30px;
-        color: $validator-black;
-        font-size: 14px;
-        margin-right: 1rem;
-        background: url("../../../assets/images/icons/search-icon.png") no-repeat;
-        background-size: 13px;
-        background-position: 5px 6px;
+      justify-content: center;
+      border-radius: var(--spacer-2);
+      overflow: hidden;
+    }
+    .txt-copied {
+      height: 0;
+      opacity: 0;
+      -webkit-transition: all 0.3s linear;
+      transition: all 0.3s linear;
+      &.show {
+        opacity: 1;
+        height: 24px;
       }
     }
   }
-  .card-body {
-    .item-color-balance {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin: 0.2rem 1rem 0 0;
-      font-weight: 500;
+  form.search-form {
+    .input-group {
+      background-color: #1C1C1F; // this color not define in root
     }
-    .box-balance {
-      display: flex;
-      justify-content: space-between;
-      font-size: 18px;
-      margin: 1.5rem 10px;
-      font-weight: 500;
+    input {
+      width: 100%;
+      @media (min-width: 992px) {
+        width: 405px;
+      }
     }
+  }
+  .asset-type .select-input-field {
+    background-color: #1C1C1F; // this color not define in root
+    width: 100%;
+    @media (min-width: 992px) {
+      width: 186px;
+    }
+  }
+  .list-token {
+    width: 150px;
+  }
+  .item-color-balance {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0.2rem 1rem 0 0;
+    font-weight: 500;
   }
   .box-chart {
     width: 180px;
@@ -110,5 +67,11 @@
       border: 1px solid #D3D3D3;
       border-radius: 50%;
     }
+  }
+  .article-1 {
+    min-height: 675px;
+  }
+  .article-2 {
+    min-height: 500px;
   }
 }

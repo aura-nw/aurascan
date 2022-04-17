@@ -1,7 +1,9 @@
 <div class="wallet-connect-container">
     <ng-container *ngIf="{wallet: wallet$ | async } as ng">
-        <img class="img-wallet" *ngIf="!ng.wallet" src="./../../../../assets/images/wallet.png" alt=""
-            data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">
+
+        <button *ngIf="!ng.wallet"
+                type="button" class="button button-outline d-inline-block fw-semibold"
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT WALLET</button>
 
         <button type="button" *ngIf="ng.wallet" class="btn btn-light" [matMenuTriggerFor]="menu">
             <div class="d-flex align-items-center gap-1">
@@ -9,7 +11,6 @@
                 {{ ng.wallet?.name }}
             </div>
         </button>
-
 
         <mat-menu #menu="matMenu" class="custom-menu">
             <!-- <div class="menu-row" mat-menu-item>

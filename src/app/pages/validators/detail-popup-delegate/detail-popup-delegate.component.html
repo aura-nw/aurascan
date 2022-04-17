@@ -1,0 +1,82 @@
+<ng-container *ngIf="data.dialogMode === dialogMode.Delegate">
+  <div class="box-notice row">
+    <div class="col-2">
+      <img class="warning-icon" src="/assets/images/icons/warning.png">
+    </div>
+    <div class="col-10">
+      <span class="header-warning">Staking will lock your funds for 14+ days</span><br>
+      You will need to undelegate in order for your staked assets to be liquid again. This process will take 14 days to complete.
+    </div>
+  </div>
+  <div class="box-token mt-3">
+    <p class="font-weight-bold">My delegation</p>
+    <p>{{data.delegatedToken | number}} {{global.stableToken}}</p>
+    <p class="font-weight-bold">Available Balance</p>
+    <p>{{data.availableToken | number: global.formatNumberToken}} {{global.stableToken}}</p>
+    <p class="font-weight-bold">Amount to Delegate</p>
+    <!-- <div class="input-group mb-3 row">
+      <input type="number" class="input-amount-token" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+        [(ngModel)]="amountFormat" (blur)="resetCheck()">
+      <button class="btn btn-outline-secondary btn-max-token" type="button" (click)="getMaxToken()">MAX</button>
+      <div class="input-group-append d-flex label-token">
+        <span class="input-group-text">{{global.stableToken}}</span>
+      </div>
+    </div> -->
+  </div>
+</ng-container>
+
+<ng-container *ngIf="data.dialogMode === dialogMode.Manage">
+  <div class="box-info-delegate row">
+    <div class="col-12 d-flex justify-content-between">
+      <p>My delegation</p>
+      <p>{{data.validatorDetail.amount_staked || 0 | number: global.formatNumberToken}} <span class="g-purple">{{global.stableToken}}</span></p>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <p>Pending Reward</p>
+      <p>{{data.validatorDetail.pending_reward || 0 | number: global.formatNumberToken}} <span class="g-purple">{{global.stableToken}}</span></p>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <p>Total Reward</p>
+      <p>{{data.stakingToken || 0 | number: global.formatNumberToken}} <span class="g-purple">{{global.stableToken}}</span></p>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <p>Available Balance</p>
+      <p>{{data.availableToken || 0 | number: global.formatNumberToken}} <span class="g-purple">{{global.stableToken}}</span></p>
+    </div>
+  </div>
+  <div class="box-notice undelegate row">
+    <div class="col-2">
+      <img class="warning-icon" src="/assets/images/icons/infor.png">
+    </div>
+    <div class="col-10 text-center">
+      You can <b>"Delegate"</b> more to this validator<br>
+      Or use <b>"Redelagate"</b> to switch your assets to another validator.<br>
+      Or use <b>"Undelegate"</b> to start the unbonding period.
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="data.dialogMode === dialogMode.Undelegate">
+  <div class="box-notice row">
+    <div class="col-2">
+      <img class="warning-icon" src="/assets/images/icons/warning.png">
+    </div>
+    <div class="col-10 text-left">
+      <span class="header-warning">Once the unbonding period begins you will:</span><br>
+      - not receive staking rewards<br>
+      - not be able to cancel the unbonding<br>
+      - need to wait 14 days for the amount to be liquid
+    </div>
+  </div>
+
+  <div class="box-notice undelegate row mt-3">
+    <div class="col-2">
+      <img class="warning-icon" src="/assets/images/icons/infor.png">
+    </div>
+    <div class="col-10 text-left">
+      <span class="header-warning">Trying to switch validators?</span><br>
+      Use the 'Redelegate' feature to instantly stake your assets to another validator.
+    </div>
+  </div>
+</ng-container>
+

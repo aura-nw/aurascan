@@ -1,0 +1,11 @@
+.divider {
+  background-color: var(--aura-neutrals-3);
+  &.divider-vertical {
+    width: 1px;
+    height: 100%;
+  }
+  &.divider-horizontal {
+    width: 100%;
+    height: 1px;
+  }
+}
