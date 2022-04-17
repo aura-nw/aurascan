@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { concat, merge } from 'rxjs';
-import { concatAll, concatMap, map } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';

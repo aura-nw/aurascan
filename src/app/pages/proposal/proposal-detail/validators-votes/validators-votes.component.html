@@ -6,7 +6,7 @@
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(index)">
             <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-            <span class="d-none d-sm-block tab-title">{{ tab }}</span>
+            <span class="d-none d-sm-block tab-title">{{ tab.value }}</span>
           </a>
         </li>
       </ng-container>

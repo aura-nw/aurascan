@@ -7,7 +7,7 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -15,7 +15,7 @@ import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
-import { formatDateTime, formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 import { Globals } from '../../../global/global';
 
 @Component({
@@ -39,10 +39,10 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
 
   validatorsVotesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
-    { matColumnDef: 'validator', headerCellDef: 'Validator', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'txHash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'answer', headerCellDef: 'Answer' },
-    { matColumnDef: 'time', headerCellDef: 'Time' },
+    { matColumnDef: 'validator_name', headerCellDef: 'Validator', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'option', headerCellDef: 'Answer' },
+    { matColumnDef: 'created_at', headerCellDef: 'Time' },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
