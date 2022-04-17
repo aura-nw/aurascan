@@ -23,7 +23,7 @@ button, .button {
   box-shadow: none;
 }
 a {
-  color: var(--aura-light-gray) !important;
+  color: var(--aura-light-gray);
   text-decoration: none;
   transition: color .35s ease-in-out;
   &:hover {

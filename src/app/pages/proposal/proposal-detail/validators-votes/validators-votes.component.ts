@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
@@ -16,7 +16,7 @@ export interface IValidatorVotes {
 @Component({
   selector: 'app-validators-votes',
   templateUrl: './validators-votes.component.html',
-  styleUrls: ['./validators-votes.component.scss'],
+  styleUrls: ['./validators-votes.component.scss']
 })
 export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;

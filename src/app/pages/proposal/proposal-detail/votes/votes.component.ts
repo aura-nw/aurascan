@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
@@ -16,7 +16,7 @@ export interface IVotes {
 @Component({
   selector: 'app-votes',
   templateUrl: './votes.component.html',
-  styleUrls: ['./votes.component.scss'],
+  styleUrls: ['./votes.component.scss']
 })
 export class VotesComponent implements OnInit {
   @Input() proposalId: number = null;

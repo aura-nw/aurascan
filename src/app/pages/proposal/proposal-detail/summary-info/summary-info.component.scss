@@ -24,7 +24,8 @@
   max-height: 360px;
   overflow-y: scroll;
   padding: 16px;
-  background-color: var(--bs-gray-100);
+  // background-color: var(--bs-gray-100);
+  border: 1px var(--aura-light-gray);
 }
 .proposal__summary-total {
   color: var(--aura-white);
