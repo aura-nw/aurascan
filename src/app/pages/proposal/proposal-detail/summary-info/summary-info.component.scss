@@ -3,29 +3,21 @@
     border-bottom: 1px solid var(--bs-light);
   }
   &__title {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 3.2rem;
+    font-weight: 500;
+    color: var(--aura-white);
+    a {
+      text-decoration: none;
+    }
   }
   &__status {
     display: flex;
     align-items: center;
     gap: 10px;
-    .button{
-      height: 50px;
-    }
-    .message {
-      color: var(--bs-primary);
-    }
   }
   &__info {
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--bs-secondary);
-    .title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--bs-gray-700);
-    }
+    color: var(--aura-white);
   }
 }
 .editorial-container {
@@ -35,82 +27,100 @@
   background-color: var(--bs-gray-100);
 }
 .proposal__summary-total {
-  border-radius: 5px;
-  border: 1px solid var(--bs-gray-400);
-  box-shadow: none;
-  padding: 24px;
-  b {
-    color: var(--bs-gray-700);
+  color: var(--aura-white);
+
+  .vote-bar {
+    margin-top: 24px;
+    height: 56px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    ul {
+      background-color: #e3e3e3;
+      li.bg {
+        &--primary {
+          background-color: #5ee6d0;
+        }
+        &--danger {
+          background-color: #e65e5e;
+        }
+        &--info {
+          background-color: #5e84e6;
+        }
+        &--secondary {
+          background-color: #777e91;
+        }
+      }
+    }
+  }
+
+  .vote-legend {
+    ul {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-rows: 7rem;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+
+      padding: 0;
+
+      li {
+        padding: 0px 16px;
+        padding-left: 40px;
+        height: 5rem;
+
+        position: relative;
+
+        .item-box {
+          height: 32px;
+          display: flex;
+          align-items: center;
+
+          position: relative;
+
+          font-family: "SF Pro Display";
+          font-size: 20px;
+          line-height: 24px;
+          letter-spacing: 0.02em;
+        }
+
+        &[data-style] .item-box::before {
+          position: absolute;
+          content: "";
+          width: 32px;
+          height: 32px;
+          left: -40px;
+          top: 0px;
+          border-radius: 100rem;
+        }
+
+        &[data-style="primary"] .item-box::before {
+          background-color: #5ee6d0;
+        }
+        &[data-style="danger"] .item-box::before {
+          background-color: #e65e5e;
+        }
+        &[data-style="info"] .item-box::before {
+          background-color: #5e84e6;
+        }
+        &[data-style="secondary"] .item-box::before {
+          background-color: #777e91;
+        }
+
+        .item {
+          &-label {
+            margin-right: 32px;
+          }
+          &-amount {
+            font-size: 16px;
+            margin-top: 8px;
+          }
+        }
+      }
+    }
   }
 }
 .spacer-custom {
   @media (min-width: 576px) {
     margin-left: 16px;
-  }
-}
-.vote-bar {
-  height: 30px;
-  ul {
-    background-color: #e3e3e3;
-  }
-}
-
-.vote-legend {
-  ul {
-    margin-top: 2rem;
-    display: grid;
-    grid-template-rows: 7rem;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-
-    padding: 0;
-
-    li {
-      border-left: 4px solid;
-
-      padding: 0px 16px;
-
-      height: 5rem;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-flex-direction: column;
-      flex-direction: column;
-      -webkit-justify-content: space-between;
-      justify-content: space-between;
-
-      &[data-style='primary'] {
-        border-left-color: var(--bs-success);
-      }
-      &[data-style='danger'] {
-        border-left-color: var(--bs-danger);
-      }
-      &[data-style='info'] {
-        border-left-color: var(--bs-info);
-      }
-      &[data-style='secondary'] {
-        border-left-color: var(--bs-secondary);
-      }
-
-      .item {
-        font-size: 16px;
-        &-label {
-          font-weight: 600;
-          color: var(--black);
-        }
-        &-percent {
-          color: var(--black);
-        }
-        &-amount {
-          font-weight: 400;
-          color: var(--black);
-        }
-
-        .decimal {
-          font-size: 14px;
-        }
-        .g-purple {
-          margin-left: 4px;
-        }
-      }
-    }
   }
 }
