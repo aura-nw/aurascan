@@ -1,251 +1,249 @@
-<div>
-  <div class="card-header bg-transparent border-bottom fw-bold">Message</div>
-  <div class="card-body">
-    <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+<div class="card-header title-small">Message</div>
+<div class="card-body">
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">From Address</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]"
-        >
-          {{ transactionDetail?.messages[0]?.from_address }}
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">From Address</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">To Address</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]"
-        >
-          {{ transactionDetail?.messages[0]?.to_address }}
-        </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]"
+      >
+        {{ transactionDetail?.messages[0]?.from_address }}
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Amount</p>
-        </div>
-        <div class="col-6">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="g-purple">{{ global.stableToken }}</span>
-          </ng-container>
-          <ng-container *ngIf="amount == 0"> - </ng-container>
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">To Address</div>
       </div>
-    </ng-container>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]"
+      >
+        {{ transactionDetail?.messages[0]?.to_address }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Amount</div>
+      </div>
+      <div class="col-6">
+        <ng-container *ngIf="amount > 0">
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        </ng-container>
+        <ng-container *ngIf="amount == 0"> - </ng-container>
+      </div>
+    </div>
+  </ng-container>
 
-    <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+  <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Contract</p>
-        </div>
-        <div class="col-6">{{ transactionDetail?.messages[0]?.contract }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Contract</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Sender</p>
-        </div>
-        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
-          {{ transactionDetail?.messages[0]?.sender }}
-        </div>
+      <div class="col-6">{{ transactionDetail?.messages[0]?.contract }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Sender</div>
       </div>
-    </ng-container>
+      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+        {{ transactionDetail?.messages[0]?.sender }}
+      </div>
+    </div>
+  </ng-container>
 
-    <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+  <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Label</p>
-        </div>
-        <div class="col-6">{{ transactionDetail?.messages[0]?.label }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Label</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Sender</p>
-        </div>
-        <div class="col-6" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
-          {{ transactionDetail?.messages[0]?.sender }}
-        </div>
+      <div class="col-6">{{ transactionDetail?.messages[0]?.label }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Sender</div>
       </div>
-    </ng-container>
+      <div class="col-6" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+        {{ transactionDetail?.messages[0]?.sender }}
+      </div>
+    </div>
+  </ng-container>
 
-    <ng-container
-      *ngIf="
-        transactionDetail?.type === eTransType.GetReward ||
-        transactionDetail?.type === eTransType.Delegate ||
-        transactionDetail?.type === this.eTransType.Undelegate
-      "
-    >
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+  <ng-container
+    *ngIf="
+      transactionDetail?.type === eTransType.GetReward ||
+      transactionDetail?.type === eTransType.Delegate ||
+      transactionDetail?.type === this.eTransType.Undelegate
+    "
+  >
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Delegator Address</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
-        >
-          {{ transactionDetail?.messages[0]?.delegator_address }}
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Delegator Address</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Validator Address</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]"
-        >
-          {{ transactionDetail?.messages[0]?.validator_address }}<br />
-          <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
-        </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
+      >
+        {{ transactionDetail?.messages[0]?.delegator_address }}
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Amount</p>
-        </div>
-        <div class="col-6">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="g-purple">{{ global.stableToken }}</span>
-          </ng-container>
-          <ng-container *ngIf="amount == 0"> - </ng-container>
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Validator Address</div>
       </div>
-    </ng-container>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]"
+      >
+        {{ transactionDetail?.messages[0]?.validator_address }}<br />
+        <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Amount</div>
+      </div>
+      <div class="col-6">
+        <ng-container *ngIf="amount > 0">
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        </ng-container>
+        <ng-container *ngIf="amount == 0"> - </ng-container>
+      </div>
+    </div>
+  </ng-container>
 
-    <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Proposal Id</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]"
-        >
-          {{ transactionDetail?.messages[0]?.proposal_id }}
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Proposal Id</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Voter</p>
-        </div>
-        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
-          {{ transactionDetail?.messages[0]?.voter }}
-        </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]"
+      >
+        {{ transactionDetail?.messages[0]?.proposal_id }}
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Option</p>
-        </div>
-        <div class="col-6">
-          {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Voter</div>
       </div>
-    </ng-container>
+      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
+        {{ transactionDetail?.messages[0]?.voter }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Option</div>
+      </div>
+      <div class="col-6">
+        {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
+      </div>
+    </div>
+  </ng-container>
 
-    <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">From Address</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]"
-        >
-          {{ transactionDetail?.messages[0]?.from_address }}
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">From Address</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">To Address</p>
-        </div>
-        <div
-          class="col-6 g-blue cursor-pointer"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]"
-        >
-          {{ transactionDetail?.messages[0]?.to_address }}
-        </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]"
+      >
+        {{ transactionDetail?.messages[0]?.from_address }}
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Vesting Schedule</p>
-        </div>
-        <div class="col-6">
-          {{ dateVesting }}
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">To Address</div>
       </div>
-    </ng-container>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]"
+      >
+        {{ transactionDetail?.messages[0]?.to_address }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Vesting Schedule</div>
+      </div>
+      <div class="col-6">
+        {{ dateVesting }}
+      </div>
+    </div>
+  </ng-container>
 
-    <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text g-purple header-title">
-            <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-          </p>
+  <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Initial Deposit</p>
-        </div>
-        <div class="col-6">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="g-purple">{{ global.stableToken }}</span>
-          </ng-container>
-          <ng-container *ngIf="amount == 0"> - </ng-container>
-        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Initial Deposit</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-3">
-          <p class="card-text fw-bold">Proposer</p>
-        </div>
-        <div class="col-6 g-blue cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
-          {{ transactionDetail?.messages[0]?.proposer }}
-        </div>
+      <div class="col-6">
+        <ng-container *ngIf="amount > 0">
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        </ng-container>
+        <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
-    </ng-container>
-  </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Proposer</div>
+      </div>
+      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
+        {{ transactionDetail?.messages[0]?.proposer }}
+      </div>
+    </div>
+  </ng-container>
 </div>
