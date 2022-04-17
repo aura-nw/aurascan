@@ -63,6 +63,7 @@ export class SummaryInfoComponent implements OnInit {
         this.proposalDetail.pro_deposit_end_time,
         DATEFORMAT.DATETIME_UTC,
       );
+      this.proposalDetail.initial_deposit = balanceOf(this.proposalDetail.initial_deposit);
       this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
       this.proposalDetail.pro_votes_yes = balanceOf(this.proposalDetail.pro_votes_yes);
       this.proposalDetail.pro_votes_no = balanceOf(this.proposalDetail.pro_votes_no);
