@@ -37,7 +37,7 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
+    { matColumnDef: 'rank', headerCellDef: 'Rank' },
     { matColumnDef: 'validator_name', headerCellDef: 'Validator', isUrl: '/validators', paramField: 'operator_address' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },

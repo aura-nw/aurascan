@@ -39,11 +39,11 @@
                       </div>
                     </div>
                     <div *ngSwitchCase="'fee'">
-                      {{ data[template.matColumnDef] }} <span class="g-purple">{{ global.stableToken }}</span>
+                      {{ data[template.matColumnDef] }} <span class="text--primary">{{ global.stableToken }}</span>
                     </div>
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0">
-                        {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="g-purple">{{ global.stableToken }}</span>
+                        {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--primary">{{ global.stableToken }}</span>
                       </ng-container>
                       <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
                     </div>
