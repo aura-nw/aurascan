@@ -104,8 +104,8 @@ export class ProposalComponent implements OnInit {
               pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
             });
           }
-          pro.pro_vote_total = totalVote;
         }
+        pro.pro_vote_total = totalVote;
 
         pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
