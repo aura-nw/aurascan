@@ -21,8 +21,8 @@
               : 'Vote'
           }}
         </button>
-        <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status).key }}">
-          <span class="status title-small">{{ getStatus(proposalDetail.pro_status).value }}</span>
+        <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
+          <span class="status title-small">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
         </div>
       </div>
     </div>
