@@ -197,12 +197,14 @@ export class ProposalComponent implements OnInit {
           },
         });
         dialogRef.afterClosed().subscribe((result) => {
-          this.voteValue = result;
-          this.getList();
+          if (result) {
+            this.voteValue = result;
+            this.getList();
+          }
         });
       });
     } else {
-      this.getList();
+      window.location.reload();
     }
   }
 

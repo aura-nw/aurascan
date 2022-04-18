@@ -39,19 +39,19 @@ export class ProposalVoteComponent implements OnInit {
       chainId: this.chainId,
     });
 
-    // if(hash)
-    // {
-    //   this.toastr.success(hash);
-    // }
+    if(hash)
+    {
+      this.dialogRef.close({ keyVote: this.keyVote });
+    }
 
     if (error) {
       this.toastr.error(error);
+      this.closeVoteForm();
     }
   }
 
   onSubmitVoteForm() {
     this.proposalVote();
-    this.dialogRef.close({ keyVote: this.keyVote });
   }
 
   closeVoteForm() {
