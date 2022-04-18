@@ -19,7 +19,7 @@ export function getAmount(arrayMsg, type, rawRog = '') {
   let itemMessage = arrayMsg[0];
   
   if (itemMessage?.amount && (type === eTransType.Undelegate 
-    || type === eTransType.Delegate)) {
+    || type === eTransType.Delegate || type === eTransType.Redelegate)) {
     amount = itemMessage?.amount.amount;
   } else if (itemMessage?.amount) {
     amount = itemMessage?.amount[0].amount;

@@ -1,82 +1,5 @@
 <app-pagetitle title="VALIDATORS" [breadcrumbItems]="breadCrumbItems" [displayInfo]="true"></app-pagetitle>
 <div class="validator-container">
-  <!-- <div class="row">
-    <div class="col-xl-3 col-md-6">
-      <div class="card card-h-100">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-12">
-              <div class="row align-items-center">
-                <img src="/assets/images/icons/blocks.png" class="img-valid" />
-                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Height</span>
-              </div>
-              <h4 class="valid-header">
-                <span class="fs-4">{{ globals?.dataHeader?.block_height | number }}</span>
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-      <div class="card card-h-100">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-12">
-              <div class="row align-items-center">
-                <img src="/assets/images/icons/validators.svg" class="img-valid" />
-                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Validators</span>
-              </div>
-              <h4 class="valid-header">
-                <span class="fs-4"
-                  >{{ globals?.dataHeader?.total_validator_active_num }} /
-                  {{ globals?.dataHeader?.total_validator_num }}</span
-                >
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-      <div class="card card-h-100">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-12">
-              <div class="row align-items-center">
-                <img src="/assets/images/icons/validator-bond-token.svg" class="img-valid" />
-                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Bonded Tokens</span>
-              </div>
-              <h4 class="valid-header">
-                <span class="fs-4">{{ globals?.dataHeader?.bonded_tokens | number }}</span>
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-      <div class="card card-h-100">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-12">
-              <div class="row align-items-center">
-                <img src="/assets/images/icons/time.png" class="img-valid" />
-                <span class="ml-2 text-muted lh-1 d-block text-truncate txt-title">Block Time</span>
-              </div>
-              <h4 class="valid-header">
-                <span class="fs-4">{{ globals?.dataHeader?.block_time }}</span>
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
   <div class="row col-md-12 card box-info-user">
     <div class="row card-header">
       <div class="col-6">
@@ -126,6 +49,9 @@
                     <div *ngSwitchCase="'pending_reward'" class="">
                       {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
                       <span class="g-purple">{{ globals.stableToken }}</span>
+                    </div>
+                    <div *ngSwitchCase="'validator_name'" class="g-blue cursor-pointer" [routerLink]="['/validators', data['validator_address']]">
+                      {{ data[template.matColumnDef] }}
                     </div>
                     <div *ngSwitchCase="'action'">
                       <button
@@ -358,7 +284,10 @@
               <mat-form-field appearance="fill">
                 <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
                   <mat-option *ngFor="let item of lstValidator" [value]="item.value">
-                    {{ item.label | translate }}
+                    <div class="d-flex">
+                      <p style="width: 100px;">{{ item.label | translate }}</p>
+                      <!-- <p>Commission - {{ item.comm | translate }}</p> -->
+                    </div>
                   </mat-option>
                 </mat-select>
               </mat-form-field>

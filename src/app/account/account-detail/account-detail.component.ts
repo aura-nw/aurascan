@@ -96,10 +96,10 @@ export class AccountDetailComponent implements OnInit {
   dataSourceUnBonding: MatTableDataSource<any>;
 
   templatesReDelegation: Array<TableTemplate> = [
-    { matColumnDef: 'from', headerCellDef: 'From' },
-    { matColumnDef: 'to', headerCellDef: 'To' },
+    { matColumnDef: 'validator_src_name', headerCellDef: 'From' },
+    { matColumnDef: 'validator_dst_name', headerCellDef: 'To' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'time', headerCellDef: 'Time' },
+    { matColumnDef: 'completion_time', headerCellDef: 'Time' },
   ];
   displayedColumnsReDelegation: string[] = this.templatesReDelegation.map((dta) => dta.matColumnDef);
   dataSourceReDelegation: MatTableDataSource<any>;
