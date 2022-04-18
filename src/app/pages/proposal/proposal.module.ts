@@ -30,6 +30,7 @@ import { ProposalTableComponent } from './proposal-table/proposal-table.componen
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
 import { DateFnsModule } from 'ngx-date-fns';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { DateFnsModule } from 'ngx-date-fns';
     NgxMaskModule,
     TableNoDataModule,
     DateFnsModule,
+    PaginatorModule
   ],
   providers: [ProposalService],
 })
