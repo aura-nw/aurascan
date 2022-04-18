@@ -1,11 +1,10 @@
 <div class="validator-container">
-
   <div class="card">
         <!-- heading -->
         <div class="d-flex justify-content-between card-header title-small">
           <div>
             <div class="mb-3">
-              <span class="text--white">Available Balance: {{ dataDelegate.availableToken | number: globals.formatNumberToken }}</span>
+              <span class="text--white">Available Balance: {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span>
               <span class="ml-2 text--green">{{ globals.stableToken }}</span>
             </div>
             <div>
@@ -290,7 +289,10 @@
               <mat-form-field appearance="fill">
                 <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
                   <mat-option *ngFor="let item of lstValidator" [value]="item.value">
-                    {{ item.label | translate }}
+                    <div class="d-flex">
+                      <p style="width: 100px;">{{ item.label | translate }}</p>
+                      <!-- <p>Commission - {{ item.comm | translate }}</p> -->
+                    </div>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
