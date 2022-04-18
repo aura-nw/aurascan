@@ -19,8 +19,8 @@
           </button>
         </div>
         <!-- table -->
-        <div class="card-body">
-          <ng-container *ngIf="lengthWallet > 0">
+        <div class="card-body" *ngIf="lengthWallet > 0">
+          <ng-container>
             <div class="table-responsive">
               <table  mat-table matSort
                       [dataSource]="dataSourceWallet"
@@ -50,10 +50,9 @@
                             {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
                             <span class="text--green">{{ globals.stableToken }}</span>
                           </div>
-                          <div *ngSwitchCase="'action'">
-                            <button
-                                    type="button"
-                                    class="btn btn-primary waves-effect waves-light"
+                          <div *ngSwitchCase="'action'" class="py-4">
+                            <button type="button"
+                                    class="button button-outline py-2 px-4"
                                     [disabled]="clicked"
                                     (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)"
                             >Manage</button>
@@ -221,186 +220,120 @@
 
 <div class="col-lg-6">
   <ng-template #modalManage let-modal>
-      <div class="box-staking">
-        <div class="modal-header">
-          <div class="row col-12">
-            <div class="col-4 box-validator">
-              <span class="font-weight-bold">{{ dataModal?.title }}</span>
-              Commission - {{ dataModal?.commission | percent: '1.2-2' }}
-            </div>
-            <div class="col-8">
-              <span>
-                Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}
-                <span class="text--green">{{ globals.stableToken }}</span
-                >)
-              </span>
-              Delegators - {{ totalDelegator }}
-            </div>
-          </div>
+    <div class="box-staking aura-form">
+      <div class="d-flex align-items-end mb-8">
+        <div class="mr-10">
+          <div class="title text-gradient fw-bolder">{{ dataModal?.title }}</div>
+          <div class="body text--white">Commission - {{ dataModal?.commission | percent: '1.2-2' }}</div>
         </div>
-        <div class="modal-body">
-          <detail-popup-delegate [data]="dataDelegate"></detail-popup-delegate>
-          <div class="input-group mb-3 row box-token" *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
-            <span class="mt-3">
-              <b>Available for undelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
-              <span class="text--green">{{ globals.stableToken }}</span>
-            </span>
-            <input
-              type="number"
-              class="input-amount-token"
-              [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-              [(ngModel)]="amountFormat"
-              (blur)="resetCheck()"
-            />
-            <button
-              class="btn btn-outline-secondary btn-max-token"
-              type="button"
-              (click)="getMaxToken(dialogMode.Undelegate)"
-            >
-              MAX
-            </button>
-            <div class="input-group-append d-flex label-token">
-              <span class="input-group-text">{{ globals.stableToken }}</span>
-            </div>
+        <div class="text--greyscale-4">
+          <div class="mb-1">
+            <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
+            <span class="text--green ml-1">{{ globals.stableToken }}</span>)
           </div>
-
-          <div class="input-group mb-3 row box-token" *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
-            <input
-              type="number"
-              class="input-amount-token"
-              [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-              [(ngModel)]="amountFormat"
-              (blur)="resetCheck()"
-            />
-            <button
-              class="btn btn-outline-secondary btn-max-token"
-              type="button"
-              (click)="getMaxToken(dialogMode.Delegate)"
-            >
-              MAX
-            </button>
-            <div class="input-group-append d-flex label-token">
-              <span class="input-group-text">{{ globals.stableToken }}</span>
-            </div>
-          </div>
-
-          <div class="input-group mb-3 row box-token" *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
-            Redelegate to:
-            <div class="col-12 box-select-redelegate">
-              <mat-form-field appearance="fill">
-                <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
-                  <mat-option *ngFor="let item of lstValidator" [value]="item.value">
-                    {{ item.label | translate }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="input-group mb-3 row box-token" *ngIf="selectedValidator">
-              <span class="mt-3">
-                <b>Available for redelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
-                <span class="text--green">{{ globals.stableToken }}</span>
-              </span>
-              <input
-                type="number"
-                class="input-amount-token"
-                [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-                [(ngModel)]="amountFormat"
-                (blur)="resetCheck()"
-              />
-              <button
-                class="btn btn-outline-secondary btn-max-token"
-                type="button"
-                (click)="getMaxToken(dialogMode.Undelegate)"
-              >
-                MAX
-              </button>
-              <div class="input-group-append d-flex label-token">
-                <span class="input-group-text">{{ globals.stableToken }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <ng-container [ngSwitch]="dataDelegate.dialogMode">
-            <div *ngSwitchCase="dialogMode.Manage">
-              <div class="btn-group mr-2">
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  (click)="changeTypePopup(dialogMode.Undelegate)"
-                >
-                  Undelegate
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a class="dropdown-item" href="javascript:void(0);" (click)="changeTypePopup(dialogMode.Redelegate)"
-                      >Redelegate</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                (click)="changeTypePopup(dialogMode.Delegate)"
-                [disabled]="isExceedAmount"
-              >
-                Delegate
-              </button>
-            </div>
-            <div *ngSwitchCase="dialogMode.Undelegate">
-              <button type="button" class="btn btn-light mr-2" (click)="changeTypePopup(dialogMode.Manage)">
-                Back
-              </button>
-              <button type="button" class="btn btn-primary" (click)="handleUndelegate()">Undelegate</button>
-            </div>
-            <div *ngSwitchCase="dialogMode.Delegate">
-              <button
-                type="button"
-                class="btn btn-light mr-2"
-                (click)="changeTypePopup(dialogMode.Manage)"
-                *ngIf="!isOpenStaking"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                id="dialog-close-btn"
-                class="btn btn-light mr-2"
-                (click)="closeDialog(modal)"
-                *ngIf="isOpenStaking"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                (click)="handleStaking()"
-                [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
-              >
-                Delegate
-              </button>
-            </div>
-            <div *ngSwitchCase="dialogMode.Redelegate">
-              <button type="button" class="btn btn-light mr-2" (click)="changeTypePopup(dialogMode.Manage)">
-                Back
-              </button>
-              <button type="button" class="btn btn-primary" (click)="handleRedelegate()" [disabled]="isExceedAmount">
-                Delegate
-              </button>
-            </div>
-          </ng-container>
+          <div>Delegators - {{ totalDelegator }}</div>
         </div>
       </div>
+      <div>
+        <detail-popup-delegate [data]="dataDelegate"></detail-popup-delegate>
+        <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
+          <div class="mt-2">
+            <b>Available for undelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
+            <span class="text--green">{{ globals.stableToken }}</span>
+          </div>
+          <div class="input-group mt-2">
+            <input type="number" [max]="100000000000000"
+                   [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+                   [(ngModel)]="amountFormat"
+                   (blur)="resetCheck()"/>
+            <div class="py-2 mr-4">
+              <button class="button button-primary active" type="button"
+                      (click)="getMaxToken(dialogMode.Undelegate)">MAX</button>
+            </div>
+            <div class="input-group-append">{{ globals.stableToken }}</div>
+          </div>
+        </div>
+        <div class="input-group mt-2" *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
+          <input type="number" [max]="100000000000000"
+                 [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+                 [(ngModel)]="amountFormat"
+                 (blur)="resetCheck()"/>
+          <div class="py-2 mr-4">
+            <button class="button button-primary active py-2 px-4" type="button"
+                    (click)="getMaxToken(dialogMode.Delegate)">MAX</button>
+          </div>
+          <div class="input-group-append">{{ globals.stableToken }}</div>
+        </div>
+        <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
+          <div class="title-small mb-2">Redelegate to:</div>
+          <div class="box-select-redelegate">
+            <mat-form-field appearance="fill">
+              <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
+                <mat-option *ngFor="let item of lstValidator" [value]="item.value">
+                  {{ item.label | translate }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="selectedValidator">
+            <div class="mt-2">
+              <b>Available for redelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
+              <span class="text--green">{{ globals.stableToken }}</span>
+            </div>
+            <div class="input-group mt-2">
+              <input type="number"
+                     [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+                     [(ngModel)]="amountFormat" [max]="100000000000000"
+                     (blur)="resetCheck()"/>
+              <div class="py-2 mr-4">
+                <button class="button button-primary active py-2 px-4" type="button"
+                        (click)="getMaxToken(dialogMode.Undelegate)">MAX</button>
+              </div>
+              <div class="input-group-append">{{ globals.stableToken }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8">
+        <ng-container [ngSwitch]="dataDelegate.dialogMode">
+          <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
+            <div class="aura-form mr-4">
+              <mat-select class="form-control select-input-field select-action-field"
+                          [placeholder]="'Select Action'"
+                          [disableOptionCentering]="true">
+                <mat-option (click)="changeTypePopup(dialogMode.Undelegate)">
+                  Undelegate
+                </mat-option>
+                <mat-option (click)="changeTypePopup(dialogMode.Redelegate)">
+                  Redelegate
+                </mat-option>
+              </mat-select>
+            </div>
+            <button type="button" class="button body button-outline"
+                    (click)="changeTypePopup(dialogMode.Delegate)"[disabled]="isExceedAmount">Delegate</button>
+          </div>
+          <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-end">
+            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">Back</button>
+            <button type="button" class="button body button-outline" (click)="handleUndelegate()">Undelegate</button>
+          </div>
+          <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-end">
+            <button type="button" class="button body mr-2 text--white"
+                    (click)="changeTypePopup(dialogMode.Manage)" *ngIf="!isOpenStaking">Back</button>
+            <button type="button" class="button body mr-2 text--white"
+                    (click)="closeDialog(modal)" *ngIf="isOpenStaking">Cancel</button>
+            <button type="button" class="button body button-outline"
+                    (click)="handleStaking()"
+                    [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)">Delegate</button>
+          </div>
+          <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-end">
+            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">Back</button>
+            <button type="button" class="button body button-outline" (click)="handleRedelegate()" [disabled]="isExceedAmount">
+              Delegate
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </ng-template>
 </div>
 <!-- <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">

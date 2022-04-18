@@ -30,6 +30,12 @@
                         <div *ngSwitchCase="'Success'" class="text--primary">
                           {{ data[template.matColumnDef] }}
                         </div>
+                        <div *ngSwitchCase="'Fail'" class="text--danger">
+                          {{ data[template.matColumnDef] }}
+                        </div>
+                        <div *ngSwitchCase="'Pending'" class="text--warning">
+                          {{ data[template.matColumnDef] }}
+                        </div>
                       </div>
                     </div>
                     <div *ngSwitchCase="'fee'">

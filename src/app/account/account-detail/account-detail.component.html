@@ -175,7 +175,7 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="sub-text">Transactions</div>
+        <div class="sub-text px-6 py-6">Transactions</div>
         <div class="card-body px-6 pt-0">
           <ngx-simplebar>
             <ng-container *ngIf="length > 0; else noValues">
@@ -207,16 +207,13 @@
                                 <div *ngSwitchCase="'Success'" class="text--primary">
                                   {{ data[template.matColumnDef] }}
                                 </div>
+                                <div *ngSwitchCase="'Fail'" class="text--danger">
+                                  {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'Pending'" class="text--warning">
+                                  {{ data[template.matColumnDef] }}
+                                </div>
                               </div>
-                              <!--                            <div *ngSwitchCase="'SUCCESS'" class="text&#45;&#45;primary">-->
-                              <!--                              {{ data[template.matColumnDef] }}-->
-                              <!--                            </div>-->
-                              <!--                            <div *ngSwitchCase="'SUCCESS'" class="text&#45;&#45;primary">-->
-                              <!--                              {{ data[template.matColumnDef] }}-->
-                              <!--                            </div>-->
-                              <!--                            <div *ngSwitchCase="'SUCCESS'" class="text&#45;&#45;primary">-->
-                              <!--                              {{ data[template.matColumnDef] }}-->
-                              <!--                            </div>-->
                             </div>
                             <div *ngSwitchCase="'fee'">
                               {{ data[template.matColumnDef] }} <span class="text--green">{{ global.stableToken }}</span>
