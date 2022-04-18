@@ -3,7 +3,7 @@ import { TRANSACTION_TYPE_ENUM } from '../../../../../app/core/constants/transac
 import { TYPE_TRANSACTION } from '../../../../../app/core/constants/transaction.constant';
 import { getAmount, Globals } from '../../../../../app/global/global';
 import { DatePipe } from '@angular/common';
-import { DATEFORMAT } from '../../../../../app/core/constants/common.constant';
+import { DATEFORMAT, NUMBER_CONVERT } from '../../../../../app/core/constants/common.constant';
 import { ValidatorService } from '../../../../../app/core/services/validator.service';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 
@@ -22,6 +22,7 @@ export class TransferredDetailComponent implements OnInit {
   dateVesting;
   isVestingDelay;
   validatorName = '';
+  listValidator;
   @Input() transactionDetail: any;
 
   constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
@@ -32,7 +33,7 @@ export class TransferredDetailComponent implements OnInit {
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
-      this.getDetail();
+      this.getListValidator();
     }
     //get amount of transaction
     this.amount = getAmount(this.transactionDetail?.messages, this.transactionDetail?.type, this.transactionDetail?.raw_log);
@@ -42,10 +43,23 @@ export class TransferredDetailComponent implements OnInit {
     this.transactionDetailType = typeTrans?.value;
   }
 
-  getDetail(): void {
-    this.validatorService.validatorsDetail(this.transactionDetail?.messages[0]?.validator_address).subscribe(
+  getListValidator(): void {
+    this.validatorService.validators().subscribe(
       (res) => {
-        this.validatorName = res?.data?.title;
+        this.listValidator = res.data;
+        if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
+          let validMap = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_address);
+          this.validatorName = validMap.title || '';
+        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) { 
+          this.transactionDetail?.messages.forEach(message => {
+            message.validatorName = this.listValidator.find(f => f.operator_address === message?.validator_address).title || '';
+            // const jsonData = JSON.parse(this.transactionDetail.raw_log);
+            // console.log(jsonData);
+            // let amount = jsonData[0].events[0].attributes[1].value.replace('uaura','');
+            // message.amount = amount;
+            // message.amount = message?.amount.amount;
+          });
+        }
       },
       (error) => {},
     );
