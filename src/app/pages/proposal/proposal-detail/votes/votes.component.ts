@@ -39,9 +39,9 @@ export class VotesComponent implements OnInit {
 
   _voteList: IVotes[] = [];
 
-  countVote = [];
-
-  LIMIT_DEFAULT = 45;
+  countVote: Map<string, number> = new Map<string, number>();
+  countCurrent: string = '';
+  LIMIT_DEFAULT = 10000;
 
   query = [];
 
@@ -81,19 +81,26 @@ export class VotesComponent implements OnInit {
 
         if (res['all']) {
           this.voteDataList = [...this.voteData.all.proposalVotes];
-          this.countVote = [
-            this.voteData.all.countTotal,
-            this.voteData.all.countYes,
-            this.voteData.all.countNo,
-            this.voteData.all.countNoWithVeto,
-            this.voteData.all.countAbstain,
-          ];
+          // this.countVote = [
+          //   this.voteData.all.countTotal,
+          //   this.voteData.all.countYes,
+          //   this.voteData.all.countNo,
+          //   this.voteData.all.countNoWithVeto,
+          //   this.voteData.all.countAbstain,
+          // ];
+
+          this.countVote.set('', this.voteData.all.countTotal);
+          this.countVote.set('VOTE_OPTION_YES', this.voteData.all.countYes);
+          this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countNo);
+          this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNoWithVeto);
+          this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countAbstain);
         }
       });
     }
   }
 
   changeTab(tabId): void {
+    this.countCurrent = tabId;
     switch (tabId) {
       case '':
         this.voteDataList = this.voteData.all.proposalVotes;

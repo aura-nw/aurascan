@@ -34,6 +34,8 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
 
   pageList: { index: number; isActive: boolean }[] = [];
 
+  pageLength: number;
+
   current: {
     pageIndex: number;
     isLast: boolean;
@@ -50,7 +52,8 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.length) {
-      this.pageList = Array.from({ length: this.length }, (_, k) => ({
+      this.pageLength = Math.ceil(this.length / this.pageSize);
+      this.pageList = Array.from({ length: this.pageLength }, (_, k) => ({
         index: k,
         isActive: false,
       }));
@@ -84,15 +87,15 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
       const pageIndex = this.current.pageIndex;
 
       this.current.isFirst = pageIndex > 0 ? false : true;
-      this.current.isLast = pageIndex < this.length - 1 ? false : true;
+      this.current.isLast = pageIndex < this.pageLength - 1 ? false : true;
 
-      if (pageIndex <= this.PAGE.avgIdx || this.length <= this.PAGE.max) {
+      if (pageIndex <= this.PAGE.avgIdx || this.pageLength <= this.PAGE.max) {
         this.current.list = list.slice(0, this.PAGE.max);
       } else {
         let idx = pageIndex - this.PAGE.avgIdx;
-        const isMax = idx + this.PAGE.max > this.length;
+        const isMax = idx + this.PAGE.max > this.pageLength;
 
-        idx = isMax ? this.length - this.PAGE.max : idx;
+        idx = isMax ? this.pageLength - this.PAGE.max : idx;
         this.current.list = list.slice(idx, this.PAGE.max + idx);
       }
       this.current.list.forEach((e) => {
@@ -103,7 +106,7 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
         pageIndex: 0,
         list: list.slice(0, this.PAGE.max),
         isFirst: true,
-        isLast: false,
+        isLast: this.pageLength === 1,
       };
       this.current.list[0].isActive = true;
     }

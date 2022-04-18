@@ -39,8 +39,8 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy, Aft
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
 
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('paginator') paginator: MatPaginator;
-  @ViewChild('paginator2') paginator2: MatPaginator;
+  // @ViewChild('paginator') paginator: MatPaginator;
+  // @ViewChild('paginator2') paginator2: MatPaginator;
 
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
@@ -142,17 +142,17 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy, Aft
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-    const currentIndex = this.paginator.pageIndex;
-    const dataLength = this.paginator.length;
+    // const currentIndex = this.paginator.pageIndex;
+    // const dataLength = this.paginator.length;
 
-    if (length > dataLength) {
-    }
+    // if (length > dataLength) {
+    // }
 
-    if (pageIndex > currentIndex) {
-      this.paginator.nextPage();
-    } else {
-      this.paginator.previousPage();
-    }
+    // if (pageIndex > currentIndex) {
+    //   this.paginator.nextPage();
+    // } else {
+    //   this.paginator.previousPage();
+    // }
 
     const next = length <= pageIndex * pageSize;
 
