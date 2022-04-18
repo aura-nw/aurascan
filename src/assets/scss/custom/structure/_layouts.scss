@@ -1,6 +1,6 @@
-// 
-// _layouts.scss
-// 
+/*
+ * _layouts.scss
+ */
 
 body[data-layout-size="boxed"] {
     background-color: $boxed-body-bg;
@@ -77,7 +77,7 @@ body[data-layout-mode="dark"] {
         background-color: lighten($gray-dark-200, 4%);
 
         #layout-wrapper {
-            background-color: $gray-dark-200;
+            background-color: var(--aura-black);
         }
     }
 }

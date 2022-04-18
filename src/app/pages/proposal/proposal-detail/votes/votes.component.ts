@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { concat, merge } from 'rxjs';
-import { concatAll, concatMap, map } from 'rxjs/operators';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { merge } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
@@ -16,7 +16,7 @@ export interface IVotes {
 @Component({
   selector: 'app-votes',
   templateUrl: './votes.component.html',
-  styleUrls: ['./votes.component.scss'],
+  styleUrls: ['./votes.component.scss']
 })
 export class VotesComponent implements OnInit {
   @Input() proposalId: number = null;
@@ -38,6 +38,8 @@ export class VotesComponent implements OnInit {
   voteDataList: IVotes[] = [];
 
   _voteList: IVotes[] = [];
+
+  countVote = [];
 
   LIMIT_DEFAULT = 45;
 
@@ -67,9 +69,9 @@ export class VotesComponent implements OnInit {
       merge(
         this.proposalService.getListVote(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
         this.proposalService.getListVote(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService.getListVote(payloads[2]).pipe(map((item) => ({ abstain: item.data.result }))),
-        this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
+        this.proposalService.getListVote(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
+        this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
+        this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
       ).subscribe((res) => {
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
@@ -79,6 +81,13 @@ export class VotesComponent implements OnInit {
 
         if (res['all']) {
           this.voteDataList = [...this.voteData.all.proposalVotes];
+          this.countVote = [
+            this.voteData.all.countTotal,
+            this.voteData.all.countYes,
+            this.voteData.all.countNo,
+            this.voteData.all.countNoWithVeto,
+            this.voteData.all.countAbstain,
+          ];
         }
       });
     }

@@ -1,12 +1,12 @@
 <div class="card">
-  <div class="card-header bg-transparent border-bottom fw-bold">Validators Votes</div>
   <div class="card-body">
-    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="nav-tabs nav-tabs-custom nav-justified">
+    <div class="fw-bold card__title">Validators Votes</div>
+    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a ngbNavLink (click)="changeTab(index)">
+          <a ngbNavLink (click)="changeTab(tab.key)">
             <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-            <span class="d-none d-sm-block tab-title">{{ tab }}</span>
+            <span class="d-none d-sm-block tab-title">{{ tab.value }} ({{countVote[index]}})</span>
           </a>
         </li>
       </ng-container>

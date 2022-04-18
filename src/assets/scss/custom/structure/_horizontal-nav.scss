@@ -1,6 +1,6 @@
-// 
-// _horizontal.scss
-// 
+/*
+ * _horizontal.scss
+ */
 
 .topnav {
     background: $header-bg;
@@ -10,7 +10,6 @@
     left: 0;
     right: 0;
     z-index: 100;
-    border-bottom: 1px solid $border-color;
 
     @media (min-width: 992px) {
         background: $topnav-bg;
@@ -344,8 +343,7 @@ body[data-layout="horizontal"][data-topbar="colored"] {
 
 body[data-layout-mode="dark"] {
     .topnav {
-        background-color: $topnav-dark-bg;
-        border-color: $gray-dark-300;
+        background-color: var(--aura-dark-gray);
 
         .navbar-nav{
             .nav-link{

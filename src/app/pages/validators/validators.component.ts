@@ -32,10 +32,10 @@ export class ValidatorsComponent implements OnInit {
     { matColumnDef: 'rank', headerCellDef: 'Rank' },
     { matColumnDef: 'title', headerCellDef: 'Validator' },
     { matColumnDef: 'power', headerCellDef: 'Voting Power' },
-    { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
+    { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
-    { matColumnDef: 'commission', headerCellDef: 'Commission' },
+    // { matColumnDef: 'percent_power', headerCellDef: 'Cumulative Share %' },
     { matColumnDef: 'action', headerCellDef: '' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -106,9 +106,7 @@ export class ValidatorsComponent implements OnInit {
         this.getDataWallet();
       }
     });
-  
     this.getList();
-    this.getDataWallet();
 
     setInterval(() => {
       this.getList();
@@ -132,8 +130,8 @@ export class ValidatorsComponent implements OnInit {
       let dataFilter = res.data.filter((event) => (this.typeValidator === this.statusValidator.Active) ? 
             event.status === this.statusValidator.Active : event.status !== this.statusValidator.Active);
       //sort and calculator cumulative
-      let dataSort = this.calculatorCumulative(dataFilter);
-      this.dataSource = new MatTableDataSource(dataSort);
+      // let dataSort = this.calculatorCumulative(dataFilter);
+      this.dataSource = new MatTableDataSource(dataFilter);
       this.dataSourceBk = this.dataSource;
       this.dataSource.sort = this.sort;
       this.searchValidator();
@@ -177,8 +175,8 @@ export class ValidatorsComponent implements OnInit {
     let dataFilter = this.sortedData.filter((event) => (this.typeValidator === this.statusValidator.Active) ? 
                 event.status === this.statusValidator.Active : event.status !== this.statusValidator.Active)
     //sort and calculator cumulative
-    let dataSort = this.calculatorCumulative(dataFilter);
-    this.dataSource = new MatTableDataSource(dataSort);
+    // let dataSort = this.calculatorCumulative(dataFilter);
+    this.dataSource = new MatTableDataSource(dataFilter);
     this.dataSource.sort = this.sort;
   }
 
@@ -186,28 +184,28 @@ export class ValidatorsComponent implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  calculatorCumulative(dataFilter) {
-    for (const key in dataFilter) {
-      const dataOrigin = dataFilter[key];
-      const dataBefore = dataFilter[parseInt(key) - 1];
-      if (dataOrigin?.title) {
-        if (parseInt(key) === 0) {
-          dataOrigin.cumulative_share_before = '0.00';
-          dataOrigin.cumulative_share = dataOrigin.percent_power;
-          dataOrigin.cumulative_share_after = dataOrigin.percent_power;
-        } else {
-          dataOrigin.cumulative_share_before = dataBefore?.cumulative_share_after || 0;
-          dataOrigin.cumulative_share = dataOrigin?.percent_power;
-          const cumulative = parseFloat(dataOrigin?.cumulative_share_before) + parseFloat(dataOrigin?.percent_power);
-          dataOrigin.cumulative_share_after = cumulative.toFixed(2);
-        }
-        dataFilter.cumulative_share_before = dataOrigin.cumulative_share_before;
-        dataFilter.cumulative_share = dataOrigin.cumulative_share;
-        dataFilter.cumulative_share_after = dataOrigin.cumulative_share_after;
-      }
-    }
-    return dataFilter;
-  }
+  // calculatorCumulative(dataFilter) {
+  //   for (const key in dataFilter) {
+  //     const dataOrigin = dataFilter[key];
+  //     const dataBefore = dataFilter[parseInt(key) - 1];
+  //     if (dataOrigin?.title) {
+  //       if (parseInt(key) === 0) {
+  //         dataOrigin.cumulative_share_before = '0.00';
+  //         dataOrigin.cumulative_share = dataOrigin.percent_power;
+  //         dataOrigin.cumulative_share_after = dataOrigin.percent_power;
+  //       } else {
+  //         dataOrigin.cumulative_share_before = dataBefore?.cumulative_share_after || 0;
+  //         dataOrigin.cumulative_share = dataOrigin?.percent_power;
+  //         const cumulative = parseFloat(dataOrigin?.cumulative_share_before) + parseFloat(dataOrigin?.percent_power);
+  //         dataOrigin.cumulative_share_after = cumulative.toFixed(2);
+  //       }
+  //       dataFilter.cumulative_share_before = dataOrigin.cumulative_share_before;
+  //       dataFilter.cumulative_share = dataOrigin.cumulative_share;
+  //       dataFilter.cumulative_share_after = dataOrigin.cumulative_share_after;
+  //     }
+  //   }
+  //   return dataFilter;
+  // }
 
   searchValidator(): void {
     this.searchNullData = false;

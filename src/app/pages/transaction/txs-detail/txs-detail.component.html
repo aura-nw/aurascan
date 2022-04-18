@@ -1,15 +1,16 @@
 <app-pagetitle title="TRANSACTION DETAILS"></app-pagetitle>
-
-<div class="type-data-group">
-  <button class="btn-select" [class.btn-select]="!isRawData" (click)="changeType(false)">Parsing Data</button>
-  <button [class.btn-select]="isRawData" (click)="changeType(true)">Raw Data</button>
+<div class="row justify-content-end mb-2">
+  <div class="col-auto">
+    <div class="button-switch-stage">
+      <button [class.active]="!isRawData" (click)="changeType(false)">Parsing Data</button>
+      <button [class.active]="isRawData" (click)="changeType(true)">Raw Data</button>
+    </div>
+  </div>
 </div>
 
 <ng-container *ngIf="!isRawData">
-  <div class="card">
-    <div class="card-header bg-transparent border-bottom fw-bold">
-      Information
-    </div>
+  <div class="card text--white">
+    <div class="card-header title-small">Information</div>
     <div class="card-body">
       <div class="row mb-3">
         <div class="col-3">
@@ -37,7 +38,7 @@
         <div class="col-3">
           <p class="card-text fw-bold">Height</p>
         </div>
-        <div class="col-6"><a routerLink="/blocks/id/{{item?.block.id}}">{{item?.height | number}}</a></div>
+        <div class="col-6"><a class="text--green" routerLink="/blocks/id/{{item?.block.id}}">{{item?.height | number}}</a></div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
@@ -60,21 +61,22 @@
     </div>
   </div>
 
-  <div class="card mt-5" *ngIf="item?.messages">
+  <div class="card text--white" *ngIf="item?.messages">
     <app-transferred-detail [transactionDetail]="item">
     </app-transferred-detail>
   </div>
 
-  <div class="card" *ngIf="item?.read_set">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+  <div class="card text--white" *ngIf="item?.read_set">
+    <div class="card-header title-small">
       Read
     </div>
     <div class="card-body">
       <ngx-json-viewer [json]="item?.read_set"></ngx-json-viewer>
     </div>
   </div>
-  <div class="card" *ngIf="item?.write_set">
-    <div class="card-header bg-transparent border-bottom text-uppercase fw-bold">
+
+  <div class="card text--white" *ngIf="item?.write_set">
+    <div class="card-header title-small">
       Write
     </div>
     <div class="card-body" *ngIf="item?.write_set">
@@ -84,8 +86,8 @@
 </ng-container>
 
 <ng-container *ngIf="isRawData">
-  <div class="card">
-    <div class="card-header bg-transparent border-bottom fw-bold">
+  <div class="card text--white">
+    <div class="card-header title-small">
       Raw Data
     </div>
     <pre id="json" class="raw-content">{{jsonStr}}</pre>

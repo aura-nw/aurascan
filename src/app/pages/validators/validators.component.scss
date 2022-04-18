@@ -1,143 +1,7 @@
 @import "../../../assets/scss/color.scss";
 
 .validator-container {
-  .box-info {
-    background-color: $validator-bg-header;
-    border-radius: 5px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-align-items: center;
-    align-items: center;
-    padding: 20px 1.2rem;
-    height: 30px;
-    font-size: 16px;
-    margin-bottom: 1rem;
-    .img-valid {
-      width: auto;
-      height: 20px;
-      margin-right: 10px;
-    }
-  }
-  .card-header {
-    height: 80px;
-    align-items: center;
-    justify-content: space-between;
-    .box-claim {
-      display: flex;
-      justify-content: flex-end;
-      background: #6666FF;
-      padding: 5px 10px;
-      color: #fff;
-      width: auto;
-      border-radius: 5px;
-    }
-  }
-  .card-body {
-    padding: 10px 20px;
-    .img-valid {
-      width: auto;
-      height: 40px;
-    }
-    .txt-title {
-      width: auto;
-    }
-    .valid-header {
-      display: flex;
-      justify-content: flex-end;
-      span {
-        font-weight: 500;
-        font-size: 1.3rem;
-      }
-    }
-  }
-  .table-reponsive {
-    td, th {
-      text-align: left;
-    }
-  }
-
-  .percent-vote {
-    color: #727781;
-  }
-
-  .box-parti {
-    width: fit-content;
-    padding: 5px 15px;
-    border-radius: 5rem;
-    background-color: #ecf8f4;
-    color: #37cc6e;
-    &.parti-down {
-      background-color: #e6e6e6;
-      color: #4b525d;
-    }
-  }
-
-  // .box-rank {
-  //   background-color: #9c6cff;
-  //   border-radius: 50%;
-  //   display: -webkit-flex;
-  //   display: flex;
-  //   -webkit-justify-content: center;
-  //   justify-content: center;
-  //   -webkit-align-items: center;
-  //   align-items: center;
-  //   width: 30px;
-  //   height: 30px;
-  //   p {
-  //     margin: 0px;
-  //     color: #fff;
-  //     font-size: 12px;
-  //     font-weight: 600;
-  //   }
-  // }
-
-  .box-percent-power{
-    margin-right: 1rem;
-  }
-
-  .validator-list-search-area {
-    display: flex;
-    justify-content: flex-end;
-    .validator-list-search-input {
-      border-radius: 0.5rem;
-      border: 0.1rem solid #bebebe;
-      padding: 0.6rem 1.2rem 0.7rem;
-      margin-bottom: 0.3rem;
-      width: 30%;
-      height: 35px;
-      color: $validator-black;
-      font-size: 1rem;
-    }
-    button {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      background: none;
-      border: none;
-      border: 0.1rem solid $validator-black;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-justify-content: center;
-      justify-content: center;
-      -webkit-align-items: center;
-      align-items: center;
-      margin-left: 1.2rem;
-      // width: 8rem;
-      height: 35px;
-      color: $validator-black;
-      font-size: 15px;
-      padding: 0px 15px;
-    }
-    .btn-select,
-    button:hover {
-      background-color: $validator-black !important;
-      color: $white !important;
-    }
-  }
-
-  .cumulative-share_container {
+    .cumulative-share_container {
     position: relative;
     border-right: 0.1rem solid #e6e6e6;
     border-left: 0.1rem solid #e6e6e6;
@@ -171,12 +35,21 @@
       color: var(--gunmetal);
     }
   }
-  .box-info-user {
-    padding: 20px;
+}
+
+form.search-form {
+  .input-group {
+    background-color: #1C1C1F; // this color not define in root
+  }
+  input {
+    width: 100%;
+    @media (min-width: 992px) {
+      width: 782px;
+    }
   }
 }
 
-.visually-hidden{
+.visually-hidden {
   position: absolute!important;
   width: 1px!important;
   height: 1px!important;

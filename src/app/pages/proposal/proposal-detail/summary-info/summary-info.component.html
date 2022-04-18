@@ -1,30 +1,23 @@
 <div class="card" *ngIf="proposalDetail">
   <div class="card-header bg-transparent border-bottom">
     <div class="d-flex justify-content-between">
-      <div class="card__title fw-bold">
-        <div>#{{ proposalId }}</div>
-        <h2>{{ proposalDetail.pro_title }}</h2>
+      <div class="card__title">
+        #{{ proposalId }} <br>
+        <a class="card__title">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="card__status">
         <div class="message" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
           You voted '{{ proposalVotes[0].vote }}' for this proposal
         </div>
-        <button
-          mat-flat-button
-          color="primary"
-          *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+        <button *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
           [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-          (click)="openVoteDialog(proposalDetail)"
-          class="button"
-        >
+          (click)="openVoteDialog(proposalDetail)" class="button button-outline body">
           {{ proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}
         </button>
-        <div
-          class="button d-flex aura-status aura-status--has-elevation text-capitalize {{
-            getStatus(proposalDetail?.pro_status)?.class
-          }}"
-        >
-          <span class="status">{{ getStatus(proposalDetail.pro_status).value }}</span>
+        <div class="proposal-status proposal-status__{{
+            getStatus(proposalDetail?.pro_status).key
+          }}">
+          <span class="status title-small">{{ getStatus(proposalDetail.pro_status).value }}</span>
         </div>
       </div>
     </div>
@@ -32,144 +25,130 @@
   <div class="card-body">
     <div class="card__info">
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Proposer</div>
-        <div class="col-12 col-md-10 info">
-          <a href="/account/{{ proposalDetail.pro_proposer_address }}">{{
+        <div class="col-12 col-md-2 body">Proposer</div>
+        <div class="col-12 col-md-10 body">
+          <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">{{
             proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
-          }}</a>
+            }}</a>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Initial Deposit</div>
-        <div class="col-12 col-md-10 info">
+        <div class="col-12 col-md-2 body">Initial Deposit</div>
+        <div class="col-12 col-md-10 body">
           {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
-          <span class="g-purple">{{ global.stableToken }}</span>
+          <span class="text--primary">{{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Total Deposit</div>
-        <div class="col-12 col-md-10 info">
+        <div class="col-12 col-md-2 body">Total Deposit</div>
+        <div class="col-12 col-md-10 body">
           {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
-          <span class="g-purple"> {{ global.stableToken }}</span>
+          <span class="text--primary"> {{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Voting Start</div>
-        <div class="col-12 col-md-10 info">{{ proposalDetail.pro_voting_start_time }}</div>
+        <div class="col-12 col-md-2 body">Voting Start</div>
+        <div class="col-12 col-md-10 body">{{ proposalDetail.pro_voting_start_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Voting End</div>
-        <div class="col-12 col-md-10 info">{{ proposalDetail.pro_voting_end_time }}</div>
+        <div class="col-12 col-md-2 body">Voting End</div>
+        <div class="col-12 col-md-10 body">{{ proposalDetail.pro_voting_end_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Type</div>
-        <div class="col-12 col-md-10 info">{{ proposalDetail.pro_type }}</div>
+        <div class="col-12 col-md-2 body">Type</div>
+        <div class="col-12 col-md-10 body">{{ proposalDetail.pro_type }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Submit Time</div>
-        <div class="col-12 col-md-10 info">{{ proposalDetail.pro_submit_time }}</div>
+        <div class="col-12 col-md-2 body">Submit Time</div>
+        <div class="col-12 col-md-10 body">{{ proposalDetail.pro_submit_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Deposit End Time</div>
-        <div class="col-12 col-md-10 info">{{ proposalDetail.pro_deposit_end_time }}</div>
+        <div class="col-12 col-md-2 body">Deposit End Time</div>
+        <div class="col-12 col-md-10 body">{{ proposalDetail.pro_deposit_end_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Details</div>
-        <div class="col-12 col-md-10 info">
+        <div class="col-12 col-md-2 body">Details</div>
+        <div class="col-12 col-md-10 body">
           <div class="editorial-container" [innerText]="proposalDetail.pro_description"></div>
         </div>
       </div>
-      <!-- <div class="row mb-3">
-        <div class="col-12 col-md-2 title">Request Amount</div>
-        <div class="col-12 col-md-10 info">1,000.000000 <span class="g-purple">ATOM</span></div>
-      </div> -->
-      <div class="proposal__summary-total">
-        <div class="flex-md-row-reverse justify-content-between">
-          <!-- <div class="text-md-end mb-2 mb-md-0">
-            <div class="d-sm-flex">
-              <div><b>Current Turnout :</b>{{proposalDetail.pro_turnout}}</div>
-              <div class="spacer-custom my-2 my-sm-0"><b>Quorum :</b> 40.00%</div>
-            </div>
-            <small>59 M of 185 M has voted</small>
-          </div> -->
-          <div>
-            <b>Total : </b>
-            {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
-            <span class="g-purple"> {{ global.stableToken }}</span>
-          </div>
+
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="top-border proposal__summary-total">
+      <div class="row mb-3">
+        <div class="col-12 col-md-2 body">Total:</div>
+        <div class="col-12 col-md-10 body">
+          {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
+          <span class="text--primary">{{ global.stableToken }}</span>
         </div>
-        <div class="vote-bar mt-3">
-          <ul>
-            <li
-              class="primary"
-              [style.width]="proposalDetail.pro_vote_yes_bar + '%'"
-              matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar }}%"
-              [matTooltipPosition]="'above'"
-            ></li>
-            <li
-              class="danger"
-              [style.width]="proposalDetail.pro_vote_no_bar + '%'"
-              matTooltip="No {{ proposalDetail.pro_vote_no_bar }}%"
-              [matTooltipPosition]="'above'"
-            ></li>
-            <li
-              class="info"
-              [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
-              matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar }}%"
-              [matTooltipPosition]="'above'"
-            ></li>
-            <li
-              class="secondary"
-              [style.width]="proposalDetail.pro_vote_abstain_bar + '%'"
-              matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar }}%"
-              [matTooltipPosition]="'above'"
-            ></li>
-          </ul>
-        </div>
-        <div class="vote-legend">
-          <ul>
-            <li data-style="primary">
-              <p class="item item-label">Yes</p>
-              <p class="item item-percent">
+      </div>
+
+      <div class="vote-bar">
+        <ul>
+          <li class="bg--primary" [style.width]="proposalDetail.pro_vote_yes_bar + '%'"
+            matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar }}%" [matTooltipPosition]="'above'"></li>
+          <li class="bg--danger" [style.width]="proposalDetail.pro_vote_no_bar + '%'"
+            matTooltip="No {{ proposalDetail.pro_vote_no_bar }}%" [matTooltipPosition]="'above'"></li>
+          <li class="bg--info" [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
+            matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar }}%" [matTooltipPosition]="'above'">
+          </li>
+          <li class="bg--secondary" [style.width]="proposalDetail.pro_vote_abstain_bar + '%'"
+            matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar }}%" [matTooltipPosition]="'above'"></li>
+        </ul>
+      </div>
+      <div class="vote-legend">
+        <ul>
+          <li data-style="primary">
+            <div class="item-box">
+              <span class="item item-label">Yes</span>
+              <span class="item item-percent">
                 {{ this.proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
-              </p>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
-                <span class="g-purple">{{ global.stableToken }}</span>
-              </p>
-            </li>
-            <li data-style="danger">
-              <p class="item item-label">No</p>
-              <p class="item item-percent">
+              </span>
+            </div>
+            <p class="item item-amount">
+              <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
+              <span class="text--primary ml-1">{{ global.stableToken }}</span>
+            </p>
+          </li>
+          <li data-style="danger">
+            <div class="item-box">
+              <span class="item item-label">No</span>
+              <span class="item item-percent">
                 {{ this.proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
-              </p>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
-                <span class="g-purple">{{ global.stableToken }}</span>
-              </p>
-            </li>
-            <li data-style="info">
-              <p class="item item-label">No with veto</p>
-              <p class="item item-percent">
+              </span>
+            </div>
+            <p class="item item-amount">
+              <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
+              <span class="text--primary ml-1">{{ global.stableToken }}</span>
+            </p>
+          </li>
+          <li data-style="info">
+            <div class="item-box">
+              <span class="item item-label">NoWithVeto</span>
+              <span class="item item-percent">
                 {{ this.proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
-              </p>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
-                <span class="g-purple">{{ global.stableToken }}</span>
-              </p>
-            </li>
-            <li data-style="secondary">
-              <p class="item item-label">Abstain</p>
-              <p class="item item-percent">
+              </span>
+            </div>
+            <p class="item item-amount">
+              <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
+              <span class="text--primary ml-1">{{ global.stableToken }}</span>
+            </p>
+          </li>
+          <li data-style="secondary">
+            <div class="item-box">
+              <span class="item item-label">Abstain</span>
+              <span class="item item-percent">
                 {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
-              </p>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
-                <span class="g-purple">{{ global.stableToken }}</span>
-              </p>
-            </li>
-          </ul>
-        </div>
+              </span>
+            </div>
+            <p class="item item-amount">
+              <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
+              <span class="text--primary ml-1">{{ global.stableToken }}</span>
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

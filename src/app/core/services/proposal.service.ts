@@ -42,4 +42,8 @@ export class ProposalService extends CommonService {
   getListVote(payload: IListVoteQuery):Observable<IResponsesTemplates<IListVotesRes>> {
     return this.http.post<IResponsesTemplates<IListVotesRes>>(`${this.apiUrl}/proposals/votes/get-by-option`, payload);
   }
+
+  getProposalTally(proposalId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/tally`);
+  }
 }

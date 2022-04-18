@@ -4,64 +4,9 @@ $custom-typography: mat-typography-config(
 );
 @include angular-material-typography($custom-typography);
 * {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family:'SFProDisplay' , Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mat-table {
     width: 100%;
-}
-
-.mat-sort-header-content {
-    font-size: 14.4px;
-    font-weight: 500;
-    color: #5156be;
-}
-
-tr.mat-row,
-tr.mat-footer-row {
-    height: 48px;
-}
-
-tr:nth-child(2n + 1).mat-row {
-    background-color: #fbfaff;
-}
-
-mat-row,
-mat-header-row,
-mat-footer-row,
-th.mat-header-cell,
-td.mat-cell,
-td.mat-footer-cell {
-    border-bottom-color: #ededf7;
-    padding-left: 20px;
-    cursor: auto;
-}
-
-th.mat-header-cell {
-    color: #5156be;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.custom-menu.mat-menu-panel {
-    margin-top: 12px;
-    min-width: 180px;
-    -webkit-box-shadow: rgb(0 0 0 / 16%) 0px 4px 16px;
-    box-shadow: rgb(0 0 0 / 16%) 0px 4px 16px;
-
-    .menu-row {
-        display: flex;
-        justify-content: space-between;
-        .menu-img {
-            width: 24px;
-            margin-right: 12px;
-        }
-        .menu-content {
-            font-size: 16px;
-            flex-grow: 1;
-        }
-        .menu-checked {
-            color: #00bd49;
-        }
-    }
 }

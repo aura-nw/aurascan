@@ -1,0 +1,153 @@
+.button {
+    display: inline-block;
+    padding: var(--spacer-3) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-3)) var(--spacer-6);
+    letter-spacing: 0.02em;
+    font-family: SFProDisplay;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    &.button-outline {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        border: none;
+        border-radius: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 0;
+        text-decoration: none;
+    }
+    &.button-inline {
+        border: none;
+        color: var(--aura-white);
+    }
+    &.button-primary {
+        background: var(--aura-dark-gray);
+        color: var(--aura-neutrals-4);
+        border-radius: 100px;
+        &:hover,
+        &.active {
+            background: var(--aura-gradient-simple);
+            color: var(--aura-neutrals-2);
+        }
+    }
+    &.button-secondary {
+        background: var(--aura-light-gray);
+        color: var(--aura-white);
+        border-radius: 100px;
+    }
+    &.button-fixed {
+        @media (max-width: 991.99px) {
+            width: 100%;
+        }
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
+}
+
+.button-outline {
+    background: var(--aura-gradient-simple);
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 90px;
+        border: 2px solid transparent;
+        background: inherit;
+        background-origin: border-box;
+        background-clip: border-box;
+        -webkit-mask: var(--aura-gradient-simple) padding-box, var(--aura-gradient-simple);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        -webkit-mask-repeat: no-repeat;
+    }
+}
+
+.button-float {
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.35s ease-in-out;
+  &:after, &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%,0);
+    width: 32px;
+    height: 32px;
+    background: url("../../icons/icons-svg/basic/arrow-up.svg") center no-repeat;
+    background-size: contain;
+    transition: opacity .35s ease-in-out;
+  }
+  &:before {
+    background: url("../../icons/icons-svg/basic/arrow-up.svg") center no-repeat;
+    background-size: contain;
+    opacity: 1;
+  }
+  &:after {
+    background: url("../../icons/icons-svg/color/arrow-up.svg") center no-repeat;
+    background-size: contain;
+    opacity: 0;
+  }
+  @media (min-width: 992px) {
+    &:hover {
+      &:before {
+        opacity: 0;
+      }
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+  &.active {
+    &:before {
+      opacity: 0;
+    }
+    &:after {
+      opacity: 1;
+    }
+  }
+  &.show {
+      opacity: 1;
+  }
+
+}
+
+.button-switch-stage {
+  padding: var(--spacer-1);
+  background-color: var(--aura-dark-gray);
+  border-radius: var(--spacer-2);
+  display: flex;
+  button {
+    padding: 0 var(--spacer-6);
+    border-radius: 6px;
+    height: 40px;
+    background: transparent;
+    color: var(--aura-neutrals-4);
+    transition: all .35s ease-in-out;
+    &.active {
+      background: var(--aura-gradient-simple);
+      color: var(--aura-black);
+    }
+  }
+}

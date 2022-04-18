@@ -1,0 +1,52 @@
+.aura-form {
+  .form-control:focus {
+    box-shadow: none;
+  }
+  &.single-input-field {
+    .input-group {
+      border: 2px solid var(--aura-neutrals-3);
+      border-radius: 90px;
+      padding: 6px;
+      justify-content: space-between;
+      input {
+        max-width: 80%;
+        padding: 0;
+        padding-left: var(--spacer-1);
+        border: none;
+        background-color: transparent;
+        color: var(--aura-light-gray);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: SFProDisplay;
+        &::placeholder {
+          color: var(--aura-dark-gray);
+        }
+      }
+      button[type='submit'] {
+        background: transparent;
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        padding: 0;
+        &:before {
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+  .select-input-field {
+    border: 2px solid var(--aura-neutrals-3);
+    border-radius: 90px;
+    padding: 12px 22px 14px 24px;
+    color: var(--aura-white);
+    font-size: 16px;
+    line-height: 24px;
+    font-family: SFProDisplay;
+    .mat-select-arrow-wrapper .mat-select-arrow {
+      border: none;
+      width: 24px;
+      height: 24px;
+      background: url("../../icons/icons-svg/white/chevron-down.svg") center no-repeat;
+    }
+  }
+}

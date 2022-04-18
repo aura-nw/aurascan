@@ -80,16 +80,33 @@ export class ProposalComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.lastedList = res.data;
       this.lastedList.forEach((pro, index) => {
-        const totalVoteYes = +pro.pro_votes_yes;
-        const totalVoteNo = +pro.pro_votes_no;
-        const totalVoteNoWithVeto = +pro.pro_votes_no_with_veto;
-        const totalVoteAbstain = +pro.pro_votes_abstain;
-        const totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
-        pro.pro_votes_yes = (totalVoteYes * 100) / totalVote;
-        pro.pro_votes_no = (totalVoteNo * 100) / totalVote;
-        pro.pro_votes_no_with_veto = (totalVoteNoWithVeto * 100) / totalVote;
-        pro.pro_votes_abstain = (totalVoteAbstain * 100) / totalVote;
+        let totalVoteYes = +pro.pro_votes_yes;
+        let totalVoteNo = +pro.pro_votes_no;
+        let totalVoteNoWithVeto = +pro.pro_votes_no_with_veto;
+        let totalVoteAbstain = +pro.pro_votes_abstain;
+        let totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
+        if (index < 4) {
+          if (totalVote > 0) {
+            pro.pro_votes_yes = (totalVoteYes * 100) / totalVote;
+            pro.pro_votes_no = (totalVoteNo * 100) / totalVote;
+            pro.pro_votes_no_with_veto = (totalVoteNoWithVeto * 100) / totalVote;
+            pro.pro_votes_abstain = (totalVoteAbstain * 100) / totalVote;
+          } else {
+            this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
+              totalVote =
+                +res.data.proposalVoteTally.tally.yes +
+                +res.data.proposalVoteTally.tally.no +
+                +res.data.proposalVoteTally.tally.no_with_veto +
+                +res.data.proposalVoteTally.tally.abstain;
+              pro.pro_votes_yes = (+res.data.proposalVoteTally.tally.yes * 100) / totalVote;
+              pro.pro_votes_no = (+res.data.proposalVoteTally.tally.no * 100) / totalVote;
+              pro.pro_votes_no_with_veto = (+res.data.proposalVoteTally.tally.no_with_veto * 100) / totalVote;
+              pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
+            });
+          }
+        }
         pro.pro_vote_total = totalVote;
+
         pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
@@ -132,12 +149,13 @@ export class ProposalComponent implements OnInit {
   }
 
   getStatus(key: string) {
-    let resObj: { value: string; class: string } = null;
+    let resObj: { value: string; class: string; key: string } = null;
     const statusObj = this.statusConstant.find((s) => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
         value: statusObj.value,
         class: statusObj.class,
+        key: statusObj.key,
       };
     }
     return resObj;
@@ -177,9 +195,8 @@ export class ProposalComponent implements OnInit {
   openVoteDialog(item) {
     const id = item.pro_id;
     const title = item.pro_title;
-    const expiredTime = (new Date(item.pro_voting_end_time).getTime() - new Date().getTime());
-    if(expiredTime > 0)
-    {
+    const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
+    if (expiredTime > 0) {
       this.walletService.connectKeplr(this.chainId, (account) => {
         let dialogRef = this.dialog.open(ProposalVoteComponent, {
           height: '400px',
@@ -195,8 +212,7 @@ export class ProposalComponent implements OnInit {
           this.getList();
         });
       });
-    }
-    else{
+    } else {
       this.getList();
     }
   }
