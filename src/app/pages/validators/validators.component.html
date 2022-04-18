@@ -187,7 +187,7 @@
                                 type="button"
                                 class="button button-outline"
                                 [disabled]="clicked"
-                                *ngIf="data['status'] === statusValidator.Active && dataDelegate.availableToken"
+                                *ngIf="data['status'] === statusValidator.Active"
                                 (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)"
                         >
                           Delegate

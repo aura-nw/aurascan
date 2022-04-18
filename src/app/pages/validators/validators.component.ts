@@ -81,6 +81,7 @@ export class ValidatorsComponent implements OnInit {
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
   modalReference;
+  currentValidatorDialog;
 
   lstValidator = [
     {label:'Singapore', value: 'auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq', comm: '10%' },
@@ -226,6 +227,7 @@ export class ValidatorsComponent implements OnInit {
   }
 
   viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
+    this.currentValidatorDialog = address;
     const view = async () => {
       this.walletService.connectKeplr(this.walletService.chainId);
 
@@ -277,8 +279,8 @@ export class ValidatorsComponent implements OnInit {
 
         if (res.dataListDelegator) {
           this.listStakingValidator = res.dataListDelegator?.data?.delegations;
-          if (this.validatorDetail?.validator_address) {
-            this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === this.validatorDetail?.validator_address);
+          if (this.currentValidatorDialog) {
+            this.dataDelegate.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === this.currentValidatorDialog);
           }
           if (res?.dataListDelegator?.data?.delegations.length > 0) {
             res?.dataListDelegator?.data?.delegations.forEach((f) => {
