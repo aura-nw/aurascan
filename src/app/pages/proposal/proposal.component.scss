@@ -21,7 +21,7 @@
     }
     .value {
       position: relative;
-      padding-left: 18px;
+      padding-left: 32px;
       font-size: 13px;
       &:before {
         content: "";
@@ -29,9 +29,9 @@
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
+        width: 24px;
+        height: 24px;
+        border-radius: 100%;
       }
       &.primary:before {
         background-color: var(--bs-success);
@@ -48,7 +48,7 @@
     }
   }
   .message {
-    color: var(--bs-primary);
+    color: var(--aura-green-disabled);
   }
   .btn-detail {
     margin: 0 16px;

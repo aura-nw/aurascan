@@ -6,7 +6,7 @@
         <a class="card__title">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="card__status">
-        <div class="message --aura-green-disabled" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
+        <div class="message" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
           You voted '{{ proposalVotes[0].vote }}' for this proposal
         </div>
         <button
@@ -94,25 +94,25 @@
           <li
             class="bg--primary"
             [style.width]="proposalDetail.pro_vote_yes_bar + '%'"
-            matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar }}%"
+            matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar | number: global.formatNumber2Decimal }}%"
             [matTooltipPosition]="'above'"
           ></li>
           <li
             class="bg--danger"
             [style.width]="proposalDetail.pro_vote_no_bar + '%'"
-            matTooltip="No {{ proposalDetail.pro_vote_no_bar }}%"
+            matTooltip="No {{ proposalDetail.pro_vote_no_bar | number: global.formatNumber2Decimal }}%"
             [matTooltipPosition]="'above'"
           ></li>
           <li
             class="bg--info"
             [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
-            matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar }}%"
+            matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar | number: global.formatNumber2Decimal }}%"
             [matTooltipPosition]="'above'"
           ></li>
           <li
             class="bg--secondary"
             [style.width]="proposalDetail.pro_vote_abstain_bar + '%'"
-            matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar }}%"
+            matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar | number: global.formatNumber2Decimal }}%"
             [matTooltipPosition]="'above'"
           ></li>
         </ul>
