@@ -11,18 +11,7 @@
 
         cursor: pointer;
 
-        /* Insights-Body4 */
-
-        font-family: "SF Pro Display";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 17px;
-        /* identical to box height */
-
-        letter-spacing: 0.05em;
-
-        color: white;
+        color: var(--aura-white);
 
         &.active {
             color: var(--aura-primary);

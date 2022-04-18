@@ -1,7 +1,7 @@
 <mat-paginator class="d-none" [length]="actualLength" [pageSize]="pageSize">
 </mat-paginator>
 
-<ul class="d-flex page-list justify-content-end" *ngIf="length">
+<ul class="d-flex page-list justify-content-end pb-0 small-body" *ngIf="length && pageLength > 1">
     <li class="page page-first" (click)="selectPage(0)" [class.disabled]="current.isFirst"> First </li>
     <li class="page page-prev" (click)="prevPage()" [class.disabled]="current.isFirst"> Prev </li>
     <ng-container *ngFor="let page of current.list">
