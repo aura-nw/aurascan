@@ -80,30 +80,19 @@ export class ProposalComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.lastedList = res.data;
       this.lastedList.forEach((pro, index) => {
-        let totalVoteYes = +pro.pro_votes_yes;
-        let totalVoteNo = +pro.pro_votes_no;
-        let totalVoteNoWithVeto = +pro.pro_votes_no_with_veto;
-        let totalVoteAbstain = +pro.pro_votes_abstain;
-        let totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
+        let totalVote;
         if (index < 4) {
-          if (totalVote > 0) {
-            pro.pro_votes_yes = (totalVoteYes * 100) / totalVote;
-            pro.pro_votes_no = (totalVoteNo * 100) / totalVote;
-            pro.pro_votes_no_with_veto = (totalVoteNoWithVeto * 100) / totalVote;
-            pro.pro_votes_abstain = (totalVoteAbstain * 100) / totalVote;
-          } else {
-            this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
-              totalVote =
-                +res.data.proposalVoteTally.tally.yes +
-                +res.data.proposalVoteTally.tally.no +
-                +res.data.proposalVoteTally.tally.no_with_veto +
-                +res.data.proposalVoteTally.tally.abstain;
-              pro.pro_votes_yes = (+res.data.proposalVoteTally.tally.yes * 100) / totalVote;
-              pro.pro_votes_no = (+res.data.proposalVoteTally.tally.no * 100) / totalVote;
-              pro.pro_votes_no_with_veto = (+res.data.proposalVoteTally.tally.no_with_veto * 100) / totalVote;
-              pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
-            });
-          }
+          this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
+            totalVote =
+              +res.data.proposalVoteTally.tally.yes +
+              +res.data.proposalVoteTally.tally.no +
+              +res.data.proposalVoteTally.tally.no_with_veto +
+              +res.data.proposalVoteTally.tally.abstain;
+            pro.pro_votes_yes = (+res.data.proposalVoteTally.tally.yes * 100) / totalVote;
+            pro.pro_votes_no = (+res.data.proposalVoteTally.tally.no * 100) / totalVote;
+            pro.pro_votes_no_with_veto = (+res.data.proposalVoteTally.tally.no_with_veto * 100) / totalVote;
+            pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
+          });
         }
         pro.pro_vote_total = totalVote;
 

@@ -6,7 +6,7 @@
         <a class="card__title">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="card__status">
-        <div class="message" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
+        <div class="message  --aura-green-disabled" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
           You voted '{{ proposalVotes[0].vote }}' for this proposal
         </div>
         <button *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
