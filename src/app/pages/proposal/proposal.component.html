@@ -105,7 +105,7 @@
           <div class="card-footer">
             <div class="top-border">
               <div class="d-flex justify-content-end align-items-center">
-                <div class="message --aura-green-disabled" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
+                <div class="message" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
                   You voted '{{ proposalVotes[idx].vote }}' for this proposal
                 </div>
                 <button class="btn button-inline body text--green mr-3" [routerLink]="[lastedItem.pro_id]">
