@@ -95,11 +95,11 @@
             "BADGE": "02"
         },
         "TRANSACTION": {
-            "TEXT": "Transaction",
+            "TEXT": "Transactions",
             "BADGE": "01"
         },
         "PROPOSAL": {
-            "TEXT": "Proposal",
+            "TEXT": "Proposals",
             "BADGE": "04"
         },
         "CHAINCODE": {
