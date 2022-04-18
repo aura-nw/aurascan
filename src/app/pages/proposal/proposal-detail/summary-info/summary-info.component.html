@@ -2,21 +2,26 @@
   <div class="card-header bg-transparent border-bottom">
     <div class="d-flex justify-content-between">
       <div class="card__title">
-        #{{ proposalId }} <br>
+        #{{ proposalId }} <br />
         <a class="card__title">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="card__status">
-        <div class="message  --aura-green-disabled" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
+        <div class="message --aura-green-disabled" *ngIf="proposalVotes[0] && proposalVotes[0].vote">
           You voted '{{ proposalVotes[0].vote }}' for this proposal
         </div>
-        <button *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+        <button
           [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-          (click)="openVoteDialog(proposalDetail)" class="button button-outline body">
-          {{ proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' ? 'Voting Ended' : 'Vote' }}
+          (click)="openVoteDialog(proposalDetail)"
+          class="button button-outline body"
+        >
+          {{
+            proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+            proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+              ? 'Voting Ended'
+              : 'Vote'
+          }}
         </button>
-        <div class="proposal-status proposal-status__{{
-            getStatus(proposalDetail?.pro_status).key
-          }}">
+        <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status).key }}">
           <span class="status title-small">{{ getStatus(proposalDetail.pro_status).value }}</span>
         </div>
       </div>
@@ -29,7 +34,7 @@
         <div class="col-12 col-md-10 body">
           <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">{{
             proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
-            }}</a>
+          }}</a>
         </div>
       </div>
       <div class="row mb-3">
@@ -72,7 +77,6 @@
           <div class="editorial-container" [innerText]="proposalDetail.pro_description"></div>
         </div>
       </div>
-
     </div>
   </div>
   <div class="card-footer">
@@ -87,15 +91,30 @@
 
       <div class="vote-bar">
         <ul>
-          <li class="bg--primary" [style.width]="proposalDetail.pro_vote_yes_bar + '%'"
-            matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar }}%" [matTooltipPosition]="'above'"></li>
-          <li class="bg--danger" [style.width]="proposalDetail.pro_vote_no_bar + '%'"
-            matTooltip="No {{ proposalDetail.pro_vote_no_bar }}%" [matTooltipPosition]="'above'"></li>
-          <li class="bg--info" [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
-            matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar }}%" [matTooltipPosition]="'above'">
-          </li>
-          <li class="bg--secondary" [style.width]="proposalDetail.pro_vote_abstain_bar + '%'"
-            matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar }}%" [matTooltipPosition]="'above'"></li>
+          <li
+            class="bg--primary"
+            [style.width]="proposalDetail.pro_vote_yes_bar + '%'"
+            matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar }}%"
+            [matTooltipPosition]="'above'"
+          ></li>
+          <li
+            class="bg--danger"
+            [style.width]="proposalDetail.pro_vote_no_bar + '%'"
+            matTooltip="No {{ proposalDetail.pro_vote_no_bar }}%"
+            [matTooltipPosition]="'above'"
+          ></li>
+          <li
+            class="bg--info"
+            [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
+            matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar }}%"
+            [matTooltipPosition]="'above'"
+          ></li>
+          <li
+            class="bg--secondary"
+            [style.width]="proposalDetail.pro_vote_abstain_bar + '%'"
+            matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar }}%"
+            [matTooltipPosition]="'above'"
+          ></li>
         </ul>
       </div>
       <div class="vote-legend">

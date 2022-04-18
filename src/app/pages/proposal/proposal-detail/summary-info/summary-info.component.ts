@@ -100,12 +100,14 @@ export class SummaryInfoComponent implements OnInit {
           data: { id, title, voteValue: this.voteValue },
         });
         dialogRef.afterClosed().subscribe((result) => {
-          this.voteValue = result;
-          this.getDetail();
+          if (result) {
+            this.voteValue = result;
+            this.getDetail();
+          }
         });
       });
     } else {
-      this.getDetail();
+      window.location.reload();
     }
   }
 
@@ -133,12 +135,6 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   getVoteResult() {
-    // let payloads = {
-    //   limit: 45,
-    //   offset: 0,
-    //   option: '',
-    //   proposalId: this.proposalId,
-    // };
     this.proposalService.getProposalTally(this.proposalId).subscribe((res) => {
       this.proposalDetail.pro_votes_yes = balanceOf(+res.data.proposalVoteTally.tally.yes);
       this.proposalDetail.pro_votes_no = balanceOf(+res.data.proposalVoteTally.tally.no);
