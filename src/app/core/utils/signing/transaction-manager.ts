@@ -29,7 +29,7 @@ export async function createSignBroadcast({
           amount: '1',
         },
       ],
-      gas: '300000',
+      gas: '400000',
     };
 
     try {
