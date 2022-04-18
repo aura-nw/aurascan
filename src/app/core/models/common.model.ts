@@ -131,10 +131,11 @@ export class CommonDataDto {
   community_pool_format: number;
 }
 
-export class DataDelegatoDto {
+export class DataDelegateDto {
   delegatedToken: string;
   availableToken: string;
   stakingToken: string;
+  stakingCurrentValidate: string;
   dialogMode: string = '';
   validatorDetail: any;
 }

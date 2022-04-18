@@ -49,4 +49,46 @@
       background: url("../../icons/icons-svg/white/chevron-down.svg") center no-repeat;
     }
   }
+  .input-group {
+    display: flex;
+    width: 100%;
+    border: 2px solid var(--aura-neutrals-3);
+    border-radius: 16px;
+    padding: 0 var(--spacer-6);
+    input {
+      flex-shrink: 0;
+      flex-grow: 1;
+      padding: 0;
+      font-size: 2rem;
+      line-height: 2.4rem;
+      background: transparent;
+      outline: none;
+      border: none;
+      color: var(--aura-white);
+      padding-right: 16px;
+      overflow-x: hidden;
+      /* Chrome, Safari, Edge, Opera */
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      &[type=number] {
+        -moz-appearance: textfield;
+      }
+    }
+    .input-group-append {
+      display: flex;
+      align-items: center;
+      background: transparent;
+      padding: var(--spacer-4) 0;
+      padding-left: var(--spacer-6);
+      font-size: 2rem;
+      line-height: 2.4rem;
+      color: var(--aura-white);
+      border-left: 2px solid var(--aura-neutrals-3);
+    }
+  }
 }

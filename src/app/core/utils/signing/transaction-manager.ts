@@ -29,11 +29,11 @@ export async function createSignBroadcast({
           amount: '1',
         },
       ],
-      gas: '200000',
+      gas: '400000',
     };
 
     try {
-      broadcastResult = await client.signAndBroadcast(senderAddress, [messagesSend], fee);
+      broadcastResult = await client.signAndBroadcast(senderAddress, Array.isArray(messagesSend) ? messagesSend : [messagesSend], fee);
 
       assertIsBroadcastTxSuccess(broadcastResult);
     } catch (e: any) {

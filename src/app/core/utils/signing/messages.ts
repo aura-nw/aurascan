@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx';
-import { MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
+import { MsgDelegate, MsgUndelegate, MsgBeginRedelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 // Bank
 
@@ -90,16 +90,22 @@ export function ClaimRewardsTx(
   //   }
 
   // }
-  
-  const msg = MsgWithdrawDelegatorReward.fromPartial({
-    delegatorAddress: senderAddress,
-    validatorAddress: from[0].validator_address,
-  });
+  const msg = [];
 
-  return {
-    typeUrl: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
-    value: msg,
-  };
+  //loop list validator for get reward
+  from.forEach((f => {
+    msg.push(
+      {
+        typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+        value: MsgWithdrawDelegatorReward.fromPartial({
+          delegatorAddress: senderAddress,
+          validatorAddress: f.validator_address,
+        })
+      }
+    )
+  }));
+
+  return msg;
 }
 
 export function VoteTx(senderAddress, { proposalId, voteOption }) {
@@ -143,27 +149,19 @@ export function Coin({ amount, denom }, coinLookup) {
 // ReStaking
 export function RestakeTx(senderAddress, { src_address, to_address, amount }, network) {
   /* istanbul ignore next */
-  const msg = {
-    delegator_address: senderAddress,
-    validator_src_address: src_address,
-    validator_dst_address: to_address,
+  const msg = MsgBeginRedelegate.fromPartial({
+    delegatorAddress: senderAddress,
+    validatorSrcAddress: src_address,
+    validatorDstAddress: to_address,
     amount: {
       amount: amount.amount + '',
       denom: 'uaura',
     },
-  };
+  });
   return {
-    typeUrl: 'cosmos-sdk.MsgBeginRedelegate',
+    typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
     value: msg,
   };
-  // return {
-  //   type: `cosmos-sdk/MsgDelegate`,
-  //   value: {
-  //     delegator_address: senderAddress,
-  //     validator_address: to[0],
-  //     amount: Coin(amount, network.coinLookup),
-  //   },
-  // }
 }
 
 export const messageCreators = {

@@ -105,40 +105,75 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3">
-      <div class="col-3">
-        <div class="card-text fw-bold">Delegator Address</div>
+    <ng-container *ngIf="transactionDetail?.type === eTransType.GetReward && transactionDetail?.messages.length > 1">
+      <ng-container *ngFor="let item of transactionDetail?.messages">
+        <div class="row mb-3">
+          <div class="col-3">
+            <div class="card-text fw-bold">Delegator Address</div>
+          </div>
+          <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', item.delegator_address]">
+            {{ item.delegator_address }}
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-3">
+            <div class="card-text fw-bold">Validator Address</div>
+          </div>
+          <div class="col-6 text--green cursor-pointer" [routerLink]="['/validators', item.validator_address]">
+            {{ item.validator_address }}<br />
+            <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
+          </div>
+        </div>
+        <!-- <div class="row mb-5">
+          <div class="col-3">
+            <div class="card-text fw-bold">Amount</div>
+          </div>
+          <div class="col-6">
+            <ng-container *ngIf="item.amount > 0">
+              {{ item.amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+            </ng-container>
+            <ng-container *ngIf="item.amount == 0"> - </ng-container>
+          </div>
+        </div> -->
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="transactionDetail?.messages.length === 1">
+      <div class="row mb-3">
+        <div class="col-3">
+          <div class="card-text fw-bold">Delegator Address</div>
+        </div>
+        <div
+          class="col-6 text--green cursor-pointer"
+          [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
+        >
+          {{ transactionDetail?.messages[0]?.delegator_address }}
+        </div>
       </div>
-      <div
-        class="col-6 text--green cursor-pointer"
-        [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
-      >
-        {{ transactionDetail?.messages[0]?.delegator_address }}
+      <div class="row mb-3">
+        <div class="col-3">
+          <div class="card-text fw-bold">Validator Address</div>
+        </div>
+        <div
+          class="col-6 text--green cursor-pointer"
+          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]"
+        >
+          {{ transactionDetail?.messages[0]?.validator_address }}<br />
+          <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
+        </div>
       </div>
-    </div>
-    <div class="row mb-3">
-      <div class="col-3">
-        <div class="card-text fw-bold">Validator Address</div>
+      <div class="row mb-3">
+        <div class="col-3">
+          <div class="card-text fw-bold">Amount</div>
+        </div>
+        <div class="col-6">
+          <ng-container *ngIf="amount > 0">
+            {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+          </ng-container>
+          <ng-container *ngIf="amount == 0"> - </ng-container>
+        </div>
       </div>
-      <div
-        class="col-6 text--green cursor-pointer"
-        [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]"
-      >
-        {{ transactionDetail?.messages[0]?.validator_address }}<br />
-        <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
-      </div>
-    </div>
-    <div class="row mb-3">
-      <div class="col-3">
-        <div class="card-text fw-bold">Amount</div>
-      </div>
-      <div class="col-6">
-        <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
-        </ng-container>
-        <ng-container *ngIf="amount == 0"> - </ng-container>
-      </div>
-    </div>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
@@ -241,7 +276,10 @@
       <div class="col-3">
         <div class="card-text fw-bold">Proposer</div>
       </div>
-      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]"
+      >
         {{ transactionDetail?.messages[0]?.proposer }}
       </div>
     </div>

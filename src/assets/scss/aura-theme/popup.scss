@@ -1,0 +1,12 @@
+.modal {
+  .modal-dialog {
+    max-width: 720px;
+    .modal-content {
+      padding: var(--spacer-6);
+      background: var(--aura-black);
+      box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
+      border-radius: 12px;
+      color: var(--aura-white);
+    }
+  }
+}
