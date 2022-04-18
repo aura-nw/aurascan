@@ -16,39 +16,40 @@ export interface IValidatorVotes {
 @Component({
   selector: 'app-validators-votes',
   templateUrl: './validators-votes.component.html',
-  styleUrls: ['./validators-votes.component.scss']
+  styleUrls: ['./validators-votes.component.scss'],
 })
 export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;
-  TABS = PROPOSAL_VOTE.concat({
+  PROPOSAL_VOTE_EXT = PROPOSAL_VOTE.concat({
     key: 'null',
     value: 'Did not vote',
     class: '',
     voteOption: '',
-  })
-    .filter((vote) =>
-      [
-        'VOTE_OPTION_UNSPECIFIED',
-        'VOTE_OPTION_YES',
-        'VOTE_OPTION_ABSTAIN',
-        'VOTE_OPTION_NO',
-        'VOTE_OPTION_NO_WITH_VETO',
-        'null',
-      ].includes(vote.key),
-    )
-    .map((vote) => ({
-      ...vote,
-      value: vote.value.toUpperCase(),
-      key: vote.key === 'VOTE_OPTION_UNSPECIFIED' ? '' : vote.key,
-    }));
+  });
+
+  TABS = this.PROPOSAL_VOTE_EXT.filter((vote) =>
+    [
+      'VOTE_OPTION_UNSPECIFIED',
+      'VOTE_OPTION_YES',
+      'VOTE_OPTION_ABSTAIN',
+      'VOTE_OPTION_NO',
+      'VOTE_OPTION_NO_WITH_VETO',
+      'null',
+    ].includes(vote.key),
+  ).map((vote) => ({
+    ...vote,
+    value: vote.value.toUpperCase(),
+    key: vote.key === 'VOTE_OPTION_UNSPECIFIED' ? '' : vote.key,
+  }));
 
   voteDataList: IValidatorVotes[] = [];
 
   _voteList: IValidatorVotes[] = [];
 
-  countVote = [];
+  countVote: Map<string, number> = new Map<string, number>();
+  countCurrent: string = '';
 
-  LIMIT_DEFAULT = 45;
+  LIMIT_DEFAULT = 5;
 
   query = [];
 
@@ -90,21 +91,306 @@ export class ValidatorsVotesComponent implements OnInit {
         res['didNotVote'] && ((dta) => (this.voteData.didNotVote = dta))(res['didNotVote']);
 
         if (res['all']) {
-          this.voteDataList = [...this.voteData.all.proposalVotes];
-          this.countVote = [
-            this.voteData.all.countTotal,
-            this.voteData.all.countYes,
-            this.voteData.all.countNo,
-            this.voteData.all.countNoWithVeto,
-            this.voteData.all.countAbstain,
-            this.voteData.all.countDidNotVote,
-          ];
+          this.voteDataList = JSON.parse(`[
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            },    {
+                "validator_name": "mynode",
+                "validator_address": "aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8",
+                "rank": "1"
+            },
+            {
+                "validator_name": "Paris",
+                "validator_address": "aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p",
+                "rank": "2"
+            },
+            {
+                "validator_name": "mynode",
+                "validator_address": "aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs",
+                "rank": "3"
+            },
+            {
+                "validator_name": "Singapore",
+                "validator_address": "aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847",
+                "tx_hash": null,
+                "option": null,
+                "created_at": null,
+                "operator_address": "auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq",
+                "rank": "4"
+            }
+        ]`);
+
+          
+          
+          // this.countVote.set();
+          this.countVote.set('', this.voteDataList.length);
+          this.countVote.set('VOTE_OPTION_YES', this.voteData.all.countYes);
+          this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countNo);
+          this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNoWithVeto);
+          this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countAbstain);
+          this.countVote.set('null', this.voteData.all.countDidNotVote);
         }
       });
     }
   }
 
   changeTab(tabId): void {
+    this.countCurrent = tabId;
     switch (tabId) {
       case '':
         this.voteDataList = this.voteData.all.proposalVotes;
@@ -126,4 +412,175 @@ export class ValidatorsVotesComponent implements OnInit {
         break;
     }
   }
+
+  loadMore($event): void {
+    console.log($event);
+  }
 }
+
+const mock = [
+  [
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8',
+      rank: '1',
+    },
+    {
+      validator_name: 'Paris',
+      validator_address: 'aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p',
+      rank: '2',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs',
+      rank: '3',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8',
+      rank: '1',
+    },
+    {
+      validator_name: 'Paris',
+      validator_address: 'aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p',
+      rank: '2',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs',
+      rank: '3',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8',
+      rank: '1',
+    },
+    {
+      validator_name: 'Paris',
+      validator_address: 'aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p',
+      rank: '2',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs',
+      rank: '3',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8',
+      rank: '1',
+    },
+    {
+      validator_name: 'Paris',
+      validator_address: 'aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p',
+      rank: '2',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs',
+      rank: '3',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8',
+      rank: '1',
+    },
+    {
+      validator_name: 'Paris',
+      validator_address: 'aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p',
+      rank: '2',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs',
+      rank: '3',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1w9hnyr057crrn52f94axe3jsrrn7zazupsu3ee',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1w9hnyr057crrn52f94axe3jsrrn7zazu6zdep8',
+      rank: '1',
+    },
+    {
+      validator_name: 'Paris',
+      validator_address: 'aura105m3p8a8c2qjugqmhhl68hl3clrrpuwgcw4zjl',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper105m3p8a8c2qjugqmhhl68hl3clrrpuwgruy22p',
+      rank: '2',
+    },
+    {
+      validator_name: 'mynode',
+      validator_address: 'aura1p5kp36qlmmczrk56veztdt0re4ly7uzr805lcw',
+      tx_hash: null,
+      option: null,
+      created_at: null,
+      operator_address: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs',
+      rank: '3',
+    },
+  ],
+];

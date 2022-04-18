@@ -1,0 +1,54 @@
+.page-list {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    padding: 20px 16px;
+
+    .page {
+        margin: 0 3px;
+        padding: 3.5px 7.5px;
+
+        cursor: pointer;
+
+        /* Insights-Body4 */
+
+        font-family: "SF Pro Display";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        /* identical to box height */
+
+        letter-spacing: 0.05em;
+
+        color: white;
+
+        &.active {
+            color: var(--aura-primary);
+        }
+
+        &.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        &-next {
+            background: url("../../../../assets/icons/icons-svg/white/chevron-right.svg") center no-repeat;
+            font-size: 0px;
+
+            &:disabled {
+                background: url("../../../../assets/icons/icons-svg/basic/chevron-right.svg") center no-repeat;
+            }
+        }
+
+        &-prev {
+            background: url("../../../../assets/icons/icons-svg/white/chevron-left.svg") center no-repeat;
+            font-size: 0px;
+
+            &:disabled {
+                background: url("../../../../assets/icons/icons-svg/basic/chevron-right.svg") center no-repeat;
+            }
+        }
+    }
+}

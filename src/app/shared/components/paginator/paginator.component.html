@@ -1,0 +1,12 @@
+<mat-paginator class="d-none" [length]="actualLength" [pageSize]="pageSize">
+</mat-paginator>
+
+<ul class="d-flex page-list justify-content-end" *ngIf="length">
+    <li class="page page-first" (click)="selectPage(0)" [class.disabled]="current.isFirst"> First </li>
+    <li class="page page-prev" (click)="prevPage()" [class.disabled]="current.isFirst"> Prev </li>
+    <ng-container *ngFor="let page of current.list">
+        <li class="page" [class.active]="page.isActive" (click)="selectPage(page.index)"> {{page.index + 1}}</li>
+    </ng-container>
+    <li class="page page-next" (click)="nextPage()" [class.disabled]="current.isLast"> Next </li>
+    <li class="page page-last" (click)="selectPage(length-1)" [class.disabled]="current.isLast"> Last </li>
+</ul>
