@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountService } from '../../../app/core/services/account.service';
 import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
-import { CommonDataDto, DataDelegatoDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
@@ -64,9 +64,6 @@ export class ValidatorsComponent implements OnInit {
   breadCrumbItems!: Array<{}>;
   dataModal;
   clicked = false;
-  delegatedToken = 0;
-  availableToken = 0;
-  stakingToken = 0;
   totalDelegator = 0;
   claimReward = 0;
   amountFormat;
@@ -80,15 +77,15 @@ export class ValidatorsComponent implements OnInit {
   validatorDetail;
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
-  dataDelegate = new DataDelegatoDto();
+  dataDelegate = new DataDelegateDto();
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
   modalReference;
 
   lstValidator = [
-    {label:'Singapore', value: 'auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq' },
-    {label:'mynode', value: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs' }
-  ]
+    {label:'Singapore', value: 'auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq', comm: '10%' },
+    {label:'mynode', value: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs', comm: '100%' }
+  ];
 
   constructor(
     private validatorService: ValidatorService,
@@ -102,15 +99,6 @@ export class ValidatorsComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
-    this.getList();
-    // this.getDataWallet();
-
-    setInterval(() => {
-      this.getList();
-      this.getDataWallet();
-    }, 10000);
-
-    // this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -118,6 +106,12 @@ export class ValidatorsComponent implements OnInit {
         this.getDataWallet();
       }
     });
+    this.getList();
+
+    setInterval(() => {
+      this.getList();
+      this.getDataWallet();
+    }, 10000);
   }
 
   ngAfterViewInit(): void {
@@ -257,6 +251,7 @@ export class ValidatorsComponent implements OnInit {
         this.getListDelegators(address);
 
         this.clicked = false;
+        this.isExceedAmount = false;
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,
@@ -272,7 +267,7 @@ export class ValidatorsComponent implements OnInit {
     if (this.userAddress) {
       forkJoin({
         dataWallet: this.accountService.getAccoutDetail(this.userAddress),
-        dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
+        dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress)
       }).subscribe((res) => {
         if (res.dataWallet) {
           this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
@@ -282,7 +277,9 @@ export class ValidatorsComponent implements OnInit {
 
         if (res.dataListDelegator) {
           this.listStakingValidator = res.dataListDelegator?.data?.delegations;
-          
+          if (this.validatorDetail?.validator_address) {
+            this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === this.validatorDetail?.validator_address);
+          }
           if (res?.dataListDelegator?.data?.delegations.length > 0) {
             res?.dataListDelegator?.data?.delegations.forEach((f) => {
               f.amount_staked = f.amount_staked / NUMBER_CONVERT;
@@ -304,8 +301,14 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkAmountStaking(): void {
+    let amountCheck;
+    if (this.dataDelegate.dialogMode === this.dialogMode.Delegate){
+      amountCheck = this.dataDelegate.availableToken;
+    } else if (this.dataDelegate.dialogMode === this.dialogMode.Redelegate || this.dataDelegate.dialogMode === this.dialogMode.Undelegate){
+      amountCheck = this.dataDelegate.validatorDetail.amount_staked;
+    }
     this.isExceedAmount = false;
-    if (this.amountFormat > this.dataDelegate.availableToken) {
+    if (this.amountFormat > amountCheck) {
       this.isExceedAmount = true;
     }
   }
@@ -372,7 +375,8 @@ export class ValidatorsComponent implements OnInit {
   }
 
   handleUndelegate() {
-    if (this.amountFormat > 0) {
+    this.checkAmountStaking();
+    if (!this.isExceedAmount && this.amountFormat > 0) {
       const excuteUnStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
@@ -403,7 +407,8 @@ export class ValidatorsComponent implements OnInit {
   }
 
   handleRedelegate() {
-    if (this.amountFormat > 0) {
+    this.checkAmountStaking();
+    if (!this.isExceedAmount && this.amountFormat > 0) {
       const excuteReStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
@@ -439,10 +444,18 @@ export class ValidatorsComponent implements OnInit {
   }
 
   changeTypePopup(type){
+    this.isExceedAmount = false;
+    this.amountFormat = null;
     this.dataDelegate.dialogMode = type;
   }
 
   getMaxToken(type): void{
-    this.amountFormat = (type === this.dialogMode.Delegate) ? this.availableToken : this.dataDelegate.validatorDetail.amount_staked;
+    if (type === this.dialogMode.Delegate) {
+      this.amountFormat = this.dataDelegate.availableToken;
+    } else if (type === this.dialogMode.Undelegate) {
+      this.amountFormat = this.dataDelegate.validatorDetail.amount_staked;
+    } else if (type === this.dialogMode.Redelegate) {
+      this.amountFormat = this.dataDelegate.availableToken;
+    }
   }
 }
