@@ -328,16 +328,16 @@ body {
         display: flex;
         li {
             &.primary {
-                background-color: var(--bs-success);
+                background-color: #5ee6d0;
             }
             &.danger {
-                background-color: var(--bs-danger);
+                background-color: #e65e5e;
             }
             &.info {
-                background-color: var(--bs-info);
+                background-color: #5e84e6;
             }
             &.secondary {
-                background-color: var(--bs-secondary);
+                background-color: #777e91;
             }
         }
     }
