@@ -16,7 +16,7 @@
   }
   .most-vote {
     margin-left: 20px;
-    min-width: 110px;
+    min-width: 150px;
     .title {
       font-weight: 500;
     }
@@ -44,7 +44,7 @@
         background-color: var(--aura-info);
       }
       &.secondary:before {
-        background-color: var(--aura-secondary);
+        background-color: var(--aura-green-disabled);
       }
     }
   }
