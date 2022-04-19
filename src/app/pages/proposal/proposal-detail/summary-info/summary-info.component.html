@@ -10,7 +10,6 @@
           You voted '{{ proposalVotes[0].vote }}' for this proposal
         </div>
         <button
-          [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
           (click)="openVoteDialog(proposalDetail)"
           class="button button-outline body"
         >
