@@ -16,10 +16,12 @@ import {
 } from '../../../app/core/constants/wallet.constant';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
-import { DIALOG_STAKE_MODE, STAKING_TYPE_ENUM, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
-import { forkJoin } from 'rxjs';
+import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
+import { async, forkJoin } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 
 @Component({
   selector: 'app-validators',
@@ -66,27 +68,25 @@ export class ValidatorsComponent implements OnInit {
   clicked = false;
   totalDelegator = 0;
   claimReward = 0;
-  amountFormat;
+  amountFormat = null;
   isExceedAmount = false;
-  userAddress;
-  validatorAddress;
-  selectedValidator;
+  userAddress = '';
+  validatorAddress = [];
+  selectedValidator = [];
   listTypeStake = TYPE_STAKING;
   searchNullData = false;
-  listStakingValidator;
-  validatorDetail;
+  listStakingValidator = [];
+  validatorDetail = '';
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
   dataDelegate = new DataDelegateDto();
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
-  modalReference;
+  modalReference: any;
   currentValidatorDialog;
-
-  lstValidator = [
-    {label:'Singapore', value: 'auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq', comm: '10%' },
-    {label:'mynode', value: 'auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs', comm: '100%' }
-  ];
+  lstValidator = [];
+  lstUndelegate = [];
+  numberCode = 0;
 
   constructor(
     private validatorService: ValidatorService,
@@ -96,6 +96,7 @@ export class ValidatorsComponent implements OnInit {
     private commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
+    private transactionService: TransactionService
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +108,7 @@ export class ValidatorsComponent implements OnInit {
         this.getDataWallet();
       }
     });
+    this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
     this.getList();
 
     setInterval(() => {
@@ -236,6 +238,7 @@ export class ValidatorsComponent implements OnInit {
           this.clicked = true;
           this.amountFormat = null;
           this.getValidatorDetail(address, staticDataModal);
+          this.getListRedelegate(this.userAddress, address);
         }
       });
     };
@@ -264,12 +267,31 @@ export class ValidatorsComponent implements OnInit {
     );
   }
 
+  getListRedelegate(userAddress, operatorAddress): void {
+    this.validatorService.validatorsListRedelegate(userAddress, operatorAddress).subscribe(
+      (res) => {
+        this.lstValidator = res.data;
+        // res.forEach(f => {
+        //   let isStaking = (f.staking_address === this.userAddress) ? true : false;
+        //   this.lstValidator.push(f.title, f.commission, isStaking);
+        // });
+        
+        // this.dataModal = res.data;
+        // this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
+        // this.dataDelegate.validatorDetail = this.validatorDetail;
+        // this.getListDelegators(address);
+      },
+      (error) => {},
+    );
+  }
+
   //Get data for wallet info and list staking
   getDataWallet() {
     if (this.userAddress) {
       forkJoin({
         dataWallet: this.accountService.getAccoutDetail(this.userAddress),
-        dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress)
+        dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
+        dataListUndelegator: this.validatorService.validatorsListUndelegateWallet(this.userAddress)
       }).subscribe((res) => {
         if (res.dataWallet) {
           this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
@@ -290,6 +312,22 @@ export class ValidatorsComponent implements OnInit {
             this.dataSourceWallet = new MatTableDataSource(res?.dataListDelegator.data?.delegations);
             this.lengthWallet = res?.dataListDelegator.data?.delegations?.length;
           }
+        }
+
+        if (res.dataListUndelegator) {
+          this.lstUndelegate = [];
+          res.dataListUndelegator.data.forEach(data => {
+            data.entries.forEach(f => {
+              f.balance = f.balance / NUMBER_CONVERT;
+              f.validator_address = data.validator_address;
+              f.validator_name = data.validator_name;
+              this.lstUndelegate.push(f);
+            });
+          });
+
+          this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
+            return this.compare(a.completion_time, b.completion_time, true);
+          });
         }
       });
     }
@@ -338,13 +376,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
-
-        if (error) {
-          this.toastr.error("Error Delegate");
-        } else {
-          this.getDataWallet();
-        }
+        this.checkStatuExcuteBlock(hash, error, 'Error Delegate');
       };
       
       excuteStaking();
@@ -365,11 +397,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
-        if (error) {
-          this.toastr.error("Error Get Reward");
-        } else {
-          this.getDataWallet();
-        }
+        this.checkStatuExcuteBlock(hash, error, 'Error Get Reward');
       };
       
       excuteClaim();
@@ -395,13 +423,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
-
-        if (error) {
-          this.toastr.error("Error Undelegate");
-        } else {
-          this.getDataWallet();
-        }
+        this.checkStatuExcuteBlock(hash, error, 'Error Undelegate');
       };
       
       excuteUnStaking();
@@ -428,13 +450,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
-
-        if (error) {
-          this.toastr.error("Error Redelegate");
-        } else {
-          this.getDataWallet();
-        }
+        this.checkStatuExcuteBlock(hash, error, 'Error Redelegate');
       };
       
       excuteReStaking();
@@ -459,5 +475,32 @@ export class ValidatorsComponent implements OnInit {
     } else if (type === this.dialogMode.Redelegate) {
       this.amountFormat = this.dataDelegate.availableToken;
     }
+  }
+
+  checkStatuExcuteBlock(hash, error, msg) {
+    this.modalReference.close();
+    if (error) {
+      this.toastr.error(msg);
+    } else {
+      setTimeout(() => {
+        this.checkDetailTx(hash, msg);
+      }, 2000);
+    }
+  }
+    
+  checkDetailTx(id, message) {
+    this.transactionService.txsDetail(id).subscribe(
+      (res: ResponseDto) => {
+        let numberCode = res?.data?.code;
+        if (numberCode !== CodeTransaction.Success) {
+          message = res?.data?.raw_log || message;
+          this.toastr.error(message);
+        } else {
+          this.getDataWallet();
+        }
+      },
+      (error) => {
+      },
+    );
   }
 }

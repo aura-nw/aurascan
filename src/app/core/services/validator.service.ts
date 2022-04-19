@@ -37,6 +37,11 @@ export class ValidatorService extends CommonService {
 
   validatorsListUndelegateWallet(address): Observable<any> {
     this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/${address}/delegators`);
+    return this.http.get<any>(`${this.apiUrl}/validators/${address}/unbonding-delegations`);
+  }
+
+  validatorsListRedelegate(delegatorAddress, operatorAddress): Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/validators/${delegatorAddress}/${operatorAddress}/delegators`);
   }
 }

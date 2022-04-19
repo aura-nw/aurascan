@@ -77,6 +77,25 @@
         </div>
   </div>
 
+  <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
+    <div class="d-flex justify-content-between card-header title-small text--white">
+      Undelegating
+    </div>
+    <div class="card-body">
+      <ng-container *ngFor="let validator of lstUndelegate">
+        <div class="row col-12 mb-3">
+          <div class="col-3 title-small title-name text--green cursor-pointer" [routerLink]="['/validators', validator.validator_address]">
+            {{validator.validator_name}}
+          </div>
+          <div class="col-9 text--white">
+            {{validator.balance | number: globals.formatNumberToken}} <span class="text--green">{{ globals.stableToken }}</span><br>
+            <span class="txt-time">{{validator.completion_time | calDate}} remaining</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
   <div class="card">
     <div class="d-flex align-items-center justify-content-between px-6 py-6">
       <div class="sub-text text--white">Validators</div>
@@ -215,7 +234,6 @@
       </ng-template>
     </div>
   </div>
-
 </div>
 
 <div class="col-lg-6">
@@ -225,7 +243,7 @@
           <div class="row col-12">
             <div class="col-4 box-validator">
               <span class="font-weight-bold">{{ dataModal?.title }}</span>
-              Commission - {{ dataModal?.commission | percent: '1.2-2' }}
+              Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
             </div>
             <div class="col-8">
               <span>
@@ -288,9 +306,9 @@
             <div class="col-12 box-select-redelegate">
               <mat-form-field appearance="fill">
                 <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
-                  <mat-option *ngFor="let item of lstValidator" [value]="item.value">
+                  <mat-option *ngFor="let item of lstValidator" [value]="item.operator_address">
                     <div class="d-flex">
-                      <p style="width: 100px;">{{ item.label | translate }}</p>
+                      <p style="width: 100px;">{{ item.title | translate }}</p>
                       <!-- <p>Commission - {{ item.comm | translate }}</p> -->
                     </div>
                   </mat-option>
