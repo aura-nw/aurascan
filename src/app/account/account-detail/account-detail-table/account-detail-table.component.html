@@ -32,10 +32,10 @@
                     $ {{data[template.matColumnDef] | number: global.formatNumberToken}}
                     <!--                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>-->
                   </div>
-                  <div *ngSwitchCase="'validator_src_name'" [routerLink]="['/validators', data['validator_src_address']]">
+                  <div *ngSwitchCase="'validator_src_name'" class="text--green cursor-pointer" [routerLink]="['/validators', data['validator_src_address']]">
                     {{ data[template.matColumnDef] }}
                   </div>
-                  <div *ngSwitchCase="'validator_dst_name'" [routerLink]="['/validators', data['validator_dst_address']]">
+                  <div *ngSwitchCase="'validator_dst_name'" class="text--green cursor-pointer" [routerLink]="['/validators', data['validator_dst_address']]">
                     {{ data[template.matColumnDef] }}
                   </div>
                   <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}
