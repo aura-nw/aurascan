@@ -1,22 +1,22 @@
-mat-radio-group {
+.vote-group.mat-radio-group {
   display: block;
-  margin-top: 16px;
-  border: 1px solid rgba(0,0,0,.2);
   border-radius: 4px;
-  mat-radio-button {
+  .mat-radio-button {
     display: block;
-    padding: 16px;
-    &:not(:last-child) {
-      border-bottom: 1px solid rgba(0,0,0,.2);
-      //margin-bottom: 16px;
-    }
+    padding: 16px 0px 0px 0px;
   }
-
-}
-.btn-detail {
-  margin-right: 16px;
 }
 :host::ng-deep {
-  .mat-ripple { display: none; }
-  label.mat-radio-label { margin-bottom: 0}
+  .mat-ripple {
+    display: none;
+  }
+  label.mat-radio-label {
+    margin-bottom: 0;
+    .mat-radio-label-content {
+      padding-left: 18px;
+    }
+    .mat-radio-inner-circle{
+      background-color: var(--aura-primary);
+    }
+  }
 }

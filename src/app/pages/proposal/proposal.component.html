@@ -105,14 +105,13 @@
           <div class="card-footer">
             <div class="top-border">
               <div class="d-flex justify-content-end align-items-center">
-                <div class="message" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
+                <div class="message mr-5" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
                   You voted '{{ proposalVotes[idx].vote }}' for this proposal
                 </div>
                 <button class="btn button-inline body text--green mr-3" [routerLink]="[lastedItem.pro_id]">
                   Details
                 </button>
                 <button
-                  [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                   (click)="openVoteDialog(lastedItem)"
                   class="button button-outline body"
                 >
@@ -137,7 +136,7 @@
       <div class="col">
         <div class="card">
           <div class="card-header align-items-center d-flex justify-content-between">
-            <div class="sub-text text--white">Proposal</div>
+            <div class="sub-text text--white">Proposals</div>
             <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
           </div>
           <div class="card-body pt-0">
