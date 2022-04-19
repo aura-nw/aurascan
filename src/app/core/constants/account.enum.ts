@@ -42,5 +42,5 @@ export enum WalletAcount {
   Delegated = '#5EE6D0',
   Unbonding = '#7AF3E0',
   StakingReward = '#AAF8EB',
-  Commission = '#96648C',
+  Commission = '#C6F8F0',
 }
