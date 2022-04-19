@@ -112,6 +112,7 @@
                   Details
                 </button>
                 <button
+                  [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                   (click)="openVoteDialog(lastedItem)"
                   class="button button-outline body"
                 >
