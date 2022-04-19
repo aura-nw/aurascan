@@ -44,28 +44,28 @@
                   <li
                     class="primary"
                     [style.width]="lastedItem.pro_votes_yes + '%'"
-                    matTooltip="Yes {{ lastedItem.pro_votes_yes }}%"
+                    matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                   <li
                     class="danger"
                     *ngIf="lastedItem.pro_votes_no"
                     [style.width]="lastedItem.pro_votes_no + '%'"
-                    matTooltip="No {{ lastedItem.pro_votes_no }}%"
+                    matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                   <li
                     class="info"
                     *ngIf="lastedItem.pro_votes_no_with_veto"
                     [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
-                    matTooltip="No with veto {{ lastedItem.pro_votes_no_with_veto }}%"
+                    matTooltip="No with veto {{ lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                   <li
                     class="secondary"
                     *ngIf="lastedItem.pro_votes_abstain"
                     [style.width]="lastedItem.pro_votes_abstain + '%'"
-                    matTooltip="Abstain {{ lastedItem.pro_votes_abstain }}%"
+                    matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                 </ul>
