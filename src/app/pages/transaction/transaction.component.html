@@ -25,7 +25,7 @@
                     <div *ngSwitchCase="'type'" class="text--green">
                       {{ data[template.matColumnDef] }}
                     </div>
-                    <div *ngSwitchCase="'status'">
+                    <!-- <div *ngSwitchCase="'status'">
                       <div [ngSwitch]="data[template.matColumnDef]">
                         <div *ngSwitchCase="'Success'" class="text--primary">
                           {{ data[template.matColumnDef] }}
@@ -37,7 +37,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div *ngSwitchCase="'fee'">
                       {{ data[template.matColumnDef] }} <span class="text--primary">{{ global.stableToken }}</span>
                     </div>

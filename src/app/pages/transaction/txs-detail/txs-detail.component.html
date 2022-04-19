@@ -11,7 +11,7 @@
 <ng-container *ngIf="!isRawData">
   <div class="card text--white">
     <div class="card-header title-small">Information</div>
-    <div class="card-body">
+    <div class="card-body body">
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Chain Id</p>
@@ -90,6 +90,6 @@
     <div class="card-header title-small">
       Raw Data
     </div>
-    <pre id="json" class="raw-content">{{jsonStr}}</pre>
+    <pre id="json" class="raw-content text--white px-4">{{jsonStr}}</pre>
   </div>
 </ng-container>

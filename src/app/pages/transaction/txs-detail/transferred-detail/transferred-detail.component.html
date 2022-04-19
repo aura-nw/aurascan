@@ -1,5 +1,5 @@
 <div class="card-header title-small">Message</div>
-<div class="card-body">
+<div class="card-body body">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div class="row mb-3">
       <div class="col-3">
@@ -281,6 +281,102 @@
         [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]"
       >
         {{ transactionDetail?.messages[0]?.proposer }}
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Delegate Address</div>
+      </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
+      >
+        {{ transactionDetail?.messages[0]?.delegator_address }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Source Validator Address</div>
+      </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]"
+      >
+        {{ transactionDetail?.messages[0]?.validator_src_address }}
+        <ng-container *ngIf="validatorName"><br />({{ validatorName }})</ng-container>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Destination Validator Address</div>
+      </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]"
+      >
+        {{ transactionDetail?.messages[0]?.validator_dst_address }}
+        <ng-container *ngIf="validatorNameDes"><br />({{ validatorNameDes }})</ng-container>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Amount</div>
+      </div>
+      <div class="col-6">
+        <ng-container *ngIf="amount > 0">
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        </ng-container>
+        <ng-container *ngIf="amount == 0"> - </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Proposal Id</div>
+      </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]"
+      >
+        {{ transactionDetail?.messages[0]?.proposal_id }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Depositor</div>
+      </div>
+      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
+        {{ transactionDetail?.messages[0]?.depositor }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Amount</div>
+      </div>
+      <div class="col-6">
+        <ng-container *ngIf="amount > 0">
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        </ng-container>
+        <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
     </div>
   </ng-container>
