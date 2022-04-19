@@ -92,7 +92,7 @@ export class SummaryInfoComponent implements OnInit {
     const id = proposalDetail.pro_id;
     const title = proposalDetail.pro_title;
     const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
-    //if (expiredTime > 0) {
+    if (expiredTime > 0) {
       this.walletService.connectKeplr(this.chainId, (account) => {
         let dialogRef = this.dialog.open(ProposalVoteComponent, {
           height: '378px',
@@ -110,9 +110,9 @@ export class SummaryInfoComponent implements OnInit {
           }
         });
       });
-    // } else {
-    //   window.location.reload();
-    // }
+    } else {
+      window.location.reload();
+    }
   }
 
   getVotedProposal() {
