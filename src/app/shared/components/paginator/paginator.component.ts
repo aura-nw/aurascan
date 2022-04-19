@@ -77,6 +77,11 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
 
   selectPage(pageIndex): void {
     this._paginator.pageIndex = pageIndex;
+    this._paginator.page.next({
+      length: this._paginator.length,
+      pageIndex: this._paginator.pageIndex,
+      pageSize: this._paginator.pageSize,
+    });
     this.current.pageIndex = pageIndex;
     this.changePage();
   }
