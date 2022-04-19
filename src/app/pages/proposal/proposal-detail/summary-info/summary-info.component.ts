@@ -92,23 +92,27 @@ export class SummaryInfoComponent implements OnInit {
     const id = proposalDetail.pro_id;
     const title = proposalDetail.pro_title;
     const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
-    if (expiredTime > 0) {
-    this.walletService.connectKeplr(this.chainId, (account) => {
-      let dialogRef = this.dialog.open(ProposalVoteComponent, {
-        height: '400px',
-        width: '600px',
-        data: { id, title, voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null },
+    //if (expiredTime > 0) {
+      this.walletService.connectKeplr(this.chainId, (account) => {
+        let dialogRef = this.dialog.open(ProposalVoteComponent, {
+          height: '378px',
+          width: '431px',
+          data: {
+            id,
+            title,
+            voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
+          },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.voteValue = result;
+            this.getDetail();
+          }
+        });
       });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.voteValue = result;
-          this.getDetail();
-        }
-      });
-    });
-    } else {
-      window.location.reload();
-    }
+    // } else {
+    //   window.location.reload();
+    // }
   }
 
   getVotedProposal() {

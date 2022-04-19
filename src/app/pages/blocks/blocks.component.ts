@@ -13,7 +13,6 @@ import { BlockService } from '../../../app/core/services/block.service';
   styleUrls: ['./blocks.component.scss']
 })
 export class BlocksComponent implements OnInit {
-  @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
@@ -29,7 +28,6 @@ export class BlocksComponent implements OnInit {
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   constructor(
-    private commonService: CommonService,
     private router: Router,
     private blockService: BlockService,
   ) { }
@@ -57,7 +55,6 @@ export class BlocksComponent implements OnInit {
 
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
-        this.dataSource.sort = this.sort;
       }
       );
   }

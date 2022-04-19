@@ -15,8 +15,18 @@
     .mat-radio-label-content {
       padding-left: 18px;
     }
-    .mat-radio-inner-circle{
+    .mat-radio-outer-circle {
+      border-style: none;
+      background-color: #2e3332;
+    }
+    .mat-radio-inner-circle {
       background-color: var(--aura-primary);
     }
+  }
+}
+::ng-deep {
+ 
+  .mat-dialog-container {
+     background-color: var(--aura-black);
   }
 }
