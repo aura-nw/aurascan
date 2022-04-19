@@ -23,7 +23,7 @@ export class SummaryInfoComponent implements OnInit {
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
-  voteValue: { keyVote: number } = null;
+  voteValue: { keyVote: string } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   proposalVotes: {
     proId: number;
@@ -93,19 +93,19 @@ export class SummaryInfoComponent implements OnInit {
     const title = proposalDetail.pro_title;
     const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
     if (expiredTime > 0) {
-      this.walletService.connectKeplr(this.chainId, (account) => {
-        let dialogRef = this.dialog.open(ProposalVoteComponent, {
-          height: '400px',
-          width: '600px',
-          data: { id, title, voteValue: this.voteValue },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this.voteValue = result;
-            this.getDetail();
-          }
-        });
+    this.walletService.connectKeplr(this.chainId, (account) => {
+      let dialogRef = this.dialog.open(ProposalVoteComponent, {
+        height: '400px',
+        width: '600px',
+        data: { id, title, voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null },
       });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.voteValue = result;
+          this.getDetail();
+        }
+      });
+    });
     } else {
       window.location.reload();
     }
@@ -120,6 +120,7 @@ export class SummaryInfoComponent implements OnInit {
         .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
         .subscribe((res) => {
           this.proposalVotes = res.map((i, idx) => {
+            this.voteValue = { keyVote: i };
             return {
               proId: this.proposalVotes[idx].proId,
               vote: this.voteConstant.find((s) => s.key === i)?.value || null,

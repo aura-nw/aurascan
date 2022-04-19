@@ -12,7 +12,7 @@ import { createSignBroadcast } from '../../../core/utils/signing/transaction-man
   styleUrls: ['./proposal-vote.component.scss'],
 })
 export class ProposalVoteComponent implements OnInit {
-  keyVote: string = null;
+  keyVote = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   constructor(
     public dialogRef: MatDialogRef<ProposalVoteComponent>,

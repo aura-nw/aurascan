@@ -251,7 +251,7 @@
         "PROPOSAL": {
             "yes": "Yes",
             "no": "No",
-            "noWithVeto": "No with veto",
+            "noWithVeto": "NoWithVeto",
             "abstain": "Abstain"
         }
     },

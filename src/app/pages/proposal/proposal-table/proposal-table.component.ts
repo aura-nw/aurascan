@@ -1,21 +1,16 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
+  OnChanges, OnInit,
+  Output
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
-import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
+import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
 import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 import { Globals } from '../../../global/global';
@@ -31,16 +26,12 @@ interface CustomPageEvent {
   styleUrls: ['./proposal-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+export class ProposalTableComponent implements OnInit, OnChanges {
   @Input() type: 'VOTES' | 'VALIDATORS_VOTES' | 'DEPOSITORS';
   @Input() data: any[];
   @Input() length: number;
 
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
-
-  @ViewChild(MatSort) sort: MatSort;
-  // @ViewChild('paginator') paginator: MatPaginator;
-  // @ViewChild('paginator2') paginator2: MatPaginator;
 
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
@@ -70,7 +61,6 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy, Aft
   ];
 
   displayedColumns: string[];
-
   template: Array<TableTemplate> = [];
 
   dataSource: MatTableDataSource<any>;
@@ -78,12 +68,6 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy, Aft
   pageIndex = 0;
 
   constructor(public global: Globals) {}
-
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-  }
-
-  ngOnDestroy(): void {}
 
   ngOnChanges(): void {
     if (this.dataSource) {
@@ -142,18 +126,6 @@ export class ProposalTableComponent implements OnInit, OnChanges, OnDestroy, Aft
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-    // const currentIndex = this.paginator.pageIndex;
-    // const dataLength = this.paginator.length;
-
-    // if (length > dataLength) {
-    // }
-
-    // if (pageIndex > currentIndex) {
-    //   this.paginator.nextPage();
-    // } else {
-    //   this.paginator.previousPage();
-    // }
-
     const next = length <= pageIndex * pageSize;
 
     if (next) {

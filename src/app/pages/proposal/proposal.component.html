@@ -44,28 +44,28 @@
                   <li
                     class="primary"
                     [style.width]="lastedItem.pro_votes_yes + '%'"
-                    matTooltip="Yes {{ lastedItem.pro_votes_yes }}%"
+                    matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                   <li
                     class="danger"
                     *ngIf="lastedItem.pro_votes_no"
                     [style.width]="lastedItem.pro_votes_no + '%'"
-                    matTooltip="No {{ lastedItem.pro_votes_no }}%"
+                    matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                   <li
                     class="info"
                     *ngIf="lastedItem.pro_votes_no_with_veto"
                     [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
-                    matTooltip="No with veto {{ lastedItem.pro_votes_no_with_veto }}%"
+                    matTooltip="No with veto {{ lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                   <li
                     class="secondary"
                     *ngIf="lastedItem.pro_votes_abstain"
                     [style.width]="lastedItem.pro_votes_abstain + '%'"
-                    matTooltip="Abstain {{ lastedItem.pro_votes_abstain }}%"
+                    matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
                     [matTooltipPosition]="'above'"
                   ></li>
                 </ul>
@@ -105,7 +105,7 @@
           <div class="card-footer">
             <div class="top-border">
               <div class="d-flex justify-content-end align-items-center">
-                <div class="message" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
+                <div class="message mr-5" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
                   You voted '{{ proposalVotes[idx].vote }}' for this proposal
                 </div>
                 <button class="btn button-inline body text--green mr-3" [routerLink]="[lastedItem.pro_id]">
@@ -137,7 +137,7 @@
       <div class="col">
         <div class="card">
           <div class="card-header align-items-center d-flex justify-content-between">
-            <div class="sub-text text--white">Proposal</div>
+            <div class="sub-text text--white">Proposals</div>
             <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
           </div>
           <div class="card-body pt-0">
