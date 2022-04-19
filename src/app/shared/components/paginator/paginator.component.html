@@ -1,4 +1,4 @@
-<mat-paginator class="d-none" [length]="actualLength" [pageSize]="pageSize">
+<mat-paginator class="d-none" [pageSize]="pageSize">
 </mat-paginator>
 
 <ul class="d-flex page-list justify-content-end pb-0 small-body" *ngIf="length && pageLength > 1">
@@ -8,5 +8,5 @@
         <li class="page" [class.active]="page.isActive" (click)="selectPage(page.index)"> {{page.index + 1}}</li>
     </ng-container>
     <li class="page page-next" (click)="nextPage()" [class.disabled]="current.isLast"> Next </li>
-    <li class="page page-last" (click)="selectPage(length-1)" [class.disabled]="current.isLast"> Last </li>
+    <li class="page page-last" (click)="selectPage(pageLength - 1)" [class.disabled]="current.isLast"> Last </li>
 </ul>
