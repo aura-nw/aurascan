@@ -95,9 +95,9 @@ export class ValidatorsVotesComponent implements OnInit {
 
           this.countVote.set('', this.voteData.all.countTotal);
           this.countVote.set('VOTE_OPTION_YES', this.voteData.all.countYes);
-          this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countNo);
-          this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNoWithVeto);
-          this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countAbstain);
+          this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countAbstain);
+          this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNo);
+          this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countNoWithVeto);
           this.countVote.set('null', this.voteData.all.countDidNotVote);
         }
       });

@@ -16,6 +16,7 @@
   }
   .most-vote {
     margin-left: 20px;
+    min-width: 110px;
     .title {
       font-weight: 500;
     }
@@ -34,16 +35,16 @@
         border-radius: 100%;
       }
       &.primary:before {
-        background-color: var(--bs-success);
+        background-color: var(--aura-primary);
       }
       &.danger:before {
-        background-color: var(--bs-danger);
+        background-color: var(--aura-danger);
       }
       &.info:before {
-        background-color: var(--bs-info);
+        background-color: var(--aura-info);
       }
       &.secondary:before {
-        background-color: var(--bs-secondary);
+        background-color: var(--aura-secondary);
       }
     }
   }
