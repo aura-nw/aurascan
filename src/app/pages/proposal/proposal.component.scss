@@ -16,12 +16,13 @@
   }
   .most-vote {
     margin-left: 20px;
+    min-width: 110px;
     .title {
       font-weight: 500;
     }
     .value {
       position: relative;
-      padding-left: 18px;
+      padding-left: 32px;
       font-size: 13px;
       &:before {
         content: "";
@@ -29,25 +30,26 @@
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 10px;
-        height: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 100%;
       }
       &.primary:before {
-        background-color: var(--bs-success);
+        background-color: var(--aura-primary);
       }
       &.danger:before {
-        background-color: var(--bs-danger);
+        background-color: var(--aura-danger);
       }
       &.info:before {
-        background-color: var(--bs-info);
+        background-color: var(--aura-info);
       }
       &.secondary:before {
-        background-color: var(--bs-secondary);
+        background-color: var(--aura-secondary);
       }
     }
   }
   .message {
-    color: var(--bs-primary);
+    color: var(--aura-green-disabled);
   }
   .btn-detail {
     margin: 0 16px;

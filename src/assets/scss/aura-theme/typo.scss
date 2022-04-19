@@ -125,10 +125,15 @@ $textColors: (
   -webkit-text-fill-color: transparent;
 }
 
+.text--greyscale-4 {
+  color: #9CA3AF;
+}
+
 $textColorsStatus: (
   "primary"  : '#5EE6D0',
   "danger"   : '#E65E5E',
   "info"     : '#5E84E6',
+  "warning"  : '#E3E65E',
   "secondary": '#E3E65E',
 );
 

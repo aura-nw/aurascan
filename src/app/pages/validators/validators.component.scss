@@ -81,3 +81,31 @@ form.search-form {
   border-bottom: 0;
   border-left: 0.3em solid transparent;
 }
+
+.box-select-redelegate {
+  width: 100%;
+  background: var(--aura-dark-gray);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  .mat-form-field {
+    margin-top: var(--spacer-3);
+  }
+}
+
+.aura-form {
+  .select-action-field {
+    min-width: 180px;
+  }
+  .input-group {
+    button.button.button-primary.active {
+      color: var(--aura-black);
+      font-size: 20px;
+      line-height: 23px;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+  }
+}

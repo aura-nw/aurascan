@@ -41,7 +41,7 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  length: number;
   pageSize = 20;
   pageIndex = 0;
   lastedList = [];
@@ -153,7 +153,7 @@ export class ProposalComponent implements OnInit {
   getHighestVote(yes: number, no: number, noWithVeto: number, abstain: number) {
     let highest = Math.max(yes, no, noWithVeto, abstain);
     let resObj: { value: number; name: string; class: string } = null;
-    let key;
+    let key: string;
 
     if (!highest) {
       highest = 0;
@@ -197,12 +197,14 @@ export class ProposalComponent implements OnInit {
           },
         });
         dialogRef.afterClosed().subscribe((result) => {
-          this.voteValue = result;
-          this.getList();
+          if (result) {
+            this.voteValue = result;
+            this.getList();
+          }
         });
       });
     } else {
-      this.getList();
+      window.location.reload();
     }
   }
 

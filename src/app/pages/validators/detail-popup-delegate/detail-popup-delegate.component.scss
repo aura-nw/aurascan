@@ -20,3 +20,21 @@
   color: $validator-btn-text;
   font-size: 12px;
 }
+
+.box-notice {
+  display: flex;
+  border: 2px solid var(--aura-dark-gray);
+  border-radius: 20px;
+  padding: var(--spacer-6);
+  .warning-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: url("../../../../assets/icons/icons-svg/color/info-circle.svg");
+    background-size: cover;
+  }
+}
+
+.dialog-title {
+  min-width: 163px;
+}

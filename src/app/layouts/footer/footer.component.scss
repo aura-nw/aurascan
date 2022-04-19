@@ -131,4 +131,12 @@ footer {
       color: var(--aura-white);
     }
   }
+  a {
+    color: var(--aura-light-gray) !important;
+    text-decoration: none;
+    transition: color .35s ease-in-out;
+    &:hover {
+      color: var(--aura-white) !important;
+    }
+  }
 }

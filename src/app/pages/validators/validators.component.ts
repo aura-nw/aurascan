@@ -72,7 +72,7 @@ export class ValidatorsComponent implements OnInit {
   isExceedAmount = false;
   userAddress = '';
   validatorAddress = [];
-  selectedValidator = [];
+  selectedValidator;
   listTypeStake = TYPE_STAKING;
   searchNullData = false;
   listStakingValidator = [];
