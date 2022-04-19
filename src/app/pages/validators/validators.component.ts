@@ -108,7 +108,7 @@ export class ValidatorsComponent implements OnInit {
         this.getDataWallet();
       }
     });
-    this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
+    // this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
     this.getList();
 
     setInterval(() => {
