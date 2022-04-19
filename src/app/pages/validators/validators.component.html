@@ -241,7 +241,7 @@
       <div class="d-flex align-items-end mb-8">
         <div class="mr-10">
           <div class="title text-gradient fw-bolder">{{ dataModal?.title }}</div>
-          <div class="body text--white">Commission - {{ dataModal?.commission | percent: '1.2-2' }}</div>
+          <div class="body text--white">Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}</div>
         </div>
         <div class="text--greyscale-4">
           <div class="mb-1">

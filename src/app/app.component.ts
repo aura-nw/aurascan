@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../app/core/services/auth.service';
+import { NUMBER_CONVERT } from './core/constants/common.constant';
 import { CommonDataDto } from './core/models/common.model';
 import { CommonService } from './core/services/common.service';
 import { Globals } from './global/global';
@@ -30,7 +31,8 @@ export class AppComponent implements OnInit {
       .status()
       .subscribe(res => {
         this.globals.dataHeader = res.data;
-        this.globals.dataHeader.bonded_tokens_format = this.formatNumber(this.globals.dataHeader.bonded_tokens);
+        this.globals.dataHeader.bonded_tokens_format = this.formatNumber(this.globals.dataHeader.bonded_tokens / NUMBER_CONVERT);
+        this.globals.dataHeader.bonded_tokens = this.formatNumber(this.globals.dataHeader.bonded_tokens / NUMBER_CONVERT);
         this.globals.dataHeader.community_pool_format = this.formatNumber(this.globals.dataHeader.community_pool);
       }
       );

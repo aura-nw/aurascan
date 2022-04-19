@@ -484,7 +484,7 @@ export class ValidatorsComponent implements OnInit {
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
-      }, 2000);
+      }, 3000);
     }
   }
     

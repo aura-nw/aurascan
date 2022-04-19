@@ -129,7 +129,6 @@ export class ValidatorsVotesComponent implements OnInit {
   }
 
   loadMore($event): void {
-    console.log($event);
   }
 }
 
