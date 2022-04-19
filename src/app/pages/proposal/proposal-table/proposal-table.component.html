@@ -3,7 +3,7 @@
     <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
       <ng-container *ngFor="let template of template; index as i">
         <ng-container [matColumnDef]="template.matColumnDef">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="none-border-top">
+          <th mat-header-cell *matHeaderCellDef class="none-border-top">
             <div [innerHTML]="template.headerCellDef | translate"></div>
           </th>
 
