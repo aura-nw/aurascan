@@ -28,7 +28,7 @@
                     (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
                     '-' | number: global.formatNumberToken
                     }}
-                    <span class="g-purple">{{ global.stableToken }}</span>
+                    <span class="text--primary">{{ global.stableToken }}</span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'option'">
                     {{ getVoteValue(data[template.matColumnDef]) }}
