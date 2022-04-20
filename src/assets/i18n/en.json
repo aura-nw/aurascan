@@ -245,6 +245,9 @@
                     }
                 }
             }
+        },
+        "ACCOUNT": {
+            "TEXT": "My Account"
         }
     },
     "PAGES": {
