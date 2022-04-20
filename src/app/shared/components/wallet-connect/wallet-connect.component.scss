@@ -18,9 +18,15 @@
       height: auto;
     }
   }
+  .account-button {
+    max-width: 192px;
+    width: 100%;
+    white-space: nowrap;
+  }
 
   .wallet-container {
     position: relative;
+
 
     .qr-modal {
       position: absolute;

@@ -17,7 +17,12 @@
             <span class="ml-2 text--green">{{ globals.stableToken }}</span>
           </div>
         </div>
-        <button class="button button-outline title-small" type="button" (click)="handleClaim()" [disabled]="isDisableClaim">
+        <button
+          class="button button-outline title-small"
+          type="button"
+          (click)="handleClaim()"
+          [disabled]="isDisableClaim"
+        >
           Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
           <span class="ml-1">{{ globals.stableToken }}</span>
         </button>
@@ -111,7 +116,7 @@
               class="col-3 title-small title-name text--green cursor-pointer"
               [routerLink]="['/validators', validator.validator_address]"
             >
-              {{ validator.validator_name }}
+              <span class="text-clamp"> {{ validator.validator_name }}</span>
             </div>
             <div class="col-9 text--white">
               {{ validator.balance | number: globals.formatNumberToken }}
@@ -197,7 +202,7 @@
                   </th>
                 </ng-container>
 
-                <td mat-cell *matCellDef="let data">
+                <td mat-cell *matCellDef="let data" style="max-width: 300px">
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'operator_address'" class="text--green cursor-pointer">
@@ -224,7 +229,7 @@
                       </div>
                       <div
                         *ngSwitchCase="'title'"
-                        class="text--green cursor-pointer"
+                        class="text--green cursor-pointer text-clamp"
                         [routerLink]="['/validators', data.operator_address]"
                       >
                         <span>{{ data[template.matColumnDef] }}</span>
@@ -287,7 +292,8 @@
         <div class="body text--greyscale-4">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
-            <span class="text--green ml-1">{{ globals.stableToken }}</span>)
+            <span class="text--green ml-1">{{ globals.stableToken }}</span
+            >)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
         </div>

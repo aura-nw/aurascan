@@ -155,7 +155,7 @@ export class ProposalComponent implements OnInit {
     let resObj: { value: number; name: string; class: string } = null;
     let key: string;
 
-    if (!highest) {
+    if (!highest || highest > 100) {
       highest = 0;
       key = 'VOTE_OPTION_YES';
     } else {

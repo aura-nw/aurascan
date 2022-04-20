@@ -1,27 +1,27 @@
 <div class="wallet-connect-container">
     <ng-container *ngIf="{wallet: wallet$ | async } as ng">
 
-        <button *ngIf="!ng.wallet"
-                type="button" class="button button-outline d-inline-block fw-semibold"
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT WALLET</button>
+        <button *ngIf="!ng.wallet" type="button" class="button button-outline d-inline-block fw-semibold"
+            data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT
+            WALLET</button>
 
-        <button type="button" *ngIf="ng.wallet" class="button button-outline body fw-semibold" [matMenuTriggerFor]="menu">
-            <div class="d-flex align-items-center gap-2">
-                <img [src]="avatarValue" alt="wallet-avatar" height="20px" width="20px" class="border rounded-circle">
-                {{ ng.wallet?.name }}
+        <button type="button" *ngIf="ng.wallet" class="button account-button button-outline body fw-semibold"
+            [matMenuTriggerFor]="menu">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <span class="mr-3 flex-grow-0">
+                    {{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name }}
+                </span>
+                <img class="flex-shrink-0" src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+                    alt="wallet-avatar" height="24px" width="24px">
             </div>
         </button>
 
         <mat-menu #menu="matMenu" class="custom-menu mt-2" xPosition="before">
-            <div class="menu-row" mat-menu-item>
-                <img class="menu-img mr-3" width="20px"
-                    src="./../../../../assets/images/wallet.png" alt="">
-                <span class="menu-content" [routerLink]="['/account',ng.wallet?.bech32Address]">Account Detail</span>
+            <div class="menu-row row-first" mat-menu-item [routerLink]="['/account',ng.wallet?.bech32Address]">
+                <span class="menu-content body">Account Detail</span>
             </div>
-            <div class="menu-row" mat-menu-item>
-                <img class="menu-img mr-3" width="20px"
-                    src="./../../../../assets/images/log-out.svg" alt="">
-                <span class="menu-content" (click)="disconnect()">Log out</span>
+            <div class="menu-row" mat-menu-item (click)="disconnect()">
+                <span class="menu-content body">Log out</span>
             </div>
         </mat-menu>
 
@@ -71,7 +71,7 @@
                         </div>
                         <div class="card-body">
                             <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
-                                <!-- <ng-container *ngIf="ng.wallet as wallet; else walletList">
+                            <!-- <ng-container *ngIf="ng.wallet as wallet; else walletList">
                                 <app-wallet-detail [trigger]="trigger" [chainId]="chainId"
                                     [address]="wallet.bech32Address" (depositEvent)="toggleShowQR()">
                                 </app-wallet-detail>
