@@ -35,7 +35,7 @@ import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-
     SharedModule,
     SimplebarAngularModule,
     TableNoDataModule,
-    DetailPopupDelegateModule
+    DetailPopupDelegateModule,
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService]
 })

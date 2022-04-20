@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,11 +20,13 @@ import { DIALOG_STAKE_MODE, STAKING_TYPE_ENUM, STATUS_VALIDATOR } from '../../..
 import { forkJoin } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-validators',
   templateUrl: './validators.component.html',
   styleUrls: ['./validators.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ValidatorsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
@@ -82,6 +84,8 @@ export class ValidatorsComponent implements OnInit {
   isOpenStaking = false;
   modalReference;
   currentValidatorDialog;
+  commissionLabel = null;
+  commission = new FormControl();
 
   lstValidator = [
     {label:'Singapore', value: 'auravaloper1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjlna0dq', comm: '10%' },
@@ -459,5 +463,13 @@ export class ValidatorsComponent implements OnInit {
     } else if (type === this.dialogMode.Redelegate) {
       this.amountFormat = this.dataDelegate.availableToken;
     }
+  }
+
+  setCommissionTitle(label: string) {
+    this.commissionLabel = label;
+  }
+
+  showMe() {
+    console.log(this.commission)
   }
 }

@@ -225,7 +225,7 @@
           <div class="title text-gradient fw-bolder">{{ dataModal?.title }}</div>
           <div class="body text--white">Commission - {{ dataModal?.commission | percent: '1.2-2' }}</div>
         </div>
-        <div class="text--greyscale-4">
+        <div class="body text--greyscale-4">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
             <span class="text--green ml-1">{{ globals.stableToken }}</span>)
@@ -265,17 +265,25 @@
         </div>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
           <div class="title-small mb-2">Redelegate to:</div>
-          <div class="box-select-redelegate">
-            <mat-form-field appearance="fill">
-              <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
-                <mat-option *ngFor="let item of lstValidator" [value]="item.value">
-                  {{ item.label | translate }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="fill" dense>
+            <mat-select class="list-token" placeholder="Select validator"
+                        [formControl]="commission"
+                        [(value)]="selectedValidator"
+                        [disableOptionCentering]="true">
+              <mat-select-trigger>{{commissionLabel}}</mat-select-trigger>
+              <mat-option *ngFor="let item of lstValidator" [value]="item.value" (click)="setCommissionTitle(item.label)">
+                <div class="d-flex option-contain">
+                  <div class="option-lable active">
+                    <span>{{ item.label | translate }}</span>
+                  </div>
+                  <div class="option-lable">Commission - 100%</div>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <div *ngIf="selectedValidator">
-            <div class="mt-2">
+            <div class="mt-6">
               <b>Available for redelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
               <span class="text--green">{{ globals.stableToken }}</span>
             </div>
