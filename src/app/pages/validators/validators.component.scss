@@ -52,9 +52,9 @@ form.search-form {
     background-color: #1C1C1F; // this color not define in root
   }
   input {
-    width: 100%;
+    width: 100% !important;
     @media (min-width: 992px) {
-      width: 782px;
+      width: 782px !important;
     }
   }
 }
@@ -82,7 +82,7 @@ form.search-form {
   border-left: 0.3em solid transparent;
 }
 
-.box-select-redelegate {
+.mat-form-field[dense] {
   width: 100%;
   background: var(--aura-dark-gray);
   border-radius: 8px;
@@ -90,10 +90,75 @@ form.search-form {
   justify-content: center;
   align-items: center;
   min-height: 80px;
-  .mat-form-field {
-    margin-top: var(--spacer-3);
+  .mat-form-field-wrapper {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+  }
+  .mat-form-field-flex {
+    padding: 0;
+    background: transparent;
+  }
+  .mat-select-placeholder, mat-select-trigger  {
+    position: relative;
+    color: var(--aura-white);
+    font-size: 2rem;
+    line-height: 2.3rem;
+    &:after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background: url("../../../assets/icons/icons-svg/white/triangle-down.svg");
+      background-size: cover;
+    }
+  }
+  .mat-select-arrow {
+    border: none;
+  }
+  .mat-form-field-underline {
+    display: none;
   }
 }
+.mat-option {
+  background: #25252C;
+  .option-contain {
+    .option-lable {
+      &:first-child {
+        width: 50%;
+      }
+      &.active {
+        span {
+          position: relative;
+          &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -16px;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #5E84E6;
+          }
+        }
+      }
+    }
+  }
+}
+
+.cdk-overlay-pane {
+  transform: translateY(64px) !important;
+}
+
+.mat-select-panel {
+  width: 100%;
+  min-width: 100% !important;
+}
+
 
 .aura-form {
   .select-action-field {

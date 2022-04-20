@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -28,6 +28,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
   selector: 'app-validators',
   templateUrl: './validators.component.html',
   styleUrls: ['./validators.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ValidatorsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
@@ -85,6 +86,8 @@ export class ValidatorsComponent implements OnInit {
   isOpenStaking = false;
   modalReference: any;
   currentValidatorDialog;
+  commissionLabel = null;
+
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
@@ -276,7 +279,7 @@ export class ValidatorsComponent implements OnInit {
         //   let isStaking = (f.staking_address === this.userAddress) ? true : false;
         //   this.lstValidator.push(f.title, f.commission, isStaking);
         // });
-        
+
         // this.dataModal = res.data;
         // this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         // this.dataDelegate.validatorDetail = this.validatorDetail;
@@ -478,6 +481,10 @@ export class ValidatorsComponent implements OnInit {
     }
   }
 
+  setCommissionTitle(label: string) {
+    this.commissionLabel = label;
+  }
+
   checkStatuExcuteBlock(hash, error, msg) {
     this.modalReference.close();
     if (error) {
@@ -488,7 +495,7 @@ export class ValidatorsComponent implements OnInit {
       }, 3000);
     }
   }
-    
+
   checkDetailTx(id, message) {
     this.transactionService.txsDetail(id).subscribe(
       (res: ResponseDto) => {
