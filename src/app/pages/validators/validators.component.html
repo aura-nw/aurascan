@@ -1,99 +1,101 @@
 <div class="validator-container">
-  <div class="card">
-        <!-- heading -->
-        <div class="d-flex justify-content-between card-header title-small">
-          <div>
-            <div class="mb-3">
-              <span class="text--white">Available Balance: {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span>
-              <span class="ml-2 text--green">{{ globals.stableToken }}</span>
-            </div>
+  <ng-container *ngIf="userAddress">
+    <div class="card">
+          <!-- heading -->
+          <div class="d-flex justify-content-between card-header title-small">
             <div>
-              <span class="text--white">Total Staked: {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}</span>
-              <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+              <div class="mb-3">
+                <span class="text--white">Available Balance: {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span>
+                <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+              </div>
+              <div>
+                <span class="text--white">Total Staked: {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}</span>
+                <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+              </div>
             </div>
+            <button class="button button-outline title-small" type="button" (click)="handleClaim()">
+              Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
+              <span class="ml-1">{{ globals.stableToken }}</span>
+            </button>
           </div>
-          <button class="button button-outline title-small" type="button" (click)="handleClaim()">
-            Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
-            <span class="ml-1">{{ globals.stableToken }}</span>
-          </button>
-        </div>
-        <!-- table -->
-        <div class="card-body" *ngIf="lengthWallet > 0">
-          <ng-container>
-            <div class="table-responsive">
-              <table  mat-table matSort
-                      [dataSource]="dataSourceWallet"
-                      class="aura-table"
-                      (matSortChange)="sortData($event)">
-                <ng-container *ngFor="let template of templatesWallet; index as i">
-                  <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
-                    <ng-container *ngSwitchCase="'action'">
-                      <th mat-header-cell *matHeaderCellDef>
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                    </ng-container>
-                    <ng-container *ngSwitchDefault>
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                    </ng-container>
+          <!-- table -->
+          <div class="card-body" *ngIf="lengthWallet > 0">
+            <ng-container>
+              <div class="table-responsive">
+                <table  mat-table matSort
+                        [dataSource]="dataSourceWallet"
+                        class="aura-table"
+                        (matSortChange)="sortData($event)">
+                  <ng-container *ngFor="let template of templatesWallet; index as i">
+                    <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+                      <ng-container *ngSwitchCase="'action'">
+                        <th mat-header-cell *matHeaderCellDef>
+                          <div [innerHTML]="template.headerCellDef | translate"></div>
+                        </th>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          <div [innerHTML]="template.headerCellDef | translate"></div>
+                        </th>
+                      </ng-container>
 
-                    <td mat-cell *matCellDef="let data">
-                      <div>
-                        <ng-container [ngSwitch]="template.matColumnDef">
-                          <div *ngSwitchCase="'amount_staked'">
-                            {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                            <span class="text--green">{{ globals.stableToken }}</span>
-                          </div>
-                          <div *ngSwitchCase="'pending_reward'">
-                            {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                            <span class="text--green">{{ globals.stableToken }}</span>
-                          </div>
-                          <div *ngSwitchCase="'action'" class="py-4">
-                            <button type="button"
-                                    class="button button-outline py-2 px-4"
-                                    [disabled]="clicked"
-                                    (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)"
-                            >Manage</button>
-                          </div>
-                          <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                        </ng-container>
-                      </div>
-                    </td>
+                      <td mat-cell *matCellDef="let data">
+                        <div>
+                          <ng-container [ngSwitch]="template.matColumnDef">
+                            <div *ngSwitchCase="'amount_staked'">
+                              {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                              <span class="text--green">{{ globals.stableToken }}</span>
+                            </div>
+                            <div *ngSwitchCase="'pending_reward'">
+                              {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                              <span class="text--green">{{ globals.stableToken }}</span>
+                            </div>
+                            <div *ngSwitchCase="'action'" class="py-4">
+                              <button type="button"
+                                      class="button button-outline py-2 px-4"
+                                      [disabled]="clicked"
+                                      (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)"
+                              >Manage</button>
+                            </div>
+                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                          </ng-container>
+                        </div>
+                      </td>
+                    </ng-container>
                   </ng-container>
-                </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumnsWallet"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
-                <tr class="mat-row" *matNoDataRow>
-                  <td class="mat-cell g-no-data" colspan="9999">
-                    {{ 'NO VALIDATORS' | translate }}
-                  </td>
-                </tr>
-              </table>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsWallet"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell g-no-data" colspan="9999">
+                      {{ 'NO VALIDATORS' | translate }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </ng-container>
+          </div>
+    </div>
+
+    <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
+      <div class="d-flex justify-content-between card-header title-small text--white">
+        Undelegating
+      </div>
+      <div class="card-body">
+        <ng-container *ngFor="let validator of lstUndelegate">
+          <div class="row col-12 mb-3">
+            <div class="col-3 title-small title-name text--green cursor-pointer" [routerLink]="['/validators', validator.validator_address]">
+              {{validator.validator_name}}
             </div>
-          </ng-container>
-        </div>
-  </div>
-
-  <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-    <div class="d-flex justify-content-between card-header title-small text--white">
-      Undelegating
-    </div>
-    <div class="card-body">
-      <ng-container *ngFor="let validator of lstUndelegate">
-        <div class="row col-12 mb-3">
-          <div class="col-3 title-small title-name text--green cursor-pointer" [routerLink]="['/validators', validator.validator_address]">
-            {{validator.validator_name}}
+            <div class="col-9 text--white">
+              {{validator.balance | number: globals.formatNumberToken}} <span class="text--green">{{ globals.stableToken }}</span><br>
+              <span class="txt-time">{{validator.completion_time | calDate}} remaining</span>
+            </div>
           </div>
-          <div class="col-9 text--white">
-            {{validator.balance | number: globals.formatNumberToken}} <span class="text--green">{{ globals.stableToken }}</span><br>
-            <span class="txt-time">{{validator.completion_time | calDate}} remaining</span>
-          </div>
-        </div>
-      </ng-container>
+        </ng-container>
+      </div>
     </div>
-  </div>
+  </ng-container>
 
   <div class="card">
     <div class="d-flex align-items-center justify-content-between px-6 py-6">

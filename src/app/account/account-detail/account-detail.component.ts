@@ -71,8 +71,8 @@ export class AccountDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'name', headerCellDef: 'Name' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'token_name', headerCellDef: 'Name' },
+    { matColumnDef: 'token_amount', headerCellDef: 'Amount' },
     { matColumnDef: 'total_value', headerCellDef: 'Total Value' },
   ];
   displayedColumnsToken: string[] = this.templatesToken.map((dta) => dta.matColumnDef);
@@ -372,6 +372,11 @@ export class AccountDetailComponent implements OnInit {
       });
       this.tokenPrice = 0;
 
+      this.item?.balances.forEach(f => {
+        f.token_amount = f.amount;
+        f.token_name = f.name;
+      });
+      
       this.dataSourceToken = new MatTableDataSource(this.item?.balances);
       this.pageDataToken.length = this.item?.balances.length;
       this.dataSourceTokenBk = this.dataSourceToken;
