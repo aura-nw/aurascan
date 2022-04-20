@@ -69,7 +69,7 @@ export class CommonService {
         return isCustom ? [
           formatTimeInWords(new Date(time).getTime()),
           `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ] :  [formatDistanceToNowStrict(new Date(time).getTime())]
+        ] :  formatDistanceToNowStrict(new Date(time).getTime())
       } catch (e) {
         return [time, ''];
       }
