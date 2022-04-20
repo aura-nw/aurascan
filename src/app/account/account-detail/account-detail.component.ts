@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
+import { PAGE_EVENT } from '../../../app/core/constants/common.constant';
 import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -18,6 +18,7 @@ import {
   ChartComponent,
   ApexStroke,
   ApexTooltip,
+  ApexGrid,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
@@ -27,7 +28,6 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  TypeAccount,
   WalletAcount,
 } from '../../../app/core/constants/account.enum';
 import { getAmount, Globals } from '../../../app/global/global';
@@ -42,7 +42,7 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   colors: string[];
-  stoke: ApexStroke;
+  stroke: ApexStroke;
   tooltip: ApexTooltip;
 };
 
@@ -175,6 +175,11 @@ export class AccountDetailComponent implements OnInit {
     public global: Globals,
   ) {
     this.chartOptions = {
+      stroke: {
+          width: 1,
+          curve: 'smooth',
+          colors: this.chartCustomOptions.map((e) => e.color)
+      },
       tooltip: {
         custom: function ({ series, seriesIndex, w }) {
           const percent = (series[seriesIndex] * 100) / series.reduce((a, b) => a + b);
