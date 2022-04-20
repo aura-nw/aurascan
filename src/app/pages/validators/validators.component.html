@@ -13,7 +13,7 @@
                 <span class="ml-2 text--green">{{ globals.stableToken }}</span>
               </div>
             </div>
-            <button class="button button-outline title-small" type="button" (click)="handleClaim()">
+            <button class="button button-outline title-small" type="button" (click)="handleClaim()" [disabled]="isDisableClaim">
               Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
               <span class="ml-1">{{ globals.stableToken }}</span>
             </button>

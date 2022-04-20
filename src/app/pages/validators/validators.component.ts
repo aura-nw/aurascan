@@ -87,6 +87,7 @@ export class ValidatorsComponent implements OnInit {
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
+  isDisableClaim = true;
 
   constructor(
     private validatorService: ValidatorService,
@@ -106,6 +107,9 @@ export class ValidatorsComponent implements OnInit {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
         this.getDataWallet();
+      }
+      else {
+        this.userAddress = null;
       }
     });
     // this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
@@ -297,6 +301,11 @@ export class ValidatorsComponent implements OnInit {
           this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
           this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
           this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
+        }
+
+        this.isDisableClaim = false;
+        if (Number(this.dataDelegate.stakingToken) === 0) {
+          this.isDisableClaim = true;
         }
 
         if (res.dataListDelegator) {
