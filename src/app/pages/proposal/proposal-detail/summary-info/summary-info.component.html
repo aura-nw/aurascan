@@ -73,9 +73,7 @@
       </div>
       <div class="row mb-3">
         <div class="col-12 col-md-2 body">Details</div>
-        <div class="col-12 col-md-10 body">
-          <div class="editorial-container" [innerText]="proposalDetail.pro_description"></div>
-        </div>
+        <div class="col-12 col-md-10 body">{{ proposalDetail.pro_description }}</div>
       </div>
     </div>
   </div>
@@ -106,7 +104,9 @@
           <li
             class="bg--info"
             [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
-            matTooltip="No with veto {{ proposalDetail.pro_vote_no_with_veto_bar | number: global.formatNumber2Decimal }}%"
+            matTooltip="No with veto {{
+              proposalDetail.pro_vote_no_with_veto_bar | number: global.formatNumber2Decimal
+            }}%"
             [matTooltipPosition]="'above'"
           ></li>
           <li
