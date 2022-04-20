@@ -326,18 +326,11 @@
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
           <div class="title-small mb-2">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
-            <mat-select
-              class="list-token"
-              placeholder="Select validator"
-              [(value)]="selectedValidator"
-              [disableOptionCentering]="true"
-            >
-              <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
-              <mat-option
-                *ngFor="let item of lstValidator"
-                [value]="item.operator_address"
-                (click)="setCommissionTitle(item.label)"
-              >
+            <mat-select class="list-token" placeholder="Select validator" panelClass="commissionPanel"
+                        [(value)]="selectedValidator"
+                        [disableOptionCentering]="true">
+              <mat-select-trigger>{{commissionLabel}}</mat-select-trigger>
+              <mat-option *ngFor="let item of lstValidator" [value]="item.operator_address" (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain">
                   <div class="option-lable active">
                     <span>{{ item.title | translate }}</span>

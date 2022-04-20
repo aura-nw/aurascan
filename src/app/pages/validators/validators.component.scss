@@ -125,7 +125,12 @@ form.search-form {
 }
 .mat-option {
   background: #25252C;
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
   .option-contain {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
     .option-lable {
       &:first-child {
         width: 50%;
@@ -150,15 +155,17 @@ form.search-form {
   }
 }
 
-.cdk-overlay-pane {
+.cdk-overlay-pane.commissionPanel {
   transform: translateY(64px) !important;
 }
 
-.mat-select-panel {
-  width: 100%;
+.commissionPanel {
+  background: #25252C;
+  transform: translate3D(16px,64px, 0) !important;
   min-width: 100% !important;
+  padding: 16px 0 !important;
+  border-radius: 8px;
 }
-
 
 .aura-form {
   .select-action-field {
