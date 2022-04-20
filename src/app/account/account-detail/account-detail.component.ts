@@ -17,6 +17,7 @@ import {
   ApexPlotOptions,
   ChartComponent,
   ApexStroke,
+  ApexTooltip,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
 import { PageEvent } from '@angular/material/paginator';
@@ -42,6 +43,7 @@ export type ChartOptions = {
   plotOptions: ApexPlotOptions;
   colors: string[];
   stoke: ApexStroke;
+  tooltip: ApexTooltip;
 };
 
 @Component({
@@ -173,6 +175,19 @@ export class AccountDetailComponent implements OnInit {
     public global: Globals,
   ) {
     this.chartOptions = {
+      tooltip: {
+        custom: function ({ series, seriesIndex, w }) {
+          const percent = (series[seriesIndex] * 100) / series.reduce((a, b) => a + b);
+          return `
+          <div class="custom-apex-tooltip"> 
+            <div class="tooltip-title">
+              ${w.globals.labels[seriesIndex]}
+            </div>
+            <div class="tooltip-percent"> ${percent.toFixed(2)}% </div>
+            <div class="tooltip-amount"> ${series[seriesIndex].toFixed(6)}</div>
+          </div>`;
+        },
+      },
       series: [0, 0],
       labels: this.chartCustomOptions.map((e) => e.name),
       colors: this.chartCustomOptions.map((e) => e.color),
@@ -333,9 +348,13 @@ export class AccountDetailComponent implements OnInit {
       this.chartOptions.series = [];
       if (this.item.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
-        this.chartCustomOptions.push({name: ACCOUNT_WALLET_COLOR_ENUM.Commission, color: WalletAcount.Commission, amount: '0.000000'});
+        this.chartCustomOptions.push({
+          name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
+          color: WalletAcount.Commission,
+          amount: '0.000000',
+        });
       }
-      
+
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
           case ACCOUNT_WALLET_COLOR_ENUM.Available:
