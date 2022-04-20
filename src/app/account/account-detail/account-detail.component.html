@@ -77,9 +77,9 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row row-eq-heigth">
     <div class="col-9">
-      <div class="card">
+      <div class="card card-h-100">
         <div class="article-2">
           <mat-tab-group class="aura-tab" mat-stretch-tabs>
             <mat-tab label="Delegations">
@@ -128,7 +128,7 @@
       </div>
     </div>
     <div class="col-3">
-      <div class="card">
+      <div class="card card-h-100">
         <div class="article-2 py-6 px-6 d-flex flex-column justify-content-between">
           <div id="walletChart">
             <ng-container *ngIf="item?.total > 0; else chartNoValue">
@@ -156,12 +156,12 @@
             </ng-template>
           </div>
           <div>
-            <div class="d-flex justify-content-between align-items-center body mb-9">
+            <div class="d-flex justify-content-between align-items-center body mb-5">
               <span class="text--green">{{ global.stableToken }}</span>
               <span>{{ item?.total | number: global.formatNumberToken }}</span>
             </div>
             <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-              <div class="d-flex justify-content-between body" [class.mb-3]="!last">
+              <div class="d-flex justify-content-between body chart-legend-item" [class.mb-3]="!last">
                 <div class="d-flex">
                   <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
                   <span>{{ item.name }}</span>
