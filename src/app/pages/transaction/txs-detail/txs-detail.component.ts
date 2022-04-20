@@ -11,6 +11,8 @@ import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { Globals } from '../../../../app/global/global';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-txs-detail',
@@ -36,6 +38,7 @@ export class TxsDetailComponent implements OnInit {
     private transactionService: TransactionService,
     private datePipe: DatePipe,
     public global: Globals,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {

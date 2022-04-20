@@ -2,12 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from 'src/app/core/services/common.service';
 import { DATEFORMAT, PAGE_SIZE_OPTIONS } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { getAmount, Globals } from '../../../../app/global/global';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',
@@ -44,6 +46,7 @@ export class BlockDetailComponent implements OnInit {
     private blockService: BlockService,
     private datePipe: DatePipe,
     public global: Globals,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {

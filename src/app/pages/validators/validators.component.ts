@@ -22,6 +22,7 @@ import { takeWhile } from 'rxjs/operators';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 @Component({
   selector: 'app-validators',
@@ -94,7 +95,7 @@ export class ValidatorsComponent implements OnInit {
     public globals: Globals,
     private modalService: NgbModal,
     private accountService: AccountService,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private transactionService: TransactionService
@@ -132,6 +133,7 @@ export class ValidatorsComponent implements OnInit {
           val.isPartiDown = true;
         }
         val.participation = val.vote_count + '/ ' + val.target_count;
+        val.power = val.power / NUMBER_CONVERT;
       });
 
       let dataFilter = res.data.filter((event) => (this.typeValidator === this.statusValidator.Active) ? 
@@ -255,6 +257,7 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
         this.dataModal = res.data;
+        this.dataModal.power = this.dataModal.power / NUMBER_CONVERT;
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.dataDelegate.validatorDetail = this.validatorDetail;
         this.getListDelegators(address);

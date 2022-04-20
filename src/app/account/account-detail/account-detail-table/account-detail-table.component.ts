@@ -1,12 +1,14 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Globals } from '../../../global/global';
+import { formatDistanceToNowStrict } from 'date-fns';
+import { CommonService } from 'src/app/core/services/common.service';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { TableTemplate } from '../../../core/models/common.model';
+import { Globals } from '../../../global/global';
 
 @Component({
   selector: 'app-account-table',
@@ -27,6 +29,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     private route: Router,
     private datePipe: DatePipe,
     public global: Globals,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {}
@@ -41,7 +44,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
         }
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
-          f.type_format = (f.type.toLowerCase().indexOf('perio') > -1) ? 'Periodic' : 'Delayed';
+          f.type_format = f.type.toLowerCase().indexOf('perio') > -1 ? 'Periodic' : 'Delayed';
           f.vesting_schedule_format = this.datePipe.transform(f.date_format, DATEFORMAT.DATETIME_UTC);
         }
       });

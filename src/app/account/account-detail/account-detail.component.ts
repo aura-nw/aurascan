@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
-import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
-import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { TransactionService } from '../../../app/core/services/transaction.service';
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
@@ -17,18 +13,24 @@ import {
   ApexPlotOptions,
   ChartComponent,
   ApexStroke,
+  ApexTooltip,
+  ApexGrid,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
-import { PageEvent } from '@angular/material/paginator';
-import { AccountService } from '../../../app/core/services/account.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  TypeAccount,
   WalletAcount,
 } from '../../../app/core/constants/account.enum';
+import { DATEFORMAT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
+import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { AccountService } from '../../../app/core/services/account.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
 
 export type ChartOptions = {
@@ -41,7 +43,8 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   colors: string[];
-  stoke: ApexStroke;
+  stroke: ApexStroke;
+  tooltip: ApexTooltip;
 };
 
 @Component({
@@ -167,12 +170,31 @@ export class AccountDetailComponent implements OnInit {
 
   constructor(
     private transactionService: TransactionService,
+    public commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
     public global: Globals,
   ) {
     this.chartOptions = {
+      stroke: {
+        width: 1,
+        curve: 'smooth',
+        colors: this.chartCustomOptions.map((e) => e.color),
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, w }) {
+          const percent = (series[seriesIndex] * 100) / series.reduce((a, b) => a + b);
+          return `
+          <div class="custom-apex-tooltip"> 
+            <div class="tooltip-title">
+              ${w.globals.labels[seriesIndex]}
+            </div>
+            <div class="tooltip-percent"> ${percent.toFixed(2)}% </div>
+            <div class="tooltip-amount"> ${series[seriesIndex].toFixed(6)}</div>
+          </div>`;
+        },
+      },
       series: [0, 0],
       labels: this.chartCustomOptions.map((e) => e.name),
       colors: this.chartCustomOptions.map((e) => e.color),
@@ -247,10 +269,18 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.getAccountDetail();
-    this.getListTransaction();
-    this.createQRCode();
+    // this.id = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      if (params?.id) {
+        this.id = params?.id;
+
+        this.getAccountDetail();
+        this.getListTransaction();
+        this.createQRCode();
+      } else {
+        
+      }
+    });
   }
 
   copyMessage(val: string) {
@@ -333,9 +363,13 @@ export class AccountDetailComponent implements OnInit {
       this.chartOptions.series = [];
       if (this.item.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
-        this.chartCustomOptions.push({name: ACCOUNT_WALLET_COLOR_ENUM.Commission, color: WalletAcount.Commission, amount: '0.000000'});
+        this.chartCustomOptions.push({
+          name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
+          color: WalletAcount.Commission,
+          amount: '0.000000',
+        });
       }
-      
+
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
           case ACCOUNT_WALLET_COLOR_ENUM.Available:

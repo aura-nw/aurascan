@@ -11,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { Globals } from '../../../../app/global/global';
 import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
 import { NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
+import { DATEFORMAT } from '../../../core/constants/common.constant';
 
 @Component({
   selector: 'app-validators-detail',
@@ -81,7 +83,7 @@ export class ValidatorsDetailComponent implements OnInit {
     private router: Router,
     private validatorService: ValidatorService,
     private blockService: BlockService,
-    private commonService: CommonService,
+    public commonService: CommonService,
     public global: Globals
   ) {
   }

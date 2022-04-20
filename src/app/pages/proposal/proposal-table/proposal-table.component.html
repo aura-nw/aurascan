@@ -34,9 +34,9 @@
                     {{ getVoteValue(data[template.matColumnDef]) }}
                   </ng-container>
                   <ng-container *ngSwitchCase="'created_at'">
-                    {{ getDateValue(data[template.matColumnDef])[0] }}
+                    {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                     <br />
-                    {{ getDateValue(data[template.matColumnDef])[1] }}
+                    {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
                   </ng-container>
 
                   <ng-container *ngSwitchDefault>
