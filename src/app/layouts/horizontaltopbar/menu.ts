@@ -30,13 +30,13 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.PROPOSAL.TEXT',
         icon: 'archive',
         link: '/proposal',
-    }
-    // {
-    //     id: 5,
-    //     label: 'MENUITEMS.CHAINCODE.TEXT',
-    //     icon: 'link',
-    //     link: '/chaincodes',
-    // },
+    },
+    {
+        id: 6,
+        label: 'MENUITEMS.ACCOUNT.TEXT',
+        icon: 'account',
+        link: '',
+    },
     // {
     //     id: 6,
     //     label: 'MENUITEMS.CHANEL.TEXT',
