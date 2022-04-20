@@ -45,6 +45,21 @@
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
+                  <ng-container *ngSwitchCase="'validator_name'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'amount_staked'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'pending_reward'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
                   <ng-container *ngSwitchDefault>
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
                       <div [innerHTML]="template.headerCellDef | translate"></div>
@@ -83,7 +98,7 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
               <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
-                  {{ 'NO VALIDATORS' | translate }}
+                  {{ 'NO DATA' | translate }}
                 </td>
               </tr>
             </table>
@@ -332,10 +347,10 @@
               <mat-select-trigger>{{commissionLabel}}</mat-select-trigger>
               <mat-option *ngFor="let item of lstValidator" [value]="item.operator_address" (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain">
-                  <div class="option-lable active">
+                  <div class="option-lable" [ngClass]="{'active': item.isStaking}">
                     <span>{{ item.title | translate }}</span>
                   </div>
-                  <div class="option-lable">Commission - 100%</div>
+                  <div class="option-lable">Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}</div>
                 </div>
               </mat-option>
             </mat-select>
@@ -379,7 +394,6 @@
               type="button"
               class="button body button-outline"
               (click)="changeTypePopup(dialogMode.Delegate)"
-              [disabled]="isExceedAmount"
             >
               Delegate
             </button>
@@ -392,7 +406,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleUndelegate()"
-              [disabled]="isExceedAmount"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
             >
               Undelegate
             </button>
@@ -431,9 +445,9 @@
               type="button"
               class="button body button-outline"
               (click)="handleRedelegate()"
-              [disabled]="isExceedAmount"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
             >
-              Delegate
+              Redelegate
             </button>
           </div>
         </ng-container>
@@ -441,5 +455,3 @@
     </div>
   </ng-template>
 </div>
-<!-- <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
-</mat-paginator> -->
