@@ -1,14 +1,14 @@
 <div class="wallet-connect-container">
     <ng-container *ngIf="{wallet: wallet$ | async } as ng">
 
-        <button *ngIf="!ng.wallet" type="button" class="button button-outline d-inline-block fw-semibold"
+        <button *ngIf="!ng.wallet" type="button" class="button account-button button-outline d-inline-block fw-semibold"
             data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT
             WALLET</button>
 
         <button type="button" *ngIf="ng.wallet" class="button account-button button-outline body fw-semibold"
             [matMenuTriggerFor]="menu">
-            <div class="d-flex align-items-center justify-content-between w-100">
-                <span class="mr-3 flex-grow-0">
+            <div class="d-flex align-items-center justify-content-center w-100">
+                <span class="mr-1 flex-grow-0">
                     {{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name }}
                 </span>
                 <img class="flex-shrink-0" src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
