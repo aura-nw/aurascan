@@ -17,6 +17,7 @@ import {
   ApexGrid,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
@@ -31,7 +32,6 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { AccountService } from '../../../app/core/services/account.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
-import { formatTimeInWords, formatWithSchema } from '../../core/helpers/date';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -170,6 +170,7 @@ export class AccountDetailComponent implements OnInit {
 
   constructor(
     private transactionService: TransactionService,
+    public commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
@@ -484,21 +485,6 @@ export class AccountDetailComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
-    }
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [
-          formatTimeInWords(new Date(time).getTime()),
-          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
     }
   }
 }

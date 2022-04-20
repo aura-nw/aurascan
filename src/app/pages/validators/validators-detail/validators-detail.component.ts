@@ -83,7 +83,7 @@ export class ValidatorsDetailComponent implements OnInit {
     private router: Router,
     private validatorService: ValidatorService,
     private blockService: BlockService,
-    private commonService: CommonService,
+    public commonService: CommonService,
     public global: Globals
   ) {
   }
@@ -197,21 +197,6 @@ export class ValidatorsDetailComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
-    }
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [
-          formatTimeInWords(new Date(time).getTime()),
-          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
     }
   }
 }

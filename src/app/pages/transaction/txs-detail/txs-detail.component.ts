@@ -12,6 +12,7 @@ import { TransactionService } from '../../../../app/core/services/transaction.se
 import { DatePipe } from '@angular/common';
 import { Globals } from '../../../../app/global/global';
 import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-txs-detail',
@@ -37,6 +38,7 @@ export class TxsDetailComponent implements OnInit {
     private transactionService: TransactionService,
     private datePipe: DatePipe,
     public global: Globals,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -71,20 +73,5 @@ export class TxsDetailComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isRawData = type;
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [
-          formatTimeInWords(new Date(time).getTime()),
-          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
-    }
   }
 }

@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { CommonService } from 'src/app/core/services/common.service';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { Globals } from '../../../global/global';
@@ -28,6 +29,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     private route: Router,
     private datePipe: DatePipe,
     public global: Globals,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {}
@@ -57,17 +59,5 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     this.pageData.pageSize = event.pageSize;
     event.pageEventType = this.pageEventType;
     this.pageEvent.emit(event);
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [formatDistanceToNowStrict(new Date(time).getTime())];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
-    }
   }
 }

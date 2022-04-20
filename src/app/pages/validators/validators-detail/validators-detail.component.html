@@ -125,7 +125,7 @@
                       <td mat-cell *matCellDef="let data">
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
-                            <div *ngSwitchCase="'timestamp'">{{ getDateValue(data[template.matColumnDef])[0] }}</div>
+                            <div *ngSwitchCase="'timestamp'">{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
                             <div
                               *ngSwitchCase="'block_hash_format'"
                               class="text--green cursor-pointer"
@@ -301,7 +301,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ getDateValue(data[template.matColumnDef])[0] }}
+                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                               {{ data[template.matColumnDef] }}

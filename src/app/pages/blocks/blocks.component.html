@@ -23,7 +23,7 @@
                       {{ data[template.matColumnDef] }}
                     </div>
                     <div *ngSwitchCase="'timestamp'">
-                      {{ getDateValue(data[template.matColumnDef])[0] }}
+                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>

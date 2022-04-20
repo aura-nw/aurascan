@@ -175,7 +175,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ getDateValue(data[template.matColumnDef])[0] }}
+                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <div *ngSwitchCase="'proposer'" class="text--green cursor-pointer" [routerLink]="['/validators', data.operator_address]">
                               {{ data[template.matColumnDef] }}
@@ -231,7 +231,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ getDateValue(data[template.matColumnDef])[0] }}
+                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                               {{ data[template.matColumnDef] }}
