@@ -10,6 +10,7 @@ import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.con
 import { PageEvent } from '@angular/material/paginator';
 import { Globals } from '../../../../app/global/global';
 import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
+import { NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
 
 @Component({
   selector: 'app-validators-detail',
@@ -103,6 +104,8 @@ export class ValidatorsDetailComponent implements OnInit {
           return;
         }
         this.item = res.data;
+        this.item.self_bonded = this.item.self_bonded / NUMBER_CONVERT;
+        this.item.power = this.item.power / NUMBER_CONVERT;
         this.item.up_time = this.item.status === this.statusValidator.Active ? this.item.up_time : '0%';
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.dataSource.sort = this.sort;
