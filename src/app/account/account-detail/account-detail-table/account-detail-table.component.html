@@ -34,10 +34,10 @@
                   </div>
                   <div *ngSwitchCase="'completion_time'">
                     {{ data['completion_time_format'] }}
-                    <div class="small-body">({{ getDateValue(data[template.matColumnDef]) }} remaining)</div>
+                    <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false) }} remaining)</div>
                   </div>
                   <div *ngSwitchCase="'vesting_schedule'">
-                    {{ data['vesting_schedule_format'] }} <br />({{ getDateValue(data['date_format']) }} remaining)
+                    {{ data['vesting_schedule_format'] }} <br />({{ commonService.getDateValue(data['date_format'], false) }} remaining)
                   </div>
                   <div *ngSwitchCase="'total_value'" class="fw-normal">
                     $ {{ data[template.matColumnDef] | number: global.formatNumberToken }}

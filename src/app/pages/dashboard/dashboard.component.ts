@@ -78,13 +78,13 @@ export class DashboardComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
 
   constructor(
-    private commonService: CommonService,
+    public commonService: CommonService,
     private datePipe: DatePipe,
     private router: Router,
     private authenticationService: AuthenticationService,
     private blockService: BlockService,
     private transactionService: TransactionService,
-    public global: Globals,
+    public global: Globals
   ) {}
 
   ngOnInit(): void {
@@ -343,21 +343,6 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
-    }
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [
-          formatTimeInWords(new Date(time).getTime()),
-          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
     }
   }
 }

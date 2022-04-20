@@ -1,4 +1,4 @@
-<app-pagetitle title="TRANSACTION DETAILS"></app-pagetitle>
+<app-pagetitle title="Transaction Details"></app-pagetitle>
 <div class="row justify-content-end mb-2">
   <div class="col-auto">
     <div class="button-switch-stage">
@@ -52,7 +52,7 @@
         <div class="col-3">
           <p class="card-text fw-bold">Time</p>
         </div>
-        <div class="col-6">{{ getDateValue(item?.timestamp)[0] }} ({{ getDateValue(dateFormat)[1] }})</div>
+        <div class="col-6">{{ commonService.getDateValue(item?.timestamp)[0] }} {{ commonService.getDateValue(dateFormat)[1] }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-3">

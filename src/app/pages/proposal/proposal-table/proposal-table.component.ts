@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { CommonService } from 'src/app/core/services/common.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
@@ -60,7 +61,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   pageSize = 5;
   pageIndex = 0;
 
-  constructor(public global: Globals) {}
+  constructor(public global: Globals, public commonService: CommonService) {}
 
   ngOnChanges(): void {
     if (this.dataSource) {
@@ -100,21 +101,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   getVoteValue(voteKey) {
     const vote = PROPOSAL_VOTE.find((vote) => vote.key === voteKey);
     return vote ? vote.value : 'Did not vote';
-  }
-
-  getDateValue(created_at) {
-    if (created_at) {
-      try {
-        return [
-          formatTimeInWords(new Date(created_at).getTime()),
-          `(${formatWithSchema(new Date(created_at).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ];
-      } catch (e) {
-        return [created_at, ''];
-      }
-    } else {
-      return ['-', ''];
-    }
   }
 
   pageEvent(e: PageEvent): void {

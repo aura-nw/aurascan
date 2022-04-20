@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -28,6 +28,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
   selector: 'app-validators',
   templateUrl: './validators.component.html',
   styleUrls: ['./validators.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ValidatorsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
@@ -85,16 +86,19 @@ export class ValidatorsComponent implements OnInit {
   isOpenStaking = false;
   modalReference: any;
   currentValidatorDialog;
+  commissionLabel = null;
+
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
+  isDisableClaim = true;
 
   constructor(
     private validatorService: ValidatorService,
     public globals: Globals,
     private modalService: NgbModal,
     private accountService: AccountService,
-    private commonService: CommonService,
+    public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private transactionService: TransactionService
@@ -107,6 +111,9 @@ export class ValidatorsComponent implements OnInit {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
         this.getDataWallet();
+      }
+      else {
+        this.userAddress = null;
       }
     });
     // this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
@@ -129,6 +136,7 @@ export class ValidatorsComponent implements OnInit {
           val.isPartiDown = true;
         }
         val.participation = val.vote_count + '/ ' + val.target_count;
+        val.power = val.power / NUMBER_CONVERT;
       });
 
       let dataFilter = res.data.filter((event) => (this.typeValidator === this.statusValidator.Active) ? 
@@ -252,6 +260,7 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validatorsDetail(address).subscribe(
       (res) => {
         this.dataModal = res.data;
+        this.dataModal.power = this.dataModal.power / NUMBER_CONVERT;
         this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         this.dataDelegate.validatorDetail = this.validatorDetail;
         this.getListDelegators(address);
@@ -276,7 +285,7 @@ export class ValidatorsComponent implements OnInit {
         //   let isStaking = (f.staking_address === this.userAddress) ? true : false;
         //   this.lstValidator.push(f.title, f.commission, isStaking);
         // });
-        
+
         // this.dataModal = res.data;
         // this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
         // this.dataDelegate.validatorDetail = this.validatorDetail;
@@ -298,6 +307,11 @@ export class ValidatorsComponent implements OnInit {
           this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
           this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
           this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
+        }
+
+        this.isDisableClaim = false;
+        if (Number(this.dataDelegate.stakingToken) === 0) {
+          this.isDisableClaim = true;
         }
 
         if (res.dataListDelegator) {
@@ -478,6 +492,10 @@ export class ValidatorsComponent implements OnInit {
     }
   }
 
+  setCommissionTitle(label: string) {
+    this.commissionLabel = label;
+  }
+
   checkStatuExcuteBlock(hash, error, msg) {
     this.modalReference.close();
     if (error) {
@@ -488,7 +506,7 @@ export class ValidatorsComponent implements OnInit {
       }, 3000);
     }
   }
-    
+
   checkDetailTx(id, message) {
     this.transactionService.txsDetail(id).subscribe(
       (res: ResponseDto) => {
@@ -503,19 +521,5 @@ export class ValidatorsComponent implements OnInit {
       (error) => {
       },
     );
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [
-          formatDistanceToNowStrict(new Date(time).getTime()),
-        ];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
-    }
   }
 }

@@ -17,7 +17,7 @@
             <span class="ml-2 text--green">{{ globals.stableToken }}</span>
           </div>
         </div>
-        <button class="button button-outline title-small" type="button" (click)="handleClaim()">
+        <button class="button button-outline title-small" type="button" (click)="handleClaim()" [disabled]="isDisableClaim">
           Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
           <span class="ml-1">{{ globals.stableToken }}</span>
         </button>
@@ -102,7 +102,7 @@
               {{ validator.balance | number: globals.formatNumberToken }}
               <span class="text--green">{{ globals.stableToken }}</span
               ><br />
-              <span class="txt-time">{{ getDateValue(validator.completion_time) }} remaining</span>
+              <span class="txt-time">{{ commonService.getDateValue(validator.completion_time, false) }} remaining</span>
             </div>
           </div>
         </ng-container>
@@ -269,11 +269,10 @@
             Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
           </div>
         </div>
-        <div class="text--greyscale-4">
+        <div class="body text--greyscale-4">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
-            <span class="text--green ml-1">{{ globals.stableToken }}</span
-            >)
+            <span class="text--green ml-1">{{ globals.stableToken }}</span>)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
         </div>
@@ -320,17 +319,24 @@
         </div>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
           <div class="title-small mb-2">Redelegate to:</div>
-          <div class="box-select-redelegate">
-            <mat-form-field appearance="fill">
-              <mat-select class="list-token" [(value)]="selectedValidator" placeholder="Select validator">
-                <mat-option *ngFor="let item of lstValidator" [value]="item.operator_address">
-                  {{ item.title | translate }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="fill" dense>
+            <mat-select class="list-token" placeholder="Select validator"
+                        [(value)]="selectedValidator"
+                        [disableOptionCentering]="true">
+              <mat-select-trigger>{{commissionLabel}}</mat-select-trigger>
+              <mat-option *ngFor="let item of lstValidator" [value]="item.operator_address" (click)="setCommissionTitle(item.label)">
+                <div class="d-flex option-contain">
+                  <div class="option-lable active">
+                    <span>{{ item.title | translate }}</span>
+                  </div>
+                  <div class="option-lable">Commission - 100%</div>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <div *ngIf="selectedValidator">
-            <div class="mt-2">
+            <div class="mt-6">
               <b>Available for redelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
               <span class="text--green">{{ globals.stableToken }}</span>
             </div>

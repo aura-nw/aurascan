@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/core/services/common.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { DATEFORMAT } from '../../core/constants/common.constant';
@@ -27,7 +28,7 @@ export class BlocksComponent implements OnInit {
   pageIndex = 0;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
-  constructor(private router: Router, private blockService: BlockService) {}
+  constructor(private router: Router, private blockService: BlockService, public commonService: CommonService,) {}
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Blocks' }, { label: 'List', active: true }];
@@ -60,21 +61,6 @@ export class BlocksComponent implements OnInit {
       this.router.navigate(['validators', data.operator_address]);
     } else if (linkBlock) {
       this.router.navigate(['blocks', data.height]);
-    }
-  }
-
-  getDateValue(time) {
-    if (time) {
-      try {
-        return [
-          formatTimeInWords(new Date(time).getTime()),
-          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
-        ];
-      } catch (e) {
-        return [time, ''];
-      }
-    } else {
-      return ['-', ''];
     }
   }
 }
