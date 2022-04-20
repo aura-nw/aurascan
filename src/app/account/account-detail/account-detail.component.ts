@@ -4,14 +4,25 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ApexChart, ApexDataLabels, ApexFill, ApexLegend, ApexNonAxisChartSeries, ApexPlotOptions, ApexResponsive, ApexStroke, ChartComponent
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexFill,
+  ApexDataLabels,
+  ApexLegend,
+  ApexPlotOptions,
+  ChartComponent,
+  ApexStroke,
+  ApexTooltip,
+  ApexGrid,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
-  PageEventType, WalletAcount
+  PageEventType,
+  WalletAcount,
 } from '../../../app/core/constants/account.enum';
 import { DATEFORMAT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
@@ -32,7 +43,8 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   colors: string[];
-  stoke: ApexStroke;
+  stroke: ApexStroke;
+  tooltip: ApexTooltip;
 };
 
 @Component({
@@ -164,6 +176,24 @@ export class AccountDetailComponent implements OnInit {
     public global: Globals,
   ) {
     this.chartOptions = {
+      stroke: {
+        width: 1,
+        curve: 'smooth',
+        colors: this.chartCustomOptions.map((e) => e.color),
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, w }) {
+          const percent = (series[seriesIndex] * 100) / series.reduce((a, b) => a + b);
+          return `
+          <div class="custom-apex-tooltip"> 
+            <div class="tooltip-title">
+              ${w.globals.labels[seriesIndex]}
+            </div>
+            <div class="tooltip-percent"> ${percent.toFixed(2)}% </div>
+            <div class="tooltip-amount"> ${series[seriesIndex].toFixed(6)}</div>
+          </div>`;
+        },
+      },
       series: [0, 0],
       labels: this.chartCustomOptions.map((e) => e.name),
       colors: this.chartCustomOptions.map((e) => e.color),
@@ -238,10 +268,18 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.getAccountDetail();
-    this.getListTransaction();
-    this.createQRCode();
+    // this.id = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      if (params?.id) {
+        this.id = params?.id;
+
+        this.getAccountDetail();
+        this.getListTransaction();
+        this.createQRCode();
+      } else {
+        
+      }
+    });
   }
 
   copyMessage(val: string) {
