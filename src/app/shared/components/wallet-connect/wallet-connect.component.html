@@ -12,15 +12,14 @@
             </div>
         </button>
 
-        <mat-menu #menu="matMenu" class="custom-menu">
-            <!-- <div class="menu-row" mat-menu-item>
-                <img class="menu-img" width="20px"
-                    src="./../../../../assets/images/icon-keplr.svg" alt="">
-                <span class="menu-content">Keplr</span>
-                <i-feather name="check" class="menu-checked"></i-feather>
-            </div> -->
+        <mat-menu #menu="matMenu" class="custom-menu mt-2" xPosition="before">
             <div class="menu-row" mat-menu-item>
-                <img class="menu-img" width="20px"
+                <img class="menu-img mr-3" width="20px"
+                    src="./../../../../assets/images/wallet.png" alt="">
+                <span class="menu-content" [routerLink]="['/account',ng.wallet?.bech32Address]">Account Detail</span>
+            </div>
+            <div class="menu-row" mat-menu-item>
+                <img class="menu-img mr-3" width="20px"
                     src="./../../../../assets/images/log-out.svg" alt="">
                 <span class="menu-content" (click)="disconnect()">Log out</span>
             </div>
