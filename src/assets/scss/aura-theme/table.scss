@@ -22,7 +22,9 @@
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 16px;
   }
-
+  .mat-cell{
+    padding-right: 8px;
+  }
   td a {
     color: var(--aura-green);
 
