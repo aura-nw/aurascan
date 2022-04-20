@@ -18,6 +18,12 @@
                   <div *ngSwitchCase="'amount'" class="fw-normal">
                     {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--green">{{global.stableToken}}</span>
                   </div>
+                  <div *ngSwitchCase="'token_amount'" class="fw-normal">
+                    {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                  </div>
+                  <div *ngSwitchCase="'token_name'" class="fw-normal text--green">
+                    {{ data[template.matColumnDef] }}
+                  </div>
                   <div *ngSwitchCase="'reward'" class="fw-normal">
                     {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--green">{{global.stableToken}}</span>
                   </div>
