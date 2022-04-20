@@ -35,6 +35,16 @@
       color: var(--gunmetal);
     }
   }
+  .box-undelegate {
+    .title-name {
+      // display: flex;
+      // align-items: center;
+      margin-top: 5px;
+    }
+    .txt-time {
+      color: var(--aura-neutrals-4);
+    }
+  }
 }
 
 form.search-form {

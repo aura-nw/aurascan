@@ -5,22 +5,21 @@
                 type="button" class="button button-outline d-inline-block fw-semibold"
                 data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT WALLET</button>
 
-        <button type="button" *ngIf="ng.wallet" class="btn btn-light" [matMenuTriggerFor]="menu">
-            <div class="d-flex align-items-center gap-1">
+        <button type="button" *ngIf="ng.wallet" class="button button-outline body fw-semibold" [matMenuTriggerFor]="menu">
+            <div class="d-flex align-items-center gap-2">
                 <img [src]="avatarValue" alt="wallet-avatar" height="20px" width="20px" class="border rounded-circle">
                 {{ ng.wallet?.name }}
             </div>
         </button>
 
-        <mat-menu #menu="matMenu" class="custom-menu">
-            <!-- <div class="menu-row" mat-menu-item>
-                <img class="menu-img" width="20px"
-                    src="./../../../../assets/images/icon-keplr.svg" alt="">
-                <span class="menu-content">Keplr</span>
-                <i-feather name="check" class="menu-checked"></i-feather>
-            </div> -->
+        <mat-menu #menu="matMenu" class="custom-menu mt-2" xPosition="before">
             <div class="menu-row" mat-menu-item>
-                <img class="menu-img" width="20px"
+                <img class="menu-img mr-3" width="20px"
+                    src="./../../../../assets/images/wallet.png" alt="">
+                <span class="menu-content" [routerLink]="['/account',ng.wallet?.bech32Address]">Account Detail</span>
+            </div>
+            <div class="menu-row" mat-menu-item>
+                <img class="menu-img mr-3" width="20px"
                     src="./../../../../assets/images/log-out.svg" alt="">
                 <span class="menu-content" (click)="disconnect()">Log out</span>
             </div>
@@ -34,14 +33,14 @@
                         <div class="card-header">
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                    <div class="d-flex align-items-center gap-1"
+                                    <div class="d-flex align-items-center gap-3"
                                         [class.disabled-pointer]="!ng.wallet?.name">
                                         <div class="wallet-avatar">
                                             <img [src]="avatarValue" alt="wallet-avatar">
                                         </div>
                                         <div class="wallet-name">
                                             <span class="text">
-                                                <span class="cursor-pointer">
+                                                <span class="cursor-pointer body text--white">
                                                     {{ ng.wallet?.name || 'My Wallet' }}
                                                     <i-feather [hidden]="!ng.wallet?.name" name="chevron-down">
                                                     </i-feather>

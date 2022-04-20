@@ -15,6 +15,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    .message {
+      color: var(--aura-green-disabled);
+    }
   }
   &__info {
     color: var(--aura-white);
@@ -24,7 +27,6 @@
   max-height: 360px;
   overflow-y: scroll;
   padding: 16px;
-  // background-color: var(--bs-gray-100);
   border: 1px var(--aura-light-gray);
 }
 .proposal__summary-total {
@@ -40,16 +42,16 @@
       background-color: #e3e3e3;
       li.bg {
         &--primary {
-          background-color: #5ee6d0;
+          background-color: var(--aura-primary);
         }
         &--danger {
-          background-color: #e65e5e;
+          background-color: var(--aura-danger);
         }
         &--info {
-          background-color: #5e84e6;
+          background-color: var(--aura-info);
         }
         &--secondary {
-          background-color: #777e91;
+          background-color: var(--aura-green-disabled);
         }
       }
     }

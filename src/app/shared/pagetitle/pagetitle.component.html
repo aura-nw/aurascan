@@ -2,19 +2,18 @@
 <div class="row">
   <div class="col-12">
     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-      <h1 class="title fw-bold mb-0 text--white">{{ title }}</h1>
+      <h1 class="title fw-bold mb-0 text--white title-medium">{{ title }}</h1>
       <div class="page-title-right">
         <ol class="breadcrumb m-0" *ngIf="!displayInfo">
           <ng-container *ngFor="let item of breadcrumbItems">
-            <li class="breadcrumb-item" [ngClass]="{'active': item.active == true}">{{ item.label }}
-            </li>
+            <li class="breadcrumb-item" [ngClass]="{ active: item.active == true }">{{ item.label }}</li>
           </ng-container>
         </ol>
         <div class="box-info body" *ngIf="displayInfo">
-          <span class="item-info"><b>Height:</b> {{global?.dataHeader?.block_height | number}}</span>
-          <span class="item-info"><b>Bonded:</b> {{global?.dataHeader?.bonded_tokens_format}}</span>
-          <span class="item-info"><b>Inflation:</b> {{global?.dataHeader?.inflation}}</span>
-          <span><b>Community Pool:</b> {{global?.dataHeader?.community_pool_format}}</span>
+          <span class="item-info"><b>Height:</b> {{ global?.dataHeader?.block_height | number }}</span>
+          <span class="item-info"><b>Bonded:</b> {{ global?.dataHeader?.bonded_tokens_format }}</span>
+          <span class="item-info"><b>Inflation:</b> {{ global?.dataHeader?.inflation }}</span>
+          <span><b>Community Pool:</b> {{ global?.dataHeader?.community_pool_format }}</span>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@
 .card {
     margin-bottom: $grid-gutter-width;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .card-drop {
@@ -42,7 +42,7 @@
     border-radius: 0 0 12px 12px;
 }
 body[data-layout-mode="dark"] {
-    .card, .card-footer,
+    .card, .card-footer, .card-header, 
     .modal-content, .offcanvas {
         background-color: #20262B;
         border-color: #20262B;

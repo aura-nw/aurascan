@@ -39,6 +39,14 @@ footer {
       border-right: 1px solid var(--aura-neutrals-3);
       border-bottom: none;
     }
+      a {
+    color: var(--aura-light-gray) !important;
+    text-decoration: none;
+    transition: color .35s ease-in-out;
+    &:hover {
+      color: var(--aura-white) !important;
+    }
+  }
   }
   .footer__cta {
     margin: 32px 8px;
@@ -129,14 +137,6 @@ footer {
     transition: color 0.35s ease-in-out;
     &:hover {
       color: var(--aura-white);
-    }
-  }
-  a {
-    color: var(--aura-light-gray) !important;
-    text-decoration: none;
-    transition: color .35s ease-in-out;
-    &:hover {
-      color: var(--aura-white) !important;
     }
   }
 }

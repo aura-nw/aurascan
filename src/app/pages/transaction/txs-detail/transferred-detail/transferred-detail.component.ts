@@ -22,6 +22,7 @@ export class TransferredDetailComponent implements OnInit {
   dateVesting;
   isVestingDelay;
   validatorName = '';
+  validatorNameDes = '';
   listValidator;
   @Input() transactionDetail: any;
 
@@ -32,7 +33,8 @@ export class TransferredDetailComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
+    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward 
+      || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
       this.getListValidator();
     }
     //get amount of transaction
@@ -47,7 +49,10 @@ export class TransferredDetailComponent implements OnInit {
     this.validatorService.validators().subscribe(
       (res) => {
         this.listValidator = res.data;
-        if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
+        if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
+          this.validatorName = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address).title || '';
+          this.validatorNameDes = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address).title || '';
+        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
           let validMap = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_address);
           this.validatorName = validMap.title || '';
         } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) { 

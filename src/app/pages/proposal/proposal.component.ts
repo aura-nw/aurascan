@@ -41,7 +41,7 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  length: number;
   pageSize = 20;
   pageIndex = 0;
   lastedList = [];
@@ -80,30 +80,19 @@ export class ProposalComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.lastedList = res.data;
       this.lastedList.forEach((pro, index) => {
-        let totalVoteYes = +pro.pro_votes_yes;
-        let totalVoteNo = +pro.pro_votes_no;
-        let totalVoteNoWithVeto = +pro.pro_votes_no_with_veto;
-        let totalVoteAbstain = +pro.pro_votes_abstain;
-        let totalVote = totalVoteYes + totalVoteNo + totalVoteNoWithVeto + totalVoteAbstain;
+        let totalVote;
         if (index < 4) {
-          if (totalVote > 0) {
-            pro.pro_votes_yes = (totalVoteYes * 100) / totalVote;
-            pro.pro_votes_no = (totalVoteNo * 100) / totalVote;
-            pro.pro_votes_no_with_veto = (totalVoteNoWithVeto * 100) / totalVote;
-            pro.pro_votes_abstain = (totalVoteAbstain * 100) / totalVote;
-          } else {
-            this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
-              totalVote =
-                +res.data.proposalVoteTally.tally.yes +
-                +res.data.proposalVoteTally.tally.no +
-                +res.data.proposalVoteTally.tally.no_with_veto +
-                +res.data.proposalVoteTally.tally.abstain;
-              pro.pro_votes_yes = (+res.data.proposalVoteTally.tally.yes * 100) / totalVote;
-              pro.pro_votes_no = (+res.data.proposalVoteTally.tally.no * 100) / totalVote;
-              pro.pro_votes_no_with_veto = (+res.data.proposalVoteTally.tally.no_with_veto * 100) / totalVote;
-              pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
-            });
-          }
+          this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
+            totalVote =
+              +res.data.proposalVoteTally.tally.yes +
+              +res.data.proposalVoteTally.tally.no +
+              +res.data.proposalVoteTally.tally.no_with_veto +
+              +res.data.proposalVoteTally.tally.abstain;
+            pro.pro_votes_yes = (+res.data.proposalVoteTally.tally.yes * 100) / totalVote;
+            pro.pro_votes_no = (+res.data.proposalVoteTally.tally.no * 100) / totalVote;
+            pro.pro_votes_no_with_veto = (+res.data.proposalVoteTally.tally.no_with_veto * 100) / totalVote;
+            pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
+          });
         }
         pro.pro_vote_total = totalVote;
 
@@ -164,7 +153,7 @@ export class ProposalComponent implements OnInit {
   getHighestVote(yes: number, no: number, noWithVeto: number, abstain: number) {
     let highest = Math.max(yes, no, noWithVeto, abstain);
     let resObj: { value: number; name: string; class: string } = null;
-    let key;
+    let key: string;
 
     if (!highest) {
       highest = 0;
@@ -199,8 +188,8 @@ export class ProposalComponent implements OnInit {
     if (expiredTime > 0) {
       this.walletService.connectKeplr(this.chainId, (account) => {
         let dialogRef = this.dialog.open(ProposalVoteComponent, {
-          height: '400px',
-          width: '600px',
+          height: '378px',
+          width: '431px',
           data: {
             id,
             title,
@@ -208,12 +197,14 @@ export class ProposalComponent implements OnInit {
           },
         });
         dialogRef.afterClosed().subscribe((result) => {
-          this.voteValue = result;
-          this.getList();
+          if (result) {
+            this.voteValue = result;
+            this.getList();
+          }
         });
       });
     } else {
-      this.getList();
+      window.location.reload();
     }
   }
 

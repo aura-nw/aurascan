@@ -11,74 +11,79 @@
 <ng-container *ngIf="!isRawData">
   <div class="card text--white">
     <div class="card-header title-small">Information</div>
-    <div class="card-body">
+    <div class="card-body body">
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Chain Id</p>
         </div>
-        <div class="col-6">{{item?.block.chainid}}</div>
+        <div class="col-6">{{ item?.block.chainid }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">TxHash</p>
         </div>
-        <div class="col-6">{{item?.tx_hash}}</div>
+        <div class="col-6">{{ item?.tx_hash }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Status</p>
         </div>
         <div class="col-6">
-          <img [src]="item?.code === codeTransaction.Success ?
-                    'assets/images/icons/success.svg' : 'assets/images/icons/fail.svg'" alt="">
-          {{item?.status}}
+          <img
+            [src]="
+              item?.code === codeTransaction.Success
+                ? 'assets/images/icons/success.svg'
+                : 'assets/images/icons/fail.svg'
+            "
+            alt=""
+          />
+          {{ item?.status }}
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Height</p>
         </div>
-        <div class="col-6"><a class="text--green" routerLink="/blocks/id/{{item?.block.id}}">{{item?.height | number}}</a></div>
+        <div class="col-6">
+          <a class="text--green" routerLink="/blocks/id/{{ item?.block.id }}">{{ item?.height | number }}</a>
+        </div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Time</p>
         </div>
-        <div class="col-6">{{item?.timestamp | calDate}} ago ({{dateFormat}})</div>
+        <div class="col-6">{{ getDateValue(item?.timestamp)[0] }} ({{ getDateValue(dateFormat)[1] }})</div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Fee</p>
         </div>
-        <div class="col-6">{{item?.fee}} <span class="g-purple">{{global.stableToken}}</span></div>
+        <div class="col-6">
+          {{ item?.fee }} <span class="g-purple">{{ global.stableToken }}</span>
+        </div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Gas (used / wanted)</p>
         </div>
-        <div class="col-6">{{item?.gas_used | number}} / {{item?.gas_wanted | number}}</div>
+        <div class="col-6">{{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}</div>
       </div>
     </div>
   </div>
 
   <div class="card text--white" *ngIf="item?.messages">
-    <app-transferred-detail [transactionDetail]="item">
-    </app-transferred-detail>
+    <app-transferred-detail [transactionDetail]="item"> </app-transferred-detail>
   </div>
 
   <div class="card text--white" *ngIf="item?.read_set">
-    <div class="card-header title-small">
-      Read
-    </div>
+    <div class="card-header title-small">Read</div>
     <div class="card-body">
       <ngx-json-viewer [json]="item?.read_set"></ngx-json-viewer>
     </div>
   </div>
 
   <div class="card text--white" *ngIf="item?.write_set">
-    <div class="card-header title-small">
-      Write
-    </div>
+    <div class="card-header title-small">Write</div>
     <div class="card-body" *ngIf="item?.write_set">
       <ngx-json-viewer [json]="item?.write_set"></ngx-json-viewer>
     </div>
@@ -87,9 +92,7 @@
 
 <ng-container *ngIf="isRawData">
   <div class="card text--white">
-    <div class="card-header title-small">
-      Raw Data
-    </div>
-    <pre id="json" class="raw-content">{{jsonStr}}</pre>
+    <div class="card-header title-small">Raw Data</div>
+    <pre id="json" class="raw-content text--white px-4">{{ jsonStr }}</pre>
   </div>
 </ng-container>

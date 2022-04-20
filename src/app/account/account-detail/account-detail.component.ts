@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
-import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
-import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { TransactionService } from '../../../app/core/services/transaction.service';
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
@@ -17,19 +13,25 @@ import {
   ApexPlotOptions,
   ChartComponent,
   ApexStroke,
+  ApexTooltip,
+  ApexGrid,
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
-import { PageEvent } from '@angular/material/paginator';
-import { AccountService } from '../../../app/core/services/account.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  TypeAccount,
   WalletAcount,
 } from '../../../app/core/constants/account.enum';
+import { DATEFORMAT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
+import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { AccountService } from '../../../app/core/services/account.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
+import { formatTimeInWords, formatWithSchema } from '../../core/helpers/date';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -41,7 +43,8 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
   colors: string[];
-  stoke: ApexStroke;
+  stroke: ApexStroke;
+  tooltip: ApexTooltip;
 };
 
 @Component({
@@ -71,8 +74,8 @@ export class AccountDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   templatesToken: Array<TableTemplate> = [
-    { matColumnDef: 'name', headerCellDef: 'Name' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount' },
+    { matColumnDef: 'token_name', headerCellDef: 'Name' },
+    { matColumnDef: 'token_amount', headerCellDef: 'Amount' },
     { matColumnDef: 'total_value', headerCellDef: 'Total Value' },
   ];
   displayedColumnsToken: string[] = this.templatesToken.map((dta) => dta.matColumnDef);
@@ -173,6 +176,24 @@ export class AccountDetailComponent implements OnInit {
     public global: Globals,
   ) {
     this.chartOptions = {
+      stroke: {
+        width: 1,
+        curve: 'smooth',
+        colors: this.chartCustomOptions.map((e) => e.color),
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, w }) {
+          const percent = (series[seriesIndex] * 100) / series.reduce((a, b) => a + b);
+          return `
+          <div class="custom-apex-tooltip"> 
+            <div class="tooltip-title">
+              ${w.globals.labels[seriesIndex]}
+            </div>
+            <div class="tooltip-percent"> ${percent.toFixed(2)}% </div>
+            <div class="tooltip-amount"> ${series[seriesIndex].toFixed(6)}</div>
+          </div>`;
+        },
+      },
       series: [0, 0],
       labels: this.chartCustomOptions.map((e) => e.name),
       colors: this.chartCustomOptions.map((e) => e.color),
@@ -247,10 +268,18 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.getAccountDetail();
-    this.getListTransaction();
-    this.createQRCode();
+    // this.id = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      if (params?.id) {
+        this.id = params?.id;
+
+        this.getAccountDetail();
+        this.getListTransaction();
+        this.createQRCode();
+      } else {
+        
+      }
+    });
   }
 
   copyMessage(val: string) {
@@ -333,9 +362,13 @@ export class AccountDetailComponent implements OnInit {
       this.chartOptions.series = [];
       if (this.item.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
-        this.chartCustomOptions.push({name: ACCOUNT_WALLET_COLOR_ENUM.Commission, color: WalletAcount.Commission, amount: '0.000000'});
+        this.chartCustomOptions.push({
+          name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
+          color: WalletAcount.Commission,
+          amount: '0.000000',
+        });
       }
-      
+
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
           case ACCOUNT_WALLET_COLOR_ENUM.Available:
@@ -372,6 +405,11 @@ export class AccountDetailComponent implements OnInit {
       });
       this.tokenPrice = 0;
 
+      this.item?.balances.forEach(f => {
+        f.token_amount = f.amount;
+        f.token_name = f.name;
+      });
+      
       this.dataSourceToken = new MatTableDataSource(this.item?.balances);
       this.pageDataToken.length = this.item?.balances.length;
       this.dataSourceTokenBk = this.dataSourceToken;
@@ -446,6 +484,21 @@ export class AccountDetailComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
+    }
+  }
+
+  getDateValue(time) {
+    if (time) {
+      try {
+        return [
+          formatTimeInWords(new Date(time).getTime()),
+          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [time, ''];
+      }
+    } else {
+      return ['-', ''];
     }
   }
 }

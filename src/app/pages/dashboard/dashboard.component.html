@@ -78,7 +78,7 @@
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="title text-gradient fw-bold">$ {{ global?.dataHeader?.block_height | number }}</h4>
+            <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.block_height | number }}</h4>
             <div class="body">Update 5s ago</div>
           </div>
         </div>
@@ -175,7 +175,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ data[template.matColumnDef] | calDate }} ago
+                              {{ getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <div *ngSwitchCase="'proposer'" class="text--green cursor-pointer" [routerLink]="['/validators', data.operator_address]">
                               {{ data[template.matColumnDef] }}
@@ -231,7 +231,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ data[template.matColumnDef] | calDate }} ago
+                              {{ getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                               {{ data[template.matColumnDef] }}

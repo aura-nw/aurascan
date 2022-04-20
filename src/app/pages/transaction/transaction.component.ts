@@ -1,22 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { CommonService } from '../../../app/core/services/common.service';
+import { DATEFORMAT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
+import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
-import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { formatTimeInWords, formatWithSchema } from '../../core/helpers/date';
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit {
-  @ViewChild(MatSort) sort: MatSort;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   templates: Array<TableTemplate> = [
@@ -38,7 +36,6 @@ export class TransactionComponent implements OnInit {
   statusTransaction = StatusTransaction;
 
   constructor(
-    private commonService: CommonService,
     private router: Router,
     private transactionService: TransactionService,
     public global: Globals
@@ -75,7 +72,6 @@ export class TransactionComponent implements OnInit {
 
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
-        this.dataSource.sort = this.sort;
       }
       );
   }
@@ -87,6 +83,21 @@ export class TransactionComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
+    }
+  }
+
+  getDateValue(time) {
+    if (time) {
+      try {
+        return [
+          formatTimeInWords(new Date(time).getTime()),
+          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [time, ''];
+      }
+    } else {
+      return ['-', ''];
     }
   }
 }

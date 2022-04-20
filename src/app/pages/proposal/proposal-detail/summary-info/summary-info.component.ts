@@ -23,7 +23,7 @@ export class SummaryInfoComponent implements OnInit {
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
-  voteValue: { keyVote: number } = null;
+  voteValue: { keyVote: string } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   proposalVotes: {
     proId: number;
@@ -65,12 +65,86 @@ export class SummaryInfoComponent implements OnInit {
       );
       this.proposalDetail.initial_deposit = balanceOf(this.proposalDetail.initial_deposit);
       this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
-      this.proposalDetail.pro_votes_yes = balanceOf(this.proposalDetail.pro_votes_yes);
-      this.proposalDetail.pro_votes_no = balanceOf(this.proposalDetail.pro_votes_no);
-      this.proposalDetail.pro_votes_no_with_veto = balanceOf(this.proposalDetail.pro_votes_no_with_veto);
-      this.proposalDetail.pro_votes_abstain = balanceOf(this.proposalDetail.pro_votes_abstain);
-
       this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
+      this.proposalVotes.push({
+        proId: this.proposalDetail.pro_id,
+        vote: null,
+      });
+      this.getVotedProposal();
+      this.getVoteResult();
+    });
+  }
+
+  getStatus(key: string) {
+    let resObj: { value: string; class: string; key: string } = null;
+    const statusObj = this.statusConstant.find((s) => s.key === key);
+    if (statusObj !== undefined) {
+      resObj = {
+        value: statusObj.value,
+        class: statusObj.class,
+        key: statusObj.key,
+      };
+    }
+    return resObj;
+  }
+
+  openVoteDialog(proposalDetail) {
+    const id = proposalDetail.pro_id;
+    const title = proposalDetail.pro_title;
+    const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
+    if (expiredTime > 0) {
+      this.walletService.connectKeplr(this.chainId, (account) => {
+        let dialogRef = this.dialog.open(ProposalVoteComponent, {
+          height: '378px',
+          width: '431px',
+          data: {
+            id,
+            title,
+            voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
+          },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.voteValue = result;
+            this.getDetail();
+          }
+        });
+      });
+    } else {
+      window.location.reload();
+    }
+  }
+
+  getVotedProposal() {
+    const addr = this.walletService.wallet?.bech32Address || null;
+    if (this.proposalVotes.length > 0 && addr) {
+      forkJoin({
+        0: this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr),
+      })
+        .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
+        .subscribe((res) => {
+          this.proposalVotes = res.map((i, idx) => {
+            this.voteValue = { keyVote: i };
+            return {
+              proId: this.proposalVotes[idx].proId,
+              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
+            };
+          });
+        });
+    } else {
+      this.proposalVotes = this.proposalVotes.map((e) => ({
+        ...e,
+        vote: null,
+      }));
+    }
+  }
+
+  getVoteResult() {
+    this.proposalService.getProposalTally(this.proposalId).subscribe((res) => {
+      this.proposalDetail.pro_votes_yes = balanceOf(+res.data.proposalVoteTally.tally.yes);
+      this.proposalDetail.pro_votes_no = balanceOf(+res.data.proposalVoteTally.tally.no);
+      this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.proposalVoteTally.tally.no_with_veto);
+      this.proposalDetail.pro_votes_abstain = balanceOf(+res.data.proposalVoteTally.tally.abstain);
 
       this.proposalDetail.pro_total_vote =
         this.proposalDetail.pro_votes_yes +
@@ -96,69 +170,6 @@ export class SummaryInfoComponent implements OnInit {
         (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.abstainPercent =
         (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
-
-      this.proposalVotes.push({
-        proId: this.proposalDetail.pro_id,
-        vote: null,
-      });
-      this.getVotedProposal();
     });
-  }
-
-  getStatus(key: string) {
-    let resObj: { value: string; class: string, key: string } = null;
-    const statusObj = this.statusConstant.find((s) => s.key === key);
-    if (statusObj !== undefined) {
-      resObj = {
-        value: statusObj.value,
-        class: statusObj.class,
-        key: statusObj.key,
-      };
-    }
-    return resObj;
-  }
-
-  openVoteDialog(proposalDetail) {
-    const id = proposalDetail.pro_id;
-    const title = proposalDetail.pro_title;
-    const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
-    if (expiredTime > 0) {
-      this.walletService.connectKeplr(this.chainId, (account) => {
-        let dialogRef = this.dialog.open(ProposalVoteComponent, {
-          height: '400px',
-          width: '600px',
-          data: { id, title, voteValue: this.voteValue },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          this.voteValue = result;
-          this.getDetail();
-        });
-      });
-    } else {
-      this.getDetail();
-    }
-  }
-
-  getVotedProposal() {
-    const addr = this.walletService.wallet?.bech32Address || null;
-    if (this.proposalVotes.length > 0 && addr) {
-      forkJoin({
-        0: this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr),
-      })
-        .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
-        .subscribe((res) => {
-          this.proposalVotes = res.map((i, idx) => {
-            return {
-              proId: this.proposalVotes[idx].proId,
-              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
-            };
-          });
-        });
-    } else {
-      this.proposalVotes = this.proposalVotes.map((e) => ({
-        ...e,
-        vote: null,
-      }));
-    }
   }
 }

@@ -3,10 +3,10 @@
   <div class="card">
     <div class="card-body">
       <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="  aura-table" matSort>
+        <table mat-table [dataSource]="dataSource" class="  aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="none-border-top">
+              <th mat-header-cell *matHeaderCellDef class="none-border-top">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
 
@@ -14,7 +14,7 @@
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <div *ngSwitchCase="'timestamp'">
-                      {{ data[template.matColumnDef] | calDate }} ago
+                      {{ getDateValue(data[template.matColumnDef])[0] }}
                     </div>
                     <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                       {{ data[template.matColumnDef] }}
@@ -25,7 +25,7 @@
                     <div *ngSwitchCase="'type'" class="text--green">
                       {{ data[template.matColumnDef] }}
                     </div>
-                    <div *ngSwitchCase="'status'">
+                    <!-- <div *ngSwitchCase="'status'">
                       <div [ngSwitch]="data[template.matColumnDef]">
                         <div *ngSwitchCase="'Success'" class="text--primary">
                           {{ data[template.matColumnDef] }}
@@ -37,13 +37,13 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div *ngSwitchCase="'fee'">
-                      {{ data[template.matColumnDef] }} <span class="g-purple">{{ global.stableToken }}</span>
+                      {{ data[template.matColumnDef] }} <span class="text--primary">{{ global.stableToken }}</span>
                     </div>
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0">
-                        {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="g-purple">{{ global.stableToken }}</span>
+                        {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--primary">{{ global.stableToken }}</span>
                       </ng-container>
                       <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
                     </div>

@@ -328,36 +328,19 @@ body {
         display: flex;
         li {
             &.primary {
-                background-color: var(--bs-success);
+                background-color: #5ee6d0;
             }
             &.danger {
-                background-color: var(--bs-danger);
+                background-color: #e65e5e;
             }
             &.info {
-                background-color: var(--bs-info);
+                background-color: #5e84e6;
             }
             &.secondary {
-                background-color: var(--bs-secondary);
+                background-color: #777e91;
             }
         }
     }
-}
-.box-rank {
-    background-color: #9c6cff;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-align-items: center;
-    align-items: center;
 }
 
 .proposal-status {
@@ -389,4 +372,26 @@ body {
 .top-border {
     border-top: solid 1px var(--aura-light-gray);
     padding-top: var(--spacer-5);
+}
+
+.custom-apex-tooltip {
+    padding: 8px;
+    border: 1px var(--aura-light-gray);
+    transition: all 1s;
+    .tooltip {
+        &-title {
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        &-amount {
+            font-weight: 400;
+        }
+    }
+}
+
+.text-clamp{
+    display: -webkit-inline-box;
+    overflow: hidden;
+    -webkit-line-clamp: 1;   
+    -webkit-box-orient: vertical;
 }

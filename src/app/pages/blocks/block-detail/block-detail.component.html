@@ -18,7 +18,7 @@
       <div class="col-3">
         <p class="card-text fw-bold">Block Time</p>
       </div>
-      <div class="col-6">{{ item?.timestamp | calDate }} ago ({{ dateFormat }})</div>
+      <div class="col-6">{{ getDateValue(item?.timestamp)[0]}} ({{ (dateFormat) }})</div>
     </div>
     <div class="row mb-3">
       <div class="col-3">
@@ -59,17 +59,17 @@
   <div class="card-body body">
     <ng-container *ngIf="length > 0; else noValues">
       <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="aura-table" matSort>
+        <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="none-border-top">
+              <th mat-header-cell *matHeaderCellDef class="none-border-top">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
 
               <td mat-cell *matCellDef="let data">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <div *ngSwitchCase="'timestamp'">{{ data[template.matColumnDef] | calDate }} ago</div>
+                    <div *ngSwitchCase="'timestamp'">{{ getDateValue(data[template.matColumnDef])[0] }}</div>
                     <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                       {{ data[template.matColumnDef] }}
                     </div>

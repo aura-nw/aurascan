@@ -12,7 +12,7 @@ import { createSignBroadcast } from '../../../core/utils/signing/transaction-man
   styleUrls: ['./proposal-vote.component.scss'],
 })
 export class ProposalVoteComponent implements OnInit {
-  keyVote: string = null;
+  keyVote = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   constructor(
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
@@ -39,19 +39,19 @@ export class ProposalVoteComponent implements OnInit {
       chainId: this.chainId,
     });
 
-    // if(hash)
-    // {
-    //   this.toastr.success(hash);
-    // }
+    if(hash)
+    {
+      this.dialogRef.close({ keyVote: this.keyVote });
+    }
 
     if (error) {
       this.toastr.error(error);
+      this.closeVoteForm();
     }
   }
 
   onSubmitVoteForm() {
     this.proposalVote();
-    this.dialogRef.close({ keyVote: this.keyVote });
   }
 
   closeVoteForm() {
