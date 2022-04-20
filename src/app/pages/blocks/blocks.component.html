@@ -10,7 +10,7 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
 
-              <td mat-cell *matCellDef="let data">
+              <td mat-cell *matCellDef="let data" style="max-width: 300px;">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
