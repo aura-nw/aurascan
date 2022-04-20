@@ -13,15 +13,15 @@
         </button>
 
         <mat-menu #menu="matMenu" class="custom-menu mt-2" xPosition="before">
-            <div class="menu-row" mat-menu-item>
+            <div class="menu-row" mat-menu-item [routerLink]="['/account',ng.wallet?.bech32Address]">
                 <img class="menu-img mr-3" width="20px"
                     src="./../../../../assets/images/wallet.png" alt="">
-                <span class="menu-content" [routerLink]="['/account',ng.wallet?.bech32Address]">Account Detail</span>
+                <span class="menu-content">Account Detail</span>
             </div>
-            <div class="menu-row" mat-menu-item>
+            <div class="menu-row" mat-menu-item (click)="disconnect()">
                 <img class="menu-img mr-3" width="20px"
                     src="./../../../../assets/images/log-out.svg" alt="">
-                <span class="menu-content" (click)="disconnect()">Log out</span>
+                <span class="menu-content">Log out</span>
             </div>
         </mat-menu>
 
