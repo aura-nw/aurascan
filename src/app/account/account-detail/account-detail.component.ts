@@ -176,9 +176,9 @@ export class AccountDetailComponent implements OnInit {
   ) {
     this.chartOptions = {
       stroke: {
-          width: 1,
-          curve: 'smooth',
-          colors: this.chartCustomOptions.map((e) => e.color)
+        width: 1,
+        curve: 'smooth',
+        colors: this.chartCustomOptions.map((e) => e.color),
       },
       tooltip: {
         custom: function ({ series, seriesIndex, w }) {
@@ -267,10 +267,18 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.getAccountDetail();
-    this.getListTransaction();
-    this.createQRCode();
+    // this.id = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      if (params?.id) {
+        this.id = params?.id;
+
+        this.getAccountDetail();
+        this.getListTransaction();
+        this.createQRCode();
+      } else {
+        
+      }
+    });
   }
 
   copyMessage(val: string) {
