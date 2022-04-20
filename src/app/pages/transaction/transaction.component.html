@@ -14,7 +14,7 @@
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <div *ngSwitchCase="'timestamp'">
-                      {{ data[template.matColumnDef] | calDate }} ago
+                      {{ getDateValue(data[template.matColumnDef])[0] }}
                     </div>
                     <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                       {{ data[template.matColumnDef] }}

@@ -1,35 +1,26 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
-import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
-import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { TransactionService } from '../../../app/core/services/transaction.service';
 import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart,
-  ApexFill,
-  ApexDataLabels,
-  ApexLegend,
-  ApexPlotOptions,
-  ChartComponent,
-  ApexStroke,
+  ApexChart, ApexDataLabels, ApexFill, ApexLegend, ApexNonAxisChartSeries, ApexPlotOptions, ApexResponsive, ApexStroke, ChartComponent
 } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
-import { PageEvent } from '@angular/material/paginator';
-import { AccountService } from '../../../app/core/services/account.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
-  PageEventType,
-  TypeAccount,
-  WalletAcount,
+  PageEventType, WalletAcount
 } from '../../../app/core/constants/account.enum';
+import { DATEFORMAT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
+import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { AccountService } from '../../../app/core/services/account.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
+import { formatTimeInWords, formatWithSchema } from '../../core/helpers/date';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -333,9 +324,13 @@ export class AccountDetailComponent implements OnInit {
       this.chartOptions.series = [];
       if (this.item.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
-        this.chartCustomOptions.push({name: ACCOUNT_WALLET_COLOR_ENUM.Commission, color: WalletAcount.Commission, amount: '0.000000'});
+        this.chartCustomOptions.push({
+          name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
+          color: WalletAcount.Commission,
+          amount: '0.000000',
+        });
       }
-      
+
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
           case ACCOUNT_WALLET_COLOR_ENUM.Available:
@@ -451,6 +446,21 @@ export class AccountDetailComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
+    }
+  }
+
+  getDateValue(time) {
+    if (time) {
+      try {
+        return [
+          formatTimeInWords(new Date(time).getTime()),
+          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [time, ''];
+      }
+    } else {
+      return ['-', ''];
     }
   }
 }

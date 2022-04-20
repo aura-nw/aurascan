@@ -29,13 +29,14 @@
               <div class="title mr-4">Assets</div>
               <form class="aura-form single-input-field search-form">
                 <div class="input-group">
-                  <input  type="text"
-                          class="form-control"
-                          placeholder="Search Asset"
-                          [(ngModel)]="textSearch"
-                          (ngModelChange)="searchToken()"
-                          name="search"
-                          autocomplete="off"
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Asset"
+                    [(ngModel)]="textSearch"
+                    (ngModelChange)="searchToken()"
+                    name="search"
+                    autocomplete="off"
                   />
                   <button type="submit" class="btn-search" (click)="searchToken()">
                     <img src="../../../assets/icons/icons-svg/white/search.svg" alt="" width="24" height="24" />
@@ -46,27 +47,29 @@
             <div class="d-flex align-items-center">
               <div class="title-small mr-4">Asset Type</div>
               <div class="aura-form asset-type">
-                <mat-select class="list-token form-control select-input-field"
-                            (selectionChange)="searchToken()"
-                            [disableOptionCentering]="true"
-                            [(value)]="selected">
+                <mat-select
+                  class="list-token form-control select-input-field"
+                  (selectionChange)="searchToken()"
+                  [disableOptionCentering]="true"
+                  [(value)]="selected"
+                >
                   <mat-option *ngFor="let item of assetsType" [value]="item.label">
                     {{ item.value | translate }}
                   </mat-option>
                 </mat-select>
               </div>
             </div>
-
           </div>
           <ng-container *ngIf="!searchNullData; else noValues">
-            <app-account-table *ngIf="dataSourceToken"
-                               [dataSource]="dataSourceToken"
-                               [templates]="templatesToken"
-                               [displayedColumns]="displayedColumnsToken"
-                               [pageData]="pageDataToken"
-                               [pageEventType]="pageEventType.Token"
-                               (pageEvent)="changePage($event)"
-                               [textNull]="'NO COINS'"
+            <app-account-table
+              *ngIf="dataSourceToken"
+              [dataSource]="dataSourceToken"
+              [templates]="templatesToken"
+              [displayedColumns]="displayedColumnsToken"
+              [pageData]="pageDataToken"
+              [pageEventType]="pageEventType.Token"
+              (pageEvent)="changePage($event)"
+              [textNull]="'NO COINS'"
             >
             </app-account-table>
           </ng-container>
@@ -84,43 +87,43 @@
           <mat-tab-group class="aura-tab" mat-stretch-tabs>
             <mat-tab label="Delegations">
               <app-account-table
-                      [dataSource]="dataSourceDelegation"
-                      [templates]="templatesDelegation"
-                      [displayedColumns]="displayedColumnsDelegation"
-                      [pageData]="pageDataDelegation"
-                      [pageEventType]="pageEventType.Delegation"
-                      (pageEvent)="changePage($event)"
+                [dataSource]="dataSourceDelegation"
+                [templates]="templatesDelegation"
+                [displayedColumns]="displayedColumnsDelegation"
+                [pageData]="pageDataDelegation"
+                [pageEventType]="pageEventType.Delegation"
+                (pageEvent)="changePage($event)"
               >
               </app-account-table>
             </mat-tab>
             <mat-tab label="Unbondings">
               <app-account-table
-                      [dataSource]="dataSourceUnBonding"
-                      [templates]="templatesUnBonding"
-                      [displayedColumns]="displayedColumnsUnBonding"
-                      [pageData]="pageDataUnbonding"
-                      [pageEventType]="pageEventType.Unbonding"
-                      (pageEvent)="changePage($event)"
+                [dataSource]="dataSourceUnBonding"
+                [templates]="templatesUnBonding"
+                [displayedColumns]="displayedColumnsUnBonding"
+                [pageData]="pageDataUnbonding"
+                [pageEventType]="pageEventType.Unbonding"
+                (pageEvent)="changePage($event)"
               ></app-account-table>
             </mat-tab>
             <mat-tab label="Redelegations">
               <app-account-table
-                      [dataSource]="dataSourceReDelegation"
-                      [templates]="templatesReDelegation"
-                      [displayedColumns]="displayedColumnsReDelegation"
-                      [pageData]="pageDataRedelegation"
-                      [pageEventType]="pageEventType.Redelegation"
-                      (pageEvent)="changePage($event)"
+                [dataSource]="dataSourceReDelegation"
+                [templates]="templatesReDelegation"
+                [displayedColumns]="displayedColumnsReDelegation"
+                [pageData]="pageDataRedelegation"
+                [pageEventType]="pageEventType.Redelegation"
+                (pageEvent)="changePage($event)"
               ></app-account-table>
             </mat-tab>
             <mat-tab label="Vestings">
               <app-account-table
-                      [dataSource]="dataSourceVesting"
-                      [templates]="templatesVesting"
-                      [displayedColumns]="displayedColumnsVesting"
-                      [pageData]="pageDataVesting"
-                      [pageEventType]="pageEventType.Vestings"
-                      (pageEvent)="changePage($event)"
+                [dataSource]="dataSourceVesting"
+                [templates]="templatesVesting"
+                [displayedColumns]="displayedColumnsVesting"
+                [pageData]="pageDataVesting"
+                [pageEventType]="pageEventType.Vestings"
+                (pageEvent)="changePage($event)"
               ></app-account-table>
             </mat-tab>
           </mat-tab-group>
@@ -133,15 +136,15 @@
           <div id="walletChart">
             <ng-container *ngIf="item?.total > 0; else chartNoValue">
               <apx-chart
-                      [series]="chartOptions.series"
-                      [chart]="chartOptions.chart"
-                      [labels]="chartOptions.labels"
-                      [fill]="chartOptions.fill"
-                      [dataLabels]="chartOptions.dataLabels"
-                      [responsive]="chartOptions.responsive"
-                      [plotOptions]="chartOptions.plotOptions"
-                      [legend]="chartOptions.legend"
-                      [colors]="chartOptions.colors"
+                [series]="chartOptions.series"
+                [chart]="chartOptions.chart"
+                [labels]="chartOptions.labels"
+                [fill]="chartOptions.fill"
+                [dataLabels]="chartOptions.dataLabels"
+                [responsive]="chartOptions.responsive"
+                [plotOptions]="chartOptions.plotOptions"
+                [legend]="chartOptions.legend"
+                [colors]="chartOptions.colors"
               >
               </apx-chart>
             </ng-container>
@@ -180,7 +183,7 @@
           <ngx-simplebar>
             <ng-container *ngIf="length > 0; else noValues">
               <div class="table-responsive">
-                <table mat-table [dataSource]="dataSource" class="  aura-table">
+                <table mat-table [dataSource]="dataSource" class="aura-table">
                   <ng-container *ngFor="let template of templates; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
                       <th class="none-border-top" mat-header-cell *matHeaderCellDef>
@@ -191,7 +194,7 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <div *ngSwitchCase="'timestamp'">
-                              {{ data[template.matColumnDef] | calDate }} ago
+                              {{ getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                               {{ data[template.matColumnDef] }}
@@ -216,7 +219,8 @@
                               </div>
                             </div>
                             <div *ngSwitchCase="'fee'">
-                              {{ data[template.matColumnDef] }} <span class="text--green">{{ global.stableToken }}</span>
+                              {{ data[template.matColumnDef] }}
+                              <span class="text--green">{{ global.stableToken }}</span>
                             </div>
                             <div *ngSwitchCase="'amount'">
                               <ng-container *ngIf="data[template.matColumnDef] > 0">
@@ -247,10 +251,7 @@
             </ng-template>
           </ngx-simplebar>
           <div class="mt-4">
-            <mat-paginator
-                    [length]="length"
-                    [pageIndex]="pageIndex"
-                    [pageSize]="pageSize" (page)="changePage($event)">
+            <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" (page)="changePage($event)">
             </mat-paginator>
           </div>
         </div>

@@ -18,7 +18,7 @@
       <div class="col-3">
         <p class="card-text fw-bold">Block Time</p>
       </div>
-      <div class="col-6">{{ item?.timestamp | calDate }} ago ({{ dateFormat }})</div>
+      <div class="col-6">{{ getDateValue(item?.timestamp)[0]}} ({{ (dateFormat) }})</div>
     </div>
     <div class="row mb-3">
       <div class="col-3">
@@ -69,7 +69,7 @@
               <td mat-cell *matCellDef="let data">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <div *ngSwitchCase="'timestamp'">{{ data[template.matColumnDef] | calDate }} ago</div>
+                    <div *ngSwitchCase="'timestamp'">{{ getDateValue(data[template.matColumnDef])[0] }}</div>
                     <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                       {{ data[template.matColumnDef] }}
                     </div>
