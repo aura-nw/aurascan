@@ -22,6 +22,7 @@ import { takeWhile } from 'rxjs/operators';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 @Component({
   selector: 'app-validators',
@@ -502,5 +503,19 @@ export class ValidatorsComponent implements OnInit {
       (error) => {
       },
     );
+  }
+
+  getDateValue(time) {
+    if (time) {
+      try {
+        return [
+          formatDistanceToNowStrict(new Date(time).getTime()),
+        ];
+      } catch (e) {
+        return [time, ''];
+      }
+    } else {
+      return ['-', ''];
+    }
   }
 }

@@ -1,95 +1,108 @@
 <div class="validator-container">
   <ng-container *ngIf="userAddress">
     <div class="card">
-          <!-- heading -->
-          <div class="d-flex justify-content-between card-header title-small">
-            <div>
-              <div class="mb-3">
-                <span class="text--white">Available Balance: {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span>
-                <span class="ml-2 text--green">{{ globals.stableToken }}</span>
-              </div>
-              <div>
-                <span class="text--white">Total Staked: {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}</span>
-                <span class="ml-2 text--green">{{ globals.stableToken }}</span>
-              </div>
-            </div>
-            <button class="button button-outline title-small" type="button" (click)="handleClaim()">
-              Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
-              <span class="ml-1">{{ globals.stableToken }}</span>
-            </button>
+      <!-- heading -->
+      <div class="d-flex justify-content-between card-header title-small">
+        <div>
+          <div class="mb-3">
+            <span class="text--white"
+              >Available Balance: {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span
+            >
+            <span class="ml-2 text--green">{{ globals.stableToken }}</span>
           </div>
-          <!-- table -->
-          <div class="card-body" *ngIf="lengthWallet > 0">
-            <ng-container>
-              <div class="table-responsive">
-                <table  mat-table matSort
-                        [dataSource]="dataSourceWallet"
-                        class="aura-table"
-                        (matSortChange)="sortData($event)">
-                  <ng-container *ngFor="let template of templatesWallet; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
-                      <ng-container *ngSwitchCase="'action'">
-                        <th mat-header-cell *matHeaderCellDef>
-                          <div [innerHTML]="template.headerCellDef | translate"></div>
-                        </th>
-                      </ng-container>
-                      <ng-container *ngSwitchDefault>
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                          <div [innerHTML]="template.headerCellDef | translate"></div>
-                        </th>
-                      </ng-container>
-
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef">
-                            <div *ngSwitchCase="'amount_staked'">
-                              {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                              <span class="text--green">{{ globals.stableToken }}</span>
-                            </div>
-                            <div *ngSwitchCase="'pending_reward'">
-                              {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                              <span class="text--green">{{ globals.stableToken }}</span>
-                            </div>
-                            <div *ngSwitchCase="'action'" class="py-4">
-                              <button type="button"
-                                      class="button button-outline py-2 px-4"
-                                      [disabled]="clicked"
-                                      (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)"
-                              >Manage</button>
-                            </div>
-                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
+          <div>
+            <span class="text--white"
+              >Total Staked: {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}</span
+            >
+            <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+          </div>
+        </div>
+        <button class="button button-outline title-small" type="button" (click)="handleClaim()">
+          Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
+          <span class="ml-1">{{ globals.stableToken }}</span>
+        </button>
+      </div>
+      <!-- table -->
+      <div class="card-body" *ngIf="lengthWallet > 0">
+        <ng-container>
+          <div class="table-responsive">
+            <table
+              mat-table
+              matSort
+              [dataSource]="dataSourceWallet"
+              class="aura-table"
+              (matSortChange)="sortData($event)"
+            >
+              <ng-container *ngFor="let template of templatesWallet; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+                  <ng-container *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
                   </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef="displayedColumnsWallet"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                      {{ 'NO VALIDATORS' | translate }}
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </ng-container>
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef">
+                        <div *ngSwitchCase="'amount_staked'">
+                          {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                          <span class="text--green">{{ globals.stableToken }}</span>
+                        </div>
+                        <div *ngSwitchCase="'pending_reward'">
+                          {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                          <span class="text--green">{{ globals.stableToken }}</span>
+                        </div>
+                        <div *ngSwitchCase="'action'" class="py-4">
+                          <button
+                            type="button"
+                            class="button button-outline py-2 px-4"
+                            [disabled]="clicked"
+                            (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)"
+                          >
+                            Manage
+                          </button>
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsWallet"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{ 'NO VALIDATORS' | translate }}
+                </td>
+              </tr>
+            </table>
           </div>
+        </ng-container>
+      </div>
     </div>
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-      <div class="d-flex justify-content-between card-header title-small text--white">
-        Undelegating
-      </div>
+      <div class="d-flex justify-content-between card-header title-small text--white">Undelegating</div>
       <div class="card-body">
         <ng-container *ngFor="let validator of lstUndelegate">
           <div class="row col-12 mb-3">
-            <div class="col-3 title-small title-name text--green cursor-pointer" [routerLink]="['/validators', validator.validator_address]">
-              {{validator.validator_name}}
+            <div
+              class="col-3 title-small title-name text--green cursor-pointer"
+              [routerLink]="['/validators', validator.validator_address]"
+            >
+              {{ validator.validator_name }}
             </div>
             <div class="col-9 text--white">
-              {{validator.balance | number: globals.formatNumberToken}} <span class="text--green">{{ globals.stableToken }}</span><br>
-              <span class="txt-time">{{validator.completion_time | calDate}} remaining</span>
+              {{ validator.balance | number: globals.formatNumberToken }}
+              <span class="text--green">{{ globals.stableToken }}</span
+              ><br />
+              <span class="txt-time">{{ getDateValue(validator.completion_time) }} remaining</span>
             </div>
           </div>
         </ng-container>
@@ -103,13 +116,14 @@
       <div class="d-flex align-item-center">
         <form class="aura-form single-input-field search-form mr-6">
           <div class="input-group">
-            <input  type="text"
-                    class="form-control"
-                    placeholder="Search validators"
-                    [(ngModel)]="textSearch"
-                    (ngModelChange)="searchValidator()"
-                    name="search"
-                    autocomplete="off"
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search validators"
+              [(ngModel)]="textSearch"
+              (ngModelChange)="searchValidator()"
+              name="search"
+              autocomplete="off"
             />
             <button type="submit" class="btn-search" (click)="searchValidator()">
               <img src="../../../assets/icons/icons-svg/white/search.svg" alt="" width="24" height="24" />
@@ -117,12 +131,18 @@
           </div>
         </form>
         <div class="button-switch-stage">
-          <button [class.active]="typeValidator === statusValidator.Active"
-                  (click)="changeType(statusValidator.Active)"
-          >Active</button>
-          <button [class.active]="typeValidator === statusValidator.Inactive"
-                  (click)="changeType(statusValidator.Inactive)"
-          >Inactive</button>
+          <button
+            [class.active]="typeValidator === statusValidator.Active"
+            (click)="changeType(statusValidator.Active)"
+          >
+            Active
+          </button>
+          <button
+            [class.active]="typeValidator === statusValidator.Inactive"
+            (click)="changeType(statusValidator.Inactive)"
+          >
+            Inactive
+          </button>
         </div>
       </div>
     </div>
@@ -130,12 +150,14 @@
     <div class="card-body pt-4">
       <ng-container *ngIf="dataSource; else noValues">
         <div class="table-responsive">
-          <table  mat-table matSort
-                  [dataSource]="dataSource"
-                  class="aura-table"
-                  (matSortChange)="sortData($event)"
-                  ng-container
-                  *ngIf="!searchNullData; else noValues"
+          <table
+            mat-table
+            matSort
+            [dataSource]="dataSource"
+            class="aura-table"
+            (matSortChange)="sortData($event)"
+            ng-container
+            *ngIf="!searchNullData; else noValues"
           >
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
@@ -173,10 +195,7 @@
                         {{ data[template.matColumnDef] | number }}<br />
                         <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                       </div>
-                      <div
-                              *ngSwitchCase="'participation'"
-                              [ngClass]="{ 'parti-down': data['isPartiDown'] }"
-                      >
+                      <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngSwitchCase="'rank'" class="text-left">
@@ -189,26 +208,29 @@
                         <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
                       </div>
                       <div
-                              *ngSwitchCase="'title'"
-                              class="text--green cursor-pointer"
-                              [routerLink]="['/validators', data.operator_address]"
+                        *ngSwitchCase="'title'"
+                        class="text--green cursor-pointer"
+                        [routerLink]="['/validators', data.operator_address]"
                       >
                         <span>{{ data[template.matColumnDef] }}</span>
                       </div>
                       <div *ngSwitchCase="'percent_power'" class="box-percent-power">
                         <div class="cumulative-share_container">
-                          <div class="cumulative-share_cum" [ngStyle]="{ width: data.cumulative_share_before + '%' }"></div>
+                          <div
+                            class="cumulative-share_cum"
+                            [ngStyle]="{ width: data.cumulative_share_before + '%' }"
+                          ></div>
                           <div class="cumulative-share_fill" [ngStyle]="{ width: data.cumulative_share + '%' }"></div>
                           <span>{{ data['cumulative_share_after'] + '%' }}</span>
                         </div>
                       </div>
                       <div *ngSwitchCase="'action'">
                         <button
-                                type="button"
-                                class="button button-outline"
-                                [disabled]="clicked"
-                                *ngIf="data['status'] === statusValidator.Active"
-                                (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)"
+                          type="button"
+                          class="button button-outline"
+                          [disabled]="clicked"
+                          *ngIf="data['status'] === statusValidator.Active"
+                          (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)"
                         >
                           Delegate
                         </button>
@@ -243,12 +265,15 @@
       <div class="d-flex align-items-end mb-8">
         <div class="mr-10">
           <div class="title text-gradient fw-bolder">{{ dataModal?.title }}</div>
-          <div class="body text--white">Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}</div>
+          <div class="body text--white">
+            Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
+          </div>
         </div>
         <div class="text--greyscale-4">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
-            <span class="text--green ml-1">{{ globals.stableToken }}</span>)
+            <span class="text--green ml-1">{{ globals.stableToken }}</span
+            >)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
         </div>
@@ -261,24 +286,35 @@
             <span class="text--green">{{ globals.stableToken }}</span>
           </div>
           <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-            <input type="number" [max]="globals.maxNumberInput"
-                   [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-                   [(ngModel)]="amountFormat"
-                   (blur)="resetCheck()"/>
+            <input
+              type="number"
+              [max]="globals.maxNumberInput"
+              [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+              [(ngModel)]="amountFormat"
+              (blur)="resetCheck()"
+            />
             <div class="py-2 mr-4">
-              <button class="button button-primary active" type="button"
-                      (click)="getMaxToken(dialogMode.Undelegate)">MAX</button>
+              <button class="button button-primary active" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
+                MAX
+              </button>
             </div>
             <div class="input-group-append">{{ globals.stableToken }}</div>
           </div>
         </div>
-        <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }" *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
-          <input type="number" [max]="globals.maxNumberInput"
-                 [(ngModel)]="amountFormat"
-                 (blur)="resetCheck()"/>
+        <div
+          class="input-group mt-2"
+          [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+          *ngIf="dataDelegate.dialogMode === dialogMode.Delegate"
+        >
+          <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="py-2 mr-4">
-            <button class="button button-primary active py-2 px-4" type="button"
-                    (click)="getMaxToken(dialogMode.Delegate)">MAX</button>
+            <button
+              class="button button-primary active py-2 px-4"
+              type="button"
+              (click)="getMaxToken(dialogMode.Delegate)"
+            >
+              MAX
+            </button>
           </div>
           <div class="input-group-append">{{ globals.stableToken }}</div>
         </div>
@@ -299,12 +335,15 @@
               <span class="text--green">{{ globals.stableToken }}</span>
             </div>
             <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input type="number"
-                     [(ngModel)]="amountFormat" [max]="globals.maxNumberInput"
-                     (blur)="resetCheck()"/>
+              <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="py-2 mr-4">
-                <button class="button button-primary active py-2 px-4" type="button"
-                        (click)="getMaxToken(dialogMode.Undelegate)">MAX</button>
+                <button
+                  class="button button-primary active py-2 px-4"
+                  type="button"
+                  (click)="getMaxToken(dialogMode.Undelegate)"
+                >
+                  MAX
+                </button>
               </div>
               <div class="input-group-append">{{ globals.stableToken }}</div>
             </div>
@@ -315,36 +354,73 @@
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
             <div class="aura-form mr-4">
-              <mat-select class="form-control select-input-field select-action-field"
-                          [placeholder]="'Select Action'"
-                          [disableOptionCentering]="true">
-                <mat-option (click)="changeTypePopup(dialogMode.Undelegate)">
-                  Undelegate
-                </mat-option>
-                <mat-option (click)="changeTypePopup(dialogMode.Redelegate)">
-                  Redelegate
-                </mat-option>
+              <mat-select
+                class="form-control select-input-field select-action-field"
+                [placeholder]="'Select Action'"
+                [disableOptionCentering]="true"
+              >
+                <mat-option (click)="changeTypePopup(dialogMode.Undelegate)"> Undelegate </mat-option>
+                <mat-option (click)="changeTypePopup(dialogMode.Redelegate)"> Redelegate </mat-option>
               </mat-select>
             </div>
-            <button type="button" class="button body button-outline"
-                    (click)="changeTypePopup(dialogMode.Delegate)" [disabled]="isExceedAmount">Delegate</button>
+            <button
+              type="button"
+              class="button body button-outline"
+              (click)="changeTypePopup(dialogMode.Delegate)"
+              [disabled]="isExceedAmount"
+            >
+              Delegate
+            </button>
           </div>
           <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">Back</button>
-            <button type="button" class="button body button-outline" (click)="handleUndelegate()" [disabled]="isExceedAmount">Undelegate</button>
+            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">
+              Back
+            </button>
+            <button
+              type="button"
+              class="button body button-outline"
+              (click)="handleUndelegate()"
+              [disabled]="isExceedAmount"
+            >
+              Undelegate
+            </button>
           </div>
           <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button body mr-2 text--white"
-                    (click)="changeTypePopup(dialogMode.Manage)" *ngIf="!isOpenStaking">Back</button>
-            <button type="button" class="button body mr-2 text--white"
-                    (click)="closeDialog(modal)" *ngIf="isOpenStaking">Cancel</button>
-            <button type="button" class="button body button-outline"
-                    (click)="handleStaking()"
-                    [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)">Delegate</button>
+            <button
+              type="button"
+              class="button body mr-2 text--white"
+              (click)="changeTypePopup(dialogMode.Manage)"
+              *ngIf="!isOpenStaking"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              class="button body mr-2 text--white"
+              (click)="closeDialog(modal)"
+              *ngIf="isOpenStaking"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="button body button-outline"
+              (click)="handleStaking()"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+            >
+              Delegate
+            </button>
           </div>
           <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">Back</button>
-            <button type="button" class="button body button-outline" (click)="handleRedelegate()" [disabled]="isExceedAmount">
+            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">
+              Back
+            </button>
+            <button
+              type="button"
+              class="button body button-outline"
+              (click)="handleRedelegate()"
+              [disabled]="isExceedAmount"
+            >
               Delegate
             </button>
           </div>

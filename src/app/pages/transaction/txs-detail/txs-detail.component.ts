@@ -11,6 +11,7 @@ import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { Globals } from '../../../../app/global/global';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 
 @Component({
   selector: 'app-txs-detail',
@@ -70,5 +71,20 @@ export class TxsDetailComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isRawData = type;
+  }
+
+  getDateValue(time) {
+    if (time) {
+      try {
+        return [
+          formatTimeInWords(new Date(time).getTime()),
+          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [time, ''];
+      }
+    } else {
+      return ['-', ''];
+    }
   }
 }
