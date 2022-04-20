@@ -71,7 +71,7 @@
             <div class="collapse navbar-collapse active" id="topnav-menu-content">
                 <ul class="navbar-nav">
                     <ng-container *ngFor="let item of menuItems">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown mr-10">
                             <a class="nav-link d-flex align-items-center" *ngIf="!item.subItems && item.link" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
                                [routerLink]="item.link" routerLinkActive="active" [class.active]="router.url === '/' && item.link === '/dashboard'" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>
