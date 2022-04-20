@@ -72,7 +72,7 @@
           <div class="card-text">Voting Power</div>
         </div>
         <div class="col-6">
-          {{ item?.percent_power }}%({{ item?.power | number }} <span class="text--green">{{ global.stableToken }}</span
+          {{ item?.percent_power }}%({{ item?.power | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span
           >)
         </div>
       </div>
@@ -87,7 +87,7 @@
           <div class="card-text">Self Bonded</div>
         </div>
         <div class="col-6">
-          {{ item?.self_bonded | number }} <span class="text--green">{{ global.stableToken }}</span> ({{
+          {{ item?.self_bonded | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span> ({{
             item?.percent_self_bonded
           }})
         </div>

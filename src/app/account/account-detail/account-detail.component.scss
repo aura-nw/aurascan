@@ -71,7 +71,6 @@ section.account-detail {
   .article-2 {
     min-height: 500px;
   }
-
 }
 .chart-legend-item {
   border-bottom: 1px solid var(--aura-dark-gray);
@@ -87,4 +86,8 @@ section.account-detail {
     margin: 0.2rem 1rem 0 0;
     font-weight: 500;
   }
+}
+
+.chart-token {
+  margin: 0 auto;
 }
