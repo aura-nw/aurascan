@@ -10,6 +10,8 @@ import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.con
 import { PageEvent } from '@angular/material/paginator';
 import { Globals } from '../../../../app/global/global';
 import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
+import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
+import { DATEFORMAT } from '../../../core/constants/common.constant';
 
 @Component({
   selector: 'app-validators-detail',
@@ -192,6 +194,21 @@ export class ValidatorsDetailComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
+    }
+  }
+
+  getDateValue(time) {
+    if (time) {
+      try {
+        return [
+          formatTimeInWords(new Date(time).getTime()),
+          `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+        ];
+      } catch (e) {
+        return [time, ''];
+      }
+    } else {
+      return ['-', ''];
     }
   }
 }
