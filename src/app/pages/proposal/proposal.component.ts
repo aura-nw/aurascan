@@ -81,7 +81,7 @@ export class ProposalComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.lastedList = [...res.data];
       this.lastedList.forEach((pro, index) => {
-        if (index < 8) {
+        if (index < 4) {
           this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
             if (!res.data.proposalVoteTally.tally) {
               return;
