@@ -57,6 +57,7 @@ import { DatePipe } from '@angular/common';
 import { Globals } from './global/global';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { NgxMaskModule } from 'ngx-mask';
+import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/timeout.interceptor';
 // if (environment.defaultauth === 'firebase') {
 //   initFirebaseBackend(environment.firebaseConfig);
 // } else {
@@ -141,6 +142,8 @@ export class MaterialModule { }
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
+    { provide: DEFAULT_TIMEOUT, useValue: 60000 },
     // { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     EnvironmentService,
     DatePipe,
