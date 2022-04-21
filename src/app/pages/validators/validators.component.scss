@@ -47,6 +47,14 @@
   }
 }
 
+.undelegate-item {
+  padding: var(--spacer-3) 0;
+  margin: 0;
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--aura-light-gray);
+  }
+}
+
 form.search-form {
   .input-group {
     background-color: #1C1C1F; // this color not define in root
@@ -180,11 +188,4 @@ form.search-form {
       border-radius: 4px;
     }
   }
-}
-.col-per-13 {
-  width: 13%;
-}
-
-.col-per-15 {
-  width: 15%;
 }
