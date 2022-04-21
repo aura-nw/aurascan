@@ -58,11 +58,6 @@ export class TransferredDetailComponent implements OnInit {
         } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) { 
           this.transactionDetail?.messages.forEach(message => {
             message.validatorName = this.listValidator.find(f => f.operator_address === message?.validator_address).title || '';
-            // const jsonData = JSON.parse(this.transactionDetail.raw_log);
-            // console.log(jsonData);
-            // let amount = jsonData[0].events[0].attributes[1].value.replace('uaura','');
-            // message.amount = amount;
-            // message.amount = message?.amount.amount;
           });
         }
       },
