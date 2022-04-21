@@ -1,4 +1,4 @@
-<app-pagetitle title="Account detail" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Account Detail" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <section class="account-detail">
   <div class="row">
     <div class="col-3">
@@ -188,7 +188,7 @@
                 <table mat-table [dataSource]="dataSource" class="aura-table">
                   <ng-container *ngFor="let template of templates; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th class="none-border-top" mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef>
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 
