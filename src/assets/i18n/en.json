@@ -1,6 +1,6 @@
 {
     "HEADER": {
-        "SEARCH": "Search by Address, Block, Txn Hash,...",
+        "SEARCH": "Search by Address, Block Height, Tx Hash,...",
         "MEGA_MENU": "Mega Menu",
         "NOTIFICATIONS": {
             "TITLE": "Notifications",

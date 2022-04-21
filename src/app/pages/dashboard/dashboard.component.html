@@ -10,34 +10,34 @@
               <div class="ms-auto">
                 <div>
                   <button
-                          type="button"
-                          class="button button-primary body mr-2"
-                          [class.active]="chart === '60m'"
-                          (click)="updateBlockAndTxs('60m')"
+                    type="button"
+                    class="button button-primary body mr-2"
+                    [class.active]="chart === '60m'"
+                    (click)="updateBlockAndTxs('60m')"
                   >
                     60m
                   </button>
                   <button
-                          type="button"
-                          class="button button-primary body mr-2"
-                          [class.active]="chart === '24h'"
-                          (click)="updateBlockAndTxs('24h')"
+                    type="button"
+                    class="button button-primary body mr-2"
+                    [class.active]="chart === '24h'"
+                    (click)="updateBlockAndTxs('24h')"
                   >
                     24h
                   </button>
                   <button
-                          type="button"
-                          class="button button-primary body mr-2"
-                          [class.active]="chart === '30d'"
-                          (click)="updateBlockAndTxs('30d')"
+                    type="button"
+                    class="button button-primary body mr-2"
+                    [class.active]="chart === '30d'"
+                    (click)="updateBlockAndTxs('30d')"
                   >
                     30d
                   </button>
                   <button
-                          type="button"
-                          class="button button-primary body"
-                          [class.active]="chart === '12M'"
-                          (click)="updateBlockAndTxs('12M')"
+                    type="button"
+                    class="button button-primary body"
+                    [class.active]="chart === '12M'"
+                    (click)="updateBlockAndTxs('12M')"
                   >
                     12M
                   </button>
@@ -47,12 +47,12 @@
             <div class="w-100" *ngIf="chartOptions">
               <div id="chart">
                 <apx-chart
-                        [series]="chartOptions.series"
-                        [chart]="chartOptions.chart"
-                        [xaxis]="chartOptions.xaxis"
-                        [stroke]="chartOptions.stroke"
-                        [tooltip]="chartOptions.tooltip"
-                        [dataLabels]="chartOptions.dataLabels"
+                  [series]="chartOptions.series"
+                  [chart]="chartOptions.chart"
+                  [xaxis]="chartOptions.xaxis"
+                  [stroke]="chartOptions.stroke"
+                  [tooltip]="chartOptions.tooltip"
+                  [dataLabels]="chartOptions.dataLabels"
                 >
                 </apx-chart>
               </div>
@@ -66,8 +66,7 @@
 <!-- Cards -->
 <section>
   <div class="row">
-    <div class="col-xl-3 col-md-6"
-         *ngIf="global && global.dataHeader && global.dataHeader.block_height">
+    <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.block_height">
       <!-- card -->
       <div class="card text--white">
         <!-- card body -->
@@ -86,22 +85,18 @@
       </div>
       <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6"
-         *ngIf="global && global.dataHeader && global.dataHeader.total_validator_active_num && global.dataHeader.total_validator_num">
+    <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.block_time">
       <!-- card -->
       <div class="card text--white">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-9">
             <div class="col-12">
-              <span class="sub-text">Validators</span>
+              <span class="sub-text">Block Time</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="title text-gradient fw-bold">
-              {{ global?.dataHeader?.total_validator_active_num }} /
-              {{ global?.dataHeader?.total_validator_num }}
-            </h4>
+            <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.block_time }}</h4>
             <div class="body">Update 5s ago</div>
           </div>
         </div>
@@ -109,8 +104,7 @@
       </div>
       <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6"
-         *ngIf="global && global.dataHeader && global.dataHeader.bonded_tokens">
+    <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.bonded_tokens">
       <!-- card -->
       <div class="card text--white">
         <!-- card body -->
@@ -129,19 +123,29 @@
       </div>
       <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6"
-         *ngIf="global && global.dataHeader && global.dataHeader.block_time">
+    <div
+      class="col-xl-3 col-md-6"
+      *ngIf="
+        global &&
+        global.dataHeader &&
+        global.dataHeader.total_validator_active_num &&
+        global.dataHeader.total_validator_num
+      "
+    >
       <!-- card -->
       <div class="card text--white">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-9">
             <div class="col-12">
-              <span class="sub-text">Block Time</span>
+              <span class="sub-text">Validators</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between">
-            <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.block_time }}</h4>
+            <h4 class="title text-gradient fw-bold">
+              {{ global?.dataHeader?.total_validator_active_num }} /
+              {{ global?.dataHeader?.total_validator_num }}
+            </h4>
             <div class="body">Update 5s ago</div>
           </div>
         </div>
@@ -165,10 +169,10 @@
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceBlock; else noValues">
               <div class="table-responsive">
-                <table mat-table [dataSource]="dataSourceBlock" class="  aura-table">
+                <table mat-table [dataSource]="dataSourceBlock" class="aura-table body">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef class="has-border-top">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
                       <td mat-cell *matCellDef="let data">
@@ -177,10 +181,18 @@
                             <div *ngSwitchCase="'timestamp'">
                               {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
-                            <div *ngSwitchCase="'proposer'" class="text--green cursor-pointer" [routerLink]="['/validators', data.operator_address]">
+                            <div
+                              *ngSwitchCase="'proposer'"
+                              class="text--green cursor-pointer"
+                              [routerLink]="['/validators', data.operator_address]"
+                            >
                               {{ data[template.matColumnDef] }}
                             </div>
-                            <div *ngSwitchCase="'height'" class="text--green cursor-pointer" [routerLink]="['/blocks', data.height]">
+                            <div
+                              *ngSwitchCase="'height'"
+                              class="text--green cursor-pointer"
+                              [routerLink]="['/blocks', data.height]"
+                            >
                               {{ data[template.matColumnDef] }}
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -208,8 +220,6 @@
       </div>
     </div>
 
-
-
     <!-- Transaction -->
     <div class="col-xl-6">
       <div class="card">
@@ -221,10 +231,10 @@
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceTx; else noValues">
               <div class="table-responsive">
-                <table mat-table [dataSource]="dataSourceTx" class="  aura-table">
+                <table mat-table [dataSource]="dataSourceTx" class="aura-table body">
                   <ng-container *ngFor="let template of templatesTx; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef class="has-border-top">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
                       <td mat-cell *matCellDef="let data">
@@ -250,7 +260,11 @@
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsTx" (click)="openTxsDetail($event, row)"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumnsTx"
+                    (click)="openTxsDetail($event, row)"
+                  ></tr>
                   <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell g-no-data" colspan="9999">
                       {{ 'NO DATA' | translate }}
@@ -268,4 +282,3 @@
     </div>
   </div>
 </section>
-

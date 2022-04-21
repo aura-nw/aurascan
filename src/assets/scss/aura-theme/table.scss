@@ -4,14 +4,13 @@
     border-bottom-color: var(--aura-light-gray);
   }
   th.mat-header-cell {
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: var(--aura-light-gray);
     font-size: 1.6rem;
     line-height: 2.4rem;
     color: var(--aura-white);
-    &.none-border-top {
-      border-top: none;
+    &.has-border-top {
+      border-top-width: 1px;
+      border-top-style: solid;
+      border-top-color: var(--aura-light-gray);
     }
   }
   .mat-cell, .mat-footer-cell {
@@ -33,7 +32,22 @@
       color: var(--aura-white);
   }
   }
+  button.button.button-outline {
+    padding: var(--spacer-2) var(--spacer-6);
+  }
 }
 mat-paginator {
   background-color: transparent !important;
+}
+
+.col-per-13 {
+  width: 13%;
+}
+
+.col-per-15 {
+  width: 15%;
+}
+
+.col-per-25 {
+  width: 25%;
 }
