@@ -1,16 +1,16 @@
 @font-face {
   font-family: 'icon-aura';
-  src:  url('icon-aura.eot?xchece');
-  src:  url('icon-aura.eot?xchece#iefix') format('embedded-opentype'),
-    url('icon-aura.ttf?xchece') format('truetype'),
-    url('icon-aura.woff?xchece') format('woff'),
-    url('icon-aura.svg?xchece#icomoon') format('svg');
+  src:  url('ico-aura.eot?w8bdhl');
+  src:  url('ico-aura.eot?w8bdhl#iefix') format('embedded-opentype'),
+    url('ico-aura.ttf?w8bdhl') format('truetype'),
+    url('ico-aura.woff?w8bdhl') format('woff'),
+    url('ico-aura.svg?w8bdhl#ico-aura') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+i {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icon-aura' !important;
   speak: never;
@@ -25,6 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-credit-card:before {
+  content: "\e909";
+}
+.icon-user:before {
+  content: "\e90b";
+}
+.icon-collab:before {
+  content: "\e90c";
+}
 .icon-archive:before {
   content: "\e900";
 }
@@ -52,15 +61,6 @@
 .icon-close:before {
   content: "\e908";
 }
-.icon-credit-card:before {
-  content: "\e909";
-}
 .icon-grid:before {
   content: "\e90a";
-}
-.icon-user:before {
-  content: "\e90b";
-}
-.icon-account:before {
-  content: "\e90b";
 }
