@@ -11,8 +11,6 @@ import { AuthenticationService } from '../../../app/core/services/auth.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { DATEFORMAT } from '../../core/constants/common.constant';
-import { formatTimeInWords, formatWithSchema } from '../../core/helpers/date';
 import { Globals } from '../../global/global';
 
 export type ChartOptions = {
@@ -94,15 +92,16 @@ export class DashboardComponent implements OnInit {
     ];
     this.chartOptions = {
       series: [
-        {
-          name: 'blocks',
-          type: 'area',
-          data: [],
-        },
+        // {
+        //   name: 'blocks',
+        //   type: 'area',
+        //   data: [],
+        // },
         {
           name: 'transactions',
           type: 'line',
           data: [],
+          color: '#5EE6D0',
         },
       ],
       chart: {
@@ -190,23 +189,24 @@ export class DashboardComponent implements OnInit {
       const data0 = res[0].data.map((i) => i.count);
       const data1 = res[1].data.map((i) => i.count);
       let categories = res[0].data.map((i) => i.timestamp);
-      let missing1 = data0.filter((item) => this.chartOptions.series[0].data.indexOf(item) < 0);
-      let missing2 = data1.filter((item) => this.chartOptions.series[1].data.indexOf(item) < 0);
+      // let missing1 = data0.filter((item) => this.chartOptions.series[0].data.indexOf(item) < 0);
+      // let missing2 = data1.filter((item) => this.chartOptions.series[1].data.indexOf(item) < 0);
       // this.chartOptions.xaxis = {
       //   type: "datetime",
       //   categories: []
       // }
       // if (missing1?.length > 0 || missing2?.length > 0) {
       this.chartOptions.series = [
-        {
-          name: 'blocks',
-          type: 'area',
-          data: data0,
-        },
+        // {
+        //   name: 'blocks',
+        //   type: 'area',
+        //   data: data0,
+        // },
         {
           name: 'transactions',
           type: 'line',
           data: data1,
+          color: '#5EE6D0',
         },
       ];
 
