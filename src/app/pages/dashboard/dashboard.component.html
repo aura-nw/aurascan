@@ -68,7 +68,7 @@
   <div class="row">
     <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.block_height">
       <!-- card -->
-      <div class="card text--white">
+      <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-9">
@@ -76,7 +76,7 @@
               <span class="sub-text">Height</span>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.block_height | number }}</h4>
             <div class="body">Update 5s ago</div>
           </div>
@@ -87,7 +87,7 @@
     </div>
     <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.total_txs_num">
       <!-- card -->
-      <div class="card text--white">
+      <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-9">
@@ -95,7 +95,7 @@
               <span class="sub-text">Transactions</span>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.total_txs_num }}</h4>
             <div class="body">Update 5s ago</div>
           </div>
@@ -106,7 +106,7 @@
     </div>
     <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.bonded_tokens">
       <!-- card -->
-      <div class="card text--white">
+      <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-9">
@@ -114,7 +114,7 @@
               <span class="sub-text">Bonded Tokens</span>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.bonded_tokens | number }}</h4>
             <div class="body">Update 5s ago</div>
           </div>
@@ -133,7 +133,7 @@
       "
     >
       <!-- card -->
-      <div class="card text--white">
+      <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-9">
@@ -141,7 +141,7 @@
               <span class="sub-text">Validators</span>
             </div>
           </div>
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="title text-gradient fw-bold">
               {{ global?.dataHeader?.total_validator_active_num }} /
               {{ global?.dataHeader?.total_validator_num }}
