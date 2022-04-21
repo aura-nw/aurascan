@@ -7,7 +7,6 @@ import {
 } from 'ng-apexcharts';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
-import { AuthenticationService } from '../../../app/core/services/auth.service';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
@@ -79,7 +78,6 @@ export class DashboardComponent implements OnInit {
     public commonService: CommonService,
     private datePipe: DatePipe,
     private router: Router,
-    private authenticationService: AuthenticationService,
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals
@@ -107,6 +105,17 @@ export class DashboardComponent implements OnInit {
       chart: {
         height: 300,
         type: 'area',
+        toolbar:{
+          tools:{
+            selection: false,
+            download: true,
+            zoom: false,
+            zoomin: true,
+            zoomout: true,
+            pan: false,
+            reset: false,
+          }
+        }
       },
       dataLabels: {
         enabled: false,
