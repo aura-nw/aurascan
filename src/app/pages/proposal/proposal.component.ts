@@ -188,7 +188,6 @@ export class ProposalComponent implements OnInit {
     if (expiredTime > 0) {
       this.walletService.connectKeplr(this.chainId, (account) => {
         let dialogRef = this.dialog.open(ProposalVoteComponent, {
-          height: '378px',
           width: '431px',
           data: {
             id,

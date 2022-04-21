@@ -281,15 +281,9 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validatorsListRedelegate(userAddress, operatorAddress).subscribe(
       (res) => {
         this.lstValidator = res.data;
-        // res.forEach(f => {
-        //   let isStaking = (f.staking_address === this.userAddress) ? true : false;
-        //   this.lstValidator.push(f.title, f.commission, isStaking);
-        // });
-
-        // this.dataModal = res.data;
-        // this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
-        // this.dataDelegate.validatorDetail = this.validatorDetail;
-        // this.getListDelegators(address);
+        this.lstValidator.forEach(f => {
+          f.isStaking = (f.staking_address === this.userAddress) ? true : false;
+        });
       },
       (error) => {},
     );
@@ -324,8 +318,11 @@ export class ValidatorsComponent implements OnInit {
               f.amount_staked = f.amount_staked / NUMBER_CONVERT;
               f.pending_reward = f.pending_reward / NUMBER_CONVERT;
             });
-            this.dataSourceWallet = new MatTableDataSource(res?.dataListDelegator.data?.delegations);
-            this.lengthWallet = res?.dataListDelegator.data?.delegations?.length;
+
+            //check amount staked > 0
+            let arrayDelegate = res?.dataListDelegator.data?.delegations.filter(x => x.amount_staked > 0);
+            this.dataSourceWallet = new MatTableDataSource(arrayDelegate);
+            this.lengthWallet = arrayDelegate?.length;
           }
         }
 
