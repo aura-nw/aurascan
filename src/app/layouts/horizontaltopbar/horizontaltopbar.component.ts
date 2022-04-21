@@ -1,21 +1,19 @@
-import { Component, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-
-import { MENU } from './menu';
-import { MenuItem } from './menu.model';
-
+import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
-
-import { LanguageService } from '../../core/services/language.service';
-import { EventService } from '../../core/services/event.service';
-import { AuthenticationService } from '../../core/services/auth.service';
-import { LAYOUT_MODE } from '../layouts.model';
+import { first } from 'rxjs/operators';
 import { NETWORK, VALIDATOR_ADDRESS_PREFIX } from '../../../app/core/constants/common.constant';
 import { CommonService } from '../../../app/core/services/common.service';
-import { EnvironmentService } from '../../../app/core/data-services/environment.service';
-import { first } from 'rxjs/operators';
+import { ResponseDto } from '../../core/models/common.model';
+import { AuthenticationService } from '../../core/services/auth.service';
+import { EventService } from '../../core/services/event.service';
+import { LanguageService } from '../../core/services/language.service';
+import { TransactionService } from '../../core/services/transaction.service';
 import { WalletService } from '../../core/services/wallet.service';
+import { LAYOUT_MODE } from '../layouts.model';
+import { MENU } from './menu';
+import { MenuItem } from './menu.model';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -64,6 +62,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private authService: AuthenticationService,
     private commonService: CommonService,
     private walletService: WalletService,
+    private transactionService: TransactionService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -77,7 +76,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.menuItems.forEach((item) => {
-          if (item.id === 6) { // check if item is account
+          if (item.id === 6) {
+            // check if item is account
             item.link = `/account/${wallet.bech32Address}`;
           }
         });
@@ -320,20 +320,44 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   handleSearch() {
+    const VALIDATORS = {
+      HASHRULE: /^[A-Z0-9]/,
+    };
+    const regexRule = VALIDATORS.HASHRULE;
     this.searchValue = this.searchValue.trim();
-    if (this.searchValue.length > 60) {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['transaction', this.searchValue]);
-      });
-    } else if (this.searchValue.length > 40) {
-      let urlLink = this.searchValue.startsWith(VALIDATOR_ADDRESS_PREFIX) ? 'validators' : 'account';
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([urlLink, this.searchValue]);
-      });
+
+    if (regexRule.test(this.searchValue)) {
+      if (this.searchValue.length > 60) {
+        this.getTxhDetail(this.searchValue);
+      } else if (this.searchValue.length > 40) {
+        let urlLink = this.searchValue.startsWith(VALIDATOR_ADDRESS_PREFIX) ? 'validators' : 'account';
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate([urlLink, this.searchValue]);
+        });
+      } else {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['blocks', this.searchValue]);
+        });
+      }
     } else {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['blocks', this.searchValue]);
-      });
+      this.searchValue = '';
     }
+  }
+
+  getTxhDetail(value): void {
+    this.transactionService.txsDetail(decodeURI(value)).subscribe(
+      (res: ResponseDto) => {
+        if (res.data) {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['transaction', this.searchValue]);
+          });
+        } else {
+          this.searchValue = '';
+        }
+      },
+      (error) => {
+        this.searchValue = '';
+      },
+    );
   }
 }
