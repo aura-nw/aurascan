@@ -111,8 +111,8 @@
                 <button class="btn button-inline body text--green mr-3" [routerLink]="[lastedItem.pro_id]">
                   Details
                 </button>
-                <!-- [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'" -->
                 <button
+                  [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                   (click)="openVoteDialog(lastedItem)"
                   class="button button-outline body"
                 >

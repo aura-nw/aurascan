@@ -186,31 +186,30 @@ export class ProposalComponent implements OnInit {
   openVoteDialog(item: IProposal) {
     const id = item.pro_id;
     const title = item.pro_title;
-    const expiredTime = 1; //new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
+    const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
 
     if (expiredTime > 0) {
       this.walletService.connectKeplr(this.chainId, (account) => {
         this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
 
-          const { created_at } = data.result;
+          const { created_at } = data.result ? data.result : { created_at: null };
 
           warning = created_at
-            ? new Date(created_at) > new Date(item.pro_voting_start_time)
+            ? new Date(created_at) < new Date(item.pro_voting_start_time)
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
 
-          // if (created_at) {
-          //   const exp = new Date(created_at) > new Date(item.pro_voting_start_time);
-
-          //   if (exp) {
-          //   } else {
-          //     warning = MESSAGE_WARNING.LATE;
-          //   }
-          // } else {
-          //   warning = MESSAGE_WARNING.NOT_PARTICIPATE;
-          // }
+          console.log({
+            id,
+            title,
+            warning,
+            voteValue: warning
+              ? this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null)
+              : null,
+          });
+          
 
           this.openDialog({
             id,
@@ -221,15 +220,6 @@ export class ProposalComponent implements OnInit {
               : null,
           });
         });
-
-        /* 
-          {
-            id,
-            title,
-            voteValue: this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
-            warning: `You don't have the right to vote on this proposal because the voting period of this proposal started before you staked Aura.`
-          }
-       */
       });
     } else {
       window.location.reload();

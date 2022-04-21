@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { MESSAGE_WARNING } from '../../../core/constants/proposal.constant';
 import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
@@ -17,7 +18,7 @@ export class ProposalVoteComponent implements OnInit {
   keyVote = null;
   chainId = this.environmentService.apiUrl.value.chainId;
 
-  message = MESSAGE_WARNING;
+  MESSAGE = MESSAGE_WARNING;
 
   constructor(
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
@@ -25,6 +26,7 @@ export class ProposalVoteComponent implements OnInit {
     private toastr: NgxToastrService,
     private walletService: WalletService,
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
+    private route: Router,
   ) {
     this.keyVote = data.voteValue ?? null;
   }
@@ -44,8 +46,7 @@ export class ProposalVoteComponent implements OnInit {
       chainId: this.chainId,
     });
 
-    if(hash)
-    {
+    if (hash) {
       this.dialogRef.close({ keyVote: this.keyVote });
     }
 
@@ -61,5 +62,13 @@ export class ProposalVoteComponent implements OnInit {
 
   closeVoteForm() {
     this.dialogRef.close();
+  }
+  onClick(): void {
+    if (this.data.warning === MESSAGE_WARNING.LATE) {
+      this.dialogRef.close();
+    } else {
+      this.route.navigate(['validators']);
+      this.dialogRef.close();
+    }
   }
 }

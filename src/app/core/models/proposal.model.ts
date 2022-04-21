@@ -1,3 +1,5 @@
+import { MESSAGE_WARNING } from "../constants/proposal.constant";
+
 export interface IListVoteQuery {
   proposalId: number;
   option: string;
@@ -40,7 +42,7 @@ export interface IVotingDialog {
   id: number;
   title: string;
   voteValue: string;
-  warning?: string;
+  warning?: MESSAGE_WARNING;
 }
 
 export interface IVotingInfo {

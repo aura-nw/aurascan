@@ -56,6 +56,6 @@ export const PROPOSAL_VOTE = [
 
 
 export enum MESSAGE_WARNING {
-    NOT_PARTICIPATE,//: `You don't have the right to vote on this proposal because you are a unbonded Aura holder. Staking now to have the right to vote on other later proposals`,
-    LATE//: `You don't have the right to vote on this proposal because the voting period of this proposal started before you stake Aura.`
+    NOT_PARTICIPATE = 'NOT_PARTICIPATE',
+    LATE = 'LATE'
 }
