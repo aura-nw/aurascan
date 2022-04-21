@@ -330,7 +330,7 @@
           <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="py-2 mr-4">
             <button
-              class="button button-primary active py-2 px-4"
+              class="button button-primary active"
               type="button"
               (click)="getMaxToken(dialogMode.Delegate)"
             >
@@ -366,7 +366,7 @@
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="py-2 mr-4">
                 <button
-                  class="button button-primary active py-2 px-4"
+                  class="button button-primary active"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)"
                 >

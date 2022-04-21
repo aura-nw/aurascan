@@ -58,11 +58,11 @@
 form.search-form {
   .input-group {
     background-color: #1C1C1F; // this color not define in root
-  }
-  input {
-    width: 100% !important;
-    @media (min-width: 992px) {
-      width: 782px !important;
+    input.form-control {
+      width: 100%;
+      @media (min-width: 992px) {
+        width: 782px;
+      }
     }
   }
 }
