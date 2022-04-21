@@ -393,6 +393,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
+        this.modalReference.close();
         this.checkStatuExcuteBlock(hash, error, 'Error Delegate');
       };
       
@@ -440,6 +441,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
+        this.modalReference.close();
         this.checkStatuExcuteBlock(hash, error, 'Error Undelegate');
       };
       
@@ -467,6 +469,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
+        this.modalReference.close();
         this.checkStatuExcuteBlock(hash, error, 'Error Redelegate');
       };
       
@@ -501,7 +504,6 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
-    this.modalReference.close();
     if (error) {
       this.toastr.error(msg);
     } else {

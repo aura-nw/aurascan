@@ -106,7 +106,7 @@
       </div>
     </div>
     <ng-container *ngIf="transactionDetail?.type === eTransType.GetReward && transactionDetail?.messages.length > 1">
-      <ng-container *ngFor="let item of transactionDetail?.messages">
+      <ng-container *ngFor="let item of transactionDetail?.messages, let i = index">
         <div class="row mb-3">
           <div class="col-3">
             <div class="card-text fw-bold">Delegator Address</div>
@@ -124,17 +124,17 @@
             <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
           </div>
         </div>
-        <!-- <div class="row mb-5">
+        <div class="row mb-5">
           <div class="col-3">
             <div class="card-text fw-bold">Amount</div>
           </div>
           <div class="col-6">
-            <ng-container *ngIf="item.amount > 0">
-              {{ item.amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+            <ng-container *ngIf="listAmountClaim[i] > 0">
+              {{ listAmountClaim[i] | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
             </ng-container>
-            <ng-container *ngIf="item.amount == 0"> - </ng-container>
+            <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
           </div>
-        </div> -->
+        </div>
       </ng-container>
     </ng-container>
 
@@ -171,6 +171,14 @@
             {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="amountClaim > 0">
+        <div class="col-3">
+          <div class="card-text fw-bold">Auto Claim Reward</div>
+        </div>
+        <div class="col-6">
+          {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
         </div>
       </div>
     </ng-container>
