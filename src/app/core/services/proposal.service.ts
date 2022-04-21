@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
-import { IListVoteQuery, IListVotes, IListVotesRes } from '../models/proposal.model';
+import { IListVoteQuery, IListVotesRes, IProposal } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getProposal(limit, offset): Observable<any> {
+  getProposal(): Observable<IResponsesTemplates<IProposal[]>> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/proposals`);
   }
