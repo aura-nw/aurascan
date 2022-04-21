@@ -27,6 +27,7 @@
   .navbar-nav {
     .nav-item {
       .nav-link {
+        padding: var(--spacer-5) 30px;
         i.icon, span {
           color: var(--aura-light-gray);
           transition: color .35s ease-in-out;

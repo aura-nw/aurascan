@@ -25,6 +25,9 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-download:before {
+  content: "\e90d";
+}
 .icon-credit-card:before {
   content: "\e909";
 }
