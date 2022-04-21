@@ -135,6 +135,7 @@ export class DataDelegateDto {
   delegatedToken: string;
   availableToken: string;
   stakingToken: string;
+  historyTotalReward: number;
   stakingCurrentValidate: string;
   dialogMode: string = '';
   validatorDetail: any;

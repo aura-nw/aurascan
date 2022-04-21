@@ -1,4 +1,4 @@
-<app-pagetitle title="Account Detail" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Account Details" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <section class="account-detail">
   <div class="row">
     <div class="col-3">
@@ -164,7 +164,7 @@
               <span>{{ item?.total | number: global.formatNumberToken }}</span>
             </div>
             <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-              <div class="d-flex justify-content-between body chart-legend-item" [class.mb-3]="!last">
+              <div class="d-flex justify-content-between body chart-legend-item">
                 <div class="d-flex">
                   <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
                   <span>{{ item.name }}</span>

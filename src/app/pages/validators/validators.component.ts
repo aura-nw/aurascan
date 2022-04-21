@@ -301,6 +301,7 @@ export class ValidatorsComponent implements OnInit {
           this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
           this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
           this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
+          this.dataDelegate.historyTotalReward = (res?.dataListDelegator?.data?.claim_reward / NUMBER_CONVERT) || 0;
         }
 
         this.isDisableClaim = false;
@@ -328,12 +329,16 @@ export class ValidatorsComponent implements OnInit {
 
         if (res.dataListUndelegator) {
           this.lstUndelegate = [];
+          const now = new Date();
           res.dataListUndelegator.data.forEach(data => {
             data.entries.forEach(f => {
               f.balance = f.balance / NUMBER_CONVERT;
               f.validator_address = data.validator_address;
               f.validator_name = data.validator_name;
-              this.lstUndelegate.push(f);
+              let timeConvert = new Date(f.completion_time);
+              if (now < timeConvert) {
+                this.lstUndelegate.push(f);
+              }
             });
           });
 
@@ -470,10 +475,12 @@ export class ValidatorsComponent implements OnInit {
   }
 
   closeDialog(modal) {
+    this.selectedValidator = '';
     modal.close('Close click');
   }
 
   changeTypePopup(type){
+    this.selectedValidator = '';
     this.isExceedAmount = false;
     this.amountFormat = null;
     this.dataDelegate.dialogMode = type;

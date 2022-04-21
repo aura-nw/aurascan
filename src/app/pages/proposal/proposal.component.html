@@ -1,7 +1,7 @@
 <section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
   <div class="container-fluid">
     <div class="row row-eq-height">
-      <div class="col-6 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 8); index as idx">
+      <div class="col-6 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
         <div class="card mb-0 h-100">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-start">
@@ -136,7 +136,7 @@
     <div class="row">
       <div class="col">
         <div class="card">
-          <div class="card-header align-items-center d-flex justify-content-between">
+          <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
             <div class="sub-text text--white">Proposals</div>
             <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
           </div>

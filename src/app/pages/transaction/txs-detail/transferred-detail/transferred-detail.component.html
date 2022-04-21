@@ -380,4 +380,28 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Validator</div>
+      </div>
+      <div class="col-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Validator Address</div>
+      </div>
+      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
+        {{ transactionDetail?.messages[0]?.validator_address }}
+      </div>
+    </div>
+  </ng-container>
 </div>
