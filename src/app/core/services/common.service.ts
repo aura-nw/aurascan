@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { formatDistanceToNowStrict } from 'date-fns';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
-import { formatDistanceToNowStrict } from 'date-fns';
 @Injectable()
 export class CommonService {
   apiUrl = '';
