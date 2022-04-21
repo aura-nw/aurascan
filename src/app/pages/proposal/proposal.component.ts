@@ -11,6 +11,7 @@ import { DATEFORMAT } from '../../core/constants/common.constant';
 import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
+import { IProposal } from '../../core/models/proposal.model';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
@@ -44,7 +45,7 @@ export class ProposalComponent implements OnInit {
   length: number;
   pageSize = 20;
   pageIndex = 0;
-  lastedList = [];
+  lastedList: IProposal[] = [];
 
   proposalVotes: {
     proId: number;
@@ -74,35 +75,36 @@ export class ProposalComponent implements OnInit {
   }
 
   getList(): void {
-    this.proposalService.getProposal(this.pageSize, this.pageIndex).subscribe((res: ResponseDto) => {
+    this.proposalService.getProposal().subscribe((res) => {
       this.dataSource = new MatTableDataSource<any>(res.data);
       this.length = res.data.length;
       this.dataSource.sort = this.sort;
-      this.lastedList = res.data;
+      this.lastedList = [...res.data];
       this.lastedList.forEach((pro, index) => {
-        let totalVote;
-        if (index < 4) {
+        if (index < 8) {
           this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
-            totalVote =
-              +res.data.proposalVoteTally.tally.yes +
-              +res.data.proposalVoteTally.tally.no +
-              +res.data.proposalVoteTally.tally.no_with_veto +
-              +res.data.proposalVoteTally.tally.abstain;
-            pro.pro_votes_yes = (+res.data.proposalVoteTally.tally.yes * 100) / totalVote;
-            pro.pro_votes_no = (+res.data.proposalVoteTally.tally.no * 100) / totalVote;
-            pro.pro_votes_no_with_veto = (+res.data.proposalVoteTally.tally.no_with_veto * 100) / totalVote;
-            pro.pro_votes_abstain = (+res.data.proposalVoteTally.tally.abstain * 100) / totalVote;
+            if (!res.data.proposalVoteTally.tally) {
+              return;
+            }
+            const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+
+            pro.pro_votes_yes = (+yes * 100) / totalVote;
+            pro.pro_votes_no = (+no * 100) / totalVote;
+            pro.pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
+            pro.pro_votes_abstain = (+abstain * 100) / totalVote;
           });
         }
-        pro.pro_vote_total = totalVote;
 
-        pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-        pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-        pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+        // pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
+        // pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
+        // pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
+
         if (index < 4) {
           this.proposalVotes.push({
-            proId: pro.pro_id,
+            proId: +pro.pro_id,
             vote: null,
           });
         }
