@@ -201,16 +201,6 @@ export class ProposalComponent implements OnInit {
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
 
-          console.log({
-            id,
-            title,
-            warning,
-            voteValue: warning
-              ? this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null)
-              : null,
-          });
-          
-
           this.openDialog({
             id,
             title,
