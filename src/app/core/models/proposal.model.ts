@@ -34,3 +34,25 @@ export interface IProposal {
   pro_voting_start_time: string;
   pro_vote_total?: number;
 }
+
+export interface IVotingDialog {
+  [key: string]: any;
+  id: number;
+  title: string;
+  voteValue: string;
+  warning?: string;
+}
+
+export interface IVotingInfo {
+  result: {
+    created_at: string;
+    updated_at: string;
+    id: number;
+    delegator_address: string;
+    validator_address: string;
+    shares: string;
+    amount: string;
+    tx_hash: string;
+    type: string;
+  };
+}

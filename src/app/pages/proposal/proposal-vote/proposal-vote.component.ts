@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MESSAGE_WARNING } from '../../../core/constants/proposal.constant';
 import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { IVotingDialog } from '../../../core/models/proposal.model';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 import { createSignBroadcast } from '../../../core/utils/signing/transaction-manager';
@@ -14,12 +16,15 @@ import { createSignBroadcast } from '../../../core/utils/signing/transaction-man
 export class ProposalVoteComponent implements OnInit {
   keyVote = null;
   chainId = this.environmentService.apiUrl.value.chainId;
+
+  message = MESSAGE_WARNING;
+
   constructor(
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private walletService: WalletService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
   ) {
     this.keyVote = data.voteValue ?? null;
   }
