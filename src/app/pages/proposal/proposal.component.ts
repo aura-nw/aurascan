@@ -8,7 +8,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
-import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
+import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
@@ -183,25 +183,32 @@ export class ProposalComponent implements OnInit {
     return resObj;
   }
 
-  openVoteDialog(item) {
+  openVoteDialog(item: IProposal) {
     const id = item.pro_id;
     const title = item.pro_title;
     const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
+
     if (expiredTime > 0) {
       this.walletService.connectKeplr(this.chainId, (account) => {
-        let dialogRef = this.dialog.open(ProposalVoteComponent, {
-          width: '431px',
-          data: {
+        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+          let warning: MESSAGE_WARNING;
+
+          const { created_at } = data.result ? data.result : { created_at: null };
+
+          warning = created_at
+            ? new Date(created_at) < new Date(item.pro_voting_start_time)
+              ? null
+              : MESSAGE_WARNING.LATE
+            : MESSAGE_WARNING.NOT_PARTICIPATE;
+
+          this.openDialog({
             id,
             title,
-            voteValue: this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
-          },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this.voteValue = result;
-            this.getList();
-          }
+            warning,
+            voteValue: warning
+              ? this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null)
+              : null,
+          });
         });
       });
     } else {
@@ -209,6 +216,19 @@ export class ProposalComponent implements OnInit {
     }
   }
 
+  openDialog(data): void {
+    let dialogRef = this.dialog.open(ProposalVoteComponent, {
+      width: '431px',
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.voteValue = result;
+        this.getList();
+      }
+    });
+  }
   parsingStatus(sts) {
     return (
       this.voteConstant.find((s) => {
