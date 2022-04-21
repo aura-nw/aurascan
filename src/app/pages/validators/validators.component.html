@@ -172,7 +172,7 @@
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchCase="'rank'">
-                  <th mat-header-cell *matHeaderCellDef class="none-border-top">
+                  <th mat-header-cell *matHeaderCellDef class="none-border-top col-per-15">
                     <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
@@ -182,7 +182,7 @@
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchDefault>
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="none-border-top">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="none-border-top col-per-13">
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
@@ -196,7 +196,7 @@
                       <div *ngSwitchCase="'commission'" class="">
                         {{ data[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
                       </div>
-                      <div *ngSwitchCase="'power'" class="px-4 py-4">
+                      <div *ngSwitchCase="'power'" class="py-4">
                         {{ data[template.matColumnDef] | number }}<br />
                         <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                       </div>
@@ -232,7 +232,7 @@
                       <div *ngSwitchCase="'action'">
                         <button
                           type="button"
-                          class="button button-outline"
+                          class="button button-outline ml-auto"
                           [disabled]="clicked"
                           *ngIf="data['status'] === statusValidator.Active"
                           (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)"
