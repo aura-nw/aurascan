@@ -1,6 +1,6 @@
 <div class="validator-container">
   <ng-container *ngIf="userAddress">
-    <div class="card">
+    <div class="card" *ngIf="lengthWallet > 0">
       <!-- heading -->
       <div class="d-flex justify-content-between card-header title-small">
         <div>
@@ -28,7 +28,7 @@
         </button>
       </div>
       <!-- table -->
-      <div class="card-body" *ngIf="lengthWallet > 0">
+      <div class="card-body">
         <ng-container>
           <div class="table-responsive">
             <table
@@ -147,7 +147,7 @@
               autocomplete="off"
             />
             <button type="submit" class="btn-search" (click)="searchValidator()">
-              <img src="../../../assets/icons/icons-svg/white/search.svg" alt="" width="24" height="24" />
+              <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -330,7 +330,7 @@
           <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="py-2 mr-4">
             <button
-              class="button button-primary active py-2 px-4"
+              class="button button-primary active"
               type="button"
               (click)="getMaxToken(dialogMode.Delegate)"
             >
@@ -366,7 +366,7 @@
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="py-2 mr-4">
                 <button
-                  class="button button-primary active py-2 px-4"
+                  class="button button-primary active"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)"
                 >

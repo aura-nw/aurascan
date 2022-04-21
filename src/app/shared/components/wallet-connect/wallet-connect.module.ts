@@ -4,7 +4,7 @@ import { WalletConnectComponent } from "./wallet-connect.component";
 import { WalletListComponent } from "./wallet-list/wallet-list.component";
 import { WalletDetailComponent } from "./wallet-detail/wallet-detail.component";
 import { NgApexchartsModule } from "ng-apexcharts";
-import { MatMenuModule } from "@angular/material/menu";
+import {MAT_MENU_DEFAULT_OPTIONS, MatMenuModule} from "@angular/material/menu";
 import { FeatherModule } from "angular-feather";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";

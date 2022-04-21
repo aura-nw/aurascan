@@ -1,5 +1,7 @@
+
 <section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
   <div class="container-fluid">
+    <app-pagetitle title="Proposals"></app-pagetitle>
     <div class="row row-eq-height">
       <div class="col-6 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
         <div class="card mb-0 h-100">

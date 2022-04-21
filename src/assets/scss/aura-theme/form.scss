@@ -6,9 +6,10 @@
     .input-group {
       border: 2px solid var(--aura-neutrals-3);
       border-radius: 90px;
-      padding: 6px;
+      padding: var(--spacer-3) 22px var(--spacer-3) var(--spacer-6);
       justify-content: space-between;
       align-items: center;
+      height: 50px;
       input {
         max-width: 80%;
         padding: 0;
@@ -36,6 +37,7 @@
     }
   }
   .select-input-field {
+    height: 50px;
     border: 2px solid var(--aura-neutrals-3);
     border-radius: 90px;
     padding: 12px 22px 14px 24px;
@@ -91,6 +93,27 @@
       line-height: 2.4rem;
       color: var(--aura-white);
       border-left: 2px solid var(--aura-neutrals-3);
+    }
+  }
+}
+
+.aura-optional-panel {
+  min-width: calc(100% + 46px) !important;
+  transform: translate3d(-8px, -12px, 0) !important;
+  border-radius: 25px !important;
+  mat-option {
+    padding: var(--spacer-4) var(--spacer-6);
+    background-color: #1C1C1F;
+    &.mat-active {
+      background-color: var(--aura-dark-gray) !important;
+    }
+    &:first-child {
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 25px;
     }
   }
 }

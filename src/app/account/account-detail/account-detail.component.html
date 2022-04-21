@@ -39,7 +39,7 @@
                     autocomplete="off"
                   />
                   <button type="submit" class="btn-search" (click)="searchToken()">
-                    <img src="../../../assets/icons/icons-svg/white/search.svg" alt="" width="24" height="24" />
+                    <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
                   </button>
                 </div>
               </form>
@@ -49,6 +49,7 @@
               <div class="aura-form asset-type">
                 <mat-select
                   class="list-token form-control select-input-field"
+                  panelClass="aura-optional-panel"
                   (selectionChange)="searchToken()"
                   [disableOptionCentering]="true"
                   [(value)]="selected"
