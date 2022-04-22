@@ -266,5 +266,9 @@
         "STAKE": "Stake",
         "CLAIM": "Claim",
         "DEPOSIT": "Deposit"
+    },
+    "NOTICE": {
+        "REDELEGATE_WAITING": "You must wait 21 days in order to be able to redelegate from the 'To' validator.",
+        "NUMBER_REDELEGATE": "You can redelegate from and to the same validator set only up to 7 times."
     }
 }
