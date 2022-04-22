@@ -82,6 +82,11 @@ export class ProposalComponent implements OnInit {
       this.lastedList = [...res.data];
       this.lastedList.forEach((pro, index) => {
         if (index < 4) {
+          const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
+          if (expiredTime < 0 && pro.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+            pro.pro_status = 'PROPOSAL_STATUS_REJECTED';
+          }
+
           this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
             if (!res.data.proposalVoteTally.tally) {
               return;
