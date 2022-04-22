@@ -351,8 +351,8 @@ export class ValidatorsComponent implements OnInit {
 
   getListDelegators(address): void {
     //get total delegator
-    this.commonService.delegators(5, 0, address).subscribe((res) => {
-      this.totalDelegator = res?.meta?.count;
+    this.validatorService.delegators(5, 0, address).subscribe((res) => {
+      this.totalDelegator = res?.total;
     });
   }
 
@@ -518,15 +518,17 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         if (numberCode !== CodeTransaction.Success) {
           message = res?.data?.raw_log || message;
-          console.log(message);
-          if(this.dataDelegate.dialogMode === this.dialogMode.Redelegate){
+          if (this.dataDelegate.dialogMode === this.dialogMode.Redelegate) {
             if (message.indexOf('too many') >= 0) {
               message = 'You can only redelegate from and to this validator up to 7 times.';
             } else if (message.indexOf('in progress') >= 0) {
               message = "You must wait 21 days in order to be able to redelegate from the 'To' validator.";
             }
+          } else if(this.dataDelegate.dialogMode === this.dialogMode.Undelegate){
+            if (message.indexOf('too many') >= 0) {
+              message = 'You can undelegate from the same validator only up to 7 times';
+            }
           }
-          
           this.toastr.error(message);
         } else {
           this.getDataWallet();
