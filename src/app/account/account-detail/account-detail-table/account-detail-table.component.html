@@ -11,11 +11,8 @@
             <td mat-cell *matCellDef="let data" style="max-width: 200px;">
               <div>
                 <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                  <div
-                    *ngSwitchCase="'validator_name'"
-                    class="text--green cursor-pointer text-clamp"
-                    [routerLink]="['/validators', data['validator_address']]"
-                  >
+                  <div *ngSwitchCase="'validator_name'" class="text--green cursor-pointer text-clamp"
+                    [routerLink]="['/validators', data['validator_address']]">
                     {{ data[template.matColumnDef] }}
                   </div>
                   <div *ngSwitchCase="'amount'" class="fw-normal">
@@ -34,27 +31,23 @@
                   </div>
                   <div *ngSwitchCase="'completion_time'">
                     {{ data['completion_time_format'] }}
-                    <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false) }} remaining)</div>
+                    <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false) }}
+                      remaining)</div>
                   </div>
                   <div *ngSwitchCase="'vesting_schedule'">
-                    {{ data['vesting_schedule_format'] }} <br />({{ commonService.getDateValue(data['date_format'], false) }} remaining)
+                    {{ data['vesting_schedule_format'] }} <br />({{ commonService.getDateValue(data['date_format'],
+                    false) }} remaining)
                   </div>
                   <div *ngSwitchCase="'total_value'" class="fw-normal">
                     $ {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                     <!--                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>-->
                   </div>
-                  <div
-                    *ngSwitchCase="'validator_src_name'"
-                    class="text--green cursor-pointer text-clamp"
-                    [routerLink]="['/validators', data['validator_src_address']]"
-                  >
+                  <div *ngSwitchCase="'validator_src_name'" class="text--green cursor-pointer text-clamp"
+                    [routerLink]="['/validators', data['validator_src_address']]">
                     {{ data[template.matColumnDef] }}
                   </div>
-                  <div
-                    *ngSwitchCase="'validator_dst_name'"
-                    class="text--green cursor-pointer text-clamp"
-                    [routerLink]="['/validators', data['validator_dst_address']]"
-                  >
+                  <div *ngSwitchCase="'validator_dst_name'" class="text--green cursor-pointer text-clamp"
+                    [routerLink]="['/validators', data['validator_dst_address']]">
                     {{ data[template.matColumnDef] }}
                   </div>
                   <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
@@ -72,6 +65,9 @@
           </td>
         </tr>
       </table>
+      <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)"
+        (pageEvent)="paginatorEvent($event)">
+      </app-paginator>
     </div>
   </ng-container>
   <ng-template #noValues>
@@ -79,11 +75,6 @@
   </ng-template>
 </ngx-simplebar>
 
-<mat-paginator
-  (page)="handlePageEvent($event)"
-  [length]="pageData?.length"
-  [pageSize]="pageData?.pageSize"
-  [pageIndex]="pageData?.pageIndex"
-  *ngIf="pageData?.length"
->
-</mat-paginator>
+<!-- <mat-paginator (page)="handlePageEvent($event)" [length]="pageData?.length" [pageSize]="pageData?.pageSize"
+  [pageIndex]="pageData?.pageIndex" *ngIf="pageData?.length">
+</mat-paginator> -->

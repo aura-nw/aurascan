@@ -25,10 +25,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   constructor(
     public translate: TranslateService,
-    private route: Router,
     private datePipe: DatePipe,
     public global: Globals,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {}
@@ -59,4 +58,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     event.pageEventType = this.pageEventType;
     this.pageEvent.emit(event);
   }
+
+  paginatorEmit(event): void {
+    this.dataSource.paginator = event;
+  }
+  paginatorEvent(event: PageEvent): void {}
 }
