@@ -280,7 +280,7 @@ export class ValidatorsComponent implements OnInit {
       (res) => {
         this.lstValidator = res.data;
         this.lstValidator.forEach(f => {
-          f.isStaking = (f.staking_address === this.userAddress) ? true : false;
+          f.isStaking = (f.amount_staked > 0) ? true : false;
         });
       },
       (error) => {},
