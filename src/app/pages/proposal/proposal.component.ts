@@ -217,13 +217,13 @@ export class ProposalComponent implements OnInit {
         });
       });
     } else {
-      window.location.reload();
+      this.getList();
     }
   }
 
   openDialog(data): void {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
-      width: '431px',
+      width: data.warning ? '500px' : '431px',
       data: data,
     });
 
@@ -231,6 +231,7 @@ export class ProposalComponent implements OnInit {
       if (result) {
         this.voteValue = result;
         this.getList();
+        this.getVotedProposal();
       }
     });
   }
