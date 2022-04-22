@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
@@ -517,6 +517,10 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         if (numberCode !== CodeTransaction.Success) {
           message = res?.data?.raw_log || message;
+          
+          if (message.indexOf('too many') >= 0) {
+            message = 'You can only redelegate from and to this validator up to 7 times';
+          }
           this.toastr.error(message);
         } else {
           this.getDataWallet();
