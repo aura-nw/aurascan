@@ -1,28 +1,26 @@
-import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AccountService } from '../../../app/core/services/account.service';
+import { forkJoin } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
-import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { CommonService } from '../../../app/core/services/common.service';
-import { ValidatorService } from '../../../app/core/services/validator.service';
-import { Globals } from '../../../app/global/global';
-import { WalletService } from '../../../app/core/services/wallet.service';
-import {
-  ChainsInfo,
-  SIGNING_MESSAGE_TYPES,
-} from '../../../app/core/constants/wallet.constant';
-import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
-import { async, forkJoin } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import {
+  ChainsInfo,
+  SIGNING_MESSAGE_TYPES
+} from '../../../app/core/constants/wallet.constant';
+import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { AccountService } from '../../../app/core/services/account.service';
+import { CommonService } from '../../../app/core/services/common.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
-import { formatDistanceToNowStrict } from 'date-fns';
+import { ValidatorService } from '../../../app/core/services/validator.service';
+import { WalletService } from '../../../app/core/services/wallet.service';
+import { Globals } from '../../../app/global/global';
+import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',

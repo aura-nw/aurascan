@@ -4,9 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
-import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
-import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 import { Globals } from '../../../global/global';
 
 interface CustomPageEvent {

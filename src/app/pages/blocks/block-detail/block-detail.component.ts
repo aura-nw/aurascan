@@ -9,7 +9,6 @@ import { CodeTransaction, StatusTransaction } from '../../../../app/core/constan
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { getAmount, Globals } from '../../../../app/global/global';
-import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',

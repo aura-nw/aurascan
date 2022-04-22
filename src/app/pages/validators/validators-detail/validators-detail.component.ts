@@ -1,18 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BlockService } from '../../../../app/core/services/block.service';
+import { NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
+import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
 import { TableTemplate } from '../../../../app/core/models/common.model';
+import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { ValidatorService } from '../../../../app/core/services/validator.service';
-import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
-import { PageEvent } from '@angular/material/paginator';
 import { Globals } from '../../../../app/global/global';
-import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
-import { NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
-import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
-import { DATEFORMAT } from '../../../core/constants/common.constant';
 
 @Component({
   selector: 'app-validators-detail',

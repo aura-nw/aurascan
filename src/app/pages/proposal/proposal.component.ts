@@ -10,7 +10,7 @@ import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
-import { ResponseDto, TableTemplate } from '../../core/models/common.model';
+import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
