@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
@@ -81,14 +81,6 @@ export class VotesComponent implements OnInit {
 
         if (res['all']) {
           this.voteDataList = [...this.voteData.all.proposalVotes];
-          // this.countVote = [
-          //   this.voteData.all.countTotal,
-          //   this.voteData.all.countYes,
-          //   this.voteData.all.countNo,
-          //   this.voteData.all.countNoWithVeto,
-          //   this.voteData.all.countAbstain,
-          // ];
-
           this.countVote.set('', this.voteData.all.countTotal);
           this.countVote.set('VOTE_OPTION_YES', this.voteData.all.countYes);
           this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countAbstain);

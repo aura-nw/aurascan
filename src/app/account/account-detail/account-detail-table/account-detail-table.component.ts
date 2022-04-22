@@ -4,7 +4,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { CommonService } from 'src/app/core/services/common.service';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { TableTemplate } from '../../../core/models/common.model';
