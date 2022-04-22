@@ -12,7 +12,7 @@ import { TransactionService } from '../../../../app/core/services/transaction.se
 import { DatePipe } from '@angular/common';
 import { Globals } from '../../../../app/global/global';
 import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
-import { CommonService } from 'src/app/core/services/common.service';
+import { CommonService } from '../../../../app/core/services/common.service';
 
 @Component({
   selector: 'app-txs-detail',

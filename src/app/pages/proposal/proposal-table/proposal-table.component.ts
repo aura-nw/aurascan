@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { CommonService } from 'src/app/core/services/common.service';
+import { CommonService } from '../../../../app/core/services/common.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { DATEFORMAT } from '../../../core/constants/common.constant';

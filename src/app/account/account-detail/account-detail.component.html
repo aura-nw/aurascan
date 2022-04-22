@@ -108,8 +108,8 @@
               ></app-account-table>
             </mat-tab>
             <mat-tab label="Redelegations">
-              <div *ngIf="pageDataRedelegation?.length > 0">
-                1. You must wait 21 days in order to be able to redelegate from the "To" validator.
+              <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
+                1. You must wait 21 days in order to be able to redelegate from the "To" validator.<br>
                 2. You can redelegate from and to the same validator set only up to 7 times.
               </div>
               <app-account-table
@@ -230,11 +230,20 @@
                               <span class="text--green">{{ global.stableToken }}</span>
                             </div>
                             <div *ngSwitchCase="'amount'">
-                              <ng-container *ngIf="data[template.matColumnDef] > 0">
+                              <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                                 {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                                 <span class="text--green">{{ global.stableToken }}</span>
                               </ng-container>
-                              <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
+                              <ng-template #displayNonNumber>
+                                <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                                <span
+                                  *ngIf="data[template.matColumnDef] !== 0"
+                                  class="text--primary cursor-pointer"
+                                  [routerLink]="['/transaction', data['tx_hash']]"
+                                >
+                                  More
+                              </span>
+                              </ng-template>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                           </ng-container>

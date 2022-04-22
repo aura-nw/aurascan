@@ -21,7 +21,7 @@ import { async, forkJoin } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { formatDistanceToNowStrict } from 'date-fns';
 
 @Component({
@@ -519,6 +519,10 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         if (numberCode !== CodeTransaction.Success) {
           message = res?.data?.raw_log || message;
+          
+          if (message.indexOf('too many') >= 0) {
+            message = 'You can only redelegate from and to this validator up to 7 times';
+          }
           this.toastr.error(message);
         } else {
           this.getDataWallet();
