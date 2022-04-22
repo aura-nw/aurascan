@@ -316,6 +316,7 @@ export class ValidatorsComponent implements OnInit {
             res?.dataListDelegator?.data?.delegations.forEach((f) => {
               f.amount_staked = f.amount_staked / NUMBER_CONVERT;
               f.pending_reward = f.pending_reward / NUMBER_CONVERT;
+              f.reward = f.reward / NUMBER_CONVERT;
             });
 
             //check amount staked > 0
@@ -517,10 +518,15 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         if (numberCode !== CodeTransaction.Success) {
           message = res?.data?.raw_log || message;
-          
-          if (message.indexOf('too many') >= 0) {
-            message = 'You can only redelegate from and to this validator up to 7 times';
+          console.log(message);
+          if(this.dataDelegate.dialogMode === this.dialogMode.Redelegate){
+            if (message.indexOf('too many') >= 0) {
+              message = 'You can only redelegate from and to this validator up to 7 times.';
+            } else if (message.indexOf('in progress') >= 0) {
+              message = "You must wait 21 days in order to be able to redelegate from the 'To' validator.";
+            }
           }
+          
           this.toastr.error(message);
         } else {
           this.getDataWallet();
