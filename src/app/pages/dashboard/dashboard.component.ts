@@ -103,12 +103,12 @@ export class DashboardComponent implements OnInit {
         },
       ],
       chart: {
-        height: 300,
+        height: 333,
         type: 'area',
         toolbar:{
           tools:{
             selection: false,
-            download: true,
+            download: `<i class="icon icon-download"></i>`,
             zoom: false,
             zoomin: true,
             zoomout: true,
