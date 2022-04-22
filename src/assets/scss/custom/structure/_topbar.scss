@@ -33,6 +33,8 @@
 }
 
 .logo {
+    width: 180px;
+    height: 60px;
     line-height: 69px;
     color: inherit !important;
     .logo-sm {
@@ -222,7 +224,7 @@ body[data-topbar="dark"] {
         display: none;
     }
     .logo-light {
-        display: block;
+        display: flex;
     }
 }
 
@@ -332,7 +334,7 @@ body[data-layout-mode="dark"][data-topbar="light"] {
         display: none;
     }
     .logo-dark {
-        display: block;
+        display: flex;
     }
     #vertical-menu-btn {
         color: $dark !important;

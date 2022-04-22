@@ -1,4 +1,4 @@
-<div class="container" (clickOutside)="closeVoteForm()">
+<div (clickOutside)="closeVoteForm()">
     <ng-container *ngIf="!data.warning">
         <div class="sub-text">Your vote</div>
         <div class="mt-3 body">#{{data.id}} {{data.title}}</div>
@@ -25,7 +25,7 @@
         <div class="d-flex justify-content-center">
             <img src="../../../../assets/icons/icons-svg/color/info.svg" alt="">
         </div>
-        <div class="body mb-5 mt-3">
+        <div class="body mb-5 mt-3 warning-content">
             {{
             data.warning === 'NOT_PARTICIPATE' ?
             'You don\'t have the right to vote on this proposal because you are a unbonded Aura holder. Staking now to have the right to vote on other later proposals.' :

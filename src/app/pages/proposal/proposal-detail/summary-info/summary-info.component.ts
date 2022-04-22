@@ -115,13 +115,12 @@ export class SummaryInfoComponent implements OnInit {
       });
     } else {
       proposalDetail.pro_status = 'PROPOSAL_STATUS_REJECTED';
-      //window.location.reload();
     }
   }
 
   openDialog(data): void {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
-      width: '431px',
+      width: data.warning ? '500px' : '431px',
       data: data,
     });
 
@@ -129,6 +128,7 @@ export class SummaryInfoComponent implements OnInit {
       if (result) {
         this.voteValue = result;
         this.getVoteResult();
+        this.getVotedProposal();
       }
     });
   }
