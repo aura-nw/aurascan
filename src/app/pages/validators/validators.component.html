@@ -88,7 +88,7 @@
                           </button>
                         </div>
                         <div *ngSwitchDefault>
-                          <span class="text--green cursor-pointer" (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)">
+                          <span class="text--green cursor-pointer" [routerLink]="['/validators', data['validator_address']]">
                             {{ data[template.matColumnDef] }}
                           </span>
                         </div>
