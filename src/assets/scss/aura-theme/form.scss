@@ -131,10 +131,12 @@
     padding: 0;
     border: none;
     box-shadow: none;
+    transform: unset !important;
     li.dropdown-item {
       font-size: 1.6rem;
       line-height: 2.4rem;
       padding: var(--spacer-3) var(--spacer-6);
+      background-color: #1C1C1F !important;
       & > * {
         color: var(--aura-white);
       }
