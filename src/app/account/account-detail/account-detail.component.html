@@ -16,7 +16,7 @@
           </div>
           <div>
             <p class="title-small mb-2">Total Value</p>
-            <p class="title">$ {{ tokenPrice * currentAccountDetail?.total | number: global.formatNumber2Decimal }}</p>
+            <p class="title">$ {{ tokenPrice * +currentAccountDetail?.total| number: global.formatNumber2Decimal }}</p>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@
       <div class="card card-h-100">
         <div class="article-2 py-6 px-6 d-flex flex-column justify-content-between">
           <div id="walletChart" class="chart-token">
-            <ng-container *ngIf="currentAccountDetail?.total > 0; else chartNoValue">
+            <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
               <apx-chart
                       [series]="chartOptions.series"
                       [chart]="chartOptions.chart"

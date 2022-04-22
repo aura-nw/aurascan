@@ -38,7 +38,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   
   currentAddress: string;
 
-  currentAccountDetail;
+  currentAccountDetail: IAccountDetail;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
@@ -302,7 +302,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           token.amount = this.currentAccountDetail.total;
         }
         // token.total_value = token.price * token.amount;
-        token.total_price = token.price * token.amount;
+        token.total_price = token.price * Number(token.amount);
       });
       this.tokenPrice = 0;
 
