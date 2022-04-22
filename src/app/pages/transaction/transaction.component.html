@@ -3,7 +3,7 @@
   <div class="card">
     <div class="card-body">
       <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="  aura-table">
+        <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>
@@ -42,10 +42,20 @@
                       {{ data[template.matColumnDef] }} <span class="text--primary">{{ global.stableToken }}</span>
                     </div>
                     <div *ngSwitchCase="'amount'">
-                      <ng-container *ngIf="data[template.matColumnDef] > 0">
-                        {{ data[template.matColumnDef] | number: global.formatNumberToken }} <span class="text--primary">{{ global.stableToken }}</span>
+                      <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                        {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                        <span class="text--primary">{{ global.stableToken }}</span>
                       </ng-container>
-                      <ng-container *ngIf="data[template.matColumnDef] == 0"> - </ng-container>
+                      <ng-template #displayNonNumber>
+                        <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                        <span
+                          *ngIf="data[template.matColumnDef] !== 0"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/transaction', data['tx_hash']]"
+                        >
+                          More
+                      </span>
+                      </ng-template>
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>
@@ -56,10 +66,10 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr
-                  mat-row
-                  *matRowDef="let row; columns: displayedColumns"
-                  [class]="displayedColumns"
-                  (click)="openTxsDetail($event, row)"
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            [class]="displayedColumns"
+            (click)="openTxsDetail($event, row)"
           ></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">

@@ -98,8 +98,16 @@ export class TransferredDetailComponent implements OnInit {
           const data = temp[0]?.attributes;
           if (data) {
             if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
-              let amount =  data.find(k => k.key === 'amount').value;
-              this.amountClaim = (amount.replace('uaura', '') / NUMBER_CONVERT) || 0;
+              if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate){
+                let arrayAmount = data.filter(k => k.key === 'amount');
+                this.amountClaim = 0;
+                arrayAmount.forEach(element => {
+                  this.amountClaim += (Number(element.value.replace('uaura', '')) / NUMBER_CONVERT) || 0;
+                });
+              } else {
+                let amount =  data.find(k => k.key === 'amount').value;
+                this.amountClaim = (amount.replace('uaura', '') / NUMBER_CONVERT) || 0;
+              }
             }
             this.transactionDetail?.messages.forEach((message) => {
               const validator = data.find((trans) => trans.key === 'validator')?.value;

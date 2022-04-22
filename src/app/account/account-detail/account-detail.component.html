@@ -108,6 +108,10 @@
               ></app-account-table>
             </mat-tab>
             <mat-tab label="Redelegations">
+              <div *ngIf="pageDataRedelegation?.length > 0">
+                1. You must wait 21 days in order to be able to redelegate from the "To" validator.
+                2. You can redelegate from and to the same validator set only up to 7 times.
+              </div>
               <app-account-table
                 [dataSource]="dataSourceReDelegation"
                 [templates]="templatesReDelegation"
