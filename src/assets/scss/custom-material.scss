@@ -10,24 +10,3 @@ $custom-typography: mat-typography-config(
 .mat-table {
     width: 100%;
 }
-
-.custom-menu.mat-menu-panel {
-    border-radius: 25px;
-    min-width: 192px;
-    background-color: #1C1C1F;
-    .mat-menu-content {
-        padding: 0;
-    }
-    .mat-menu-item {
-        display: flex;
-        padding: 13px 0px 13px 25px ;
-        align-items: center;
-    }
-    
-    .mat-menu-item.row-first {
-        background-color: #38383D;
-    }
-
-    
-
-}
