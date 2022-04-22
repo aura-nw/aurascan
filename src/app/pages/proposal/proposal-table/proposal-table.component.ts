@@ -31,7 +31,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'created_at', headerCellDef: 'Time' },
+    { matColumnDef: 'updated_at', headerCellDef: 'Time' },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
@@ -44,7 +44,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'created_at', headerCellDef: 'Time' },
+    { matColumnDef: 'updated_at', headerCellDef: 'Time' },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [

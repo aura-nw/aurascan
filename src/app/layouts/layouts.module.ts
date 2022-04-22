@@ -20,6 +20,7 @@ import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.c
 import { CommonService } from '../core/services/common.service';
 import { FormsModule } from '@angular/forms';
 import { WalletConnectModule } from '../shared/components/wallet-connect/wallet-connect.module';
+import { TransactionService } from '../core/services/transaction.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { WalletConnectModule } from '../shared/components/wallet-connect/wallet-
     FormsModule,
     WalletConnectModule
   ],
-  providers: [LanguageService, CommonService],
+  providers: [LanguageService, CommonService , TransactionService],
   exports: [VerticalComponent]
 })
 export class LayoutsModule { }

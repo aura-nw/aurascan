@@ -106,7 +106,7 @@
       </div>
     </div>
     <ng-container *ngIf="transactionDetail?.type === eTransType.GetReward && transactionDetail?.messages.length > 1">
-      <ng-container *ngFor="let item of transactionDetail?.messages">
+      <ng-container *ngFor="let item of transactionDetail?.messages, let i = index">
         <div class="row mb-3">
           <div class="col-3">
             <div class="card-text fw-bold">Delegator Address</div>
@@ -124,17 +124,17 @@
             <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
           </div>
         </div>
-        <!-- <div class="row mb-5">
+        <div class="row mb-5">
           <div class="col-3">
             <div class="card-text fw-bold">Amount</div>
           </div>
           <div class="col-6">
-            <ng-container *ngIf="item.amount > 0">
-              {{ item.amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+            <ng-container *ngIf="listAmountClaim[i] > 0">
+              {{ listAmountClaim[i] | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
             </ng-container>
-            <ng-container *ngIf="item.amount == 0"> - </ng-container>
+            <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
           </div>
-        </div> -->
+        </div>
       </ng-container>
     </ng-container>
 
@@ -171,6 +171,14 @@
             {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="amountClaim > 0">
+        <div class="col-3">
+          <div class="card-text fw-bold">Auto Claim Reward</div>
+        </div>
+        <div class="col-6">
+          {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
         </div>
       </div>
     </ng-container>
@@ -269,7 +277,9 @@
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
         </ng-container>
-        <ng-container *ngIf="amount == 0"> - </ng-container>
+        <ng-container *ngIf="amount == 0">
+          0.000000 <span class="text--green">{{ global.stableToken }}</span></ng-container
+        >
       </div>
     </div>
     <div class="row mb-3">
@@ -281,6 +291,30 @@
         [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]"
       >
         {{ transactionDetail?.messages[0]?.proposer }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Proposal Id</div>
+      </div>
+      <div class="col-6">
+        {{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Proposal Type</div>
+      </div>
+      <div class="col-6">
+        {{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Title</div>
+      </div>
+      <div class="col-6">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}
       </div>
     </div>
   </ng-container>
@@ -364,7 +398,10 @@
       <div class="col-3">
         <div class="card-text fw-bold">Depositor</div>
       </div>
-      <div class="col-6 text--green cursor-pointer" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]"
+      >
         {{ transactionDetail?.messages[0]?.depositor }}
       </div>
     </div>
@@ -377,6 +414,33 @@
           {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text header-title">
+          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Validator</div>
+      </div>
+      <div class="col-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Validator Address</div>
+      </div>
+      <div
+        class="col-6 text--green cursor-pointer"
+        [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]"
+      >
+        {{ transactionDetail?.messages[0]?.validator_address }}
       </div>
     </div>
   </ng-container>

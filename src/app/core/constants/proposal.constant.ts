@@ -53,3 +53,9 @@ export const PROPOSAL_VOTE = [
         voteOption: 'Abstain'
     }
 ];
+
+
+export enum MESSAGE_WARNING {
+    NOT_PARTICIPATE = 'NOT_PARTICIPATE',
+    LATE = 'LATE'
+}
