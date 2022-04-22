@@ -373,6 +373,17 @@
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
     </div>
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="card-text fw-bold">Auto Claim Reward</div>
+      </div>
+      <div class="col-6">
+        <ng-container *ngIf="amountClaim > 0">
+          {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        </ng-container>
+        <ng-container *ngIf="amountClaim == 0"> - </ng-container>
+      </div>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">

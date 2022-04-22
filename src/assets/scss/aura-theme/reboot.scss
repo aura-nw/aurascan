@@ -53,3 +53,14 @@ a {
 //     max-width: 1920px;
 //   }
 // }
+.container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm {
+  padding-right: var(--bs-gutter-x, 30px) !important;
+  padding-left: var(--bs-gutter-x, 30px) !important;
+}
+
+.apexcharts-tooltip-series-group.apexcharts-active,
+.apexcharts-tooltip-title
+{
+  color: var(--aura-white) !important;
+}
+

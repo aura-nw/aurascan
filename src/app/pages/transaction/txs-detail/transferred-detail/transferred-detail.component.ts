@@ -18,8 +18,8 @@ export class TransferredDetailComponent implements OnInit {
   voteConstant = PROPOSAL_VOTE;
   transactionDetailType;
   eTransType = TRANSACTION_TYPE_ENUM;
-  amount;
-  amountClaim;
+  amount = 0;
+  amountClaim = 0;
   dateVesting;
   isVestingDelay;
   validatorName = '';
@@ -86,32 +86,43 @@ export class TransferredDetailComponent implements OnInit {
   }
 
   checkGetReward(): void {
-    const jsonData = JSON.parse(this.transactionDetail.raw_log);
-    if (jsonData && jsonData[0]) {
-      jsonData.forEach((j) => {
-        let rawType = 'transfer';
-        if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
-          rawType = 'withdraw_rewards';
-        }
-        const temp = j?.events.filter((f) => f.type === rawType);
-        if (temp) {
-          const data = temp[0]?.attributes;
-          if (data) {
-            if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
-              let amount =  data.find(k => k.key === 'amount').value;
-              this.amountClaim = (amount.replace('uaura', '') / NUMBER_CONVERT) || 0;
-            }
-            this.transactionDetail?.messages.forEach((message) => {
-              const validator = data.find((trans) => trans.key === 'validator')?.value;
-              if (validator === message.validator_address) {
-                let amount = data.find((k) => k.key === 'amount').value.replace('uaura', '');
-                amount = amount / NUMBER_CONVERT || 0;
-                this.listAmountClaim.push(amount);
-              }
-            });
+    try {
+      const jsonData = JSON.parse(this.transactionDetail.raw_log);
+      if (jsonData && jsonData[0]) {
+        jsonData.forEach((j) => {
+          let rawType = 'transfer';
+          if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
+            rawType = 'withdraw_rewards';
           }
-        }
-      });
+          const temp = j?.events.filter((f) => f.type === rawType);
+          if (temp) {
+            const data = temp[0]?.attributes;
+            if (data) {
+              if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
+                if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate){
+                  let arrayAmount = data.filter(k => k.key === 'amount');
+                  this.amountClaim = 0;
+                  arrayAmount.forEach(element => {
+                    this.amountClaim += (Number(element.value.replace('uaura', '')) / NUMBER_CONVERT) || 0;
+                  });
+                } else {
+                  let amount =  data.find(k => k.key === 'amount').value;
+                  this.amountClaim = (amount.replace('uaura', '') / NUMBER_CONVERT) || 0;
+                }
+              }
+              this.transactionDetail?.messages.forEach((message) => {
+                const validator = data.find((trans) => trans.key === 'validator')?.value;
+                if (validator === message.validator_address) {
+                  let amount = data.find((k) => k.key === 'amount').value.replace('uaura', '');
+                  amount = amount / NUMBER_CONVERT || 0;
+                  this.listAmountClaim.push(amount);
+                }
+              });
+            }
+          }
+        });
+      }
+    } catch (e) {
     }
   }
 

@@ -17,6 +17,7 @@ import { FeatherModule } from 'angular-feather';
 import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountService } from '../../../app/core/services/account.service';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-da
     NgApexchartsModule,
     FeatherModule,
     AccountDetailTableModule,
-    TableNoDataModule
+    TableNoDataModule,
+    PaginatorModule
   ],
   providers: [TransactionService, AccountService]
 })

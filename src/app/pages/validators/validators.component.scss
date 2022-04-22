@@ -61,6 +61,12 @@ form.search-form {
     input.form-control {
       width: 100%;
       @media (min-width: 992px) {
+        width: 300px;
+      }
+      @media (min-width: 1200px) {
+        width: 500px;
+      }
+      @media (min-width: 1440px) {
         width: 782px;
       }
     }

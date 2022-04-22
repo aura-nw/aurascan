@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (clickOutside)="closeVoteForm()">
     <ng-container *ngIf="!data.warning">
         <div class="sub-text">Your vote</div>
         <div class="mt-3 body">#{{data.id}} {{data.title}}</div>
