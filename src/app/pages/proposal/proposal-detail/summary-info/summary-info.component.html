@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between">
       <div class="card__title">
         #{{ proposalId }} <br />
-        <a class="card__title text-clamp">{{ proposalDetail.pro_title }}</a>
+        <a class="card__title">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="card__status  flex-shrink-0">
         <div class="message" *ngIf="proposalVotes[0] && proposalVotes[0].vote">

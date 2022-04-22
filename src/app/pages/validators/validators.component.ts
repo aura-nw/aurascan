@@ -1,28 +1,26 @@
-import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AccountService } from '../../../app/core/services/account.service';
+import { forkJoin } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
-import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { CommonService } from '../../../app/core/services/common.service';
-import { ValidatorService } from '../../../app/core/services/validator.service';
-import { Globals } from '../../../app/global/global';
-import { WalletService } from '../../../app/core/services/wallet.service';
-import {
-  ChainsInfo,
-  SIGNING_MESSAGE_TYPES,
-} from '../../../app/core/constants/wallet.constant';
-import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
-import { async, forkJoin } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import {
+  ChainsInfo,
+  SIGNING_MESSAGE_TYPES
+} from '../../../app/core/constants/wallet.constant';
+import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { AccountService } from '../../../app/core/services/account.service';
+import { CommonService } from '../../../app/core/services/common.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
-import { formatDistanceToNowStrict } from 'date-fns';
+import { ValidatorService } from '../../../app/core/services/validator.service';
+import { WalletService } from '../../../app/core/services/wallet.service';
+import { Globals } from '../../../app/global/global';
+import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',
@@ -318,6 +316,7 @@ export class ValidatorsComponent implements OnInit {
             res?.dataListDelegator?.data?.delegations.forEach((f) => {
               f.amount_staked = f.amount_staked / NUMBER_CONVERT;
               f.pending_reward = f.pending_reward / NUMBER_CONVERT;
+              f.reward = f.reward / NUMBER_CONVERT;
             });
 
             //check amount staked > 0
@@ -519,6 +518,15 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         if (numberCode !== CodeTransaction.Success) {
           message = res?.data?.raw_log || message;
+          console.log(message);
+          if(this.dataDelegate.dialogMode === this.dialogMode.Redelegate){
+            if (message.indexOf('too many') >= 0) {
+              message = 'You can only redelegate from and to this validator up to 7 times.';
+            } else if (message.indexOf('in progress') >= 0) {
+              message = "You must wait 21 days in order to be able to redelegate from the 'To' validator.";
+            }
+          }
+          
           this.toastr.error(message);
         } else {
           this.getDataWallet();

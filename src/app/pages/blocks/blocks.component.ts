@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { CommonService } from 'src/app/core/services/common.service';
+import { CommonService } from '../../../app/core/services/common.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
-import { DATEFORMAT } from '../../core/constants/common.constant';
-import { formatTimeInWords, formatWithSchema } from '../../core/helpers/date';
 
 @Component({
   selector: 'app-blocks',

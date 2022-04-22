@@ -1,18 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from '../../../../app/core/services/common.service';
 import { DATEFORMAT, NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import {
   CodeTransaction,
   StatusTransaction,
-  TRANSACTION_TYPE_ENUM,
+  TRANSACTION_TYPE_ENUM
 } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
-import { DatePipe } from '@angular/common';
 import { Globals } from '../../../../app/global/global';
-import { formatTimeInWords, formatWithSchema } from '../../../core/helpers/date';
-import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-txs-detail',
