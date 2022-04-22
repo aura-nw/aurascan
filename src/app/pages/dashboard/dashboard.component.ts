@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
         toolbar:{
           tools:{
             selection: false,
-            download: true,
+            download: `<i class="icon icon-download"></i>`,
             zoom: false,
             zoomin: true,
             zoomout: true,
