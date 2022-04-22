@@ -1,16 +1,44 @@
 <div class="container">
-    <div class="sub-text">Your vote</div>
-    <div class="mt-3 body">#{{data.id}} {{data.title}}</div>
-    <form #voteForm="ngForm">
-        <mat-radio-group class="vote-group" aria-label="Select an option" [(ngModel)]="keyVote" name="inputVote">
-            <mat-radio-button class="body" color="primary" value="Yes">{{ 'PAGES.PROPOSAL.yes' | translate }}</mat-radio-button>
-            <mat-radio-button class="body" color="primary" value="No">{{ 'PAGES.PROPOSAL.no' | translate }}</mat-radio-button>
-            <mat-radio-button class="body" color="primary" value="NoWithVeto">{{ 'PAGES.PROPOSAL.noWithVeto' | translate }}</mat-radio-button>
-            <mat-radio-button class="body" color="primary" value="Abstain">{{ 'PAGES.PROPOSAL.abstain' | translate }}</mat-radio-button>
-        </mat-radio-group>
-        <div class="mt-5 d-flex justify-content-end">
-            <button class="btn button-inline body mr-3" (click)="closeVoteForm()" color="primary">Cancel</button>
-            <button class="button button-outline body" color="primary" (click)="onSubmitVoteForm()" [disabled]="keyVote === null">Confirm</button>
+    <ng-container *ngIf="!data.warning">
+        <div class="sub-text">Your vote</div>
+        <div class="mt-3 body">#{{data.id}} {{data.title}}</div>
+        <form #voteForm="ngForm">
+            <mat-radio-group class="vote-group" aria-label="Select an option" [(ngModel)]="keyVote" name="inputVote">
+                <mat-radio-button class="body" color="primary" value="Yes">{{ 'PAGES.PROPOSAL.yes' | translate }}
+                </mat-radio-button>
+                <mat-radio-button class="body" color="primary" value="No">{{ 'PAGES.PROPOSAL.no' | translate }}
+                </mat-radio-button>
+                <mat-radio-button class="body" color="primary" value="NoWithVeto">{{ 'PAGES.PROPOSAL.noWithVeto' |
+                    translate }}</mat-radio-button>
+                <mat-radio-button class="body" color="primary" value="Abstain">{{ 'PAGES.PROPOSAL.abstain' | translate
+                    }}</mat-radio-button>
+            </mat-radio-group>
+            <div class="mt-5 d-flex justify-content-end">
+                <button class="btn button-inline body mr-3" (click)="closeVoteForm()" color="primary">Cancel</button>
+                <button class="button button-outline body" color="primary" (click)="onSubmitVoteForm()"
+                    [disabled]="keyVote === null">Confirm</button>
+            </div>
+        </form>
+    </ng-container>
+
+    <ng-container *ngIf="data.warning">
+        <div class="d-flex justify-content-center">
+            <img src="../../../../assets/icons/icons-svg/color/info.svg" alt="">
         </div>
-    </form>
+        <div class="body mb-5 mt-3">
+            {{
+            data.warning === 'NOT_PARTICIPATE' ?
+            'You don\'t have the right to vote on this proposal because you are a unbonded Aura holder. Staking now to have the right to vote on other later proposals.' :
+            'You don\'t have the right to vote on this proposal because the voting period of this proposal started before you stake Aura.'
+            }}
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center gap-3">
+            <button class="button button-inline" *ngIf="data.warning === 'NOT_PARTICIPATE'"
+                (click)="dialogRef.close();"> Cancel </button>
+            <button class="button button-outline" (click)="onClick()">
+                {{ data.warning === 'NOT_PARTICIPATE' ? 'Stake' : 'OK'}}
+            </button>
+        </div>
+    </ng-container>
 </div>

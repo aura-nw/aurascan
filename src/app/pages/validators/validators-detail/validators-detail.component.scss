@@ -76,3 +76,14 @@
 .article-1 {
   min-height: 400px;
 }
+
+form.search-form {
+  .input-group {
+    input.form-control {
+      width: 100%;
+      @media (min-width: 992px) {
+        width: 500px;
+      }
+    }
+  }
+}

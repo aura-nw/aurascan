@@ -22,7 +22,11 @@
     width: 192px;
     white-space: nowrap;
   }
-
+  .walletMenu {
+    .button__title {
+      min-width: 100px;
+    }
+  }
   .wallet-container {
     position: relative;
 

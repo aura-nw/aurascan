@@ -26,20 +26,27 @@
 .topnav {
   .navbar-nav {
     .nav-item {
+      padding: var(--spacer-5) 30px;
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+      i.icon, span {
+        color: var(--aura-light-gray);
+        transition: color .35s ease-in-out;
+      }
       .nav-link {
-        i.icon, span {
-          color: var(--aura-light-gray);
-          transition: color .35s ease-in-out;
-        }
         &:hover, &.active {
           i.icon, span {
-            color: var(--aura-white);
+            color: var(--aura-white) !important;
           }
         }
       }
-      i.icon {
-        font-size: 3.2rem;
-      }
+    }
+    i.icon {
+      font-size: 3.2rem;
     }
   }
 }

@@ -19,11 +19,13 @@ export class TransferredDetailComponent implements OnInit {
   transactionDetailType;
   eTransType = TRANSACTION_TYPE_ENUM;
   amount;
+  amountClaim;
   dateVesting;
   isVestingDelay;
   validatorName = '';
   validatorNameDes = '';
   listValidator;
+  listAmountClaim = [];
   @Input() transactionDetail: any;
 
   constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
@@ -33,12 +35,21 @@ export class TransferredDetailComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward 
-      || this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
+    if (
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate
+    ) {
       this.getListValidator();
+      this.checkGetReward();
     }
     //get amount of transaction
-    this.amount = getAmount(this.transactionDetail?.messages, this.transactionDetail?.type, this.transactionDetail?.raw_log);
+    this.amount = getAmount(
+      this.transactionDetail?.messages,
+      this.transactionDetail?.type,
+      this.transactionDetail?.raw_log,
+    );
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
     );
@@ -50,24 +61,58 @@ export class TransferredDetailComponent implements OnInit {
       (res) => {
         this.listValidator = res.data;
         if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
-          this.validatorName = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address).title || '';
-          this.validatorNameDes = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address).title || '';
+          this.validatorName =
+            this.listValidator.find(
+              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address,
+            ).title || '';
+          this.validatorNameDes =
+            this.listValidator.find(
+              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address,
+            ).title || '';
         } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
-          let validMap = this.listValidator.find(f => f.operator_address === this.transactionDetail?.messages[0]?.validator_address);
+          let validMap = this.listValidator.find(
+            (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_address,
+          );
           this.validatorName = validMap.title || '';
-        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) { 
-          this.transactionDetail?.messages.forEach(message => {
-            message.validatorName = this.listValidator.find(f => f.operator_address === message?.validator_address).title || '';
-            // const jsonData = JSON.parse(this.transactionDetail.raw_log);
-            // console.log(jsonData);
-            // let amount = jsonData[0].events[0].attributes[1].value.replace('uaura','');
-            // message.amount = amount;
-            // message.amount = message?.amount.amount;
+        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) {
+          this.transactionDetail?.messages.forEach((message) => {
+            message.validatorName =
+              this.listValidator.find((f) => f.operator_address === message?.validator_address).title || '';
           });
         }
       },
       (error) => {},
     );
+  }
+
+  checkGetReward(): void {
+    const jsonData = JSON.parse(this.transactionDetail.raw_log);
+    if (jsonData && jsonData[0]) {
+      jsonData.forEach((j) => {
+        let rawType = 'transfer';
+        if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward) {
+          rawType = 'withdraw_rewards';
+        }
+        const temp = j?.events.filter((f) => f.type === rawType);
+        if (temp) {
+          const data = temp[0]?.attributes;
+          if (data) {
+            if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
+              let amount =  data.find(k => k.key === 'amount').value;
+              this.amountClaim = (amount.replace('uaura', '') / NUMBER_CONVERT) || 0;
+            }
+            this.transactionDetail?.messages.forEach((message) => {
+              const validator = data.find((trans) => trans.key === 'validator')?.value;
+              if (validator === message.validator_address) {
+                let amount = data.find((k) => k.key === 'amount').value.replace('uaura', '');
+                amount = amount / NUMBER_CONVERT || 0;
+                this.listAmountClaim.push(amount);
+              }
+            });
+          }
+        }
+      });
+    }
   }
 
   parsingOptionVote(option) {

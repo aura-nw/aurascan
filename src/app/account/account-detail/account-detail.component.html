@@ -1,4 +1,4 @@
-<app-pagetitle title="Account details" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Account Details" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
 <section class="account-detail">
   <div class="row">
     <div class="col-3">
@@ -39,7 +39,7 @@
                     autocomplete="off"
                   />
                   <button type="submit" class="btn-search" (click)="searchToken()">
-                    <img src="../../../assets/icons/icons-svg/white/search.svg" alt="" width="24" height="24" />
+                    <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
                   </button>
                 </div>
               </form>
@@ -49,6 +49,7 @@
               <div class="aura-form asset-type">
                 <mat-select
                   class="list-token form-control select-input-field"
+                  panelClass="aura-optional-panel"
                   (selectionChange)="searchToken()"
                   [disableOptionCentering]="true"
                   [(value)]="selected"
@@ -164,7 +165,7 @@
               <span>{{ item?.total | number: global.formatNumberToken }}</span>
             </div>
             <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-              <div class="d-flex justify-content-between body chart-legend-item" [class.mb-3]="!last">
+              <div class="d-flex justify-content-between body chart-legend-item">
                 <div class="d-flex">
                   <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
                   <span>{{ item.name }}</span>
@@ -188,7 +189,7 @@
                 <table mat-table [dataSource]="dataSource" class="aura-table">
                   <ng-container *ngFor="let template of templates; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th class="none-border-top" mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef>
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 

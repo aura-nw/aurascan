@@ -22,7 +22,7 @@ export const MENU: MenuItem[] = [
     {
         id: 4,
         label: 'MENUITEMS.VALIDATORS.TEXT',
-        icon: 'user',
+        icon: 'collab',
         link: '/validators',
     },
     {
@@ -34,7 +34,7 @@ export const MENU: MenuItem[] = [
     {
         id: 6,
         label: 'MENUITEMS.ACCOUNT.TEXT',
-        icon: 'account',
+        icon: 'user',
         link: '',
     },
     // {

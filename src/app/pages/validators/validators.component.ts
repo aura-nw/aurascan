@@ -281,15 +281,9 @@ export class ValidatorsComponent implements OnInit {
     this.validatorService.validatorsListRedelegate(userAddress, operatorAddress).subscribe(
       (res) => {
         this.lstValidator = res.data;
-        // res.forEach(f => {
-        //   let isStaking = (f.staking_address === this.userAddress) ? true : false;
-        //   this.lstValidator.push(f.title, f.commission, isStaking);
-        // });
-
-        // this.dataModal = res.data;
-        // this.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === address);
-        // this.dataDelegate.validatorDetail = this.validatorDetail;
-        // this.getListDelegators(address);
+        this.lstValidator.forEach(f => {
+          f.isStaking = (f.staking_address === this.userAddress) ? true : false;
+        });
       },
       (error) => {},
     );
@@ -307,6 +301,7 @@ export class ValidatorsComponent implements OnInit {
           this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
           this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
           this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
+          this.dataDelegate.historyTotalReward = (res?.dataListDelegator?.data?.claim_reward / NUMBER_CONVERT) || 0;
         }
 
         this.isDisableClaim = false;
@@ -324,19 +319,26 @@ export class ValidatorsComponent implements OnInit {
               f.amount_staked = f.amount_staked / NUMBER_CONVERT;
               f.pending_reward = f.pending_reward / NUMBER_CONVERT;
             });
-            this.dataSourceWallet = new MatTableDataSource(res?.dataListDelegator.data?.delegations);
-            this.lengthWallet = res?.dataListDelegator.data?.delegations?.length;
+
+            //check amount staked > 0
+            let arrayDelegate = res?.dataListDelegator.data?.delegations.filter(x => x.amount_staked > 0);
+            this.dataSourceWallet = new MatTableDataSource(arrayDelegate);
+            this.lengthWallet = arrayDelegate?.length;
           }
         }
 
         if (res.dataListUndelegator) {
           this.lstUndelegate = [];
+          const now = new Date();
           res.dataListUndelegator.data.forEach(data => {
             data.entries.forEach(f => {
               f.balance = f.balance / NUMBER_CONVERT;
               f.validator_address = data.validator_address;
               f.validator_name = data.validator_name;
-              this.lstUndelegate.push(f);
+              let timeConvert = new Date(f.completion_time);
+              if (now < timeConvert) {
+                this.lstUndelegate.push(f);
+              }
             });
           });
 
@@ -391,6 +393,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
+        this.modalReference.close();
         this.checkStatuExcuteBlock(hash, error, 'Error Delegate');
       };
       
@@ -438,6 +441,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
+        this.modalReference.close();
         this.checkStatuExcuteBlock(hash, error, 'Error Undelegate');
       };
       
@@ -465,6 +469,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
+        this.modalReference.close();
         this.checkStatuExcuteBlock(hash, error, 'Error Redelegate');
       };
       
@@ -473,10 +478,12 @@ export class ValidatorsComponent implements OnInit {
   }
 
   closeDialog(modal) {
+    this.selectedValidator = '';
     modal.close('Close click');
   }
 
   changeTypePopup(type){
+    this.selectedValidator = '';
     this.isExceedAmount = false;
     this.amountFormat = null;
     this.dataDelegate.dialogMode = type;
@@ -497,7 +504,6 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
-    this.modalReference.close();
     if (error) {
       this.toastr.error(msg);
     } else {

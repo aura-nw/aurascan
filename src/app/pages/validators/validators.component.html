@@ -1,6 +1,6 @@
 <div class="validator-container">
   <ng-container *ngIf="userAddress">
-    <div class="card">
+    <div class="card" *ngIf="lengthWallet > 0">
       <!-- heading -->
       <div class="d-flex justify-content-between card-header title-small">
         <div>
@@ -28,7 +28,7 @@
         </button>
       </div>
       <!-- table -->
-      <div class="card-body" *ngIf="lengthWallet > 0">
+      <div class="card-body">
         <ng-container>
           <div class="table-responsive">
             <table
@@ -41,6 +41,21 @@
               <ng-container *ngFor="let template of templatesWallet; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
                   <ng-container *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'validator_name'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'amount_staked'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'pending_reward'">
                     <th mat-header-cell *matHeaderCellDef>
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
@@ -65,14 +80,18 @@
                         <div *ngSwitchCase="'action'" class="py-4">
                           <button
                             type="button"
-                            class="button button-outline py-2 px-4"
+                            class="button button-outline ml-auto"
                             [disabled]="clicked"
                             (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)"
                           >
                             Manage
                           </button>
                         </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        <div *ngSwitchDefault>
+                          <span class="text--green cursor-pointer" (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)">
+                            {{ data[template.matColumnDef] }}
+                          </span>
+                        </div>
                       </ng-container>
                     </div>
                   </td>
@@ -83,7 +102,7 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
               <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell g-no-data" colspan="9999">
-                  {{ 'NO VALIDATORS' | translate }}
+                  {{ 'NO DATA' | translate }}
                 </td>
               </tr>
             </table>
@@ -96,12 +115,9 @@
       <div class="d-flex justify-content-between card-header title-small text--white">Undelegating</div>
       <div class="card-body">
         <ng-container *ngFor="let validator of lstUndelegate">
-          <div class="row col-12 mb-3">
-            <div
-              class="col-3 title-small title-name text--green cursor-pointer"
-              [routerLink]="['/validators', validator.validator_address]"
-            >
-              <span class="text-clamp"> {{ validator.validator_name }}</span>
+          <div class="row col-12 mb-3 undelegate-item">
+            <div class="col-3 body title-name">
+              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green"> {{ validator.validator_name }}</a>
             </div>
             <div class="col-9 text--white">
               {{ validator.balance | number: globals.formatNumberToken }}
@@ -131,7 +147,7 @@
               autocomplete="off"
             />
             <button type="submit" class="btn-search" (click)="searchValidator()">
-              <img src="../../../assets/icons/icons-svg/white/search.svg" alt="" width="24" height="24" />
+              <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -167,22 +183,22 @@
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'percent_power'">
-                  <th mat-header-cell *matHeaderCellDef class="none-border-top">
+                  <th mat-header-cell *matHeaderCellDef>
                     <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchCase="'rank'">
-                  <th mat-header-cell *matHeaderCellDef class="none-border-top">
+                  <th mat-header-cell *matHeaderCellDef class="col-per-15">
                     <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchCase="'action'">
-                  <th mat-header-cell *matHeaderCellDef class="none-border-top">
+                  <th mat-header-cell *matHeaderCellDef>
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchDefault>
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="none-border-top">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-per-13">
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
@@ -196,7 +212,7 @@
                       <div *ngSwitchCase="'commission'" class="">
                         {{ data[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
                       </div>
-                      <div *ngSwitchCase="'power'" class="px-4 py-4">
+                      <div *ngSwitchCase="'power'" class="py-4">
                         {{ data[template.matColumnDef] | number }}<br />
                         <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                       </div>
@@ -232,7 +248,7 @@
                       <div *ngSwitchCase="'action'">
                         <button
                           type="button"
-                          class="button button-outline"
+                          class="button button-outline ml-auto"
                           [disabled]="clicked"
                           *ngIf="data['status'] === statusValidator.Active"
                           (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)"
@@ -314,7 +330,7 @@
           <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="py-2 mr-4">
             <button
-              class="button button-primary active py-2 px-4"
+              class="button button-primary active"
               type="button"
               (click)="getMaxToken(dialogMode.Delegate)"
             >
@@ -330,12 +346,13 @@
                         [(value)]="selectedValidator"
                         [disableOptionCentering]="true">
               <mat-select-trigger>{{commissionLabel}}</mat-select-trigger>
-              <mat-option *ngFor="let item of lstValidator" [value]="item.operator_address" (click)="setCommissionTitle(item.title)">
+              <mat-option *ngFor="let item of lstValidator; let last = last" [class.mb-4]="!last"
+                          [value]="item.operator_address" (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain">
-                  <div class="option-lable active">
+                  <div class="option-lable" [ngClass]="{'active': item.isStaking}">
                     <span>{{ item.title | translate }}</span>
                   </div>
-                  <div class="option-lable">Commission - 100%</div>
+                  <div class="option-lable">Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}</div>
                 </div>
               </mat-option>
             </mat-select>
@@ -350,7 +367,7 @@
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="py-2 mr-4">
                 <button
-                  class="button button-primary active py-2 px-4"
+                  class="button button-primary active"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)"
                 >
@@ -365,21 +382,28 @@
       <div class="mt-8">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
-            <div class="aura-form mr-4">
-              <mat-select
-                class="form-control select-input-field select-action-field"
-                [placeholder]="'Select Action'"
-                [disableOptionCentering]="true"
-              >
-                <mat-option (click)="changeTypePopup(dialogMode.Undelegate)"> Undelegate </mat-option>
-                <mat-option (click)="changeTypePopup(dialogMode.Redelegate)"> Redelegate </mat-option>
-              </mat-select>
+
+            <div class="dropdown aura-dropdown mr-4">
+              <button class="button button-outline d-flex align-items-center fw-semibold" type="button"
+                      id="delegateAction" data-bs-toggle="dropdown" aria-expanded="false">
+                <span>Select Action</span>
+                <img class="flex-shrink-0" src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+                     alt="wallet-avatar" height="24px" width="24px">
+              </button>
+              <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
+                <li class="dropdown-item">
+                  <button type="button" class="button p-0" (click)="changeTypePopup(dialogMode.Undelegate)">Undelegate</button>
+                </li>
+                <li class="dropdown-item">
+                  <button type="button" class="button p-0" (click)="changeTypePopup(dialogMode.Redelegate)">Redelegate</button>
+                </li>
+              </ul>
             </div>
+
             <button
               type="button"
               class="button body button-outline"
               (click)="changeTypePopup(dialogMode.Delegate)"
-              [disabled]="isExceedAmount"
             >
               Delegate
             </button>
@@ -392,7 +416,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleUndelegate()"
-              [disabled]="isExceedAmount"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
             >
               Undelegate
             </button>
@@ -431,9 +455,9 @@
               type="button"
               class="button body button-outline"
               (click)="handleRedelegate()"
-              [disabled]="isExceedAmount"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
             >
-              Delegate
+              Redelegate
             </button>
           </div>
         </ng-container>
@@ -441,5 +465,3 @@
     </div>
   </ng-template>
 </div>
-<!-- <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)">
-</mat-paginator> -->
