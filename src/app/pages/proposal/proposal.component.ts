@@ -96,9 +96,9 @@ export class ProposalComponent implements OnInit {
           });
         }
 
-        // pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-        // pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-        // pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+        pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
+        pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
+        pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
 
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
@@ -206,8 +206,8 @@ export class ProposalComponent implements OnInit {
             title,
             warning,
             voteValue: warning
-              ? this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null)
-              : null,
+              ? null
+              : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
           });
         });
       });
