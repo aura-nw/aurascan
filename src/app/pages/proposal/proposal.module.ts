@@ -31,6 +31,7 @@ import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
 import { DateFnsModule } from 'ngx-date-fns';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { PaginatorModule } from '../../shared/components/paginator/paginator.mod
     NgxMaskModule,
     TableNoDataModule,
     DateFnsModule,
-    PaginatorModule
+    PaginatorModule,
+    ClickOutsideModule
   ],
   providers: [ProposalService],
 })
