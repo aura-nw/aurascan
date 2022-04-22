@@ -248,7 +248,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         });
 
         this.dataSource.data =  res.data ;// new MatTableDataSource(res.data);
-        console.log(this.dataSource.data);
         
         this.length = res.meta.count;
         // this.pageData.length= 
@@ -301,8 +300,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         if (token.name === this.global.stableToken) {
           token.amount = this.currentAccountDetail.total;
         }
-        // token.total_value = token.price * token.amount;
-        token.total_price = token.price * Number(token.amount);
+        token.total_value = token.price * Number(token.amount);
+        // token.total_price = token.price * Number(token.amount);
       });
       this.tokenPrice = 0;
 

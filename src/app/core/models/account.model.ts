@@ -6,6 +6,7 @@ interface Balance {
   total_price: number;
   token_amount?: string;
   token_name?: string;
+  total_value?: number;
 }
 
 interface Delegation {
