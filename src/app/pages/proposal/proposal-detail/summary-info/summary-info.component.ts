@@ -114,7 +114,8 @@ export class SummaryInfoComponent implements OnInit {
         });
       });
     } else {
-      window.location.reload();
+      proposalDetail.pro_status = 'PROPOSAL_STATUS_REJECTED';
+      //window.location.reload();
     }
   }
 
@@ -127,6 +128,7 @@ export class SummaryInfoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.voteValue = result;
+        this.getVoteResult();
       }
     });
   }

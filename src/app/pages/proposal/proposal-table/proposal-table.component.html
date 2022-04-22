@@ -38,6 +38,11 @@
                     <br />
                     {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
                   </ng-container>
+                  <ng-container *ngSwitchCase="'created_at'">
+                    {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                    <br />
+                    {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
+                  </ng-container>
 
                   <ng-container *ngSwitchDefault>
                     {{
