@@ -133,9 +133,6 @@ form.search-form {
 }
 .mat-option {
   background: #25252C;
-  &:not(:last-child) {
-    margin-bottom: 16px;
-  }
   .option-contain {
     font-size: 1.6rem;
     line-height: 2.4rem;

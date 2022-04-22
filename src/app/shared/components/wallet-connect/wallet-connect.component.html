@@ -5,25 +5,23 @@
             data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT
             WALLET</button>
 
-        <button type="button" *ngIf="ng.wallet" class="button account-button button-outline body fw-semibold"
-            [matMenuTriggerFor]="menu">
-            <div class="d-flex align-items-center justify-content-center w-100">
-                <span class="mr-1 flex-grow-0">
-                    {{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name }}
-                </span>
+        <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
+            <button class="button button-outline d-flex align-items-center fw-semibold" type="button"
+                    id="walletMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="button__title">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name }}</span>
                 <img class="flex-shrink-0" src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
-                    alt="wallet-avatar" height="24px" width="24px">
-            </div>
-        </button>
+                     alt="wallet-avatar" height="24px" width="24px">
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
+                <li class="dropdown-item">
+                    <a [routerLink]="['/account',ng.wallet?.bech32Address]">Account Detail</a>
+                </li>
+                <li class="dropdown-item">
+                    <button type="button" class="button p-0" (click)="disconnect()">Log out</button>
+                </li>
+            </ul>
+        </div>
 
-        <mat-menu #menu="matMenu" class="custom-menu mt-2" xPosition="before">
-            <div class="menu-row row-first" mat-menu-item [routerLink]="['/account',ng.wallet?.bech32Address]">
-                <span class="menu-content body">Account Detail</span>
-            </div>
-            <div class="menu-row" mat-menu-item (click)="disconnect()">
-                <span class="menu-content body">Log out</span>
-            </div>
-        </mat-menu>
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet
             aria-labelledby="offcanvasWalletLabel">
