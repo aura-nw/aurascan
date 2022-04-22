@@ -6,7 +6,7 @@
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
-              <th mat-header-cell *matHeaderCellDef>
+              <th mat-header-cell *matHeaderCellDef [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
 

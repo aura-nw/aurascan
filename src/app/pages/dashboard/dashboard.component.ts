@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit {
         },
       ],
       chart: {
-        height: 300,
+        height: 333,
         type: 'area',
         toolbar:{
           tools:{

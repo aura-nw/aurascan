@@ -17,7 +17,7 @@
     align-items: center;
     margin: 0 auto;
     height: $header-height;
-    padding: 0 $grid-gutter-width 0 0;
+    padding: 0 40px;
     .dropdown .show {
         &.header-item {
             background-color: $gray-100;
@@ -257,8 +257,8 @@ body[data-layout="horizontal"] {
     }
     .navbar-header {
         @media (min-width: 992px) {
-            padding-left: var(--spacer-3);
-            padding-right: var(--spacer-3);
+            padding-left: var(--spacer-10);
+            padding-right: var(--spacer-10);
         }
     }
     &[data-sidebar="dark"] {

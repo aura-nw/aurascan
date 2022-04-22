@@ -32,6 +32,12 @@ section.account-detail {
     input {
       width: 100%;
       @media (min-width: 992px) {
+        width: 150px;
+      }
+      @media (min-width: 1200px) {
+        width: 250px;
+      }
+      @media (min-width: 1440px) {
         width: 405px;
       }
     }
