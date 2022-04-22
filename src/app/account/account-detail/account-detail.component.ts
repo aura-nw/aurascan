@@ -1,21 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart,
-  ApexFill,
-  ApexDataLabels,
-  ApexLegend,
-  ApexPlotOptions,
-  ChartComponent,
-  ApexStroke,
-  ApexTooltip,
-  ApexGrid,
-} from 'ng-apexcharts';
+import { ChartComponent } from 'ng-apexcharts';
 import * as qrCode from 'qrcode';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
@@ -25,41 +13,32 @@ import {
   PageEventType,
   WalletAcount,
 } from '../../../app/core/constants/account.enum';
-import { DATEFORMAT, PAGE_EVENT } from '../../../app/core/constants/common.constant';
+import { PAGE_EVENT } from '../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
-
-export type ChartOptions = {
-  series: ApexNonAxisChartSeries;
-  chart: ApexChart;
-  responsive: ApexResponsive[];
-  labels: any;
-  fill: ApexFill;
-  legend: ApexLegend;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  colors: string[];
-  stroke: ApexStroke;
-  tooltip: ApexTooltip;
-};
+import { IAccountDetail } from '../../core/models/account.model';
+import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
   selector: 'app-account-detail',
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.scss'],
 })
-export class AccountDetailComponent implements OnInit {
-  @ViewChild('walletChart') chart: ChartComponent;
+export class AccountDetailComponent implements OnInit, AfterViewInit {
   public chartOptions: Partial<ChartOptions>;
+
+  @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
-  // bread crumb items
+
   breadCrumbItems!: Array<{}>;
-  id;
-  item;
+  
+  currentAddress: string;
+
+  currentAccountDetail: IAccountDetail;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
@@ -70,8 +49,6 @@ export class AccountDetailComponent implements OnInit {
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
 
   templatesToken: Array<TableTemplate> = [
     { matColumnDef: 'token_name', headerCellDef: 'Name' },
@@ -152,6 +129,9 @@ export class AccountDetailComponent implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
+  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
+
   length;
   pageSize = 5;
   pageIndex = 0;
@@ -166,7 +146,7 @@ export class AccountDetailComponent implements OnInit {
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
 
-  chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
+  chartCustomOptions = chartCustomOptions;
 
   constructor(
     private transactionService: TransactionService,
@@ -176,94 +156,11 @@ export class AccountDetailComponent implements OnInit {
     private accountService: AccountService,
     public global: Globals,
   ) {
-    this.chartOptions = {
-      stroke: {
-        width: 1,
-        curve: 'smooth',
-        colors: this.chartCustomOptions.map((e) => e.color),
-      },
-      tooltip: {
-        custom: function ({ series, seriesIndex, w }) {
-          const percent = (series[seriesIndex] * 100) / series.reduce((a, b) => a + b);
-          return `
-          <div class="custom-apex-tooltip"> 
-            <div class="tooltip-title">
-              ${w.globals.labels[seriesIndex]}
-            </div>
-            <div class="tooltip-percent"> ${percent.toFixed(2)}% </div>
-            <div class="tooltip-amount"> ${series[seriesIndex].toFixed(6)}</div>
-          </div>`;
-        },
-      },
-      series: [0, 0],
-      labels: this.chartCustomOptions.map((e) => e.name),
-      colors: this.chartCustomOptions.map((e) => e.color),
-      dataLabels: {
-        enabled: false,
-      },
-      chart: {
-        width: 261,
-        type: 'donut',
-      },
-      plotOptions: {
-        pie: {
-          startAngle: 0,
-          endAngle: 360,
-          expandOnClick: false,
-          offsetX: 0,
-          offsetY: 0,
-          customScale: 1,
-          dataLabels: {
-            offset: 0,
-            minAngleToShowLabel: 1,
-          },
-          donut: {
-            size: '55%',
-            labels: {
-              show: false,
-              total: {
-                show: false,
-                showAlways: true,
-                label: 'Total Balance',
-                fontSize: '18px',
-                fontFamily: 'Helvetica, Arial, sans-serif',
-                fontWeight: 600,
-                color: '#373d3f',
-                formatter: function (w) {
-                  return w.globals.seriesTotals.reduce((a, b) => {
-                    return a + b;
-                  }, 0);
-                },
-              },
-            },
-          },
-        },
-      },
-      legend: {
-        show: false,
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            plotOptions: {
-              pie: {
-                donut: {
-                  labels: {
-                    total: {
-                      fontSize: '14px',
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      ],
-    };
+    this.chartOptions = CHART_OPTION();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
@@ -272,13 +169,12 @@ export class AccountDetailComponent implements OnInit {
     // this.id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe((params) => {
       if (params?.id) {
-        this.id = params?.id;
+        this.currentAddress = params?.id;
 
         this.getAccountDetail();
         this.getListTransaction();
         this.createQRCode();
       } else {
-        
       }
     });
   }
@@ -302,8 +198,8 @@ export class AccountDetailComponent implements OnInit {
   }
 
   changePage(page: any): void {
-    this.dataSource = null;
-    this.pageIndex = page.pageIndex;
+    // this.dataSource = null;
+    // this.pageIndex = page.pageIndex;
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
@@ -334,7 +230,7 @@ export class AccountDetailComponent implements OnInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txsWithAddress(this.pageSize, this.pageIndex * this.pageSize, this.id)
+      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
         res.data.forEach((trans) => {
           //get amount of transaction
@@ -345,23 +241,25 @@ export class AccountDetailComponent implements OnInit {
           if (trans.code === CodeTransaction.Success) {
             trans.status = StatusTransaction.Success;
           }
-          if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.id) {
+          if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
             trans.type = TypeTransaction.Received;
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
-        this.dataSource = new MatTableDataSource(res.data);
+
+        this.dataSource.data =  res.data ;// new MatTableDataSource(res.data);
+        
         this.length = res.meta.count;
+        // this.pageData.length= 
         this.pageData.length = res.meta.count;
-        this.dataSource.sort = this.sort;
       });
   }
 
   getAccountDetail(): void {
-    this.accountService.getAccoutDetail(this.id).subscribe((res) => {
-      this.item = res.data;
+    this.accountService.getAccoutDetail(this.currentAddress).subscribe((res) => {
+      this.currentAccountDetail = res.data;
       this.chartOptions.series = [];
-      if (this.item.commission > 0) {
+      if (+this.currentAccountDetail.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
         this.chartCustomOptions.push({
           name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
@@ -373,22 +271,22 @@ export class AccountDetailComponent implements OnInit {
       this.chartCustomOptions.forEach((f) => {
         switch (f.name) {
           case ACCOUNT_WALLET_COLOR_ENUM.Available:
-            f.amount = this.item.available;
+            f.amount = this.currentAccountDetail.available;
             break;
           case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
-            f.amount = this.item.delegated;
+            f.amount = this.currentAccountDetail.delegated;
             break;
           case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
-            f.amount = this.item.stake_reward;
+            f.amount = this.currentAccountDetail.stake_reward;
             break;
           case ACCOUNT_WALLET_COLOR_ENUM.Commission:
-            f.amount = this.item.commission;
+            f.amount = this.currentAccountDetail.commission;
             break;
           case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
-            f.amount = this.item.unbonding;
+            f.amount = this.currentAccountDetail.unbonding;
             break;
           case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-            f.amount = this.item.vesting?.amount;
+            f.amount = this.currentAccountDetail.vesting?.amount;
             break;
           default:
             break;
@@ -397,35 +295,36 @@ export class AccountDetailComponent implements OnInit {
         this.chartOptions.series.push(Number(f.amount));
       });
 
-      this.item.balances.forEach((token) => {
+      this.currentAccountDetail.balances.forEach((token) => {
         token.price = 0;
         if (token.name === this.global.stableToken) {
-          token.amount = this.item.total;
+          token.amount = this.currentAccountDetail.total;
         }
-        token.total_value = token.price * token.amount;
+        token.total_value = token.price * Number(token.amount);
+        // token.total_price = token.price * Number(token.amount);
       });
       this.tokenPrice = 0;
 
-      this.item?.balances.forEach(f => {
+      this.currentAccountDetail?.balances.forEach((f) => {
         f.token_amount = f.amount;
         f.token_name = f.name;
       });
-      
-      this.dataSourceToken = new MatTableDataSource(this.item?.balances);
-      this.pageDataToken.length = this.item?.balances.length;
+
+      this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
+      this.pageDataToken.length = this.currentAccountDetail?.balances.length;
       this.dataSourceTokenBk = this.dataSourceToken;
 
-      this.dataSourceDelegation = new MatTableDataSource(this.item?.delegations);
-      this.pageDataDelegation.length = this.item?.delegations.length;
+      this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
+      this.pageDataDelegation.length = this.currentAccountDetail?.delegations.length;
 
-      this.dataSourceUnBonding = new MatTableDataSource(this.item?.unbonding_delegations);
-      this.pageDataUnbonding.length = this.item?.unbonding_delegations.length;
+      this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
+      this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations.length;
 
-      this.dataSourceReDelegation = new MatTableDataSource(this.item?.redelegations);
-      this.pageDataRedelegation.length = this.item?.redelegations.length;
+      this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
+      this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
 
-      if (this.item?.vesting) {
-        this.dataSourceVesting = new MatTableDataSource([this.item?.vesting]);
+      if (this.currentAccountDetail?.vesting) {
+        this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
         this.pageDataVesting.length = 1;
       }
     });
@@ -453,7 +352,7 @@ export class AccountDetailComponent implements OnInit {
   async createQRCode(): Promise<any> {
     try {
       const data = {
-        values: this.id || '',
+        values: this.currentAddress || '',
       };
 
       const canvas: any = document.getElementById('canvas');
@@ -486,5 +385,14 @@ export class AccountDetailComponent implements OnInit {
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
     }
+  }
+
+  paginatorEmit(e): void {
+    this.dataSource.paginator = e;
+  }
+
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListTransaction();
   }
 }

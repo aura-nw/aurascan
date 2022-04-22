@@ -112,20 +112,6 @@ export class SummaryInfoComponent implements OnInit {
             voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
           });
         });
-/*         let dialogRef = this.dialog.open(ProposalVoteComponent, {
-          width: '431px',
-          data: {
-            id,
-            title,
-            voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
-          },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this.voteValue = result;
-            this.getDetail();
-          }
-        }); */
       });
     } else {
       window.location.reload();

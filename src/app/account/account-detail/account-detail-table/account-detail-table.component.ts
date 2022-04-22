@@ -4,7 +4,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -26,10 +25,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   constructor(
     public translate: TranslateService,
-    private route: Router,
     private datePipe: DatePipe,
     public global: Globals,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {}
@@ -60,4 +58,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     event.pageEventType = this.pageEventType;
     this.pageEvent.emit(event);
   }
+
+  paginatorEmit(event): void {
+    this.dataSource.paginator = event;
+  }
+  paginatorEvent(event: PageEvent): void {}
 }

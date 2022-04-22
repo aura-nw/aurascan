@@ -17,6 +17,7 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { AccountService } from '../../../app/core/services/account.service';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-delegate.module';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-
     SimplebarAngularModule,
     TableNoDataModule,
     DetailPopupDelegateModule,
+    PaginatorModule
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService]
 })

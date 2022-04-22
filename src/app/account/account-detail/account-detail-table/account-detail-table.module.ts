@@ -11,6 +11,7 @@ import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { RouterModule } from '@angular/router';
 import { TableNoDataModule } from '../../../../app/shared/table-no-data/table-no-data.module';
+import { PaginatorModule } from '../../../shared/components/paginator/paginator.module';
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
@@ -25,7 +26,8 @@ import { TableNoDataModule } from '../../../../app/shared/table-no-data/table-no
     CommonPipeModule,
     SimplebarAngularModule,
     RouterModule,
-    TableNoDataModule
+    TableNoDataModule,
+    PaginatorModule
   ],
   exports: [AccountDetailTableComponent]
 })
