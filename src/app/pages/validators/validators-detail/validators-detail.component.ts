@@ -25,7 +25,9 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthBlock: number;
   lengthDelegator: number;
   lengthPower: number;
+
   pageSize = 5;
+
   pageIndexBlock = 0;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
@@ -35,23 +37,24 @@ export class ValidatorsDetailComponent implements OnInit {
   isUptimeMiss = true;
   statusValidator = STATUS_VALIDATOR;
 
-  dataSourceBlock: MatTableDataSource<any>;
+  dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
+
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
 
-  dataSourceDelegator: MatTableDataSource<any>;
+  dataSourceDelegator: MatTableDataSource<any> = new MatTableDataSource();
   templatesDelegator: Array<TableTemplate> = [
     { matColumnDef: 'delegator_address_format', headerCellDef: 'Delegator Address' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
   ];
   displayedColumnsDelegator: string[] = this.templatesDelegator.map((dta) => dta.matColumnDef);
 
-  dataSourcePower: MatTableDataSource<any>;
+  dataSourcePower: MatTableDataSource<any> = new MatTableDataSource();
   templatesPower: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'tx_hash_format', headerCellDef: 'TxHash' },
@@ -110,7 +113,7 @@ export class ValidatorsDetailComponent implements OnInit {
           );
         });
         this.lengthBlock = res.meta?.count;
-        this.dataSourceBlock = new MatTableDataSource(res.data);
+        this.dataSourceBlock.data = res.data;
       });
   }
 
@@ -131,7 +134,7 @@ export class ValidatorsDetailComponent implements OnInit {
           );
         });
         this.lengthDelegator = res.meta?.count;
-        this.dataSourceDelegator = new MatTableDataSource(res.data);
+        this.dataSourceDelegator = res.data;
       });
   }
 
@@ -146,12 +149,12 @@ export class ValidatorsDetailComponent implements OnInit {
           }
           power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
         });
-        this.dataSourcePower = new MatTableDataSource(res.data);
+        this.dataSourcePower = res.data;
         this.lengthPower = res.meta?.count;
       });
   }
 
-  changePage(page: PageEvent, type: string): void {
+  changePage(page: PageEvent, type: 'block' | 'delegator' | 'power'): void {
     switch (type) {
       case 'block':
         this.pageIndexBlock = page.pageIndex;
@@ -177,6 +180,40 @@ export class ValidatorsDetailComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
+    }
+  }
+
+  paginatorEmit(event, type: 'block' | 'delegator' | 'power'): void {
+    switch (type) {
+      case 'block':
+        this.dataSourceBlock.paginator = event;
+        break;
+      case 'delegator':
+        this.dataSourceDelegator.paginator = event;
+        break;
+      case 'power':
+        this.dataSourcePower.paginator = event;
+        break;
+      default:
+        break;
+    }
+  }
+  pageEvent(page: PageEvent, type: 'block' | 'delegator' | 'power'): void {
+    switch (type) {
+      case 'block':
+        this.pageIndexBlock = page.pageIndex;
+        this.getListBlockWithOperator();
+        break;
+      case 'delegator':
+        this.pageIndexDelegator = page.pageIndex;
+        this.getListDelegator();
+        break;
+      case 'power':
+        this.pageIndexPower = page.pageIndex;
+        this.getListPower();
+        break;
+      default:
+        break;
     }
   }
 }

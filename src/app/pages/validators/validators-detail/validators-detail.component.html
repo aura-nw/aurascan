@@ -146,16 +146,18 @@
                     </td>
                   </tr>
                 </table>
+                <app-paginator [length]="lengthBlock" [pageSize]="pageSize" (paginator)="paginatorEmit($event, 'block')"
+                  (pageEvent)="pageEvent($event, 'block')" [id]="'block'">
+                </app-paginator>
               </div>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-
-          <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexBlock" [pageSize]="pageSize"
+          <!-- <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexBlock" [pageSize]="pageSize"
             (page)="changePage($event, 'block')" *ngIf="lengthBlock">
-          </mat-paginator>
+          </mat-paginator> -->
         </div>
       </div>
     </div>
@@ -234,16 +236,18 @@
                     </td>
                   </tr>
                 </table>
+                <app-paginator [length]="lengthDelegator" [pageSize]="pageSize" [id]="'delegator'"
+                  (paginator)="paginatorEmit($event, 'delegator')" (pageEvent)="pageEvent($event, 'delegator')">
+                </app-paginator>
               </div>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-
-          <mat-paginator [length]="lengthDelegator" [pageIndex]="pageIndexDelegator" [pageSize]="pageSize"
+          <!-- <mat-paginator [length]="lengthDelegator" [pageIndex]="pageIndexDelegator" [pageSize]="pageSize"
             (page)="changePage($event, 'delegator')" *ngIf="lengthDelegator">
-          </mat-paginator>
+          </mat-paginator> -->
         </div>
       </div>
     </div>
@@ -297,16 +301,18 @@
                     </td>
                   </tr>
                 </table>
+                <app-paginator [length]="lengthPower" [pageSize]="pageSize" (paginator)="paginatorEmit($event, 'power')"
+                  (pageEvent)="pageEvent($event, 'power')" [id]="'power'">
+                </app-paginator>
               </div>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-
-          <mat-paginator [length]="lengthPower" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
+          <!-- <mat-paginator [length]="lengthPower" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
             (page)="changePage($event, 'power')" *ngIf="lengthPower">
-          </mat-paginator>
+          </mat-paginator> -->
         </div>
       </div>
     </div>
