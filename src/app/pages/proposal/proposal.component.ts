@@ -194,28 +194,28 @@ export class ProposalComponent implements OnInit {
     const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
 
     if (expiredTime > 0) {
-      this.walletService.connectKeplr(this.chainId, (account) => {
-        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
-          let warning: MESSAGE_WARNING;
+      // this.walletService.connectKeplr(this.chainId, (account) => {
+      //   this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+      //     let warning: MESSAGE_WARNING;
 
-          const { created_at } = data.result ? data.result : { created_at: null };
+      //     const { created_at } = data.result ? data.result : { created_at: null };
 
-          warning = created_at
-            ? new Date(created_at) < new Date(item.pro_voting_start_time)
-              ? null
-              : MESSAGE_WARNING.LATE
-            : MESSAGE_WARNING.NOT_PARTICIPATE;
+      //     warning = created_at
+      //       ? new Date(created_at) < new Date(item.pro_voting_start_time)
+      //         ? null
+      //         : MESSAGE_WARNING.LATE
+      //       : MESSAGE_WARNING.NOT_PARTICIPATE;
 
-          this.openDialog({
-            id,
-            title,
-            warning,
-            voteValue: warning
-              ? null
-              : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
-          });
-        });
-      });
+      //     this.openDialog({
+      //       id,
+      //       title,
+      //       warning,
+      //       voteValue: warning
+      //         ? null
+      //         : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+      //     });
+      //   });
+      // });
     } else {
       this.getList();
     }
