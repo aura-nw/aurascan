@@ -343,7 +343,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
-      if (data.length === 0) {
+      if (data && data.length === 0) {
         this.searchNullData = true;
       }
       this.dataSourceToken = this.dataSourceTokenBk;
