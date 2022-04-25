@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
       .subscribe(res => {
         this.globals.dataHeader = res.data;
         this.globals.dataHeader.bonded_tokens = this.globals.dataHeader.bonded_tokens / NUMBER_CONVERT;
-        this.globals.dataHeader.bonded_tokens_format = this.formatNumber(this.globals.dataHeader.bonded_tokens / NUMBER_CONVERT);
+        this.globals.dataHeader.bonded_tokens_format = this.formatNumber(this.globals.dataHeader.bonded_tokens);
         this.globals.dataHeader.community_pool_format = this.formatNumber(this.globals.dataHeader.community_pool);
       }
       );

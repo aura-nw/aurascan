@@ -18,6 +18,7 @@ import { AccountDetailTableModule } from './account-detail-table/account-detail-
 import { AccountService } from '../../../app/core/services/account.service';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
+import { QrModule } from '../../../app/shared/components/qr/qr.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { PaginatorModule } from '../../shared/components/paginator/paginator.mod
     AccountDetailTableModule,
     TableNoDataModule,
     PaginatorModule,
+    QrModule
   ],
   providers: [TransactionService, AccountService]
 })

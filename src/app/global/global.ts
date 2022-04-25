@@ -10,6 +10,7 @@ export class Globals {
   stableToken = 'AURA';
   formatNumberToken = '1.6-6';
   formatNumber2Decimal = '1.2-2';
+  formatNumberOnlyDecimal = '1.0-0';
   maxNumberInput = 100000000000000;
 }
 

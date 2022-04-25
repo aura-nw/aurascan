@@ -6,7 +6,8 @@
         <div class="box-account article-1">
           <div>
             <div class="mb-8 qr-code">
-              <canvas id="canvas" #canvas></canvas>
+              <!-- <canvas id="canvas" #canvas></canvas> -->
+              <app-qr [address]="currentAddress || ''"> </app-qr>
             </div>
             <div>
               <div class="title mb-2">Address</div>
