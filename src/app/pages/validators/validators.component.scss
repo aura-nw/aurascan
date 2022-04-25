@@ -69,6 +69,9 @@ form.search-form {
       @media (min-width: 1440px) {
         width: 782px;
       }
+      &::placeholder {
+        color: var(--aura-neutrals-4);
+      }
     }
   }
 }

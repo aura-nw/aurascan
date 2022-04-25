@@ -321,7 +321,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
   handleSearch() {
     const VALIDATORS = {
-      HASHRULE: /^[A-Z0-9]/,
+      HASHRULE: /^[A-Za-z0-9]/,
     };
     const regexRule = VALIDATORS.HASHRULE;
     this.searchValue = this.searchValue.trim();

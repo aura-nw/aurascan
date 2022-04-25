@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription, timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
-import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import {
@@ -68,7 +68,7 @@ export class ValidatorsComponent implements OnInit {
   clicked = false;
   totalDelegator = 0;
   claimReward = 0;
-  amountFormat = null;
+  amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   validatorAddress = [];
@@ -85,11 +85,12 @@ export class ValidatorsComponent implements OnInit {
   modalReference: any;
   currentValidatorDialog;
   commissionLabel = null;
-
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
   isDisableClaim = true;
+  timerUnSub: Subscription;
+  errorExceedAmount = false;
 
   constructor(
     private validatorService: ValidatorService,
@@ -114,13 +115,21 @@ export class ValidatorsComponent implements OnInit {
         this.userAddress = null;
       }
     });
-    // this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
-    this.getList();
 
-    setInterval(() => {
-      this.getList();
-      this.getDataWallet();
-    }, 10000);
+    this.getList();
+    const halftime = 30000;
+    this.timerUnSub = timer(halftime, halftime).subscribe(() =>
+      this.getDataWallet()
+    );
+  }
+
+  /**
+   * ngOnDestroy
+   */
+   ngOnDestroy(): void {
+    if (this.timerUnSub) {
+      this.timerUnSub.unsubscribe();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -371,6 +380,7 @@ export class ValidatorsComponent implements OnInit {
 
   resetCheck() {
     this.isExceedAmount = false;
+    this.errorExceedAmount = false;
   }
 
   handleStaking() {
@@ -484,13 +494,19 @@ export class ValidatorsComponent implements OnInit {
   changeTypePopup(type){
     this.selectedValidator = '';
     this.isExceedAmount = false;
-    this.amountFormat = null;
+    this.amountFormat = undefined;
     this.dataDelegate.dialogMode = type;
+    this.errorExceedAmount = false;
   }
 
   getMaxToken(type): void{
     if (type === this.dialogMode.Delegate) {
-      this.amountFormat = this.dataDelegate.availableToken;
+      const amountCheck = Number(this.dataDelegate.availableToken) - (Number(GAS_ESTIMATE) / NUMBER_CONVERT);
+      if (amountCheck < 0) {
+        this.isExceedAmount = true;
+        this.errorExceedAmount = true;
+      }
+      this.amountFormat = amountCheck || 0;
     } else if (type === this.dialogMode.Undelegate) {
       this.amountFormat = this.dataDelegate.validatorDetail.amount_staked;
     } else if (type === this.dialogMode.Redelegate) {
