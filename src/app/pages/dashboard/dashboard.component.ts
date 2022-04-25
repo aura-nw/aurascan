@@ -112,8 +112,8 @@ export class DashboardComponent implements OnInit {
             selection: false,
             download: `<i class="icon icon-download"></i>`,
             zoom: false,
-            zoomin: true,
-            zoomout: true,
+            zoomin: `<i class="icon icon-plus-circle"></i>`,
+            zoomout: `<i class="icon icon-minus-circle"></i>`,
             pan: false,
             reset: false,
           }

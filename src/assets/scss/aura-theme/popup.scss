@@ -9,4 +9,7 @@
       color: var(--aura-white);
     }
   }
+  &.modal-holder.fade.show {
+    z-index: 1090;
+  }
 }

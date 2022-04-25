@@ -10,3 +10,26 @@
 .aura-table th:not(:last-child) {
     width: 24%;
 }
+
+:host::ng-deep {
+    apx-chart {
+        .apexcharts-toolbar {
+            .apexcharts-zoomin-icon,
+            .apexcharts-zoomout-icon,
+            .apexcharts-menu-icon {
+                display: flex;
+                align-items: center;
+                margin-right: 12px;
+                width: auto;
+                height: auto;
+            }
+            i.icon {
+                font-size: 2.4rem;
+                transition: color .35s ease-in-out;
+                &:hover {
+                    color: var(--aura-green);
+                }
+            }
+        }
+    }
+}

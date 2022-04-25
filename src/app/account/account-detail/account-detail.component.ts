@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -29,6 +29,13 @@ import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options'
   styleUrls: ['./account-detail.component.scss'],
 })
 export class AccountDetailComponent implements OnInit, AfterViewInit {
+  @ViewChild('assetTypeSelect') assetTypeSelect;
+  @HostListener('window:scroll', ['$event'])
+  closeOptionPanelSection(event) {
+    if (this.assetTypeSelect !== undefined) {
+      this.assetTypeSelect.close();
+    }
+  }
   public chartOptions: Partial<ChartOptions>;
 
   @ViewChild('walletChart') chart: ChartComponent;
@@ -261,6 +268,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       this.chartOptions.series = [];
       if (+this.currentAccountDetail.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
+        this.chartOptions.colors.push(WalletAcount.Commission);
         this.chartCustomOptions.push({
           name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
           color: WalletAcount.Commission,
