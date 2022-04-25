@@ -1,11 +1,22 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { CommonService } from '../../../../app/core/services/common.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
+import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
 import { PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
 import { Globals } from '../../../global/global';
+import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 
 interface CustomPageEvent {
   next: number;
@@ -20,9 +31,10 @@ interface CustomPageEvent {
 })
 export class ProposalTableComponent implements OnInit, OnChanges {
   @Input() type: 'VOTES' | 'VALIDATORS_VOTES' | 'DEPOSITORS';
+  @Input() tabId: string;
   @Input() data: any[];
   @Input() length: number;
-
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
 
   votesTemplates: Array<TableTemplate> = [
@@ -61,7 +73,10 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   constructor(public global: Globals, public commonService: CommonService) {}
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.tabId && !changes.tabId.firstChange && this.dataSource?.paginator) {
+      this.pageChange.selectPage(0);
+    }
     if (this.dataSource) {
       this.dataSource.data = this.data;
     } else {
