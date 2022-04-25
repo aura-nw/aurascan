@@ -146,11 +146,11 @@
               name="search"
               autocomplete="off"
             />
-            <button type="submit" class="btn-search {{textSearch && textSearch.length > 0 ? 'd-none' : ''}}" (click)="searchValidator()">
+            <button type="submit" class="btn-search {{textSearch && textSearch?.length > 0 ? 'd-none' : ''}}" (click)="searchValidator()">
               <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
             </button>
-            <button type="reset" class="btn-reset {{(!textSearch || textSearch && textSearch.length === 0) ? 'd-none' : ''}}"
-                    (click)="textSearch = null">
+            <button type="reset" class="btn-reset {{(!textSearch || textSearch && textSearch?.length === 0) ? 'd-none' : ''}}"
+                    (click)="textSearch = ''; searchValidator()">
               <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
             </button>
           </div>
