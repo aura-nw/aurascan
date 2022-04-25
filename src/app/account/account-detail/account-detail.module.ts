@@ -41,7 +41,7 @@ import { PaginatorModule } from '../../shared/components/paginator/paginator.mod
     FeatherModule,
     AccountDetailTableModule,
     TableNoDataModule,
-    PaginatorModule
+    PaginatorModule,
   ],
   providers: [TransactionService, AccountService]
 })
