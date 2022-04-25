@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {
   ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexStroke, ApexTooltip, ApexXAxis, ChartType
 } from 'ng-apexcharts';
+import { Subscription, timer } from 'rxjs';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
@@ -73,6 +74,7 @@ export class DashboardComponent implements OnInit {
   dataSourceTx: MatTableDataSource<any>;
   currentUser;
   typeTransaction = TYPE_TRANSACTION;
+  timerUnSub: Subscription;
 
   constructor(
     public commonService: CommonService,
@@ -110,8 +112,8 @@ export class DashboardComponent implements OnInit {
             selection: false,
             download: `<i class="icon icon-download"></i>`,
             zoom: false,
-            zoomin: true,
-            zoomout: true,
+            zoomin: `<i class="icon icon-plus-circle"></i>`,
+            zoomout: `<i class="icon icon-minus-circle"></i>`,
             pan: false,
             reset: false,
           }
@@ -142,14 +144,27 @@ export class DashboardComponent implements OnInit {
       this.updateBlockAndTxs(this.chart);
     }, 1000);
 
-    setInterval(() => {
-      this.getInfo();
-      this.getListBlock();
-      this.getListTransaction();
-      this.updateBlockAndTxs(this.chart);
-      // this.getBlockPer(this.chart1);
-      // this.getTxsPer(this.chart2);
-    }, 60000);
+    const halftime = 60000;
+    this.timerUnSub = timer(halftime, halftime).subscribe(() =>
+      this.getInforData()
+    );
+  }
+
+  //get all data for dashbroad
+  getInforData(){
+    this.getInfo();
+    this.getListBlock();
+    this.getListTransaction();
+    this.updateBlockAndTxs(this.chart);
+  }
+
+  /**
+   * ngOnDestroy
+   */
+   ngOnDestroy(): void {
+    if (this.timerUnSub) {
+      this.timerUnSub.unsubscribe();
+    }
   }
 
   getListBlock(): void {

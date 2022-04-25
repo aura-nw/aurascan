@@ -124,8 +124,8 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getListDelegator(): void {
-    this.commonService
-      .delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress)
+    this.validatorService
+      .delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress)
       .subscribe((res) => {
         res.data.forEach((delegator) => {
           delegator.delegator_address_format = delegator.delegator_address.replace(
@@ -133,7 +133,7 @@ export class ValidatorsDetailComponent implements OnInit {
             '...',
           );
         });
-        this.lengthDelegator = res.meta?.count;
+        this.lengthDelegator = res.total;
         this.dataSourceDelegator = res.data;
       });
   }

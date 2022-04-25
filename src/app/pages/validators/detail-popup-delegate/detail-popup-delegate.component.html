@@ -17,24 +17,24 @@
 
 <ng-container *ngIf="data.dialogMode === dialogMode.Manage">
   <div>
-    <div class="d-flex mb-6">
+    <div class="d-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 title-small">My delegation</div>
       <div class="text--greyscale-4 body">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} <span class="text--green">{{global.stableToken}}</span></div>
     </div>
-    <div class="d-flex mb-6">
+    <div class="d-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 title-small">Pending Reward</div>
       <div class="text--greyscale-4 body">{{data?.validatorDetail?.pending_reward || 0 | number: global.formatNumberToken}} <span class="text--green">{{global.stableToken}}</span></div>
     </div>
-    <div class="d-flex mb-6">
+    <div class="d-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 title-small">Total Reward</div>
-      <div class="text--greyscale-4 body">{{data?.historyTotalReward || 0 | number: global.formatNumberToken}} <span class="text--green">{{global.stableToken}}</span></div>
+      <div class="text--greyscale-4 body">{{data?.validatorDetail.reward || 0 | number: global.formatNumberToken}} <span class="text--green">{{global.stableToken}}</span></div>
     </div>
     <div class="d-flex">
       <div class="dialog-title mr-10 title-small">Available Balance</div>
       <div class="text--greyscale-4 body">{{data?.availableToken || 0 | number: global.formatNumberToken}} <span class="text--green">{{global.stableToken}}</span></div>
     </div>
   </div>
-  <div class="box-notice mt-8">
+  <div class="box-notice mt-4 mt-xl-8">
     <div class="warning-icon mr-6"></div>
     <div class="text--greyscale-4">
       <div>You can <span class="fw-bold text--white">"Delegate"</span> more to this validator</div>

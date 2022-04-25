@@ -2,6 +2,7 @@ import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
 import { getSigner } from './signer';
 import { messageCreators } from './messages';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
+import { GAS_ESTIMATE } from '../../constants/common.constant';
 
 export async function createSignBroadcast({
   messageType,
@@ -29,7 +30,7 @@ export async function createSignBroadcast({
           amount: '1',
         },
       ],
-      gas: '400000',
+      gas: GAS_ESTIMATE,
     };
 
     try {

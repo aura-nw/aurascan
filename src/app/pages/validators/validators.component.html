@@ -88,7 +88,7 @@
                           </button>
                         </div>
                         <div *ngSwitchDefault>
-                          <span class="text--green cursor-pointer" (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)">
+                          <span class="text--green cursor-pointer" [routerLink]="['/validators', data['validator_address']]">
                             {{ data[template.matColumnDef] }}
                           </span>
                         </div>
@@ -146,8 +146,12 @@
               name="search"
               autocomplete="off"
             />
-            <button type="submit" class="btn-search" (click)="searchValidator()">
+            <button type="submit" class="btn-search {{textSearch && textSearch.length > 0 ? 'd-none' : ''}}" (click)="searchValidator()">
               <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+            </button>
+            <button type="reset" class="btn-reset {{(!textSearch || textSearch && textSearch.length === 0) ? 'd-none' : ''}}"
+                    (click)="textSearch = null">
+              <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -283,7 +287,7 @@
 <div class="col-lg-6">
   <ng-template #modalManage let-modal>
     <div class="box-staking aura-form">
-      <div class="d-flex align-items-end mb-8">
+      <div class="d-flex align-items-end mb-4 mb-xl-8">
         <div class="mr-10">
           <div class="title text-gradient fw-bolder">{{ dataModal?.title }}</div>
           <div class="body text--white">
@@ -292,7 +296,7 @@
         </div>
         <div class="body text--greyscale-4">
           <div class="mb-1">
-            <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
+            <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}</span>
             <span class="text--green ml-1">{{ globals.stableToken }}</span
             >)
           </div>
@@ -303,10 +307,10 @@
         <detail-popup-delegate [data]="dataDelegate"></detail-popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
           <div class="mt-2">
-            <b>Available for undelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
+            <b>Available for undelegatation</b> {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             <span class="text--green">{{ globals.stableToken }}</span>
           </div>
-          <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
               type="number"
               [max]="globals.maxNumberInput"
@@ -322,23 +326,25 @@
             <div class="input-group-append">{{ globals.stableToken }}</div>
           </div>
         </div>
-        <div
-          class="input-group mt-2"
-          [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-          *ngIf="dataDelegate.dialogMode === dialogMode.Delegate"
-        >
-          <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
-          <div class="py-2 mr-4">
-            <button
-              class="button button-primary active"
-              type="button"
-              (click)="getMaxToken(dialogMode.Delegate)"
-            >
-              MAX
-            </button>
+        <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
+          <div
+            class="input-group mt-3"
+            [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+          >
+            <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+            <div class="py-2 mr-4">
+              <button
+                class="button button-primary active"
+                type="button"
+                (click)="getMaxToken(dialogMode.Delegate)"
+              >
+                MAX
+              </button>
+            </div>
+            <div class="input-group-append">{{ globals.stableToken }}</div>
           </div>
-          <div class="input-group-append">{{ globals.stableToken }}</div>
-        </div>
+          <div *ngIf="errorExceedAmount" class="text--danger mt-3">Insufficient available balance for transaction fee</div>
+        </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
           <div class="title-small mb-2">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
@@ -360,10 +366,10 @@
 
           <div *ngIf="selectedValidator">
             <div class="mt-6">
-              <b>Available for redelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
+              <b>Available for redelegatation</b> {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               <span class="text--green">{{ globals.stableToken }}</span>
             </div>
-            <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+            <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="py-2 mr-4">
                 <button
@@ -379,7 +385,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-8">
+      <div class="mt-4 mt-xl-8">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
 

@@ -4,13 +4,11 @@
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <a routerLink="/" class="logo logo-dark">
-                    <img srcset="assets/images/logo/auraMainLogo-1x.png 1x, assets/images/logo/auraMainLogo-2x.png 2x"
-                         src="assets/images/logo/auraMainLogo-1x.png" alt="Aura Logo">
+                    <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
                 </a>
 
                 <a routerLink="/" class="logo logo-light">
-                    <img srcset="assets/images/logo/auraMainLogo-1x.png 1x, assets/images/logo/auraMainLogo-2x.png 2x"
-                         src="assets/images/logo/auraMainLogo-1x.png" alt="Aura Logo">
+                    <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
                 </a>
             </div>
 
@@ -34,8 +32,13 @@
                                     name="inputEmail"
                                     autocomplete="off"
                             />
-                            <button type="submit" class="btn-search" (click)="handleSearch()">
+                            <button type="submit" class="btn-search {{searchValue && searchValue.length > 0 ? 'd-none' : ''}}"
+                                    (click)="handleSearch()">
                                 <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                            </button>
+                            <button type="reset" class="btn-reset {{(!searchValue || searchValue && searchValue.length === 0) ? 'd-none' : ''}}"
+                                    (click)="searchValue = null">
+                                <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
                             </button>
                         </div>
                     </form>
