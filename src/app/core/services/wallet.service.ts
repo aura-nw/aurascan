@@ -56,6 +56,9 @@ export class WalletService {
 
       case WALLET_PROVIDER.COIN98:
         return this.connectCoin98(chainId);
+      default:
+        this.toastr.error('Can not found ', wallet);
+        return null;
     }
   }
 
@@ -65,13 +68,15 @@ export class WalletService {
     session.removeItem(LAST_USED_PROVIDER);
   }
 
- private async connectKeplr(chainId: string): Promise<void> {
+  private async connectKeplr(chainId: string): Promise<void> {
     const checkWallet = async () => {
       try {
-        const keplr = await getKeplr();
+        const coin98 = await this.checkExistedCoin98();
+
+        const keplr = coin98 || (await getKeplr());
 
         if (keplr) {
-          await this.keplrSuggestChain(chainId);
+          !!!coin98 && (await this.keplrSuggestChain(chainId));
           await keplr.enable(chainId);
 
           const account = await keplr.getKey(chainId);
@@ -82,10 +87,6 @@ export class WalletService {
               provider: WALLET_PROVIDER.KEPLR,
               chainId,
             });
-
-            // if (callback) {
-            //   callback(account);
-            // }
           }
         } else {
           this.disconnect();
@@ -108,7 +109,7 @@ export class WalletService {
 
     if (coin98) {
       try {
-        coin98.enable(chainId);
+        await coin98.enable(chainId);
 
         const account = await coin98.getKey(chainId);
 
@@ -129,29 +130,16 @@ export class WalletService {
       }
     } else {
       this.disconnect();
-      window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
+      window.open('https://chrome.google.com/webstore/detail/coin98-wallet/aeachknmefphepccionboohckonoeemg');
     }
   }
 
-  private async checkExistedCoin98(): Promise<Keplr> {
-    if ((window as any).coin98 && (window as any).coin98?.keplr) {
-      return (window as any).coin98.keplr;
+  private async checkExistedCoin98(): Promise<Keplr | null> {
+    if ((window as any).coin98) {
+      return (window as any).keplr || (window as any).coin98.keplr;
     }
 
-    if (document.readyState === 'complete') {
-      return (window as any).coin98.keplr;
-    }
-
-    return new Promise((resolve) => {
-      const documentStateChange = (event: Event) => {
-        if (event.target && (event.target as Document).readyState === 'complete') {
-          resolve((window as any).coin98.keplr);
-          document.removeEventListener('readystatechange', documentStateChange);
-        }
-      };
-
-      document.addEventListener('readystatechange', documentStateChange);
-    });
+    return null;
   }
 
   public getWalletDetail(address: string): Observable<IResponsesTemplate<IWalletDetail>> {

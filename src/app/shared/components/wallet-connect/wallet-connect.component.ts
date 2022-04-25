@@ -51,7 +51,8 @@ export class WalletConnectComponent implements OnInit, AfterViewInit {
 
   connectWallet(provider: WALLET_PROVIDER): void {
     try {
-      const connect = async () => {
+      const connect = async () => {console.log('connectWallet ', provider);
+      
         await this.walletService.connect(provider, this.chainId);
 
         this.buttonDismiss.nativeElement.click();
