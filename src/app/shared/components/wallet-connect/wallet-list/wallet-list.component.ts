@@ -12,10 +12,10 @@ export class WalletListComponent {
       name: WALLET_PROVIDER.KEPLR,
       icon: '../../../../../../assets/images/icon-keplr.svg',
     },
-    // {
-    //   name: WALLET_PROVIDER.COIN98,
-    //   icon: '../../../../../../assets/images/icon-coin98.svg',
-    // },
+    {
+      name: WALLET_PROVIDER.COIN98,
+      icon: '../../../../../../assets/images/icon-coin98.svg',
+    },
   ];
 
   @Output() onConnect = new EventEmitter<WALLET_PROVIDER>();

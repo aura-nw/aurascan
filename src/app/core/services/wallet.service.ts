@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Key } from '@keplr-wallet/types';
+import { Keplr, Key } from '@keplr-wallet/types';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { ChainsInfo, KEPLR_ERRORS, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -57,14 +57,13 @@ export class WalletService {
     });
   }
 
-  connect(wallet: WALLET_PROVIDER, chainId: string): any {
+  connect(wallet: WALLET_PROVIDER, chainId: string): Promise<void> | any {
     switch (wallet) {
       case WALLET_PROVIDER.KEPLR:
-        this.connectKeplr(chainId);
-        break;
+        return this.connectKeplr(chainId);
+
       case WALLET_PROVIDER.COIN98:
-        this.connectCoin98(chainId);
-        break;
+        return this.connectCoin98(chainId);
     }
   }
 
@@ -92,8 +91,8 @@ export class WalletService {
               chainId,
             });
 
-            if(callback) {
-              callback(account)
+            if (callback) {
+              callback(account);
             }
           }
         } else {
@@ -112,11 +111,54 @@ export class WalletService {
     checkWallet();
   }
 
-  private connectCoin98(chainId: string): void {}
+  private async connectCoin98(chainId: string): Promise<void> {
+    const coin98 = await this.checkExistedCoin98();
 
-  private checkExistedCoin98(): Promise<boolean> {
+    if (coin98) {
+      try {
+        coin98.enable(chainId);
+
+        const account = await coin98.getKey(chainId);
+
+        if (account) {
+          this.setWallet(account);
+          session.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+            provider: WALLET_PROVIDER.KEPLR,
+            chainId,
+          });
+        }
+      } catch (e: any) {
+        const handleErrors = async () => {
+          this.handleErrors(e, chainId);
+        };
+
+        handleErrors();
+        this.disconnect();
+      }
+    } else {
+      this.disconnect();
+      window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
+    }
+  }
+
+  private async checkExistedCoin98(): Promise<Keplr> {
+    if ((window as any).coin98 && (window as any).coin98?.keplr) {
+      return (window as any).coin98.keplr;
+    }
+
+    if (document.readyState === 'complete') {
+      return (window as any).coin98.keplr;
+    }
+
     return new Promise((resolve) => {
-      resolve(false);
+      const documentStateChange = (event: Event) => {
+        if (event.target && (event.target as Document).readyState === 'complete') {
+          resolve((window as any).coin98.keplr);
+          document.removeEventListener('readystatechange', documentStateChange);
+        }
+      };
+
+      document.addEventListener('readystatechange', documentStateChange);
     });
   }
 
