@@ -16,7 +16,7 @@
         padding-left: var(--spacer-1);
         border: none;
         background-color: transparent;
-        color: var(--aura-light-gray);
+        color: var(--aura-white);
         font-size: 16px;
         line-height: 24px;
         font-family: SFProDisplay;
@@ -24,7 +24,8 @@
           color: var(--aura-dark-gray);
         }
       }
-      button[type='submit'] {
+      button[type='submit'],
+      button[type='reset']{
         background: transparent;
         width: 24px;
         height: 24px;
