@@ -91,6 +91,7 @@ export class ValidatorsComponent implements OnInit {
   isDisableClaim = true;
   timerUnSub: Subscription;
   errorExceedAmount = false;
+  isHandleStake = false;
 
   constructor(
     private validatorService: ValidatorService,
@@ -117,7 +118,7 @@ export class ValidatorsComponent implements OnInit {
     });
 
     this.getList();
-    const halftime = 30000;
+    const halftime = 5000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() =>
       this.getDataWallet()
     );
@@ -375,7 +376,8 @@ export class ValidatorsComponent implements OnInit {
     this.isExceedAmount = false;
     if (this.amountFormat > amountCheck) {
       this.isExceedAmount = true;
-    }
+    } 
+    this.isHandleStake = true;
   }
 
   resetCheck() {
@@ -519,13 +521,18 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
+    console.log({hash, error, msg});
+    
     if (error) {
-      this.toastr.error(msg);
+      if (error != 'Request rejected') {
+        this.toastr.error(msg);
+      }
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
       }, 3000);
     }
+    this.isHandleStake = false;
   }
 
   checkDetailTx(id, message) {

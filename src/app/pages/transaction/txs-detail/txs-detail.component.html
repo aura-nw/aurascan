@@ -12,6 +12,9 @@
   <div class="card text--white">
     <div class="card-header title-small">Information</div>
     <div class="card-body body">
+      <div class="row box-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
       <div class="row mb-3">
         <div class="col-3">
           <p class="card-text fw-bold">Chain Id</p>

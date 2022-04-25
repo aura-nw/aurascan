@@ -21,7 +21,7 @@
           class="button button-outline title-small"
           type="button"
           (click)="handleClaim()"
-          [disabled]="isDisableClaim"
+          [disabled]="isDisableClaim || isHandleStake"
         >
           Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
           <span class="ml-1">{{ globals.stableToken }}</span>
@@ -418,7 +418,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleUndelegate()"
-              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake"
             >
               Undelegate
             </button>
@@ -444,7 +444,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleStaking()"
-              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake"
             >
               Delegate
             </button>
@@ -457,7 +457,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleRedelegate()"
-              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake"
             >
               Redelegate
             </button>
