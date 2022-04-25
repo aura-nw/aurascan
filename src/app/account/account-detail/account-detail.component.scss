@@ -40,6 +40,9 @@ section.account-detail {
       @media (min-width: 1440px) {
         width: 405px;
       }
+      &::placeholder {
+        color: var(--aura-neutrals-4);
+      }
     }
   }
   .asset-type .select-input-field {
