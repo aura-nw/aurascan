@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'icon-aura';
+  font-family: 'ico-aura';
   src:  url('ico-aura.eot?w8bdhl');
   src:  url('ico-aura.eot?w8bdhl#iefix') format('embedded-opentype'),
-    url('ico-aura.ttf?w8bdhl') format('truetype'),
-    url('ico-aura.woff?w8bdhl') format('woff'),
-    url('ico-aura.svg?w8bdhl#ico-aura') format('svg');
+  url('ico-aura.ttf?w8bdhl') format('truetype'),
+  url('ico-aura.woff?w8bdhl') format('woff'),
+  url('ico-aura.svg?w8bdhl#ico-aura') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -12,7 +12,7 @@
 
 i {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icon-aura' !important;
+  font-family: 'ico-aura' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -25,6 +25,12 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-minus-circle:before {
+  content: "\e90e";
+}
+.icon-plus-circle:before {
+  content: "\e910";
+}
 .icon-download:before {
   content: "\e90d";
 }
