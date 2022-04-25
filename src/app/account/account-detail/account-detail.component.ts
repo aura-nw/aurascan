@@ -261,6 +261,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       this.chartOptions.series = [];
       if (+this.currentAccountDetail.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
+        this.chartOptions.colors.push(WalletAcount.Commission);
         this.chartCustomOptions.push({
           name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
           color: WalletAcount.Commission,
