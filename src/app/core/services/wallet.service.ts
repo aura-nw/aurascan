@@ -32,14 +32,6 @@ export class WalletService {
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
   ) {
-    const initialValue: Key = {
-      address: null,
-      algo: null,
-      bech32Address: null,
-      isNanoLedger: null,
-      name: null,
-      pubKey: null,
-    };
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
     const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
@@ -52,12 +44,12 @@ export class WalletService {
     window.addEventListener('keplr_keystorechange', (event) => {
       const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
       if (lastProvider) {
-        this.connect(WALLET_PROVIDER.KEPLR, this.chainId);
+        this.connect(lastProvider.provider, lastProvider.chainId);
       }
     });
   }
 
-  connect(wallet: WALLET_PROVIDER, chainId: string): Promise<void> | any {
+  connect(wallet: WALLET_PROVIDER, chainId: string): Promise<void> {
     switch (wallet) {
       case WALLET_PROVIDER.KEPLR:
         return this.connectKeplr(chainId);
