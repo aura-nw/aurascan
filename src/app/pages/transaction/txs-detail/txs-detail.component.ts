@@ -30,6 +30,7 @@ export class TxsDetailComponent implements OnInit {
   isRawData = false;
   jsonStr;
   eTransType = TRANSACTION_TYPE_ENUM;
+  errorMessage = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +56,18 @@ export class TxsDetailComponent implements OnInit {
         const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res.data.type.toLowerCase());
         this.transactionDetailType = typeTrans?.value;
         this.item = res.data;
+
+        if (this.item.raw_log) {
+          this.errorMessage = this.item.raw_log;
+          if (this.errorMessage.indexOf('too many redelegation') >= 0) {
+            this.errorMessage = 'You can only redelegate from and to this validator up to 7 times.';
+          } else if (this.errorMessage.indexOf('too many unbonding') >= 0) {
+            this.errorMessage = 'You can undelegate from the same validator only up to 7 times';
+          } else if (this.errorMessage.indexOf('in progress') >= 0) {
+            this.errorMessage = "You must wait 21 days in order to be able to redelegate from the 'To' validator.";
+          }
+        }
+        
         //convert json for display raw data
         this.jsonStr = JSON.stringify(this.item.tx, null, 2).replace(/\\/g, '');
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
