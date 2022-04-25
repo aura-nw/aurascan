@@ -57,14 +57,14 @@ export class TxsDetailComponent implements OnInit {
         this.transactionDetailType = typeTrans?.value;
         this.item = res.data;
 
-        if (this.item.raw_log) {
+        if (this.item.raw_log && this.item.code !== CodeTransaction.Success) {
           this.errorMessage = this.item.raw_log;
           if (this.errorMessage.indexOf('too many redelegation') >= 0) {
             this.errorMessage = 'You can only redelegate from and to this validator up to 7 times.';
           } else if (this.errorMessage.indexOf('too many unbonding') >= 0) {
-            this.errorMessage = 'You can undelegate from the same validator only up to 7 times';
+            this.errorMessage = 'You can undelegate from the same validator only up to 7 times.';
           } else if (this.errorMessage.indexOf('in progress') >= 0) {
-            this.errorMessage = "You must wait 21 days in order to be able to redelegate from the 'To' validator.";
+            this.errorMessage = "You must wait 21 days in order to be able to redelegate from the selected validator.";
           }
         }
         
