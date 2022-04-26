@@ -12,6 +12,7 @@ import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/cons
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
+import { DialogService } from '../../core/services/dialog.service';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
@@ -59,6 +60,7 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
+    private dlgServ: DialogService 
   ) {}
 
   ngOnInit(): void {
@@ -272,5 +274,12 @@ export class ProposalComponent implements OnInit {
 
   shortenAddress(address: string): string {
     return shortenAddressStartEnd(address, 6, 10);
+  }
+
+  dlgServOpen(): void {
+    this.dlgServ.showDialog({
+      content: 'Please set up override Keplr in settings of Coin98 wallet',
+      title: '',
+    })
   }
 }

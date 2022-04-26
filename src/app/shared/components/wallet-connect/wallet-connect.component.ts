@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { DialogService } from '../../../core/services/dialog.service';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 
@@ -26,6 +27,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     private walletService: WalletService,
     private envService: EnvironmentService,
     private toastr: NgxToastrService,
+    private dlgService: DialogService,
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {
@@ -52,8 +54,11 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     try {
       const connect = async () => {
         const connect = await this.walletService.connect(provider, this.chainId);
-        if (!connect) {
-          this.toastr.error('Please set up override Keplr in settings of Coin98 wallet');
+        if (!connect && provider === WALLET_PROVIDER.COIN98) {
+          this.dlgService.showDialog({
+            title: '',
+            content: 'Please set up override Keplr in settings of Coin98 wallet',
+          });
         }
         this.buttonDismiss.nativeElement.click();
       };
