@@ -129,6 +129,9 @@ export class DashboardComponent implements OnInit {
       xaxis: {
         type: 'datetime',
         categories: [],
+        labels: {
+          datetimeUTC: false
+        }
       },
       tooltip: {
         x: {
@@ -237,6 +240,9 @@ export class DashboardComponent implements OnInit {
       this.chartOptions.xaxis = {
         type: 'datetime',
         categories: categories,
+        labels: {
+          datetimeUTC: false
+        }
       };
       // }
     });
@@ -296,6 +302,9 @@ export class DashboardComponent implements OnInit {
         },
         xaxis: {
           categories: categories,
+          labels: {
+            datetimeUTC: false
+          }
         },
       };
     });
@@ -355,6 +364,9 @@ export class DashboardComponent implements OnInit {
         },
         xaxis: {
           categories: categories,
+          labels: {
+            datetimeUTC: false
+          }
         },
       };
     });
