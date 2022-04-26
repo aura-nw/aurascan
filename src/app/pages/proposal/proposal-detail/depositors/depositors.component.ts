@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { balanceOf } from '../../../../core/utils/common/parsing';

@@ -21,7 +21,7 @@
           class="button button-outline title-small"
           type="button"
           (click)="handleClaim()"
-          [disabled]="isDisableClaim"
+          [disabled]="isDisableClaim || isHandleStake"
         >
           Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
           <span class="ml-1">{{ globals.stableToken }}</span>
@@ -296,7 +296,7 @@
         </div>
         <div class="body text--greyscale-4">
           <div class="mb-1">
-            <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number }}</span>
+            <span>Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}</span>
             <span class="text--green ml-1">{{ globals.stableToken }}</span
             >)
           </div>
@@ -307,10 +307,10 @@
         <detail-popup-delegate [data]="dataDelegate"></detail-popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
           <div class="mt-2">
-            <b>Available for undelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
+            <b>Available for undelegatation</b> {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             <span class="text--green">{{ globals.stableToken }}</span>
           </div>
-          <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
               type="number"
               [max]="globals.maxNumberInput"
@@ -326,23 +326,25 @@
             <div class="input-group-append">{{ globals.stableToken }}</div>
           </div>
         </div>
-        <div
-          class="input-group mt-2"
-          [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-          *ngIf="dataDelegate.dialogMode === dialogMode.Delegate"
-        >
-          <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
-          <div class="py-2 mr-4">
-            <button
-              class="button button-primary active"
-              type="button"
-              (click)="getMaxToken(dialogMode.Delegate)"
-            >
-              MAX
-            </button>
+        <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
+          <div
+            class="input-group mt-3"
+            [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+          >
+            <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+            <div class="py-2 mr-4">
+              <button
+                class="button button-primary active"
+                type="button"
+                (click)="getMaxToken(dialogMode.Delegate)"
+              >
+                MAX
+              </button>
+            </div>
+            <div class="input-group-append">{{ globals.stableToken }}</div>
           </div>
-          <div class="input-group-append">{{ globals.stableToken }}</div>
-        </div>
+          <div *ngIf="errorExceedAmount" class="text--danger mt-3">Insufficient available balance for transaction fee</div>
+        </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
           <div class="title-small mb-2">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
@@ -364,10 +366,10 @@
 
           <div *ngIf="selectedValidator">
             <div class="mt-6">
-              <b>Available for redelegatation</b> {{ dataDelegate.validatorDetail.amount_staked | number }}
+              <b>Available for redelegatation</b> {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               <span class="text--green">{{ globals.stableToken }}</span>
             </div>
-            <div class="input-group mt-2" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+            <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="py-2 mr-4">
                 <button
@@ -420,7 +422,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleUndelegate()"
-              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake"
             >
               Undelegate
             </button>
@@ -446,7 +448,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleStaking()"
-              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake"
             >
               Delegate
             </button>
@@ -459,7 +461,7 @@
               type="button"
               class="button body button-outline"
               (click)="handleRedelegate()"
-              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0)"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake"
             >
               Redelegate
             </button>

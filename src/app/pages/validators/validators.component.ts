@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription, timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
-import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import {
@@ -21,6 +21,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import { Globals } from '../../../app/global/global';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-validators',
@@ -68,7 +69,7 @@ export class ValidatorsComponent implements OnInit {
   clicked = false;
   totalDelegator = 0;
   claimReward = 0;
-  amountFormat = null;
+  amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   validatorAddress = [];
@@ -85,11 +86,13 @@ export class ValidatorsComponent implements OnInit {
   modalReference: any;
   currentValidatorDialog;
   commissionLabel = null;
-
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
   isDisableClaim = true;
+  timerUnSub: Subscription;
+  errorExceedAmount = false;
+  isHandleStake = false;
 
   constructor(
     private validatorService: ValidatorService,
@@ -99,7 +102,8 @@ export class ValidatorsComponent implements OnInit {
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    public translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -114,13 +118,21 @@ export class ValidatorsComponent implements OnInit {
         this.userAddress = null;
       }
     });
-    // this.userAddress = 'aura1992zh99p5qdcgfs27hnysgy2sr2vupu39a72r5';
-    this.getList();
 
-    setInterval(() => {
-      this.getList();
-      this.getDataWallet();
-    }, 10000);
+    this.getList();
+    const halftime = 5000;
+    this.timerUnSub = timer(halftime, halftime).subscribe(() =>
+      this.getDataWallet()
+    );
+  }
+
+  /**
+   * ngOnDestroy
+   */
+   ngOnDestroy(): void {
+    if (this.timerUnSub) {
+      this.timerUnSub.unsubscribe();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -366,11 +378,13 @@ export class ValidatorsComponent implements OnInit {
     this.isExceedAmount = false;
     if (this.amountFormat > amountCheck) {
       this.isExceedAmount = true;
-    }
+    } 
+    this.isHandleStake = true;
   }
 
   resetCheck() {
     this.isExceedAmount = false;
+    this.errorExceedAmount = false;
   }
 
   handleStaking() {
@@ -484,13 +498,19 @@ export class ValidatorsComponent implements OnInit {
   changeTypePopup(type){
     this.selectedValidator = '';
     this.isExceedAmount = false;
-    this.amountFormat = null;
+    this.amountFormat = undefined;
     this.dataDelegate.dialogMode = type;
+    this.errorExceedAmount = false;
   }
 
   getMaxToken(type): void{
     if (type === this.dialogMode.Delegate) {
-      this.amountFormat = this.dataDelegate.availableToken;
+      const amountCheck = Number(this.dataDelegate.availableToken) - (Number(GAS_ESTIMATE) / NUMBER_CONVERT);
+      if (amountCheck < 0) {
+        this.isExceedAmount = true;
+        this.errorExceedAmount = true;
+      }
+      this.amountFormat = amountCheck || 0;
     } else if (type === this.dialogMode.Undelegate) {
       this.amountFormat = this.dataDelegate.validatorDetail.amount_staked;
     } else if (type === this.dialogMode.Redelegate) {
@@ -503,13 +523,17 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
+
     if (error) {
-      this.toastr.error(msg);
+      if (error != 'Request rejected') {
+        this.toastr.error(msg);
+      }
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
       }, 3000);
     }
+    this.isHandleStake = false;
   }
 
   checkDetailTx(id, message) {
@@ -520,13 +544,13 @@ export class ValidatorsComponent implements OnInit {
           message = res?.data?.raw_log || message;
           if (this.dataDelegate.dialogMode === this.dialogMode.Redelegate) {
             if (message.indexOf('too many') >= 0) {
-              message = 'You can only redelegate from and to this validator up to 7 times.';
+              message = this.translate.instant('NOTICE.ERROR_REDELEGATE_TIME');
             } else if (message.indexOf('in progress') >= 0) {
-              message = "You must wait 21 days in order to be able to redelegate from the 'To' validator.";
+              message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS');
             }
           } else if(this.dataDelegate.dialogMode === this.dialogMode.Undelegate){
             if (message.indexOf('too many') >= 0) {
-              message = 'You can undelegate from the same validator only up to 7 times';
+              message = this.translate.instant('NOTICE.ERROR_UNDELEGATE_TIME');
             }
           }
           this.toastr.error(message);

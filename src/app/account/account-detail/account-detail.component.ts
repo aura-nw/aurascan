@@ -145,14 +145,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
   pageEventType = PageEventType;
-  type = 'All';
   imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
   tokenPrice = 0;
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
-
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
@@ -181,10 +179,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
-
         this.getAccountDetail();
         this.getListTransaction();
-        this.createQRCode();
       } else {
       }
     });
@@ -273,6 +269,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       this.chartOptions.series = [];
       if (+this.currentAccountDetail.commission > 0) {
         this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
+        this.chartOptions.colors.push(WalletAcount.Commission);
         this.chartCustomOptions.push({
           name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
           color: WalletAcount.Commission,
@@ -358,37 +355,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     } else {
       this.dataSourceToken = this.dataSourceTokenBk;
     }
-  }
-
-  /**
-   * createQRCode
-   */
-  async createQRCode(): Promise<any> {
-    try {
-      const data = {
-        values: this.currentAddress || '',
-      };
-
-      const canvas: any = document.getElementById('canvas');
-      await qrCode.toDataURL(canvas, data.values, { width: 295, margin: 5 });
-      // adding a log at center
-      const imgDim = { width: 295, height: 295 };
-      const context = canvas.getContext('2d');
-      const logoImg: any = new Image();
-      logoImg.crossOrigin = 'anonymous';
-      // logoImg.src = imgBase64;
-      logoImg.onload = () => {
-        context.drawImage(
-          '',
-          canvas.width / 2 - imgDim.width / 2,
-          canvas.height / 2 - imgDim.height / 2,
-          imgDim.width,
-          imgDim.height,
-        );
-        context.save();
-      };
-      this.imgGenerateQR = true;
-    } catch (e) {}
   }
 
   openTxsDetail(event: any, data: any) {

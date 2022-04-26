@@ -10,6 +10,9 @@
       input {
         font-size: 1.6rem;
         line-height: 2.4rem;
+        &::placeholder {
+          color: var(--aura-neutrals-4);
+        }
       }
     }
     button.btn-search, button.btn-reset  {
