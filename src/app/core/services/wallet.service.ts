@@ -27,11 +27,25 @@ export class WalletService {
     this._wallet$.next(nextState);
   }
 
+  dialogState$: Observable<'open' | 'close'>;
+  private _dialogState$: BehaviorSubject<'open' | 'close'>;
+
+  get dialogState(): 'open' | 'close' {
+    return this._dialogState$.getValue();
+  }
+
+  setDialogState(nextState: 'open' | 'close'): void {
+    this._dialogState$.next(nextState);
+  }
+
   constructor(
     private http: HttpClient,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
   ) {
+    this._dialogState$ = new BehaviorSubject(null);
+    this.dialogState$ = this._dialogState$.asObservable();
+
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
     const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);

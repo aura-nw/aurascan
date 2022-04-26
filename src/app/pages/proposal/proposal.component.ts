@@ -8,7 +8,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT } from '../../core/constants/common.constant';
-import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
