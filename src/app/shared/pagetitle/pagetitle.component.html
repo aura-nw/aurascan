@@ -10,10 +10,10 @@
           </ng-container>
         </ol>
         <div class="box-info body" *ngIf="displayInfo">
-          <span class="item-info"><b>Height:</b> {{ global?.dataHeader?.block_height | number }}</span>
-          <span class="item-info"><b>Bonded:</b> {{ global?.dataHeader?.bonded_tokens_format }}</span>
-          <span class="item-info"><b>Inflation:</b> {{ global?.dataHeader?.inflation }}</span>
-          <span><b>Community Pool:</b> {{ global?.dataHeader?.community_pool_format }}</span>
+          <span class="item-info" *ngIf="global?.dataHeader?.block_height"><b>Height:</b> {{ global?.dataHeader?.block_height | number }}</span>
+          <span class="item-info" *ngIf="global?.dataHeader?.bonded_tokens_format"><b>Bonded:</b> {{ global?.dataHeader?.bonded_tokens_format }}</span>
+          <span class="item-info" *ngIf="global?.dataHeader?.inflation"><b>Inflation:</b> {{ global?.dataHeader?.inflation }}</span>
+          <span *ngIf="global?.dataHeader?.community_pool_format"><b>Community Pool:</b> {{ global?.dataHeader?.community_pool_format }}</span>
         </div>
       </div>
     </div>

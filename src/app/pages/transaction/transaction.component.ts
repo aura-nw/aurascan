@@ -34,6 +34,7 @@ export class TransactionComponent implements OnInit {
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
+  loading = true;
 
   constructor(
     private router: Router,
@@ -59,6 +60,7 @@ export class TransactionComponent implements OnInit {
     this.transactionService
       .txs(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe((res: ResponseDto) => {
+        this.loading = true;
         res.data.forEach((trans) => {
           //get amount of transaction
           trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
@@ -73,6 +75,7 @@ export class TransactionComponent implements OnInit {
 
         this.dataSource = new MatTableDataSource(res.data);
         this.length = res.meta.count;
+        this.loading = false;
       }
       );
   }

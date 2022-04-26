@@ -38,6 +38,7 @@ export class BlockDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
   dateFormat;
+  loading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,6 +76,7 @@ export class BlockDetailComponent implements OnInit {
   getDetailById() {
     this.blockService.blockDetailById(this.blockId).subscribe(
       (res) => {
+        this.loading = true;
         if (res.status === 404) {
           this.router.navigate(['/']);
           return;
@@ -93,6 +95,7 @@ export class BlockDetailComponent implements OnInit {
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.length = res.data?.txs.length;
+        this.loading = false;
       },
       (error) => {
         this.router.navigate(['/']);
@@ -103,6 +106,7 @@ export class BlockDetailComponent implements OnInit {
   getDetailByHeight() {
     this.blockService.blockDetail(this.id).subscribe(
       (res: ResponseDto) => {
+        this.loading = true;
         if (res.status === 404) {
           this.router.navigate(['/']);
           return;
@@ -122,6 +126,7 @@ export class BlockDetailComponent implements OnInit {
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
         this.length = res.data?.txs.length;
+        this.loading = false;
       },
       (error) => {
         this.router.navigate(['/']);
