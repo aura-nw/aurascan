@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input,  Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { WALLET_PROVIDER } from "../../../../core/constants/wallet.constant";
 import { IWalletInfo } from "../../../../core/models/wallet";
 @Component({
@@ -19,8 +19,13 @@ export class WalletListComponent {
   ];
 
   @Output() onConnect = new EventEmitter<WALLET_PROVIDER>();
+  @Output() onDismiss = new EventEmitter();
 
   connect(wallet: IWalletInfo): void {
     this.onConnect.emit(wallet.name);
+  }
+
+  dismiss(): void {
+    this.onDismiss.emit();
   }
 }

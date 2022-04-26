@@ -56,6 +56,10 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  dismiss(): void{
+    this.buttonDismiss.nativeElement.click();
+  }
+
   disconnect(): void {
     this.walletService.disconnect();
   }

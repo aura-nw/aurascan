@@ -51,7 +51,7 @@
         <div class="wallet-container">
           <div class="card border-0">
             <div class="card-body">
-              <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
+              <app-wallet-list (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
             </div>
           </div>
         </div>
