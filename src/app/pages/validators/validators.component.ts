@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subscription, timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
-import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS, STABLE_UTOKEN } from '../../../app/core/constants/common.constant';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import {
@@ -21,7 +21,7 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import { Globals } from '../../../app/global/global';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
-import { TranslateService } from '@ngx-translate/core';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 
 @Component({
   selector: 'app-validators',
@@ -103,7 +103,7 @@ export class ValidatorsComponent implements OnInit {
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private transactionService: TransactionService,
-    public translate: TranslateService,
+    private mappingErrorService: MappingErrorService
   ) {}
 
   ngOnInit(): void {
@@ -120,7 +120,7 @@ export class ValidatorsComponent implements OnInit {
     });
 
     this.getList();
-    const halftime = 5000;
+    const halftime = 30000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() =>
       this.getDataWallet()
     );
@@ -129,7 +129,7 @@ export class ValidatorsComponent implements OnInit {
   /**
    * ngOnDestroy
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.timerUnSub) {
       this.timerUnSub.unsubscribe();
     }
@@ -256,6 +256,7 @@ export class ValidatorsComponent implements OnInit {
         if (wallet && wallet.bech32Address) {
           this.clicked = true;
           this.amountFormat = null;
+          this.isHandleStake = false;
           this.getValidatorDetail(address, staticDataModal);
           this.getListRedelegate(this.userAddress, address);
         }
@@ -397,7 +398,7 @@ export class ValidatorsComponent implements OnInit {
             to: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: 'uaura',
+              denom: STABLE_UTOKEN,
             },
           },
           senderAddress: this.userAddress,
@@ -445,7 +446,7 @@ export class ValidatorsComponent implements OnInit {
             from: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: 'uaura',
+              denom: STABLE_UTOKEN,
             },
           },
           senderAddress: this.userAddress,
@@ -473,7 +474,7 @@ export class ValidatorsComponent implements OnInit {
             to_address: this.selectedValidator,
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: 'uaura',
+              denom: STABLE_UTOKEN,
             },
           },
           senderAddress: this.userAddress,
@@ -523,8 +524,6 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
-    console.log({hash, error, msg});
-    
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(msg);
@@ -532,7 +531,7 @@ export class ValidatorsComponent implements OnInit {
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
-      }, 3000);
+      }, 4000);
     }
     this.isHandleStake = false;
   }
@@ -541,22 +540,13 @@ export class ValidatorsComponent implements OnInit {
     this.transactionService.txsDetail(id).subscribe(
       (res: ResponseDto) => {
         let numberCode = res?.data?.code;
-        if (numberCode !== CodeTransaction.Success) {
-          message = res?.data?.raw_log || message;
-          if (this.dataDelegate.dialogMode === this.dialogMode.Redelegate) {
-            if (message.indexOf('too many') >= 0) {
-              message = this.translate.instant('NOTICE.ERROR_REDELEGATE_TIME');
-            } else if (message.indexOf('in progress') >= 0) {
-              message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS');
-            }
-          } else if(this.dataDelegate.dialogMode === this.dialogMode.Undelegate){
-            if (message.indexOf('too many') >= 0) {
-              message = this.translate.instant('NOTICE.ERROR_UNDELEGATE_TIME');
-            }
-          }
-          this.toastr.error(message);
-        } else {
+        message = res?.data?.raw_log || message;
+        message = this.mappingErrorService.checkMappingError(message, numberCode);
+        if (numberCode === CodeTransaction.Success) {
           this.getDataWallet();
+          this.toastr.success(message);
+        } else {
+          this.toastr.error(message);
         }
       },
       (error) => {

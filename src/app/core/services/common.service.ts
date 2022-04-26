@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';

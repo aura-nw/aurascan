@@ -1,6 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
+import { ResponseDto } from '../../../../app/core/models/common.model';
+import { MappingErrorService } from '../../../../app/core/services/mapping-error.service';
+import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { MESSAGE_WARNING } from '../../../core/constants/proposal.constant';
 import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
@@ -27,6 +31,8 @@ export class ProposalVoteComponent implements OnInit {
     private walletService: WalletService,
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
     private route: Router,
+    private transactionService: TransactionService,
+    private mappingErrorService: MappingErrorService
   ) {
     this.keyVote = data.voteValue ?? null;
   }
@@ -48,12 +54,30 @@ export class ProposalVoteComponent implements OnInit {
 
     if (hash) {
       this.dialogRef.close({ keyVote: this.keyVote });
-    }
-
-    if (error) {
+      setTimeout(() => {
+        this.checkDetailTx(hash, 'Error Voting');
+      }, 4000);
+    } else if (error) {
       this.toastr.error(error);
       this.closeVoteForm();
     }
+  }
+
+  checkDetailTx(id, message) {
+    this.transactionService.txsDetail(id).subscribe(
+      (res: ResponseDto) => {
+        let numberCode = res?.data?.code;
+        message = res?.data?.raw_log || message;
+        message = this.mappingErrorService.checkMappingError(message, numberCode);
+        if (numberCode === CodeTransaction.Success) {
+          this.toastr.success(message);
+        } else {
+          this.toastr.error(message);
+        }
+      },
+      (error) => {
+      },
+    );
   }
 
   onSubmitVoteForm() {

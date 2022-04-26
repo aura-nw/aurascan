@@ -14,6 +14,7 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { TransferredDetailComponent } from './txs-detail/transferred-detail/transferred-detail.component';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 import { ValidatorService } from '../../../app/core/services/validator.service';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,6 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
     NgxJsonViewerModule,
     TableNoDataModule
   ],
-  providers: [TransactionService, ValidatorService]
+  providers: [TransactionService, ValidatorService, MappingErrorService]
 })
 export class TransactionModule { }

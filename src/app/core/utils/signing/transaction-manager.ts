@@ -2,7 +2,7 @@ import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
 import { getSigner } from './signer';
 import { messageCreators } from './messages';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
-import { GAS_ESTIMATE } from '../../constants/common.constant';
+import { GAS_ESTIMATE, STABLE_UTOKEN } from '../../constants/common.constant';
 
 export async function createSignBroadcast({
   messageType,
@@ -26,7 +26,7 @@ export async function createSignBroadcast({
     const fee: any = {
       amount: [
         {
-          denom: 'uaura',
+          denom: STABLE_UTOKEN,
           amount: '1',
         },
       ],

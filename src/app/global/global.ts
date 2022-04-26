@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NUMBER_CONVERT } from '../core/constants/common.constant';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../core/constants/transaction.enum';
+import { NUMBER_CONVERT, STABLE_UTOKEN } from '../core/constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 
 Injectable()
@@ -31,7 +31,7 @@ export function getAmount(arrayMsg, type, rawRog = '') {
     amount = itemMessage?.initial_deposit[0]?.amount || 0;
   } else if (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg.length === 1){
     const jsonData = JSON.parse(rawRog);
-    amount = jsonData[0].events[0].attributes[1].value.replace('uaura','');
+    amount = jsonData[0].events[0].attributes[1].value.replace(STABLE_UTOKEN,'');
   }
 
   if (itemMessage && amount >= 0) {

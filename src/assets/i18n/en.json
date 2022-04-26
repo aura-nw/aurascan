@@ -272,6 +272,7 @@
         "NUMBER_REDELEGATE": "You can redelegate from and to the same validator set only up to 7 times.",
         "ERROR_REDELEGATE_TIME": "You can only redelegate from and to this validator up to 7 times.",
         "ERROR_REDELEGATE_INPROGRESS": "You must wait 21 days in order to be able to redelegate from the selected validator.",
-        "ERROR_UNDELEGATE_TIME": "You can undelegate from the same validator only up to 7 times."
+        "ERROR_UNDELEGATE_TIME": "You can undelegate from the same validator only up to 7 times.",
+        "SUCCESS_TRANSACTION": "Successful transaction!"
     }
 }
