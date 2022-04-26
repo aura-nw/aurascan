@@ -1,9 +1,12 @@
 <div class="card">
   <div class="card-body">
-
     <div class="fw-bold card__title">Depositors</div>
     <div class="">
-      <app-proposal-table [type]="'DEPOSITORS'" [data]="voteDataList" [length]="voteDataList.length"></app-proposal-table>
+      <app-proposal-table *ngIf="voteDataList.length > 0"
+              [type]="'DEPOSITORS'" [data]="voteDataList" [length]="voteDataList.length"></app-proposal-table>
+      <div *ngIf="voteDataList.length === 0">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
     </div>
   </div>
 </div>

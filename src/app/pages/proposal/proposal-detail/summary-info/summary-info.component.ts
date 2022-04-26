@@ -29,6 +29,7 @@ export class SummaryInfoComponent implements OnInit {
     proId: number;
     vote: string | null;
   }[] = [];
+  votingBarLoading = true;
 
   constructor(
     private proposalService: ProposalService,
@@ -159,6 +160,7 @@ export class SummaryInfoComponent implements OnInit {
 
   getVoteResult() {
     this.proposalService.getProposalTally(this.proposalId).subscribe((res) => {
+      this.votingBarLoading = true;
       this.proposalDetail.pro_votes_yes = balanceOf(+res.data.proposalVoteTally.tally.yes);
       this.proposalDetail.pro_votes_no = balanceOf(+res.data.proposalVoteTally.tally.no);
       this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.proposalVoteTally.tally.no_with_veto);
@@ -188,6 +190,7 @@ export class SummaryInfoComponent implements OnInit {
         (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
       this.proposalDetail.abstainPercent =
         (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
+      this.votingBarLoading = false;
     });
   }
 }

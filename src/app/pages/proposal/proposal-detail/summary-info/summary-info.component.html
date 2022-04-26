@@ -78,7 +78,7 @@
     </div>
   </div>
   <div class="card-footer">
-    <div class="top-border proposal__summary-total">
+    <div class="top-border proposal__summary-total" *ngIf="!votingBarLoading">
       <div class="row mb-3">
         <div class="col-12 col-md-2 body">Total:</div>
         <div class="col-12 col-md-10 body">
@@ -86,7 +86,6 @@
           <span class="text--primary">{{ global.stableToken }}</span>
         </div>
       </div>
-
       <div class="vote-bar">
         <ul>
           <li
@@ -169,6 +168,9 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div *ngIf="votingBarLoading" class="">
+      <app-loading-sprint></app-loading-sprint>
     </div>
   </div>
 </div>
