@@ -155,6 +155,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   chartCustomOptions = chartCustomOptions;
 
+  // loading param check
+  accDetailLoading = true;
+  chartLoading = true;
+
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
@@ -254,16 +258,17 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
 
-        this.dataSource.data =  res.data ;// new MatTableDataSource(res.data);
+        this.dataSource.data =  res.data ;
         
         this.length = res.meta.count;
-        // this.pageData.length= 
         this.pageData.length = res.meta.count;
       });
   }
 
   getAccountDetail(): void {
     this.accountService.getAccoutDetail(this.currentAddress).subscribe((res) => {
+      this.chartLoading = true;
+      this.accDetailLoading = true;
       this.currentAccountDetail = res.data;
       this.chartOptions.series = [];
       if (+this.currentAccountDetail.commission > 0) {
@@ -334,6 +339,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
         this.pageDataVesting.length = 1;
       }
+      this.accDetailLoading = false;
+      this.chartLoading = false;
     });
   }
 
