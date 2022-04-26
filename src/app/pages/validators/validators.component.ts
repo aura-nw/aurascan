@@ -22,6 +22,7 @@ import { WalletService } from '../../../app/core/services/wallet.service';
 import { Globals } from '../../../app/global/global';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-validators',
@@ -103,12 +104,12 @@ export class ValidatorsComponent implements OnInit {
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private transactionService: TransactionService,
-    private mappingErrorService: MappingErrorService
+    private mappingErrorService: MappingErrorService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
-
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
@@ -120,10 +121,6 @@ export class ValidatorsComponent implements OnInit {
     });
 
     this.getList();
-    const halftime = 30000;
-    this.timerUnSub = timer(halftime, halftime).subscribe(() =>
-      this.getDataWallet()
-    );
   }
 
   /**
@@ -302,7 +299,9 @@ export class ValidatorsComponent implements OnInit {
 
   //Get data for wallet info and list staking
   getDataWallet() {
-    if (this.userAddress) {
+    const halftime = 30000;
+    const currentUrl = this.router.url;
+    if (this.userAddress && currentUrl === '/validators') {
       forkJoin({
         dataWallet: this.accountService.getAccoutDetail(this.userAddress),
         dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
@@ -358,7 +357,15 @@ export class ValidatorsComponent implements OnInit {
             return this.compare(a.completion_time, b.completion_time, true);
           });
         }
-      });
+        setTimeout(() => {
+          this.getDataWallet()
+        }, halftime);
+      }, (error) => {
+        setTimeout(() => {
+          this.getDataWallet()
+        }, halftime);
+      }
+      );
     }
   }
 
