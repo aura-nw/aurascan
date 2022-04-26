@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MESSAGE_WARNING } from '../../../core/constants/proposal.constant';
-import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { IVotingDialog } from '../../../core/models/proposal.model';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
@@ -42,7 +42,7 @@ export class ProposalVoteComponent implements OnInit {
       },
       senderAddress: this.walletService.wallet.bech32Address,
       network: ChainsInfo[this.chainId],
-      signingType: 'keplr',
+      signingType: ESigningType.Keplr,
       chainId: this.chainId,
     });
 

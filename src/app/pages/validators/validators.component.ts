@@ -3,13 +3,13 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subscription, timer } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
-import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import {
   ChainsInfo,
+  ESigningType,
   SIGNING_MESSAGE_TYPES
 } from '../../../app/core/constants/wallet.constant';
 import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -248,15 +248,23 @@ export class ValidatorsComponent implements OnInit {
     this.currentValidatorDialog = address;
     const view = async () => {
       // this.walletService.connectKeplr(this.walletService.chainId);
+      const account = this.walletService.getAccount();
 
-      this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
-        if (wallet && wallet.bech32Address) {
-          this.clicked = true;
-          this.amountFormat = null;
-          this.getValidatorDetail(address, staticDataModal);
-          this.getListRedelegate(this.userAddress, address);
-        }
-      });
+      if (account && account.bech32Address) {
+        this.clicked = true;
+        this.amountFormat = null;
+        this.getValidatorDetail(address, staticDataModal);
+        this.getListRedelegate(this.userAddress, address);
+      }
+
+      // this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
+      //   if (wallet && wallet.bech32Address) {
+      //     this.clicked = true;
+      //     this.amountFormat = null;
+      //     this.getValidatorDetail(address, staticDataModal);
+      //     this.getListRedelegate(this.userAddress, address);
+      //   }
+      // });
     };
     view();
     this.isOpenStaking = isOpenStaking;
@@ -398,7 +406,7 @@ export class ValidatorsComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -420,7 +428,7 @@ export class ValidatorsComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -446,7 +454,7 @@ export class ValidatorsComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -474,7 +482,7 @@ export class ValidatorsComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 

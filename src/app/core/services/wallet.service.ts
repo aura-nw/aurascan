@@ -62,11 +62,6 @@ export class WalletService implements OnDestroy {
   }
 
   connect(provider: WALLET_PROVIDER, chainId: string): Promise<void> {
-    if (!this.wallet) {
-      this.setDialogState('open');
-      return null;
-    }
-
     switch (provider) {
       case WALLET_PROVIDER.KEPLR:
         return this.connectKeplr(chainId);

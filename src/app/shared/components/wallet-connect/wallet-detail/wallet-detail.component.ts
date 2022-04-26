@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ChartComponent } from 'ng-apexcharts'
-import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../../core/constants/wallet.constant'
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../../core/constants/wallet.constant'
 import { AccountService } from '../../../../core/services/account.service'
 import { NgxToastrService } from '../../../../core/services/ngx-toastr.service'
 import { WalletService } from '../../../../core/services/wallet.service'
@@ -107,7 +107,7 @@ export class WalletDetailComponent implements OnInit, OnChanges {
       },
       senderAddress: this.address,
       network: ChainsInfo[this.chainId],
-      signingType: 'keplr',
+      signingType: ESigningType.Keplr,
       chainId: this.chainId,
     })
 
