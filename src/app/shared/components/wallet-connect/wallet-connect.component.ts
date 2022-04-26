@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Key } from '@keplr-wallet/types';
-import makeBlockie from 'ethereum-blockies-base64';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { DialogService } from '../../../core/services/dialog.service';
+import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 
 @Component({
@@ -12,54 +13,64 @@ import { WalletService } from '../../../core/services/wallet.service';
   templateUrl: './wallet-connect.component.html',
   styleUrls: ['./wallet-connect.component.scss'],
 })
-export class WalletConnectComponent implements OnInit, AfterViewInit {
-  walletAddress: string = null;
-
-  walletName = 'My Wallet';
-
-  isShowQR = true;
-  trigger: 'hide' | 'show' = 'hide';
-
-  avatarValue = this.walletAddress ? makeBlockie(this.walletAddress) : makeBlockie(this.walletName);
-
-  wallet$: Observable<Key> = this.walletService.wallet$.pipe(
-    tap((wallet) => {
-      if (wallet?.bech32Address) {
-        this.avatarValue = makeBlockie(wallet.bech32Address);
-      }
-    }),
-  );
+export class WalletConnectComponent implements AfterViewInit, OnDestroy {
+  wallet$: Observable<Key> = this.walletService.wallet$;
 
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
+  @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.apiUrl.value.chainId;
 
-  ngOnInit(): void {
+  destroy$ = new Subject();
+  constructor(
+    private walletService: WalletService,
+    private envService: EnvironmentService,
+    private toastr: NgxToastrService,
+    private dlgService: DialogService,
+  ) {
+    this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
+      if (state === 'open') {
+        this.connectButton?.nativeElement.click();
+      } else {
+        this.buttonDismiss?.nativeElement.click();
+      }
+    });
   }
-  constructor(private walletService: WalletService, private envService: EnvironmentService) {}
 
   ngAfterViewInit(): void {
-    this.offcanvasWallet.nativeElement.addEventListener('show.bs.offcanvas', () => {
-      this.trigger = 'show';
-    });
-
     this.offcanvasWallet.nativeElement.addEventListener('hide.bs.offcanvas', () => {
-      this.trigger = 'hide';
+      this.walletService.setDialogState('close');
     });
+  }
+
+  ngOnDestroy(): void {
+    document.removeAllListeners('hide.bs.offcanvas');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
     try {
       const connect = async () => {
-        await this.walletService.connect(provider, this.chainId);
-
+        const connect = await this.walletService.connect(provider, this.chainId);
+        if (!connect && provider === WALLET_PROVIDER.COIN98) {
+          this.dlgService.showDialog({
+            title: '',
+            content: 'Please set up override Keplr in settings of Coin98 wallet',
+          });
+        }
         this.buttonDismiss.nativeElement.click();
       };
+
       connect();
     } catch (error) {
       console.error(error);
     }
+  }
+
+  dismiss(): void {
+    this.buttonDismiss.nativeElement.click();
   }
 
   disconnect(): void {
@@ -68,9 +79,5 @@ export class WalletConnectComponent implements OnInit, AfterViewInit {
 
   shortenWallet(address: string): string {
     return address ? `${new String(address).slice(0, 6)}...${address.slice(address.length - 6)}` : '';
-  }
-
-  toggleShowQR(): void {
-    this.isShowQR = !this.isShowQR;
   }
 }

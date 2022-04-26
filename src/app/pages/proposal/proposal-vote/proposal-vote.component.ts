@@ -6,7 +6,7 @@ import { ResponseDto } from '../../../../app/core/models/common.model';
 import { MappingErrorService } from '../../../../app/core/services/mapping-error.service';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { MESSAGE_WARNING } from '../../../core/constants/proposal.constant';
-import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { IVotingDialog } from '../../../core/models/proposal.model';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
@@ -48,7 +48,7 @@ export class ProposalVoteComponent implements OnInit {
       },
       senderAddress: this.walletService.wallet.bech32Address,
       network: ChainsInfo[this.chainId],
-      signingType: 'keplr',
+      signingType: ESigningType.Keplr,
       chainId: this.chainId,
     });
 
