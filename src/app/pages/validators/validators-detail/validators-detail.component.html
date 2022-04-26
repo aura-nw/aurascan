@@ -1,6 +1,7 @@
 <app-pagetitle title="Validator Details" [breadcrumbItems]="breadCrumbItems" [displayInfo]="true"></app-pagetitle>
 <section>
-  <div class="card text--white">
+
+  <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div class="title-small mb-2">
@@ -96,14 +97,16 @@
       </div> -->
     </div>
   </div>
+  <div class="card py-10" *ngIf="!currentValidatorDetail">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
 
   <div class="row">
     <div class="col-xl-6">
-      <div class="card text--white">
+      <div class="card text--white" *ngIf="lengthBlock">
         <div class="card-header d-flex align-items-center justify-content-between">
           <div class="title-small">Proposed Blocks</div>
           <div>
-            <!--            <img src="/assets/images/icons/blocks.png" class="img-valid" />-->
             <span class="fw-bold mr-2">Total :</span><span>{{ lengthBlock | number }} blocks </span>
           </div>
         </div>
@@ -155,9 +158,11 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <!-- <mat-paginator [length]="lengthBlock" [pageIndex]="pageIndexBlock" [pageSize]="pageSize"
-            (page)="changePage($event, 'block')" *ngIf="lengthBlock">
-          </mat-paginator> -->
+        </div>
+      </div>
+      <div class="card py-10" *ngIf="!lengthBlock">
+        <div class="card-body article-1">
+          <app-loading-sprint></app-loading-sprint>
         </div>
       </div>
     </div>
@@ -191,7 +196,7 @@
 
   <div class="row">
     <div class="col-xl-6">
-      <div class="card text--white">
+      <div class="card text--white" *ngIf="lengthDelegator">
         <div class="card-header d-flex align-items-center justify-content-between">
           <div class="title-small">Delegators</div>
           <div class="box-info d-flex align-items-center">
@@ -250,9 +255,15 @@
           </mat-paginator> -->
         </div>
       </div>
+      <div class="card py-10" *ngIf="!lengthDelegator">
+        <div class="card-body article-1">
+          <app-loading-sprint></app-loading-sprint>
+        </div>
+      </div>
+
     </div>
     <div class="col-xl-6">
-      <div class="card text--white">
+      <div class="card text--white" *ngIf="lengthPower">
         <div class="card-header align-items-center d-flex">
           <div class="title-small">Power Events</div>
           <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
@@ -313,6 +324,11 @@
           <!-- <mat-paginator [length]="lengthPower" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
             (page)="changePage($event, 'power')" *ngIf="lengthPower">
           </mat-paginator> -->
+        </div>
+      </div>
+      <div class="card py-10" *ngIf="!lengthPower">
+        <div class="card-body article-1">
+          <app-loading-sprint></app-loading-sprint>
         </div>
       </div>
     </div>
