@@ -1,3 +1,4 @@
+import { STABLE_UTOKEN } from "./common.constant";
 
 export enum WALLET_PROVIDER {
   KEPLR = "KEPLR",
@@ -27,7 +28,7 @@ export const ChainsInfo: { [chainId: string]: any } = {
     currencies: [
       {
         coinDenom: "AURA",
-        coinMinimalDenom: "uaura",
+        coinMinimalDenom: STABLE_UTOKEN,
         coinDecimals: 6,
         // coinGeckoId: "aura",
       },
@@ -35,16 +36,16 @@ export const ChainsInfo: { [chainId: string]: any } = {
     feeCurrencies: [
       {
         coinDenom: "AURA",
-        coinMinimalDenom: "uaura",
+        coinMinimalDenom: STABLE_UTOKEN,
         coinDecimals: 6,
-        // coinGeckoId: "uaura",
+        // coinGeckoId: STABLE_UTOKEN,
       },
     ],
     stakeCurrency: {
       coinDenom: "AURA",
-      coinMinimalDenom: "uaura",
+      coinMinimalDenom: STABLE_UTOKEN,
       coinDecimals: 6,
-      // coinGeckoId: "uaura",
+      // coinGeckoId: STABLE_UTOKEN,
     },
     coinType: 118,
     gasPriceStep: {
@@ -73,21 +74,21 @@ export const ChainsInfo: { [chainId: string]: any } = {
     },
     currencies: [{
       coinDenom: "AURA",
-      coinMinimalDenom: "uaura",
+      coinMinimalDenom: STABLE_UTOKEN,
       coinDecimals: 6,
-      // coinGeckoId: "aura",
+      // coinGeckoId: STABLE_UTOKEN,
     }, ],
     feeCurrencies: [{
       coinDenom: "AURA",
-      coinMinimalDenom: "uaura",
+      coinMinimalDenom: STABLE_UTOKEN,
       coinDecimals: 6,
-      // coinGeckoId: "uaura",
+      // coinGeckoId: STABLE_UTOKEN,
     }, ],
     stakeCurrency: {
       coinDenom: "AURA",
-      coinMinimalDenom: "uaura",
+      coinMinimalDenom: STABLE_UTOKEN,
       coinDecimals: 6,
-      // coinGeckoId: "uaura",
+      // coinGeckoId: STABLE_UTOKEN,
     },
     coinType: 118,
     gasPriceStep: {

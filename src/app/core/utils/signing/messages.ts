@@ -2,6 +2,9 @@ import BigNumber from 'bignumber.js';
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx';
 import { MsgDelegate, MsgUndelegate, MsgBeginRedelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
+import { Globals } from '../../../../app/global/global';
+import { STABLE_UTOKEN } from '../../constants/common.constant';
+
 // Bank
 
 /* istanbul ignore next */
@@ -33,7 +36,7 @@ export function StakeTx(senderAddress, { to, amount }, network) {
     validatorAddress: to[0],
     amount: {
       amount: amount.amount + '',
-      denom: 'uaura',
+      denom: STABLE_UTOKEN,
     },
   });
   return {
@@ -59,7 +62,7 @@ export function UnstakeTx(senderAddress, { from, amount }, network) {
       validatorAddress: from[0],
       amount: {
         amount: amount.amount + '',
-        denom: 'uaura',
+        denom: STABLE_UTOKEN,
       }
     }),
   };
@@ -155,7 +158,7 @@ export function RestakeTx(senderAddress, { src_address, to_address, amount }, ne
     validatorDstAddress: to_address,
     amount: {
       amount: amount.amount + '',
-      denom: 'uaura',
+      denom: STABLE_UTOKEN,
     },
   });
   return {

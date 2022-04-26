@@ -32,6 +32,7 @@ import { ProposalComponent } from './proposal.component';
 import { DateFnsModule } from 'ngx-date-fns';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
     PaginatorModule,
     ClickOutsideModule
   ],
-  providers: [ProposalService],
+  providers: [ProposalService, MappingErrorService],
 })
 export class ProposalModule {}

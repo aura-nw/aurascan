@@ -18,6 +18,7 @@ import { AccountService } from '../../../app/core/services/account.service';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-delegate.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,6 @@ import { PaginatorModule } from '../../shared/components/paginator/paginator.mod
     DetailPopupDelegateModule,
     PaginatorModule
   ],
-  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService]
+  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService]
 })
 export class ValidatorsModule { }
