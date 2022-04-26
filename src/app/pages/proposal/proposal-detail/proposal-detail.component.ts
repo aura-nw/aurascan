@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProposalDetailComponent implements OnInit {
   // bread crumb items
-  breadCrumbItems!: Array<{}>;
   proposalId: number;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
@@ -23,11 +22,5 @@ export class ProposalDetailComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.breadCrumbItems = [
-      { label: 'Proposal' },
-      { label: 'List' },
-      { label: 'Activate governance discussions on the ...', active: true },
-    ];
-  }
+  ngOnInit(): void {}
 }

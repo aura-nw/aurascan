@@ -64,8 +64,6 @@ export class ValidatorsComponent implements OnInit {
   rawData;
   sortedData;
   dataHeader = new CommonDataDto();
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
   dataModal;
   clicked = false;
   totalDelegator = 0;
@@ -109,7 +107,6 @@ export class ValidatorsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
@@ -148,8 +145,6 @@ export class ValidatorsComponent implements OnInit {
 
       let dataFilter = res.data.filter((event) => (this.typeValidator === this.statusValidator.Active) ? 
             event.status === this.statusValidator.Active : event.status !== this.statusValidator.Active);
-      //sort and calculator cumulative
-      // let dataSort = this.calculatorCumulative(dataFilter);
       this.dataSource = new MatTableDataSource(dataFilter);
       this.dataSourceBk = this.dataSource;
       this.dataSource.sort = this.sort;
