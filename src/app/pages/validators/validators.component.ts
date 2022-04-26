@@ -523,8 +523,7 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
-    console.log({hash, error, msg});
-    
+
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(msg);
