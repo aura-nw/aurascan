@@ -29,8 +29,6 @@ export class ProposalComponent implements OnInit {
   voteValue: { keyVote: number } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   @ViewChild(MatSort) sort: MatSort;
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
   // data table
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
@@ -62,9 +60,7 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Proposal' }, { label: 'List', active: true }];
     this.getList();
-
     this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 

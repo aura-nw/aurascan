@@ -20,8 +20,8 @@ import { MappingErrorService } from '../../../../app/core/services/mapping-error
   styleUrls: ['./txs-detail.component.scss'],
 })
 export class TxsDetailComponent implements OnInit {
-  id;
-  item;
+  id = '';
+  item =  null;
   breadCrumbItems = [{ label: 'Transaction' }, { label: 'List' }, { label: 'Detail', active: true }];
   codeTransaction = CodeTransaction;
   typeTransaction = TYPE_TRANSACTION;

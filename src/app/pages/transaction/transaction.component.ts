@@ -28,7 +28,7 @@ export class TransactionComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  length: number;
   pageSize = 20;
   pageIndex = 0;
   pageSizeOptions = PAGE_SIZE_OPTIONS;
@@ -44,10 +44,6 @@ export class TransactionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.breadCrumbItems = [
-      { label: 'Transaction' },
-      { label: 'List', active: true }
-    ];
     this.getList();
   }
   changePage(page: PageEvent): void {

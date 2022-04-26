@@ -1,32 +1,25 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountDetailRoutingModule } from './account-detail-routing.module';
-import { AccountDetailComponent } from './account-detail.component';
-import { SharedModule } from "../../shared/shared.module";
-import { AccountInfoComponent } from './account-info/account-info.component';
-import { StackingTabComponent } from './stacking-tab/stacking-tab.component';
-import { StackingAccountComponent } from './stacking-account/stacking-account.component';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { FeatherModule } from 'angular-feather';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { SimplebarAngularModule } from 'simplebar-angular';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
-import { FormsModule } from '@angular/forms';
-import { SimplebarAngularModule } from 'simplebar-angular';
-import { TranslateModule } from '@ngx-translate/core';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { NgApexchartsModule } from 'ng-apexcharts';
-import { FeatherModule } from 'angular-feather';
-import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountService } from '../../../app/core/services/account.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
+import { QrModule } from '../../../app/shared/components/qr/qr.module';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
-import { QrModule } from '../../../app/shared/components/qr/qr.module';
+import { SharedModule } from "../../shared/shared.module";
+import { AccountDetailRoutingModule } from './account-detail-routing.module';
+import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
+import { AccountDetailComponent } from './account-detail.component';
 
 @NgModule({
   declarations: [
     AccountDetailComponent,
-    AccountInfoComponent,
-    StackingTabComponent,
-    StackingAccountComponent,
-    // TableComponent
   ],
   imports: [
     CommonModule,

@@ -1,11 +1,9 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartComponent } from 'ng-apexcharts';
-import * as qrCode from 'qrcode';
-import { CommonService } from '../../../app/core/services/common.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
@@ -18,6 +16,7 @@ import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.consta
 import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
+import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
 import { IAccountDetail } from '../../core/models/account.model';
@@ -41,8 +40,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   @ViewChild('walletChart') chart: ChartComponent;
   @ViewChild(MatSort) sort: MatSort;
 
-  breadCrumbItems!: Array<{}>;
-  
   currentAddress: string;
 
   currentAccountDetail: IAccountDetail;
@@ -139,7 +136,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
-  length;
+  length: number;
   pageSize = 5;
   pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
@@ -174,8 +171,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
-    // this.breadCrumbItems = [{ label: 'Account' }, { label: 'Detail', active: true }];
-    // this.id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
@@ -205,8 +200,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   changePage(page: any): void {
-    // this.dataSource = null;
-    // this.pageIndex = page.pageIndex;
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
@@ -214,19 +207,15 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         break;
       case this.pageEventType.Unbonding:
         this.pageDataUnbonding.pageIndex = page.pageIndex;
-        // this.getListDelegators();
         break;
       case this.pageEventType.Redelegation:
         this.pageDataRedelegation.pageIndex = page.pageIndex;
-        // this.getListPower();
         break;
       case this.pageEventType.Vestings:
         this.pageDataVesting.pageIndex = page.pageIndex;
-        // this.getListPower();
         break;
       case this.pageEventType.Token:
         this.pageDataToken.pageIndex = page.pageIndex;
-        // this.getListPower();
         break;
       default:
         this.pageData.pageIndex = page.pageIndex;
@@ -253,9 +242,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           }
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
+        this.dataSource.data = res.data;
 
-        this.dataSource.data =  res.data ;
-        
         this.length = res.meta.count;
         this.pageData.length = res.meta.count;
       });
@@ -310,7 +298,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           token.amount = this.currentAccountDetail.total;
         }
         token.total_value = token.price * Number(token.amount);
-        // token.total_price = token.price * Number(token.amount);
       });
       this.tokenPrice = 0;
 
