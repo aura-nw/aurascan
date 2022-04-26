@@ -1,0 +1,54 @@
+$loadingColor1: #49B3A1;
+$loadingColor2: #7AF3E0;
+$loadingColor3: #C6F8F0;
+
+aura-loader {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.aura-loader--sprint {
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  text-align: center;
+}
+svg {
+  width: 60%;
+  fill: none;
+}
+
+.load {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 570;
+  stroke-width: 8px;
+  &.one {
+    stroke: $loadingColor3;
+    animation: load 1.5s infinite;
+  }
+  &.two {
+    stroke: $loadingColor2;
+    animation: load 1.5s infinite;
+    animation-delay: 0.1s;
+  }
+  &.three {
+    stroke: $loadingColor1;
+    animation: load 1.5s infinite;
+    animation-delay: 0.2s;
+  }
+}
+
+@keyframes load {
+  0% {
+    stroke-dashoffset: 570;
+  }
+  50% {
+    stroke-dashoffset: 530;
+  }
+  100% {
+    stroke-dashoffset: 570;
+    transform: rotate(360deg);
+  }
+}

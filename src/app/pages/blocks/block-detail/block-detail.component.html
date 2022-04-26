@@ -1,7 +1,7 @@
 <app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
 <div class="card text--white">
   <div class="card-header title-small py-6 px-6">Header</div>
-  <div class="card-body body">
+  <div class="card-body body" *ngIf="!loading">
     <div class="row mb-3">
       <div class="col-3">
         <p class="card-text fw-bold">Chain Id</p>
@@ -52,6 +52,9 @@
         <a class="text--green" routerLink="/validators/{{ item?.operator_address }}">{{ item?.proposer }}</a>
       </div>
     </div>
+  </div>
+  <div class="card-body body" *ngIf="loading">
+    <app-loading-sprint></app-loading-sprint>
   </div>
 </div>
 <div class="card text--white">

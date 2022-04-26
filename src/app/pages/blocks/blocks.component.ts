@@ -24,6 +24,7 @@ export class BlocksComponent implements OnInit {
   length;
   pageSize = 20;
   pageIndex = 0;
+  loading = true;
   // bread crumb items
   breadCrumbItems!: Array<{}>;
   constructor(private router: Router, private blockService: BlockService, public commonService: CommonService,) {}
@@ -40,6 +41,7 @@ export class BlocksComponent implements OnInit {
 
   getList(): void {
     this.blockService.blocks(this.pageSize, this.pageIndex * this.pageSize).subscribe((res) => {
+      this.loading = true;
       res.data.forEach((block) => {
         block.block_hash_format = block.block_hash.replace(
           block.block_hash.substring(6, block.block_hash.length - 6),
@@ -49,6 +51,7 @@ export class BlocksComponent implements OnInit {
 
       this.dataSource = new MatTableDataSource(res.data);
       this.length = res.meta.count;
+      this.loading = false;
     });
   }
 
