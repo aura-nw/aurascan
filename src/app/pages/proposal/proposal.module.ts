@@ -11,14 +11,18 @@ import {
   NgbPaginationModule,
   NgbPopoverModule,
   NgbProgressbarModule,
-  NgbTooltipModule,
+  NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
 import { MaterialModule } from '../../app.module';
+import { MappingErrorService } from '../../core/services/mapping-error.service';
 import { ProposalService } from '../../core/services/proposal.service';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { SharedModule } from '../../shared/shared.module';
 import { DepositorsComponent } from './proposal-detail/depositors/depositors.component';
 import { ProposalDetailComponent } from './proposal-detail/proposal-detail.component';
@@ -29,10 +33,6 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
-import { DateFnsModule } from 'ngx-date-fns';
-import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,7 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
     TableNoDataModule,
     DateFnsModule,
     PaginatorModule,
-    ClickOutsideModule
+    ClickOutsideModule,
   ],
   providers: [ProposalService, MappingErrorService],
 })

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ChartComponent } from 'ng-apexcharts'
-import { ChainsInfo, SIGNING_MESSAGE_TYPES } from '../../../../core/constants/wallet.constant'
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../../core/constants/wallet.constant'
+import { AccountService } from '../../../../core/services/account.service'
 import { NgxToastrService } from '../../../../core/services/ngx-toastr.service'
 import { WalletService } from '../../../../core/services/wallet.service'
 import { balanceOf } from '../../../../core/utils/common/parsing'
@@ -37,8 +38,12 @@ export class WalletDetailComponent implements OnInit, OnChanges {
 
   isClaiming: boolean = false
 
-  constructor(private walletService: WalletService, private toastr: NgxToastrService) {
-    this.chartOptions = CHART_OPTIONS
+  constructor(
+    private walletService: WalletService,
+    private toastr: NgxToastrService,
+    private accountService: AccountService,
+  ) {
+    this.chartOptions = CHART_OPTIONS;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,7 +59,7 @@ export class WalletDetailComponent implements OnInit, OnChanges {
   }
 
   loadWalletDetail(): void {
-    this.walletService.getWalletDetail(this.address).subscribe((response) => {
+    this.accountService.getWalletDetail(this.address).subscribe((response) => {
       if (!response) {
         return
       }
@@ -102,7 +107,7 @@ export class WalletDetailComponent implements OnInit, OnChanges {
       },
       senderAddress: this.address,
       network: ChainsInfo[this.chainId],
-      signingType: 'keplr',
+      signingType: ESigningType.Keplr,
       chainId: this.chainId,
     })
 

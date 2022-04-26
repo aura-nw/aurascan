@@ -1,94 +1,62 @@
 <div class="wallet-connect-container">
-    <ng-container *ngIf="{wallet: wallet$ | async } as ng">
+  <ng-container *ngIf="{ wallet: wallet$ | async } as ng">
+    <button
+      #connectButton
+      *ngIf="!ng.wallet"
+      type="button"
+      class="button account-button button-outline d-inline-block fw-semibold"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasWallet"
+      aria-controls="offcanvasWallet"
+    >
+      CONNECT WALLET
+    </button>
 
-        <button *ngIf="!ng.wallet" type="button" class="button account-button button-outline d-inline-block fw-semibold"
-            data-bs-toggle="offcanvas" data-bs-target="#offcanvasWallet" aria-controls="offcanvasWallet">CONNECT
-            WALLET</button>
-
-        <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
-            <button class="button button-outline d-flex align-items-center fw-semibold" type="button"
-                    id="walletMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="button__title">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name }}</span>
-                <img class="flex-shrink-0" src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
-                     alt="wallet-avatar" height="24px" width="24px">
-            </button>
-            <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
-                <li class="dropdown-item">
-                    <a [routerLink]="['/account',ng.wallet?.bech32Address]">Account Detail</a>
-                </li>
-                <li class="dropdown-item">
-                    <button type="button" class="button p-0" (click)="disconnect()">Log out</button>
-                </li>
-            </ul>
-        </div>
-
-
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasWallet" #offcanvasWallet
-            aria-labelledby="offcanvasWalletLabel">
-            <div class="offcanvas-body p-0">
-                <div class="wallet-container">
-                    <div class="card border-0">
-                        <div class="card-header">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="d-flex align-items-center gap-3"
-                                        [class.disabled-pointer]="!ng.wallet?.name">
-                                        <div class="wallet-avatar">
-                                            <img [src]="avatarValue" alt="wallet-avatar">
-                                        </div>
-                                        <div class="wallet-name">
-                                            <span class="text">
-                                                <span class="cursor-pointer body text--white">
-                                                    {{ ng.wallet?.name || 'My Wallet' }}
-                                                    <i-feather [hidden]="!ng.wallet?.name" name="chevron-down">
-                                                    </i-feather>
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <mat-menu #menu="matMenu" class="custom-menu">
-                                        <div class="menu-row" mat-menu-item>
-                                            <img class="menu-img" width="20px"
-                                                src="./../../../../assets/images/icon-keplr.svg" alt="">
-                                            <span class="menu-content">Keplr</span>
-                                            <i-feather name="check" class="menu-checked"></i-feather>
-                                        </div>
-                                        <div class="menu-row" mat-menu-item>
-                                            <img class="menu-img" width="20px"
-                                                src="./../../../../assets/images/log-out.svg" alt="">
-                                            <span class="menu-content" (click)="disconnect()">Log out</span>
-                                        </div>
-                                    </mat-menu>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <span class="text">{{ shortenWallet(ng.wallet?.bech32Address) }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
-                            <!-- <ng-container *ngIf="ng.wallet as wallet; else walletList">
-                                <app-wallet-detail [trigger]="trigger" [chainId]="chainId"
-                                    [address]="wallet.bech32Address" (depositEvent)="toggleShowQR()">
-                                </app-wallet-detail>
-                            </ng-container>
-                            <ng-template #walletList>
-                                <app-wallet-list (onConnect)="connectWallet($event)"></app-wallet-list>
-                            </ng-template> -->
-                        </div>
-                    </div>
-
-                    <!-- <div class="qr-modal" *ngIf="isShowQR">
-                        <div class="modal-content" (clickOutside)="toggleShowQR()">
-                            <h2 class="text-center"> {{"WALLET.SCAN_QR" | translate }} </h2>
-                            <app-qr [address]="ng.wallet?.bech32Address || ''"> </app-qr>
-                        </div>
-                    </div> -->
-                </div>
+    <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
+      <button
+        class="button button-outline d-flex align-items-center fw-semibold"
+        type="button"
+        id="walletMenu"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <span class="button__title">{{
+          ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name
+        }}</span>
+        <img
+          class="flex-shrink-0"
+          src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+          alt="wallet-avatar"
+          height="24px"
+          width="24px"
+        />
+      </button>
+      <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
+        <li class="dropdown-item" [routerLink]="['/account', ng.wallet?.bech32Address]">
+          <a>Account Detail</a>
+        </li>
+        <li class="dropdown-item" (click)="disconnect()">
+          <button type="button" class="button p-0">Log out</button>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="offcanvas offcanvas-wallet offcanvas-end"
+      tabindex="-1"
+      id="offcanvasWallet"
+      #offcanvasWallet
+      aria-labelledby="offcanvasWalletLabel"
+    >
+      <div class="offcanvas-body p-0">
+        <div class="wallet-container">
+          <div class="card border-0">
+            <div class="card-body">
+              <app-wallet-list (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
             </div>
-            <button #buttonDismiss class="d-none" data-bs-dismiss="offcanvas"> </button>
+          </div>
         </div>
-    </ng-container>
+      </div>
+      <button #buttonDismiss class="d-none" data-bs-dismiss="offcanvas"></button>
+    </div>
+  </ng-container>
 </div>

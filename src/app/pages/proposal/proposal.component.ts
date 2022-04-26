@@ -12,6 +12,7 @@ import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/cons
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
+import { DialogService } from '../../core/services/dialog.service';
 import { ProposalService } from '../../core/services/proposal.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
@@ -59,6 +60,7 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
+    private dlgServ: DialogService 
   ) {}
 
   ngOnInit(): void {
@@ -194,7 +196,33 @@ export class ProposalComponent implements OnInit {
     const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
 
     if (expiredTime > 0) {
-      this.walletService.connectKeplr(this.chainId, (account) => {
+      const account = this.walletService.getAccount();
+
+      if (account) {
+        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+          let warning: MESSAGE_WARNING;
+
+          const { created_at } = data.result ? data.result : { created_at: null };
+
+          warning = created_at
+            ? new Date(created_at) < new Date(item.pro_voting_start_time)
+              ? null
+              : MESSAGE_WARNING.LATE
+            : MESSAGE_WARNING.NOT_PARTICIPATE;
+
+          this.openDialog({
+            id,
+            title,
+            warning,
+            voteValue: warning
+              ? null
+              : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+          });
+        });
+      }
+
+      /* 
+        this.walletService.connectKeplr(this.chainId, (account) => {
         this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
 
@@ -216,6 +244,7 @@ export class ProposalComponent implements OnInit {
           });
         });
       });
+      */
     } else {
       this.getList();
     }
@@ -245,5 +274,12 @@ export class ProposalComponent implements OnInit {
 
   shortenAddress(address: string): string {
     return shortenAddressStartEnd(address, 6, 10);
+  }
+
+  dlgServOpen(): void {
+    this.dlgServ.showDialog({
+      content: 'Please set up override Keplr in settings of Coin98 wallet',
+      title: '',
+    })
   }
 }
