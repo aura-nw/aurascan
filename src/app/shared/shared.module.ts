@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { WidgetModule } from './widget/widget.module';
 import { PagetitleComponent } from './pagetitle/pagetitle.component';
+import { LoadingSprintComponent } from './loading/loading-sprint/loading-sprint.component';
 
 @NgModule({
   declarations: [
-    PagetitleComponent
+    PagetitleComponent,
+    LoadingSprintComponent
   ],
   imports: [
     CommonModule,
     WidgetModule
   ],
-  exports: [PagetitleComponent]
+  exports: [PagetitleComponent, LoadingSprintComponent]
 })
 export class SharedModule { }

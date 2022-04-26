@@ -66,22 +66,26 @@
               </div>
             </div>
           </div>
-          <ng-container *ngIf="!searchNullData; else noValues">
-            <app-account-table
-              *ngIf="dataSourceToken"
-              [dataSource]="dataSourceToken"
-              [templates]="templatesToken"
-              [displayedColumns]="displayedColumnsToken"
-              [pageData]="pageDataToken"
-              [pageEventType]="pageEventType.Token"
-              (pageEvent)="changePage($event)"
-              [textNull]="'NO COINS'"
-            >
-            </app-account-table>
-          </ng-container>
-          <ng-template #noValues>
-            <app-table-no-data></app-table-no-data>
-          </ng-template>
+          <div *ngIf="!accDetailLoading">
+            <ng-container *ngIf="!searchNullData; else noValues">
+              <app-account-table
+                      *ngIf="dataSourceToken"
+                      [dataSource]="dataSourceToken"
+                      [templates]="templatesToken"
+                      [displayedColumns]="displayedColumnsToken"
+                      [pageData]="pageDataToken"
+                      [pageEventType]="pageEventType.Token"
+                      (pageEvent)="changePage($event)"
+                      [textNull]="'NO COINS'">
+              </app-account-table>
+            </ng-container>
+            <ng-template #noValues>
+              <app-table-no-data></app-table-no-data>
+            </ng-template>
+          </div>
+          <div class="mt-20" *ngIf="accDetailLoading">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
         </div>
       </div>
     </div>
@@ -90,7 +94,7 @@
     <div class="col-8">
       <div class="card card-h-100">
         <div class="article-2">
-          <mat-tab-group class="aura-tab" mat-stretch-tabs>
+          <mat-tab-group *ngIf="!accDetailLoading" class="aura-tab" mat-stretch-tabs>
             <mat-tab label="Delegations">
               <app-account-table
                 [dataSource]="dataSourceDelegation"
@@ -137,51 +141,59 @@
               ></app-account-table>
             </mat-tab>
           </mat-tab-group>
+          <div class="mt-20" *ngIf="accDetailLoading">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
         </div>
       </div>
     </div>
     <div class="col-4">
       <div class="card card-h-100">
         <div class="article-2 py-6 px-6 d-flex flex-column justify-content-between">
-          <div id="walletChart" class="chart-token">
-            <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
-              <apx-chart
-                      [series]="chartOptions.series"
-                      [chart]="chartOptions.chart"
-                      [labels]="chartOptions.labels"
-                      [fill]="chartOptions.fill"
-                      [dataLabels]="chartOptions.dataLabels"
-                      [responsive]="chartOptions.responsive"
-                      [plotOptions]="chartOptions.plotOptions"
-                      [legend]="chartOptions.legend"
-                      [colors]="chartOptions.colors"
-                      [tooltip]="chartOptions.tooltip"
-                      [stroke]="chartOptions.stroke"
-              >
-              </apx-chart>
-            </ng-container>
-            <ng-template #chartNoValue>
-              <div class="d-flex flex-column justify-content-center align-items-center">
-                <div class="box-chart">
-                  <div></div>
+          <div *ngIf="!chartLoading">
+            <div id="walletChart" class="chart-token">
+              <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
+                <apx-chart
+                        [series]="chartOptions.series"
+                        [chart]="chartOptions.chart"
+                        [labels]="chartOptions.labels"
+                        [fill]="chartOptions.fill"
+                        [dataLabels]="chartOptions.dataLabels"
+                        [responsive]="chartOptions.responsive"
+                        [plotOptions]="chartOptions.plotOptions"
+                        [legend]="chartOptions.legend"
+                        [colors]="chartOptions.colors"
+                        [tooltip]="chartOptions.tooltip"
+                        [stroke]="chartOptions.stroke"
+                >
+                </apx-chart>
+              </ng-container>
+              <ng-template #chartNoValue>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="box-chart">
+                    <div></div>
+                  </div>
                 </div>
-              </div>
-            </ng-template>
-          </div>
-          <div>
-            <div class="d-flex justify-content-between align-items-center body mb-5">
-              <span class="text--green">{{ global.stableToken }}</span>
-              <span>{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
+              </ng-template>
             </div>
-            <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-              <div class="d-flex justify-content-between body chart-legend-item">
-                <div class="d-flex">
-                  <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
-                  <span>{{ item.name }}</span>
-                </div>
-                <span>{{ item.amount | number: global.formatNumberToken }}</span>
+            <div>
+              <div class="d-flex justify-content-between align-items-center body mb-5">
+                <span class="text--green">{{ global.stableToken }}</span>
+                <span>{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
-            </ng-container>
+              <ng-container *ngFor="let item of chartCustomOptions; let last = last">
+                <div class="d-flex justify-content-between body chart-legend-item">
+                  <div class="d-flex">
+                    <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
+                    <span>{{ item.name }}</span>
+                  </div>
+                  <span>{{ item.amount | number: global.formatNumberToken }}</span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div *ngIf="chartLoading" class="mt-14">
+            <app-loading-sprint></app-loading-sprint>
           </div>
         </div>
       </div>
@@ -192,13 +204,14 @@
       <div class="card">
         <div class="sub-text px-6 py-6">Transactions</div>
         <div class="card-body px-6 pt-0">
-          <ngx-simplebar>
+          <ngx-simplebar *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="length > 0; else noValues">
               <div class="table-responsive">
                 <table mat-table [dataSource]="dataSource" class="aura-table">
                   <ng-container *ngFor="let template of templates; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef
+                          class="{{(template.headerCellDef === 'Time' || template.headerCellDef === 'Result' || template.headerCellDef === 'Tx Hash') ? 'col-per-15' : 'col-per-13' }}">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 
@@ -265,7 +278,6 @@
                     </td>
                   </tr>
                 </table>
-
                 <app-paginator [length]="pageData.length" [pageSize]="pageSize" 
                                (paginator)="paginatorEmit($event)"
                                (pageEvent)="pageEvent($event)">
@@ -276,10 +288,9 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <!-- <div class="mt-4">
-            <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize" (page)="changePage($event)">
-            </mat-paginator>
-          </div> -->
+          <div *ngIf="dataSource && !dataSource.data" class="">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
         </div>
       </div>
     </div>
