@@ -61,17 +61,29 @@ export class WalletService implements OnDestroy {
     window.removeAllListeners('keplr_keystorechange');
   }
 
-  connect(provider: WALLET_PROVIDER, chainId: string): Promise<void> {
+  connect(provider: WALLET_PROVIDER, chainId: string): Promise<boolean> {
     switch (provider) {
       case WALLET_PROVIDER.KEPLR:
-        return this.connectKeplr(chainId);
+        const coin98 = this.checkExistedCoin98();
+
+        if (coin98) {
+          this.connectCoin98(chainId);
+        } else {
+          this.connectKeplr(chainId);
+        }
+
+        return Promise.resolve(true);
 
       case WALLET_PROVIDER.COIN98:
-        return this.connectCoin98(chainId);
+        const _coin98 = this.checkExistedCoin98();
 
-      default:
-        this.toastr.error('Can not found ', provider);
-        return null;
+        if (_coin98 === undefined) {
+          return Promise.resolve(false);
+        } else {
+          this.connectCoin98(chainId);
+
+          return Promise.resolve(true);
+        }
     }
   }
 
@@ -84,12 +96,10 @@ export class WalletService implements OnDestroy {
   private async connectKeplr(chainId: string): Promise<void> {
     const checkWallet = async () => {
       try {
-        const coin98 = await this.checkExistedCoin98();
-
-        const keplr = coin98 || (await getKeplr());
+        const keplr = await getKeplr();
 
         if (keplr) {
-          !!!coin98 && (await keplrSuggestChain(chainId));
+          await keplrSuggestChain(chainId);
           await keplr.enable(chainId);
 
           const account = await keplr.getKey(chainId);
@@ -138,12 +148,16 @@ export class WalletService implements OnDestroy {
     }
   }
 
-  private async checkExistedCoin98(): Promise<Keplr | null> {
+  private checkExistedCoin98(): Keplr | null | undefined {
     if ((window as any).coin98) {
-      return (window as any).keplr || (window as any).coin98.keplr;
+      if ((window as any).coin98.keplr) {
+        return (window as any).keplr || (window as any).coin98.keplr;
+      } else {
+        return undefined; // c98 not override keplr
+      }
     }
 
-    return null;
+    return null; // not found coin98
   }
 
   getAccount(): Key {

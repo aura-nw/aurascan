@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 
 @Component({
@@ -21,7 +22,11 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   chainId = this.envService.apiUrl.value.chainId;
 
   destroy$ = new Subject();
-  constructor(private walletService: WalletService, private envService: EnvironmentService) {
+  constructor(
+    private walletService: WalletService,
+    private envService: EnvironmentService,
+    private toastr: NgxToastrService,
+  ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {
         this.connectButton?.nativeElement.click();
@@ -46,7 +51,10 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   connectWallet(provider: WALLET_PROVIDER): void {
     try {
       const connect = async () => {
-        await this.walletService.connect(provider, this.chainId);
+        const connect = await this.walletService.connect(provider, this.chainId);
+        if (!connect) {
+          this.toastr.error('Please set up override Keplr in settings of Coin98 wallet');
+        }
         this.buttonDismiss.nativeElement.click();
       };
 
@@ -56,7 +64,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  dismiss(): void{
+  dismiss(): void {
     this.buttonDismiss.nativeElement.click();
   }
 

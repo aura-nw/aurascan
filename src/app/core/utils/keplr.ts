@@ -22,16 +22,11 @@ export async function getKeplr(): Promise<Keplr | undefined> {
   });
 }
 
-export async function keplrSuggestChain(chainId: string): Promise<string> {
+export async function keplrSuggestChain(chainId: string): Promise<any> {
   if (ChainsInfo[chainId]) {
-    (await getKeplr())
-      .experimentalSuggestChain(ChainsInfo[chainId])
-      .then(() => {
-        return null;
-      })
-      .catch((e: Error) => {
-        return e.message;
-      });
+    return (await getKeplr()).experimentalSuggestChain(ChainsInfo[chainId]).catch((e: Error) => {
+      throw e;
+    });
   }
 
   return KEPLR_ERRORS.NoChainInfo;
