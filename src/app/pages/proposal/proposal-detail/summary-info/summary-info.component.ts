@@ -1,8 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
@@ -25,10 +23,7 @@ export class SummaryInfoComponent implements OnInit {
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: string } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
-  proposalVotes: {
-    proId: number;
-    vote: string | null;
-  }[] = [];
+  proposalVotes: string;
   votingBarLoading = true;
 
   constructor(
@@ -67,10 +62,6 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.initial_deposit = balanceOf(this.proposalDetail.initial_deposit);
       this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
       this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
-      this.proposalVotes.push({
-        proId: this.proposalDetail.pro_id,
-        vote: null,
-      });
       this.getVotedProposal();
       this.getVoteResult();
     });
@@ -115,28 +106,6 @@ export class SummaryInfoComponent implements OnInit {
           });
         });
       }
-
-      // this.walletService.connect()
-      // this.walletService.connectKeplr(this.chainId, (account) => {
-      //   this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
-      //     let warning: MESSAGE_WARNING;
-
-      //     const { created_at } = data.result ? data.result : { created_at: null };
-
-      //     warning = created_at
-      //       ? new Date(created_at) < new Date(proposalDetail.pro_voting_start_time)
-      //         ? null
-      //         : MESSAGE_WARNING.LATE
-      //       : MESSAGE_WARNING.NOT_PARTICIPATE;
-
-      //     this.openDialog({
-      //       id,
-      //       title,
-      //       warning,
-      //       voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
-      //     });
-      //   });
-      // });
     } else {
       proposalDetail.pro_status = 'PROPOSAL_STATUS_REJECTED';
     }
@@ -150,34 +119,29 @@ export class SummaryInfoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.voteValue = result;
+        this.voteValue = {
+          keyVote: this.voteConstant.find((s) => s.voteOption === result.keyVote)?.key,
+        };
+        this.proposalVotes = result.keyVote;
         this.getVoteResult();
-        this.getVotedProposal();
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       }
     });
   }
 
   getVotedProposal() {
     const addr = this.walletService.wallet?.bech32Address || null;
-    if (this.proposalVotes.length > 0 && addr) {
-      forkJoin({
-        0: this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr),
-      })
-        .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
-        .subscribe((res) => {
-          this.proposalVotes = res.map((i, idx) => {
-            this.voteValue = { keyVote: i };
-            return {
-              proId: this.proposalVotes[idx].proId,
-              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
-            };
-          });
-        });
+    if (addr) {
+      this.proposalService.getVotes(this.proposalId, addr).subscribe((res) => {
+        this.proposalVotes = this.voteConstant.find((s) => s.key === res.data.proposalVote?.option)?.voteOption;
+        this.voteValue = {
+          keyVote: res.data.proposalVote?.option,
+        };
+      });
     } else {
-      this.proposalVotes = this.proposalVotes.map((e) => ({
-        ...e,
-        vote: null,
-      }));
+      this.proposalVotes = null;
     }
   }
 
