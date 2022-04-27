@@ -42,6 +42,7 @@ export class VotesComponent implements OnInit {
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
   LIMIT_DEFAULT = 10000;
+  voteDataListLoading = true;
 
   query = [];
 
@@ -73,6 +74,7 @@ export class VotesComponent implements OnInit {
         this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
         this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
       ).subscribe((res) => {
+        this.voteDataListLoading = true;
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
         res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
@@ -87,6 +89,7 @@ export class VotesComponent implements OnInit {
           this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNo);
           this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countNoWithVeto);
         }
+        this.voteDataListLoading = false;
       });
     }
   }

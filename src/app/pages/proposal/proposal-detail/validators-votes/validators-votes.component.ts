@@ -43,6 +43,7 @@ export class ValidatorsVotesComponent implements OnInit {
   }));
 
   voteDataList: IValidatorVotes[] = [];
+  voteDataListLoading = true;
 
   _voteList: IValidatorVotes[] = [];
 
@@ -83,6 +84,7 @@ export class ValidatorsVotesComponent implements OnInit {
         this.proposalService.getValidatorVotes(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
         this.proposalService.getValidatorVotes(payloads[5]).pipe(map((item) => ({ didNotVote: item.data.result }))),
       ).subscribe((res) => {
+        this.voteDataListLoading = true;
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
         res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
@@ -100,6 +102,7 @@ export class ValidatorsVotesComponent implements OnInit {
           this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countNoWithVeto);
           this.countVote.set('null', this.voteData.all.countDidNotVote);
         }
+        this.voteDataListLoading = false;
       });
     }
   }
