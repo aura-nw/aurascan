@@ -1,19 +1,17 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Key } from '@keplr-wallet/types';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { ChainsInfo, KEPLR_ERRORS, LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Keplr, Key } from '@keplr-wallet/types';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { IResponsesTemplates as IResponsesTemplate } from '../models/common.model';
-import { IWalletDetail, WalletStorage } from '../models/wallet';
-import { getKeplr } from '../utils/keplr';
+import { WalletStorage } from '../models/wallet';
+import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
 import session from '../utils/storage/session';
 import { NgxToastrService } from './ngx-toastr.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WalletService {
+export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
   chainId = this.environmentService.apiUrl.value.chainId;
   wallet$: Observable<Key>;
@@ -27,19 +25,21 @@ export class WalletService {
     this._wallet$.next(nextState);
   }
 
-  constructor(
-    private http: HttpClient,
-    private environmentService: EnvironmentService,
-    private toastr: NgxToastrService,
-  ) {
-    const initialValue: Key = {
-      address: null,
-      algo: null,
-      bech32Address: null,
-      isNanoLedger: null,
-      name: null,
-      pubKey: null,
-    };
+  dialogState$: Observable<'open' | 'close'>;
+  private _dialogState$: BehaviorSubject<'open' | 'close'>;
+
+  get dialogState(): 'open' | 'close' {
+    return this._dialogState$.getValue();
+  }
+
+  setDialogState(nextState: 'open' | 'close'): void {
+    this._dialogState$.next(nextState);
+  }
+
+  constructor(private environmentService: EnvironmentService, private toastr: NgxToastrService) {
+    this._dialogState$ = new BehaviorSubject(null);
+    this.dialogState$ = this._dialogState$.asObservable();
+
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
     const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
@@ -49,22 +49,41 @@ export class WalletService {
       this.connect(provider, chainId);
     }
 
-    window.addEventListener('keplr_keystorechange', (event) => {
+    window.addEventListener('keplr_keystorechange', () => {
       const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
       if (lastProvider) {
-        this.connect(WALLET_PROVIDER.KEPLR, this.chainId);
+        this.connect(lastProvider.provider, lastProvider.chainId);
       }
     });
   }
 
-  connect(wallet: WALLET_PROVIDER, chainId: string): any {
-    switch (wallet) {
+  ngOnDestroy(): void {
+    window.removeAllListeners('keplr_keystorechange');
+  }
+
+  connect(provider: WALLET_PROVIDER, chainId: string): Promise<boolean> {
+    switch (provider) {
       case WALLET_PROVIDER.KEPLR:
-        this.connectKeplr(chainId);
-        break;
+        const coin98 = this.checkExistedCoin98();
+
+        if (coin98) {
+          this.connectCoin98(chainId);
+        } else {
+          this.connectKeplr(chainId);
+        }
+
+        return Promise.resolve(true);
+
       case WALLET_PROVIDER.COIN98:
-        this.connectCoin98(chainId);
-        break;
+        const _coin98 = this.checkExistedCoin98();
+
+        if (_coin98 === undefined) {
+          return Promise.resolve(false);
+        } else {
+          this.connectCoin98(chainId);
+
+          return Promise.resolve(true);
+        }
     }
   }
 
@@ -74,13 +93,13 @@ export class WalletService {
     session.removeItem(LAST_USED_PROVIDER);
   }
 
-  connectKeplr(chainId: string, callback?: (account: Key) => void): void {
+  private async connectKeplr(chainId: string): Promise<void> {
     const checkWallet = async () => {
       try {
         const keplr = await getKeplr();
 
         if (keplr) {
-          await this.keplrSuggestChain(chainId);
+          await keplrSuggestChain(chainId);
           await keplr.enable(chainId);
 
           const account = await keplr.getKey(chainId);
@@ -91,78 +110,71 @@ export class WalletService {
               provider: WALLET_PROVIDER.KEPLR,
               chainId,
             });
-
-            if(callback) {
-              callback(account)
-            }
           }
         } else {
           this.disconnect();
           window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
         }
       } catch (e: any) {
-        const handleErrors = async () => {
-          this.handleErrors(e, chainId);
-        };
-
-        handleErrors();
-        this.disconnect();
+        this.catchErrors(e, chainId);
       }
     };
     checkWallet();
   }
 
-  private connectCoin98(chainId: string): void {}
+  private async connectCoin98(chainId: string): Promise<void> {
+    const coin98 = await this.checkExistedCoin98();
 
-  private checkExistedCoin98(): Promise<boolean> {
-    return new Promise((resolve) => {
-      resolve(false);
+    if (coin98) {
+      try {
+        await coin98.enable(chainId);
+
+        const account = await coin98.getKey(chainId);
+
+        if (account) {
+          this.setWallet(account);
+          session.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+            provider: WALLET_PROVIDER.KEPLR,
+            chainId,
+          });
+        }
+      } catch (e: any) {
+        this.catchErrors(e, chainId);
+        this.disconnect();
+      }
+    } else {
+      this.disconnect();
+      window.open('https://chrome.google.com/webstore/detail/coin98-wallet/aeachknmefphepccionboohckonoeemg');
+    }
+  }
+
+  private checkExistedCoin98(): Keplr | null | undefined {
+    if ((window as any).coin98) {
+      if ((window as any).coin98.keplr) {
+        return (window as any).keplr || (window as any).coin98.keplr;
+      } else {
+        return undefined; // c98 not override keplr
+      }
+    }
+
+    return null; // not found coin98
+  }
+
+  getAccount(): Key {
+    const account = this.wallet;
+
+    if (account) {
+      return account;
+    }
+    this.setDialogState('open');
+    return null;
+  }
+
+  async catchErrors(e, chainId) {
+    handleErrors(e, chainId).then((msg) => {
+      if (msg) {
+        this.toastr.error(msg);
+      }
     });
-  }
-
-  public getWalletDetail(address: string): Observable<IResponsesTemplate<IWalletDetail>> {
-    if (!address) {
-      return of(null);
-    }
-    return this.http.get<any>(`${this.apiUrl}/wallets/${address}`);
-  }
-
-  private getError(err: any): KEPLR_ERRORS {
-    if (err.toUpperCase().includes(KEPLR_ERRORS.NoChainInfo)) {
-      return KEPLR_ERRORS.NoChainInfo;
-    } else if (err.toUpperCase().includes(KEPLR_ERRORS.NOT_EXIST)) {
-      return KEPLR_ERRORS.NOT_EXIST;
-    } else if (err.toUpperCase().includes(KEPLR_ERRORS.RequestRejected)) {
-      return KEPLR_ERRORS.RequestRejected;
-    }
-
-    return KEPLR_ERRORS.Failed;
-  }
-
-  private async handleErrors(err: Error, chainId: string): Promise<any> {
-    const error = this.getError(err.message);
-    switch (error) {
-      case KEPLR_ERRORS.NoChainInfo:
-        // this.keplrSuggestChain(chainId);
-        break;
-      case KEPLR_ERRORS.NOT_EXIST:
-        window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
-        break;
-      default:
-        this.toastr.error(err.message);
-    }
-  }
-
-  async keplrSuggestChain(chainId: string): Promise<any> {
-    if (ChainsInfo[chainId]) {
-      (await getKeplr())
-        .experimentalSuggestChain(ChainsInfo[chainId])
-        .then(() => {
-          // this.connectKeplr(chainId);
-        })
-        .catch((e: Error) => {
-          this.toastr.error(e.message);
-        });
-    }
   }
 }

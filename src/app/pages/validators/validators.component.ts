@@ -1,27 +1,28 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Subscription, timer } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { forkJoin, Subscription } from 'rxjs';
+import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS, STABLE_UTOKEN } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
-import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import {
   ChainsInfo,
+  ESigningType,
   SIGNING_MESSAGE_TYPES
 } from '../../../app/core/constants/wallet.constant';
 import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
 import { CommonService } from '../../../app/core/services/common.service';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import { Globals } from '../../../app/global/global';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-validators',
@@ -63,8 +64,6 @@ export class ValidatorsComponent implements OnInit {
   rawData;
   sortedData;
   dataHeader = new CommonDataDto();
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
   dataModal;
   clicked = false;
   totalDelegator = 0;
@@ -103,12 +102,11 @@ export class ValidatorsComponent implements OnInit {
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private transactionService: TransactionService,
-    public translate: TranslateService,
+    private mappingErrorService: MappingErrorService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: true }];
-
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
@@ -120,16 +118,12 @@ export class ValidatorsComponent implements OnInit {
     });
 
     this.getList();
-    const halftime = 5000;
-    this.timerUnSub = timer(halftime, halftime).subscribe(() =>
-      this.getDataWallet()
-    );
   }
 
   /**
    * ngOnDestroy
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.timerUnSub) {
       this.timerUnSub.unsubscribe();
     }
@@ -151,8 +145,6 @@ export class ValidatorsComponent implements OnInit {
 
       let dataFilter = res.data.filter((event) => (this.typeValidator === this.statusValidator.Active) ? 
             event.status === this.statusValidator.Active : event.status !== this.statusValidator.Active);
-      //sort and calculator cumulative
-      // let dataSort = this.calculatorCumulative(dataFilter);
       this.dataSource = new MatTableDataSource(dataFilter);
       this.dataSourceBk = this.dataSource;
       this.dataSource.sort = this.sort;
@@ -250,16 +242,25 @@ export class ValidatorsComponent implements OnInit {
   viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
     this.currentValidatorDialog = address;
     const view = async () => {
-      this.walletService.connectKeplr(this.walletService.chainId);
+      // this.walletService.connectKeplr(this.walletService.chainId);
+      const account = this.walletService.getAccount();
 
-      this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
-        if (wallet && wallet.bech32Address) {
-          this.clicked = true;
-          this.amountFormat = null;
-          this.getValidatorDetail(address, staticDataModal);
-          this.getListRedelegate(this.userAddress, address);
-        }
-      });
+      if (account && account.bech32Address) {
+        this.clicked = true;
+        this.amountFormat = null;
+        this.isHandleStake = false;
+        this.getValidatorDetail(address, staticDataModal);
+        this.getListRedelegate(this.userAddress, address);
+      }
+
+      // this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
+      //   if (wallet && wallet.bech32Address) {
+      //     this.clicked = true;
+      //     this.amountFormat = null;
+      //     this.getValidatorDetail(address, staticDataModal);
+      //     this.getListRedelegate(this.userAddress, address);
+      //   }
+      // });
     };
     view();
     this.isOpenStaking = isOpenStaking;
@@ -301,7 +302,9 @@ export class ValidatorsComponent implements OnInit {
 
   //Get data for wallet info and list staking
   getDataWallet() {
-    if (this.userAddress) {
+    const halftime = 30000;
+    const currentUrl = this.router.url;
+    if (this.userAddress && currentUrl === '/validators') {
       forkJoin({
         dataWallet: this.accountService.getAccoutDetail(this.userAddress),
         dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
@@ -357,7 +360,15 @@ export class ValidatorsComponent implements OnInit {
             return this.compare(a.completion_time, b.completion_time, true);
           });
         }
-      });
+        setTimeout(() => {
+          this.getDataWallet()
+        }, halftime);
+      }, (error) => {
+        setTimeout(() => {
+          this.getDataWallet()
+        }, halftime);
+      }
+      );
     }
   }
 
@@ -397,12 +408,12 @@ export class ValidatorsComponent implements OnInit {
             to: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: 'uaura',
+              denom: STABLE_UTOKEN,
             },
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -424,7 +435,7 @@ export class ValidatorsComponent implements OnInit {
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -445,12 +456,12 @@ export class ValidatorsComponent implements OnInit {
             from: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: 'uaura',
+              denom: STABLE_UTOKEN,
             },
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -473,12 +484,12 @@ export class ValidatorsComponent implements OnInit {
             to_address: this.selectedValidator,
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: 'uaura',
+              denom: STABLE_UTOKEN,
             },
           },
           senderAddress: this.userAddress,
           network: ChainsInfo[this.walletService.chainId],
-          signingType: 'keplr',
+          signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
 
@@ -523,7 +534,6 @@ export class ValidatorsComponent implements OnInit {
   }
 
   checkStatuExcuteBlock(hash, error, msg) {
-
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(msg);
@@ -531,7 +541,7 @@ export class ValidatorsComponent implements OnInit {
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
-      }, 3000);
+      }, 4000);
     }
     this.isHandleStake = false;
   }
@@ -540,22 +550,13 @@ export class ValidatorsComponent implements OnInit {
     this.transactionService.txsDetail(id).subscribe(
       (res: ResponseDto) => {
         let numberCode = res?.data?.code;
-        if (numberCode !== CodeTransaction.Success) {
-          message = res?.data?.raw_log || message;
-          if (this.dataDelegate.dialogMode === this.dialogMode.Redelegate) {
-            if (message.indexOf('too many') >= 0) {
-              message = this.translate.instant('NOTICE.ERROR_REDELEGATE_TIME');
-            } else if (message.indexOf('in progress') >= 0) {
-              message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS');
-            }
-          } else if(this.dataDelegate.dialogMode === this.dialogMode.Undelegate){
-            if (message.indexOf('too many') >= 0) {
-              message = this.translate.instant('NOTICE.ERROR_UNDELEGATE_TIME');
-            }
-          }
-          this.toastr.error(message);
-        } else {
+        message = res?.data?.raw_log || message;
+        message = this.mappingErrorService.checkMappingError(message, numberCode);
+        if (numberCode === CodeTransaction.Success) {
           this.getDataWallet();
+          this.toastr.success(message);
+        } else {
+          this.toastr.error(message);
         }
       },
       (error) => {

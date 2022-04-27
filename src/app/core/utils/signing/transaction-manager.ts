@@ -1,8 +1,8 @@
 import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
-import { getSigner } from './signer';
-import { messageCreators } from './messages';
+import { GAS_ESTIMATE, STABLE_UTOKEN } from '../../constants/common.constant';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
-import { GAS_ESTIMATE } from '../../constants/common.constant';
+import { messageCreators } from './messages';
+import { getSigner } from './signer';
 
 export async function createSignBroadcast({
   messageType,
@@ -26,7 +26,7 @@ export async function createSignBroadcast({
     const fee: any = {
       amount: [
         {
-          denom: 'uaura',
+          denom: STABLE_UTOKEN,
           amount: '1',
         },
       ],
@@ -34,7 +34,11 @@ export async function createSignBroadcast({
     };
 
     try {
-      broadcastResult = await client.signAndBroadcast(senderAddress, Array.isArray(messagesSend) ? messagesSend : [messagesSend], fee);
+      broadcastResult = await client.signAndBroadcast(
+        senderAddress,
+        Array.isArray(messagesSend) ? messagesSend : [messagesSend],
+        fee,
+      );
 
       assertIsBroadcastTxSuccess(broadcastResult);
     } catch (e: any) {

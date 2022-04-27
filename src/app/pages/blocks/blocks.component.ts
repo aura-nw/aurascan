@@ -26,11 +26,9 @@ export class BlocksComponent implements OnInit {
   pageIndex = 0;
   loading = true;
   // bread crumb items
-  breadCrumbItems!: Array<{}>;
   constructor(private router: Router, private blockService: BlockService, public commonService: CommonService,) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: 'Blocks' }, { label: 'List', active: true }];
     this.getList();
   }
   changePage(page: PageEvent): void {

@@ -26,10 +26,22 @@
     .button__title {
       min-width: 100px;
     }
+
+    li {
+      cursor: pointer;
+    }
+  }
+  .offcanvas-wallet {
+    background: #141416;
+    box-shadow: -2px 0px 18px rgba(0, 0, 0, 0.25);
+    border: none;
+
+    .card {
+      background: #141416;
+    }
   }
   .wallet-container {
     position: relative;
-
 
     .qr-modal {
       position: absolute;

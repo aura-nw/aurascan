@@ -7,11 +7,12 @@ import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.con
 import {
   CodeTransaction,
   StatusTransaction,
-  TRANSACTION_TYPE_ENUM
+  TRANSACTION_TYPE_ENUM,
 } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { Globals } from '../../../../app/global/global';
+import { MappingErrorService } from '../../../../app/core/services/mapping-error.service';
 
 @Component({
   selector: 'app-txs-detail',
@@ -19,8 +20,8 @@ import { Globals } from '../../../../app/global/global';
   styleUrls: ['./txs-detail.component.scss'],
 })
 export class TxsDetailComponent implements OnInit {
-  id;
-  item;
+  id = '';
+  item =  null;
   breadCrumbItems = [{ label: 'Transaction' }, { label: 'List' }, { label: 'Detail', active: true }];
   codeTransaction = CodeTransaction;
   typeTransaction = TYPE_TRANSACTION;
@@ -38,7 +39,8 @@ export class TxsDetailComponent implements OnInit {
     private transactionService: TransactionService,
     private datePipe: DatePipe,
     public global: Globals,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private mappingErrorService: MappingErrorService,
   ) {}
 
   ngOnInit(): void {
@@ -59,15 +61,9 @@ export class TxsDetailComponent implements OnInit {
 
         if (this.item.raw_log && this.item.code !== CodeTransaction.Success) {
           this.errorMessage = this.item.raw_log;
-          if (this.errorMessage.indexOf('too many redelegation') >= 0) {
-            this.errorMessage = 'You can only redelegate from and to this validator up to 7 times.';
-          } else if (this.errorMessage.indexOf('too many unbonding') >= 0) {
-            this.errorMessage = 'You can undelegate from the same validator only up to 7 times.';
-          } else if (this.errorMessage.indexOf('in progress') >= 0) {
-            this.errorMessage = "You must wait 21 days in order to be able to redelegate from the selected validator.";
-          }
+          this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.item.code);
         }
-        
+
         //convert json for display raw data
         this.jsonStr = JSON.stringify(this.item.tx, null, 2).replace(/\\/g, '');
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);

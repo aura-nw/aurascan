@@ -1,4 +1,4 @@
-<app-pagetitle title="Account Details" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<app-pagetitle title="Account Details"></app-pagetitle>
 <section class="account-detail">
   <div class="row">
     <div class="col-3">
@@ -150,7 +150,7 @@
     <div class="col-4">
       <div class="card card-h-100">
         <div class="article-2 py-6 px-6 d-flex flex-column justify-content-between">
-          <div *ngIf="!chartLoading">
+          <ng-container *ngIf="!chartLoading">
             <div id="walletChart" class="chart-token">
               <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
                 <apx-chart
@@ -191,7 +191,7 @@
                 </div>
               </ng-container>
             </div>
-          </div>
+          </ng-container>
           <div *ngIf="chartLoading" class="mt-14">
             <app-loading-sprint></app-loading-sprint>
           </div>
