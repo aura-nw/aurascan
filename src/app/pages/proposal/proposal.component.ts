@@ -58,7 +58,7 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
-    private dlgServ: DialogService 
+    private dlgServ: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -84,19 +84,7 @@ export class ProposalComponent implements OnInit {
           if (expiredTime < 0 && pro.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
             pro.pro_status = 'PROPOSAL_STATUS_REJECTED';
           }
-
-          this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
-            if (!res.data.proposalVoteTally.tally) {
-              return;
-            }
-            const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
-
-            pro.pro_votes_yes = (+yes * 100) / totalVote;
-            pro.pro_votes_no = (+no * 100) / totalVote;
-            pro.pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
-            pro.pro_votes_abstain = (+abstain * 100) / totalVote;
-          });
+          this.getVoteResult(pro.pro_id, index);
         }
 
         pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
@@ -212,7 +200,7 @@ export class ProposalComponent implements OnInit {
             voteValue: warning
               ? null
               : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
-            idx: index
+            idx: index,
           });
         });
       }
@@ -229,6 +217,7 @@ export class ProposalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.getVoteResult(data.id, data.idx);
         this.proposalVotes[data.idx].vote = result.keyVote;
       }
     });
@@ -250,6 +239,21 @@ export class ProposalComponent implements OnInit {
     this.dlgServ.showDialog({
       content: 'Please set up override Keplr in settings of Coin98 wallet',
       title: '',
-    })
+    });
+  }
+
+  getVoteResult(pro_id, index) {
+    this.proposalService.getProposalTally(pro_id).subscribe((res) => {
+      if (!res.data.proposalVoteTally.tally) {
+        return;
+      }
+      const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
+      let totalVote = +yes + +no + +no_with_veto + +abstain;
+
+      this.lastedList[index].pro_votes_yes = (+yes * 100) / totalVote;
+      this.lastedList[index].pro_votes_no = (+no * 100) / totalVote;
+      this.lastedList[index].pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
+      this.lastedList[index].pro_votes_abstain = (+abstain * 100) / totalVote;
+    });
   }
 }
