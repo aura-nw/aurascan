@@ -3,10 +3,10 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Outpu
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { CommonService } from '../../../../app/core/services/common.service';
-import { DATEFORMAT } from '../../../core/constants/common.constant';
-import { TableTemplate } from '../../../core/models/common.model';
-import { Globals } from '../../../global/global';
+import { CommonService } from '../../../../core/services/common.service';
+import { DATEFORMAT } from '../../../../core/constants/common.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-account-table',

@@ -4,22 +4,22 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartComponent } from 'ng-apexcharts';
-import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../app/core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
   WalletAcount,
-} from '../../../app/core/constants/account.enum';
-import { PAGE_EVENT } from '../../../app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../app/core/constants/transaction.enum';
-import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { AccountService } from '../../../app/core/services/account.service';
-import { CommonService } from '../../../app/core/services/common.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { getAmount, Globals } from '../../../app/global/global';
-import { IAccountDetail } from '../../core/models/account.model';
+} from '../../../core/constants/account.enum';
+import { PAGE_EVENT } from '../../../core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
+import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
+import { AccountService } from '../../../core/services/account.service';
+import { CommonService } from '../../../core/services/common.service';
+import { TransactionService } from '../../../core/services/transaction.service';
+import { getAmount, Globals } from '../../../global/global';
+import { IAccountDetail } from '../../../core/models/account.model';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({

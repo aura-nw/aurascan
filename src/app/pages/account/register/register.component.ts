@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { environment } from '../../../environments/environment';
-import { AuthenticationService } from '../../core/services/auth.service';
-import { UserProfileService } from '../../core/services/user.service';
-import { LAYOUT_MODE } from '../../layouts/layouts.model';
+import { environment } from '../../../../environments/environment';
+import { AuthenticationService } from '../../../core/services/auth.service';
+import { UserProfileService } from '../../../core/services/user.service';
+import { LAYOUT_MODE } from '../../../layouts/layouts.model';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 

@@ -9,7 +9,7 @@ import {
   ApexStroke,
   ApexTooltip,
 } from 'ng-apexcharts';
-import { ACCOUNT_WALLET_COLOR } from '../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR } from '../../../core/constants/account.constant';
 
 export const chartCustomOptions: { name: string; color: string; amount: string }[] = ACCOUNT_WALLET_COLOR;
 
