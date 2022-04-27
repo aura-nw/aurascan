@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { RouterModule } from '@angular/router';
-import { TableNoDataModule } from '../../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../../shared/components/paginator/paginator.module';
 
 @NgModule({

@@ -10,7 +10,7 @@ import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { AccountService } from '../../../app/core/services/account.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { QrModule } from '../../../app/shared/components/qr/qr.module';
-import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { SharedModule } from "../../shared/shared.module";
 import { AccountDetailRoutingModule } from './account-detail-routing.module';

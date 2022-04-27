@@ -39,7 +39,7 @@ import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxMaskModule } from 'ngx-mask';
-import { NgProgressModule } from "ngx-progressbar";
+import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -53,7 +53,6 @@ import { CommonService } from './core/services/common.service';
 import { ExtrapagesModule } from './extrapages/extrapages.module';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -93,24 +92,22 @@ export function createTranslateLoader(http: HttpClient): any {
     MatFormFieldModule,
   ],
 })
-export class MaterialModule { }
+export class MaterialModule {}
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
+        useFactory: createTranslateLoader,
+        deps: [HttpClient],
+      },
     }),
     NgProgressModule.withConfig({
-      spinnerPosition: "left",
-      color: "blue"
+      spinnerPosition: 'left',
+      color: 'blue',
     }),
     HttpClientModule,
     BrowserModule,
@@ -126,7 +123,7 @@ export class MaterialModule { }
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
     ToastrModule.forRoot({ positionClass: 'inline' }),
     NgxMaskModule.forRoot(),
@@ -144,17 +141,15 @@ export class MaterialModule { }
       provide: APP_INITIALIZER,
       useFactory: (environmentService: EnvironmentService) => () => environmentService.load(),
       multi: true,
-      deps: [
-        EnvironmentService
-      ]
+      deps: [EnvironmentService],
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
-      multi: true
+      multi: true,
     },
-    CommonService
+    CommonService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
