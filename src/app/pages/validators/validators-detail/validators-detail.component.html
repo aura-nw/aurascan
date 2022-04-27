@@ -103,7 +103,7 @@
 
   <div class="row">
     <div class="col-xl-6">
-      <div class="card text--white" *ngIf="lengthBlock">
+      <div class="card text--white">
         <div class="card-header d-flex align-items-center justify-content-between">
           <div class="title-small">Proposed Blocks</div>
           <div>
@@ -155,14 +155,10 @@
               </div>
             </ng-container>
             <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
+              <app-loading-sprint *ngIf="lengthBlockLoading"></app-loading-sprint>
+              <app-table-no-data *ngIf="!lengthBlockLoading"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-        </div>
-      </div>
-      <div class="card py-10" *ngIf="!lengthBlock">
-        <div class="card-body article-1">
-          <app-loading-sprint></app-loading-sprint>
         </div>
       </div>
     </div>
@@ -263,13 +259,13 @@
 
     </div>
     <div class="col-xl-6">
-      <div class="card text--white" *ngIf="lengthPower">
+      <div class="card text--white">
         <div class="card-header align-items-center d-flex">
           <div class="title-small">Power Events</div>
           <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
         </div>
         <div class="card-body article-1 px-0">
-          <ngx-simplebar style="max-height: 400px">
+          <ngx-simplebar>
             <ng-container *ngIf="lengthPower > 0; else noValues">
               <div class="table-responsive">
                 <table mat-table [dataSource]="dataSourcePower" class="aura-table">
@@ -318,17 +314,13 @@
               </div>
             </ng-container>
             <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
+              <app-loading-sprint *ngIf="lengthPowerLoading"></app-loading-sprint>
+              <app-table-no-data *ngIf="!lengthPowerLoading"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
           <!-- <mat-paginator [length]="lengthPower" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
             (page)="changePage($event, 'power')" *ngIf="lengthPower">
           </mat-paginator> -->
-        </div>
-      </div>
-      <div class="card py-10" *ngIf="!lengthPower">
-        <div class="card-body article-1">
-          <app-loading-sprint></app-loading-sprint>
         </div>
       </div>
     </div>
