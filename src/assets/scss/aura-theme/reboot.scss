@@ -64,3 +64,6 @@ a {
   color: var(--aura-white) !important;
 }
 
+.aura-tab mat-tab-body.mat-tab-body, .mat-tab-body-content {
+  overflow: unset !important;
+}
