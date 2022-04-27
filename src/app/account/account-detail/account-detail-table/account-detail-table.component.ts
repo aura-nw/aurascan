@@ -1,11 +1,8 @@
-import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { Globals } from '../../../global/global';
 
@@ -25,7 +22,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   constructor(
     public translate: TranslateService,
-    private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
   ) {}
@@ -37,13 +33,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   ngOnChanges(): void {
     if (this.dataSource) {
       this.dataSource.data.forEach((f) => {
-        if (f.completion_time) {
-          f.completion_time_format = this.datePipe.transform(f.completion_time, DATEFORMAT.DATETIME_UTC);
-        }
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
           f.type_format = f.type.toLowerCase().indexOf('perio') > -1 ? 'Periodic' : 'Delayed';
-          f.vesting_schedule_format = this.datePipe.transform(f.date_format, DATEFORMAT.DATETIME_UTC);
         }
       });
     }
