@@ -117,7 +117,7 @@
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef class="col-per-25">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 
@@ -207,7 +207,7 @@
                 <table mat-table [dataSource]="dataSourceDelegator" class="aura-table">
                   <ng-container *ngFor="let template of templatesDelegator; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef class="col-per-50">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 
@@ -271,7 +271,7 @@
                 <table mat-table [dataSource]="dataSourcePower" class="aura-table">
                   <ng-container *ngFor="let template of templatesPower; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
+                      <th mat-header-cell *matHeaderCellDef class="col-per-25">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 

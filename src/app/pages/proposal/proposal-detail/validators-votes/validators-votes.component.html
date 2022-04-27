@@ -15,7 +15,7 @@
     <div class="mt-3">
       <app-proposal-table *ngIf="voteDataList.length > 0"
               [tabId]="countCurrent" [type]="'VALIDATORS_VOTES'" [length]="countVote.get(countCurrent)" [data]="voteDataList" (loadMore)="loadMore($event)"></app-proposal-table>
-      <div *ngIf="voteDataList.length === 0">
+      <div *ngIf="voteDataListLoading">
         <app-loading-sprint></app-loading-sprint>
       </div>
     </div>
