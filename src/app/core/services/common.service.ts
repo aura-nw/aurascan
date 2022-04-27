@@ -74,7 +74,10 @@ export class CommonService {
               (formatDistanceToNowStrict(new Date(time).getTime()) + ' remaining')
             ];
           } else {
-            return false;
+            return [
+              formatTimeInWords(new Date(time).getTime()),
+              `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+            ];
           }
         }
       } catch (e) {
