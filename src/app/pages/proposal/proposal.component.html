@@ -5,14 +5,13 @@
       <div class="card mb-0 h-100">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start">
-            <div class="card__title ">
+            <div class="card__title">
               #{{ lastedItem.pro_id }} <br />
               <a [routerLink]="[lastedItem.pro_id]" class="card__title text-clamp">{{ lastedItem.pro_title }}</a>
             </div>
             <div
               *ngIf="getStatus(lastedItem.pro_status)"
-              class="proposal-status flex-shrink-0 proposal-status__{{ getStatus(lastedItem.pro_status).key }}"
-            >
+              class="proposal-status flex-shrink-0 proposal-status__{{ getStatus(lastedItem.pro_status).key }}">
               <span class="status title-small">{{ getStatus(lastedItem.pro_status).value }}</span>
             </div>
           </div>
@@ -22,19 +21,17 @@
                 <div class="body">Proposer</div>
                 <div>
                   <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--green">{{
-                    lastedItem.pro_proposer
-                      ? lastedItem.pro_proposer
-                      : shortenAddress(lastedItem.pro_proposer_address)
+                    lastedItem.pro_proposer ? lastedItem.pro_proposer : shortenAddress(lastedItem.pro_proposer_address)
                   }}</a>
                 </div>
               </div>
               <div class="d-flex mb-2">
                 <div class="body">Voting Start</div>
-                <div>{{ lastedItem.pro_voting_start_time | mask:'0000-00-00 00:00:00' }}</div>
+                <div>{{ lastedItem.pro_voting_start_time | mask: '0000-00-00 00:00:00' }}</div>
               </div>
               <div class="d-flex mb-2">
                 <div class="body">Voting End</div>
-                <div>{{ lastedItem.pro_voting_end_time | mask:'0000-00-00 00:00:00' }}</div>
+                <div>{{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}</div>
               </div>
             </div>
           </div>
@@ -45,29 +42,27 @@
                   class="primary"
                   [style.width]="lastedItem.pro_votes_yes + '%'"
                   matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
-                  [matTooltipPosition]="'above'"
-                ></li>
+                  [matTooltipPosition]="'above'"></li>
                 <li
                   class="danger"
                   *ngIf="lastedItem.pro_votes_no"
                   [style.width]="lastedItem.pro_votes_no + '%'"
                   matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
-                  [matTooltipPosition]="'above'"
-                ></li>
+                  [matTooltipPosition]="'above'"></li>
                 <li
                   class="info"
                   *ngIf="lastedItem.pro_votes_no_with_veto"
                   [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
-                  matTooltip="No with veto {{ lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal }}%"
-                  [matTooltipPosition]="'above'"
-                ></li>
+                  matTooltip="No with veto {{
+                    lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal
+                  }}%"
+                  [matTooltipPosition]="'above'"></li>
                 <li
                   class="secondary"
                   *ngIf="lastedItem.pro_votes_abstain"
                   [style.width]="lastedItem.pro_votes_abstain + '%'"
                   matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
-                  [matTooltipPosition]="'above'"
-                ></li>
+                  [matTooltipPosition]="'above'"></li>
               </ul>
             </div>
             <div class="most-vote flex-shrink-0">
@@ -80,8 +75,7 @@
                     lastedItem.pro_votes_no_with_veto,
                     lastedItem.pro_votes_abstain
                   ).class
-                }}"
-              >
+                }}">
                 {{
                   getHighestVote(
                     lastedItem.pro_votes_yes,
@@ -113,9 +107,8 @@
               </button>
               <button
                 [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-                (click)="openVoteDialog(lastedItem)"
-                class="button button-outline body"
-              >
+                (click)="openVoteDialog(lastedItem, idx)"
+                class="button button-outline body">
                 {{
                   lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                   lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
@@ -157,9 +150,8 @@
           <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let element">
             <div
-                    class="aura-status {{ getStatus(element.pro_status).class }} text-uppercase"
-                    *ngIf="getStatus(element.pro_status)"
-            >
+              class="aura-status {{ getStatus(element.pro_status).class }} text-uppercase"
+              *ngIf="getStatus(element.pro_status)">
               <span class="status">{{ getStatus(element.pro_status).value }}</span>
             </div>
           </td>
