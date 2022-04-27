@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
@@ -10,7 +11,10 @@ export class CommonService {
   apiUrl = '';
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
-  constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
+  constructor(
+    private _http: HttpClient,
+    private _environmentService: EnvironmentService
+  ) {
     this.apiUrl = `${this._environmentService.apiUrl.value.cosmos}`;
     const currentNetwork = JSON.parse(localStorage.getItem('currentNetwork'));
     this.networkQuerySubject = new BehaviorSubject<any>(currentNetwork?.value || 2);
@@ -64,13 +68,13 @@ export class CommonService {
             `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
           ];
         } else {
-          if (new Date(time).getTime() - new Date().getTime() > 0) {
-            return [formatDistanceToNowStrict(new Date(time).getTime()) + ' remaining'];
-          } else {
-            return [
-              formatTimeInWords(new Date(time).getTime()),
-              `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+          if ((new Date(time).getTime() - new Date().getTime()) > 0) {
+            return  [
+              formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC),
+              (formatDistanceToNowStrict(new Date(time).getTime()) + ' remaining')
             ];
+          } else {
+            return false;
           }
         }
       } catch (e) {

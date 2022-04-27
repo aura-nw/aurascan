@@ -123,7 +123,7 @@
               {{ validator.balance | number: globals.formatNumberToken }}
               <span class="text--green">{{ globals.stableToken }}</span
               ><br />
-              <span class="txt-time">{{ commonService.getDateValue(validator.completion_time, false) }}</span>
+              <span class="txt-time">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
             </div>
           </div>
         </ng-container>
