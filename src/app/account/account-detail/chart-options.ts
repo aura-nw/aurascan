@@ -43,7 +43,7 @@ export const CHART_OPTION = (): ChartOptions =>
             ${w.globals.labels[seriesIndex]}
           </div>
           <div class="tooltip-percent"> ${percent.toFixed(2)}% </div>
-          <div class="tooltip-amount"> ${series[seriesIndex].toFixed(6)}</div>
+          <div class="tooltip-amount"> ${series[seriesIndex].toLocaleString('en-US', {minimumFractionDigits: 6})}</div>
         </div>`;
       },
     },
