@@ -1,8 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonService } from '../../../../app/core/services/common.service';
+import { DATEFORMAT } from '../../../core/constants/common.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { Globals } from '../../../global/global';
 
@@ -22,6 +24,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   constructor(
     public translate: TranslateService,
+    private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
   ) {}
