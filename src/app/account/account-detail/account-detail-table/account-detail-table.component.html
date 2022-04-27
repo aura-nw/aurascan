@@ -36,9 +36,9 @@
                     <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false)[1] }})</div>
                   </div>
                   <div *ngSwitchCase="'vesting_schedule'">
-                    {{ commonService.getDateValue(data['date_format'], false)[0] }} <br />({{
-                      commonService.getDateValue(data['date_format'], false)[1]
-                    }}
+                    {{ commonService.getDateValue(data['date_format'], false)[1] }} <br />({{
+                      commonService.getDateValue(data['date_format'], false)[0]
+                    }})
                   </div>
                   <div *ngSwitchCase="'total_value'" class="fw-normal">
                     $ {{ data[template.matColumnDef] | number: global.formatNumberToken }}

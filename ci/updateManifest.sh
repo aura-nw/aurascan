@@ -30,6 +30,7 @@ curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack
 rm kustomize
 
 git config --global user.name "${GITHUB_ACTOR}"
+git config --global user.email "user@aura.network"
 git add . 
 git commit -m "Update image to ${CONTAINER_RELEASE_IMAGE}"
 git push
