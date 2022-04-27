@@ -94,7 +94,8 @@ export class SummaryInfoComponent implements OnInit {
     const title = proposalDetail.pro_title;
     const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
     if (expiredTime > 0) {
-      this.walletService.connectKeplr(this.chainId, (account) => {
+      const account = this.walletService.getAccount();
+      if (account) {
         this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
 
@@ -113,7 +114,29 @@ export class SummaryInfoComponent implements OnInit {
             voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
           });
         });
-      });
+      }
+
+      // this.walletService.connect()
+      // this.walletService.connectKeplr(this.chainId, (account) => {
+      //   this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+      //     let warning: MESSAGE_WARNING;
+
+      //     const { created_at } = data.result ? data.result : { created_at: null };
+
+      //     warning = created_at
+      //       ? new Date(created_at) < new Date(proposalDetail.pro_voting_start_time)
+      //         ? null
+      //         : MESSAGE_WARNING.LATE
+      //       : MESSAGE_WARNING.NOT_PARTICIPATE;
+
+      //     this.openDialog({
+      //       id,
+      //       title,
+      //       warning,
+      //       voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
+      //     });
+      //   });
+      // });
     } else {
       proposalDetail.pro_status = 'PROPOSAL_STATUS_REJECTED';
     }

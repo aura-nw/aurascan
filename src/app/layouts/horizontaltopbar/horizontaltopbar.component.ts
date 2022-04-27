@@ -292,7 +292,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
    */
   logout() {
     this.authService.logout();
-    // this.router.navigate(['/account/login']);
   }
 
   onSelectNetwork(item) {
@@ -310,9 +309,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       .pipe(first())
       .subscribe(
         (data) => {
-          // this.router.navigate(['/']);
-          // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-          //   this.router.navigate(['/']));
           window.location.reload();
         },
         (error) => {},
