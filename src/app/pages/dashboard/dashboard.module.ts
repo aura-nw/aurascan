@@ -13,7 +13,6 @@ import { allIcons } from 'angular-feather/icons';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { LightboxModule } from 'ngx-lightbox';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MaterialModule } from '../../../app/app.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -41,7 +40,6 @@ import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-da
     NgbDropdownModule,
     NgbNavModule,
     LightboxModule,
-    LeafletModule,
     MaterialModule,
     NgxMaskModule,
     CommonPipeModule,

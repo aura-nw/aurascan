@@ -24,7 +24,15 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "allowedCommonJsDependencies": [
-                            "rxjs", "core-js", "chart.js", "chartist", "qrcode", "@cosmjs/stargate", "ngx-lightbox"
+                            "rxjs", 
+                            "core-js",
+                            "chart.js",
+                            "chartist",
+                            "qrcode",
+                            "@cosmjs/stargate",
+                            "ngx-lightbox",
+                            "simplebar",
+                            "simplebar-angular"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
