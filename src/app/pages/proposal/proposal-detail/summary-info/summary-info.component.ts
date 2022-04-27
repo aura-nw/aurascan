@@ -124,6 +124,9 @@ export class SummaryInfoComponent implements OnInit {
         };
         this.proposalVotes = result.keyVote;
         this.getVoteResult();
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       }
     });
   }
