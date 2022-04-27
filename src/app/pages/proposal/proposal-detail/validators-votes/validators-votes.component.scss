@@ -11,3 +11,11 @@
 
     margin-bottom: 32px;
 }
+
+:host::ng-deep {
+    app-proposal-table {
+        table th {
+            width: 20%;
+        }
+    }
+}

@@ -63,6 +63,9 @@ export class ValidatorsDetailComponent implements OnInit {
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
 
+  lengthBlockLoading = true;
+  lengthPowerLoading = true;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -106,6 +109,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.blockService
       .blockWithOperator(this.pageSize, this.pageIndexBlock * this.pageSize, this.currentAddress)
       .subscribe((res) => {
+        this.lengthBlockLoading = true;
         res.data.forEach((block) => {
           block.block_hash_format = block.block_hash.replace(
             block.block_hash.substring(6, block.block_hash.length - 6),
@@ -114,6 +118,7 @@ export class ValidatorsDetailComponent implements OnInit {
         });
         this.lengthBlock = res.meta?.count;
         this.dataSourceBlock.data = res.data;
+        this.lengthBlockLoading = false;
       });
   }
 
@@ -142,6 +147,7 @@ export class ValidatorsDetailComponent implements OnInit {
     this.validatorService
       .validatorsDetailListPower(this.pageSize, this.pageIndexPower * this.pageSize, this.currentAddress)
       .subscribe((res) => {
+        this.lengthPowerLoading = true;
         res.data.forEach((power) => {
           power.isStakeMode = false;
           if (power.type === 'delegate') {
@@ -151,6 +157,7 @@ export class ValidatorsDetailComponent implements OnInit {
         });
         this.dataSourcePower = res.data;
         this.lengthPower = res.meta?.count;
+        this.lengthPowerLoading = false;
       });
   }
 
