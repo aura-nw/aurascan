@@ -32,12 +32,12 @@
                     <span class="text--green">{{ global.stableToken }}</span>
                   </div>
                   <div *ngSwitchCase="'completion_time'">
-                    {{ data['completion_time_format'] }}
-                    <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false) }})</div>
+                    {{ commonService.getDateValue(data[template.matColumnDef], false)[0] }}
+                    <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false)[1] }})</div>
                   </div>
                   <div *ngSwitchCase="'vesting_schedule'">
-                    {{ data['vesting_schedule_format'] }} <br />({{
-                      commonService.getDateValue(data['date_format'], false)
+                    {{ commonService.getDateValue(data['date_format'], false)[0] }} <br />({{
+                      commonService.getDateValue(data['date_format'], false)[1]
                     }}
                   </div>
                   <div *ngSwitchCase="'total_value'" class="fw-normal">

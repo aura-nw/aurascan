@@ -69,12 +69,12 @@ export class CommonService {
           ];
         } else {
           if ((new Date(time).getTime() - new Date().getTime()) > 0) {
-            return (formatDistanceToNowStrict(new Date(time).getTime()) + ' remaining');
-          } else {
-            return [
-              formatTimeInWords(new Date(time).getTime()),
-              `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+            return  [
+              formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC),
+              (formatDistanceToNowStrict(new Date(time).getTime()) + ' remaining')
             ];
+          } else {
+            return false;
           }
         }
       } catch (e) {
