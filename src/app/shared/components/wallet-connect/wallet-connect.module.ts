@@ -9,14 +9,12 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { ClickOutsideModule } from "ng-click-outside";
 import { QrModule } from "../qr/qr.module";
 import { WalletConnectComponent } from "./wallet-connect.component";
-import { WalletDetailComponent } from "./wallet-detail/wallet-detail.component";
 import { WalletListComponent } from "./wallet-list/wallet-list.component";
 
 @NgModule({
   declarations: [
     WalletConnectComponent,
-    WalletListComponent,
-    WalletDetailComponent,
+    WalletListComponent
   ],
   imports: [
     CommonModule,

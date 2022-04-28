@@ -45,7 +45,7 @@ export class ValidatorsComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
   dataSourceBk: MatTableDataSource<any>;
-  length;
+
   pageIndex = 0;
 
   templatesWallet: Array<TableTemplate> = [
@@ -61,10 +61,10 @@ export class ValidatorsComponent implements OnInit {
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   isActive = true;
   textSearch = '';
-  rawData;
-  sortedData;
+  rawData: any[];
+  sortedData: any;
   dataHeader = new CommonDataDto();
-  dataModal;
+  dataModal: any;
   clicked = false;
   totalDelegator = 0;
   claimReward = 0;
@@ -72,7 +72,7 @@ export class ValidatorsComponent implements OnInit {
   isExceedAmount = false;
   userAddress = '';
   validatorAddress = [];
-  selectedValidator;
+  selectedValidator: string;
   listTypeStake = TYPE_STAKING;
   searchNullData = false;
   listStakingValidator = [];
@@ -198,29 +198,6 @@ export class ValidatorsComponent implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  // calculatorCumulative(dataFilter) {
-  //   for (const key in dataFilter) {
-  //     const dataOrigin = dataFilter[key];
-  //     const dataBefore = dataFilter[parseInt(key) - 1];
-  //     if (dataOrigin?.title) {
-  //       if (parseInt(key) === 0) {
-  //         dataOrigin.cumulative_share_before = '0.00';
-  //         dataOrigin.cumulative_share = dataOrigin.percent_power;
-  //         dataOrigin.cumulative_share_after = dataOrigin.percent_power;
-  //       } else {
-  //         dataOrigin.cumulative_share_before = dataBefore?.cumulative_share_after || 0;
-  //         dataOrigin.cumulative_share = dataOrigin?.percent_power;
-  //         const cumulative = parseFloat(dataOrigin?.cumulative_share_before) + parseFloat(dataOrigin?.percent_power);
-  //         dataOrigin.cumulative_share_after = cumulative.toFixed(2);
-  //       }
-  //       dataFilter.cumulative_share_before = dataOrigin.cumulative_share_before;
-  //       dataFilter.cumulative_share = dataOrigin.cumulative_share;
-  //       dataFilter.cumulative_share_after = dataOrigin.cumulative_share_after;
-  //     }
-  //   }
-  //   return dataFilter;
-  // }
-
   searchValidator(): void {
     this.searchNullData = false;
     let data;
@@ -252,15 +229,6 @@ export class ValidatorsComponent implements OnInit {
         this.getValidatorDetail(address, staticDataModal);
         this.getListRedelegate(this.userAddress, address);
       }
-
-      // this.walletService.wallet$.pipe(takeWhile((e) => !(e && e?.bech32Address), true)).subscribe((wallet) => {
-      //   if (wallet && wallet.bech32Address) {
-      //     this.clicked = true;
-      //     this.amountFormat = null;
-      //     this.getValidatorDetail(address, staticDataModal);
-      //     this.getListRedelegate(this.userAddress, address);
-      //   }
-      // });
     };
     view();
     this.isOpenStaking = isOpenStaking;

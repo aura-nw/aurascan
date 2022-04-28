@@ -5,7 +5,6 @@ import { takeUntil } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
-import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   constructor(
     private walletService: WalletService,
     private envService: EnvironmentService,
-    private toastr: NgxToastrService,
     private dlgService: DialogService,
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
