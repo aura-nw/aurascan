@@ -251,7 +251,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   getAccountDetail(): void {
-    this.accountService.getAccoutDetail(this.currentAddress).subscribe((res) => {
+    this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
       this.currentAccountDetail = res.data;

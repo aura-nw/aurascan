@@ -274,7 +274,7 @@ export class ValidatorsComponent implements OnInit {
     const currentUrl = this.router.url;
     if (this.userAddress && currentUrl === '/validators') {
       forkJoin({
-        dataWallet: this.accountService.getAccoutDetail(this.userAddress),
+        dataWallet: this.accountService.getAccountDetail(this.userAddress),
         dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
         dataListUndelegator: this.validatorService.validatorsListUndelegateWallet(this.userAddress)
       }).subscribe((res) => {

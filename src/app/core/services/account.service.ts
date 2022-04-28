@@ -8,16 +8,11 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class AccountService extends CommonService {
-  accountDetail: string = '../../assets/mock-data/account-list.json';
-  // listLastedProposal: string = '../../assets/mock-data/proposal-list-lasted.json';
-  constructor(
-    private http: HttpClient,
-    private environmentService: EnvironmentService
-  ) {
+  constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
-  getAccoutDetail(account_id): Observable<any> {
+  getAccountDetail(account_id: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
   }
 
