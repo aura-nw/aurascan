@@ -28,7 +28,7 @@ export class TransactionComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   length: number;
-  pageSize = PAGE_EVENT.PAGE_SIZE;
+  pageSize = 20;
   pageIndex = 0;
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;

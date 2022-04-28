@@ -18,15 +18,15 @@
             <div class="col-4 col-sm-4">
               <div class="body contact__title text--white">Features</div>
               <div class="body mt-2 mt-md-10">
-                <div class="mb-4"><a target="_blank" href="{{ this.dashboardURL }}">Dashboard</a></div>
-                <div class="mb-4"><a target="_blank" href="{{ this.blocksURL }}">Blocks</a></div>
+                <div class="mb-4"><a target="_blank" href="{{ getUrl(dashboardURL) }}">Dashboard</a></div>
+                <div class="mb-4"><a target="_blank" href="{{ getUrl(blocksURL) }}">Blocks</a></div>
                 <div class="mb-4">
-                  <a target="_blank" href="{{ this.transactionURL }}">Transactions</a>
+                  <a target="_blank" href="{{  getUrl(transactionURL) }}">Transactions</a>
                 </div>
                 <div class="mb-4">
-                  <a target="_blank" href="{{ this.validatorURL }}">Validators</a>
+                  <a target="_blank" href="{{ getUrl(validatorURL) }}">Validators</a>
                 </div>
-                <div class="mb-4"><a target="_blank" href="{{ this.governanceURL }}">Governance</a></div>
+                <div class="mb-4"><a target="_blank" href="{{ getUrl(governanceURL) }}">Governance</a></div>
                 <!-- <div class="mb-4"><a target="_blank" href="https://safe.aura.network/welcome">Safe</a></div>
                                 <div class="mb-4"><a target="_blank" href="https://docs.aura.network/">Docs</a></div>
                                 <div class="mb-4"><a target="_blank" href="https://explorer.aura.network/">Explorer</a></div> -->

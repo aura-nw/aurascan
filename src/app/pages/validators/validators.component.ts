@@ -83,7 +83,7 @@ export class ValidatorsComponent implements OnInit {
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
   modalReference: any;
-  currentValidatorDialog;
+  currentValidatorDialog: string;
   commissionLabel = null;
   lstValidator = [];
   lstUndelegate = [];
@@ -107,6 +107,8 @@ export class ValidatorsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadDataTemp();
+
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
@@ -116,7 +118,6 @@ export class ValidatorsComponent implements OnInit {
         this.userAddress = null;
       }
     });
-
     this.getList();
   }
 
@@ -130,6 +131,23 @@ export class ValidatorsComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+  }
+
+  loadDataTemp(): void { 
+    //get data from client for wallet info
+    var retrievedObject = localStorage.getItem('dataInfoWallet');
+    var data = JSON.parse(retrievedObject);
+    if (data) {
+      this.dataDelegate = JSON.parse(data?.dataDelegate);
+      //check wallet is staked
+      if (Number(this.dataDelegate.delegatedToken) > 0) {
+        this.isDisableClaim = false;
+        this.lstUndelegate = JSON.parse(data?.lstUndelegate);
+        let arrayDelegate = JSON.parse(data?.arrayDelegate);
+        this.dataSourceWallet = new MatTableDataSource(arrayDelegate);
+        this.lengthWallet = arrayDelegate?.length;
+      }
+    }
   }
 
   getList(): void {
@@ -272,6 +290,7 @@ export class ValidatorsComponent implements OnInit {
   getDataWallet() {
     const halftime = 30000;
     const currentUrl = this.router.url;
+    let dataInforWallet = {};
     if (this.userAddress && currentUrl === '/validators') {
       forkJoin({
         dataWallet: this.accountService.getAccountDetail(this.userAddress),
@@ -306,6 +325,7 @@ export class ValidatorsComponent implements OnInit {
             let arrayDelegate = res?.dataListDelegator.data?.delegations.filter(x => x.amount_staked > 0);
             this.dataSourceWallet = new MatTableDataSource(arrayDelegate);
             this.lengthWallet = arrayDelegate?.length;
+            dataInforWallet['arrayDelegate'] = JSON.stringify(arrayDelegate);
           }
         }
 
@@ -328,6 +348,12 @@ export class ValidatorsComponent implements OnInit {
             return this.compare(a.completion_time, b.completion_time, true);
           });
         }
+
+        //store data wallet info
+        dataInforWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
+        dataInforWallet['lstUndelegate'] = JSON.stringify(this.lstUndelegate);
+        localStorage.setItem('dataInfoWallet', JSON.stringify(dataInforWallet));
+
         setTimeout(() => {
           this.getDataWallet()
         }, halftime);
@@ -350,7 +376,7 @@ export class ValidatorsComponent implements OnInit {
   checkAmountStaking(): void {
     let amountCheck;
     if (this.dataDelegate.dialogMode === this.dialogMode.Delegate){
-      amountCheck = this.dataDelegate.availableToken;
+      amountCheck = this.dataDelegate.availableToken || 0;
     } else if (this.dataDelegate.dialogMode === this.dialogMode.Redelegate || this.dataDelegate.dialogMode === this.dialogMode.Undelegate){
       amountCheck = this.dataDelegate.validatorDetail.amount_staked;
     }
@@ -520,14 +546,12 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         message = res?.data?.raw_log || message;
         message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (numberCode) {
-          if (numberCode === CodeTransaction.Success) {
+          if (!!!numberCode && numberCode === CodeTransaction.Success) {
             this.getDataWallet();
             this.toastr.success(message);
           } else {
             this.toastr.error(message);
           }
-        }
       },
       (error) => {
       },

@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartComponent } from 'ng-apexcharts';
+import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
@@ -154,6 +155,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   // loading param check
   accDetailLoading = true;
   chartLoading = true;
+  userAddress = '';
 
   constructor(
     private transactionService: TransactionService,
@@ -162,6 +164,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private router: Router,
     private accountService: AccountService,
     public global: Globals,
+    private walletService: WalletService
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -175,11 +178,44 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
+        this.loadDataTemp();
         this.getAccountDetail();
         this.getListTransaction();
-      } else {
       }
     });
+  }
+
+  loadDataTemp(): void {
+    //get data from client for my account
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.userAddress = wallet.bech32Address;
+      }
+    });
+
+    var retrievedObject = localStorage.getItem('accountDetail');
+    if (retrievedObject) {
+      var data = JSON.parse(retrievedObject);
+      let dataAccount = JSON.parse(data?.dataAccount);
+      if (dataAccount && dataAccount.acc_address === this.currentAddress) {
+        this.accDetailLoading = false;
+        this.chartLoading = false;
+        this.currentAccountDetail = dataAccount;
+        this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
+        this.pageDataToken.length = dataAccount.balances.length;
+  
+        this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
+        this.pageDataDelegation.length = dataAccount.delegations.length;
+  
+        this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
+        this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
+  
+        this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
+        this.pageDataRedelegation.length = dataAccount.redelegations.length;
+  
+        this.chartOptions = JSON.parse(data?.dataChart);
+      }
+    }
   }
 
   copyMessage(val: string) {
@@ -307,6 +343,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         f.token_name = f.name;
       });
 
+
       this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
       this.pageDataToken.length = this.currentAccountDetail?.balances.length;
       this.dataSourceTokenBk = this.dataSourceToken;
@@ -326,6 +363,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       }
       this.accDetailLoading = false;
       this.chartLoading = false;
+
+      if (this.userAddress === this.currentAddress) {
+        //store data wallet info
+        let accountDetail = {};
+        accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
+        accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
+        localStorage.setItem('accountDetail', JSON.stringify(accountDetail));
+      }
     });
   }
 

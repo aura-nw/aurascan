@@ -72,7 +72,7 @@ export class CommonService {
           } else {
             return [
               formatTimeInWords(new Date(time).getTime()),
-              `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
+              `${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)}`,
             ];
           }
         }

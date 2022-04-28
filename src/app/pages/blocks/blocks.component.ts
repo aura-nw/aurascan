@@ -24,7 +24,7 @@ export class BlocksComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   length: number;
-  pageSize = PAGE_EVENT.PAGE_SIZE;
+  pageSize = 20;
   pageIndex = 0;
   loading = true;
   // bread crumb items
