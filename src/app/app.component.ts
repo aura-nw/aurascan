@@ -1,23 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../app/core/services/auth.service';
 import { NUMBER_CONVERT } from './core/constants/common.constant';
-import { CommonDataDto } from './core/models/common.model';
 import { CommonService } from './core/services/common.service';
 import { Globals } from './global/global';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = '';
-  constructor(
-    private authService: AuthenticationService,
-    private commonService: CommonService,
-    private globals: Globals
-  ) {
-  }
+  constructor(private commonService: CommonService, private globals: Globals) {}
   ngOnInit(): void {
     this.getInfoCommon();
 
@@ -27,15 +19,12 @@ export class AppComponent implements OnInit {
   }
 
   getInfoCommon(): void {
-    this.commonService
-      .status()
-      .subscribe(res => {
-        this.globals.dataHeader = res.data;
-        this.globals.dataHeader.bonded_tokens = this.globals.dataHeader.bonded_tokens / NUMBER_CONVERT;
-        this.globals.dataHeader.bonded_tokens_format = this.formatNumber(this.globals.dataHeader.bonded_tokens);
-        this.globals.dataHeader.community_pool_format = this.formatNumber(this.globals.dataHeader.community_pool);
-      }
-      );
+    this.commonService.status().subscribe((res) => {
+      this.globals.dataHeader = res.data;
+      this.globals.dataHeader.bonded_tokens = this.globals.dataHeader.bonded_tokens / NUMBER_CONVERT;
+      this.globals.dataHeader.bonded_tokens_format = this.formatNumber(this.globals.dataHeader.bonded_tokens);
+      this.globals.dataHeader.community_pool_format = this.formatNumber(this.globals.dataHeader.community_pool);
+    });
   }
 
   formatNumber(number: number, args?: any): any {
@@ -52,7 +41,7 @@ export class AppComponent implements OnInit {
       { key: 'T', value: Math.pow(10, 12) },
       { key: 'B', value: Math.pow(10, 9) },
       { key: 'M', value: Math.pow(10, 6) },
-      { key: 'K', value: 1000 }
+      { key: 'K', value: 1000 },
     ];
 
     for (let i = 0; i < powers.length; i++) {

@@ -12,7 +12,7 @@ import { TxsDetailComponent } from './txs-detail/txs-detail.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { TransferredDetailComponent } from './txs-detail/transferred-detail/transferred-detail.component';
-import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 

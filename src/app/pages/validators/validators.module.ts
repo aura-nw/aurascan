@@ -15,7 +15,7 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { AccountService } from '../../../app/core/services/account.service';
-import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-delegate.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { TRANSACTION_TYPE_ENUM } from '../../../../../app/core/constants/transaction.enum';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../../../app/core/constants/transaction.constant';
 import { getAmount, Globals } from '../../../../../app/global/global';
 import { DatePipe } from '@angular/common';
@@ -14,19 +14,20 @@ import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
   encapsulation: ViewEncapsulation.None,
 })
 export class TransferredDetailComponent implements OnInit {
+  @Input() transactionDetail: any;
+
   typeTransaction = TYPE_TRANSACTION;
   voteConstant = PROPOSAL_VOTE;
-  transactionDetailType;
+  transactionDetailType: TypeTransaction;
   eTransType = TRANSACTION_TYPE_ENUM;
   amount = 0;
   amountClaim = 0;
-  dateVesting;
-  isVestingDelay;
+  dateVesting: string;
+  isVestingDelay: boolean;
   validatorName = '';
   validatorNameDes = '';
-  listValidator;
+  listValidator: any[];
   listAmountClaim = [];
-  @Input() transactionDetail: any;
 
   constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
 
@@ -81,7 +82,7 @@ export class TransferredDetailComponent implements OnInit {
           });
         }
       },
-      (error) => {},
+      (_) => {},
     );
   }
 
@@ -99,15 +100,15 @@ export class TransferredDetailComponent implements OnInit {
             const data = temp[0]?.attributes;
             if (data) {
               if (this.transactionDetail?.type !== TRANSACTION_TYPE_ENUM.GetReward) {
-                if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate){
-                  let arrayAmount = data.filter(k => k.key === 'amount');
+                if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
+                  let arrayAmount = data.filter((k) => k.key === 'amount');
                   this.amountClaim = 0;
-                  arrayAmount.forEach(element => {
-                    this.amountClaim += (Number(element.value.replace(STABLE_UTOKEN, '')) / NUMBER_CONVERT) || 0;
+                  arrayAmount.forEach((element) => {
+                    this.amountClaim += Number(element.value.replace(STABLE_UTOKEN, '')) / NUMBER_CONVERT || 0;
                   });
                 } else {
-                  let amount =  data.find(k => k.key === 'amount').value;
-                  this.amountClaim = (amount.replace(STABLE_UTOKEN, '') / NUMBER_CONVERT) || 0;
+                  let amount = data.find((k) => k.key === 'amount').value;
+                  this.amountClaim = amount.replace(STABLE_UTOKEN, '') / NUMBER_CONVERT || 0;
                 }
               }
               this.transactionDetail?.messages.forEach((message) => {
@@ -122,8 +123,7 @@ export class TransferredDetailComponent implements OnInit {
           }
         });
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   parsingOptionVote(option) {
