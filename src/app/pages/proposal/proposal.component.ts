@@ -79,20 +79,13 @@ export class ProposalComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.lastedList = [...res.data];
       this.lastedList.forEach((pro, index) => {
-        if (index < 4) {
-          const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
-          if (expiredTime < 0 && pro.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
-            pro.pro_status = 'PROPOSAL_STATUS_REJECTED';
-          }
-          this.getVoteResult(pro.pro_id, index);
-        }
-
         pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
         if (index < 4) {
+          this.getVoteResult(pro.pro_id, index);
           this.proposalVotes.push({
             proId: +pro.pro_id,
             vote: null,
@@ -117,7 +110,7 @@ export class ProposalComponent implements OnInit {
           this.proposalVotes = res.map((i, idx) => {
             return {
               proId: this.proposalVotes[idx].proId,
-              vote: this.voteConstant.find((s) => s.key === i)?.value || null,
+              vote: this.voteConstant.find((s) => s.key === i)?.voteOption || null,
             };
           });
         });
