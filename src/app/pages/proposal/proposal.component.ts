@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
-import { DATEFORMAT } from '../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -42,7 +42,7 @@ export class ProposalComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
   length: number;
-  pageSize = 20;
+  pageSize = PAGE_EVENT.PAGE_SIZE;
   pageIndex = 0;
   lastedList: IProposal[] = [];
 
@@ -58,7 +58,7 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
-    private dlgServ: DialogService,
+    private dlgService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -236,7 +236,7 @@ export class ProposalComponent implements OnInit {
   }
 
   dlgServOpen(): void {
-    this.dlgServ.showDialog({
+    this.dlgService.showDialog({
       content: 'Please set up override Keplr in settings of Coin98 wallet',
       title: '',
     });
