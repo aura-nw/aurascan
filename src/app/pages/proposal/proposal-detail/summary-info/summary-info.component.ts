@@ -128,7 +128,7 @@ export class SummaryInfoComponent implements OnInit {
         });
       }
     } else {
-      window.location.reload();
+      this.getProposalDetailFromNode(id);
     }
   }
 
@@ -166,11 +166,19 @@ export class SummaryInfoComponent implements OnInit {
     }
   }
 
+  getProposalDetailFromNode(pro_id) {
+    this.proposalService.getProposalDetailFromNode(pro_id).subscribe((res) => {
+      if (res) {
+        this.proposalDetail.pro_status = res.data.status;
+      }
+    });
+  }
+
   getVoteResult() {
     this.votingBarLoading = true;
     this.proposalService.getProposalTally(this.proposalId).subscribe(
       (res) => {
-        if (!res.data.proposalVoteTally.tally) {
+        if (!res?.data?.proposalVoteTally?.tally) {
           return;
         }
 

@@ -85,7 +85,9 @@ export class ProposalComponent implements OnInit {
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
         if (index < 4) {
-          this.getVoteResult(pro.pro_id, index);
+          if (pro.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+            this.getVoteResult(pro.pro_id, index);
+          }
           this.proposalVotes.push({
             proId: +pro.pro_id,
             vote: null,
@@ -93,6 +95,15 @@ export class ProposalComponent implements OnInit {
         }
       });
       this.getVotedProposal();
+    });
+  }
+
+  getProposalDetailFromNode(pro_id, index) {
+    this.proposalService.getProposalDetailFromNode(pro_id).subscribe((res) => {
+      if (res) {
+        this.lastedList[index].pro_status = res.data.status;
+        this.dataSource.data[index].pro_status = res.data.status;
+      }
     });
   }
 
@@ -160,7 +171,7 @@ export class ProposalComponent implements OnInit {
       resObj = {
         value: highest,
         class: statusObj.class,
-        name: statusObj.value,
+        name: statusObj.voteOption,
       };
     }
     return resObj;
@@ -198,7 +209,7 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getList();
+      this.getProposalDetailFromNode(id, index);
     }
   }
 
