@@ -8,6 +8,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
+  TypeTransaction,
 } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto } from '../../../../app/core/models/common.model';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
@@ -20,16 +21,15 @@ import { MappingErrorService } from '../../../../app/core/services/mapping-error
   styleUrls: ['./txs-detail.component.scss'],
 })
 export class TxsDetailComponent implements OnInit {
-  id = '';
-  item =  null;
-  breadCrumbItems = [{ label: 'Transaction' }, { label: 'List' }, { label: 'Detail', active: true }];
+  txHash = '';
+  transaction = null;
   codeTransaction = CodeTransaction;
   typeTransaction = TYPE_TRANSACTION;
-  transactionDetailType;
-  dateFormat;
-  amount;
+  transactionDetailType: TypeTransaction;
+  dateFormat: string;
+  amount: string | number;
   isRawData = false;
-  jsonStr;
+  jsonStr: string;
   eTransType = TRANSACTION_TYPE_ENUM;
   errorMessage = '';
 
@@ -44,12 +44,12 @@ export class TxsDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.txHash = this.route.snapshot.paramMap.get('id');
     this.getDetail();
   }
 
   getDetail(): void {
-    this.transactionService.txsDetail(this.id).subscribe(
+    this.transactionService.txsDetail(this.txHash).subscribe(
       (res: ResponseDto) => {
         res.data.status = StatusTransaction.Fail;
         if (res.data.code === CodeTransaction.Success) {
@@ -57,23 +57,23 @@ export class TxsDetailComponent implements OnInit {
         }
         const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res.data.type.toLowerCase());
         this.transactionDetailType = typeTrans?.value;
-        this.item = res.data;
+        this.transaction = res.data;
 
-        if (this.item.raw_log && this.item.code !== CodeTransaction.Success) {
-          this.errorMessage = this.item.raw_log;
-          this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.item.code);
+        if (this.transaction.raw_log && this.transaction.code !== CodeTransaction.Success) {
+          this.errorMessage = this.transaction.raw_log;
+          this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
         }
 
         //convert json for display raw data
-        this.jsonStr = JSON.stringify(this.item.tx, null, 2).replace(/\\/g, '');
-        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
+        this.jsonStr = JSON.stringify(this.transaction.tx, null, 2).replace(/\\/g, '');
+        this.dateFormat = this.datePipe.transform(this.transaction?.timestamp, DATEFORMAT.DATETIME_UTC);
         //check exit amount of transaction
-        if (this.item.messages && this.item.messages[0]?.amount) {
-          let amount = this.item.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
-          this.amount = this.item.messages?.length === 1 ? amount : 'More';
+        if (this.transaction.messages && this.transaction.messages[0]?.amount) {
+          let amount = this.transaction.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
+          this.amount = this.transaction.messages?.length === 1 ? amount : 'More';
         }
       },
-      (error) => {
+      (_) => {
         this.router.navigate(['/']);
       },
     );

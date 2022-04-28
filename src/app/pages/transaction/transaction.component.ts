@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../app/core/services/common.service';
-import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { PAGE_EVENT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -15,8 +15,6 @@ import { getAmount, Globals } from '../../../app/global/global';
   styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit {
-  // bread crumb items
-  breadCrumbItems!: Array<{}>;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
@@ -28,8 +26,9 @@ export class TransactionComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
+
   length: number;
-  pageSize = 20;
+  pageSize = PAGE_EVENT.PAGE_SIZE;
   pageIndex = 0;
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
