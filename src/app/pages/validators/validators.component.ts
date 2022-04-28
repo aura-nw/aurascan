@@ -418,7 +418,7 @@ export class ValidatorsComponent implements OnInit {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, 'Error Delegate');
+        this.checkStatuExcuteBlock(hash, error, '');
       };
       
       excuteStaking();
@@ -439,7 +439,7 @@ export class ValidatorsComponent implements OnInit {
           chainId: this.walletService.chainId,
         });
 
-        this.checkStatuExcuteBlock(hash, error, 'Error Get Reward');
+        this.checkStatuExcuteBlock(hash, error, '');
       };
       
       excuteClaim();
@@ -466,7 +466,7 @@ export class ValidatorsComponent implements OnInit {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, 'Error Undelegate');
+        this.checkStatuExcuteBlock(hash, error, '');
       };
       
       excuteUnStaking();
@@ -494,7 +494,7 @@ export class ValidatorsComponent implements OnInit {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, 'Error Redelegate');
+        this.checkStatuExcuteBlock(hash, error, '');
       };
       
       excuteReStaking();
@@ -552,11 +552,13 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         message = res?.data?.raw_log || message;
         message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (numberCode === CodeTransaction.Success) {
-          this.getDataWallet();
-          this.toastr.success(message);
-        } else {
-          this.toastr.error(message);
+        if (numberCode) {
+          if (numberCode === CodeTransaction.Success) {
+            this.getDataWallet();
+            this.toastr.success(message);
+          } else {
+            this.toastr.error(message);
+          }
         }
       },
       (error) => {
