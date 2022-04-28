@@ -124,7 +124,7 @@
   </div>
 </section>
 <section class="all-list table-responsive">
-  <div class="card" *ngIf="dataSource">
+  <div class="card" *ngIf="dataSource.data.length > 0">
     <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
       <div class="sub-text text--white">Proposals</div>
       <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
@@ -188,7 +188,7 @@
       </table>
     </div>
   </div>
-  <div *ngIf="!dataSource">
-    <app-loading-sprint></app-loading-sprint>
+  <div *ngIf="!(dataSource.data.length > 0)">
+    <app-table-no-data></app-table-no-data>
   </div>
 </section>
