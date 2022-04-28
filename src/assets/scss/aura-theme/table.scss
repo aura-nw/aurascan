@@ -1,3 +1,9 @@
+.aura-table-contain {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .aura-table {
   background: transparent;
   mat-footer-row, mat-header-row, mat-row, td.mat-cell, td.mat-footer-cell, th.mat-header-cell {

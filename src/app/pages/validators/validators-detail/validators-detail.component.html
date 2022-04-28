@@ -113,7 +113,7 @@
         <div class="card-body article-1">
           <ngx-simplebar>
             <ng-container *ngIf="lengthBlock > 0; else noValues">
-              <div class="table-responsive">
+              <div class="table-responsive aura-table-contain">
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -144,8 +144,8 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
                   <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                      {{ 'NO DATA' | translate }}
+                    <td class="mat-cell g-no-data pt-8" colspan="9999">
+                      <app-loading-sprint></app-loading-sprint>
                     </td>
                   </tr>
                 </table>
@@ -203,7 +203,7 @@
         <div class="card-body article-1 px-0">
           <ngx-simplebar>
             <ng-container *ngIf="lengthDelegator > 0; else noValues">
-              <div class="table-responsive">
+              <div class="table-responsive aura-table-contain">
                 <table mat-table [dataSource]="dataSourceDelegator" class="aura-table">
                   <ng-container *ngFor="let template of templatesDelegator; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -232,8 +232,8 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsDelegator"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsDelegator"></tr>
                   <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                      {{ 'NO DATA' | translate }}
+                    <td class="mat-cell g-no-data pt-8" colspan="9999">
+                      <app-loading-sprint></app-loading-sprint>
                     </td>
                   </tr>
                 </table>
@@ -267,7 +267,7 @@
         <div class="card-body article-1 px-0">
           <ngx-simplebar>
             <ng-container *ngIf="lengthPower > 0; else noValues">
-              <div class="table-responsive">
+              <div class="table-responsive aura-table-contain">
                 <table mat-table [dataSource]="dataSourcePower" class="aura-table">
                   <ng-container *ngFor="let template of templatesPower; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -303,8 +303,8 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsPower" (click)="openTxsDetail($event, row)">
                   </tr>
                   <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                      {{ 'NO DATA' | translate }}
+                    <td class="mat-cell g-no-data pt-8" colspan="9999">
+                      <app-loading-sprint></app-loading-sprint>
                     </td>
                   </tr>
                 </table>
