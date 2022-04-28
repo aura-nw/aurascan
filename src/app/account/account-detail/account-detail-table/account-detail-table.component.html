@@ -1,6 +1,6 @@
 <ngx-simplebar style="max-height: 400px">
   <ng-container *ngIf="pageData?.length > 0; else noValues">
-    <div class="table-responsive">
+    <div class="table-responsive aura-table-contain">
       <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
