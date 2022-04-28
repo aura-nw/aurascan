@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
@@ -85,11 +85,13 @@ export class ProposalComponent implements OnInit {
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
         if (index < 4) {
-          this.getVoteResult(pro.pro_id, index);
-          this.proposalVotes.push({
-            proId: +pro.pro_id,
-            vote: null,
-          });
+          if(pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+            this.getVoteResult(pro.pro_id, index);
+            this.proposalVotes.push({
+              proId: +pro.pro_id,
+              vote: null,
+            });
+          }
         }
       });
       this.getVotedProposal();
@@ -100,16 +102,18 @@ export class ProposalComponent implements OnInit {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (this.proposalVotes.length > 0 && addr) {
       forkJoin({
-        0: this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr),
-        1: this.proposalService.getVotes(this.proposalVotes[1]?.proId, addr),
-        2: this.proposalService.getVotes(this.proposalVotes[2]?.proId, addr),
-        3: this.proposalService.getVotes(this.proposalVotes[3]?.proId, addr),
+        0: this.proposalVotes[0] ? this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr) : of([]),
+        1: this.proposalVotes[1] ? this.proposalService.getVotes(this.proposalVotes[1]?.proId, addr) : of([]),
+        2: this.proposalVotes[2] ? this.proposalService.getVotes(this.proposalVotes[2]?.proId, addr) : of([]),
+        3: this.proposalVotes[3] ? this.proposalService.getVotes(this.proposalVotes[3]?.proId, addr) : of([]),
       })
         .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
         .subscribe((res) => {
+          console.log(res);
+          
           this.proposalVotes = res.map((i, idx) => {
             return {
-              proId: this.proposalVotes[idx].proId,
+              proId: this.proposalVotes[idx]?.proId || null,
               vote: this.voteConstant.find((s) => s.key === i)?.voteOption || null,
             };
           });
