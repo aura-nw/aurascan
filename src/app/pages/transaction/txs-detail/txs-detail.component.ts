@@ -26,10 +26,10 @@ export class TxsDetailComponent implements OnInit {
   codeTransaction = CodeTransaction;
   typeTransaction = TYPE_TRANSACTION;
   transactionDetailType;
-  dateFormat;
-  amount;
+  dateFormat = '';
+  amount = undefined;
   isRawData = false;
-  jsonStr;
+  jsonStr: any;
   eTransType = TRANSACTION_TYPE_ENUM;
   errorMessage = '';
 

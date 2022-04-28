@@ -31,13 +31,13 @@ export class BlockDetailComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  length = 0;
   pageSize = 10;
   pageIndex = 0;
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
-  dateFormat;
+  dateFormat = '';
   loading = true;
 
   constructor(

@@ -23,13 +23,12 @@ export class ChanelsComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  length = 0;
   pageSize = 10;
   pageIndex = 0;
   pageSizeOptions = PAGE_SIZE_OPTIONS;
   constructor(
-    private commonService: CommonService,
-    private router: Router
+    private commonService: CommonService
   ) { }
 
   ngOnInit(): void {

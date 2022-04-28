@@ -21,7 +21,7 @@ export class BlocksComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  length = 0;
   pageSize = 20;
   pageIndex = 0;
   loading = true;

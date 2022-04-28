@@ -28,9 +28,9 @@ export type ChartOptions = {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  block_height;
-  total_txs_num;
-  total_validator_num;
+  block_height = 0;
+  total_txs_num = 0;
+  total_validator_num = 0;
   breadCrumbItems!: Array<{}>;
   title!: string;
   chart = '30d';
@@ -72,7 +72,6 @@ export class DashboardComponent implements OnInit {
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any>;
-  currentUser;
   typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
 
@@ -86,10 +85,6 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [
-      // { label: 'Dashboard' },
-      // { label: 'Dashboard', active: true }
-    ];
     this.chartOptions = {
       series: [
         // {
