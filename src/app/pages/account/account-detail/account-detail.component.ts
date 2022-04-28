@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,12 +15,12 @@ import {
 import { PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
+import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { getAmount, Globals } from '../../../global/global';
-import { IAccountDetail } from '../../../core/models/account.model';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -28,9 +29,9 @@ import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options'
   styleUrls: ['./account-detail.component.scss'],
 })
 export class AccountDetailComponent implements OnInit, AfterViewInit {
-  @ViewChild('assetTypeSelect') assetTypeSelect;
+  @ViewChild('assetTypeSelect') assetTypeSelect: MatSelect;
   @HostListener('window:scroll', ['$event'])
-  closeOptionPanelSection(event) {
+  closeOptionPanelSection(_) {
     if (this.assetTypeSelect !== undefined) {
       this.assetTypeSelect.close();
     }

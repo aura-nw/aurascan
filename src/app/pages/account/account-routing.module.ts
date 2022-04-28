@@ -7,10 +7,10 @@ import {LayoutComponent} from "../../layouts/layout.component";
 
 const routes: Routes = [
   // { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
+  // {
+  //   path: 'login',
+  //   component: LoginComponent
+  // },
   {
     path: ':id', component: LayoutComponent, loadChildren: () => import('./account-detail/account-detail.module').then(m => m.AccountDetailModule)
   },
