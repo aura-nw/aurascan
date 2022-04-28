@@ -107,7 +107,7 @@ export class SummaryInfoComponent implements OnInit {
         });
       }
     } else {
-      proposalDetail.pro_status = 'PROPOSAL_STATUS_REJECTED';
+      window.location.reload();
     }
   }
 
@@ -147,6 +147,9 @@ export class SummaryInfoComponent implements OnInit {
 
   getVoteResult() {
     this.proposalService.getProposalTally(this.proposalId).subscribe((res) => {
+      if (!res.data.proposalVoteTally.tally) {
+        return;
+      }
       this.votingBarLoading = true;
       this.proposalDetail.pro_votes_yes = balanceOf(+res.data.proposalVoteTally.tally.yes);
       this.proposalDetail.pro_votes_no = balanceOf(+res.data.proposalVoteTally.tally.no);
