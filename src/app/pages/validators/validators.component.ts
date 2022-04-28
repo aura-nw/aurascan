@@ -546,14 +546,12 @@ export class ValidatorsComponent implements OnInit {
         let numberCode = res?.data?.code;
         message = res?.data?.raw_log || message;
         message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (numberCode) {
-          if (numberCode === CodeTransaction.Success) {
+          if (!!!numberCode && numberCode === CodeTransaction.Success) {
             this.getDataWallet();
             this.toastr.success(message);
           } else {
             this.toastr.error(message);
           }
-        }
       },
       (error) => {
       },
