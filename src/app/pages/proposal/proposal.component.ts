@@ -40,7 +40,7 @@ export class ProposalComponent implements OnInit {
     { matColumnDef: 'totalDeposit', headerCellDef: 'Total Deposit' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   length: number;
   pageSize = PAGE_EVENT.PAGE_SIZE;
   pageIndex = 0;
