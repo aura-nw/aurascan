@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subscription } from 'rxjs';
+import local from '../../../app/core/utils/storage/local';
 import { GAS_ESTIMATE, NUMBER_CONVERT, PAGE_SIZE_OPTIONS, STABLE_UTOKEN } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
@@ -135,8 +136,8 @@ export class ValidatorsComponent implements OnInit {
 
   loadDataTemp(): void { 
     //get data from client for wallet info
-    var retrievedObject = localStorage.getItem('dataInfoWallet');
-    var data = JSON.parse(retrievedObject);
+    let retrievedObject = localStorage.getItem('dataInfoWallet');
+    let data = JSON.parse(retrievedObject);
     if (data) {
       this.dataDelegate = JSON.parse(data?.dataDelegate);
       //check wallet is staked
@@ -352,7 +353,7 @@ export class ValidatorsComponent implements OnInit {
         //store data wallet info
         dataInforWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
         dataInforWallet['lstUndelegate'] = JSON.stringify(this.lstUndelegate);
-        localStorage.setItem('dataInfoWallet', JSON.stringify(dataInforWallet));
+        local.setItem('dataInfoWallet', dataInforWallet);
 
         setTimeout(() => {
           this.getDataWallet()
@@ -383,8 +384,9 @@ export class ValidatorsComponent implements OnInit {
     this.isExceedAmount = false;
     if (this.amountFormat > amountCheck) {
       this.isExceedAmount = true;
-    } 
-    this.isHandleStake = true;
+    } else {
+      this.isHandleStake = true;
+    }
   }
 
   resetCheck() {
