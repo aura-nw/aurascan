@@ -1,0 +1,298 @@
+<app-pagetitle title="Account Details"></app-pagetitle>
+<section class="account-detail">
+  <div class="row">
+    <div class="col-3">
+      <div class="card">
+        <div class="box-account article-1">
+          <div>
+            <div class="mb-8 qr-code">
+              <!-- <canvas id="canvas" #canvas></canvas> -->
+              <app-qr [address]="currentAddress || ''"> </app-qr>
+            </div>
+            <div>
+              <div class="title mb-2">Address</div>
+              <p class="title-small cursor-pointer mt-0 mb-1" (click)="copyMessage(currentAddress)">{{ currentAddress }}</p>
+              <p class="body txt-copied text--green" [class.show]="isCopy">copied!</p>
+            </div>
+          </div>
+          <div>
+            <p class="title-small mb-2">Total Value</p>
+            <p class="title">$ {{ tokenPrice * +currentAccountDetail?.total| number: global.formatNumber2Decimal }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="card">
+        <div class="px-6 py-6 article-1">
+          <div class="d-flex align-items-center justify-content-between mb-8">
+            <div class="d-flex align-items-center">
+              <div class="title mr-4">Assets</div>
+              <form class="aura-form single-input-field search-form">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Asset"
+                    [(ngModel)]="textSearch"
+                    (ngModelChange)="searchToken()"
+                    name="search"
+                    autocomplete="off"
+                  />
+                  <button type="submit" class="btn-search {{textSearch && textSearch?.length > 0 ? 'd-none' : ''}}" (click)="searchToken()">
+                    <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                  </button>
+                  <button type="reset" class="btn-reset {{(!textSearch || textSearch && textSearch?.length === 0) ? 'd-none' : ''}}"
+                          (click)="textSearch = ''; searchToken()">
+                    <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="d-flex align-items-center">
+              <div class="title-small mr-4">Asset Type</div>
+              <div class="aura-form asset-type">
+                <mat-select #assetTypeSelect
+                  class="list-token form-control select-input-field"
+                  panelClass="aura-optional-panel"
+                  (selectionChange)="searchToken()"
+                  [disableOptionCentering]="true"
+                  [(value)]="selected"
+                >
+                  <mat-option *ngFor="let item of assetsType" [value]="item.label">
+                    {{ item.value | translate }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!accDetailLoading">
+            <ng-container *ngIf="!searchNullData; else noValues">
+              <app-account-table
+                      *ngIf="dataSourceToken"
+                      [dataSource]="dataSourceToken"
+                      [templates]="templatesToken"
+                      [displayedColumns]="displayedColumnsToken"
+                      [pageData]="pageDataToken"
+                      [pageEventType]="pageEventType.Token"
+                      (pageEvent)="changePage($event)"
+                      [textNull]="'NO COINS'">
+              </app-account-table>
+            </ng-container>
+            <ng-template #noValues>
+              <app-table-no-data></app-table-no-data>
+            </ng-template>
+          </div>
+          <div class="mt-20" *ngIf="accDetailLoading">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row row-eq-heigth">
+    <div class="col-8">
+      <div class="card card-h-100">
+        <div class="article-2">
+          <mat-tab-group *ngIf="!accDetailLoading" class="aura-tab" mat-stretch-tabs>
+            <mat-tab label="Delegations">
+              <app-account-table
+                [dataSource]="dataSourceDelegation"
+                [templates]="templatesDelegation"
+                [displayedColumns]="displayedColumnsDelegation"
+                [pageData]="pageDataDelegation"
+                [pageEventType]="pageEventType.Delegation"
+                (pageEvent)="changePage($event)"
+              >
+              </app-account-table>
+            </mat-tab>
+            <mat-tab label="Unbondings">
+              <app-account-table
+                [dataSource]="dataSourceUnBonding"
+                [templates]="templatesUnBonding"
+                [displayedColumns]="displayedColumnsUnBonding"
+                [pageData]="pageDataUnbonding"
+                [pageEventType]="pageEventType.Unbonding"
+                (pageEvent)="changePage($event)"
+              ></app-account-table>
+            </mat-tab>
+            <mat-tab label="Redelegations">
+              <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
+                1. {{"NOTICE.REDELEGATE_WAITING" | translate}}<br>
+                2. {{"NOTICE.NUMBER_REDELEGATE" | translate}}
+              </div>
+              <app-account-table
+                [dataSource]="dataSourceReDelegation"
+                [templates]="templatesReDelegation"
+                [displayedColumns]="displayedColumnsReDelegation"
+                [pageData]="pageDataRedelegation"
+                [pageEventType]="pageEventType.Redelegation"
+                (pageEvent)="changePage($event)"
+              ></app-account-table>
+            </mat-tab>
+            <mat-tab label="Vestings">
+              <app-account-table
+                [dataSource]="dataSourceVesting"
+                [templates]="templatesVesting"
+                [displayedColumns]="displayedColumnsVesting"
+                [pageData]="pageDataVesting"
+                [pageEventType]="pageEventType.Vestings"
+                (pageEvent)="changePage($event)"
+              ></app-account-table>
+            </mat-tab>
+          </mat-tab-group>
+          <div class="mt-20" *ngIf="accDetailLoading">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card card-h-100">
+        <div class="article-2 py-6 px-6 d-flex flex-column justify-content-between">
+          <ng-container *ngIf="!chartLoading">
+            <div id="walletChart" class="chart-token">
+              <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
+                <apx-chart
+                        [series]="chartOptions.series"
+                        [chart]="chartOptions.chart"
+                        [labels]="chartOptions.labels"
+                        [fill]="chartOptions.fill"
+                        [dataLabels]="chartOptions.dataLabels"
+                        [responsive]="chartOptions.responsive"
+                        [plotOptions]="chartOptions.plotOptions"
+                        [legend]="chartOptions.legend"
+                        [colors]="chartOptions.colors"
+                        [tooltip]="chartOptions.tooltip"
+                        [stroke]="chartOptions.stroke"
+                >
+                </apx-chart>
+              </ng-container>
+              <ng-template #chartNoValue>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="box-chart">
+                    <div></div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+            <div>
+              <div class="d-flex justify-content-between align-items-center body mb-5">
+                <span class="text--green">{{ global.stableToken }}</span>
+                <span>{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
+              </div>
+              <ng-container *ngFor="let item of chartCustomOptions; let last = last">
+                <div class="d-flex justify-content-between body chart-legend-item">
+                  <div class="d-flex">
+                    <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
+                    <span>{{ item.name }}</span>
+                  </div>
+                  <span>{{ item.amount | number: global.formatNumberToken }}</span>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <div *ngIf="chartLoading" class="mt-14">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="sub-text px-6 py-6">Transactions</div>
+        <div class="card-body px-6 pt-0">
+          <ngx-simplebar *ngIf="dataSource && dataSource.data">
+            <ng-container *ngIf="length > 0; else noValues">
+              <div class="table-responsive aura-table-contain">
+                <table mat-table [dataSource]="dataSource" class="aura-table">
+                  <ng-container *ngFor="let template of templates; index as i">
+                    <ng-container [matColumnDef]="template.matColumnDef">
+                      <th mat-header-cell *matHeaderCellDef
+                          class="{{(template.headerCellDef === 'Time' || template.headerCellDef === 'Result' || template.headerCellDef === 'Tx Hash') ? 'col-per-15' : 'col-per-13' }}">
+                        <div [innerHTML]="template.headerCellDef | translate"></div>
+                      </th>
+
+                      <td mat-cell *matCellDef="let data">
+                        <div>
+                          <ng-container [ngSwitch]="template.matColumnDef">
+                            <div *ngSwitchCase="'timestamp'">
+                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                            </div>
+                            <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'type'">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'status'">
+                              <div [ngSwitch]="data[template.matColumnDef]">
+                                <div *ngSwitchCase="'Success'" class="text--primary">
+                                  {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'Fail'" class="text--danger">
+                                  {{ data[template.matColumnDef] }}
+                                </div>
+                                <div *ngSwitchCase="'Pending'" class="text--warning">
+                                  {{ data[template.matColumnDef] }}
+                                </div>
+                              </div>
+                            </div>
+                            <div *ngSwitchCase="'fee'">
+                              {{ data[template.matColumnDef] }}
+                              <span class="text--green">{{ global.stableToken }}</span>
+                            </div>
+                            <div *ngSwitchCase="'amount'">
+                              <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                                {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                                <span class="text--green">{{ global.stableToken }}</span>
+                              </ng-container>
+                              <ng-template #displayNonNumber>
+                                <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                                <span
+                                  *ngIf="data[template.matColumnDef] !== 0"
+                                  class="text--primary cursor-pointer"
+                                  [routerLink]="['/transaction', data['tx_hash']]"
+                                >
+                                  More
+                              </span>
+                              </ng-template>
+                            </div>
+                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                          </ng-container>
+                        </div>
+                      </td>
+                    </ng-container>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell g-no-data pt-8" colspan="9999">
+                      <app-loading-sprint></app-loading-sprint>
+                    </td>
+                  </tr>
+                </table>
+                <app-paginator [length]="pageData.length" [pageSize]="pageSize" 
+                               (paginator)="paginatorEmit($event)"
+                               (pageEvent)="pageEvent($event)">
+                </app-paginator>
+              </div>
+            </ng-container>
+            <ng-template #noValues>
+              <app-table-no-data></app-table-no-data>
+            </ng-template>
+          </ngx-simplebar>
+          <div *ngIf="dataSource && !dataSource.data" class="">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

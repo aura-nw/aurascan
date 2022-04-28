@@ -6,7 +6,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "minia": {
+        "aura": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -24,7 +24,15 @@
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "allowedCommonJsDependencies": [
-                            "rxjs", "core-js", "chart.js", "chartist", "qrcode", "@cosmjs/stargate", "ngx-lightbox"
+                            "rxjs", 
+                            "core-js",
+                            "chart.js",
+                            "chartist",
+                            "qrcode",
+                            "@cosmjs/stargate",
+                            "ngx-lightbox",
+                            "simplebar",
+                            "simplebar-angular"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
@@ -90,10 +98,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                            "browserTarget": "minia:build:production"
+                            "browserTarget": "aura:build:production"
                         },
                         "development": {
-                            "browserTarget": "minia:build:development"
+                            "browserTarget": "aura:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -101,7 +109,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "minia:build"
+                        "browserTarget": "aura:build"
                     }
                 },
                 "test": {
@@ -127,5 +135,5 @@
             }
         }
     },
-    "defaultProject": "minia"
+    "defaultProject": "aura"
 }

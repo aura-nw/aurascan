@@ -19,16 +19,19 @@ export class DepositorsComponent implements OnInit {
   @Input() proposalId: number;
   voteDataList: IDepositor[] = [];
   _voteList: IDepositor[] = [];
+  loading = true;
 
   constructor(private proposalService: ProposalService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this.proposalService.getDepositors(this.proposalId).subscribe((res) => {
+      this.loading = true;
       this.voteDataList = [...res.data.result];
       this.voteDataList.forEach((item) => {
         item.amount = balanceOf(item.amount);
         item.created_at = this.datePipe.transform(item.created_at, DATEFORMAT.DATETIME_UTC);
       });
+      this.loading = false;
     });
   }
 }

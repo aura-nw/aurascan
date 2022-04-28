@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
+import { PAGE_EVENT } from '../../core/constants/common.constant';
 
 @Component({
   selector: 'app-blocks',
@@ -21,8 +22,9 @@ export class BlocksComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length = 0;
-  pageSize = 20;
+
+  length: number;
+  pageSize = PAGE_EVENT.PAGE_SIZE;
   pageIndex = 0;
   loading = true;
   // bread crumb items

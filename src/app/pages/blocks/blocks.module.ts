@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BlockDetailComponent } from './block-detail/block-detail.component';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { BlockService } from '../../../app/core/services/block.service';
-import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 
 @NgModule({
   declarations: [

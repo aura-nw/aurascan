@@ -18,7 +18,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
-import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { MaterialModule } from '../../app.module';
 import { MappingErrorService } from '../../core/services/mapping-error.service';
 import { ProposalService } from '../../core/services/proposal.service';

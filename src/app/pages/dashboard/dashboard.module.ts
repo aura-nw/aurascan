@@ -13,7 +13,6 @@ import { allIcons } from 'angular-feather/icons';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { LightboxModule } from 'ngx-lightbox';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MaterialModule } from '../../../app/app.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -21,7 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-data.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +40,6 @@ import { TableNoDataModule } from '../../../app/shared/table-no-data/table-no-da
     NgbDropdownModule,
     NgbNavModule,
     LightboxModule,
-    LeafletModule,
     MaterialModule,
     NgxMaskModule,
     CommonPipeModule,

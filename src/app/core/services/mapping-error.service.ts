@@ -28,7 +28,8 @@ export class MappingErrorService extends CommonService {
       message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS');
     } else if (message.indexOf('too many unbonding') >= 0) {
       message = this.translate.instant('NOTICE.ERROR_UNDELEGATE_TIME');
-    } else {
+    } 
+    else if (code && code !== CodeTransaction.Success) {
       const arr = ['claim reward', 'delegate', 'redelegate', 'undelegate'];
       const contains = arr.some(element => {
         if (message.includes(element)) {

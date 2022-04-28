@@ -17,11 +17,11 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals`);
   }
 
-  getProposalDetail(proposalId): Observable<any> {
+  getProposalDetail(proposalId: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
   }
 
-  getVotes(proposalId, voter): Observable<any> {
+  getVotes(proposalId: string | number, voter: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/votes/${voter}`);
   }
 
@@ -29,7 +29,7 @@ export class ProposalService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/proposals/votes/get-by-validator`, data);
   }
 
-  getDepositors(proposalId): Observable<any> {
+  getDepositors(proposalId: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
   }
 
@@ -37,7 +37,7 @@ export class ProposalService extends CommonService {
     return this.http.post<IResponsesTemplates<IListVotesRes>>(`${this.apiUrl}/proposals/votes/get-by-option`, payload);
   }
 
-  getProposalTally(proposalId): Observable<any> {
+  getProposalTally(proposalId: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/tally`);
   }
 

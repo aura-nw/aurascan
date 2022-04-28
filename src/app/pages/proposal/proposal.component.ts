@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
-import { DATEFORMAT } from '../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -42,7 +42,7 @@ export class ProposalComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
   length: number;
-  pageSize = 20;
+  pageSize = PAGE_EVENT.PAGE_SIZE;
   pageIndex = 0;
   lastedList: IProposal[] = [];
 
@@ -58,7 +58,7 @@ export class ProposalComponent implements OnInit {
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
-    private dlgServ: DialogService 
+    private dlgService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -84,25 +84,12 @@ export class ProposalComponent implements OnInit {
           if (expiredTime < 0 && pro.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
             pro.pro_status = 'PROPOSAL_STATUS_REJECTED';
           }
-
-          this.proposalService.getProposalTally(pro.pro_id).subscribe((res) => {
-            if (!res.data.proposalVoteTally.tally) {
-              return;
-            }
-            const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
-
-            pro.pro_votes_yes = (+yes * 100) / totalVote;
-            pro.pro_votes_no = (+no * 100) / totalVote;
-            pro.pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
-            pro.pro_votes_abstain = (+abstain * 100) / totalVote;
-          });
+          this.getVoteResult(pro.pro_id, index);
         }
 
         pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
         pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
-
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
         if (index < 4) {
@@ -186,7 +173,7 @@ export class ProposalComponent implements OnInit {
     return resObj;
   }
 
-  openVoteDialog(item: IProposal) {
+  openVoteDialog(item: IProposal, index: number) {
     const id = item.pro_id;
     const title = item.pro_title;
     const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
@@ -213,34 +200,10 @@ export class ProposalComponent implements OnInit {
             voteValue: warning
               ? null
               : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+            idx: index,
           });
         });
       }
-
-      /* 
-        this.walletService.connectKeplr(this.chainId, (account) => {
-        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
-          let warning: MESSAGE_WARNING;
-
-          const { created_at } = data.result ? data.result : { created_at: null };
-
-          warning = created_at
-            ? new Date(created_at) < new Date(item.pro_voting_start_time)
-              ? null
-              : MESSAGE_WARNING.LATE
-            : MESSAGE_WARNING.NOT_PARTICIPATE;
-
-          this.openDialog({
-            id,
-            title,
-            warning,
-            voteValue: warning
-              ? null
-              : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
-          });
-        });
-      });
-      */
     } else {
       this.getList();
     }
@@ -254,12 +217,12 @@ export class ProposalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.voteValue = result;
-        this.getList();
-        this.getVotedProposal();
+        this.getVoteResult(data.id, data.idx);
+        this.proposalVotes[data.idx].vote = result.keyVote;
       }
     });
   }
+
   parsingStatus(sts) {
     return (
       this.voteConstant.find((s) => {
@@ -273,9 +236,24 @@ export class ProposalComponent implements OnInit {
   }
 
   dlgServOpen(): void {
-    this.dlgServ.showDialog({
+    this.dlgService.showDialog({
       content: 'Please set up override Keplr in settings of Coin98 wallet',
       title: '',
-    })
+    });
+  }
+
+  getVoteResult(pro_id, index) {
+    this.proposalService.getProposalTally(pro_id).subscribe((res) => {
+      if (!res.data.proposalVoteTally.tally) {
+        return;
+      }
+      const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
+      let totalVote = +yes + +no + +no_with_veto + +abstain;
+
+      this.lastedList[index].pro_votes_yes = (+yes * 100) / totalVote;
+      this.lastedList[index].pro_votes_no = (+no * 100) / totalVote;
+      this.lastedList[index].pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
+      this.lastedList[index].pro_votes_abstain = (+abstain * 100) / totalVote;
+    });
   }
 }
