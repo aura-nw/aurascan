@@ -109,8 +109,6 @@ export class ProposalComponent implements OnInit {
       })
         .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
         .subscribe((res) => {
-          console.log(res);
-          
           this.proposalVotes = res.map((i, idx) => {
             return {
               proId: this.proposalVotes[idx]?.proId || null,
