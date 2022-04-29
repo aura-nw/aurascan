@@ -31,9 +31,10 @@ export function getAmount(arrayMsg, type, rawRog = '') {
     amount = itemMessage?.initial_deposit[0]?.amount || 0;
   } else if (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg.length === 1) {
     //check error with rawlog
-    if (typeof rawRog !== 'string') {
+    try {
       const jsonData = JSON.parse(rawRog);
       amount = jsonData[0].events[0].attributes[1].value.replace(STABLE_UTOKEN,'');
+    } catch {
     }
   }
 
