@@ -284,7 +284,7 @@
                             <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                               {{ data[template.matColumnDef] }}
                             </div>
-                            <div *ngSwitchCase="'fee'"
+                            <div *ngSwitchCase="'amount'"
                               [ngStyle]="{ color: data['isStakeMode'] ? '#37cc6e' : '#ff2745' }">
                               {{ data['isStakeMode'] ? '+' : '-' }}
                               {{ data[template.matColumnDef] | number: global.formatNumberToken }}
