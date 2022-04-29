@@ -44,4 +44,9 @@ export class ProposalService extends CommonService {
   getStakeInfo(delegatorAddress: string): Observable<IResponsesTemplates<IVotingInfo>> {
     return this.http.get<IResponsesTemplates<IVotingInfo>>(`${this.apiUrl}/proposals/delegations/${delegatorAddress}`);
   }
+
+  getProposalDetailFromNode(proposalId: string | number):  Observable<any> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
+  }
 }

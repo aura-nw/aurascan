@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartComponent } from 'ng-apexcharts';
+import local from '../../../../app/core/utils/storage/local';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
@@ -193,9 +194,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       }
     });
 
-    var retrievedObject = localStorage.getItem('accountDetail');
+    let retrievedObject = localStorage.getItem('accountDetail');
     if (retrievedObject) {
-      var data = JSON.parse(retrievedObject);
+      let data = JSON.parse(retrievedObject);
       let dataAccount = JSON.parse(data?.dataAccount);
       if (dataAccount && dataAccount.acc_address === this.currentAddress) {
         this.accDetailLoading = false;
@@ -369,7 +370,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         let accountDetail = {};
         accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
         accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
-        localStorage.setItem('accountDetail', JSON.stringify(accountDetail));
+        local.setItem('accountDetail', accountDetail);
       }
     });
   }
