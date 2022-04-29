@@ -85,14 +85,13 @@ export class ProposalComponent implements OnInit {
         pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
         if (index < 4) {
-          if(pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+          if (pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
             this.getVoteResult(pro.pro_id, index);
           }
-            this.proposalVotes.push({
-              proId: +pro.pro_id,
-              vote: null,
-            });
-          }
+          this.proposalVotes.push({
+            proId: +pro.pro_id,
+            vote: null,
+          });
         }
       });
       this.getVotedProposal();
