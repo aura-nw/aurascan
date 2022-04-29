@@ -87,12 +87,12 @@ export class ProposalComponent implements OnInit {
         if (index < 4) {
           if (pro.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
             this.getVoteResult(pro.pro_id, index);
+            const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
+            if (expiredTime < 0) {
+              this.getProposalDetailFromNode(pro.pro_id, index);
+            }
           }
-          const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
-          
-          if (expiredTime < 0) {
-            this.getProposalDetailFromNode(pro.pro_id, index);
-          }
+
           this.proposalVotes.push({
             proId: +pro.pro_id,
             vote: null,

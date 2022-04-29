@@ -43,14 +43,6 @@ export class SummaryInfoComponent implements OnInit {
   getDetail(): void {
     this.proposalService.getProposalDetail(this.proposalId).subscribe((res: ResponseDto) => {
       this.proposalDetail = res.data;
-
-      const expiredTime = new Date(this.proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
-      if (expiredTime < 0) {
-        this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res : ResponseDto)=>{
-          this.proposalDetail.pro_status = res.data.status;
-        })
-      }
-
       this.proposalDetail.pro_voting_start_time = this.datePipe.transform(
         this.proposalDetail.pro_voting_start_time,
         DATEFORMAT.DATETIME_UTC,
@@ -73,6 +65,12 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
       this.getVotedProposal();
       if (this.proposalDetail.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+        const expiredTime = new Date(this.proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
+        if (expiredTime < 0) {
+          this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res: ResponseDto) => {
+            this.proposalDetail.pro_status = res.data.status;
+          });
+        }
         this.getVoteResult();
       } else {
         this.proposalDetail.pro_vote_yes_bar =
