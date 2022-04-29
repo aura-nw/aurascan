@@ -514,8 +514,9 @@ export class ValidatorsComponent implements OnInit {
 
   getMaxToken(type): void{
     if (type === this.dialogMode.Delegate) {
-      const amountCheck = Number(this.dataDelegate.availableToken) - (Number(GAS_ESTIMATE) / NUMBER_CONVERT);
-      if (amountCheck < 0) {
+      //check amout for high fee
+      const amountCheck = (Number(this.dataDelegate.availableToken) - ((Number(GAS_ESTIMATE)*ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT)).toFixed(6);
+      if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
         this.errorExceedAmount = true;
       }
