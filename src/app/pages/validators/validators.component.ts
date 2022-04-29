@@ -310,11 +310,13 @@ export class ValidatorsComponent implements OnInit {
           this.isDisableClaim = true;
         }
 
+        dataInforWallet['arrayDelegate'] = JSON.stringify({});
         if (res.dataListDelegator) {
           this.listStakingValidator = res.dataListDelegator?.data?.delegations;
           if (this.currentValidatorDialog) {
             this.dataDelegate.validatorDetail = this.listStakingValidator?.find((f) => f.validator_address === this.currentValidatorDialog);
           }
+          this.lengthWallet = 0;
           if (res?.dataListDelegator?.data?.delegations.length > 0) {
             res?.dataListDelegator?.data?.delegations.forEach((f) => {
               f.amount_staked = f.amount_staked / NUMBER_CONVERT;

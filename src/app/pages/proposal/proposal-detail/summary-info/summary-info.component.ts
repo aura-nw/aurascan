@@ -65,6 +65,12 @@ export class SummaryInfoComponent implements OnInit {
       this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
       this.getVotedProposal();
       if (this.proposalDetail.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+        const expiredTime = new Date(this.proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
+        if (expiredTime < 0) {
+          this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res: ResponseDto) => {
+            this.proposalDetail.pro_status = res.data.status;
+          });
+        }
         this.getVoteResult();
       } else {
         this.proposalDetail.pro_vote_yes_bar =
@@ -128,7 +134,7 @@ export class SummaryInfoComponent implements OnInit {
         });
       }
     } else {
-      this.getProposalDetailFromNode(id);
+      this.getDetail();
     }
   }
 
@@ -164,14 +170,6 @@ export class SummaryInfoComponent implements OnInit {
     } else {
       this.proposalVotes = null;
     }
-  }
-
-  getProposalDetailFromNode(pro_id) {
-    this.proposalService.getProposalDetailFromNode(pro_id).subscribe((res) => {
-      if (res) {
-        this.proposalDetail.pro_status = res.data.status;
-      }
-    });
   }
 
   getVoteResult() {
