@@ -54,7 +54,6 @@ export const ChainsInfo: { [chainId: string]: any } = {
     walletUrlForStaking: 'https://aura.network',
   },
   ['aura-devnet']: {
-    features: ['no-legacy-stdTx'],
     chainId: 'aura-devnet',
     chainName: 'aura devnet',
     rpc: 'http://34.199.79.132:26657',
@@ -94,14 +93,16 @@ export const ChainsInfo: { [chainId: string]: any } = {
     },
     coinType: 118,
     gasPriceStep: {
-      low: 1,
-      average: 2.5,
-      high: 4,
+      low: 0.0001,
+      average: 0.00025,
+      high: 0.0004,
     },
-    walletUrlForStaking: 'https://stake.aura.network',
+    features: ['no-legacy-stdTx'],
+    walletUrlForStaking: "https://explorer.dev.aura.network/validators",
+    logo: "https://i.imgur.com/zi0mTYb.png",
+    explorer: "https://explorer.dev.aura.network/"
   },
   ['serenity-testnet-001']: {
-    features: ['no-legacy-stdTx'],
     chainId: "serenity-testnet-001",
     chainName: "Aura Serenity TestNet",
     rpc: "https://rpc.serenity.aura.network",
@@ -141,7 +142,10 @@ export const ChainsInfo: { [chainId: string]: any } = {
       average: 0.0025,
       high: 0.004
     },
-    walletUrlForStaking: "https://serenity.aurascan.io/validators"
+    features: ['no-legacy-stdTx'],
+    walletUrlForStaking: "https://serenity.aurascan.io/validators",
+    logo: "https://i.imgur.com/zi0mTYb.png",
+    explorer: "https://serenity.aurascan.io/"
   }
 };
 
