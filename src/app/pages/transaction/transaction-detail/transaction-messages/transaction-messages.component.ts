@@ -72,7 +72,7 @@ export class TransactionMessagesComponent implements OnInit {
               this.validatorName = validatorSrcAddress?.title || '';
 
               const validatorDstAddress = this.listValidator.find(
-                (f) => f.operator_address === messages[0]?.validator_src_address,
+                (f) => f.operator_address === messages[0]?.validator_dst_address, 
               );
               this.validatorNameDes = validatorDstAddress?.title || '';
             } else if (messages?.length > 0) {
