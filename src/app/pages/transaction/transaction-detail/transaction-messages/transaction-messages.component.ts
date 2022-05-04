@@ -60,7 +60,7 @@ export class TransactionMessagesComponent implements OnInit {
   getListValidator(): void {
     this.validatorService.validators().subscribe(
       (res) => {
-        if (res?.data) {
+        if (res?.data?.length > 0) {
           this.listValidator = res.data;
           if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
             this.validatorName =

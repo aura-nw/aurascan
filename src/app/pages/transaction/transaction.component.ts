@@ -54,7 +54,7 @@ export class TransactionComponent implements OnInit {
   getList(): void {
     this.transactionService.txs(this.pageSize, this.pageIndex * this.pageSize).subscribe((res: ResponseDto) => {
       this.loading = true;
-      if (res.data) {
+      if (res?.data?.length > 0) {
         res.data.forEach((trans) => {
           //get amount of transaction
           trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
@@ -68,7 +68,7 @@ export class TransactionComponent implements OnInit {
         });
 
         this.dataSource = new MatTableDataSource(res.data);
-        this.length = res.meta.count;
+        this.length = res?.meta?.count;
       }
       this.loading = false;
     });

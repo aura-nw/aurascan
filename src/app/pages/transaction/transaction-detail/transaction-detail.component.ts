@@ -53,12 +53,12 @@ export class TransactionDetailComponent implements OnInit {
       (res: ResponseDto) => {
         if (res?.data) {
           res.data.status = StatusTransaction.Fail;
-          if (res.data.code === CodeTransaction.Success) {
+          if (res?.data?.code === CodeTransaction.Success) {
             res.data.status = StatusTransaction.Success;
           }
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res.data.type.toLowerCase());
+          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res?.data?.type.toLowerCase());
           this.transactionDetailType = typeTrans?.value;
-          this.transaction = res.data;
+          this.transaction = res?.data;
 
           if (this.transaction.raw_log && this.transaction.code !== CodeTransaction.Success) {
             this.errorMessage = this.transaction.raw_log;
