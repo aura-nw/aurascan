@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   GAS_ESTIMATE,
   NUMBER_CONVERT,
@@ -32,7 +34,7 @@ import { createSignBroadcast } from '../../core/utils/signing/transaction-manage
   styleUrls: ['./validators.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ValidatorsComponent implements OnInit {
+export class ValidatorsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank' },
@@ -95,6 +97,9 @@ export class ValidatorsComponent implements OnInit {
   errorExceedAmount = false;
   isHandleStake = false;
 
+  destroyed$ = new Subject();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
+  
   constructor(
     private validatorService: ValidatorService,
     public globals: Globals,
@@ -106,6 +111,7 @@ export class ValidatorsComponent implements OnInit {
     private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,
     private router: Router,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
@@ -126,6 +132,9 @@ export class ValidatorsComponent implements OnInit {
    * ngOnDestroy
    */
   ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+
     if (this.timerUnSub) {
       this.timerUnSub.unsubscribe();
     }

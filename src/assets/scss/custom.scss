@@ -1,5 +1,6 @@
 // regular style toast
 @import "~ngx-toastr/toastr";
+
 // Custom Dashboard Css
 .activity-wid .activity-list:last-child::before {
     display: none;
@@ -8,6 +9,7 @@
 // owl-carousel
 @import "~ngx-owl-carousel-o/lib/styles/scss/owl.carousel";
 @import "~ngx-owl-carousel-o/lib/styles/scss/owl.theme.default";
+
 .carousel-indicators li {
     box-sizing: content-box;
     -ms-flex: 0 1 auto;
@@ -31,6 +33,7 @@
 */
 
 @import "~ngx-lightbox/lightbox.css";
+
 // alert
 .alert-dismissible {
     .btn-close {
@@ -55,6 +58,7 @@
         height: 1em;
         z-index: 2;
         color: $btn-close-color;
+
         span {
             display: none;
         }
@@ -121,6 +125,7 @@
 
 // Select2
 @import "~@ng-select/ng-select/themes/default.theme.css";
+
 // .multi_default .ng-value-icon {
 //   display: none !important;
 // }
@@ -164,6 +169,7 @@
 */
 
 @import "~dropzone/dist/min/dropzone.min.css";
+
 // Custome css
 .border_none {
     border: none;
@@ -171,16 +177,19 @@
 
 // dark style
 body[data-layout-mode="dark"] {
+
     // Calender
     .fc-theme-standard .fc-scrollgrid,
     .fc-theme-standard td,
     .fc-theme-standard th {
         border: 1px solid $gray-dark-300;
     }
+
     .fc .fc-daygrid-day-number,
     .fc .fc-col-header-cell-cushion {
         color: $white;
     }
+
     // Accordion
     .accordion {
         .card-header {
@@ -188,40 +197,49 @@ body[data-layout-mode="dark"] {
             background-color: $secondary;
         }
     }
+
     // Advance Form
     .ng-select .ng-select-container {
         background-color: lighten($gray-dark-200, 2%);
         color: $gray-dark-500;
         border-color: $gray-dark-300;
-        .ng-value-container .ng-input > input {
+
+        .ng-value-container .ng-input>input {
             color: $gray-dark-500;
         }
     }
+
     .ng-dropdown-panel {
         background-color: lighten($gray-dark-200, 2%) !important;
         border-color: $gray-dark-300;
+
         .ng-dropdown-panel-items {
             .ng-option {
                 background-color: lighten($gray-dark-200, 2%) !important;
                 color: $gray-dark-500;
+
                 &.ng-option-marked {
                     background-color: lighten($gray-dark-200, 4%) !important;
                     color: $gray-dark-600;
                 }
             }
+
             .ng-optgroup {
                 color: rgba($white, 0.4);
             }
         }
     }
+
     .switch.checked {
         border-color: #000;
     }
+
     // File Upload
     .dropzone {
         background-color: #333836 !important;
         border-color: $gray-dark-300 !important;
     }
+
     .dropzone .dz-message {
         background-color: #333836 !important;
     }
@@ -233,6 +251,7 @@ body[data-layout-mode="dark"] {
         tr {
             th {
                 position: relative;
+
                 &:before {
                     content: "\F0143";
                     position: absolute;
@@ -241,6 +260,7 @@ body[data-layout-mode="dark"] {
                     font: normal normal normal 24px/1 "Material Design Icons";
                     opacity: 0.3;
                 }
+
                 &:after {
                     content: "\F0140";
                     position: absolute;
@@ -250,11 +270,13 @@ body[data-layout-mode="dark"] {
                     font: normal normal normal 24px/1 "Material Design Icons";
                 }
             }
+
             .asc {
                 &:before {
                     opacity: 1;
                 }
             }
+
             .desc {
                 &:after {
                     opacity: 1;
@@ -316,26 +338,32 @@ body {
 .disabled-pointer {
     pointer-events: none;
 }
+
 // vote bar (similar process bar)
 
 .vote-bar {
     width: 100%;
+
     ul {
         padding: 0;
         margin: 0;
         height: 100%;
         list-style: none;
         display: flex;
+
         li {
             &.primary {
                 background-color: #5ee6d0;
             }
+
             &.danger {
                 background-color: #e65e5e;
             }
+
             &.info {
                 background-color: #5e84e6;
             }
+
             &.secondary {
                 background-color: #777e91;
             }
@@ -378,21 +406,23 @@ body {
     padding: 8px;
     border: 1px var(--aura-light-gray);
     transition: all 1s;
+
     .tooltip {
         &-title {
             margin-bottom: 12px;
             font-weight: 500;
         }
+
         &-amount {
             font-weight: 400;
         }
     }
 }
 
-.text-clamp{
+.text-clamp {
     display: -webkit-inline-box;
     overflow: hidden;
-    -webkit-line-clamp: 1;   
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     word-break: break-all;
 }
@@ -414,5 +444,35 @@ body {
 
     &-string {
         color: #CE9178;
+    }
+}
+
+.table-mobile {
+    &__item {
+        background: #38383D;
+        border-radius: 8px;
+        padding: 0 12px;
+        margin: 8px 0px;
+
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            border-bottom: 1px solid #777E91;
+            padding: 12px 0px;
+
+            &__title {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+            &__action {
+
+            }
+        }
+
+        .table-body {
+            padding: 12px 0px;
+        }
     }
 }
