@@ -30,7 +30,7 @@
   <div class="card-body">
     <div class="card__info">
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Proposer</div>
+        <div class="col-12 col-md-2 body-bold">Proposer</div>
         <div class="col-12 col-md-10 body">
           <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">{{
             proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
@@ -38,41 +38,41 @@
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Initial Deposit</div>
+        <div class="col-12 col-md-2 body-bold">Initial Deposit</div>
         <div class="col-12 col-md-10 body">
           {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
           <span class="text--primary">{{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Total Deposit</div>
+        <div class="col-12 col-md-2 body-bold">Total Deposit</div>
         <div class="col-12 col-md-10 body">
           {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
           <span class="text--primary"> {{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Voting Start</div>
+        <div class="col-12 col-md-2 body-bold">Voting Start</div>
         <div class="col-12 col-md-10 body">{{ proposalDetail.pro_voting_start_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Voting End</div>
+        <div class="col-12 col-md-2 body-bold">Voting End</div>
         <div class="col-12 col-md-10 body">{{ proposalDetail.pro_voting_end_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Type</div>
+        <div class="col-12 col-md-2 body-bold">Type</div>
         <div class="col-12 col-md-10 body">{{ proposalDetail.pro_type }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Submit Time</div>
+        <div class="col-12 col-md-2 body-bold">Submit Time</div>
         <div class="col-12 col-md-10 body">{{ proposalDetail.pro_submit_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Deposit End Time</div>
+        <div class="col-12 col-md-2 body-bold">Deposit End Time</div>
         <div class="col-12 col-md-10 body">{{ proposalDetail.pro_deposit_end_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Details</div>
+        <div class="col-12 col-md-2 body-bold">Details</div>
         <div class="col-12 col-md-10 body">{{ proposalDetail.pro_description }}</div>
       </div>
     </div>
@@ -80,7 +80,7 @@
   <div class="card-footer">
     <div class="top-border proposal__summary-total" *ngIf="!votingBarLoading">
       <div class="row mb-3">
-        <div class="col-12 col-md-2 body">Total:</div>
+        <div class="col-12 col-md-2 body-bold">Total:</div>
         <div class="col-12 col-md-10 body">
           {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
           <span class="text--primary">{{ global.stableToken }}</span>
