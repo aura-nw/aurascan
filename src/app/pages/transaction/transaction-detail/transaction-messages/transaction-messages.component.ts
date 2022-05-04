@@ -1,19 +1,19 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../../app/core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../../../app/core/constants/transaction.constant';
-import { getAmount, Globals } from '../../../../../app/global/global';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
+import { getAmount, Globals } from '../../../../global/global';
 import { DatePipe } from '@angular/common';
-import { DATEFORMAT, NUMBER_CONVERT, STABLE_UTOKEN } from '../../../../../app/core/constants/common.constant';
-import { ValidatorService } from '../../../../../app/core/services/validator.service';
+import { DATEFORMAT, NUMBER_CONVERT, STABLE_UTOKEN } from '../../../../core/constants/common.constant';
+import { ValidatorService } from '../../../../core/services/validator.service';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 
 @Component({
-  selector: 'app-transferred-detail',
-  templateUrl: './transferred-detail.component.html',
-  styleUrls: ['./transferred-detail.component.scss'],
+  selector: 'app-transaction-messages',
+  templateUrl: './transaction-messages.component.html',
+  styleUrls: ['./transaction-messages.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TransferredDetailComponent implements OnInit {
+export class TransactionMessagesComponent implements OnInit {
   @Input() transactionDetail: any;
 
   typeTransaction = TYPE_TRANSACTION;
@@ -60,26 +60,28 @@ export class TransferredDetailComponent implements OnInit {
   getListValidator(): void {
     this.validatorService.validators().subscribe(
       (res) => {
-        this.listValidator = res.data;
-        if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
-          this.validatorName =
-            this.listValidator.find(
-              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address,
-            ).title || '';
-          this.validatorNameDes =
-            this.listValidator.find(
-              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address,
-            ).title || '';
-        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
-          let validMap = this.listValidator.find(
-            (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_address,
-          );
-          this.validatorName = validMap.title || '';
-        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) {
-          this.transactionDetail?.messages.forEach((message) => {
-            message.validatorName =
-              this.listValidator.find((f) => f.operator_address === message?.validator_address).title || '';
-          });
+        if (res.data?.length > 0) {
+          this.listValidator = res.data;
+          if (this.transactionDetail) {
+            const { type, messages } = this.transactionDetail;
+
+            if (type === TRANSACTION_TYPE_ENUM.Redelegate) {
+              const validatorSrcAddress = this.listValidator.find(
+                (f) => f.operator_address === messages[0]?.validator_src_address,
+              );
+              this.validatorName = validatorSrcAddress?.title || '';
+
+              const validatorDstAddress = this.listValidator.find(
+                (f) => f.operator_address === messages[0]?.validator_dst_address, 
+              );
+              this.validatorNameDes = validatorDstAddress?.title || '';
+            } else if (messages?.length > 0) {
+              messages.forEach((message) => {
+                message.validatorName =
+                  this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
+              });
+            }
+          }
         }
       },
       (_) => {},

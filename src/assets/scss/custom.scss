@@ -402,3 +402,17 @@ body {
     width: 24px;
     cursor: pointer;
 }
+
+.json {
+    &-key {
+        color: #569CD6;
+    }
+
+    &-value {
+        color: #AAC19E;
+    }
+
+    &-string {
+        color: #CE9178;
+    }
+}
