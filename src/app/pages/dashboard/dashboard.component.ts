@@ -135,7 +135,6 @@ export class DashboardComponent implements OnInit {
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
-      if (res?.data?.length > 0) {
         // const data0 = res[0].data.map((i) => i.count);
         const data1 = res[1].data.map((i) => i.count);
         let categories = res[0].data.map((i) => i.timestamp);
@@ -168,7 +167,6 @@ export class DashboardComponent implements OnInit {
           },
         };
         // }
-      }
     });
   }
 
