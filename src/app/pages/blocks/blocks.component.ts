@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { CommonService } from '../../../app/core/services/common.service';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
-import { PAGE_EVENT } from '../../core/constants/common.constant';
+import { CommonService } from '../../../app/core/services/common.service';
 
 @Component({
   selector: 'app-blocks',
@@ -27,8 +26,7 @@ export class BlocksComponent implements OnInit {
   pageSize = 20;
   pageIndex = 0;
   loading = true;
-  // bread crumb items
-  constructor(private router: Router, private blockService: BlockService, public commonService: CommonService,) {}
+  constructor(private router: Router, private blockService: BlockService, public commonService: CommonService) {}
 
   ngOnInit(): void {
     this.getList();
@@ -42,15 +40,16 @@ export class BlocksComponent implements OnInit {
   getList(): void {
     this.blockService.blocks(this.pageSize, this.pageIndex * this.pageSize).subscribe((res) => {
       this.loading = true;
-      res.data.forEach((block) => {
-        block.block_hash_format = block.block_hash.replace(
-          block.block_hash.substring(6, block.block_hash.length - 6),
-          '...',
-        );
-      });
-
-      this.dataSource = new MatTableDataSource(res.data);
-      this.length = res.meta.count;
+      if (res?.data?.length > 0) {
+        res.data.forEach((block) => {
+          block.block_hash_format = block.block_hash.replace(
+            block.block_hash.substring(6, block.block_hash.length - 6),
+            '...',
+          );
+        });
+        this.dataSource = new MatTableDataSource(res.data);
+        this.length = res.meta.count;
+      }
       this.loading = false;
     });
   }
