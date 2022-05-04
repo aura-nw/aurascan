@@ -51,26 +51,28 @@ export class TransactionDetailComponent implements OnInit {
   getDetail(): void {
     this.transactionService.txsDetail(this.txHash).subscribe(
       (res: ResponseDto) => {
-        res.data.status = StatusTransaction.Fail;
-        if (res.data.code === CodeTransaction.Success) {
-          res.data.status = StatusTransaction.Success;
-        }
-        const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res.data.type.toLowerCase());
-        this.transactionDetailType = typeTrans?.value;
-        this.transaction = res.data;
+        if (res?.data) {
+          res.data.status = StatusTransaction.Fail;
+          if (res.data.code === CodeTransaction.Success) {
+            res.data.status = StatusTransaction.Success;
+          }
+          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res.data.type.toLowerCase());
+          this.transactionDetailType = typeTrans?.value;
+          this.transaction = res.data;
 
-        if (this.transaction.raw_log && this.transaction.code !== CodeTransaction.Success) {
-          this.errorMessage = this.transaction.raw_log;
-          this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
-        }
+          if (this.transaction.raw_log && this.transaction.code !== CodeTransaction.Success) {
+            this.errorMessage = this.transaction.raw_log;
+            this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
+          }
 
-        //convert json for display raw data
-        this.jsonStr = JSON.stringify(this.transaction.tx, null, 2).replace(/\\/g, '');
-        this.dateFormat = this.datePipe.transform(this.transaction?.timestamp, DATEFORMAT.DATETIME_UTC);
-        //check exit amount of transaction
-        if (this.transaction.messages && this.transaction.messages[0]?.amount) {
-          let amount = this.transaction.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
-          this.amount = this.transaction.messages?.length === 1 ? amount : 'More';
+          //convert json for display raw data
+          this.jsonStr = JSON.stringify(this.transaction.tx, null, 2).replace(/\\/g, '');
+          this.dateFormat = this.datePipe.transform(this.transaction?.timestamp, DATEFORMAT.DATETIME_UTC);
+          //check exit amount of transaction
+          if (this.transaction.messages && this.transaction.messages[0]?.amount) {
+            let amount = this.transaction.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
+            this.amount = this.transaction.messages?.length === 1 ? amount : 'More';
+          }
         }
       },
       (_) => {

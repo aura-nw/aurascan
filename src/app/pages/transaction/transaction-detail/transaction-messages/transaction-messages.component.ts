@@ -60,26 +60,28 @@ export class TransactionMessagesComponent implements OnInit {
   getListValidator(): void {
     this.validatorService.validators().subscribe(
       (res) => {
-        this.listValidator = res.data;
-        if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
-          this.validatorName =
-            this.listValidator.find(
-              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address,
-            ).title || '';
-          this.validatorNameDes =
-            this.listValidator.find(
-              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address,
-            ).title || '';
-        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
-          let validMap = this.listValidator.find(
-            (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_address,
-          );
-          this.validatorName = validMap.title || '';
-        } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) {
-          this.transactionDetail?.messages.forEach((message) => {
-            message.validatorName =
-              this.listValidator.find((f) => f.operator_address === message?.validator_address).title || '';
-          });
+        if (res?.data) {
+          this.listValidator = res.data;
+          if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
+            this.validatorName =
+              this.listValidator.find(
+                (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address,
+              ).title || '';
+            this.validatorNameDes =
+              this.listValidator.find(
+                (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address,
+              ).title || '';
+          } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
+            let validMap = this.listValidator.find(
+              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_address,
+            );
+            this.validatorName = validMap.title || '';
+          } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) {
+            this.transactionDetail?.messages.forEach((message) => {
+              message.validatorName =
+                this.listValidator.find((f) => f.operator_address === message?.validator_address).title || '';
+            });
+          }
         }
       },
       (_) => {},
