@@ -75,7 +75,7 @@
   </div>
 
   <div class="card text--white" *ngIf="transaction?.messages">
-    <app-transferred-detail [transactionDetail]="transaction"> </app-transferred-detail>
+    <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
   </div>
 
   <div class="card text--white" *ngIf="transaction?.read_set">

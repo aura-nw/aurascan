@@ -1,19 +1,19 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../../app/core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../../../app/core/constants/transaction.constant';
-import { getAmount, Globals } from '../../../../../app/global/global';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
+import { getAmount, Globals } from '../../../../global/global';
 import { DatePipe } from '@angular/common';
-import { DATEFORMAT, NUMBER_CONVERT, STABLE_UTOKEN } from '../../../../../app/core/constants/common.constant';
-import { ValidatorService } from '../../../../../app/core/services/validator.service';
+import { DATEFORMAT, NUMBER_CONVERT, STABLE_UTOKEN } from '../../../../core/constants/common.constant';
+import { ValidatorService } from '../../../../core/services/validator.service';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 
 @Component({
-  selector: 'app-transferred-detail',
-  templateUrl: './transferred-detail.component.html',
-  styleUrls: ['./transferred-detail.component.scss'],
+  selector: 'app-transaction-messages',
+  templateUrl: './transaction-messages.component.html',
+  styleUrls: ['./transaction-messages.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TransferredDetailComponent implements OnInit {
+export class TransactionMessagesComponent implements OnInit {
   @Input() transactionDetail: any;
 
   typeTransaction = TYPE_TRANSACTION;

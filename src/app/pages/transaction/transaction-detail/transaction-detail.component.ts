@@ -1,26 +1,26 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '../../../../app/core/services/common.service';
-import { DATEFORMAT, NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
+import { CommonService } from '../../../core/services/common.service';
+import { DATEFORMAT, NUMBER_CONVERT } from '../../../core/constants/common.constant';
+import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
   TypeTransaction,
-} from '../../../../app/core/constants/transaction.enum';
-import { ResponseDto } from '../../../../app/core/models/common.model';
-import { TransactionService } from '../../../../app/core/services/transaction.service';
-import { Globals } from '../../../../app/global/global';
-import { MappingErrorService } from '../../../../app/core/services/mapping-error.service';
+} from '../../../core/constants/transaction.enum';
+import { ResponseDto } from '../../../core/models/common.model';
+import { TransactionService } from '../../../core/services/transaction.service';
+import { Globals } from '../../../global/global';
+import { MappingErrorService } from '../../../core/services/mapping-error.service';
 
 @Component({
-  selector: 'app-txs-detail',
-  templateUrl: './txs-detail.component.html',
-  styleUrls: ['./txs-detail.component.scss'],
+  selector: 'app-transaction-detail',
+  templateUrl: './transaction-detail.component.html',
+  styleUrls: ['./transaction-detail.component.scss'],
 })
-export class TxsDetailComponent implements OnInit {
+export class TransactionDetailComponent implements OnInit {
   txHash = '';
   transaction = null;
   codeTransaction = CodeTransaction;
