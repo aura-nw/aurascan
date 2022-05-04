@@ -58,7 +58,7 @@ export class ValidatorsDetailComponent implements OnInit {
   templatesPower: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'tx_hash_format', headerCellDef: 'TxHash' },
-    { matColumnDef: 'fee', headerCellDef: 'Amount' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
@@ -150,7 +150,7 @@ export class ValidatorsDetailComponent implements OnInit {
         this.lengthPowerLoading = true;
         res.data.forEach((power) => {
           power.isStakeMode = false;
-          if (power.type === 'delegate') {
+          if (power.type === 'delegate' || (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress)) {
             power.isStakeMode = true;
           }
           power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
