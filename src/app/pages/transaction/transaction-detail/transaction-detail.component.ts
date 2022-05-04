@@ -66,7 +66,7 @@ export class TransactionDetailComponent implements OnInit {
           }
 
           //convert json for display raw data
-          this.jsonStr = JSON.stringify(this.transaction.tx, null, 2).replace(/\\/g, '');
+          // this.jsonStr = JSON.stringify(this.transaction.tx, null, 2).replace(/\\/g, '');
           this.dateFormat = this.datePipe.transform(this.transaction?.timestamp, DATEFORMAT.DATETIME_UTC);
           //check exit amount of transaction
           if (this.transaction.messages && this.transaction.messages[0]?.amount) {
