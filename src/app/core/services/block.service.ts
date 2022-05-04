@@ -40,10 +40,10 @@ export class BlockService extends CommonService {
   getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
     // return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    let character = this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
+    //let character = this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
     let characterHomeWorld = this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
 
-    return forkJoin([character, characterHomeWorld]);
+    return characterHomeWorld;
   }
 
   getLastBlock(validator_address): Observable<any> {
