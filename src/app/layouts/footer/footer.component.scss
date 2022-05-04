@@ -66,6 +66,8 @@ footer {
       top: 0;
       left: 0;
       object-fit: cover;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
     }
     &:before {
       content: "";
@@ -117,7 +119,6 @@ footer {
   }
   .bottom-bar {
     border-top: 1px solid var(--aura-neutrals-3);
-    border-bottom: 1px solid var(--aura-neutrals-3);
     .caption-2 {
       font-size: 12px;
       line-height: 20px;
@@ -137,6 +138,21 @@ footer {
     transition: color 0.35s ease-in-out;
     &:hover {
       color: var(--aura-white);
+    }
+  }
+  .menu-bar {
+    background-color: #1F1F22;
+    .menu-item {
+      padding: 12px;
+      .menu-link {
+        color: var(--aura-light-gray);
+        &.active {
+          color: var(--aura-white);
+        }
+      }
+      i.icon {
+        font-size: 2.4rem;
+      }
     }
   }
 }

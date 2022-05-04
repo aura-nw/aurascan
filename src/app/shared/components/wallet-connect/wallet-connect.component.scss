@@ -19,8 +19,10 @@
     }
   }
   .account-button {
-    width: 192px;
     white-space: nowrap;
+    @media (min-width: 992px) {
+      width: 192px;
+    }
   }
   .walletMenu {
     .button__title {
