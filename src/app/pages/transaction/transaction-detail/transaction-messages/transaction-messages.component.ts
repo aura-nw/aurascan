@@ -60,27 +60,27 @@ export class TransactionMessagesComponent implements OnInit {
   getListValidator(): void {
     this.validatorService.validators().subscribe(
       (res) => {
-        if (res?.data?.length > 0) {
+        if (res.data?.length > 0) {
           this.listValidator = res.data;
-          if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate) {
-            this.validatorName =
-              this.listValidator.find(
-                (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_src_address,
-              ).title || '';
-            this.validatorNameDes =
-              this.listValidator.find(
-                (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_dst_address,
-              ).title || '';
-          } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length === 1) {
-            let validMap = this.listValidator.find(
-              (f) => f.operator_address === this.transactionDetail?.messages[0]?.validator_address,
-            );
-            this.validatorName = validMap.title || '';
-          } else if (this.transactionDetail?.messages && this.transactionDetail?.messages.length > 1) {
-            this.transactionDetail?.messages.forEach((message) => {
-              message.validatorName =
-                this.listValidator.find((f) => f.operator_address === message?.validator_address).title || '';
-            });
+          if (this.transactionDetail) {
+            const { type, messages } = this.transactionDetail;
+
+            if (type === TRANSACTION_TYPE_ENUM.Redelegate) {
+              const validatorSrcAddress = this.listValidator.find(
+                (f) => f.operator_address === messages[0]?.validator_src_address,
+              );
+              this.validatorName = validatorSrcAddress?.title || '';
+
+              const validatorDstAddress = this.listValidator.find(
+                (f) => f.operator_address === messages[0]?.validator_src_address,
+              );
+              this.validatorNameDes = validatorDstAddress?.title || '';
+            } else if (messages?.length > 0) {
+              messages.forEach((message) => {
+                message.validatorName =
+                  this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';
+              });
+            }
           }
         }
       },
