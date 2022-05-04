@@ -54,8 +54,12 @@ a {
 //   }
 // }
 .container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm {
-  padding-right: var(--bs-gutter-x, 30px) !important;
-  padding-left: var(--bs-gutter-x, 30px) !important;
+  padding-right: var(--bs-gutter-x, 6px) !important;
+  padding-left: var(--bs-gutter-x, 6px) !important;
+  @media (min-width: 992px) {
+    padding-right: var(--bs-gutter-x, 30px) !important;
+    padding-left: var(--bs-gutter-x, 30px) !important;
+  }
 }
 
 .apexcharts-tooltip-series-group.apexcharts-active,

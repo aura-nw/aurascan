@@ -16,8 +16,11 @@
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
-    height: $header-height;
+    height: 72px;
     padding: 0 40px;
+    @media (min-width: 992px) {
+        height: $header-height;
+    }
     .dropdown .show {
         &.header-item {
             background-color: $gray-100;
@@ -255,7 +258,10 @@ body[data-layout="horizontal"] {
     }
     .page-content {
         margin-top: $header-height;
-        padding: 116px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+        padding: 138px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+        @media (min-width: 992px) {
+            padding: 116px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+        }
     }
     .navbar-header {
         @media (min-width: 992px) {
