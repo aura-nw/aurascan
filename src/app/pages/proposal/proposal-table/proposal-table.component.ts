@@ -45,7 +45,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
     {
       matColumnDef: 'validator_name',
       headerCellDef: 'Validator',
