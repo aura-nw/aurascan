@@ -1,5 +1,5 @@
 <section class="lasted-list d-none d-lg-block" *ngIf="lastedList && lastedList.length > 0">
-  <app-pagetitle title="Proposals"></app-pagetitle>
+  <app-pagetitle title="Votings"></app-pagetitle>
   <div class="row row-eq-height">
     <div class="col-6 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
       <div class="card mb-0 h-100">
@@ -126,7 +126,7 @@
 <section class="all-list table-responsive">
   <div class="card" *ngIf="dataSource?.data?.length > 0">
     <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
-      <div class="sub-text text--white">Proposals</div>
+      <div class="sub-text text--white">Votings</div>
       <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
     </div>
     <div class="card-body pt-0">

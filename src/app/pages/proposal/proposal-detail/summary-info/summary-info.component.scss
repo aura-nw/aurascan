@@ -77,18 +77,19 @@
           height: 32px;
           display: flex;
           align-items: center;
-
           position: relative;
-
-          font-family: "SF Pro Display";
+          font-family: 'SF Pro Display';
           font-size: 20px;
           line-height: 24px;
           letter-spacing: 0.02em;
+          .item-percent {
+            font-size: 16px;
+          }
         }
 
         &[data-style] .item-box::before {
           position: absolute;
-          content: "";
+          content: '';
           width: 32px;
           height: 32px;
           left: -40px;
@@ -96,16 +97,16 @@
           border-radius: 100rem;
         }
 
-        &[data-style="primary"] .item-box::before {
+        &[data-style='primary'] .item-box::before {
           background-color: #5ee6d0;
         }
-        &[data-style="danger"] .item-box::before {
+        &[data-style='danger'] .item-box::before {
           background-color: #e65e5e;
         }
-        &[data-style="info"] .item-box::before {
+        &[data-style='info'] .item-box::before {
           background-color: #5e84e6;
         }
-        &[data-style="secondary"] .item-box::before {
+        &[data-style='secondary'] .item-box::before {
           background-color: #777e91;
         }
 
