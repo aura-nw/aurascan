@@ -416,3 +416,21 @@ body {
         color: #CE9178;
     }
 }
+
+.box-rank {
+    color: #5EE6D0;
+    font-size: 16px;
+    font-weight: 600;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #5EE6D0;
+
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
