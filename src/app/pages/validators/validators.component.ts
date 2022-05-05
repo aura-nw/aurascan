@@ -37,9 +37,9 @@ import { createSignBroadcast } from '../../core/utils/signing/transaction-manage
 export class ValidatorsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
-    { matColumnDef: 'title', headerCellDef: 'Validator' },
-    { matColumnDef: 'power', headerCellDef: 'Voting Power' },
+    { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly : true },
+    { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly : true },
+    { matColumnDef: 'power', headerCellDef: 'Voting Power', desktopOnly : true },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
@@ -239,7 +239,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   searchValidator(): void {
     this.searchNullData = false;
     let data;
-    if (this.textSearch.length > 0 || this.typeValidator !== STATUS_VALIDATOR.Active) {
+    if (this.textSearch?.length > 0 || this.typeValidator !== STATUS_VALIDATOR.Active) {
       data = this.dataSourceBk.data.filter(
         (f) => f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
