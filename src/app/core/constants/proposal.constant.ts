@@ -11,7 +11,7 @@ export const PROPOSAL_STATUS = [
     },
     {
         key: 'PROPOSAL_STATUS_VOTING_PERIOD',
-        value: 'voting',
+        value: 'voting period',
         class: 'text--info'
     },
     {

@@ -66,6 +66,24 @@
       text-decoration: none;
     }
   }
+  &__title-mobile {
+    font-size: 16px;
+    line-height: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    a {
+      color: var(--aura-white);
+      text-decoration: none;
+    }
+  }
+  .proposal-status-mobile{
+    border-radius: 8px;
+    text-transform: capitalize;
+    padding: 11.5px 12px;
+  }
+  .border-bottom-mobile{
+    border-bottom: 1px solid #38383d;
+  }
 }
 .vote-bar {
   width: 60%;
