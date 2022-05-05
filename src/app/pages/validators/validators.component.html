@@ -286,8 +286,8 @@
                         <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'rank'" class="text-left">
-                          {{ data[template.matColumnDef] }}
+                        <div *ngSwitchCase="'rank'" class="text-left box-rank">
+                          <span>{{ data[template.matColumnDef] }}</span>
                         </div>
                         <div *ngSwitchCase="'up_time'">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
