@@ -19,6 +19,7 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
 import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-delegate.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
     SimplebarAngularModule,
     TableNoDataModule,
     DetailPopupDelegateModule,
-    PaginatorModule
+    PaginatorModule,
+    LayoutModule
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService]
 })
