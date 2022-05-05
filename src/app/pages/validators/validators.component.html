@@ -149,10 +149,10 @@
     </div>
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-      <div class="d-flex justify-content-between card-header card-header-dark-mob title-small text--white">
+      <div class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
         Undelegating
       </div>
-      <div class="card-body">
+      <div class="card-body" *ngIf="!breakpoint.value.matches">
         <ng-container *ngFor="let validator of lstUndelegate">
           <div class="row col-12 mb-3 undelegate-item">
             <div class="col-3 body title-name">
@@ -168,6 +168,27 @@
             </div>
           </div>
         </ng-container>
+      </div>
+
+      <div class="card-body" *ngIf="breakpoint.value.matches">
+        <div class="table-mobile">
+          <ng-container *ngFor="let validator of lstUndelegate">
+            <div class="table-mobile__item undelegate-item">
+              <div class="body title-name">
+                <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
+                  {{ validator.validator_name }}</a
+                >
+              </div>
+              <div class="undelegate-amount text--white small-body-mob">
+                <span class="">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
+                <span>
+                  {{ validator.balance | number: globals.formatNumberToken }}
+                  <span class="text--green">{{ globals.stableToken }}</span>
+                </span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </ng-container>
@@ -319,7 +340,6 @@
           <div class="table-mobile">
             <ng-container *ngFor="let validator of dataSource.data; index as i">
               <div class="table-mobile__item small-body body-mob">
-                <!-- {{ validator | json }} -->
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
                     <div class="title body-mob text--green">

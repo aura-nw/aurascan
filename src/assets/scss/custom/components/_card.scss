@@ -24,7 +24,7 @@
 }
 
 .card-header {
-    padding: var(--spacer-6);
+    padding: var(--spacer-4);
     background-color: var(--aura-dark-gray);
     border-radius: 12px 12px 0 0 !important;
     border-bottom: none !important;
@@ -35,7 +35,7 @@
 }
 
 .card-body {
-    padding: var(--spacer-6) !important;
+    padding: var(--spacer-4) !important;
 }
 
 .card-footer {
@@ -44,6 +44,7 @@
 }
 
 body[data-layout-mode="dark"] {
+
     .card,
     .card-footer,
     .card-header.card-header-dark,
@@ -59,18 +60,18 @@ body[data-layout-mode="dark"] {
 }
 
 
-@media (max-width: 992px) {
+@media (min-width: 992px) {
     .card-header {
-        padding: var(--spacer-4);
+        padding: var(--spacer-6);
     }
 
     .card-body {
-        padding: var(--spacer-4) !important;
+        padding: var(--spacer-6) !important;
     }
 
     body[data-layout-mode="dark"] {
-        .card-header.card-header-dark-mob {
-            background-color: #20262B;
+        .card-header.card-header-gray-des {
+            background-color: var(--aura-dark-gray);
         }
     }
 }
