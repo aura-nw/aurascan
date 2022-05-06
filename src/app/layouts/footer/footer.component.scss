@@ -26,6 +26,10 @@ footer {
 
     &__logo {
       display: block;
+      width: 184px;
+      @media (min-width: 992px) {
+        width: 180px;
+      }
     }
   }
 

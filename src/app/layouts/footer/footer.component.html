@@ -4,11 +4,7 @@
       <div class="col-12 col-lg-2">
         <div class="footer__menu pt-10 pt-md-0">
           <a routerLink="" class="footer__logo aura-logo ml-2 ml-md-0">
-            <img
-              srcset="assets/images/logo/auraMainLogo-1x.png 1x, assets/images/logo/auraMainLogo-2x.png 2x"
-              src="assets/images/logo/auraMainLogo-1x.png"
-              alt="Aura Logo"
-            />
+            <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
           </a>
         </div>
       </div>
@@ -124,7 +120,7 @@
           <a class="menu-link text-center"
              [routerLink]="item.link" routerLinkActive="active" [class.active]="router.url === '/' && item.link === '/dashboard'">
             <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-            <div class="d-block mt-1">{{ item.label | translate}}</div>
+            <div class="small-text d-block mt-1">{{ item.label | translate}}</div>
           </a>
         </li>
       </ng-container>
