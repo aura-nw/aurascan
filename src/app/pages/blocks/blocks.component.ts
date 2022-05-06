@@ -21,6 +21,7 @@ export class BlocksComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
+  dataBlock: any[];
 
   length: number;
   pageSize = 20;
@@ -48,6 +49,8 @@ export class BlocksComponent implements OnInit {
           );
         });
         this.dataSource = new MatTableDataSource(res.data);
+        this.dataBlock = res.data;
+        console.log(this.dataBlock)
         this.length = res.meta.count;
       }
       this.loading = false;

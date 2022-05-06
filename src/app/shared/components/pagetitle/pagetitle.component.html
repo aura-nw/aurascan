@@ -3,7 +3,7 @@
   <div class="col-12">
     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
       <h1 class="title fw-bold mb-0 text--white title-medium">{{ title }}</h1>
-      <div class="page-title-right">
+      <div class="page-title-right d-none d-lg-block">
         <ol class="breadcrumb m-0" *ngIf="!displayInfo">
           <ng-container *ngFor="let item of breadcrumbItems">
             <li class="breadcrumb-item" [ngClass]="{ active: item.active == true }">{{ item.label }}</li>
