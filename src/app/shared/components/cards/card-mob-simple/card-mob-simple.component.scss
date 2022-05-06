@@ -6,6 +6,11 @@
   & > * {
     color: var(--aura-white);
   }
+  .title {
+    &-sm { font-weight: 400;}
+    &-md { font-weight: 500;}
+    &-lg { font-weight: 600;}
+  }
   .label__status {
     background: rgba(94, 230, 208, 0.2);
     border-radius: 4px;
