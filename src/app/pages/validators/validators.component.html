@@ -27,8 +27,9 @@
                 type="button"
                 (click)="handleClaim()"
                 [disabled]="isDisableClaim || isHandleStake">
-                Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
-                <span class="ml-1">{{ globals.stableToken }}</span>
+                <span class="text-gradient">Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
+                  <span class="ml-1">{{ globals.stableToken }}</span>
+                </span>
               </button>
             </div>
           </div>
@@ -86,10 +87,10 @@
                         <div *ngSwitchCase="'action'" class="py-4">
                           <button
                             type="button"
-                            class="button button-outline ml-auto"
+                            class="button button-outline button-outline__in-card ml-auto"
                             [disabled]="clicked"
                             (click)="viewPopupDetail(modalManage, data['validator_address'], dialogMode.Manage)">
-                            Manage
+                            <span class="text-gradient">Manage</span>
                           </button>
                         </div>
                         <div *ngSwitchDefault>
@@ -120,16 +121,18 @@
             <ng-container *ngFor="let validator of listStakingValidator; index as i">
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
-                  <span class="text--green cursor-pointer table-header__title">
-                    {{ validator.validator_name }}
-                  </span>
+                  <div class="cursor-pointer table-header__title">
+                    <div class="title body-mob text--green">
+                      <span class=""> {{ validator.validator_name }} </span>
+                    </div>
+                  </div>
                   <div class="table-header__action">
                     <button
                       type="button"
-                      class="button button-outline"
+                      class="button button-outline button-outline__in-card"
                       [disabled]="clicked"
                       (click)="viewPopupDetail(modalManage, validator['validator_address'], dialogMode.Manage)">
-                      Manage
+                      <span class="text-gradient">Manage</span>
                     </button>
                   </div>
                 </div>
@@ -149,7 +152,8 @@
     </div>
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-      <div class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
+      <div
+        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
         Undelegating
       </div>
       <div class="card-body" *ngIf="!breakpoint.value.matches">
@@ -313,11 +317,11 @@
                         <div *ngSwitchCase="'action'">
                           <button
                             type="button"
-                            class="button button-outline ml-auto"
+                            class="button button-outline button-outline__in-card ml-auto"
                             [disabled]="clicked"
                             *ngIf="data['status'] === statusValidator.Active"
                             (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
-                            Delegate
+                            <span class="text-gradient">Delegate</span>
                           </button>
                         </div>
                         <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -350,17 +354,17 @@
                     </div>
                     <div class="sub-title small-body-mob">
                       <span class="mr-2 text--white">{{ validator.power | number }}</span>
-                      <span class="percent-vote">{{ validator['percent_power'] + '%' }}</span>
+                      <span class="percent-vote text--light-gray">{{ validator['percent_power'] + '%' }}</span>
                     </div>
                   </div>
                   <div class="table-header__action">
                     <button
                       type="button"
-                      class="button button-outline ml-auto"
+                      class="button button-outline button-outline__in-card ml-auto"
                       [disabled]="clicked"
                       *ngIf="validator['status'] === statusValidator.Active"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      Delegate
+                      <span class="text-gradient">Delegate</span>
                     </button>
                   </div>
                 </div>
@@ -496,12 +500,12 @@
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
             <div class="dropdown aura-dropdown mr-4">
               <button
-                class="button button-outline d-flex align-items-center fw-semibold"
+                class="button button-outline button-outline__in-card d-flex align-items-center fw-semibold"
                 type="button"
                 id="delegateAction"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span>Select Action</span>
+                <span class="text-gradient">Select Action</span>
                 <img
                   class="flex-shrink-0"
                   src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
@@ -523,8 +527,8 @@
               </ul>
             </div>
 
-            <button type="button" class="button body button-outline" (click)="changeTypePopup(dialogMode.Delegate)">
-              Delegate
+            <button type="button" class="button body button-outline button-outline__in-card" (click)="changeTypePopup(dialogMode.Delegate)">
+              <span class="text-gradient">Delegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-end">
@@ -533,10 +537,10 @@
             </button>
             <button
               type="button"
-              class="button body button-outline"
+              class="button body button-outline button-outline__in-card"
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              Undelegate
+              <span class="text-gradient">Undelegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-end">
@@ -556,10 +560,10 @@
             </button>
             <button
               type="button"
-              class="button body button-outline"
+              class="button body button-outline button-outline__in-card"
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              Delegate
+              <span class="text-gradient">Delegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-end">
@@ -568,10 +572,10 @@
             </button>
             <button
               type="button"
-              class="button body button-outline"
+              class="button body button-outline button-outline__in-card"
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              Redelegate
+              <span class="text-gradient">Redelegate</span>
             </button>
           </div>
         </ng-container>

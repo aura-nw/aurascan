@@ -464,12 +464,11 @@ body {
 
             &__title {
 
-                // display: flex;
-                // justify-content: center;
-                // align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 .title {
                     display: flex;
-                    // justify-content: center;
                     align-items: center;
                 }
 

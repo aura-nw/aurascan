@@ -136,7 +136,10 @@
     li.dropdown-item {
       font-size: 1.6rem;
       line-height: 2.4rem;
-      padding: var(--spacer-3) var(--spacer-6);
+      padding: 10px;
+      @media (min-width: 992px) {
+        padding: var(--spacer-3) var(--spacer-6);
+      }
       background-color: #1C1C1F !important;
       & > * {
         color: var(--aura-white);

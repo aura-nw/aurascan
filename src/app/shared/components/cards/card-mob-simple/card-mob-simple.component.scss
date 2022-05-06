@@ -1,0 +1,21 @@
+.card-mob-simple {
+  background-color: var(--aura-dark-gray);
+  border-radius: var(--spacer-2);
+  padding: var(--spacer-3);
+  margin-bottom: var(--spacer-2);
+  & > * {
+    color: var(--aura-white);
+  }
+  .label__status {
+    background: rgba(94, 230, 208, 0.2);
+    border-radius: 4px;
+    padding: 8px 16px;
+    @media (max-width: 414px) {
+      padding: 8px;
+    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--aura-green);
+  }
+}

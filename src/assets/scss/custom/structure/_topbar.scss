@@ -17,8 +17,9 @@
     align-items: center;
     margin: 0 auto;
     height: 72px;
-    padding: 0 40px;
+    padding: 0 24px;
     @media (min-width: 992px) {
+        padding: 0 40px;
         height: $header-height;
     }
     .dropdown .show {
@@ -36,8 +37,12 @@
 }
 
 .logo {
-    width: 180px;
-    height: 60px;
+    width: 148px;
+    height: 50px;
+    @media (min-width: 992px) {
+        width: 180px;
+        height: 60px;
+    }
     line-height: 69px;
     color: inherit !important;
     .logo-sm {
@@ -234,18 +239,12 @@ body[data-topbar="dark"] {
 @media (max-width: 600px) {
     .navbar-header {
         .dropdown {
-            position: static;
+            //position: static;
             .dropdown-menu {
-                left: 10px !important;
-                right: 10px !important;
+                left: 6px !important;
+                right: 6px !important;
             }
         }
-    }
-}
-
-@media (max-width: 380px) {
-    .navbar-brand-box {
-        display: none;
     }
 }
 
@@ -258,7 +257,7 @@ body[data-layout="horizontal"] {
     }
     .page-content {
         margin-top: $header-height;
-        padding: 138px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+        padding: 138px calc(#{$grid-gutter-width} / 2) 0 calc(#{$grid-gutter-width} / 2);
         @media (min-width: 992px) {
             padding: 116px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
         }

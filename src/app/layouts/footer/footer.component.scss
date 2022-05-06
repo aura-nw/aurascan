@@ -26,6 +26,10 @@ footer {
 
     &__logo {
       display: block;
+      width: 184px;
+      @media (min-width: 992px) {
+        width: 180px;
+      }
     }
   }
 
@@ -119,6 +123,7 @@ footer {
   }
   .bottom-bar {
     border-top: 1px solid var(--aura-neutrals-3);
+    padding-bottom: 82px;
     .caption-2 {
       font-size: 12px;
       line-height: 20px;
@@ -141,9 +146,13 @@ footer {
     }
   }
   .menu-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color: #1F1F22;
     .menu-item {
-      padding: 12px;
+      padding: 12px 4px;
       .menu-link {
         color: var(--aura-light-gray);
         &.active {
@@ -152,6 +161,12 @@ footer {
       }
       i.icon {
         font-size: 2.4rem;
+      }
+      @media (min-width: 414px) {
+        padding: 12px;
+        i.icon {
+          font-size: 2rem;
+        }
       }
     }
   }

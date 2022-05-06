@@ -9,8 +9,8 @@
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet"
     >
-      <span class="d-lg-none">Connect</span>
-      <span class="d-none d-lg-block">CONNECT WALLET</span>
+      <span class="d-lg-none text-gradient">Connect</span>
+      <span class="d-none d-lg-block text-gradient">CONNECT WALLET</span>
     </button>
 
     <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
@@ -21,7 +21,7 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title">{{
+        <span class="button__title text-gradient">{{
           ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name
         }}</span>
         <img
