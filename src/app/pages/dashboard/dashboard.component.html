@@ -5,10 +5,10 @@
       <div class="card card-h-100">
         <div class="card-body">
           <div class="align-items-center mb-3">
-            <div class="d-flex flex-wrap align-items-center mb-6">
+            <div class="d-flex flex-wrap align-items-center mb-lg-6">
               <h5 class="title-small text--white">Transactions</h5>
               <div class="ms-auto">
-                <div>
+                <div class="d-none d-lg-block">
                   <button
                     type="button"
                     class="button button-primary body mr-2"
@@ -51,6 +51,37 @@
                   [dataLabels]="chartOptions.dataLabels">
                 </apx-chart>
               </div>
+            </div>
+
+            <div class="d-lg-none text-center">
+              <button
+                      type="button"
+                      class="button button-primary body mr-6"
+                      [class.active]="chartRange === '60m'"
+                      (click)="updateBlockAndTxs('60m')">
+                60m
+              </button>
+              <button
+                      type="button"
+                      class="button button-primary body mr-6"
+                      [class.active]="chartRange === '24h'"
+                      (click)="updateBlockAndTxs('24h')">
+                24h
+              </button>
+              <button
+                      type="button"
+                      class="button button-primary body mr-6"
+                      [class.active]="chartRange === '30d'"
+                      (click)="updateBlockAndTxs('30d')">
+                30d
+              </button>
+              <button
+                      type="button"
+                      class="button button-primary body"
+                      [class.active]="chartRange === '12M'"
+                      (click)="updateBlockAndTxs('12M')">
+                12M
+              </button>
             </div>
           </div>
         </div>

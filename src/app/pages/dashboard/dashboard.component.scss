@@ -1,6 +1,9 @@
 .button {
     &-primary {
-        padding: 8px 20px;
+        padding: var(--spacer-2) var(--spacer-3);
+        @media (min-width: 992px) {
+            padding: 8px 20px;
+        }
     }
     &-outline {
         padding: 8px 24px;
@@ -14,6 +17,9 @@
 :host::ng-deep {
     apx-chart {
         .apexcharts-toolbar {
+            @media (max-width: 992px) {
+                top: -33px !important;
+            }
             .apexcharts-zoomin-icon,
             .apexcharts-zoomout-icon,
             .apexcharts-menu-icon {

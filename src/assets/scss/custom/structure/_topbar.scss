@@ -17,8 +17,9 @@
     align-items: center;
     margin: 0 auto;
     height: 72px;
-    padding: 0 40px;
+    padding: 0 24px;
     @media (min-width: 992px) {
+        padding: 0 40px;
         height: $header-height;
     }
     .dropdown .show {
@@ -234,18 +235,12 @@ body[data-topbar="dark"] {
 @media (max-width: 600px) {
     .navbar-header {
         .dropdown {
-            position: static;
+            //position: static;
             .dropdown-menu {
-                left: 10px !important;
-                right: 10px !important;
+                left: 6px !important;
+                right: 6px !important;
             }
         }
-    }
-}
-
-@media (max-width: 380px) {
-    .navbar-brand-box {
-        display: none;
     }
 }
 
