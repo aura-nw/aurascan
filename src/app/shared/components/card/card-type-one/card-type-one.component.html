@@ -1,0 +1,30 @@
+<ng-container *ngFor="let item of data">
+  <div class="row box-mob-table justify-content-between mb-3">
+    <div class="">
+      <div class="text--green txt-trans body-mob mb-2">{{ item?.tx_hash_format }}</div>
+      Amount<br />
+      Time
+    </div>
+    <div class="text-right">
+      <div class="d-flex justify-content-end">
+        <span class="label-trans">{{ item.type }}</span>
+      </div>
+      <ng-container *ngIf="item?.amount > 0; else displayNonNumber">
+        {{ item?.amount | number: global.formatNumberToken }}
+        <span class="text--green">{{ global.stableToken }}</span>
+      </ng-container>
+      <ng-template #displayNonNumber>
+        <span *ngIf="item?.amount === 0"> - </span>
+        <span
+          *ngIf="item?.amount !== 0"
+          class="text--primary cursor-pointer"
+          [routerLink]="['/transaction', item['tx_hash']]"
+        >
+          More
+      </span>
+      </ng-template>
+      <br>
+      {{ commonService.getDateValue(item?.timestamp, false)[1] }}
+    </div>
+  </div>
+</ng-container>

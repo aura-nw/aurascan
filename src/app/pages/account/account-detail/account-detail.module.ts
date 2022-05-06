@@ -16,6 +16,7 @@ import { SharedModule } from "../../../shared/shared.module";
 import { AccountDetailRoutingModule } from './account-detail-routing.module';
 import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountDetailComponent } from './account-detail.component';
+import { CardTypeOneModule } from '../../../../app/shared/components/card/card-type-one/card-type-one.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AccountDetailComponent } from './account-detail.component';
     AccountDetailTableModule,
     TableNoDataModule,
     PaginatorModule,
-    QrModule
+    QrModule,
+    CardTypeOneModule
   ],
   providers: [TransactionService, AccountService]
 })
