@@ -120,9 +120,11 @@
             <ng-container *ngFor="let validator of listStakingValidator; index as i">
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
-                  <span class="text--green cursor-pointer table-header__title">
-                    {{ validator.validator_name }}
-                  </span>
+                  <div class="cursor-pointer table-header__title">
+                    <div class="title body-mob text--green">
+                      <span class=""> {{ validator.validator_name }} </span>
+                    </div>
+                  </div>
                   <div class="table-header__action">
                     <button
                       type="button"
@@ -149,7 +151,8 @@
     </div>
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-      <div class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
+      <div
+        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
         Undelegating
       </div>
       <div class="card-body" *ngIf="!breakpoint.value.matches">
@@ -286,8 +289,8 @@
                         <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'rank'" class="text-left">
-                          {{ data[template.matColumnDef] }}
+                        <div *ngSwitchCase="'rank'" class="text-left box-rank">
+                          <span>{{ data[template.matColumnDef] }}</span>
                         </div>
                         <div *ngSwitchCase="'up_time'">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
@@ -350,7 +353,7 @@
                     </div>
                     <div class="sub-title small-body-mob">
                       <span class="mr-2 text--white">{{ validator.power | number }}</span>
-                      <span class="percent-vote">{{ validator['percent_power'] + '%' }}</span>
+                      <span class="percent-vote text--light-gray">{{ validator['percent_power'] + '%' }}</span>
                     </div>
                   </div>
                   <div class="table-header__action">
