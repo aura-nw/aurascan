@@ -79,6 +79,9 @@ h5,
   .title-mob {
     @include mono-font-size(3.2, 4, -0.01, "SFProDisplay");
   }
+  .title-medium-mob {
+    @include mono-font-size(2.6, 3.2, -0.01, "SFProDisplay");
+  }
   .title-small-mob {
     @include mono-font-size(2.4, 3.2, -0.01, "SFProDisplay");
   }
