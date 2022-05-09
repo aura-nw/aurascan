@@ -27,9 +27,9 @@
     </div>
     <div class="card-header bg-transparent border-bottom" *ngIf="breakpoint.value.matches">
       <div class="d-flex justify-content-between mb-3">
-        <div class="col-3 card__title">#{{ proposalId }}</div>
+        <div class="col-3 card__title-mobile">#{{ proposalId }}</div>
         <div class="col-9 justify-content-end card__status flex-shrink-0">
-          <div class="message" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
+          <!-- <div class="message" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div> -->
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
@@ -135,7 +135,7 @@
               [matTooltipPosition]="'above'"></li>
           </ul>
         </div>
-        <div class="vote-legend-mobile">
+        <div class="vote-legend-mobile" *ngIf="breakpoint.value.matches">
           <ul>
             <li data-style="primary">
               <div class="item-box">
@@ -180,6 +180,58 @@
               <span class="item item-percent">
                 {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
               </span>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
+                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div class="vote-legend" *ngIf="!breakpoint.value.matches">
+          <ul>
+            <li data-style="primary">
+              <div class="item-box">
+                <span class="item item-label">Yes</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
+                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+              </p>
+            </li>
+            <li data-style="danger">
+              <div class="item-box">
+                <span class="item item-label">No</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
+                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+              </p>
+            </li>
+            <li data-style="info">
+              <div class="item-box">
+                <span class="item item-label">NoWithVeto</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
+              <p class="item item-amount">
+                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
+                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+              </p>
+            </li>
+            <li data-style="secondary">
+              <div class="item-box">
+                <span class="item item-label">Abstain</span>
+                <span class="item item-percent">
+                  {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+                </span>
+              </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
                 <span class="text--primary ml-1">{{ global.stableToken }}</span>
