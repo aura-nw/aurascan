@@ -1,6 +1,6 @@
 <app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
 <div class="card text--white">
-  <div class="card-header title-small py-6 px-6">Header</div>
+  <div class="card-header title-small py-6 px-6">Information</div>
   <div class="card-body body" *ngIf="!loading">
     <div class="row mb-3">
       <div class="col-3">
@@ -58,10 +58,11 @@
   </div>
 </div>
 <div class="card text--white">
-  <div class="card-header title-small py-6 px-6">Transactions</div>
+  <div class="card-header title-small py-6 px-6 d-none d-lg-block">Transactions</div>
+  <div class="d-lg-none px-4 pt-4 pb-0 title-small">Transactions</div>
   <div class="card-body body">
     <ng-container *ngIf="length > 0; else noValues">
-      <div class="table-responsive">
+      <div class="table-responsive d-none d-lg-block">
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
@@ -129,6 +130,15 @@
             </td>
           </tr>
         </table>
+      </div>
+      <div class="d-lg-none" *ngIf="dataTxs && dataTxs.length > 0">
+        <app-card-mob-simple *ngFor="let data of dataTxs"
+                             [link]="'/transaction/' + data.tx_hash"
+                             [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', isFail: data.status !== 'Success'}"
+                             [content]="[
+                               {label: 'Amount', info: data.amount > 0 ? ((data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>') : checkAmountValue(data.amount, data.tx_hash)},
+                               {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
+        ></app-card-mob-simple>
       </div>
     </ng-container>
 
