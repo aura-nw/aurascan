@@ -5,12 +5,12 @@ export interface CardMobSimpleTitle {
   label: string,
   subLabelContent: string,
   subLabelClass?: string,
-  rankNum?: number
+  rankNum?: number,
+  isFail?: boolean,
 }
 export interface CardMobSimpleContent {
   label: string,
   info: any,
-  isFail?: boolean,
 }
 
 @Component({

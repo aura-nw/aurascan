@@ -20,6 +20,9 @@
   }
   .account-button {
     white-space: nowrap;
+    @media (max-width: 991.99px) {
+      height: 40px;
+    }
     @media (min-width: 992px) {
       width: 192px;
     }

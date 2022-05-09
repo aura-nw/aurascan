@@ -305,4 +305,13 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['blocks/id', data.blockId]);
     }
   }
+  checkAmountValue(message: any[], txHash: string) {
+    if(message.length > 1) {
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+    } else if(message.length === 0 || (message.length === 1 && !message[0].amount)){
+      return '-';
+    } else {
+      return message[0].amount.amount + '<span class=text--primary> AURA</span>';
+    }
+  }
 }

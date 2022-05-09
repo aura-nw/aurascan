@@ -31,6 +31,7 @@ export class BlockDetailComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
+  dataTxs: any[];
   length;
   pageSize = 10;
   pageIndex = 0;
@@ -94,6 +95,7 @@ export class BlockDetailComponent implements OnInit {
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
+        this.dataTxs = res.data?.txs;
         this.length = res.data?.txs.length;
         this.loading = false;
       },
@@ -125,6 +127,7 @@ export class BlockDetailComponent implements OnInit {
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
+        this.dataTxs = res.data?.txs;
         this.length = res.data?.txs.length;
         this.loading = false;
       },
@@ -132,5 +135,13 @@ export class BlockDetailComponent implements OnInit {
         this.router.navigate(['/']);
       },
     );
+  }
+
+  checkAmountValue(amount: number, txHash: string) {
+      if(amount === 0) {
+          return '-';
+      } else {
+         return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+      }
   }
 }
