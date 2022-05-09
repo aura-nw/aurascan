@@ -35,6 +35,10 @@
       border-radius: 8px;
       text-transform: capitalize;
       padding: 11.5px 12px;
+      .title-small-mobile{
+        font-size: 14px;
+        font-weight: 600;
+      }
     }
   }
   &__info {
