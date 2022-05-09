@@ -50,7 +50,6 @@ export class BlocksComponent implements OnInit {
         });
         this.dataSource = new MatTableDataSource(res.data);
         this.dataBlock = res.data;
-        console.log(this.dataBlock)
         this.length = res.meta.count;
       }
       this.loading = false;
