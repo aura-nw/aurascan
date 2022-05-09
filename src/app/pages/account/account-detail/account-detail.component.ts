@@ -216,14 +216,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
 
-        this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
-        this.pageDataDelegation.length = dataAccount.delegations.length;
+        // this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
+        // this.pageDataDelegation.length = dataAccount.delegations.length;
 
-        this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
-        this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
+        // this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
+        // this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
 
-        this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
-        this.pageDataRedelegation.length = dataAccount.redelegations.length;
+        // this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
+        // this.pageDataRedelegation.length = dataAccount.redelegations.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }

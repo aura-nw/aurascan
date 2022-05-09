@@ -1,11 +1,11 @@
 <ng-container *ngFor="let item of data">
   <div class="row box-mob-table justify-content-between mb-3">
-    <div class="">
+    <div class="col-6">
       <div class="text--green txt-trans body-mob mb-2">{{ item?.tx_hash_format }}</div>
       Amount<br />
       Time
     </div>
-    <div class="text-right">
+    <div class="box-amount col-6">
       <div class="d-flex justify-content-end">
         <span class="label-trans">{{ item.type }}</span>
       </div>
