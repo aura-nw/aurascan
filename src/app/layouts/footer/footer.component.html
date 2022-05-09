@@ -4,11 +4,7 @@
       <div class="col-12 col-lg-2">
         <div class="footer__menu pt-10 pt-md-0">
           <a routerLink="" class="footer__logo aura-logo ml-2 ml-md-0">
-            <img
-              srcset="assets/images/logo/auraMainLogo-1x.png 1x, assets/images/logo/auraMainLogo-2x.png 2x"
-              src="assets/images/logo/auraMainLogo-1x.png"
-              alt="Aura Logo"
-            />
+            <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
           </a>
         </div>
       </div>
@@ -95,7 +91,7 @@
       </div>
     </div>
   </section>
-  <section class="bottom-bar pt-lg-6 pb-lg-5 pt-8 pb-3">
+  <section class="bottom-bar pt-lg-6 pb-lg-5 pt-8">
     <div class="container-fluid d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-center">
       <div class="caption-2 mt-6 mt-md-0">Copyright © 2022 Aura Network. All rights reserved</div>
       <div class="d-flex">
@@ -118,13 +114,13 @@
     </div>
   </section>
   <section class="menu-bar d-lg-none">
-    <ul class="d-flex mb-0">
+    <ul class="d-flex justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuItems">
         <li class="menu-item" *ngIf="item.id !== 6">
           <a class="menu-link text-center"
              [routerLink]="item.link" routerLinkActive="active" [class.active]="router.url === '/' && item.link === '/dashboard'">
             <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-            <div class="d-block mt-1">{{ item.label | translate}}</div>
+            <div class="small-text d-block mt-1">{{ item.label | translate}}</div>
           </a>
         </li>
       </ng-container>

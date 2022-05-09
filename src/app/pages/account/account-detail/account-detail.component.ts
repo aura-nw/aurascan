@@ -24,6 +24,10 @@ import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { getAmount, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import { Subject } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { takeUntil } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-account-detail',
@@ -157,6 +161,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   accDetailLoading = true;
   chartLoading = true;
   userAddress = '';
+  lstBalanceAcount = undefined;
+  modalReference: any;
+
+  destroyed$ = new Subject();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   constructor(
     private transactionService: TransactionService,
@@ -166,6 +175,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private accountService: AccountService,
     public global: Globals,
     private walletService: WalletService,
+    private layout: BreakpointObserver,
+    private modalService: NgbModal
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -205,14 +216,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
 
-        this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
-        this.pageDataDelegation.length = dataAccount.delegations.length;
+        // this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
+        // this.pageDataDelegation.length = dataAccount.delegations.length;
 
-        this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
-        this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
+        // this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
+        // this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
 
-        this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
-        this.pageDataRedelegation.length = dataAccount.redelegations.length;
+        // this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
+        // this.pageDataRedelegation.length = dataAccount.redelegations.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
@@ -347,6 +358,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           f.token_name = f.name;
         });
 
+        this.lstBalanceAcount = this.currentAccountDetail?.balances;
         this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
         this.pageDataToken.length = this.currentAccountDetail?.balances.length;
         this.dataSourceTokenBk = this.dataSourceToken;
@@ -388,6 +400,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.searchNullData = true;
       }
       this.dataSourceToken = this.dataSourceTokenBk;
+      this.lstBalanceAcount = data;
       this.dataSourceToken = new MatTableDataSource(data);
     } else {
       this.dataSourceToken = this.dataSourceTokenBk;
@@ -411,5 +424,17 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getListTransaction();
+  }
+
+  viewQrAddress(staticDataModal: any): void {
+    this.modalReference = this.modalService.open(staticDataModal, {
+      keyboard: false,
+      centered: true,
+      windowClass: 'modal-holder',
+    });
+  }
+
+  closePopup() {
+    this.modalReference.close();
   }
 }

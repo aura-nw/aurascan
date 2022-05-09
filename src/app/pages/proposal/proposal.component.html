@@ -112,13 +112,15 @@
                   <button
                     [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                     (click)="openVoteDialog(lastedItem, idx)"
-                    class="button button-outline body">
+                    class="button button-outline button-outline__in-card body">
+                    <span class="text-gradient">
                     {{
                       lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                       lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                        ? 'Voting Ended'
-                        : 'Vote'
-                    }}
+                              ? 'Voting Ended'
+                              : 'Vote'
+                      }}
+                    </span>
                   </button>
                 </div>
               </div>

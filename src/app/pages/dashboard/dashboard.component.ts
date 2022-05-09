@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   ];
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any>;
+  dataBlock: any[];
 
   templatesTx: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
@@ -44,6 +45,7 @@ export class DashboardComponent implements OnInit {
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any>;
+  dataTx: any[];
 
   typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
@@ -96,6 +98,7 @@ export class DashboardComponent implements OnInit {
           );
         });
         this.dataSourceBlock = new MatTableDataSource(res.data);
+        this.dataBlock = res.data;
       }
     });
   }
@@ -109,6 +112,7 @@ export class DashboardComponent implements OnInit {
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.dataSourceTx = new MatTableDataSource(res.data);
+        this.dataTx = res.data;
       }
     });
   }

@@ -464,12 +464,11 @@ body {
 
             &__title {
 
-                // display: flex;
-                // justify-content: center;
-                // align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 .title {
                     display: flex;
-                    // justify-content: center;
                     align-items: center;
                 }
 
@@ -528,4 +527,12 @@ body {
 
         color: #5EE6D0;
     }
+}
+
+.box-mob-table {
+    background-color: var(--aura-dark-gray);
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    margin: 0 auto;
 }
