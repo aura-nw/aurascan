@@ -68,7 +68,7 @@ export class SummaryInfoComponent implements OnInit {
         this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
         this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
         this.getVotedProposal();
-        if (this.proposalDetail.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+        if (this.proposalDetail.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
           const expiredTime = new Date(this.proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
           if (expiredTime < 0) {
             this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res: ResponseDto) => {

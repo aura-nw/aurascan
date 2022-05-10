@@ -454,7 +454,6 @@ body {
         padding: 0 12px;
         margin: 8px 0px;
 
-
         .table-header {
             display: flex;
             justify-content: space-between;
@@ -486,6 +485,15 @@ body {
 
             &__item {
                 width: 100%;
+                        
+                .item-link {
+                    color: var(--aura-green);
+
+                    &.disabled-link {
+                        pointer-events: none;
+                        color: var(--aura-white);
+                    }
+                }
             }
 
             &__revert {
