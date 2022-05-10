@@ -4,7 +4,7 @@
   }
   &.single-input-field {
     .input-group {
-      border: 2px solid var(--aura-neutrals-3);
+      border: 2px solid var(--aura-dark-gray);
       border-radius: 90px;
       padding: var(--spacer-3) 22px var(--spacer-3) var(--spacer-6);
       justify-content: space-between;
@@ -21,7 +21,7 @@
         line-height: 24px;
         font-family: SFProDisplay;
         &::placeholder {
-          color: var(--aura-dark-gray);
+          color: var(--aura-light-gray) !important;
         }
       }
       button[type='submit'],
@@ -103,8 +103,8 @@
   transform: translate3d(-8px, -12px, 0) !important;
   border-radius: 25px !important;
   mat-option {
-    padding: var(--spacer-4) var(--spacer-6);
-    background-color: #1C1C1F;
+    padding: var(--spacer-3) var(--spacer-6);
+    background-color: var(--aura-bg-form);
     &.mat-active {
       background-color: var(--aura-dark-gray) !important;
     }
@@ -128,7 +128,7 @@
     left: 0;
     right: 0 !important;
     border-radius: 25px;
-    background-color: #1C1C1F;
+    background-color: var(--aura-bg-form);
     padding: 0;
     border: none;
     box-shadow: none;
@@ -140,7 +140,7 @@
       @media (min-width: 992px) {
         padding: var(--spacer-3) var(--spacer-6);
       }
-      background-color: #1C1C1F !important;
+      background-color: var(--aura-bg-form) !important;
       & > * {
         color: var(--aura-white);
       }

@@ -71,3 +71,22 @@ a {
 .aura-tab mat-tab-body.mat-tab-body, .mat-tab-body-content {
   overflow: unset !important;
 }
+
+.label__status {
+  background: rgba(94, 230, 208, 0.2);
+  border-radius: 4px;
+  padding: 8px 16px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  @media (max-width: 414px) {
+    padding: 8px 12px;
+  }
+  @media (max-width: 375px) {
+    max-width: 100px; 
+  }
+  justify-content: center;
+  align-items: center;
+  color: var(--aura-green);
+  text-align: center;
+}

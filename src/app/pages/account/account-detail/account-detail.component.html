@@ -10,15 +10,15 @@
               <app-qr [address]="currentAddress || ''"> </app-qr>
             </div>
             <div>
-              <div class="title mb-2 sub-text-mob">Address</div>
+              <div class="title mb-2 sub-text-mob fw-500">Address</div>
               <p class="title-small cursor-pointer mt-0 mb-1 body-mob account-address" (click)="copyMessage(currentAddress)">{{ currentAddress }}</p>
               <p class="body txt-copied text--green" [class.show]="isCopy">copied!</p>
             </div>
           </div>
           <div>
-            <p class="title-small mb-2">Total Value</p>
+            <p class="title-small mb-2 fw-500">Total Value</p>
             <div class="d-flex justify-content-between align-items-center">
-              <span class="title">$ {{ tokenPrice * +currentAccountDetail?.total| number: global.formatNumber2Decimal }}</span>
+              <span class="title fw-bold">$ {{ tokenPrice * +currentAccountDetail?.total| number: global.formatNumber2Decimal }}</span>
               <img src="../../../../assets/images/icons/address-popup.png" alt="" width="24" height="24" *ngIf="breakpoint.value.matches"
                 (click)="viewQrAddress(modalManage)"/>
             </div>
@@ -31,7 +31,7 @@
         <div class="px-4 py-4 px-lg-6 py-lg-6 article-1">
           <div class="d-flex align-items-center justify-content-between mb-4 mb-lg-8">
             <div class="d-flex align-items-center">
-              <div class="title mr-4 sub-text-mob">Assets</div>
+              <div class="title mr-4 sub-text-mob fw-500">Assets</div>
               <form class="aura-form single-input-field search-form d-none d-lg-block">
                 <div class="input-group">
                   <input
@@ -89,12 +89,12 @@
                 <div class="table-mobile">
                   <ng-container *ngFor="let item of lstBalanceAcount">
                     <div class="row box-mob-table justify-content-between col-12">
-                      <div class="sub-text-mob text--green col-6">
+                      <div class="sub-text-mob text--green col-4 fw-500">
                         {{ item.name }}
                       </div>
-                      <div class="col-6 box-amount">
+                      <div class="col-8 box-amount">
                         {{ item.amount | number: global.formatNumberToken }}<br>
-                        <span class="mob-price small-body-mob">$ {{ item.total_value | number: global.formatNumberToken }}</span>
+                        <span class="mob-price small-body-mob">$ {{ item.total_value | number: global.formatNumber2Decimal }}</span>
                       </div>
                     </div>
                   </ng-container>
@@ -200,7 +200,7 @@
             </div>
             <div>
               <div class="d-flex justify-content-between align-items-center body mb-5">
-                <span class="text--green">{{ global.stableToken }}</span>
+                <span class="text--green fw-500">{{ global.stableToken }}</span>
                 <span>{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
               <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -224,7 +224,7 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="sub-text px-4 px-lg-6 py-4 py-lg-6">Transactions</div>
+        <div class="sub-text px-4 px-lg-6 py-4 py-lg-6 header-mob">Transactions</div>
         <div class="card-body px-6 pt-0">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="length > 0; else noValues">
@@ -303,7 +303,15 @@
                     </table>
                   </ng-container>
                   <ng-container *ngIf="breakpoint.value.matches">
-                    <app-card-type-one [data]="dataSource?.data"></app-card-type-one>
+                    <!-- <app-card-type-one [data]="dataSource?.data"></app-card-type-one> -->
+                    <app-card-mob-simple *ngFor="let data of dataSource?.data"
+                                     [link]="'/transaction/' + data.tx_hash"
+                                     [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status'}"
+                                     [content]="[
+                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash)},
+                                       {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
+                                     ]"
+                    ></app-card-mob-simple>
                   </ng-container>
                   <app-paginator [length]="pageData.length" [pageSize]="pageSize" 
                                 (paginator)="paginatorEmit($event)"
@@ -326,7 +334,7 @@
   <div class="col-lg-6">
     <ng-template #modalManage let-modal>
       <div class="box-address">
-        <div class="text-right mb-4">
+        <div class="txt-right mb-4">
           <img src="../../../../assets/images/icons/close-popup.png" alt="" width="14" height="14" (click)="closePopup()"/>
         </div>
         <app-qr [address]="currentAddress || ''"> </app-qr>

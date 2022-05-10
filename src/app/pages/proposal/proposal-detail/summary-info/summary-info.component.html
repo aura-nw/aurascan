@@ -29,7 +29,7 @@
     </div>
     <div class="card-header bg-transparent border-bottom" *ngIf="breakpoint.value.matches">
       <div class="d-flex justify-content-between mb-3">
-        <div class="col-3 card__title-mobile">#{{ proposalId }}</div>
+        <div class="col-3 card__title card__title-mobile">#{{ proposalId }}</div>
         <div class="col-9 justify-content-end card__status flex-shrink-0">
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
@@ -50,7 +50,7 @@
         </div>
       </div>
       <div>
-        <a class="card__title-mobile">{{ proposalDetail.pro_title }}</a>
+        <a class="card__title card__title-mobile">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="message mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
     </div>
@@ -154,7 +154,7 @@
               [matTooltipPosition]="'above'"></li>
           </ul>
         </div>
-        <div class="vote-legend-mobile" *ngIf="breakpoint.value.matches">
+        <div class="vote-legend vote-legend-mobile" *ngIf="breakpoint.value.matches">
           <ul>
             <li data-style="primary">
               <div class="item-box">

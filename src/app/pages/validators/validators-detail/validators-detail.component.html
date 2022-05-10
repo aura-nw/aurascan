@@ -1,46 +1,46 @@
 <app-pagetitle title="Validator Details" [breadcrumbItems]="breadCrumbItems" [displayInfo]="true"></app-pagetitle>
-<section>
-
+<section *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card text--white" *ngIf="currentValidatorDetail">
-    <div class="card-header">
+    <div class="card-header header-mob">
       <div class="d-flex justify-content-between">
         <div class="title-small mb-2">
-          <div>#{{ currentValidatorDetail?.rank }}</div>
+          <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div>
           <div>{{ currentValidatorDetail?.title }}</div>
         </div>
         <div class="valid-status"
           [ngClass]="{ 'status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
-          [ngClass]="{ 'status-jailed': currentValidatorDetail?.jailed }">
+          [ngClass]="{ 'status-jailed': currentValidatorDetail?.jailed }"
+          [ngClass]="{ 'label-mob-status': breakpoint.value.matches }">
           <ng-container *ngIf="currentValidatorDetail?.jailed">
-            <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> Jailed
+            <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches"/> Jailed
           </ng-container>
           <ng-container
             *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Active">
-            <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" /> Active
+            <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" *ngIf="!breakpoint.value.matches"/> Active
           </ng-container>
           <ng-container
             *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Inactive">
-            <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> inActive
+            <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches"/> inActive
           </ng-container>
         </div>
       </div>
       <div>
         <div class="row">
-          <div class="col-6">
+          <div class="col-12 col-lg-6">
             <div class="mt-3">
               <div class="d-flex position-relative">
-                <div class="header-title">Operator Address</div>
+                <div class="header-title fw-semibold">Operator Address</div>
                 <div class="img-wrap">
                   <img class="img-question ml-1" [src]="'assets/images/icons/questionmark-icon.svg'" alt="" matTooltip="Validator operator address at which token
-                                     holders delegate their voting powers to." [matTooltipPosition]="'above'" />
+                                     holders delegate their voting powers to." [matTooltipPosition]="'above'" *ngIf="!breakpoint.value.matches" />
                 </div>
               </div>
               <span class="fw-normal">{{ currentValidatorDetail?.operator_address }}</span>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-12 col-lg-6">
             <div class="mt-3">
-              <div class="header-title">Address</div>
+              <div class="header-title fw-semibold">Address</div>
               <span class="text--green cursor-pointer fw-normal"
                 [routerLink]="['/account', currentValidatorDetail?.acc_address]">
                 {{ currentValidatorDetail?.acc_address }}
@@ -48,41 +48,42 @@
             </div>
           </div>
         </div>
+        <div class="border-header"></div>
       </div>
     </div>
     <div class="card-body">
       <div class="row mb-3">
-        <div class="col-3">
-          <div class="card-text">Commission</div>
+        <div class="col-12 col-lg-3">
+          <div class="card-text fw-semibold">Commission</div>
         </div>
-        <div class="col-6">{{ currentValidatorDetail?.commission | percent: global.formatNumber2Decimal }}</div>
+        <div class="col-12 col-lg-6">{{ currentValidatorDetail?.commission | percent: global.formatNumber2Decimal }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
-          <div class="card-text">Uptime</div>
+        <div class="col-12 col-lg-3">
+          <div class="card-text fw-semibold">Uptime</div>
         </div>
-        <div class="col-6">{{ currentValidatorDetail?.up_time }}</div>
+        <div class="col-12 col-lg-6">{{ currentValidatorDetail?.up_time }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
-          <div class="card-text">Voting Power</div>
+        <div class="col-12 col-lg-3">
+          <div class="card-text fw-semibold">Voting Power</div>
         </div>
-        <div class="col-6">
-          {{ currentValidatorDetail?.percent_power }}%({{ currentValidatorDetail?.power | number:
+        <div class="col-12 col-lg-6">
+          {{ currentValidatorDetail?.percent_power }}% ({{ currentValidatorDetail?.power | number:
           global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>)
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
-          <div class="card-text">Bonded Height</div>
+        <div class="col-12 col-lg-3">
+          <div class="card-text fw-semibold">Bonded Height</div>
         </div>
-        <div class="col-6">{{ currentValidatorDetail?.bonded_height | number }}</div>
+        <div class="col-12 col-lg-6">{{ currentValidatorDetail?.bonded_height | number }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
-          <div class="card-text">Self Bonded</div>
+        <div class="col-12 col-lg-3">
+          <div class="card-text fw-semibold">Self Bonded</div>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
           {{ currentValidatorDetail?.self_bonded | number: global.formatNumberToken }} <span class="text--green">{{
             global.stableToken }}</span> ({{
           currentValidatorDetail?.percent_self_bonded
@@ -104,8 +105,8 @@
   <div class="row">
     <div class="col-xl-6">
       <div class="card text--white">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="title-small">Proposed Blocks</div>
+        <div class="card-header d-flex align-items-center justify-content-between header-mob">
+          <div class="title-small fw-500">Proposed Blocks</div>
           <div>
             <span class="fw-bold mr-2">Total :</span><span>{{ lengthBlock | number }} blocks </span>
           </div>
@@ -114,7 +115,7 @@
           <ngx-simplebar>
             <ng-container *ngIf="lengthBlock > 0; else noValues">
               <div class="table-responsive aura-table-contain">
-                <table mat-table [dataSource]="dataSourceBlock" class="aura-table">
+                <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
                       <th mat-header-cell *matHeaderCellDef class="col-per-25">
@@ -149,6 +150,15 @@
                     </td>
                   </tr>
                 </table>
+                <ng-container *ngIf="breakpoint.value.matches">
+                  <div *ngIf="dataSourceBlock">
+                    <app-card-mob-simple *ngFor="let data of dataSourceBlock.data"
+                                       [link]="'/blocks/' + data.height"
+                                       [title]="{size: 'md', label: data.height , subLabelContent: commonService.getDateValue(data.timestamp)[0]}"
+                                       [content]="[{label: 'Txs', info: data.num_txs.toString()}, {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
+                    ></app-card-mob-simple>
+                  </div>
+                </ng-container>
                 <app-paginator [length]="lengthBlock" [pageSize]="pageSize" (paginator)="paginatorEmit($event, 'block')"
                   (pageEvent)="pageEvent($event, 'block')" [id]="'block'">
                 </app-paginator>
@@ -164,27 +174,29 @@
     </div>
     <div class="col-xl-6">
       <div class="card text--white">
-        <div class="card-header d-flex">
+        <div class="card-header d-flex header-mob">
           <div class="flex-grow-1 d-flex align-items-center">
-            <div class="title-small">Uptime</div>
+            <div class="title-small fw-500">Uptime</div>
             <div class="img-wrap">
               <img class="img-question ml-1" [src]="'assets/images/icons/questionmark-icon.svg'" alt=""
-                matTooltip="Missed Blocks are displayed with an X" [matTooltipPosition]="'above'" />
+                matTooltip="Missed Blocks are displayed with an X" [matTooltipPosition]="'above'" *ngIf="!breakpoint.value.matches" />
             </div>
           </div>
           <div class="box-info">Last 100 Blocks</div>
         </div>
-        <div class="card-body article-1 uptime-content">
-          <ng-container *ngFor="let itemBlock of arrayUpTime; let index = index">
-            <a class="block-uptime tool-tip" [ngStyle]="{
-                'background-color': itemBlock?.isSync || currentValidatorDetail?.status !== statusValidator.Active ? 'none' : '#9c6cff'
-              }" href="/blocks/{{ itemBlock?.height }}" currentitem="false" matTooltip="{{ itemBlock?.height || 0 }}"
-              [matTooltipPosition]="'above'">
-              <div class="d-flex">
-                <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="" />
-              </div>
-            </a>
-          </ng-container>
+        <div class="text-center">
+          <div class="card-body article-1 uptime-content">
+            <ng-container *ngFor="let itemBlock of arrayUpTime; let index = index">
+              <a class="block-uptime tool-tip" [ngStyle]="{
+                  'background-color': itemBlock?.isSync || currentValidatorDetail?.status !== statusValidator.Active ? 'none' : '#5EE6D0'
+                }" href="/blocks/{{ itemBlock?.height }}" currentitem="false" matTooltip="{{ itemBlock?.height || 0 }}"
+                [matTooltipPosition]="'above'">
+                <div class="d-flex">
+                  <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="" />
+                </div>
+              </a>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>
@@ -193,8 +205,8 @@
   <div class="row">
     <div class="col-xl-6">
       <div class="card text--white" *ngIf="lengthDelegator">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="title-small">Delegators</div>
+        <div class="card-header d-flex align-items-center justify-content-between header-mob">
+          <div class="title-small fw-500">Delegators</div>
           <div class="box-info d-flex align-items-center">
             <img src="/assets/icons/icons-svg/white/user.svg" class="img-valid" />
             <span class="body">{{ lengthDelegator | number }}</span>
@@ -204,7 +216,7 @@
           <ngx-simplebar>
             <ng-container *ngIf="lengthDelegator > 0; else noValues">
               <div class="table-responsive aura-table-contain">
-                <table mat-table [dataSource]="dataSourceDelegator" class="aura-table">
+                <table mat-table [dataSource]="dataSourceDelegator.data" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesDelegator; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
                       <th mat-header-cell *matHeaderCellDef class="col-per-50">
@@ -237,6 +249,13 @@
                     </td>
                   </tr>
                 </table>
+                <ng-container *ngIf="breakpoint.value.matches">
+                  <app-card-mob-simple *ngFor="let data of dataSourceDelegator.data"
+                                      [link]="'/account/' + data.delegator_address"
+                                      [title]="{size: 'md', label: data.delegator_address_format , subLabelContent: null}"
+                                      [content]="[{label: 'Amount', info: (data.amount | number: global.formatNumberToken) + '<span class=text--green> AURA</span>'}]"
+                  ></app-card-mob-simple>
+                </ng-container>
                 <app-paginator [length]="lengthDelegator" [pageSize]="pageSize" [id]="'delegator'"
                   (paginator)="paginatorEmit($event, 'delegator')" (pageEvent)="pageEvent($event, 'delegator')">
                 </app-paginator>
@@ -260,15 +279,15 @@
     </div>
     <div class="col-xl-6">
       <div class="card text--white">
-        <div class="card-header align-items-center d-flex">
-          <div class="title-small">Power Events</div>
+        <div class="card-header align-items-center d-flex header-mob">
+          <div class="title-small fw-500">Power Events</div>
           <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
         </div>
         <div class="card-body article-1 px-0">
           <ngx-simplebar>
             <ng-container *ngIf="lengthPower > 0; else noValues">
               <div class="table-responsive aura-table-contain">
-                <table mat-table [dataSource]="dataSourcePower" class="aura-table">
+                <table mat-table [dataSource]="dataSourcePower.data" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesPower; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
                       <th mat-header-cell *matHeaderCellDef class="col-per-25">
@@ -308,6 +327,14 @@
                     </td>
                   </tr>
                 </table>
+                <ng-container *ngIf="breakpoint.value.matches">
+                  <app-card-mob-simple *ngFor="let data of dataSourcePower.data"
+                                      [link]="'/blocks/id/' + data.blockId"
+                                      [title]="{size: 'md', label: data.height , subLabelContent: data.tx_hash_format, subLabelClass: 'text--green' }"
+                                      [content]="[{label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode)},
+                                        {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
+                  ></app-card-mob-simple>
+                </ng-container>
                 <app-paginator [length]="lengthPower" [pageSize]="pageSize" (paginator)="paginatorEmit($event, 'power')"
                   (pageEvent)="pageEvent($event, 'power')" [id]="'power'">
                 </app-paginator>

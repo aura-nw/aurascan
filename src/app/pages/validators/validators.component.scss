@@ -73,7 +73,7 @@
 
 form.search-form {
   .input-group {
-    background-color: #1C1C1F; // this color not define in root
+    background-color: var(--aura-bg-form);
 
     input.form-control {
       width: 100%;
@@ -227,5 +227,14 @@ form.search-form {
       font-weight: 600;
       border-radius: 4px;
     }
+  }
+}
+
+@media (max-width: 991.99px) {
+  .header-mob {
+    padding-bottom: 2px;
+  }
+  .button-outline__in-card {
+    padding: var(--spacer-1) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-1)) var(--spacer-6);
   }
 }
