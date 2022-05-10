@@ -54,29 +54,21 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
-    if (provider === WALLET_PROVIDER.MOBILE) {
+    try {
       const connect = async () => {
-        const result = await this.walletManager.getKeplr();
-        console.log(result);
+        const connect = await this.walletService.connect(provider, this.chainId);
+        if (!connect && provider === WALLET_PROVIDER.COIN98) {
+          this.dlgService.showDialog({
+            title: '',
+            content: 'Please set up override Keplr in settings of Coin98 wallet',
+          });
+        }
+        this.buttonDismiss.nativeElement.click();
       };
-      connect();
-    } else {
-      try {
-        const connect = async () => {
-          const connect = await this.walletService.connect(provider, this.chainId);
-          if (!connect && provider === WALLET_PROVIDER.COIN98) {
-            this.dlgService.showDialog({
-              title: '',
-              content: 'Please set up override Keplr in settings of Coin98 wallet',
-            });
-          }
-          this.buttonDismiss.nativeElement.click();
-        };
 
-        connect();
-      } catch (error) {
-        console.error(error);
-      }
+      connect();
+    } catch (error) {
+      console.error(error);
     }
   }
 
