@@ -140,7 +140,7 @@
                   <ng-container *ngFor="let template of templatesWallet; index as idx">
                     <div class="d-flex justify-content-between text--white mb-2" *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
-                      <span class=""> {{ validator[template.matColumnDef] }}</span>
+                      <span class=""> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
                     </div>
                   </ng-container>
                 </div>
@@ -153,7 +153,7 @@
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
       <div
-        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
+        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white header-mob">
         Undelegating
       </div>
       <div class="card-body" *ngIf="!breakpoint.value.matches">
@@ -198,7 +198,7 @@
   </ng-container>
 
   <div class="card">
-    <div class="card-header card-header-dark d-flex align-items-center justify-content-between">
+    <div class="card-header card-header-dark d-flex align-items-center justify-content-between header-mob">
       <div class="sub-text text--white">Validators</div>
       <div class="d-flex align-item-center">
         <form class="aura-form single-input-field search-form mr-6" *ngIf="!breakpoint.value.matches">
@@ -374,7 +374,14 @@
                       class="table-body__item d-flex justify-content-between text--white mb-2"
                       *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
-                      <span class=""> {{ validator[template.matColumnDef] }}</span>
+                      <span class=""> 
+                        <ng-container *ngIf="template['headerCellDef'] === 'Commission'; else defaultData">
+                          {{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                        </ng-container>
+                        <ng-template #defaultData>
+                          {{ validator[template.matColumnDef] }}
+                        </ng-template>
+                      </span>
                     </div>
                   </ng-container>
                 </div>
