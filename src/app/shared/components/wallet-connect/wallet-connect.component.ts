@@ -2,10 +2,13 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@ang
 import { Key } from '@keplr-wallet/types';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { AccountStore, getKeplrFromWindow, WalletStatus } from '@keplr-wallet/stores';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { WalletService } from '../../../core/services/wallet.service';
+import { WalletManager } from 'src/app/core/helpers/connect-wallet';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -20,6 +23,8 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.apiUrl.value.chainId;
+
+  walletManager = new WalletManager();
 
   destroy$ = new Subject();
   constructor(
@@ -49,21 +54,29 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   }
 
   connectWallet(provider: WALLET_PROVIDER): void {
-    try {
+    if (provider === WALLET_PROVIDER.MOBILE) {
       const connect = async () => {
-        const connect = await this.walletService.connect(provider, this.chainId);
-        if (!connect && provider === WALLET_PROVIDER.COIN98) {
-          this.dlgService.showDialog({
-            title: '',
-            content: 'Please set up override Keplr in settings of Coin98 wallet',
-          });
-        }
-        this.buttonDismiss.nativeElement.click();
+        const result = await this.walletManager.getKeplr();
+        console.log(result);
       };
-
       connect();
-    } catch (error) {
-      console.error(error);
+    } else {
+      try {
+        const connect = async () => {
+          const connect = await this.walletService.connect(provider, this.chainId);
+          if (!connect && provider === WALLET_PROVIDER.COIN98) {
+            this.dlgService.showDialog({
+              title: '',
+              content: 'Please set up override Keplr in settings of Coin98 wallet',
+            });
+          }
+          this.buttonDismiss.nativeElement.click();
+        };
+
+        connect();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 

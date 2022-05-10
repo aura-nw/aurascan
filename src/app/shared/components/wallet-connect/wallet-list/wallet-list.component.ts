@@ -16,6 +16,10 @@ export class WalletListComponent {
       name: WALLET_PROVIDER.KEPLR,
       icon: '../../../../../../assets/images/icon-keplr.svg',
     },
+    {
+      name: WALLET_PROVIDER.MOBILE,
+      icon: '../../../../../../assets/images/icon-keplr.svg',
+    },
   ];
 
   @Output() onConnect = new EventEmitter<WALLET_PROVIDER>();
