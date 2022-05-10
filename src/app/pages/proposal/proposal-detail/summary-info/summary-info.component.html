@@ -29,7 +29,6 @@
       <div class="d-flex justify-content-between mb-3">
         <div class="col-3 card__title-mobile">#{{ proposalId }}</div>
         <div class="col-9 justify-content-end card__status flex-shrink-0">
-          <!-- <div class="message" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div> -->
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
@@ -49,6 +48,7 @@
       <div>
         <a class="card__title-mobile">{{ proposalDetail.pro_title }}</a>
       </div>
+      <div class="message mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
     </div>
     <div class="card-body">
       <div class="card__info">
@@ -102,6 +102,21 @@
     </div>
     <div class="card-footer">
       <div class="top-border proposal__summary-total" *ngIf="!votingBarLoading">
+        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-2 body-bold">Current Turnout:</div>
+          <div class="col-12 col-md-10 body">
+            {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-2 body-bold">Quorum:</div>
+          <div class="col-12 col-md-10 body">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</div>
+        </div>
+        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-10 body text--light-gray">
+            {{ proposalDetail.total_has_voted }} of {{ proposalDetail.total_bonded_token }} has voted
+          </div>
+        </div>
         <div class="row mb-3">
           <div class="col-12 col-md-2 body-bold">Total:</div>
           <div class="col-12 col-md-10 body">
@@ -109,7 +124,7 @@
             <span class="text--primary">{{ global.stableToken }}</span>
           </div>
         </div>
-        <div class="vote-bar">
+        <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul>
             <li
               class="bg--primary"

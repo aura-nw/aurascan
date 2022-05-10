@@ -100,18 +100,18 @@
                     </div>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body">
                   <ng-container *ngFor="let template of template; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
                       *ngIf="template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
                       <ng-container *ngIf="template.matColumnDef === 'updated_at'">
-                        {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
+                        {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
                       </ng-container>
                       <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                         <a
-                          class="text--green body"
+                          class="text--green small-body"
                           [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                           {{
                             (template.isShort
@@ -130,8 +130,8 @@
         <ng-container *ngIf="type === 'VALIDATORS_VOTES'">
           <ng-container *ngFor="let data of dataSource.data; index as i">
             <ng-container>
-              <div class="box-mob-table fw-normal mb-3">
-                <div class="table-header mb-2">
+              <div class="table-mobile__item fw-normal mb-3">
+                <div class="table-header">
                   <div class="d-flex justify-content-between">
                     <div class="d-flex">
                       <div class="box-rank">
@@ -150,18 +150,18 @@
                     </div>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body">
                   <ng-container *ngFor="let template of template; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
                       *ngIf="template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
                       <ng-container *ngIf="template.matColumnDef === 'updated_at'">
-                        {{ commonService.getDateValue(data[template.matColumnDef])[1] || '-' }}
+                        {{ commonService.getDateValue(data[template.matColumnDef], false)[1] || '-' }}
                       </ng-container>
                       <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                         <a
-                          class="text--green body"
+                          class="item-link small-body"
                           [class.disabled-link]="!data[template.matColumnDef]"
                           [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                           {{
@@ -189,18 +189,18 @@
                     </a>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body">
                   <ng-container *ngFor="let template of template; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
                       *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
                       <ng-container *ngIf="template.matColumnDef === 'created_at'">
-                        {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
+                        {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
                       </ng-container>
                       <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                         <a
-                          class="text--green body"
+                          class="text--green small-body"
                           [class.disabled-link]="!data[template.matColumnDef]"
                           [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                           {{

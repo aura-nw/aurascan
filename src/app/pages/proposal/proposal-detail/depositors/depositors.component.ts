@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
@@ -20,8 +21,13 @@ export class DepositorsComponent implements OnInit {
   voteDataList: IDepositor[] = [];
   _voteList: IDepositor[] = [];
   loading = true;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService, private datePipe: DatePipe) {}
+  constructor(
+    private proposalService: ProposalService,
+    private datePipe: DatePipe,
+    private layout: BreakpointObserver,
+  ) {}
 
   ngOnInit(): void {
     this.proposalService.getDepositors(this.proposalId).subscribe((res) => {
