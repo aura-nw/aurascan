@@ -229,3 +229,12 @@ form.search-form {
     }
   }
 }
+
+@media (max-width: 991.99px) {
+  .header-mob {
+    padding-bottom: 2px;
+  }
+  .button-outline__in-card {
+    padding: var(--spacer-1) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-1)) var(--spacer-6);
+  }
+}
