@@ -100,7 +100,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body">
                   <ng-container *ngFor="let template of template; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
@@ -111,7 +111,7 @@
                       </ng-container>
                       <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                         <a
-                          class="text--green body"
+                          class="text--green small-body"
                           [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                           {{
                             (template.isShort
@@ -150,7 +150,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body">
                   <ng-container *ngFor="let template of template; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
@@ -161,7 +161,7 @@
                       </ng-container>
                       <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                         <a
-                          class="item-link body"
+                          class="item-link small-body"
                           [class.disabled-link]="!data[template.matColumnDef]"
                           [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                           {{
@@ -189,7 +189,7 @@
                     </a>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body">
                   <ng-container *ngFor="let template of template; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
@@ -200,7 +200,7 @@
                       </ng-container>
                       <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                         <a
-                          class="text--green body"
+                          class="text--green small-body"
                           [class.disabled-link]="!data[template.matColumnDef]"
                           [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                           {{

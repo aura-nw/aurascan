@@ -126,7 +126,7 @@
             <span class="text--primary">{{ global.stableToken }}</span>
           </div>
         </div>
-        <div class="vote-bar">
+        <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul>
             <li
               class="bg--primary"
