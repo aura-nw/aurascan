@@ -139,6 +139,11 @@
     font-size: 1.4rem;
     line-height: 1.8rem;
   }
+  @media (max-width: 414px) {
+    button {
+      width: 80px !important;
+    }
+  }
   button {
     padding: 0;
     width: 100px;
