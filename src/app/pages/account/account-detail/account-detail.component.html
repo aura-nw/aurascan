@@ -89,10 +89,10 @@
                 <div class="table-mobile">
                   <ng-container *ngFor="let item of lstBalanceAcount">
                     <div class="row box-mob-table justify-content-between col-12">
-                      <div class="sub-text-mob text--green col-6 fw-500">
+                      <div class="sub-text-mob text--green col-4 fw-500">
                         {{ item.name }}
                       </div>
-                      <div class="col-6 box-amount">
+                      <div class="col-8 box-amount">
                         {{ item.amount | number: global.formatNumberToken }}<br>
                         <span class="mob-price small-body-mob">$ {{ item.total_value | number: global.formatNumber2Decimal }}</span>
                       </div>

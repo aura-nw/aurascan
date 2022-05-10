@@ -53,7 +53,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageIndex = 0;
 
   templatesWallet: Array<TableTemplate> = [
-    { matColumnDef: 'validator_name', headerCellDef: 'Name' },
+    { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly : true },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
     { matColumnDef: 'pending_reward', headerCellDef: 'Pending Reward' },
     { matColumnDef: 'action', headerCellDef: '' },
