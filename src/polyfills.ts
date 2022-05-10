@@ -67,4 +67,3 @@ import 'zone.js';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-global.Buffer = global.Buffer || require('buffer').Buffer;

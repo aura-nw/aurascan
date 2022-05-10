@@ -22,9 +22,9 @@ export async function getKeplr(): Promise<Keplr | undefined> {
   });
 }
 
-export async function keplrSuggestChain(chainId: string, keplr?: Keplr): Promise<any> {
+export async function keplrSuggestChain(chainId: string): Promise<any> {
   if (ChainsInfo[chainId]) {
-    return (await (keplr ? keplr : getKeplr())).experimentalSuggestChain(ChainsInfo[chainId]).catch((e: Error) => {
+    return (await getKeplr()).experimentalSuggestChain(ChainsInfo[chainId]).catch((e: Error) => {
       throw e;
     });
   }

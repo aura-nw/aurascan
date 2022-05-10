@@ -1,11 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Keplr, Key } from '@keplr-wallet/types';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { WalletManager } from 'src/app/core/helpers/connect-wallet';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
-import { handleErrors, keplrSuggestChain } from '../utils/keplr';
+import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
 import session from '../utils/storage/session';
 import { NgxToastrService } from './ngx-toastr.service';
 
@@ -15,9 +14,6 @@ import { NgxToastrService } from './ngx-toastr.service';
 export class WalletService implements OnDestroy {
   apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
   chainId = this.environmentService.apiUrl.value.chainId;
-
-  walletManager = new WalletManager();
-
   wallet$: Observable<Key>;
   private _wallet$: BehaviorSubject<Key>;
 
@@ -88,9 +84,6 @@ export class WalletService implements OnDestroy {
 
           return Promise.resolve(true);
         }
-      default:
-        this.connectKeplr(chainId, true)
-        return Promise.resolve(null);
     }
   }
 
@@ -100,21 +93,13 @@ export class WalletService implements OnDestroy {
     session.removeItem(LAST_USED_PROVIDER);
   }
 
-  private async connectKeplr(chainId: string, mobile = false): Promise<void> {
+  private async connectKeplr(chainId: string): Promise<void> {
     const checkWallet = async () => {
       try {
-        let keplr: Keplr;
-
-        // if (mobile) {
-        //   keplr = await this.walletManager.getKeplr();
-        // } else {
-        //    keplr = await getKeplr();
-        // }
-        keplr = await this.walletManager.getKeplr();
-
+        const keplr = await getKeplr();
 
         if (keplr) {
-          await keplrSuggestChain(chainId, keplr);
+          await keplrSuggestChain(chainId);
           await keplr.enable(chainId);
 
           const account = await keplr.getKey(chainId);

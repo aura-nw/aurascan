@@ -2,13 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@ang
 import { Key } from '@keplr-wallet/types';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
 import { WalletService } from '../../../core/services/wallet.service';
-import { WalletManager } from 'src/app/core/helpers/connect-wallet';
-import { getKeplrFromWindow } from '@keplr-wallet/stores';
 
 @Component({
   selector: 'app-wallet-connect',
@@ -23,8 +20,6 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.apiUrl.value.chainId;
-
-  walletManager = new WalletManager();
 
   destroy$ = new Subject();
   constructor(
