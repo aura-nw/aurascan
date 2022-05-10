@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,6 +26,7 @@ export class SummaryInfoComponent implements OnInit {
   chainId = this.environmentService.apiUrl.value.chainId;
   proposalVotes: string;
   votingBarLoading = false;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private proposalService: ProposalService,
@@ -33,6 +35,7 @@ export class SummaryInfoComponent implements OnInit {
     private walletService: WalletService,
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {

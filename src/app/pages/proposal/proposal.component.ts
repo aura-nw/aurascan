@@ -51,7 +51,7 @@ export class ProposalComponent implements OnInit {
     proId: number;
     vote: string | null;
   }[] = [];
-  
+
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
@@ -89,13 +89,11 @@ export class ProposalComponent implements OnInit {
           pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
-          if (index < 4) {
-          if (pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
-              this.getVoteResult(pro.pro_id, index);
-              const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
-              if (expiredTime < 0) {
-                this.getProposalDetailFromNode(pro.pro_id, index);
-              }
+          if (index < 4 || pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+            this.getVoteResult(pro.pro_id, index);
+            const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
+            if (expiredTime < 0) {
+              this.getProposalDetailFromNode(pro.pro_id, index);
             }
 
             this.proposalVotes.push({

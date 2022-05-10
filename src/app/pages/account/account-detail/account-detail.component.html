@@ -88,11 +88,11 @@
               <ng-container *ngIf="breakpoint.value.matches">
                 <div class="table-mobile">
                   <ng-container *ngFor="let item of lstBalanceAcount">
-                    <div class="row box-mob-table justify-content-between">
-                      <div class="sub-text-mob text--green">
+                    <div class="row box-mob-table justify-content-between col-12">
+                      <div class="sub-text-mob text--green col-6">
                         {{ item.name }}
                       </div>
-                      <div class="text-right">
+                      <div class="col-6 box-amount">
                         {{ item.amount | number: global.formatNumberToken }}<br>
                         <span class="mob-price small-body-mob">$ {{ item.total_value | number: global.formatNumberToken }}</span>
                       </div>

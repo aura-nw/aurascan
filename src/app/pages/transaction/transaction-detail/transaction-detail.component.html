@@ -1,101 +1,99 @@
 <app-pagetitle title="Transaction Details"></app-pagetitle>
-<div class="row justify-content-end mb-2">
+<div class="row justify-content-end mb-2 d-none d-lg-flex">
   <div class="col-auto">
     <div class="button-switch-stage">
-      <button [class.active]="!isRawData" (click)="changeType(false)">Parsing Data</button>
-      <button [class.active]="isRawData" (click)="changeType(true)">Raw Data</button>
+      <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
+      <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
     </div>
   </div>
 </div>
 
-<ng-container *ngIf="!isRawData">
-  <div class="card text--white">
-    <div class="card-header title-small">Information</div>
-    <div class="card-body body">
+<div class="card text--white">
+  <div class="card-header title-small d-none d-lg-flex">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
+  <div class="card-body body">
+    <div class="d-flex justify-content-between align-items-center d-lg-none">
+      <div class="sub-text-mob">Information</div>
+      <div class="button-switch-stage">
+        <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
+        <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
+      </div>
+    </div>
+    <div class="divider divider-horizontal my-4 d-lg-none"></div>
+    <div *ngIf="!isRawData">
       <div class="row box-error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">Chain Id</p>
         </div>
-        <div class="col-6">{{ transaction?.block.chainid }}</div>
+        <div class="col-12 col-lg-6">{{ transaction?.block.chainid }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">TxHash</p>
         </div>
-        <div class="col-6">{{ transaction?.tx_hash }}</div>
+        <div class="col-12 col-lg-6">{{ transaction?.tx_hash }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">Status</p>
         </div>
-        <div class="col-6">
-          <img
-            [src]="
-            transaction?.code === codeTransaction.Success
-                ? 'assets/images/icons/success.svg'
-                : 'assets/images/icons/fail.svg'
-            "
-            alt=""
-          />
-          {{ transaction?.status }}
+        <div class="col-12 col-lg-6 d-flex align-items-center">
+          <img [src]="transaction?.code == codeTransaction.Success ? 'assets/icons/icons-svg/color/success.svg' : 'assets/icons/icons-svg/color/fail.svg'"
+                  alt="" />
+          <span>{{ transaction?.status }}</span>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">Height</p>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
           <a class="text--green" routerLink="/blocks/id/{{ transaction?.block.id }}">{{ transaction?.height | number }}</a>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">Time</p>
         </div>
-        <div class="col-6">{{ commonService.getDateValue(transaction?.timestamp)[0] }} {{ commonService.getDateValue(dateFormat)[1] }}</div>
+        <div class="col-12 col-lg-6">{{ commonService.getDateValue(transaction?.timestamp)[0] }} {{ commonService.getDateValue(dateFormat)[1] }}</div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">Fee</p>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
           {{ transaction?.fee }} <span class="text--green">{{ global.stableToken }}</span>
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-12 col-lg-3">
           <p class="card-text fw-bold">Gas (used / wanted)</p>
         </div>
-        <div class="col-6">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
+        <div class="col-12 col-lg-6">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
       </div>
     </div>
-  </div>
 
-  <div class="card text--white" *ngIf="transaction?.messages">
-    <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
+    <pre *ngIf="isRawData" id="json" class="raw-content text--white px-4" [innerHtml]="transaction.tx | appJson"></pre>
   </div>
+</div>
 
-  <div class="card text--white" *ngIf="transaction?.read_set">
-    <div class="card-header title-small">Read</div>
-    <div class="card-body">
-      <ngx-json-viewer [json]="transaction?.read_set"></ngx-json-viewer>
-    </div>
-  </div>
+<div class="card text--white" *ngIf="!isRawData && transaction?.messages">
+  <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
+</div>
 
-  <div class="card text--white" *ngIf="transaction?.write_set">
-    <div class="card-header title-small">Write</div>
-    <div class="card-body" *ngIf="transaction?.write_set">
-      <ngx-json-viewer [json]="transaction?.write_set"></ngx-json-viewer>
-    </div>
+<div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
+  <div class="card-header title-small">Read</div>
+  <div class="card-body">
+    <ngx-json-viewer [json]="!isRawData && transaction?.read_set"></ngx-json-viewer>
   </div>
-</ng-container>
+</div>
 
-<ng-container *ngIf="isRawData">
-  <div class="card text--white">
-    <div class="card-header title-small">Raw Data</div>
-    <pre id="json" class="raw-content text--white px-4" [innerHtml]="transaction.tx | appJson"></pre>
+<div class="card text--white" *ngIf="!isRawData && transaction?.write_set">
+  <div class="card-header title-small">Write</div>
+  <div class="card-body" *ngIf="transaction?.write_set">
+    <ngx-json-viewer [json]="transaction?.write_set"></ngx-json-viewer>
   </div>
-</ng-container>
+</div>
+

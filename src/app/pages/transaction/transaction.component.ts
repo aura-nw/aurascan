@@ -26,6 +26,7 @@ export class TransactionComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
+  dataTx: any[];
 
   length: number;
   pageSize = 20;
@@ -68,6 +69,7 @@ export class TransactionComponent implements OnInit {
         });
 
         this.dataSource = new MatTableDataSource(res.data);
+        this.dataTx = res.data;
         this.length = res?.meta?.count;
       }
       this.loading = false;
@@ -81,6 +83,13 @@ export class TransactionComponent implements OnInit {
       this.router.navigate(['transaction', data.tx_hash]);
     } else if (linkBlock) {
       this.router.navigate(['blocks/id', data.blockId]);
+    }
+  }
+  checkAmountValue(amount: number, txHash: string) {
+    if(amount === 0) {
+      return '-';
+    } else {
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
     }
   }
 }
