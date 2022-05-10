@@ -27,7 +27,7 @@ section.account-detail {
   }
   form.search-form {
     .input-group {
-      background-color: #1c1c1f; // this color not define in root
+      background-color: var(--aura-bg-form);
     }
     input {
       width: 100%;
@@ -46,9 +46,9 @@ section.account-detail {
     }
   }
   .asset-type .select-input-field {
-    background-color: #1c1c1f; // this color not define in root
+    background-color: var(--aura-bg-form);
     width: 100%;
-    min-width: 180px;
+    min-width: 182px;
     @media (min-width: 992px) {
       width: 186px;
     }
@@ -132,6 +132,24 @@ section.account-detail {
   .box-mob-table {
     .box-amount {
       text-align: right;
+    }
+  }
+  .header-mob {
+    padding-bottom: 0px !important;
+    font-size: 2rem !important;
+    font-weight: 500;
+  }
+  .aura-form {
+    .select-input-field {
+      height: auto;
+      padding: 6px 16px 8px 22px;
+      border: 1px solid var(--aura-white);
+    }
+  }
+  ::ng-deep {
+    .mat-tab-label-content {
+      font-size: 1.6rem !important;
+      font-weight: 600;
     }
   }
 }

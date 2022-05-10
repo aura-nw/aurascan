@@ -76,11 +76,17 @@ a {
   background: rgba(94, 230, 208, 0.2);
   border-radius: 4px;
   padding: 8px 16px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
   @media (max-width: 414px) {
     padding: 8px;
   }
-  display: flex;
+  @media (max-width: 375px) {
+    max-width: 80px; 
+  }
   justify-content: center;
   align-items: center;
   color: var(--aura-green);
+  text-align: center;
 }

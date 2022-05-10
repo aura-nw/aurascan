@@ -73,7 +73,7 @@
 
 form.search-form {
   .input-group {
-    background-color: #1C1C1F; // this color not define in root
+    background-color: var(--aura-bg-form);
 
     input.form-control {
       width: 100%;
