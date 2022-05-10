@@ -7,6 +7,7 @@ import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
+import { CommonService } from '../../../../core/services/common.service';
 import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
@@ -36,6 +37,7 @@ export class SummaryInfoComponent implements OnInit {
     public dialog: MatDialog,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +78,24 @@ export class SummaryInfoComponent implements OnInit {
             });
           }
           this.getVoteResult();
+          this.commonService.status().subscribe((res) => {
+            if (res?.data) {
+              this.proposalDetail.total_bonded_token = this.formatNumber(res.data.bonded_tokens);
+              this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote);
+            }
+          });
         } else {
+          this.proposalDetail.pro_votes_yes = balanceOf(+res.data.pro_votes_yes);
+          this.proposalDetail.pro_votes_no = balanceOf(+res.data.pro_votes_no);
+          this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.pro_votes_no_with_veto);
+          this.proposalDetail.pro_votes_abstain = balanceOf(+res.data.pro_votes_abstain);
+
+          this.proposalDetail.pro_total_vote =
+            this.proposalDetail.pro_votes_yes +
+            this.proposalDetail.pro_votes_no +
+            this.proposalDetail.pro_votes_no_with_veto +
+            this.proposalDetail.pro_votes_abstain;
+
           this.proposalDetail.pro_vote_yes_bar =
             (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
           this.proposalDetail.pro_vote_no_bar =
@@ -223,5 +242,34 @@ export class SummaryInfoComponent implements OnInit {
         this.votingBarLoading = false;
       },
     );
+  }
+
+  formatNumber(number: number, args?: any): any {
+    if (isNaN(number)) return null; // will only work value is a number
+    if (number === null) return null;
+    if (number === 0) return null;
+    let abs = Math.abs(number);
+    const rounder = Math.pow(10, 1);
+    const isNegative = number < 0; // will also work for Negetive numbers
+    let key = '';
+
+    const powers = [
+      { key: 'Q', value: Math.pow(10, 15) },
+      { key: 'T', value: Math.pow(10, 12) },
+      { key: 'B', value: Math.pow(10, 9) },
+      { key: 'M', value: Math.pow(10, 6) },
+      { key: 'K', value: 1000 },
+    ];
+
+    for (let i = 0; i < powers.length; i++) {
+      let reduced = abs / powers[i].value;
+      reduced = Math.round(reduced * rounder) / rounder;
+      if (reduced >= 1) {
+        abs = reduced;
+        key = powers[i].key;
+        break;
+      }
+    }
+    return (isNegative ? '-' : '') + abs + key;
   }
 }
