@@ -10,6 +10,7 @@ import { CommonService } from '../../../../app/core/services/common.service';
 import { ValidatorService } from '../../../../app/core/services/validator.service';
 import { Globals } from '../../../../app/global/global';
 import { PageEvent } from '@angular/material/paginator';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-validators-detail',
@@ -66,6 +67,8 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthBlockLoading = true;
   lengthPowerLoading = true;
 
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall])
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -73,6 +76,7 @@ export class ValidatorsDetailComponent implements OnInit {
     private blockService: BlockService,
     public commonService: CommonService,
     public global: Globals,
+    private layout: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
@@ -142,7 +146,7 @@ export class ValidatorsDetailComponent implements OnInit {
           );
         });
         this.lengthDelegator = res.total;
-        this.dataSourceDelegator = res.data;
+        this.dataSourceDelegator = res;
       }
     });
   }
@@ -163,7 +167,7 @@ export class ValidatorsDetailComponent implements OnInit {
             }
             power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
           });
-          this.dataSourcePower = res.data;
+          this.dataSourcePower = res;
           this.lengthPower = res.meta?.count;
         }
         this.lengthPowerLoading = false;
@@ -230,6 +234,13 @@ export class ValidatorsDetailComponent implements OnInit {
         break;
       default:
         break;
+    }
+  }
+  checkAmountStaking(amount, isStakeMode){
+    if (isStakeMode) {
+      return '<span class=text--info>' + '+ ' + amount + '</span>';
+    } else {
+      return '<span class=text--danger>' + '- ' + amount + '</span>';
     }
   }
 }

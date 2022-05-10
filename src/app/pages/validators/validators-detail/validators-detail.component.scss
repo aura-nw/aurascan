@@ -20,7 +20,6 @@
     color: inherit;
     text-decoration: none;
     cursor: pointer;
-    // background-color: white;
     border: 2px solid $validator-bg-uptime;
     border-radius: 5px;
     display: -webkit-flex;
@@ -46,7 +45,20 @@
       z-index: 999;
     }
     .img-uptime-miss {
-      filter: $filter-purple-icon;
+      filter: $filter-uptime-icon;
+    }
+  }
+  @media (max-width: 991.99px) {
+    width: 100%;
+    max-width: 304px;
+    .block-uptime {
+      margin: 0px 5px 7px 5px;
+      width: 24px;
+      height: 24px;
+    }
+    .header-mob {
+      background: transparent;
+      padding-bottom: 2px;
     }
   }
 }
@@ -71,6 +83,17 @@
   &.status-jailed{
     background-color: #ff2745;
   }
+  &.label-mob-status {
+    background: rgba(94, 230, 208, 0.2);
+    color: var(--aura-green);
+    padding: 0px 16px;
+    margin-bottom: 8px;
+    width: fit-content;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    height: 35px;
+    border-radius: 4px;
+  }
 }
 
 .article-1 {
@@ -85,5 +108,17 @@ form.search-form {
         width: 500px;
       }
     }
+  }
+}
+
+@media (max-width: 991.99px) {
+  .header-mob {
+    background: transparent;
+    padding-bottom: 2px;
+  }
+  .border-header {
+    height: 1px;
+    margin-top: 15px;
+    background: var(--aura-dark-gray);
   }
 }
