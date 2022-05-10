@@ -84,6 +84,8 @@ export class WalletService implements OnDestroy {
 
           return Promise.resolve(true);
         }
+      default:
+        return Promise.resolve(null);
     }
   }
 
