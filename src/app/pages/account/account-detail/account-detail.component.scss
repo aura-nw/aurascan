@@ -48,12 +48,21 @@ section.account-detail {
   .asset-type .select-input-field {
     background-color: #1c1c1f; // this color not define in root
     width: 100%;
+    min-width: 180px;
     @media (min-width: 992px) {
       width: 186px;
     }
   }
   .list-token {
     width: 150px;
+  }
+  @media (max-width: 991.98px) {
+    .mob-price {
+      color: var(--aura-neutrals-4);
+    }
+    .row-eq-height {
+      flex-direction: column-reverse;
+    }
   }
 
   .box-chart {
@@ -75,7 +84,9 @@ section.account-detail {
     border-radius: 8px;
   }
   .article-1 {
-    min-height: 675px;
+    @media (min-width: 1440px) {
+      min-height: 675px;
+    }
   }
   .article-2 {
     min-height: 500px;
@@ -99,4 +110,28 @@ section.account-detail {
 
 .chart-token {
   margin: 0 auto;
+}
+
+@media (max-width: 991.98px) {
+  .account-address {
+    color: var(--aura-address-color);
+    margin-bottom: 1.6rem !important;
+  }
+  .box-account {
+    padding: var(--spacer-4) !important;
+  }
+  ::ng-deep {
+    .modal-dialog {
+      .modal-content {
+        width: 80%;
+        min-width: 300px;
+        margin: 0 auto;
+      }
+    }
+  }
+  .box-mob-table {
+    .box-amount {
+      text-align: right;
+    }
+  }
 }

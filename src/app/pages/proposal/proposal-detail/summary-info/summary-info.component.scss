@@ -11,12 +11,34 @@
       text-decoration: none;
     }
   }
+  &__title-mobile {
+    font-size: 2rem;
+    line-height: 2.3rem;
+    font-weight: 500;
+    color: var(--aura-white);
+    a {
+      text-decoration: none;
+    }
+  }
   &__status {
     display: flex;
     align-items: center;
     gap: 10px;
     .message {
       color: var(--aura-green-disabled);
+    }
+    .button-mobile {
+      height: 40px;
+      padding: 8px 24px;
+    }
+    .proposal-status-mobile {
+      border-radius: 8px;
+      text-transform: capitalize;
+      padding: 11.5px 12px;
+      .title-small-mobile{
+        font-size: 14px;
+        font-weight: 600;
+      }
     }
   }
   &__info {
@@ -85,6 +107,73 @@
           .item-percent {
             font-size: 16px;
           }
+        }
+
+        &[data-style] .item-box::before {
+          position: absolute;
+          content: '';
+          width: 32px;
+          height: 32px;
+          left: -40px;
+          top: 0px;
+          border-radius: 100rem;
+        }
+
+        &[data-style='primary'] .item-box::before {
+          background-color: #5ee6d0;
+        }
+        &[data-style='danger'] .item-box::before {
+          background-color: #e65e5e;
+        }
+        &[data-style='info'] .item-box::before {
+          background-color: #5e84e6;
+        }
+        &[data-style='secondary'] .item-box::before {
+          background-color: #777e91;
+        }
+
+        .item {
+          &-label {
+            margin-right: 32px;
+          }
+          &-amount {
+            font-size: 16px;
+            margin-top: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .vote-legend-mobile {
+    ul {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-rows: 9rem 9rem 9rem 9rem;
+      grid-template-columns: 1fr;
+      padding: 0;
+
+      li {
+        padding: 0px 16px;
+        padding-left: 40px;
+        height: 5rem;
+
+        position: relative;
+
+        .item-box {
+          height: 32px;
+          display: flex;
+          align-items: center;
+          position: relative;
+          font-family: 'SF Pro Display';
+          font-size: 20px;
+          line-height: 24px;
+          letter-spacing: 0.02em;
+
+        }
+        .item-percent {
+          font-size: 16px;
+          font-weight: 700;
         }
 
         &[data-style] .item-box::before {

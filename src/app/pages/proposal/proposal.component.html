@@ -129,7 +129,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
-        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
+        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList; index as idx">
           <div class="card mb-0 h-100">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start border-bottom-mobile">
@@ -167,7 +167,7 @@
                   <button
                     [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                     (click)="openVoteDialog(lastedItem, idx)"
-                    class="button button-outline body col-6">
+                    class="button button-mobile button-outline body col-6">
                     {{
                       lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                       lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'

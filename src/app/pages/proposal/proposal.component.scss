@@ -26,7 +26,7 @@
       padding-left: 32px;
       font-size: 13px;
       &:before {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
         top: 50%;
@@ -76,13 +76,16 @@
       text-decoration: none;
     }
   }
-  .proposal-status-mobile{
+  .proposal-status-mobile {
     border-radius: 8px;
     text-transform: capitalize;
     padding: 11.5px 12px;
   }
-  .border-bottom-mobile{
+  .border-bottom-mobile {
     border-bottom: 1px solid #38383d;
+  }
+  .button-mobile {
+    height: 40px;
   }
 }
 .vote-bar {
