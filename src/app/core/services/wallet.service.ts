@@ -5,7 +5,7 @@ import { WalletManager } from 'src/app/core/helpers/connect-wallet';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
-import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
+import { handleErrors, keplrSuggestChain } from '../utils/keplr';
 import session from '../utils/storage/session';
 import { NgxToastrService } from './ngx-toastr.service';
 
@@ -103,17 +103,18 @@ export class WalletService implements OnDestroy {
   private async connectKeplr(chainId: string, mobile = false): Promise<void> {
     const checkWallet = async () => {
       try {
-        let keplr;
-        if (mobile) {
-          keplr = await this.walletManager.getKeplr();
-        } else {
+        let keplr: Keplr;
 
-           keplr = await getKeplr();
-        }
+        // if (mobile) {
+        //   keplr = await this.walletManager.getKeplr();
+        // } else {
+        //    keplr = await getKeplr();
+        // }
+        keplr = await this.walletManager.getKeplr();
 
 
         if (keplr) {
-          await keplrSuggestChain(chainId);
+          await keplrSuggestChain(chainId, keplr);
           await keplr.enable(chainId);
 
           const account = await keplr.getKey(chainId);

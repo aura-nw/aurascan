@@ -40,8 +40,8 @@ export class WalletManager {
     return;
   };
   getKeplr = (): Promise<Keplr | undefined> => {
-    const connectingWalletType = 'wallet-connect';
-    //   localStorage?.getItem(KeyAutoConnectingWalletType) || localStorage?.getItem(KeyConnectingWalletType);
+    const connectingWalletType =
+      localStorage?.getItem(KeyAutoConnectingWalletType) || localStorage?.getItem(KeyConnectingWalletType);
 
     if (connectingWalletType === 'wallet-connect') {
       if (!this.walletConnector) {
