@@ -380,6 +380,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.chartLoading = false;
 
         if (this.userAddress === this.currentAddress) {
+          local.removeItem('accountDetail');
           //store data wallet info
           let accountDetail = {};
           accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
@@ -436,5 +437,15 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   closePopup() {
     this.modalReference.close();
+  }
+
+  checkAmountValue(message: any[], txHash: string) {
+    if(message.length > 1) {
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+    } else if(message.length === 0 || (message.length === 1 && !message[0].amount)){
+      return '-';
+    } else {
+      return message[0].amount.amount + '<span class=text--primary> AURA</span>';
+    }
   }
 }
