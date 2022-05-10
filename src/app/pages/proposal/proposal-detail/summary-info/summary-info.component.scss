@@ -16,6 +16,7 @@
     line-height: 2.3rem;
     font-weight: 500;
     color: var(--aura-white);
+    align-self: flex-end;
     a {
       text-decoration: none;
     }
@@ -29,12 +30,12 @@
     }
     .button-mobile {
       height: 40px;
-      padding: 8px 24px;
+      padding: 8px 18px;
     }
     .proposal-status-mobile {
       border-radius: 8px;
       text-transform: capitalize;
-      padding: 11.5px 12px;
+      padding: 10px 12px;
       .title-small-mobile{
         font-size: 14px;
         font-weight: 600;
@@ -43,6 +44,10 @@
   }
   &__info {
     color: var(--aura-white);
+    .body-bold{
+      font-weight: 600;
+    }
+
   }
 }
 .editorial-container {
@@ -57,6 +62,30 @@
   .vote-bar {
     margin-top: 24px;
     height: 56px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    ul {
+      background-color: #e3e3e3;
+      li.bg {
+        &--primary {
+          background-color: var(--aura-primary);
+        }
+        &--danger {
+          background-color: var(--aura-danger);
+        }
+        &--info {
+          background-color: var(--aura-info);
+        }
+        &--secondary {
+          background-color: var(--aura-green-disabled);
+        }
+      }
+    }
+  }
+  .vote-bar-mobile {
+    margin-top: 12px;
+    height: 38px;
     border-radius: 4px;
     overflow: hidden;
 
@@ -135,6 +164,7 @@
         .item {
           &-label {
             margin-right: 32px;
+            font-weight: 500;
           }
           &-amount {
             font-size: 16px;
@@ -202,6 +232,7 @@
         .item {
           &-label {
             margin-right: 32px;
+            font-weight: 500;
           }
           &-amount {
             font-size: 16px;

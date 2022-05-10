@@ -62,7 +62,7 @@
     line-height: 3.2rem;
     font-weight: 500;
     a {
-      color: var(--aura-white);
+      //color: var(--aura-white);
       text-decoration: none;
     }
   }
@@ -70,7 +70,6 @@
     font-size: 16px;
     line-height: 1.5rem;
     font-weight: 500;
-    margin-bottom: 16px;
     a {
       color: var(--aura-white);
       text-decoration: none;
@@ -79,7 +78,11 @@
   .proposal-status-mobile {
     border-radius: 8px;
     text-transform: capitalize;
-    padding: 11.5px 12px;
+    padding: 10px 12px;
+  }
+  .button-mobile {
+    height: 40px;
+    padding: 8px 18px;
   }
   .border-bottom-mobile {
     border-bottom: 1px solid #38383d;

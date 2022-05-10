@@ -102,6 +102,23 @@
     </div>
     <div class="card-footer">
       <div class="top-border proposal__summary-total" *ngIf="!votingBarLoading">
+        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-2 body-bold">Current Turnout:</div>
+          <div class="col-12 col-md-10 body">
+            {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-2 body-bold">Quorum:</div>
+          <div class="col-12 col-md-10 body">
+            {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-10 body text--light-gray">
+            {{ proposalDetail.total_has_voted}} of {{proposalDetail.total_bonded_token}} has voted
+          </div>
+        </div>
         <div class="row mb-3">
           <div class="col-12 col-md-2 body-bold">Total:</div>
           <div class="col-12 col-md-10 body">
@@ -109,7 +126,7 @@
             <span class="text--primary">{{ global.stableToken }}</span>
           </div>
         </div>
-        <div class="vote-bar">
+        <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
           <ul>
             <li
               class="bg--primary"
