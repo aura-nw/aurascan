@@ -80,7 +80,7 @@ export class SummaryInfoComponent implements OnInit {
           this.getVoteResult();
           this.commonService.status().subscribe((res) => {
             if (res?.data) {
-              this.proposalDetail.total_bonded_token = this.formatNumber(res.data.bonded_tokens);
+              this.proposalDetail.total_bonded_token = this.formatNumber(balanceOf(res.data.bonded_tokens));
               this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote);
             }
           });

@@ -12,12 +12,14 @@
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
             class="button button-outline body">
-            {{
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                ? 'Voting Ended'
-                : 'Vote'
-            }}
+            <span class="text-gradient">
+              {{
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
+              }}
+            </span>
           </button>
           <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
             <span class="status title-small">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
@@ -33,12 +35,14 @@
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
             class="button button-mobile button-outline body">
-            {{
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                ? 'Voting Ended'
-                : 'Vote'
-            }}
+            <span class="text-gradient">
+              {{
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
+              }}
+            </span>
           </button>
           <div class="proposal-status-mobile proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
             <span class="title-small-mobile">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
