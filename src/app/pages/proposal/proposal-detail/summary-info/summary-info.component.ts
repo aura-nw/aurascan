@@ -70,6 +70,18 @@ export class SummaryInfoComponent implements OnInit {
         this.proposalDetail.pro_total_deposits = balanceOf(this.proposalDetail.pro_total_deposits);
         this.proposalDetail.pro_type = this.proposalDetail.pro_type.split('.').pop();
         this.getVotedProposal();
+
+        this.proposalDetail.pro_votes_yes = balanceOf(+res.data.pro_votes_yes);
+        this.proposalDetail.pro_votes_no = balanceOf(+res.data.pro_votes_no);
+        this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.pro_votes_no_with_veto);
+        this.proposalDetail.pro_votes_abstain = balanceOf(+res.data.pro_votes_abstain);
+
+        this.proposalDetail.pro_total_vote =
+          this.proposalDetail.pro_votes_yes +
+          this.proposalDetail.pro_votes_no +
+          this.proposalDetail.pro_votes_no_with_veto +
+          this.proposalDetail.pro_votes_abstain;
+
         if (this.proposalDetail.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
           const expiredTime = new Date(this.proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
           if (expiredTime < 0) {
@@ -81,21 +93,10 @@ export class SummaryInfoComponent implements OnInit {
           this.commonService.status().subscribe((res) => {
             if (res?.data) {
               this.proposalDetail.total_bonded_token = this.formatNumber(balanceOf(res.data.bonded_tokens));
-              this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote);
+              this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote) || 0;
             }
           });
         } else {
-          this.proposalDetail.pro_votes_yes = balanceOf(+res.data.pro_votes_yes);
-          this.proposalDetail.pro_votes_no = balanceOf(+res.data.pro_votes_no);
-          this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.pro_votes_no_with_veto);
-          this.proposalDetail.pro_votes_abstain = balanceOf(+res.data.pro_votes_abstain);
-
-          this.proposalDetail.pro_total_vote =
-            this.proposalDetail.pro_votes_yes +
-            this.proposalDetail.pro_votes_no +
-            this.proposalDetail.pro_votes_no_with_veto +
-            this.proposalDetail.pro_votes_abstain;
-
           this.proposalDetail.pro_vote_yes_bar =
             (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
           this.proposalDetail.pro_vote_no_bar =
