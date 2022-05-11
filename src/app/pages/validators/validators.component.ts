@@ -2,10 +2,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import {Router, RouterEvent} from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {
   GAS_ESTIMATE,
   NUMBER_CONVERT,
@@ -96,6 +96,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
+  _routerSubscription: Subscription;
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -126,6 +127,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }
     });
     this.getList();
+
+    this._routerSubscription = this.router.events
+        .subscribe(() => {
+          this.modalReference.close();
+        });
   }
 
   /**
