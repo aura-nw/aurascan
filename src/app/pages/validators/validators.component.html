@@ -122,7 +122,7 @@
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
-                    <div class="title body-mob text--green">
+                    <div class="title body-mob text--green" [routerLink]="['/validators', validator.validator_address]">
                       <span> {{ validator.validator_name }} </span>
                     </div>
                   </div>
