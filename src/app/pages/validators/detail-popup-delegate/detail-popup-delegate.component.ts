@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { DATE_TIME_WITH_MILLISECOND } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { DATE_TIME_WITH_MILLISECOND } from '../../../../app/core/constants/common.constant';
+import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { DIALOG_STAKE_MODE } from '../../../../app/core/constants/validator.enum';
 import { Globals } from '../../../global/global';
-;
 
 @Component({
   selector: 'detail-popup-delegate',

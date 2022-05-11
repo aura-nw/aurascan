@@ -590,6 +590,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         message = res?.data?.raw_log || message;
         message = this.mappingErrorService.checkMappingError(message, numberCode);
         if (!!!numberCode && numberCode === CodeTransaction.Success) {
+          this.getList();
           this.getDataWallet();
           this.toastr.success(message);
         } else {
