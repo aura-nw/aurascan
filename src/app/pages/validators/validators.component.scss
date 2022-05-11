@@ -234,7 +234,8 @@ form.search-form {
   .header-mob {
     padding-bottom: 2px;
   }
-  .button-outline__in-card {
-    padding: var(--spacer-1) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-1)) var(--spacer-6);
+  .button-outline__in-card, .btn-claim .button-outline {
+    padding: 0 var(--spacer-6);
+    height: 40px;
   }
 }
