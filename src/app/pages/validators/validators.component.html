@@ -27,7 +27,7 @@
                 type="button"
                 (click)="handleClaim()"
                 [disabled]="isDisableClaim || isHandleStake">
-                <span class="text-gradient">Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
+                <span class="text-gradient small-body-mob">Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
                   <span class="ml-1">{{ globals.stableToken }}</span>
                 </span>
               </button>
