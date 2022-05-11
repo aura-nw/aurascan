@@ -2,15 +2,15 @@
 <section *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob">
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <div class="title-small mb-2">
           <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div>
           <div>{{ currentValidatorDetail?.title }}</div>
         </div>
-        <div class="valid-status"
-          [ngClass]="{ 'status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
-          [ngClass]="{ 'status-jailed': currentValidatorDetail?.jailed }"
-          [ngClass]="{ 'label-mob-status': breakpoint.value.matches }">
+        <div
+          [ngClass]="{ 'valid-status status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
+          [ngClass]="{ 'valid-status status-jailed': currentValidatorDetail?.jailed }"
+          [ngClass]="{ 'label__status small-body': breakpoint.value.matches }">
           <ng-container *ngIf="currentValidatorDetail?.jailed">
             <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches"/> Jailed
           </ng-container>

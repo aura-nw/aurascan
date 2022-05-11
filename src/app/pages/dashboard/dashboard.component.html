@@ -6,33 +6,33 @@
         <div class="card-body">
           <div class="align-items-center mb-3">
             <div class="d-flex flex-wrap align-items-center mb-lg-6">
-              <h5 class="title-small text--white">Transactions</h5>
+              <h5 class="sub-text sub-text-mob text--white">Transactions</h5>
               <div class="ms-auto">
                 <div class="d-none d-lg-block">
                   <button
                     type="button"
-                    class="button button-primary body mr-2"
+                    class="button button-primary body-small mr-2"
                     [class.active]="chartRange === '60m'"
                     (click)="updateBlockAndTxs('60m')">
                     60m
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body mr-2"
+                    class="button button-primary body-small mr-2"
                     [class.active]="chartRange === '24h'"
                     (click)="updateBlockAndTxs('24h')">
                     24h
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body mr-2"
+                    class="button button-primary body-small mr-2"
                     [class.active]="chartRange === '30d'"
                     (click)="updateBlockAndTxs('30d')">
                     30d
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body"
+                    class="button button-primary body-small"
                     [class.active]="chartRange === '12M'"
                     (click)="updateBlockAndTxs('12M')">
                     12M
@@ -56,28 +56,28 @@
             <div class="d-lg-none text-center">
               <button
                       type="button"
-                      class="button button-primary body mr-6"
+                      class="button button-primary body-small mr-6"
                       [class.active]="chartRange === '60m'"
                       (click)="updateBlockAndTxs('60m')">
                 60m
               </button>
               <button
                       type="button"
-                      class="button button-primary body mr-6"
+                      class="button button-primary body-small mr-6"
                       [class.active]="chartRange === '24h'"
                       (click)="updateBlockAndTxs('24h')">
                 24h
               </button>
               <button
                       type="button"
-                      class="button button-primary body mr-6"
+                      class="button button-primary body-small mr-6"
                       [class.active]="chartRange === '30d'"
                       (click)="updateBlockAndTxs('30d')">
                 30d
               </button>
               <button
                       type="button"
-                      class="button button-primary body"
+                      class="button button-primary body-small"
                       [class.active]="chartRange === '12M'"
                       (click)="updateBlockAndTxs('12M')">
                 12M
@@ -190,7 +190,7 @@
       <div class="card">
         <div class="align-items-center d-flex justify-content-between px-6 pt-6 pb-0 pb-lg-6">
           <div class="sub-text sub-text-mob text--white">Blocks</div>
-          <button type="button" class="button button-outline button-outline__in-card d-none d-lg-block" [routerLink]="'/blocks'"><span class="text-gradient">View more</span></button>
+          <button type="button" class="button button-outline button-outline__in-card d-none d-lg-block body" [routerLink]="'/blocks'"><span class="text-gradient">View more</span></button>
         </div>
         <div class="card-body pt-0">
           <ngx-simplebar>
@@ -248,7 +248,7 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <button type="button" class="button button-outline button-outline__in-card d-lg-none w-100 mt-2" [routerLink]="'/blocks'"><span class="text-gradient">View more</span></button>
+          <button type="button" class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2" [routerLink]="'/blocks'"><span class="text-gradient">View more</span></button>
         </div>
       </div>
     </div>
@@ -258,7 +258,7 @@
       <div class="card">
         <div class="align-items-center d-flex justify-content-between px-6 pt-6 pb-0 pb-lg-6">
           <div class="sub-text text--white">Transactions</div>
-          <button type="button" class="button button-outline button-outline__in-card d-none d-lg-block" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
+          <button type="button" class="button button-outline button-outline__in-card body d-none d-lg-block" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
         </div>
         <div class="card-body pt-0">
           <ngx-simplebar>
@@ -319,7 +319,7 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <button type="button" class="button button-outline button-outline__in-card d-lg-none w-100 mt-2" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
+          <button type="button" class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
         </div>
       </div>
     </div>
