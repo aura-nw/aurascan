@@ -23,6 +23,13 @@
         &::placeholder {
           color: var(--aura-light-gray) !important;
         }
+        &:placeholder-shown {
+          max-width: 100%;
+          text-overflow: ellipsis;
+          display: inline-block;
+          white-space: nowrap;
+          overflow: hidden !important;
+        }
       }
       button[type='submit'],
       button[type='reset']{

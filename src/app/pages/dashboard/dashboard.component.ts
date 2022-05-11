@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { PAGE_EVENT } from '../../core/constants/common.constant';
+import { balanceOf } from '../../core/utils/common/parsing';
 import { Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
@@ -56,6 +58,7 @@ export class DashboardComponent implements OnInit {
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
+    private numberPipe: DecimalPipe
   ) {}
 
   ngOnInit(): void {
@@ -309,13 +312,14 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['blocks/id', data.blockId]);
     }
   }
+
   checkAmountValue(message: any[], txHash: string) {
     if(message.length > 1) {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
     } else if(message.length === 0 || (message.length === 1 && !message[0].amount)){
       return '-';
     } else {
-      return message[0].amount.amount + '<span class=text--primary> AURA</span>';
+      return this.numberPipe.transform(balanceOf(message[0].amount.amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
     }
   }
 }
