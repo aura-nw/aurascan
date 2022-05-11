@@ -2,7 +2,7 @@
   <ng-container *ngIf="userAddress">
     <div class="card" *ngIf="lengthWallet > 0">
       <!-- heading -->
-      <div class="card-header title-small body-mob">
+      <div class="card-header title-small small-body-mob">
         <div class="row justify-content-between">
           <div class="col-12 col-lg-6">
             <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
@@ -20,7 +20,7 @@
               </span>
             </div>
           </div>
-          <div class="col-12 col-lg-6">
+          <div class="col-12 col-lg-6 mt-2">
             <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
               <button
                 class="button button-outline button-outline__claim-reward"
@@ -136,7 +136,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="table-body body-mob">
+                <div class="table-body small-body-mob">
                   <ng-container *ngFor="let template of templatesWallet; index as idx">
                     <div class="d-flex justify-content-between text--white mb-2" *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
@@ -177,12 +177,12 @@
         <div class="table-mobile">
           <ng-container *ngFor="let validator of lstUndelegate">
             <div class="table-mobile__item undelegate-item">
-              <div class="body title-name">
+              <div class="body">
                 <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
                   {{ validator.validator_name }}</a>
               </div>
-              <div class="d-flex align-items-center justify-content-center text--white small-body-mob">
-                <span class="">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
+              <div class="d-flex align-items-center justify-content-between text--white small-body-mob">
+                <span>{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
                 <span>
                   {{ validator.balance | number: globals.formatNumberToken }}
                   <span class="text--green">{{ globals.stableToken }}</span>
@@ -366,7 +366,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="table-body table-body__revert body-mob">
+                <div class="table-body table-body__revert small-body-mob">
                   <ng-container *ngFor="let template of templates; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-2"
