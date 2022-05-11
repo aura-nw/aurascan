@@ -12,12 +12,14 @@
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
             class="button button-outline body">
-            {{
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                ? 'Voting Ended'
-                : 'Vote'
-            }}
+            <span class="text-gradient">
+              {{
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
+              }}
+            </span>
           </button>
           <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
             <span class="status title-small">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
@@ -27,18 +29,20 @@
     </div>
     <div class="card-header bg-transparent border-bottom" *ngIf="breakpoint.value.matches">
       <div class="d-flex justify-content-between mb-3">
-        <div class="col-3 card__title-mobile">#{{ proposalId }}</div>
+        <div class="col-3 card__title card__title-mobile">#{{ proposalId }}</div>
         <div class="col-9 justify-content-end card__status flex-shrink-0">
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
             class="button button-mobile button-outline body">
-            {{
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-              proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                ? 'Voting Ended'
-                : 'Vote'
-            }}
+            <span class="text-gradient">
+              {{
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                  ? 'Voting Ended'
+                  : 'Vote'
+              }}
+            </span>
           </button>
           <div class="proposal-status-mobile proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
             <span class="title-small-mobile">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
@@ -46,7 +50,7 @@
         </div>
       </div>
       <div>
-        <a class="card__title-mobile">{{ proposalDetail.pro_title }}</a>
+        <a class="card__title card__title-mobile">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="message mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
     </div>
@@ -103,18 +107,18 @@
     <div class="card-footer">
       <div class="top-border proposal__summary-total" *ngIf="!votingBarLoading">
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-2 body-bold">Current Turnout:</div>
+          <div class="col-12 col-md-2 body-bold">Current Turnout</div>
           <div class="col-12 col-md-10 body">
             {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
           </div>
         </div>
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-2 body-bold">Quorum:</div>
+          <div class="col-12 col-md-2 body-bold">Quorum</div>
           <div class="col-12 col-md-10 body">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</div>
         </div>
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-10 body text--light-gray">
-            {{ proposalDetail.total_has_voted }} of {{ proposalDetail.total_bonded_token }} has voted
+            {{ proposalDetail.total_has_voted || '0' }} of {{ proposalDetail.total_bonded_token }} has voted
           </div>
         </div>
         <div class="row mb-3">
@@ -150,7 +154,7 @@
               [matTooltipPosition]="'above'"></li>
           </ul>
         </div>
-        <div class="vote-legend-mobile" *ngIf="breakpoint.value.matches">
+        <div class="vote-legend vote-legend-mobile" *ngIf="breakpoint.value.matches">
           <ul>
             <li data-style="primary">
               <div class="item-box">

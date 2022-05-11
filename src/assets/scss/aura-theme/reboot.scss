@@ -80,10 +80,10 @@ a {
   overflow: hidden;
   text-overflow: ellipsis; 
   @media (max-width: 414px) {
-    padding: 8px;
+    padding: 8px 12px;
   }
   @media (max-width: 375px) {
-    max-width: 80px; 
+    max-width: 100px; 
   }
   justify-content: center;
   align-items: center;

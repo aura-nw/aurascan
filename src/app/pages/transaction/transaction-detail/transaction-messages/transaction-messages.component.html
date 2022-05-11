@@ -1,8 +1,8 @@
 <div class="card-header title-small d-none d-lg-block">Message</div>
 <div class="card-body body">
   <div class="d-flex justify-content-between align-items-center d-lg-none">
-    <div class="sub-text-mob">Messages</div>
-    <div class="label__status">{{ transactionDetailType }}</div>
+    <div class="sub-text-mob fw-500">Messages</div>
+    <div class="label__status fw-semibold">{{ transactionDetailType }}</div>
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
 
@@ -16,7 +16,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">From Address</div>
+        <div class="card-text fw-semibold">From Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
         [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
@@ -25,7 +25,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">To Address</div>
+        <div class="card-text fw-semibold">To Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
         [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
@@ -34,7 +34,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Amount</div>
+        <div class="card-text fw-semibold">Amount</div>
       </div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -158,7 +158,7 @@
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <div class="card-text fw-bold">Amount</div>
+          <div class="card-text fw-semibold">Amount</div>
         </div>
         <div class="col-12 col-lg-6">
           <ng-container *ngIf="amount > 0">
@@ -169,7 +169,7 @@
       </div>
       <div class="row mb-3" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3">
-          <div class="card-text fw-bold">Auto Claim Reward</div>
+          <div class="card-text fw-semibold">Auto Claim Reward</div>
         </div>
         <div class="col-12 col-lg-6">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
@@ -188,7 +188,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Proposal Id</div>
+        <div class="card-text fw-semibold">Proposal Id</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
@@ -197,7 +197,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Voter</div>
+        <div class="card-text fw-semibold">Voter</div>
       </div>
       <a class="col-12 col-lg-6 text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
         {{ transactionDetail?.messages[0]?.voter }}
@@ -205,7 +205,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Option</div>
+        <div class="card-text fw-semibold">Option</div>
       </div>
       <div class="col-12 col-lg-6">
         {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
@@ -223,7 +223,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">From Address</div>
+        <div class="card-text fw-semibold">From Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
@@ -232,7 +232,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">To Address</div>
+        <div class="card-text fw-semibold">To Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
@@ -241,7 +241,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Vesting Schedule</div>
+        <div class="card-text fw-semibold">Vesting Schedule</div>
       </div>
       <div class="col-12 col-lg-6">
         {{ dateVesting }}
@@ -259,7 +259,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Initial Deposit</div>
+        <div class="card-text fw-semibold">Initial Deposit</div>
       </div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -272,7 +272,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Proposer</div>
+        <div class="card-text fw-semibold">Proposer</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
@@ -281,7 +281,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Proposal Id</div>
+        <div class="card-text fw-semibold">Proposal Id</div>
       </div>
       <div class="col-12 col-lg-6">
         {{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}
@@ -289,7 +289,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Proposal Type</div>
+        <div class="card-text fw-semibold">Proposal Type</div>
       </div>
       <div class="col-12 col-lg-6">
         {{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}
@@ -297,7 +297,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Title</div>
+        <div class="card-text fw-semibold">Title</div>
       </div>
       <div class="col-12 col-lg-6">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}
@@ -315,7 +315,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Delegate Address</div>
+        <div class="card-text fw-semibold">Delegate Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
@@ -324,7 +324,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Source Validator Address</div>
+        <div class="card-text fw-semibold">Source Validator Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
@@ -334,7 +334,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Destination Validator Address</div>
+        <div class="card-text fw-semibold">Destination Validator Address</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
@@ -344,7 +344,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Amount</div>
+        <div class="card-text fw-semibold">Amount</div>
       </div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -355,7 +355,7 @@
     </div>
     <div class="row mb-3" *ngIf="amountClaim > 0">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Auto Claim Reward</div>
+        <div class="card-text fw-semibold">Auto Claim Reward</div>
       </div>
       <div class="col-12 col-lg-6">
         {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
@@ -373,7 +373,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Proposal Id</div>
+        <div class="card-text fw-semibold">Proposal Id</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
@@ -382,7 +382,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Depositor</div>
+        <div class="card-text fw-semibold">Depositor</div>
       </div>
       <a class="col-12 col-lg-6 text--green"
          [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
@@ -391,7 +391,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12 col-lg-3">
-        <div class="card-text fw-bold">Amount</div>
+        <div class="card-text fw-semibold">Amount</div>
       </div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">

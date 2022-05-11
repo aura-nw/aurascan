@@ -1,6 +1,6 @@
 <div class="card" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card-body">
-    <div class="fw-bold card__title" [class.card__title-mobile]="breakpoint.value.matches">Validators Votes</div>
+    <div class="card__title" [class.card__title-mobile]="breakpoint.value.matches">Validators Votes</div>
     <ul
       ngbNav
       #customNav="ngbNav"
