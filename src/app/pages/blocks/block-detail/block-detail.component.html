@@ -3,7 +3,7 @@
   <div class="card-body header-mob" [ngClass]="breakpoint.value.matches ? 'card-body' : 'card-header'">
     <div class="d-flex justify-content-between align-items-center">
       <div class="title-small">Information</div>
-      <div class="button-switch-stage">
+      <div class="button-switch-stage invisible">
         <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
         <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
       </div>
@@ -68,8 +68,8 @@
     </div>
   </ng-container>
   <ng-container *ngIf="isRawData">
-    <ng-container *ngIf="item?.txs?.height; else noValues">
-      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.txs | appJson"></pre>
+    <ng-container *ngIf="item?.json_data; else noValues">
+      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
     </ng-container>
   </ng-container>
 </div>
