@@ -67,7 +67,11 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
   </ng-container>
-  <pre *ngIf="isRawData && item?.txs" id="json" class="raw-content text--white px-4" [innerHtml]="item?.txs | appJson"></pre>
+  <ng-container *ngIf="isRawData">
+    <ng-container *ngIf="item?.txs?.height; else noValues">
+      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.txs | appJson"></pre>
+    </ng-container>
+  </ng-container>
 </div>
 <div class="card text--white">
   <div class="card-header title-small py-6 px-6 d-none d-lg-block">Transactions</div>

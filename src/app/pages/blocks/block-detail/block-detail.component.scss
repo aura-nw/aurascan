@@ -2,8 +2,9 @@
   white-space: pre-wrap;
 }
 
-@media (max-width: 991.99px) {
-  .header-mob {
+.header-mob{
+  padding: var(--spacer-3) var(--spacer-6) !important;
+  @media (max-width: 991.99px) {
     background: transparent;
     padding-bottom: 2px !important;
   }

@@ -28,6 +28,8 @@ import { Subject } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DecimalPipe } from '@angular/common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-account-detail',
@@ -176,7 +178,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     public global: Globals,
     private walletService: WalletService,
     private layout: BreakpointObserver,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private numberPipe: DecimalPipe
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -445,7 +448,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     } else if(message.length === 0 || (message.length === 1 && !message[0].amount)){
       return '-';
     } else {
-      return message[0].amount.amount + '<span class=text--primary> AURA</span>';
+      return this.numberPipe.transform(balanceOf(message[0].amount.amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
     }
   }
 }
