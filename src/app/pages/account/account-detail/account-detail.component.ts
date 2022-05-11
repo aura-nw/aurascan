@@ -29,7 +29,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
+import { balanceOf } from '../../../../app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-account-detail',

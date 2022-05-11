@@ -9,7 +9,7 @@ import { CodeTransaction, StatusTransaction } from '../../../../app/core/constan
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { getAmount, Globals } from '../../../../app/global/global';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'app-block-detail',
