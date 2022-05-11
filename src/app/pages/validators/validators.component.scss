@@ -54,59 +54,30 @@
 
 .undelegate-item {
   padding: var(--spacer-3) 0;
-  margin: 0;
-
   &:not(:last-child) {
     border-bottom: 1px solid var(--aura-light-gray);
   }
-
   &.table-mobile__item {
     padding: 12px;
-
-    .undelegate-amount {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
   }
 }
 
 form.search-form {
   .input-group {
     background-color: var(--aura-bg-form);
-
     input.form-control {
       width: 100%;
-
       @media (min-width: 992px) {
         width: 300px;
       }
-
       @media (min-width: 1200px) {
         width: 500px;
       }
-
       @media (min-width: 1440px) {
         width: 782px;
       }
-
-      &::placeholder {
-        color: var(--aura-neutrals-4);
-      }
     }
   }
-}
-
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
 }
 
 .dropdown-toggle::after {
@@ -216,10 +187,6 @@ form.search-form {
   }
 }
 
-.cdk-overlay-pane.commissionPanel {
-  transform: translateY(64px) !important;
-}
-
 .commissionPanel {
   background: #25252C;
   min-width: 100% !important;
@@ -233,10 +200,6 @@ form.search-form {
 }
 
 .aura-form {
-  .select-action-field {
-    min-width: 180px;
-  }
-
   .input-group {
     button.button.button-primary.active {
       color: var(--aura-black);
@@ -267,12 +230,8 @@ form.search-form {
 }
 
 @media (max-width: 991.99px) {
-  .header-mob {
-    padding-bottom: 2px;
-  }
   .button-outline__in-card {
     box-shadow: 2px 1000px 1px #38383D inset;
-    padding: var(--spacer-1) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-1)) var(--spacer-6);
   }
 }
 
