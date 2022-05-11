@@ -169,6 +169,10 @@ export class DashboardComponent implements OnInit {
           labels: {
             datetimeUTC: false,
           },
+          axisBorder: {
+            show: true,
+            color: '#FFA741',
+          },
         };
         // }
     });
