@@ -4,7 +4,6 @@ import { DATE_TIME_WITH_MILLISECOND } from '../../../../app/core/constants/commo
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { DIALOG_STAKE_MODE } from '../../../../app/core/constants/validator.enum';
 import { Globals } from '../../../global/global';
-;
 
 @Component({
   selector: 'detail-popup-delegate',
