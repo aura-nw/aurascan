@@ -127,7 +127,10 @@ form.search-form {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80px;
+  min-height: 48px;
+  @media (min-width: 992px) {
+    min-height: 60px;
+  }
 
   .mat-form-field-wrapper {
     width: 100%;
@@ -144,8 +147,12 @@ form.search-form {
   mat-select-trigger {
     position: relative;
     color: var(--aura-white);
-    font-size: 2rem;
-    line-height: 2.3rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    @media (min-width: 992px) {
+      font-size: 1.6rem;
+      line-height: 1.9rem;
+    }
 
     &:after {
       content: '';
@@ -171,10 +178,17 @@ form.search-form {
 
 .mat-option {
   background: #25252C;
+  @media (max-width: 991.99px) {
+    padding: var(--spacer-3) 0;
+  }
 
   .option-contain {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    @media (min-width: 992px) {
+      font-size: 1.6rem;
+      line-height: 2.4rem;
+    }
 
     .option-lable {
       &:first-child {
@@ -208,10 +222,14 @@ form.search-form {
 
 .commissionPanel {
   background: #25252C;
-  transform: translate3D(16px, 64px, 0) !important;
   min-width: 100% !important;
-  padding: 16px 0 !important;
+  padding: var(--spacer-3) 0 !important;
   border-radius: 8px;
+  transform: translate3D(16px, 40px, 0) !important;
+  @media (min-width: 992px) {
+    padding: var(--spacer-4) 0 !important;
+    transform: translate3D(16px, 45px, 0) !important;
+  }
 }
 
 .aura-form {
@@ -222,11 +240,29 @@ form.search-form {
   .input-group {
     button.button.button-primary.active {
       color: var(--aura-black);
-      font-size: 20px;
-      line-height: 23px;
-      font-weight: 600;
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+      font-weight: 500;
       border-radius: 4px;
+      @media (min-width: 992px) {
+        font-size: 1.6rem;
+        line-height: 2rem;
+      }
     }
+  }
+}
+
+.aura-table {
+  .button-outline__in-card {
+    box-shadow: 2px 1000px 1px #20262B inset;
+  }
+}
+
+.button-outline__claim-reward {
+  min-height: 40px;
+  height: auto;
+  @media (min-width: 992px) {
+    height: 50px;
   }
 }
 
@@ -234,8 +270,35 @@ form.search-form {
   .header-mob {
     padding-bottom: 2px;
   }
-  .button-outline__in-card, .btn-claim .button-outline {
-    padding: 0 var(--spacer-6);
-    height: 40px;
+  .button-outline__in-card {
+    box-shadow: 2px 1000px 1px #38383D inset;
+    padding: var(--spacer-1) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-1)) var(--spacer-6);
+  }
+}
+
+.button-max {
+  padding: 0 var(--spacer-4);
+  height: 32px;
+  display: flex;
+  align-items: center;
+  @media (min-width: 992px) {
+    height: 34px;
+  }
+}
+
+.modal {
+  @media (max-width: 991.99px) {
+    .modal-dialog {
+      margin: 0;
+    }
+    .modal-content {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100vh - 62px);
+      border: none;
+      border-radius: 0 !important;
+    }
   }
 }

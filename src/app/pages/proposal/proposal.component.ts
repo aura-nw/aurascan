@@ -191,6 +191,7 @@ export class ProposalComponent implements OnInit {
     const title = item.pro_title;
     const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
 
+    // if (expiredTime > 0) {
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
 

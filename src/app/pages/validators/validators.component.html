@@ -23,7 +23,7 @@
           <div class="col-12 col-lg-6">
             <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
               <button
-                class="button button-outline"
+                class="button button-outline button-outline__claim-reward"
                 type="button"
                 (click)="handleClaim()"
                 [disabled]="isDisableClaim || isHandleStake">
@@ -123,7 +123,7 @@
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
                     <div class="title body-mob text--green">
-                      <span class=""> {{ validator.validator_name }} </span>
+                      <span> {{ validator.validator_name }} </span>
                     </div>
                   </div>
                   <div class="table-header__action">
@@ -140,7 +140,7 @@
                   <ng-container *ngFor="let template of templatesWallet; index as idx">
                     <div class="d-flex justify-content-between text--white mb-2" *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
-                      <span class=""> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
+                      <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
                     </div>
                   </ng-container>
                 </div>
@@ -166,8 +166,7 @@
             </div>
             <div class="col-9 text--white">
               {{ validator.balance | number: globals.formatNumberToken }}
-              <span class="text--green">{{ globals.stableToken }}</span
-              ><br />
+              <span class="text--green">{{ globals.stableToken }}</span><br />
               <span class="txt-time">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
             </div>
           </div>
@@ -180,8 +179,7 @@
             <div class="table-mobile__item undelegate-item">
               <div class="body title-name">
                 <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
-                  {{ validator.validator_name }}</a
-                >
+                  {{ validator.validator_name }}</a>
               </div>
               <div class="undelegate-amount text--white small-body-mob">
                 <span class="">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
@@ -398,16 +396,16 @@
 </div>
 
 <div class="col-lg-6">
-  <ng-template #modalManage let-modal>
+  <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
     <div class="box-staking aura-form">
-      <div class="d-flex align-items-end mb-4 mb-xl-8">
-        <div class="mr-10">
-          <div class="title text-gradient fw-bolder">{{ dataModal?.title }}</div>
-          <div class="body text--white">
+      <div class="d-lg-flex align-items-end mb-4 mb-xl-8">
+        <div class="mr-lg-10 mb-4 mb-lg-0">
+          <div class="title title-medium-mob text-gradient fw-bolder">{{ dataModal?.title }}</div>
+          <div class="body body-small-mob text--white">
             Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
           </div>
         </div>
-        <div class="body text--greyscale-4">
+        <div class="body text--greyscale-3">
           <div class="mb-1">
             <span
               >Voting power - {{ dataModal?.percent_power }}% ({{
@@ -423,10 +421,10 @@
       <div>
         <detail-popup-delegate [data]="dataDelegate"></detail-popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
-          <div class="mt-2">
-            <b>Available for undelegatation</b>
-            {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
-            <span class="text--green">{{ globals.stableToken }}</span>
+          <div class="mt-2 body">
+            <span>Available for undelegatation</span>
+            <span class="ml-3">{{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}</span>
+            <span class="text--green"> {{ globals.stableToken }}</span>
           </div>
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -435,8 +433,8 @@
               [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
               [(ngModel)]="amountFormat"
               (blur)="resetCheck()" />
-            <div class="py-2 mr-4">
-              <button class="button button-primary active" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
+            <div class="d-flex align-items-center mr-2 mr-lg-4">
+              <button class="button button-primary active button-max" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
               </button>
             </div>
@@ -446,8 +444,8 @@
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
-            <div class="py-2 mr-4">
-              <button class="button button-primary active" type="button" (click)="getMaxToken(dialogMode.Delegate)">
+            <div class="d-flex align-items-center py-2 mr-4">
+              <button class="button button-primary active button-max" type="button" (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
               </button>
             </div>
@@ -458,7 +456,7 @@
           </div>
         </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
-          <div class="title-small mb-2">Redelegate to:</div>
+          <div class="body mb-2">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
               class="list-token"
@@ -469,7 +467,7 @@
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
                 *ngFor="let item of lstValidator; let last = last"
-                [class.mb-4]="!last"
+                [class.mb-lg-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain">
@@ -483,17 +481,16 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-
           <div *ngIf="selectedValidator">
-            <div class="mt-6">
-              <b>Available for redelegatation</b>
-              {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
-              <span class="text--green">{{ globals.stableToken }}</span>
+            <div class="mt-6 body">
+              <span>Available for redelegatation</span>
+              <span class="ml-3">{{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}</span>
+              <span class="text--green"> {{ globals.stableToken }}</span>
             </div>
             <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
-              <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
-              <div class="py-2 mr-4">
-                <button class="button button-primary active" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
+                <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
+              <div class="d-flex align-items-center py-2 mr-4">
+                <button class="button button-primary active button-max" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX
                 </button>
               </div>
@@ -502,12 +499,12 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 mt-xl-8">
+      <div class="mt-4 mt-lg-8">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
             <div class="dropdown aura-dropdown mr-4">
               <button
-                class="button button-outline button-outline__in-card d-flex align-items-center fw-semibold"
+                class="button button-outline   d-flex align-items-center fw-semibold"
                 type="button"
                 id="delegateAction"
                 data-bs-toggle="dropdown"
@@ -533,8 +530,7 @@
                 </li>
               </ul>
             </div>
-
-            <button type="button" class="button body button-outline button-outline__in-card" (click)="changeTypePopup(dialogMode.Delegate)">
+            <button type="button" class="button body button-outline  " (click)="changeTypePopup(dialogMode.Delegate)">
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -544,7 +540,7 @@
             </button>
             <button
               type="button"
-              class="button body button-outline button-outline__in-card"
+              class="button body button-outline  "
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <span class="text-gradient">Undelegate</span>
@@ -567,7 +563,7 @@
             </button>
             <button
               type="button"
-              class="button body button-outline button-outline__in-card"
+              class="button body button-outline  "
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <span class="text-gradient">Delegate</span>
@@ -579,7 +575,7 @@
             </button>
             <button
               type="button"
-              class="button body button-outline button-outline__in-card"
+              class="button body button-outline  "
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <span class="text-gradient">Redelegate</span>

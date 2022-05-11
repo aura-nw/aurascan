@@ -2,11 +2,18 @@
   .modal-dialog {
     max-width: 720px;
     .modal-content {
-      padding: var(--spacer-6);
+      padding: var(--spacer-4);
       background: var(--aura-black);
       box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
       border-radius: 12px;
       color: var(--aura-white);
+      @media (max-width: 414px) {
+        overflow-y: auto;
+        padding-bottom: 120px;
+      }
+      @media (min-width: 992px) {
+        padding: var(--spacer-6);
+      }
     }
   }
   &.modal-holder.fade.show {
