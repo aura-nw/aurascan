@@ -153,12 +153,12 @@
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
       <div
-        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white header-mob">
+        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white pb-1">
         Undelegating
       </div>
       <div class="card-body" *ngIf="!breakpoint.value.matches">
         <ng-container *ngFor="let validator of lstUndelegate">
-          <div class="row col-12 mb-3 undelegate-item">
+          <div class="row col-12 mb-3 m-0 undelegate-item">
             <div class="col-3 body title-name">
               <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
                 {{ validator.validator_name }}</a
@@ -181,7 +181,7 @@
                 <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
                   {{ validator.validator_name }}</a>
               </div>
-              <div class="undelegate-amount text--white small-body-mob">
+              <div class="d-flex align-items-center justify-content-center text--white small-body-mob">
                 <span class="">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
                 <span>
                   {{ validator.balance | number: globals.formatNumberToken }}
