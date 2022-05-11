@@ -11,7 +11,7 @@
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
-            class="button button-outline body">
+            class="button button-outline button-outline__in-card body">
             <span class="text-gradient">
               {{
                 proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
@@ -34,7 +34,7 @@
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
-            class="button button-mobile button-outline body">
+            class="button button-mobile button-outline button-outline__in-card body">
             <span class="text-gradient">
               {{
                 proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
