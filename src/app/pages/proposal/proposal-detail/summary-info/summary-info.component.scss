@@ -22,9 +22,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    .message {
-      color: var(--aura-green-disabled);
-    }
     .button-mobile {
       height: 40px;
       padding: 8px 18px;
@@ -46,6 +43,9 @@
     }
 
   }
+}
+.message {
+  color: var(--aura-green-disabled);
 }
 .editorial-container {
   max-height: 360px;
