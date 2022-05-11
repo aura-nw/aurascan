@@ -19,7 +19,7 @@
         <div class="col-3">
           <p class="card-text fw-bold">Chain Id</p>
         </div>
-        <div class="col-6">{{ transaction?.block.chainid }}</div>
+        <div class="col-6">{{ transaction?.block?.chainid }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-3">
@@ -48,7 +48,7 @@
           <p class="card-text fw-bold">Height</p>
         </div>
         <div class="col-6">
-          <a class="text--green" routerLink="/blocks/id/{{ transaction?.block.id }}">{{ transaction?.height | number }}</a>
+          <a class="text--green" routerLink="/blocks/id/{{ transaction?.block?.id }}">{{ transaction?.height | number }}</a>
         </div>
       </div>
       <div class="row mb-3">
