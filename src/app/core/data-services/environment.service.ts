@@ -30,7 +30,7 @@ export class EnvironmentService {
           fabric: config['fabric'],
           cosmos: config['cosmos'],
           chainId: config['chainId'] || 'aura-testnet',
-          timeStaking: config['timeStaking'] || '21',
+          timeStaking: config['timeStaking'] || '1814400',
         };
         this.apiUrl.next(data);
       })

@@ -63,3 +63,5 @@ export const VALIDATOR_ADDRESS_PREFIX = "auravaloper";
 export const GAS_ESTIMATE = "400000";
 
 export const STABLE_UTOKEN = 'uaura';
+
+export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;

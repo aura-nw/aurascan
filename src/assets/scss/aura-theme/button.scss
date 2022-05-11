@@ -59,6 +59,11 @@
   background-origin: border-box;
   background-clip: content-box, border-box;
   box-shadow: 2px 1000px 1px #141416 inset;
+  padding: 0 var(--spacer-6);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &__in-card {
     box-shadow: 2px 1000px 1px #20262B inset;
   }
