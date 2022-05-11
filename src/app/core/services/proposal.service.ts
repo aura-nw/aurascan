@@ -49,4 +49,9 @@ export class ProposalService extends CommonService {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
   }
+
+  getProposalList(address: string): Observable<IResponsesTemplates<IProposal[]>> {
+    this.setURL();
+    return this.http.get<any>(`${this.apiUrl}/proposals/list/get-by-address/${address}`);
+  }
 }

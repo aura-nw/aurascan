@@ -118,7 +118,7 @@
         </div>
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-10 body text--light-gray">
-            {{ proposalDetail.total_has_voted || '0' }} of {{ proposalDetail.total_bonded_token }} has voted
+            {{ proposalDetail.total_has_voted }} of {{ proposalDetail.total_bonded_token }} has voted
           </div>
         </div>
         <div class="row mb-3">
