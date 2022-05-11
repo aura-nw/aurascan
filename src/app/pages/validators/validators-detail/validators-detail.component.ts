@@ -11,6 +11,8 @@ import { ValidatorService } from '../../../../app/core/services/validator.servic
 import { Globals } from '../../../../app/global/global';
 import { PageEvent } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DecimalPipe } from '@angular/common';
+import { balanceOf } from '../../../../app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-validators-detail',
@@ -76,7 +78,8 @@ export class ValidatorsDetailComponent implements OnInit {
     private blockService: BlockService,
     public commonService: CommonService,
     public global: Globals,
-    private layout: BreakpointObserver
+    private layout: BreakpointObserver,
+    private numberPipe: DecimalPipe
   ) {}
 
   ngOnInit(): void {
@@ -238,9 +241,9 @@ export class ValidatorsDetailComponent implements OnInit {
   }
   checkAmountStaking(amount, isStakeMode){
     if (isStakeMode) {
-      return '<span class=text--info>' + '+ ' + amount + '</span>';
+      return '<span class=text--info>' + '+ ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>';
     } else {
-      return '<span class=text--danger>' + '- ' + amount + '</span>';
+      return '<span class=text--danger>' + '- ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>';
     }
   }
 }
