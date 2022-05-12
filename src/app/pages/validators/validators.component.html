@@ -118,7 +118,7 @@
         </ng-container>
         <ng-container *ngIf="breakpoint.value.matches">
           <div class="table-mobile">
-            <ng-container *ngFor="let validator of listStakingValidator; index as i">
+            <ng-container *ngFor="let validator of dataSourceWallet.data; index as i">
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
