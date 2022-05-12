@@ -8,7 +8,7 @@
   }
 }
 
-.uptime-content {
+.article-1.uptime-content {
   white-space: pre-wrap;
   flex-wrap: wrap;
   display: flex;
@@ -48,11 +48,15 @@
       filter: $filter-uptime-icon;
     }
   }
-  @media (max-width: 991.99px) {
+  @media (max-width: 1199.99px) {
+    min-height: 300px;
+  }
+  @media (max-width: 767.99px) {
     width: 100%;
-    max-width: 304px;
+    max-width: fit-content;
+    min-height: 230px;
     .block-uptime {
-      margin: 0px 5px 7px 5px;
+      margin: 0 5px 7px 5px;
       width: 24px;
       height: 24px;
     }
@@ -86,7 +90,10 @@
 }
 
 .article-1 {
-  min-height: 400px;
+  @media (min-width: 1200px) and (max-width: 1399.99px) {
+    min-height: 430px;
+  }
+  min-height: 410px;
 }
 
 form.search-form {

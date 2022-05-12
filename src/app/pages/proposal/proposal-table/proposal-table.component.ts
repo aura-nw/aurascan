@@ -138,4 +138,14 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource.paginator = e;
     }
   }
+
+  getListData(): any[] {
+    if (!(this.dataSource?.paginator && this.dataSource?.data)) {
+      return [];
+    }
+    return this.dataSource.data.slice(
+      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
+      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
+    );
+  }
 }

@@ -3,7 +3,7 @@
   <div class="card-body header-mob" [ngClass]="breakpoint.value.matches ? 'card-body' : 'card-header'">
     <div class="d-flex justify-content-between align-items-center">
       <div class="title-small">Information</div>
-      <div class="button-switch-stage">
+      <div class="button-switch-stage invisible">
         <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
         <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
       </div>
@@ -11,52 +11,52 @@
     <div class="divider divider-horizontal mt-4 d-lg-none"></div>
   </div>
   <ng-container *ngIf="!isRawData">
-    <div class="card-body body header-mob" *ngIf="!loading">
+    <div class="card-body body header-mob small-body-mob" *ngIf="!loading">
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Chain Id</p>
+          <p class="card-text fw-semibold">Chain Id</p>
         </div>
         <div class="col-12 col-lg-6">{{ item?.chainid }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Height</p>
+          <p class="card-text fw-semibold">Height</p>
         </div>
         <div class="col-12 col-lg-6">{{ item?.height }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Block Time</p>
+          <p class="card-text fw-semibold">Block Time</p>
         </div>
-        <div class="col-6">{{ commonService.getDateValue(item?.timestamp)[0]}} ({{ (dateFormat) }})</div>
+        <div class="col-12 col-lg-6">{{ commonService.getDateValue(item?.timestamp)[0]}} ({{ (dateFormat) }})</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Block Hash</p>
+          <p class="card-text fw-semibold">Block Hash</p>
         </div>
         <div class="col-12 col-lg-6">{{ item?.block_hash }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Number of Tx</p>
+          <p class="card-text fw-semibold">Number of Tx</p>
         </div>
         <div class="col-12 col-lg-6">{{ item?.num_txs }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Gas (used / wanted)</p>
+          <p class="card-text fw-semibold">Gas (used / wanted)</p>
         </div>
         <div class="col-12 col-lg-6">{{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Block Round</p>
+          <p class="card-text fw-semibold">Block Round</p>
         </div>
         <div class="col-12 col-lg-6">{{ item?.round | number }}</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
-          <p class="card-text fw-bold">Proposer</p>
+          <p class="card-text fw-semibold">Proposer</p>
         </div>
         <div class="col-12 col-lg-6">
           <a class="text--green" routerLink="/validators/{{ item?.operator_address }}">{{ item?.proposer }}</a>
@@ -68,8 +68,8 @@
     </div>
   </ng-container>
   <ng-container *ngIf="isRawData">
-    <ng-container *ngIf="item?.txs?.height; else noValues">
-      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.txs | appJson"></pre>
+    <ng-container *ngIf="item?.json_data; else noValues">
+      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
     </ng-container>
   </ng-container>
 </div>

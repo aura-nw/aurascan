@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { MaterialModule } from '../../../app/app.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -20,6 +20,7 @@ import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { LayoutModule } from '@angular/cdk/layout';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -40,8 +41,9 @@ import { LayoutModule } from '@angular/cdk/layout';
     TableNoDataModule,
     DetailPopupDelegateModule,
     PaginatorModule,
-    LayoutModule
+    LayoutModule,
+    MatTooltipModule
   ],
-  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService]
+  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe]
 })
 export class ValidatorsModule { }

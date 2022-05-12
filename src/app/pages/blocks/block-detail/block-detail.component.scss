@@ -3,8 +3,9 @@
 }
 
 .header-mob{
-  padding: var(--spacer-3) var(--spacer-6) !important;
+  padding: var(--spacer-6) !important;
   @media (max-width: 991.99px) {
+    padding: var(--spacer-4) !important;
     background: transparent;
     padding-bottom: 2px !important;
   }
