@@ -573,7 +573,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkStatuExcuteBlock(hash, error, msg) {
     if (error) {
       if (error != 'Request rejected') {
-        this.toastr.error(msg);
+        this.toastr.error(error);
       }
     } else {
       setTimeout(() => {
@@ -589,12 +589,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         let numberCode = res?.data?.code;
         message = res?.data?.raw_log || message;
         message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (!!!numberCode && numberCode === CodeTransaction.Success) {
-          this.getList();
-          this.getDataWallet();
-          this.toastr.success(message);
-        } else {
-          this.toastr.error(message);
+        if (numberCode !== undefined) {
+          if (!!!numberCode && numberCode === CodeTransaction.Success) {
+            this.getList();
+            this.getDataWallet();
+            this.toastr.success(message);
+          } else {
+            this.toastr.error(message);
+          }
         }
       },
       (error) => {},
