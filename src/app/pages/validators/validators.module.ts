@@ -20,6 +20,7 @@ import { DetailPopupDelegateModule } from './detail-popup-delegate/detail-popup-
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { LayoutModule } from '@angular/cdk/layout';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     TableNoDataModule,
     DetailPopupDelegateModule,
     PaginatorModule,
-    LayoutModule
+    LayoutModule,
+    MatTooltipModule
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe]
 })
