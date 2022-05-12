@@ -144,8 +144,8 @@
               </div>
               <div class="d-flex justify-content-between mt-3 proposal-lasted__content">
                 <div class="w-100">
-                  <div class="d-flex justify-content-between align-items-end mb-2">
-                    <div class="body"><span>Status</span></div>
+                  <div class="d-flex justify-content-between align-items-end mb-3">
+                    <div class="small-body"><span>Status</span></div>
                     <div
                       *ngIf="getStatus(lastedItem.pro_status)"
                       class="proposal-status-mobile flex-shrink-0 proposal-status__{{
@@ -154,13 +154,13 @@
                       <span class="status">{{ getStatus(lastedItem.pro_status).value }}</span>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-between mb-2">
-                    <div class="body body-mobile">Voting Start</div>
-                    <div class="body body-mobile">{{ lastedItem.pro_voting_start_time | mask: '0000-00-00 00:00:00' }}</div>
+                  <div class="d-flex justify-content-between mb-3">
+                    <div class="small-body body-mobile">Voting Start</div>
+                    <div class="small-body body-mobile">{{ lastedItem.pro_voting_start_time | mask: '0000-00-00 00:00:00' }}</div>
                   </div>
-                  <div class="d-flex justify-content-between mb-2">
-                    <div class="body body-mobile">Voting End</div>
-                    <div class="body body-mobile">{{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}</div>
+                  <div class="d-flex justify-content-between">
+                    <div class="small-body body-mobile">Voting End</div>
+                    <div class="small-body body-mobile">{{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}</div>
                   </div>
                 </div>
               </div>
