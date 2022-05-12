@@ -105,8 +105,8 @@
             <div class="card-footer">
               <div class="top-border">
                 <div class="d-flex justify-content-end align-items-center">
-                  <div class="message mr-5" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
-                    You voted '{{ proposalVotes[idx].vote }}' for this proposal
+                  <div class="message mr-5" *ngIf="lastedItem.vote_option">
+                    You voted '{{ lastedItem.vote_option }}' for this proposal
                   </div>
                   <button class="btn button-inline body text--green mr-3" [routerLink]="[lastedItem.pro_id]">
                     Details
@@ -131,15 +131,15 @@
         </div>
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
-        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList; index as idx">
+        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList; index as idex">
           <div class="card mb-0 h-100">
             <div class="card-body">
               <div class="justify-content-between align-items-start border-bottom-mobile">
                 <div class="card__title-mobile mb-3 text--green text-clamp" [routerLink]="[lastedItem.pro_id]">
                   #{{ lastedItem.pro_id }} {{ lastedItem.pro_title }}
                 </div>
-                <div class="message mb-3 text-end" *ngIf="proposalVotes[idx] && proposalVotes[idx].vote">
-                  You voted '{{ proposalVotes[idx].vote }}' for this proposal
+                <div class="message mb-3 text-end" *ngIf="lastedItem.vote_option">
+                  You voted '{{ lastedItem.vote_option }}' for this proposal
                 </div>
               </div>
               <div class="d-flex justify-content-between mt-3 proposal-lasted__content">
@@ -173,7 +173,7 @@
                   </button>
                   <button
                     [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-                    (click)="openVoteDialog(lastedItem, idx)"
+                    (click)="openVoteDialog(lastedItem, idex)"
                     class="button button-mobile button-outline button-outline__in-card body col-6">
                     <span class="text-gradient">
                       {{
