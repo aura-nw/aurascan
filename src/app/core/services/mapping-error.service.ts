@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { DATE_TIME_WITH_MILLISECOND } from '../constants/common.constant';
 import { CodeTransaction } from '../constants/transaction.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -8,6 +9,7 @@ import { CommonService } from './common.service';
 @Injectable()
 export class MappingErrorService extends CommonService {
   apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
 
   constructor(
     private http: HttpClient,
@@ -15,6 +17,7 @@ export class MappingErrorService extends CommonService {
     public translate: TranslateService
   ) {
     super(http, environmentService);
+    this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
   }
 
   checkMappingError(message, code){
@@ -25,7 +28,7 @@ export class MappingErrorService extends CommonService {
     if (message.indexOf('too many redelegation') >= 0) {
       message = this.translate.instant('NOTICE.ERROR_REDELEGATE_TIME');
     } else if (message.indexOf('in progress') >= 0) {
-      message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS');
+      message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS', {timeStaking: this.timeStaking});
     } else if (message.indexOf('too many unbonding') >= 0) {
       message = this.translate.instant('NOTICE.ERROR_UNDELEGATE_TIME');
     } 

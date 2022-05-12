@@ -140,7 +140,7 @@
             </mat-tab>
             <mat-tab label="Redelegations">
               <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
-                1. {{"NOTICE.REDELEGATE_WAITING" | translate}}<br>
+                1. {{"NOTICE.REDELEGATE_WAITING" | translate: {timeStaking: timeStaking} }}<br>
                 2. {{"NOTICE.NUMBER_REDELEGATE" | translate}}
               </div>
               <app-account-table

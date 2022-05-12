@@ -14,7 +14,7 @@ import {
   PageEventType,
   WalletAcount,
 } from '../../../core/constants/account.enum';
-import { PAGE_EVENT } from '../../../core/constants/common.constant';
+import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
@@ -30,6 +30,7 @@ import { takeUntil } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
 import { balanceOf } from '../../../../app/core/utils/common/parsing';
+import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -168,6 +169,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
+  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
 
   constructor(
     private transactionService: TransactionService,
@@ -179,7 +181,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
-    private numberPipe: DecimalPipe
+    private numberPipe: DecimalPipe,
+    private environmentService: EnvironmentService
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -189,6 +192,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
       if (params?.id) {

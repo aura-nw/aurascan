@@ -593,7 +593,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.getList();
           this.getDataWallet();
           this.toastr.success(message);
-        } else {
+        } else if (numberCode !== undefined) {
           this.toastr.error(message);
         }
       },

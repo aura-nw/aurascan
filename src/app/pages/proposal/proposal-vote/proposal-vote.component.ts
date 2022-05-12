@@ -71,7 +71,7 @@ export class ProposalVoteComponent implements OnInit {
         message = this.mappingErrorService.checkMappingError(message, numberCode);
         if (numberCode === CodeTransaction.Success) {
           this.toastr.success(message);
-        } else {
+        } else if (numberCode !== undefined) {
           this.toastr.error(message);
         }
       },
