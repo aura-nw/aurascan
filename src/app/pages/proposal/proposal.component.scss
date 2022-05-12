@@ -6,6 +6,9 @@
       min-width: 140px;
       color: var(--aura-white);
     }
+    .body-mobile {
+      min-width: unset;
+    }
   }
   .vote-bar {
     margin-right: 20px;
@@ -26,7 +29,7 @@
       padding-left: 32px;
       font-size: 13px;
       &:before {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
         top: 50%;
@@ -50,7 +53,7 @@
     }
   }
   .message {
-    color: var(--aura-green-disabled);
+    color: var(--aura-greyscale-4);
   }
   .btn-detail {
     margin: 0 16px;
@@ -62,9 +65,33 @@
     line-height: 3.2rem;
     font-weight: 500;
     a {
+      //color: var(--aura-white);
+      text-decoration: none;
+    }
+  }
+  &__title-mobile {
+    font-size: 16px;
+    line-height: 1.5rem;
+    font-weight: 500;
+    a {
       color: var(--aura-white);
       text-decoration: none;
     }
+  }
+  .proposal-status-mobile {
+    border-radius: 8px;
+    text-transform: capitalize;
+    padding: 10px 12px;
+  }
+  .button-mobile {
+    height: 40px;
+    padding: 8px 18px;
+  }
+  .border-bottom-mobile {
+    border-bottom: 1px solid #38383d;
+  }
+  .button-mobile {
+    height: 40px;
   }
 }
 .vote-bar {

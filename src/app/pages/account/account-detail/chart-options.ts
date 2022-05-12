@@ -100,6 +100,7 @@ export const CHART_OPTION = (): ChartOptions =>
         options: {
           chart: {
             width: 200,
+            height: 200,
           },
           plotOptions: {
             pie: {

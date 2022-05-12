@@ -19,8 +19,13 @@
     }
   }
   .account-button {
-    width: 192px;
     white-space: nowrap;
+    @media (max-width: 991.99px) {
+      height: 40px;
+    }
+    @media (min-width: 992px) {
+      width: 192px;
+    }
   }
   .walletMenu {
     .button__title {
@@ -29,6 +34,12 @@
 
     li {
       cursor: pointer;
+    }
+  }
+  #walletMenu {
+    @media (max-width: 414px) {
+      padding: 10px;
+      height: 40px;
     }
   }
   .offcanvas-wallet {

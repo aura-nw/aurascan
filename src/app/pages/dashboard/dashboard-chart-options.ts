@@ -51,6 +51,10 @@ export const DASHBOARD_CHART_OPTIONS: Partial<ChartOptions>= {
       labels: {
         datetimeUTC: false,
       },
+      axisBorder: {
+        show: true,
+        color: '#FFA741',
+      },
     },
     tooltip: {
       x: {

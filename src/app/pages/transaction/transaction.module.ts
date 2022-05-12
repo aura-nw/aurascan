@@ -1,27 +1,23 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TransactionComponent } from './transaction.component';
-import { TransactionRoutingModule } from './transaction-routing.module';
-import { MaterialModule } from '../../../app/app.module';
-import { NgxMaskModule } from 'ngx-mask';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { SharedModule } from '../../../app/shared/shared.module';
-import { TxsDetailComponent } from './txs-detail/txs-detail.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { TransferredDetailComponent } from './txs-detail/transferred-detail/transferred-detail.component';
-import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
-import { ValidatorService } from '../../../app/core/services/validator.service';
+import { NgxMaskModule } from 'ngx-mask';
+import { MaterialModule } from '../../../app/app.module';
+import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
+import { ValidatorService } from '../../../app/core/services/validator.service';
+import { SharedModule } from '../../../app/shared/shared.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
+import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
+import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
+import { TransactionRoutingModule } from './transaction-routing.module';
+import { TransactionComponent } from './transaction.component';
 
 @NgModule({
-  declarations: [
-    TransactionComponent,
-    TxsDetailComponent,
-    TransferredDetailComponent
-  ],
+  declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent],
   imports: [
     CommonModule,
     TransactionRoutingModule,
@@ -33,8 +29,8 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
     TranslateModule,
     SharedModule,
     NgxJsonViewerModule,
-    TableNoDataModule
+    TableNoDataModule,
   ],
-  providers: [TransactionService, ValidatorService, MappingErrorService]
+  providers: [TransactionService, ValidatorService, MappingErrorService],
 })
-export class TransactionModule { }
+export class TransactionModule {}

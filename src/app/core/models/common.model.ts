@@ -27,6 +27,7 @@ export interface IResponsesTemplates<T>
 export class TableTemplate {
   matColumnDef: string;
   headerCellDef: string;
+  desktopOnly?: boolean = false;
   isUrl?: string;
   isShort?: boolean;
   cssClass?: string;

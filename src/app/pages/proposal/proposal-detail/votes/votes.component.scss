@@ -1,6 +1,11 @@
 .tab-title {
-    font-size: 15px;
+    font-size: 20px;
     white-space: nowrap;
+}
+
+.tab-title-mobile {
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .card__title {
@@ -8,8 +13,26 @@
     line-height: 3.2rem;
     font-weight: 500;
     color: var(--aura-white);
-
     margin-bottom: 32px;
+}
+
+.card__title-mobile {
+    font-size: 2rem;
+    line-height: 2.3rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: var(--aura-white);
+}
+
+.mobile-tab{
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow: auto;
+}
+
+.mobile-tab::-webkit-scrollbar{
+    display: none;
 }
 
 :host::ng-deep {

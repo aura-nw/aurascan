@@ -35,6 +35,9 @@ export interface IProposal {
   pro_voting_end_time: string;
   pro_voting_start_time: string;
   pro_vote_total?: number;
+  pro_turnout: string;
+  quorum: number,
+  vote_option: string;
 }
 
 export interface IVotingDialog {

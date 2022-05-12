@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -16,7 +16,7 @@ import { SharedModule } from "../../../shared/shared.module";
 import { AccountDetailRoutingModule } from './account-detail-routing.module';
 import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountDetailComponent } from './account-detail.component';
-
+import { CardTypeOneModule } from '../../../../app/shared/components/card/card-type-one/card-type-one.module';
 @NgModule({
   declarations: [
     AccountDetailComponent,
@@ -36,8 +36,9 @@ import { AccountDetailComponent } from './account-detail.component';
     AccountDetailTableModule,
     TableNoDataModule,
     PaginatorModule,
-    QrModule
+    QrModule,
+    CardTypeOneModule
   ],
-  providers: [TransactionService, AccountService]
+  providers: [TransactionService, AccountService, DecimalPipe]
 })
 export class AccountDetailModule { }
