@@ -11,7 +11,7 @@
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
-            class="button button-outline button-outline__in-card body">
+            class="button button-outline button-outline__in-card body flex-shrink-0">
             <span class="text-gradient">
               {{
                 proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
@@ -27,14 +27,14 @@
         </div>
       </div>
     </div>
-    <div class="card-header bg-transparent border-bottom" *ngIf="breakpoint.value.matches">
+    <div class="card-header bg-transparent pb-0" *ngIf="breakpoint.value.matches">
       <div class="d-flex justify-content-between mb-3">
         <div class="col-3 card__title card__title-mobile">#{{ proposalId }}</div>
         <div class="col-9 justify-content-end card__status flex-shrink-0">
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
-            class="button button-mobile button-outline button-outline__in-card body">
+            class="button button-mobile button-outline button-outline__in-card body flex-shrink-0">
             <span class="text-gradient">
               {{
                 proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
@@ -53,59 +53,61 @@
         <a class="card__title card__title-mobile">{{ proposalDetail.pro_title }}</a>
       </div>
       <div class="message mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
+      <div class="divider divider-horizontal mt-4"></div>
     </div>
     <div class="card-body">
       <div class="card__info">
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Proposer</div>
-          <div class="col-12 col-md-10 body">
+          <div class="col-12 col-md-2 small-body fw-semibold">Proposer</div>
+          <div class="col-12 col-md-10 small-body mt-2">
             <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">{{
               proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
             }}</a>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Initial Deposit</div>
-          <div class="col-12 col-md-10 body">
+          <div class="col-12 col-md-2 small-body fw-semibold">Initial Deposit</div>
+          <div class="col-12 col-md-10 small-body mt-2">
             {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
             <span class="text--primary">{{ global.stableToken }}</span>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Total Deposit</div>
-          <div class="col-12 col-md-10 body">
+          <div class="col-12 col-md-2 small-body fw-semibold">Total Deposit</div>
+          <div class="col-12 col-md-10 small-body mt-2">
             {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
             <span class="text--primary"> {{ global.stableToken }}</span>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Voting Start</div>
-          <div class="col-12 col-md-10 body">{{ proposalDetail.pro_voting_start_time }}</div>
+          <div class="col-12 col-md-2 small-body fw-semibold">Voting Start</div>
+          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_voting_start_time }}</div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Voting End</div>
-          <div class="col-12 col-md-10 body">{{ proposalDetail.pro_voting_end_time }}</div>
+          <div class="col-12 col-md-2 small-body fw-semibold">Voting End</div>
+          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_voting_end_time }}</div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Type</div>
-          <div class="col-12 col-md-10 body">{{ proposalDetail.pro_type }}</div>
+          <div class="col-12 col-md-2 small-body fw-semibold">Type</div>
+          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_type }}</div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Submit Time</div>
-          <div class="col-12 col-md-10 body">{{ proposalDetail.pro_submit_time }}</div>
+          <div class="col-12 col-md-2 small-body fw-semibold">Submit Time</div>
+          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_submit_time }}</div>
         </div>
         <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Deposit End Time</div>
-          <div class="col-12 col-md-10 body">{{ proposalDetail.pro_deposit_end_time }}</div>
+          <div class="col-12 col-md-2 small-body fw-semibold">Deposit End Time</div>
+          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_deposit_end_time }}</div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 body-bold">Details</div>
-          <div class="col-12 col-md-10 body">{{ proposalDetail.pro_description }}</div>
+        <div class="row">
+          <div class="col-12 col-md-2 small-body fw-semibold">Details</div>
+          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_description }}</div>
         </div>
+        <div class="divider divider-horizontal mt-4 mt-lg-5"></div>
       </div>
     </div>
-    <div class="card-footer">
-      <div class="top-border proposal__summary-total" *ngIf="!votingBarLoading">
+    <div class="card-footer pt-0">
+      <div class="proposal__summary-total" *ngIf="!votingBarLoading">
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-2 body-bold">Current Turnout</div>
           <div class="col-12 col-md-10 body">
