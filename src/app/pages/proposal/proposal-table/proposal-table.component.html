@@ -13,14 +13,13 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                        '-'
+                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-'
                     }}
                   </a>
                 </ng-container>
                 <ng-container *ngIf="template.isUrl && template.isShort">
-                  <a
-                    [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                  <a [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                     [class.disabled-link]="!data[template.matColumnDef]">
                     {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                   </a>
@@ -29,9 +28,9 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
                       {{
-                        (template.isShort
-                          ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
+                      (template.isShort
+                      ? shortenAddress(data[template.matColumnDef])
+                      : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
                       }}
                       <span class="text--primary">{{ global.stableToken }}</span>
                     </ng-container>
@@ -54,9 +53,9 @@
 
                     <ng-container *ngSwitchDefault>
                       {{
-                        (template.isShort
-                          ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) || '-'
+                      (template.isShort
+                      ? shortenAddress(data[template.matColumnDef])
+                      : data[template.matColumnDef]) || '-'
                       }}
                     </ng-container>
                   </ng-container>
@@ -77,164 +76,142 @@
     </ng-container>
     <ng-container *ngIf="breakpoint.value.matches">
       <div class="table-mobile">
-        <ng-container *ngIf="type === 'VOTES'">
-          <ng-container
-            *ngFor="
-              let data of dataSource.data.slice(
-                dataSource.paginator.pageIndex * dataSource.paginator.pageSize,
-                dataSource.paginator.pageIndex * dataSource.paginator.pageSize + dataSource.paginator.pageSize
-              );
-              index as i
-            ">
-            <ng-container>
-              <div class="box-mob-table fw-normal mb-3">
-                <div class="table-header mb-2">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <a class="text--green body" [routerLink]="['/account', data['voter'] || data['voter']]">
-                        {{ shortenAddress(data['voter']) || '-' }}
-                      </a>
-                    </div>
-                    <div class="text--white body">
-                      {{ getVoteValue(data['option']) }}
-                    </div>
-                  </div>
-                </div>
-                <div class="table-body">
-                  <ng-container *ngFor="let template of template; index as idx">
-                    <div
-                      class="table-body__item d-flex justify-content-between text--white mb-2"
-                      *ngIf="template?.desktopOnly">
-                      <span>{{ template['headerCellDef'] }}</span>
-                      <ng-container *ngIf="template.matColumnDef === 'updated_at'">
-                        {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
-                      </ng-container>
-                      <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
-                        <a
-                          class="text--green small-body"
-                          [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                          {{
-                            (template.isShort
-                              ? shortenAddress(data[template.matColumnDef])
-                              : data[template.matColumnDef]) || '-'
-                          }}
-                        </a>
-                      </ng-container>
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="type === 'VALIDATORS_VOTES'">
-          <ng-container *ngFor="let data of dataSource.data; index as i">
-            <ng-container>
-              <div class="table-mobile__item fw-normal mb-3">
-                <div class="table-header">
-                  <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                      <div class="box-rank">
-                        <span>{{ data['rank'] }}</span>
-                      </div>
-                      <div class="ml-2">
-                        <a
-                          class="text--green body"
-                          [routerLink]="['/validators', data['operator_address'] || data['validator_name']]">
-                          {{ data['validator_name'] || '-' }}
-                        </a>
-                      </div>
-                    </div>
-                    <div class="text--white body">
-                      {{ getVoteValue(data['option']) }}
-                    </div>
-                  </div>
-                </div>
-                <div class="table-body">
-                  <ng-container *ngFor="let template of template; index as idx">
-                    <div
-                      class="table-body__item d-flex justify-content-between text--white mb-2"
-                      *ngIf="template?.desktopOnly">
-                      <span>{{ template['headerCellDef'] }}</span>
-                      <ng-container *ngIf="template.matColumnDef === 'updated_at'">
-                        {{ commonService.getDateValue(data[template.matColumnDef], false)[1] || '-' }}
-                      </ng-container>
-                      <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
-                        <a
-                          class="item-link small-body"
-                          [class.disabled-link]="!data[template.matColumnDef]"
-                          [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                          {{
-                            (template.isShort
-                              ? shortenAddress(data[template.matColumnDef])
-                              : data[template.matColumnDef]) || '-'
-                          }}
-                        </a>
-                      </ng-container>
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="type === 'DEPOSITORS'">
-          <ng-container *ngFor="let data of dataSource.data; index as i">
-            <ng-container>
-              <div class="box-mob-table fw-normal mb-3">
-                <div class="table-header mb-2">
-                  <div class="d-flex justify-content-between">
-                    <a class="text--green body" [routerLink]="['/account', data['depositor'] || data['depositor']]">
-                      {{ shortenAddress(data['depositor']) }}
+
+        <ng-container *ngFor="let data of getListData();index as i">
+          <ng-container *ngIf="type === 'VOTES'">
+
+            <div class="box-mob-table fw-normal mb-3">
+              <div class="table-header mb-2">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <a class="text--green body" [routerLink]="['/account', data['voter'] || data['voter']]">
+                      {{ shortenAddress(data['voter']) || '-' }}
                     </a>
                   </div>
-                </div>
-                <div class="table-body">
-                  <ng-container *ngFor="let template of template; index as idx">
-                    <div
-                      class="table-body__item d-flex justify-content-between text--white mb-2"
-                      *ngIf="!template?.desktopOnly">
-                      <span>{{ template['headerCellDef'] }}</span>
-                      <ng-container *ngIf="template.matColumnDef === 'created_at'">
-                        {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
-                      </ng-container>
-                      <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
-                        <a
-                          class="text--green small-body"
-                          [class.disabled-link]="!data[template.matColumnDef]"
-                          [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                          {{
-                            (template.isShort
-                              ? shortenAddress(data[template.matColumnDef])
-                              : data[template.matColumnDef]) || '-'
-                          }}
-                        </a>
-                      </ng-container>
-                      <ng-container *ngIf="template.matColumnDef === 'amount'">
-                        <div class="d-flex justify-content-around">
-                          {{
-                            (template.isShort
-                              ? shortenAddress(data[template.matColumnDef])
-                              : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
-                          }}
-                          <span class="text--primary ml-1">{{ global.stableToken }}</span>
-                        </div>
-                      </ng-container>
-                    </div>
-                  </ng-container>
+                  <div class="text--white body">
+                    {{ getVoteValue(data['option']) }}
+                  </div>
                 </div>
               </div>
-            </ng-container>
+              <div class="table-body">
+                <ng-container *ngFor="let template of template; index as idx">
+                  <div class="table-body__item d-flex justify-content-between text--white mb-2"
+                    *ngIf="template?.desktopOnly">
+                    <span>{{ template['headerCellDef'] }}</span>
+                    <ng-container *ngIf="template.matColumnDef === 'updated_at'">
+                      {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
+                    </ng-container>
+                    <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
+                      <a class="text--green small-body"
+                        [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                        {{
+                        (template.isShort
+                        ? shortenAddress(data[template.matColumnDef])
+                        : data[template.matColumnDef]) || '-'
+                        }}
+                      </a>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
           </ng-container>
-        </ng-container>
+          <ng-container *ngIf="type === 'VALIDATORS_VOTES'">
+            <div class="table-mobile__item fw-normal mb-3">
+              <div class="table-header">
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex">
+                    <div class="box-rank">
+                      <span>{{ data['rank'] }}</span>
+                    </div>
+                    <div class="ml-2">
+                      <a class="text--green body"
+                        [routerLink]="['/validators', data['operator_address'] || data['validator_name']]">
+                        {{ data['validator_name'] || '-' }}
+                      </a>
+                    </div>
+                  </div>
+                  <div class="text--white body">
+                    {{ getVoteValue(data['option']) }}
+                  </div>
+                </div>
+              </div>
+              <div class="table-body">
+                <ng-container *ngFor="let template of template; index as idx">
+                  <div class="table-body__item d-flex justify-content-between text--white mb-2"
+                    *ngIf="template?.desktopOnly">
+                    <span>{{ template['headerCellDef'] }}</span>
+                    <ng-container *ngIf="template.matColumnDef === 'updated_at'">
+                      {{ commonService.getDateValue(data[template.matColumnDef], false)[1] || '-' }}
+                    </ng-container>
+                    <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
+                      <a class="item-link small-body" [class.disabled-link]="!data[template.matColumnDef]"
+                        [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                        {{
+                        (template.isShort
+                        ? shortenAddress(data[template.matColumnDef])
+                        : data[template.matColumnDef]) || '-'
+                        }}
+                      </a>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data" colspan="9999">
-            {{ 'NO DATA' | translate }}
-          </td>
-        </tr>
+          <ng-container *ngIf="type === 'DEPOSITORS'">
+            <div class="box-mob-table fw-normal mb-3">
+              <div class="table-header mb-2">
+                <div class="d-flex justify-content-between">
+                  <a class="text--green body" [routerLink]="['/account', data['depositor'] || data['depositor']]">
+                    {{ shortenAddress(data['depositor']) }}
+                  </a>
+                </div>
+              </div>
+              <div class="table-body">
+                <ng-container *ngFor="let template of template; index as idx">
+                  <div class="table-body__item d-flex justify-content-between text--white mb-2"
+                    *ngIf="!template?.desktopOnly">
+                    <span>{{ template['headerCellDef'] }}</span>
+                    <ng-container *ngIf="template.matColumnDef === 'created_at'">
+                      {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
+                    </ng-container>
+                    <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
+                      <a class="text--green small-body" [class.disabled-link]="!data[template.matColumnDef]"
+                        [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                        {{
+                        (template.isShort
+                        ? shortenAddress(data[template.matColumnDef])
+                        : data[template.matColumnDef]) || '-'
+                        }}
+                      </a>
+                    </ng-container>
+                    <ng-container *ngIf="template.matColumnDef === 'amount'">
+                      <div class="d-flex justify-content-around">
+                        {{
+                        (template.isShort
+                        ? shortenAddress(data[template.matColumnDef])
+                        : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
+                        }}
+                        <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ 'NO DATA' | translate }}
+            </td>
+          </tr>
+        </ng-container>
       </div>
     </ng-container>
   </ng-container>
@@ -243,10 +220,7 @@
   <mat-paginator [class.d-none]="length === 0" #paginator2 [length]="length" [pageSize]="pageSize"
     (page)="pageEvent($event)">
   </mat-paginator> -->
-  <app-paginator
-    [length]="length"
-    [pageSize]="pageSize"
-    (paginator)="paginatorEmit($event)"
+  <app-paginator [length]="length" [pageSize]="pageSize" (paginator)="paginatorEmit($event)"
     (pageEvent)="pageEvent($event)"></app-paginator>
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>

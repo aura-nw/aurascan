@@ -118,7 +118,7 @@
         </ng-container>
         <ng-container *ngIf="breakpoint.value.matches">
           <div class="table-mobile">
-            <ng-container *ngFor="let validator of listStakingValidator; index as i">
+            <ng-container *ngFor="let validator of dataSourceWallet.data; index as i">
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
@@ -152,8 +152,7 @@
     </div>
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-      <div
-        class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white pb-1">
+      <div class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
         Undelegating
       </div>
       <div class="card-body" *ngIf="!breakpoint.value.matches">
@@ -161,13 +160,12 @@
           <div class="row col-12 mb-3 m-0 undelegate-item">
             <div class="col-3 body title-name">
               <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
-                {{ validator.validator_name }}</a
-              >
+                {{ validator.validator_name }}</a>
             </div>
-            <div class="col-9 text--white">
+            <div class="col-9 text--white body small-body-mob">
               {{ validator.balance | number: globals.formatNumberToken }}
               <span class="text--green">{{ globals.stableToken }}</span><br />
-              <span class="txt-time">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
+              <span class="text--neutrals-4 small-body">{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
             </div>
           </div>
         </ng-container>
@@ -195,7 +193,7 @@
     </div>
   </ng-container>
 
-  <div class="card">
+  <div class="card box-validators">
     <div class="card-header card-header-dark d-flex align-items-center justify-content-between header-mob">
       <div class="sub-text text--white">Validators</div>
       <div class="d-flex align-item-center">
@@ -366,10 +364,10 @@
                     </button>
                   </div>
                 </div>
-                <div class="table-body table-body__revert small-body-mob">
+                <div class="table-body table-body__revert small-body-mob pb-0">
                   <ng-container *ngFor="let template of templates; index as idx">
                     <div
-                      class="table-body__item d-flex justify-content-between text--white mb-2"
+                      class="table-body__item d-flex justify-content-between text--white mb-3"
                       *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
                       <span class=""> 
