@@ -1,7 +1,7 @@
 <div *ngIf="link" class="card-mob-simple">
     <a href="{{link}}">
         <div *ngIf="title" class="d-flex justify-content-between align-items-center">
-            <div *ngIf="title.label" class="text--green body {{title.size ? ('title-'+title.size) : ''}}">
+            <div *ngIf="title.label" class="text--green body small-body-mob {{title.size ? ('title-'+title.size) : ''}}">
                 <span *ngIf="title.rankNum" class="mr-2">{{title.rankNum}}</span>
                 <span>{{title.label}}</span>
             </div>
@@ -9,7 +9,7 @@
                 <div *ngIf="title.isFail" class="mr-2">
                     <img src="assets/icons/icons-svg/color/fail.svg" alt="" width="24px" height="24px">
                 </div>
-                <div *ngIf="title.subLabelContent" class="small-body {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
+                <div *ngIf="title.subLabelContent" class="body {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
             </div>
         </div>
         <div *ngIf="content && content.length > 0">
