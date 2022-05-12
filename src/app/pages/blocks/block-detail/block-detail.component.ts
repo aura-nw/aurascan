@@ -9,15 +9,17 @@ import { CodeTransaction, StatusTransaction } from '../../../../app/core/constan
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { getAmount, Globals } from '../../../../app/global/global';
+import { TransactionService } from '../../../../app/core/services/transaction.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',
   styleUrls: ['./block-detail.component.scss'],
 })
 export class BlockDetailComponent implements OnInit {
-  id;
-  blockId;
-  item;
+  id: string | number;
+  blockId: string | number;
+  item = undefined;
   breadCrumbItems = [{ label: 'Blocks' }, { label: 'List', active: false }, { label: 'Detail', active: true }];
 
   templates: Array<TableTemplate> = [
@@ -31,7 +33,8 @@ export class BlockDetailComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
-  length;
+  dataTxs: any[];
+  length = 0;
   pageSize = 10;
   pageIndex = 0;
   pageSizeOptions = PAGE_SIZE_OPTIONS;
@@ -39,6 +42,8 @@ export class BlockDetailComponent implements OnInit {
   statusTransaction = StatusTransaction;
   dateFormat;
   loading = true;
+  isRawData = false;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private route: ActivatedRoute,
@@ -46,7 +51,9 @@ export class BlockDetailComponent implements OnInit {
     private blockService: BlockService,
     private datePipe: DatePipe,
     public global: Globals,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private transactionService: TransactionService,
+    private layout: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +101,7 @@ export class BlockDetailComponent implements OnInit {
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
+        this.dataTxs = res.data?.txs;
         this.length = res.data?.txs.length;
         this.loading = false;
       },
@@ -125,6 +133,7 @@ export class BlockDetailComponent implements OnInit {
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
         this.dataSource = new MatTableDataSource(res.data?.txs);
+        this.dataTxs = res.data?.txs;
         this.length = res.data?.txs.length;
         this.loading = false;
       },
@@ -132,5 +141,17 @@ export class BlockDetailComponent implements OnInit {
         this.router.navigate(['/']);
       },
     );
+  }
+
+  checkAmountValue(amount: number, txHash: string) {
+      if(amount === 0) {
+          return '-';
+      } else {
+         return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+      }
+  }
+
+  changeType(type: boolean): void {
+    this.isRawData = type;
   }
 }

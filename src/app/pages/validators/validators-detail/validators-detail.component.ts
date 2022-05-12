@@ -10,6 +10,9 @@ import { CommonService } from '../../../../app/core/services/common.service';
 import { ValidatorService } from '../../../../app/core/services/validator.service';
 import { Globals } from '../../../../app/global/global';
 import { PageEvent } from '@angular/material/paginator';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DecimalPipe } from '@angular/common';
+import { balanceOf } from '../../../../app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-validators-detail',
@@ -66,6 +69,8 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthBlockLoading = true;
   lengthPowerLoading = true;
 
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall])
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -73,6 +78,8 @@ export class ValidatorsDetailComponent implements OnInit {
     private blockService: BlockService,
     public commonService: CommonService,
     public global: Globals,
+    private layout: BreakpointObserver,
+    private numberPipe: DecimalPipe
   ) {}
 
   ngOnInit(): void {
@@ -110,28 +117,31 @@ export class ValidatorsDetailComponent implements OnInit {
       .blockWithOperator(this.pageSize, this.pageIndexBlock * this.pageSize, this.currentAddress)
       .subscribe((res) => {
         this.lengthBlockLoading = true;
-        res.data.forEach((block) => {
-          block.block_hash_format = block.block_hash.replace(
-            block.block_hash.substring(6, block.block_hash.length - 6),
-            '...',
-          );
-        });
-        this.lengthBlock = res.meta?.count;
-        this.dataSourceBlock.data = res.data;
+        if (res?.data?.length > 0 && res?.meta) {
+          res.data.forEach((block) => {
+            block.block_hash_format = block.block_hash.replace(
+              block.block_hash.substring(6, block.block_hash.length - 6),
+              '...',
+            );
+          });
+          this.lengthBlock = res.meta?.count;
+          this.dataSourceBlock.data = res.data;
+        }
         this.lengthBlockLoading = false;
       });
   }
 
   getListUpTime(): void {
     this.blockService.getLastBlock(this.currentAddress).subscribe((res) => {
-      this.arrayUpTime = res.data;
+      if (res?.data?.length > 0) {
+        this.arrayUpTime = res.data;
+      }
     });
   }
 
   getListDelegator(): void {
-    this.validatorService
-      .delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress)
-      .subscribe((res) => {
+    this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress).subscribe((res) => {
+      if (res?.data?.length > 0 && res?.total) {
         res.data.forEach((delegator) => {
           delegator.delegator_address_format = delegator.delegator_address.replace(
             delegator.delegator_address.substring(6, delegator.delegator_address.length - 6),
@@ -139,8 +149,9 @@ export class ValidatorsDetailComponent implements OnInit {
           );
         });
         this.lengthDelegator = res.total;
-        this.dataSourceDelegator = res.data;
-      });
+        this.dataSourceDelegator = res;
+      }
+    });
   }
 
   getListPower(): void {
@@ -148,15 +159,20 @@ export class ValidatorsDetailComponent implements OnInit {
       .validatorsDetailListPower(this.pageSize, this.pageIndexPower * this.pageSize, this.currentAddress)
       .subscribe((res) => {
         this.lengthPowerLoading = true;
-        res.data.forEach((power) => {
-          power.isStakeMode = false;
-          if (power.type === 'delegate' || (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress)) {
-            power.isStakeMode = true;
-          }
-          power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
-        });
-        this.dataSourcePower = res.data;
-        this.lengthPower = res.meta?.count;
+        if (res.data?.length > 0) {
+          res.data.forEach((power) => {
+            power.isStakeMode = false;
+            if (
+              power.type === 'delegate' ||
+              (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress)
+            ) {
+              power.isStakeMode = true;
+            }
+            power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
+          });
+          this.dataSourcePower = res;
+          this.lengthPower = res.meta?.count;
+        }
         this.lengthPowerLoading = false;
       });
   }
@@ -221,6 +237,13 @@ export class ValidatorsDetailComponent implements OnInit {
         break;
       default:
         break;
+    }
+  }
+  checkAmountStaking(amount, isStakeMode){
+    if (isStakeMode) {
+      return '<span class=text--info>' + '+ ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>';
+    } else {
+      return '<span class=text--danger>' + '- ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>';
     }
   }
 }

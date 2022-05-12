@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EnvironmentService } from '../../core/data-services/environment.service';
+import {MenuItem} from "../horizontaltopbar/menu.model";
+import {MENU} from "../horizontaltopbar/menu";
 
 @Component({
   selector: 'app-footer',
@@ -19,8 +21,9 @@ export class FooterComponent implements OnInit {
   transactionURL = 'transaction';
   validatorURL = 'validators';
   governanceURL = 'proposal';
+  menuItems: MenuItem[] = MENU;
 
-  constructor(private environmentService: EnvironmentService, private router: Router) {}
+  constructor(private environmentService: EnvironmentService, public router: Router) {}
 
   ngOnInit(): void {}
 

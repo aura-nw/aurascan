@@ -3,8 +3,8 @@
   <ng-container *ngIf="length > 0; else noValues">
     <div class="card">
       <div class="card-body">
-        <div class="table-responsive">
-          <table mat-table [dataSource]="dataSource" class="  aura-table">
+        <div class="table-responsive d-none d-lg-block">
+          <table mat-table [dataSource]="dataSource" class="aura-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th mat-header-cell *matHeaderCellDef class="col-per-20">
@@ -41,6 +41,16 @@
               </td>
             </tr>
           </table>
+        </div>
+        <div class="d-lg-none" *ngIf="dataBlock && dataBlock.length > 0">
+          <app-card-mob-simple *ngFor="let data of dataBlock"
+                               [link]="'/blocks/' + data.height"
+                               [title]="{size: 'md', label: data.height , subLabelContent: commonService.getDateValue(data.timestamp)[0]}"
+                               [content]="[
+                               {label: 'Proposer', info: '<span class=text--green>' + data.proposer + '</span>'},
+                               {label: 'Txs', info: data.num_txs.toString()},
+                               {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
+          ></app-card-mob-simple>
         </div>
       </div>
     </div>

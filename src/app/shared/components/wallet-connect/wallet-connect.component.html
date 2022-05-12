@@ -4,12 +4,13 @@
       #connectButton
       *ngIf="!ng.wallet"
       type="button"
-      class="button account-button button-outline d-inline-block fw-semibold"
+      class="button account-button button-outline d-flex align-items-center d-lg-inline-block fw-semibold"
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet"
     >
-      CONNECT WALLET
+      <span class="d-lg-none text-gradient">Connect</span>
+      <span class="d-none d-lg-block text-gradient">CONNECT WALLET</span>
     </button>
 
     <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
@@ -20,7 +21,7 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title">{{
+        <span class="button__title text-gradient">{{
           ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name
         }}</span>
         <img
@@ -33,7 +34,7 @@
       </button>
       <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
         <li class="dropdown-item" [routerLink]="['/account', ng.wallet?.bech32Address]">
-          <a>Account Detail</a>
+          <a>Account Details</a>
         </li>
         <li class="dropdown-item" (click)="disconnect()">
           <button type="button" class="button p-0">Log out</button>
