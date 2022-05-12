@@ -39,9 +39,11 @@
     }
   }
 
-  .box-undelegate {
-    .txt-time {
-      color: var(--aura-neutrals-4);
+  .box-undelegate, .box-validators {
+    .card-header {
+      @media (max-width: 991.99px) {
+        padding-bottom: 0;
+      }
     }
   }
 }
