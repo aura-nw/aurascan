@@ -1,0 +1,14 @@
+.card-mob-simple {
+  background-color: var(--aura-dark-gray);
+  border-radius: var(--spacer-2);
+  padding: var(--spacer-3);
+  margin-bottom: var(--spacer-2);
+  & > * {
+    color: var(--aura-white);
+  }
+  .title {
+    &-sm { font-weight: 400;}
+    &-md { font-weight: 500;}
+    &-lg { font-weight: 600;}
+  }
+}

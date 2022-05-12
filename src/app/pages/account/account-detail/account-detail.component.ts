@@ -24,6 +24,12 @@ import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { getAmount, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
+import { Subject } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { takeUntil } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DecimalPipe } from '@angular/common';
+import { balanceOf } from '../../../../app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-account-detail',
@@ -157,6 +163,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   accDetailLoading = true;
   chartLoading = true;
   userAddress = '';
+  lstBalanceAcount = undefined;
+  modalReference: any;
+
+  destroyed$ = new Subject();
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
   constructor(
     private transactionService: TransactionService,
@@ -165,7 +176,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private router: Router,
     private accountService: AccountService,
     public global: Globals,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private layout: BreakpointObserver,
+    private modalService: NgbModal,
+    private numberPipe: DecimalPipe
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -204,16 +218,16 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.currentAccountDetail = dataAccount;
         this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
-  
-        this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
-        this.pageDataDelegation.length = dataAccount.delegations.length;
-  
-        this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
-        this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
-  
-        this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
-        this.pageDataRedelegation.length = dataAccount.redelegations.length;
-  
+
+        // this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
+        // this.pageDataDelegation.length = dataAccount.delegations.length;
+
+        // this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
+        // this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
+
+        // this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
+        // this.pageDataRedelegation.length = dataAccount.redelegations.length;
+
         this.chartOptions = JSON.parse(data?.dataChart);
       }
     }
@@ -266,24 +280,26 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.transactionService
       .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        res.data.forEach((trans) => {
-          //get amount of transaction
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-          trans.type = typeTrans?.value;
-          trans.status = StatusTransaction.Fail;
-          if (trans.code === CodeTransaction.Success) {
-            trans.status = StatusTransaction.Success;
-          }
-          if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-            trans.type = TypeTransaction.Received;
-          }
-          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
-        });
-        this.dataSource.data = res.data;
+        if (res?.data?.length > 0) {
+          res.data.forEach((trans) => {
+            //get amount of transaction
+            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
+            trans.type = typeTrans?.value;
+            trans.status = StatusTransaction.Fail;
+            if (trans.code === CodeTransaction.Success) {
+              trans.status = StatusTransaction.Success;
+            }
+            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
+              trans.type = TypeTransaction.Received;
+            }
+            trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
+          });
+          this.dataSource.data = res.data;
 
-        this.length = res.meta.count;
-        this.pageData.length = res.meta.count;
+          this.length = res.meta.count;
+          this.pageData.length = res.meta.count;
+        }
       });
   }
 
@@ -291,86 +307,89 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
-      this.currentAccountDetail = res.data;
-      this.chartOptions.series = [];
-      if (+this.currentAccountDetail.commission > 0) {
-        this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
-        this.chartOptions.colors.push(WalletAcount.Commission);
-        this.chartCustomOptions.push({
-          name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
-          color: WalletAcount.Commission,
-          amount: '0.000000',
+      if (res?.data) {
+        this.currentAccountDetail = res.data;
+        this.chartOptions.series = [];
+        if (+this.currentAccountDetail.commission > 0) {
+          this.chartOptions.labels.push(ACCOUNT_WALLET_COLOR_ENUM.Commission);
+          this.chartOptions.colors.push(WalletAcount.Commission);
+          this.chartCustomOptions.push({
+            name: ACCOUNT_WALLET_COLOR_ENUM.Commission,
+            color: WalletAcount.Commission,
+            amount: '0.000000',
+          });
+        }
+
+        this.chartCustomOptions.forEach((f) => {
+          switch (f.name) {
+            case ACCOUNT_WALLET_COLOR_ENUM.Available:
+              f.amount = this.currentAccountDetail.available;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
+              f.amount = this.currentAccountDetail.delegated;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
+              f.amount = this.currentAccountDetail.stake_reward;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.Commission:
+              f.amount = this.currentAccountDetail.commission;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
+              f.amount = this.currentAccountDetail.unbonding;
+              break;
+            case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
+              f.amount = this.currentAccountDetail.vesting?.amount;
+              break;
+            default:
+              break;
+          }
+          f.amount = f.amount || '0';
+          this.chartOptions.series.push(Number(f.amount));
         });
-      }
 
-      this.chartCustomOptions.forEach((f) => {
-        switch (f.name) {
-          case ACCOUNT_WALLET_COLOR_ENUM.Available:
-            f.amount = this.currentAccountDetail.available;
-            break;
-          case ACCOUNT_WALLET_COLOR_ENUM.Delegated:
-            f.amount = this.currentAccountDetail.delegated;
-            break;
-          case ACCOUNT_WALLET_COLOR_ENUM.StakingReward:
-            f.amount = this.currentAccountDetail.stake_reward;
-            break;
-          case ACCOUNT_WALLET_COLOR_ENUM.Commission:
-            f.amount = this.currentAccountDetail.commission;
-            break;
-          case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
-            f.amount = this.currentAccountDetail.unbonding;
-            break;
-          case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-            f.amount = this.currentAccountDetail.vesting?.amount;
-            break;
-          default:
-            break;
+        this.currentAccountDetail.balances.forEach((token) => {
+          token.price = 0;
+          if (token.name === this.global.stableToken) {
+            token.amount = this.currentAccountDetail.total;
+          }
+          token.total_value = token.price * Number(token.amount);
+        });
+        this.tokenPrice = 0;
+
+        this.currentAccountDetail?.balances.forEach((f) => {
+          f.token_amount = f.amount;
+          f.token_name = f.name;
+        });
+
+        this.lstBalanceAcount = this.currentAccountDetail?.balances;
+        this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
+        this.pageDataToken.length = this.currentAccountDetail?.balances.length;
+        this.dataSourceTokenBk = this.dataSourceToken;
+
+        this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
+        this.pageDataDelegation.length = this.currentAccountDetail?.delegations.length;
+
+        this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
+        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations.length;
+
+        this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
+        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
+
+        if (this.currentAccountDetail?.vesting) {
+          this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
+          this.pageDataVesting.length = 1;
         }
-        f.amount = f.amount || '0';
-        this.chartOptions.series.push(Number(f.amount));
-      });
+        this.accDetailLoading = false;
+        this.chartLoading = false;
 
-      this.currentAccountDetail.balances.forEach((token) => {
-        token.price = 0;
-        if (token.name === this.global.stableToken) {
-          token.amount = this.currentAccountDetail.total;
+        if (this.userAddress === this.currentAddress) {
+          local.removeItem('accountDetail');
+          //store data wallet info
+          let accountDetail = {};
+          accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
+          accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
+          local.setItem('accountDetail', accountDetail);
         }
-        token.total_value = token.price * Number(token.amount);
-      });
-      this.tokenPrice = 0;
-
-      this.currentAccountDetail?.balances.forEach((f) => {
-        f.token_amount = f.amount;
-        f.token_name = f.name;
-      });
-
-
-      this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
-      this.pageDataToken.length = this.currentAccountDetail?.balances.length;
-      this.dataSourceTokenBk = this.dataSourceToken;
-
-      this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
-      this.pageDataDelegation.length = this.currentAccountDetail?.delegations.length;
-
-      this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
-      this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations.length;
-
-      this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
-      this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
-
-      if (this.currentAccountDetail?.vesting) {
-        this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
-        this.pageDataVesting.length = 1;
-      }
-      this.accDetailLoading = false;
-      this.chartLoading = false;
-
-      if (this.userAddress === this.currentAddress) {
-        //store data wallet info
-        let accountDetail = {};
-        accountDetail['dataAccount'] = JSON.stringify(this.currentAccountDetail);
-        accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
-        local.setItem('accountDetail', accountDetail);
       }
     });
   }
@@ -385,6 +404,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.searchNullData = true;
       }
       this.dataSourceToken = this.dataSourceTokenBk;
+      this.lstBalanceAcount = data;
       this.dataSourceToken = new MatTableDataSource(data);
     } else {
       this.dataSourceToken = this.dataSourceTokenBk;
@@ -408,5 +428,27 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getListTransaction();
+  }
+
+  viewQrAddress(staticDataModal: any): void {
+    this.modalReference = this.modalService.open(staticDataModal, {
+      keyboard: false,
+      centered: true,
+      windowClass: 'modal-holder',
+    });
+  }
+
+  closePopup() {
+    this.modalReference.close();
+  }
+
+  checkAmountValue(message: any[], txHash: string) {
+    if(message?.length > 1) {
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
+    } else if(message?.length === 0 || (message.length === 1 && !message[0]?.amount)){
+      return '-';
+    } else {
+      return this.numberPipe.transform(balanceOf(message[0]?.amount?.amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
+    }
   }
 }

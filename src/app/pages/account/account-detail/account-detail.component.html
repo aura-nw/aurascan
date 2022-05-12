@@ -1,34 +1,38 @@
 <app-pagetitle title="Account Details"></app-pagetitle>
-<section class="account-detail">
+<section class="account-detail" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="row">
-    <div class="col-3">
+    <div class="col-lg-3 col-12">
       <div class="card">
         <div class="box-account article-1">
           <div>
-            <div class="mb-8 qr-code">
+            <div class="mb-8 qr-code d-none d-lg-block">
               <!-- <canvas id="canvas" #canvas></canvas> -->
               <app-qr [address]="currentAddress || ''"> </app-qr>
             </div>
             <div>
-              <div class="title mb-2">Address</div>
-              <p class="title-small cursor-pointer mt-0 mb-1" (click)="copyMessage(currentAddress)">{{ currentAddress }}</p>
+              <div class="title mb-2 sub-text-mob fw-500">Address</div>
+              <p class="title-small cursor-pointer mt-0 mb-1 body-mob account-address" (click)="copyMessage(currentAddress)">{{ currentAddress }}</p>
               <p class="body txt-copied text--green" [class.show]="isCopy">copied!</p>
             </div>
           </div>
           <div>
-            <p class="title-small mb-2">Total Value</p>
-            <p class="title">$ {{ tokenPrice * +currentAccountDetail?.total| number: global.formatNumber2Decimal }}</p>
+            <p class="title-small mb-2 fw-500">Total Value</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="title fw-bold">$ {{ tokenPrice * +currentAccountDetail?.total| number: global.formatNumber2Decimal }}</span>
+              <img src="../../../../assets/images/icons/address-popup.png" alt="" width="24" height="24" *ngIf="breakpoint.value.matches"
+                (click)="viewQrAddress(modalManage)"/>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-9">
+    <div class="col-lg-9 col-12">
       <div class="card">
-        <div class="px-6 py-6 article-1">
-          <div class="d-flex align-items-center justify-content-between mb-8">
+        <div class="px-4 py-4 px-lg-6 py-lg-6 article-1">
+          <div class="d-flex align-items-center justify-content-between mb-4 mb-lg-8">
             <div class="d-flex align-items-center">
-              <div class="title mr-4">Assets</div>
-              <form class="aura-form single-input-field search-form">
+              <div class="title mr-4 sub-text-mob fw-500">Assets</div>
+              <form class="aura-form single-input-field search-form d-none d-lg-block">
                 <div class="input-group">
                   <input
                     type="text"
@@ -50,7 +54,7 @@
               </form>
             </div>
             <div class="d-flex align-items-center">
-              <div class="title-small mr-4">Asset Type</div>
+              <div class="title-small mr-4 d-none d-lg-block">Asset Type</div>
               <div class="aura-form asset-type">
                 <mat-select #assetTypeSelect
                   class="list-token form-control select-input-field"
@@ -68,16 +72,34 @@
           </div>
           <div *ngIf="!accDetailLoading">
             <ng-container *ngIf="!searchNullData; else noValues">
-              <app-account-table
-                      *ngIf="dataSourceToken"
-                      [dataSource]="dataSourceToken"
-                      [templates]="templatesToken"
-                      [displayedColumns]="displayedColumnsToken"
-                      [pageData]="pageDataToken"
-                      [pageEventType]="pageEventType.Token"
-                      (pageEvent)="changePage($event)"
-                      [textNull]="'NO COINS'">
-              </app-account-table>
+              <ng-container *ngIf="!breakpoint.value.matches">
+                <app-account-table
+                  *ngIf="dataSourceToken"
+                  [dataSource]="dataSourceToken"
+                  [templates]="templatesToken"
+                  [displayedColumns]="displayedColumnsToken"
+                  [pageData]="pageDataToken"
+                  [pageEventType]="pageEventType.Token"
+                  (pageEvent)="changePage($event)"
+                  [textNull]="'NO COINS'"
+                  class="d-none d-lg-block">
+                  </app-account-table>
+              </ng-container>
+              <ng-container *ngIf="breakpoint.value.matches">
+                <div class="table-mobile">
+                  <ng-container *ngFor="let item of lstBalanceAcount">
+                    <div class="row box-mob-table justify-content-between col-12">
+                      <div class="sub-text-mob text--green col-4 fw-500">
+                        {{ item.name }}
+                      </div>
+                      <div class="col-8 box-amount">
+                        {{ item.amount | number: global.formatNumberToken }}<br>
+                        <span class="mob-price small-body-mob">$ {{ item.total_value | number: global.formatNumber2Decimal }}</span>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
@@ -90,8 +112,8 @@
       </div>
     </div>
   </div>
-  <div class="row row-eq-heigth">
-    <div class="col-8">
+  <div class="row row-eq-height">
+    <div class="col-12 col-lg-8">
       <div class="card card-h-100">
         <div class="article-2">
           <mat-tab-group *ngIf="!accDetailLoading" class="aura-tab" mat-stretch-tabs>
@@ -147,9 +169,9 @@
         </div>
       </div>
     </div>
-    <div class="col-4">
+    <div class="col-12 col-lg-4">
       <div class="card card-h-100">
-        <div class="article-2 py-6 px-6 d-flex flex-column justify-content-between">
+        <div class="article-2 py-4 py-lg-6 px-4 px-lg-6 d-flex flex-column justify-content-between">
           <ng-container *ngIf="!chartLoading">
             <div id="walletChart" class="chart-token">
               <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
@@ -178,7 +200,7 @@
             </div>
             <div>
               <div class="d-flex justify-content-between align-items-center body mb-5">
-                <span class="text--green">{{ global.stableToken }}</span>
+                <span class="text--green fw-500">{{ global.stableToken }}</span>
                 <span>{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
               <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -202,88 +224,101 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="sub-text px-6 py-6">Transactions</div>
+        <div class="sub-text px-4 px-lg-6 py-4 py-lg-6 header-mob">Transactions</div>
         <div class="card-body px-6 pt-0">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="length > 0; else noValues">
-              <div class="table-responsive aura-table-contain">
-                <table mat-table [dataSource]="dataSource" class="aura-table">
-                  <ng-container *ngFor="let template of templates; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef
-                          class="{{(template.headerCellDef === 'Time' || template.headerCellDef === 'Result' || template.headerCellDef === 'Tx Hash') ? 'col-per-15' : 'col-per-13' }}">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
+                <div class="table-responsive aura-table-contain">
+                  <ng-container *ngIf="!breakpoint.value.matches">
+                    <table mat-table [dataSource]="dataSource" class="aura-table">
+                      <ng-container *ngFor="let template of templates; index as i">
+                        <ng-container [matColumnDef]="template.matColumnDef">
+                          <th mat-header-cell *matHeaderCellDef
+                              class="{{(template.headerCellDef === 'Time' || template.headerCellDef === 'Result' || template.headerCellDef === 'Tx Hash') ? 'col-per-15' : 'col-per-13' }}">
+                            <div [innerHTML]="template.headerCellDef | translate"></div>
+                          </th>
 
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef">
-                            <div *ngSwitchCase="'timestamp'">
-                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                            </div>
-                            <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
-                              {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
-                              {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'type'">
-                              {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'status'">
-                              <div [ngSwitch]="data[template.matColumnDef]">
-                                <div *ngSwitchCase="'Success'" class="text--primary">
+                          <td mat-cell *matCellDef="let data">
+                            <div>
+                              <ng-container [ngSwitch]="template.matColumnDef">
+                                <div *ngSwitchCase="'timestamp'">
+                                  {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                                </div>
+                                <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
                                   {{ data[template.matColumnDef] }}
                                 </div>
-                                <div *ngSwitchCase="'Fail'" class="text--danger">
+                                <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
                                   {{ data[template.matColumnDef] }}
                                 </div>
-                                <div *ngSwitchCase="'Pending'" class="text--warning">
+                                <div *ngSwitchCase="'type'">
                                   {{ data[template.matColumnDef] }}
                                 </div>
-                              </div>
-                            </div>
-                            <div *ngSwitchCase="'fee'">
-                              {{ data[template.matColumnDef] }}
-                              <span class="text--green">{{ global.stableToken }}</span>
-                            </div>
-                            <div *ngSwitchCase="'amount'">
-                              <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                                {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                                <span class="text--green">{{ global.stableToken }}</span>
+                                <div *ngSwitchCase="'status'">
+                                  <div [ngSwitch]="data[template.matColumnDef]">
+                                    <div *ngSwitchCase="'Success'" class="text--primary">
+                                      {{ data[template.matColumnDef] }}
+                                    </div>
+                                    <div *ngSwitchCase="'Fail'" class="text--danger">
+                                      {{ data[template.matColumnDef] }}
+                                    </div>
+                                    <div *ngSwitchCase="'Pending'" class="text--warning">
+                                      {{ data[template.matColumnDef] }}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div *ngSwitchCase="'fee'">
+                                  {{ data[template.matColumnDef] }}
+                                  <span class="text--green">{{ global.stableToken }}</span>
+                                </div>
+                                <div *ngSwitchCase="'amount'">
+                                  <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                                    {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                                    <span class="text--green">{{ global.stableToken }}</span>
+                                  </ng-container>
+                                  <ng-template #displayNonNumber>
+                                    <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                                    <span
+                                      *ngIf="data[template.matColumnDef] !== 0"
+                                      class="text--primary cursor-pointer"
+                                      [routerLink]="['/transaction', data['tx_hash']]"
+                                    >
+                                      More
+                                  </span>
+                                  </ng-template>
+                                </div>
+                                <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                               </ng-container>
-                              <ng-template #displayNonNumber>
-                                <span *ngIf="data[template.matColumnDef] === 0"> - </span>
-                                <span
-                                  *ngIf="data[template.matColumnDef] !== 0"
-                                  class="text--primary cursor-pointer"
-                                  [routerLink]="['/transaction', data['tx_hash']]"
-                                >
-                                  More
-                              </span>
-                              </ng-template>
                             </div>
-                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
-                  </ng-container>
+                          </td>
+                        </ng-container>
+                      </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data pt-8" colspan="9999">
-                      <app-loading-sprint></app-loading-sprint>
-                    </td>
-                  </tr>
-                </table>
-                <app-paginator [length]="pageData.length" [pageSize]="pageSize" 
-                               (paginator)="paginatorEmit($event)"
-                               (pageEvent)="pageEvent($event)">
-                </app-paginator>
-              </div>
-            </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
+                      <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell g-no-data pt-8" colspan="9999">
+                          <app-loading-sprint></app-loading-sprint>
+                        </td>
+                      </tr>
+                    </table>
+                  </ng-container>
+                  <ng-container *ngIf="breakpoint.value.matches">
+                    <!-- <app-card-type-one [data]="dataSource?.data"></app-card-type-one> -->
+                    <app-card-mob-simple *ngFor="let data of dataSource?.data"
+                                     [link]="'/transaction/' + data.tx_hash"
+                                     [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status'}"
+                                     [content]="[
+                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash)},
+                                       {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
+                                     ]"
+                    ></app-card-mob-simple>
+                  </ng-container>
+                  <app-paginator [length]="pageData.length" [pageSize]="pageSize" 
+                                (paginator)="paginatorEmit($event)"
+                                (pageEvent)="pageEvent($event)">
+                  </app-paginator>
+                </div>
+              </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
             </ng-template>
@@ -294,5 +329,16 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="col-lg-6">
+    <ng-template #modalManage let-modal>
+      <div class="box-address">
+        <div class="txt-right mb-4">
+          <img src="../../../../assets/images/icons/close-popup.png" alt="" width="14" height="14" (click)="closePopup()"/>
+        </div>
+        <app-qr [address]="currentAddress || ''"> </app-qr>
+      </div>
+    </ng-template>
   </div>
 </section>

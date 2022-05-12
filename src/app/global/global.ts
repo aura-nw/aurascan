@@ -29,9 +29,13 @@ export function getAmount(arrayMsg, type, rawRog = '') {
     amount = itemMessage?.funds[0].amount;
   } else if (type === eTransType.SubmitProposalTx){
     amount = itemMessage?.initial_deposit[0]?.amount || 0;
-  } else if (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg.length === 1){
-    const jsonData = JSON.parse(rawRog);
-    amount = jsonData[0].events[0].attributes[1].value.replace(STABLE_UTOKEN,'');
+  } else if (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg.length === 1) {
+    //check error with rawlog
+    try {
+      const jsonData = JSON.parse(rawRog);
+      amount = jsonData[0].events[0].attributes[1].value.replace(STABLE_UTOKEN,'');
+    } catch {
+    }
   }
 
   if (itemMessage && amount >= 0) {

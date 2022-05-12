@@ -5,6 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { CommonService } from '../../../../core/services/common.service';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { PageEventType } from '../../../../../app/core/constants/account.enum';
 
 @Component({
   selector: 'app-account-table',
@@ -16,17 +18,23 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   @Input() templates: Array<TableTemplate>;
   @Input() displayedColumns: string[];
   @Input() pageData: PageEvent;
-  @Input() pageEventType: String;
+  @Input() pageEventType: string;
   @Input() textNull: string = 'NO DATA';
   @Output() pageEvent = new EventEmitter<PageEvent>();
+
+  pageType = PageEventType;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  currentPage = 0;
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
     public commonService: CommonService,
+    private layout: BreakpointObserver
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngAfterViewInit(): void {}
 
@@ -55,4 +63,8 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     this.dataSource.paginator = event;
   }
   paginatorEvent(event: PageEvent): void {}
+
+  showPageEvent(event): void{
+    this.currentPage = event?.target.innerText - 1;
+  }
 }

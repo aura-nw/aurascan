@@ -99,7 +99,7 @@
             "BADGE": "01"
         },
         "PROPOSAL": {
-            "TEXT": "Proposals",
+            "TEXT": "Votings",
             "BADGE": "04"
         },
         "CHAINCODE": {
