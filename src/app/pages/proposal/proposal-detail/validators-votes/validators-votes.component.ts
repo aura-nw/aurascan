@@ -1,3 +1,4 @@
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -62,8 +63,9 @@ export class ValidatorsVotesComponent implements OnInit {
     noWithVeto: null,
     didNotVote: null,
   };
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService) {}
+  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {}
 
   ngOnInit(): void {
     if (this.proposalId) {

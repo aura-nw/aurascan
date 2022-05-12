@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -51,6 +52,8 @@ export class ProposalComponent implements OnInit {
     vote: string | null;
   }[] = [];
 
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
@@ -59,6 +62,7 @@ export class ProposalComponent implements OnInit {
     public walletService: WalletService,
     private environmentService: EnvironmentService,
     private dlgService: DialogService,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
@@ -74,38 +78,38 @@ export class ProposalComponent implements OnInit {
 
   getList(): void {
     this.proposalService.getProposal().subscribe((res) => {
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.length = res.data.length;
-      this.dataSource.sort = this.sort;
-      this.lastedList = [...res.data];
-      this.lastedList.forEach((pro, index) => {
-        pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-        pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-        pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
-        pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
+      if (res?.data) {
+        this.dataSource = new MatTableDataSource<any>(res.data);
+        this.length = res.data.length;
+        this.dataSource.sort = this.sort;
+        this.lastedList = [...res.data];
+        this.lastedList.forEach((pro, index) => {
+          pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
+          pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
+          pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
+          pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
-        if (index < 4) {
-          if (pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') {
+          if ((index < 4 && pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') || pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
             this.getVoteResult(pro.pro_id, index);
             const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
             if (expiredTime < 0) {
               this.getProposalDetailFromNode(pro.pro_id, index);
             }
-          }
 
-          this.proposalVotes.push({
-            proId: +pro.pro_id,
-            vote: null,
-          });
-        }
-      });
-      this.getVotedProposal();
+            this.proposalVotes.push({
+              proId: +pro.pro_id,
+              vote: null,
+            });
+          }
+        });
+        this.getVotedProposal();
+      }
     });
   }
 
   getProposalDetailFromNode(pro_id, index) {
     this.proposalService.getProposalDetailFromNode(pro_id).subscribe((res) => {
-      if (res) {
+      if (res?.data) {
         this.lastedList[index].pro_status = res.data.status;
         this.dataSource.data[index].pro_status = res.data.status;
       }
@@ -187,6 +191,7 @@ export class ProposalComponent implements OnInit {
     const title = item.pro_title;
     const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
 
+    // if (expiredTime > 0) {
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
 

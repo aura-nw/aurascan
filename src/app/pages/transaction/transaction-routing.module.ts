@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
+import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { TransactionComponent } from './transaction.component';
-import { TxsDetailComponent } from './txs-detail/txs-detail.component';
+
 
 const routes: Routes = [
   {
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: ':id',
-    component: TxsDetailComponent
+    component: TransactionDetailComponent
   }
 ];
 

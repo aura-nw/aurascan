@@ -5,6 +5,7 @@ export interface IApiUrl {
   fabric: string;
   cosmos: string;
   chainId: string;
+  timeStaking: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ export class EnvironmentService {
     this.apiUrl = new BehaviorSubject<IApiUrl>({
       fabric: '',
       cosmos: '',
-      chainId: ''
+      chainId: '',
+      timeStaking: ''
     });
   }
 
@@ -27,7 +29,8 @@ export class EnvironmentService {
         const data = {
           fabric: config['fabric'],
           cosmos: config['cosmos'],
-          chainId: config['chainId'] || 'aura-testnet'
+          chainId: config['chainId'] || 'aura-testnet',
+          timeStaking: config['timeStaking'] || '1814400',
         };
         this.apiUrl.next(data);
       })

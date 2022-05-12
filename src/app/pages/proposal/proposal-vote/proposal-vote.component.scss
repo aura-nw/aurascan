@@ -30,5 +30,11 @@
     border-radius: 12px;
     box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
     border: 1px solid #20262b;
+    @media (max-width: 991.99px) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: var(--spacer-4);
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { WidgetModule } from '../../../app/shared/widget/widget.module';
@@ -48,6 +48,6 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
     TranslateModule,
     TableNoDataModule
   ],
-  providers: [DatePipe, BlockService, TransactionService]
+  providers: [DatePipe, BlockService, TransactionService, DecimalPipe]
 })
 export class DashboardModule { }

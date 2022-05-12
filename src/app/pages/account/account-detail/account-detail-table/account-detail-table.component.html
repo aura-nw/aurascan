@@ -1,76 +1,166 @@
-<ngx-simplebar style="max-height: 400px">
+<ngx-simplebar style="max-height: 530px" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="table-responsive aura-table-contain">
-      <table mat-table [dataSource]="dataSource" class="aura-table">
-        <ng-container *ngFor="let template of templates; index as i">
-          <ng-container [matColumnDef]="template.matColumnDef">
-            <th mat-header-cell *matHeaderCellDef>
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
+      <ng-container *ngIf="!breakpoint.value.matches">
+        <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+          <ng-container *ngFor="let template of templates; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef">
+              <th mat-header-cell *matHeaderCellDef>
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
 
-            <td mat-cell *matCellDef="let data" style="max-width: 200px">
-              <div>
-                <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                  <div
-                    *ngSwitchCase="'validator_name'"
-                    class="text--green cursor-pointer text-clamp"
-                    [routerLink]="['/validators', data['validator_address']]">
-                    {{ data[template.matColumnDef] }}
-                  </div>
-                  <div *ngSwitchCase="'amount'" class="fw-normal">
-                    {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                    <span class="text--green">{{ global.stableToken }}</span>
-                  </div>
-                  <div *ngSwitchCase="'token_amount'" class="fw-normal">
-                    {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                  </div>
-                  <div *ngSwitchCase="'token_name'" class="fw-normal text--green">
-                    {{ data[template.matColumnDef] }}
-                  </div>
-                  <div *ngSwitchCase="'reward'" class="fw-normal">
-                    {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                    <span class="text--green">{{ global.stableToken }}</span>
-                  </div>
-                  <div *ngSwitchCase="'completion_time'">
-                    {{ commonService.getDateValue(data[template.matColumnDef], false)[0] }}
-                    <div class="small-body">({{ commonService.getDateValue(data[template.matColumnDef], false)[1] }})</div>
-                  </div>
-                  <div *ngSwitchCase="'vesting_schedule'">
-                    {{ commonService.getDateValue(data['date_format'], false)[1] }} <br />({{
-                      commonService.getDateValue(data['date_format'], false)[0]
-                    }})
-                  </div>
-                  <div *ngSwitchCase="'total_value'" class="fw-normal">
-                    $ {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                    <!--                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>-->
-                  </div>
-                  <div
-                    *ngSwitchCase="'validator_src_name'"
-                    class="text--green cursor-pointer text-clamp"
-                    [routerLink]="['/validators', data['validator_src_address']]">
-                    {{ data[template.matColumnDef] }}
-                  </div>
-                  <div
-                    *ngSwitchCase="'validator_dst_name'"
-                    class="text--green cursor-pointer text-clamp"
-                    [routerLink]="['/validators', data['validator_dst_address']]">
-                    {{ data[template.matColumnDef] }}
-                  </div>
-                  <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
-                </ng-container>
-              </div>
-            </td>
+              <td mat-cell *matCellDef="let data" style="max-width: 200px">
+                <div>
+                  <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
+                    <div
+                      *ngSwitchCase="'validator_name'"
+                      class="text--green cursor-pointer text-clamp"
+                      [routerLink]="['/validators', data['validator_address']]">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'amount'" class="fw-normal">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span>
+                    </div>
+                    <div *ngSwitchCase="'token_amount'" class="fw-normal">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                    </div>
+                    <div *ngSwitchCase="'token_name'" class="fw-normal text--green">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'reward'" class="fw-normal">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span>
+                    </div>
+                    <div *ngSwitchCase="'completion_time'">
+                      {{ commonService.getDateValue(data[template.matColumnDef], false)[0] }}
+                      <div class="small-body">
+                        ({{ commonService.getDateValue(data[template.matColumnDef], false)[1] }})
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'vesting_schedule'">
+                      {{ commonService.getDateValue(data['date_format'], false)[1] }} <br />({{
+                        commonService.getDateValue(data['date_format'], false)[0]
+                      }})
+                    </div>
+                    <div *ngSwitchCase="'total_value'" class="fw-normal">
+                      $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
+                      <!--                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>-->
+                    </div>
+                    <div
+                      *ngSwitchCase="'validator_src_name'"
+                      class="text--green cursor-pointer text-clamp"
+                      [routerLink]="['/validators', data['validator_src_address']]">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div
+                      *ngSwitchCase="'validator_dst_name'"
+                      class="text--green cursor-pointer text-clamp"
+                      [routerLink]="['/validators', data['validator_dst_address']]">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
           </ng-container>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data" colspan="9999">
-            {{ textNull | translate }}
-          </td>
-        </tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ textNull | translate }}
+            </td>
+          </tr>
+        </table>
+      </ng-container>
+      <ng-container *ngIf="breakpoint.value.matches">
+        <div class="table-mobile">
+          <ng-container *ngFor="let item of dataSource.data, let i = index">
+            <div class="box-mob-table fw-normal mb-3" *ngIf="i >= (pageData.pageSize * currentPage) && i < (pageData.pageSize * (currentPage + 1))">
+              <ng-container [ngSwitch]="pageEventType" class="fw-normal">
+                <div *ngSwitchCase="pageType.Delegation">
+                  <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                    item.validator_name
+                  }}</span
+                  ><br />
+                  <div class="d-flex justify-content-between">
+                    <div class="fw-normal">
+                      Amount<br />
+                      Reward
+                    </div>
+                    <div class="txt-right">
+                      {{ item.amount | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span
+                      ><br />
+                      {{ item.reward | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div *ngSwitchCase="pageType.Unbonding">
+                  <div class="d-flex justify-content-between">
+                    <div class="fw-normal">
+                      <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                        item.validator_name
+                      }}</span
+                      ><br />
+                      Amount<br />
+                      Completion Time
+                    </div>
+                    <div class="txt-right">
+                      {{ commonService.getDateValue(item.completion_time, false)[1] }}<br />
+                      {{ item.amount | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span
+                      ><br />
+                      {{ commonService.getDateValue(item.completion_time, false)[0] }}
+                    </div>
+                  </div>
+                </div>
+                <div *ngSwitchCase="pageType.Redelegation">
+                  <div class="d-flex justify-content-between">
+                    <div class="fw-normal">
+                      <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                        item.validator_src_name
+                      }}</span
+                      ><br />
+                      Amount<br />
+                      Time
+                    </div>
+                    <div class="txt-right">
+                      <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                        item.validator_dst_name
+                      }}</span
+                      ><br />
+                      {{ item.amount | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span
+                      ><br />
+                      {{ commonService.getDateValue(item.completion_time, false)[0] }} <br />
+                    </div>
+                  </div>
+                </div>
+                <div *ngSwitchCase="pageType.Vestings">
+                  <span class="fw-normal text--green">{{ item.type_format }}</span
+                  ><br />
+                  <div class="d-flex justify-content-between">
+                    <div class="fw-normal">
+                      Amount<br />
+                      Vesting Schedule
+                    </div>
+                    <div class="txt-right">
+                      {{ item.amount | number: global.formatNumberToken }}
+                      <span class="text--green">{{ global.stableToken }}</span
+                      ><br />
+                      {{ commonService.getDateValue(item.date_format, false)[1] }} <br />
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
       <app-paginator
         [length]="pageData.length"
         [pageSize]="pageData.pageSize"

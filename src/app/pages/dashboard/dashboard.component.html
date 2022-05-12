@@ -5,34 +5,34 @@
       <div class="card card-h-100">
         <div class="card-body">
           <div class="align-items-center mb-3">
-            <div class="d-flex flex-wrap align-items-center mb-6">
-              <h5 class="title-small text--white">Transactions</h5>
+            <div class="d-flex flex-wrap align-items-center mb-lg-6">
+              <h5 class="sub-text sub-text-mob text--white">Transactions</h5>
               <div class="ms-auto">
-                <div>
+                <div class="d-none d-lg-block">
                   <button
                     type="button"
-                    class="button button-primary body mr-2"
+                    class="button button-primary body-small mr-2"
                     [class.active]="chartRange === '60m'"
                     (click)="updateBlockAndTxs('60m')">
                     60m
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body mr-2"
+                    class="button button-primary body-small mr-2"
                     [class.active]="chartRange === '24h'"
                     (click)="updateBlockAndTxs('24h')">
                     24h
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body mr-2"
+                    class="button button-primary body-small mr-2"
                     [class.active]="chartRange === '30d'"
                     (click)="updateBlockAndTxs('30d')">
                     30d
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body"
+                    class="button button-primary body-small"
                     [class.active]="chartRange === '12M'"
                     (click)="updateBlockAndTxs('12M')">
                     12M
@@ -52,6 +52,37 @@
                 </apx-chart>
               </div>
             </div>
+
+            <div class="d-lg-none text-center">
+              <button
+                      type="button"
+                      class="button button-primary body-small mr-6"
+                      [class.active]="chartRange === '60m'"
+                      (click)="updateBlockAndTxs('60m')">
+                60m
+              </button>
+              <button
+                      type="button"
+                      class="button button-primary body-small mr-6"
+                      [class.active]="chartRange === '24h'"
+                      (click)="updateBlockAndTxs('24h')">
+                24h
+              </button>
+              <button
+                      type="button"
+                      class="button button-primary body-small mr-6"
+                      [class.active]="chartRange === '30d'"
+                      (click)="updateBlockAndTxs('30d')">
+                30d
+              </button>
+              <button
+                      type="button"
+                      class="button button-primary body-small"
+                      [class.active]="chartRange === '12M'"
+                      (click)="updateBlockAndTxs('12M')">
+                12M
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -66,13 +97,13 @@
       <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-9">
+          <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text">Height</span>
+              <span class="sub-text sub-text-mob">Height</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.block_height | number }}</h4>
+            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">{{ global?.dataHeader?.block_height | number }}</h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -85,13 +116,13 @@
       <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-9">
+          <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text">Transactions</span>
+              <span class="sub-text sub-text-mob">Transactions</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title text-gradient fw-bold">{{ global?.dataHeader?.total_txs_num | number }}</h4>
+            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">{{ global?.dataHeader?.total_txs_num | number }}</h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -104,13 +135,13 @@
       <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-9">
+          <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text">Bonded Tokens</span>
+              <span class="sub-text sub-text-mob">Bonded Tokens</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title text-gradient fw-bold">
+            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">
               {{ global?.dataHeader?.bonded_tokens | number: global.formatNumberOnlyDecimal }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
@@ -132,13 +163,13 @@
       <div class="card card-h-100 text--white">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-9">
+          <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text">Validators</span>
+              <span class="sub-text sub-text-mob">Validators</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title text-gradient fw-bold">
+            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">
               {{ global?.dataHeader?.total_validator_active_num }} /
               {{ global?.dataHeader?.total_validator_num }}
             </h4>
@@ -157,14 +188,14 @@
     <!-- Block -->
     <div class="col-xl-6">
       <div class="card">
-        <div class="align-items-center d-flex justify-content-between px-6 py-6">
-          <div class="sub-text text--white">Blocks</div>
-          <button type="button" class="button button-outline" [routerLink]="'/blocks'">View more</button>
+        <div class="align-items-center d-flex justify-content-between px-6 pt-6 pb-0 pb-lg-6">
+          <div class="sub-text sub-text-mob text--white">Blocks</div>
+          <button type="button" class="button button-outline button-outline__in-card d-none d-lg-block body" [routerLink]="'/blocks'"><span class="text-gradient">View more</span></button>
         </div>
         <div class="card-body pt-0">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceBlock; else noValues">
-              <div class="table-responsive">
+              <div class="table-responsive d-none d-lg-block">
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table body">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -205,11 +236,19 @@
                   </tr>
                 </table>
               </div>
+              <div class="d-lg-none" *ngIf="dataBlock && dataBlock.length > 0">
+                <app-card-mob-simple *ngFor="let data of dataBlock"
+                                     [link]="'/blocks/' + data.height"
+                                     [title]="{size: 'md', label: data.height , subLabelContent: commonService.getDateValue(data.timestamp)[0]}"
+                                     [content]="[{label: 'Txs', info: data.num_txs.toString()}, {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
+                  ></app-card-mob-simple>
+              </div>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
+          <button type="button" class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2" [routerLink]="'/blocks'"><span class="text-gradient">View more</span></button>
         </div>
       </div>
     </div>
@@ -217,14 +256,14 @@
     <!-- Transaction -->
     <div class="col-xl-6">
       <div class="card">
-        <div class="align-items-center d-flex justify-content-between px-6 py-6">
+        <div class="align-items-center d-flex justify-content-between px-6 pt-6 pb-0 pb-lg-6">
           <div class="sub-text text--white">Transactions</div>
-          <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button>
+          <button type="button" class="button button-outline button-outline__in-card body d-none d-lg-block" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
         </div>
         <div class="card-body pt-0">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceTx; else noValues">
-              <div class="table-responsive">
+              <div class="table-responsive d-none d-lg-block">
                 <table mat-table [dataSource]="dataSourceTx" class="aura-table body">
                   <ng-container *ngFor="let template of templatesTx; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
@@ -265,11 +304,22 @@
                   </tr>
                 </table>
               </div>
+              <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
+                <app-card-mob-simple *ngFor="let data of dataTx"
+                                     [link]="'/transaction/' + data.tx_hash"
+                                     [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status'}"
+                                     [content]="[
+                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash)},
+                                       {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
+                                     ]"
+                ></app-card-mob-simple>
+              </div>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
+          <button type="button" class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
         </div>
       </div>
     </div>

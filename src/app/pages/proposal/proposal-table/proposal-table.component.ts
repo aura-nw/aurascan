@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +8,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -39,26 +40,26 @@ export class ProposalTableComponent implements OnInit, OnChanges {
 
   votesTemplates: Array<TableTemplate> = [
     { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'updated_at', headerCellDef: 'Time' },
+    { matColumnDef: 'updated_at', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank' },
+    { matColumnDef: 'rank', headerCellDef: 'Rank', cssClass: 'box-rank' },
     {
       matColumnDef: 'validator_name',
       headerCellDef: 'Validator',
       isUrl: '/validators',
       paramField: 'operator_address',
     },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'updated_at', headerCellDef: 'Time' },
+    { matColumnDef: 'updated_at', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/account', isShort: true },
+    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/account', isShort: true, desktopOnly: true },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'created_at', headerCellDef: 'Time' },
@@ -70,8 +71,9 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any>;
   pageSize = 5;
   pageIndex = 0;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(public global: Globals, public commonService: CommonService) {}
+  constructor(public global: Globals, public commonService: CommonService, private layout: BreakpointObserver) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.tabId && !changes.tabId.firstChange && this.dataSource?.paginator) {
@@ -135,5 +137,15 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.paginator = e;
     }
+  }
+
+  getListData(): any[] {
+    if (!(this.dataSource?.paginator && this.dataSource?.data)) {
+      return [];
+    }
+    return this.dataSource.data.slice(
+      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
+      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
+    );
   }
 }
