@@ -167,17 +167,17 @@ export class ProposalComponent implements OnInit {
           let warning: MESSAGE_WARNING;
 
           const { created_at } = data.result ? data.result : { created_at: null };
-
           warning = created_at
-            ? new Date(created_at) < new Date(item.pro_voting_start_time)
+            ? +moment(created_at).format('x') < +moment(item.pro_voting_start_time).format('x')
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
+            
 
           this.openDialog({
             id,
             title,
-            MESSAGE_WARNING,
+            warning,
             voteValue: warning ? null : item.vote_option,
             idx: index,
           });
@@ -198,7 +198,8 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getVoteResult(data.id, data.idx);
-        this.proposalVotes[data.idx].vote = result.keyVote;
+        let votedValue = this.lastedList.find((s)=> s.pro_id === data.id);
+        votedValue.vote_option = result.keyVote;
       }
     });
   }
