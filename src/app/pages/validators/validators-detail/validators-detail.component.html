@@ -10,7 +10,7 @@
         <div
           [ngClass]="{ 'valid-status status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
           [ngClass]="{ 'valid-status status-jailed': currentValidatorDetail?.jailed }"
-          [ngClass]="{ 'label__status small-body': breakpoint.value.matches }">
+          [ngClass]="{ 'label__status small-body fw-semibold': breakpoint.value.matches }">
           <ng-container *ngIf="currentValidatorDetail?.jailed">
             <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches"/> Jailed
           </ng-container>
