@@ -3,11 +3,8 @@ import {DatePipe, ViewportScroller} from '@angular/common';
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
-import { forkJoin, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
@@ -31,7 +28,6 @@ export class ProposalComponent implements OnInit {
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
-  @ViewChild(MatSort) sort: MatSort;
   // data table
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
@@ -73,22 +69,21 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getList();
-    this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
+    this.walletService.wallet$.subscribe((wallet) => this.getListProposal());
   }
 
   changePage(page: PageEvent): void {
     this.dataSource = null;
     this.pageIndex = page.pageIndex;
-    this.getList();
+    this.getListProposal();
   }
 
-  getList(): void {
-    this.proposalService.getProposal().subscribe((res) => {
+  getListProposal(): void {
+    const addr = this.walletService.wallet?.bech32Address || null;
+    this.proposalService.getProposalList(addr).subscribe((res) => {
       if (res?.data) {
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
-        this.dataSource.sort = this.sort;
         this.lastedList = [...res.data];
         this.lastedList.forEach((pro, index) => {
           pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
@@ -96,20 +91,18 @@ export class ProposalComponent implements OnInit {
           pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
-          if ((index < 4 && pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') || pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+          if (
+            (index < 4 && pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') ||
+            pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD'
+          ) {
             this.getVoteResult(pro.pro_id, index);
             const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
             if (expiredTime < 0) {
               this.getProposalDetailFromNode(pro.pro_id, index);
             }
-
-            this.proposalVotes.push({
-              proId: +pro.pro_id,
-              vote: null,
-            });
           }
+          pro.vote_option = this.voteConstant.find((s) => s.key === pro.vote_option)?.voteOption;
         });
-        this.getVotedProposal();
       }
     });
   }
@@ -121,32 +114,6 @@ export class ProposalComponent implements OnInit {
         this.dataSource.data[index].pro_status = res.data.status;
       }
     });
-  }
-
-  getVotedProposal() {
-    const addr = this.walletService.wallet?.bech32Address || null;
-    if (this.proposalVotes.length > 0 && addr) {
-      forkJoin({
-        0: this.proposalVotes[0] ? this.proposalService.getVotes(this.proposalVotes[0]?.proId, addr) : of([]),
-        1: this.proposalVotes[1] ? this.proposalService.getVotes(this.proposalVotes[1]?.proId, addr) : of([]),
-        2: this.proposalVotes[2] ? this.proposalService.getVotes(this.proposalVotes[2]?.proId, addr) : of([]),
-        3: this.proposalVotes[3] ? this.proposalService.getVotes(this.proposalVotes[3]?.proId, addr) : of([]),
-      })
-        .pipe(map((item) => Object.keys(item).map((u) => item[u].data?.proposalVote?.option)))
-        .subscribe((res) => {
-          this.proposalVotes = res.map((i, idx) => {
-            return {
-              proId: this.proposalVotes[idx]?.proId || null,
-              vote: this.voteConstant.find((s) => s.key === i)?.voteOption || null,
-            };
-          });
-        });
-    } else {
-      this.proposalVotes = this.proposalVotes.map((e) => ({
-        ...e,
-        vote: null,
-      }));
-    }
   }
 
   getStatus(key: string) {
@@ -206,20 +173,18 @@ export class ProposalComponent implements OnInit {
           let warning: MESSAGE_WARNING;
 
           const { created_at } = data.result ? data.result : { created_at: null };
-
           warning = created_at
-            ? new Date(created_at) < new Date(item.pro_voting_start_time)
+            ? +moment(created_at).format('x') < +moment(item.pro_voting_start_time).format('x')
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
+
 
           this.openDialog({
             id,
             title,
             warning,
-            voteValue: warning
-              ? null
-              : this.parsingStatus(this.proposalVotes.find((item) => item.proId === +id)?.vote || null),
+            voteValue: warning ? null : item.vote_option,
             idx: index,
           });
         });
@@ -239,7 +204,8 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getVoteResult(data.id, data.idx);
-        this.proposalVotes[data.idx].vote = result.keyVote;
+        let votedValue = this.lastedList.find((s)=> s.pro_id === data.id);
+        votedValue.vote_option = result.keyVote;
       }
       this.scrollToTop();
     });

@@ -50,8 +50,10 @@
 
 .undelegate-item {
   padding: var(--spacer-3) 0;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--aura-light-gray);
+  @media (min-width: 991.99px) {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--aura-light-gray);
+    }
   }
   &.table-mobile__item {
     padding: 12px;
@@ -226,8 +228,10 @@ form.search-form {
 }
 
 @media (max-width: 991.99px) {
-  .button-outline__in-card {
-    box-shadow: 2px 1000px 1px #38383D inset;
+  .validator-container {
+    .button-outline__in-card {
+      box-shadow: 2px 1000px 1px #38383D inset;
+    }
   }
 }
 
