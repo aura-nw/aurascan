@@ -336,7 +336,7 @@
                 <ng-container *ngIf="breakpoint.value.matches">
                   <app-card-mob-simple *ngFor="let data of dataSourcePower.data"
                                       [link]="'/blocks/id/' + data.blockId"
-                                      [title]="{size: 'sm', label: data.height , subLabelContent: data.tx_hash_format, subLabelClass: 'text--green' }"
+                                      [title]="{size: 'sm', label: data.height , subLabelContent: data.tx_hash_format, subLabelClass: 'text--green fw-normal' }"
                                       [content]="[{label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode)},
                                         {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
                   ></app-card-mob-simple>
