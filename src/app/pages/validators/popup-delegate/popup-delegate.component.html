@@ -8,7 +8,7 @@
   </div>
   <div class="box-token mt-8">
     <div class="title-small">My delegation</div>
-    <div class="body mt-2 text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number}} {{global.stableToken}}</div>
+    <div class="body mt-2 text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
     <div class="title-small mt-6">Available Balance</div>
     <div class="body mt-2 text--greyscale-4">{{data?.availableToken || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
     <div class="title-small mt-6">Amount to Delegate</div>
