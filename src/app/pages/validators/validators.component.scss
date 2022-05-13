@@ -228,8 +228,10 @@ form.search-form {
 }
 
 @media (max-width: 991.99px) {
-  .button-outline__in-card {
-    box-shadow: 2px 1000px 1px #38383D inset;
+  .validator-container {
+    .button-outline__in-card {
+      box-shadow: 2px 1000px 1px #38383D inset;
+    }
   }
 }
 
