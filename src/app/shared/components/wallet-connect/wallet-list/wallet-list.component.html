@@ -1,18 +1,18 @@
 <div class="wallet-list-container">
-  <div class="d-flex justify-content-center justify-content-lg-between align-items-center mb-4">
+  <div
+    class="d-flex flex-row-reverse flex-lg-row justify-content-center justify-content-lg-between align-items-center mb-4">
+    <div class="sub-text wallet-title w-100 text-center text-lg-start">Connect a wallet</div>
     <img
-      class="icon-close d-block d-lg-none"
-      src="../../../../../assets/icons/icons-svg/white/arrow-left.svg"
-      alt=""
-      (click)="dismiss()" />
-    <div class="sub-text w-100 text-center text-lg-start">Connect a wallet</div>
-    <img
-      class="icon-close d-none d-lg-block"
-      src="../../../../../assets/icons/icons-svg/basic/close.svg"
+      class="icon-close"
+      [src]="
+        disabled
+          ? '../../../../../assets/icons/icons-svg/white/arrow-left.svg'
+          : '../../../../../assets/icons/icons-svg/basic/close.svg'
+      "
       alt=""
       (click)="dismiss()" />
   </div>
-  <div class="border-bottom-mobile d-block d-lg-none"></div>
+  <div class="border-bottom-mobile"></div>
   <p class="body small-text-mob" [class.text--danger]="disabled">
     {{ (disabled ? 'WALLET.MSG_CONNECT_DISABLED' : 'WALLET.MSG_CONNECT') | translate }}
   </p>
