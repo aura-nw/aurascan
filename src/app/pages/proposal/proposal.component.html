@@ -148,7 +148,7 @@
                     <div class="small-body"><span>Status</span></div>
                     <div
                       *ngIf="getStatus(lastedItem.pro_status)"
-                      class="proposal-status-mobile flex-shrink-0 proposal-status__{{
+                      class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
                         getStatus(lastedItem.pro_status).key
                       }}">
                       <span class="status">{{ getStatus(lastedItem.pro_status).value }}</span>
