@@ -1,8 +1,18 @@
 <app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
+<div class="row justify-content-end mb-2 d-none d-lg-flex">
+  <div class="col-auto">
+    <div class="button-switch-stage">
+      <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
+      <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
+    </div>
+  </div>
+</div>
+
 <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card-body header-mob" [ngClass]="breakpoint.value.matches ? 'card-body' : 'card-header'">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="title-small">Information</div>
+    <div class="title-small d-none d-lg-flex fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
+    <div class="d-flex justify-content-between align-items-center d-lg-none">
+      <div class="title-small fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
       <div class="button-switch-stage">
         <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
         <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
@@ -69,13 +79,15 @@
   </ng-container>
   <ng-container *ngIf="isRawData">
     <ng-container *ngIf="item?.json_data; else noValues">
-      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
+      <div class="body">
+        <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
+      </div>
     </ng-container>
   </ng-container>
 </div>
 <div class="card text--white">
-  <div class="card-header title-small py-6 px-6 d-none d-lg-block">Transactions</div>
-  <div class="d-lg-none px-4 pt-4 pb-0 title-small">Transactions</div>
+  <div class="card-header title-small py-6 px-6 d-none d-lg-block fw-500">Transactions</div>
+  <div class="d-lg-none px-4 pt-4 pb-0 title-small fw-500">Transactions</div>
   <div class="card-body body">
     <ng-container *ngIf="length > 0; else noValues">
       <div class="table-responsive d-none d-lg-block">
@@ -150,7 +162,7 @@
       <div class="d-lg-none" *ngIf="dataTxs && dataTxs.length > 0">
         <app-card-mob-simple *ngFor="let data of dataTxs"
                              [link]="'/transaction/' + data.tx_hash"
-                             [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', isFail: data.status !== 'Success'}"
+                             [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', status: data.code}"
                              [content]="[
                                {label: 'Amount', info: data.amount > 0 ? ((data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>') : checkAmountValue(data.amount, data.tx_hash)},
                                {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"

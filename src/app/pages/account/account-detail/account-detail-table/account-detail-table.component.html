@@ -81,7 +81,7 @@
             <div class="box-mob-table fw-normal mb-3" *ngIf="i >= (pageData.pageSize * currentPage) && i < (pageData.pageSize * (currentPage + 1))">
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
-                  <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                  <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
                     item.validator_name
                   }}</span
                   ><br />
@@ -102,7 +102,7 @@
                 <div *ngSwitchCase="pageType.Unbonding">
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
-                      <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                      <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
                         item.validator_name
                       }}</span
                       ><br />
@@ -121,7 +121,7 @@
                 <div *ngSwitchCase="pageType.Redelegation">
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
-                      <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                      <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
                         item.validator_src_name
                       }}</span
                       ><br />
@@ -129,7 +129,7 @@
                       Time
                     </div>
                     <div class="txt-right">
-                      <span class="fw-normal text--green" [routerLink]="['/validators', item['validator_address']]">{{
+                      <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
                         item.validator_dst_name
                       }}</span
                       ><br />
@@ -141,7 +141,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="pageType.Vestings">
-                  <span class="fw-normal text--green">{{ item.type_format }}</span
+                  <span class="fw-normal text--green body-mob">{{ item.type_format }}</span
                   ><br />
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">

@@ -308,7 +308,7 @@
                                      [link]="'/transaction/' + data.tx_hash"
                                      [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status'}"
                                      [content]="[
-                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash)},
+                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash, data.typeOrigin)},
                                        {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
                                      ]"
                     ></app-card-mob-simple>

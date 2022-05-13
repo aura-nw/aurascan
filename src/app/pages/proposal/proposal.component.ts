@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import * as moment from 'moment';
 import { forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Globals } from '../../../app/global/global';
@@ -189,7 +190,7 @@ export class ProposalComponent implements OnInit {
   openVoteDialog(item: IProposal, index: number) {
     const id = item.pro_id;
     const title = item.pro_title;
-    const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
+    const expiredTime = +moment(item.pro_voting_end_time).format('x') - +moment().format('x');
 
     // if (expiredTime > 0) {
     if (expiredTime > 0) {
