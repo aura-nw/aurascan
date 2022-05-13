@@ -204,12 +204,12 @@
                 <span>{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
               <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-                <div class="d-flex justify-content-between body chart-legend-item">
-                  <div class="d-flex">
+                <div class="d-flex justify-content-between align-items-center body chart-legend-item">
+                  <div class="d-flex align-items-center">
                     <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
-                    <span>{{ item.name }}</span>
+                    <span class="small-body-mob">{{ item.name }}</span>
                   </div>
-                  <span>{{ item.amount | number: global.formatNumberToken }}</span>
+                  <span class="small-body-mob">{{ item.amount | number: global.formatNumberToken }}</span>
                 </div>
               </ng-container>
             </div>

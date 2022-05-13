@@ -167,9 +167,12 @@
       grid-template-columns: 1fr;
 
       li {
-        .item-percent {
+        .item-percent, .item-label {
           font-size: 16px;
           font-weight: 700;
+        }
+        .item-amount{
+          font-size: 14px;
         }
       }
     }

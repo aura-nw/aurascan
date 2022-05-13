@@ -51,8 +51,8 @@
       <div class="offcanvas-body p-0">
         <div class="wallet-container">
           <div class="card border-0">
-            <div class="card-body">
-              <app-wallet-list (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
+            <div class="card-body" *ngIf="{ b: breakpoint$ | async} as breakpoint">
+              <app-wallet-list [disabled]="breakpoint.b.matches" (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
             </div>
           </div>
         </div>

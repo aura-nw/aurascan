@@ -261,6 +261,7 @@
     "WALLET": {
         "SCAN_QR": "Scan QR code",
         "MSG_CONNECT": "Connect with one wallet provider or create a new one",
+        "MSG_CONNECT_DISABLED": "The wallet connection feature on mobile web is temporarily pending. Please visit the Aurascan website on desktop to use this feature.",
         "MSG_PENDING_STAKE_REWARD": "Pending Staking Reward",
         "MSG_EARN": "Earn up to 20% per year",
         "STAKE": "Stake",
