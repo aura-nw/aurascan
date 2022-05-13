@@ -11,4 +11,17 @@
     &-md { font-weight: 500;}
     &-lg { font-weight: 600;}
   }
+  .sub-label {
+    font-weight: 500;
+    &.label__status {
+      font-weight: 600;
+    }
+  }
+  .label__status {
+    font-size: 1.4rem !important;
+    line-height: 1.6rem !important;
+  }
+  .fw-normal {
+    font-weight: normal;
+  }
 }

@@ -121,11 +121,11 @@
               <div class="table-header">
                 <div class="d-flex justify-content-between">
                   <div class="d-flex">
-                    <div class="box-rank">
+                    <div class="box-rank fw-semibold">
                       <span>{{ data['rank'] }}</span>
                     </div>
                     <div class="ml-2">
-                      <a class="text--green body"
+                      <a class="text--green body fw-semibold"
                         [routerLink]="['/validators', data['operator_address'] || data['validator_name']]">
                         {{ data['validator_name'] || '-' }}
                       </a>
@@ -164,7 +164,7 @@
             <div class="box-mob-table fw-normal mb-3">
               <div class="table-header mb-2">
                 <div class="d-flex justify-content-between">
-                  <a class="text--green body" [routerLink]="['/account', data['depositor'] || data['depositor']]">
+                  <a class="text--green body fw-500" [routerLink]="['/account', data['depositor'] || data['depositor']]">
                     {{ shortenAddress(data['depositor']) }}
                   </a>
                 </div>

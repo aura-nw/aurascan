@@ -1,16 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { DATE_TIME_WITH_MILLISECOND } from '../../../../app/core/constants/common.constant';
-import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
-import { DIALOG_STAKE_MODE } from '../../../../app/core/constants/validator.enum';
+import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
+import { EnvironmentService } from '../../../core/data-services/environment.service';
+import { DIALOG_STAKE_MODE } from '../../../core/constants/validator.enum';
 import { Globals } from '../../../global/global';
 
 @Component({
-  selector: 'detail-popup-delegate',
-  templateUrl: './detail-popup-delegate.component.html',
-  styleUrls: ['./detail-popup-delegate.component.scss'],
+  selector: 'popup-delegate',
+  templateUrl: './popup-delegate.component.html',
+  styleUrls: ['./popup-delegate.component.scss'],
 })
-export class DetailPopupDelegateComponent implements OnInit {
+export class PopupDelegateComponent implements OnInit {
   @Input() data: any;
 
   amountFormat: string | number;

@@ -94,16 +94,16 @@
   <div class="row">
     <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.block_height">
       <!-- card -->
-      <div class="card card-h-100 text--white">
+      <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text sub-text-mob">Height</span>
+              <span class="sub-text sub-text-mob card-highlight__label">Height</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">{{ global?.dataHeader?.block_height | number }}</h4>
+            <h4 class="sub-text text-gradient card-highlight__content mb-0">{{ global?.dataHeader?.block_height | number }}</h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -113,16 +113,16 @@
     </div>
     <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.total_txs_num">
       <!-- card -->
-      <div class="card card-h-100 text--white">
+      <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text sub-text-mob">Transactions</span>
+              <span class="sub-text sub-text-mob card-highlight__label">Transactions</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">{{ global?.dataHeader?.total_txs_num | number }}</h4>
+            <h4 class="sub-text text-gradient card-highlight__content mb-0">{{ global?.dataHeader?.total_txs_num | number }}</h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -132,16 +132,16 @@
     </div>
     <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.bonded_tokens">
       <!-- card -->
-      <div class="card card-h-100 text--white">
+      <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text sub-text-mob">Bonded Tokens</span>
+              <span class="sub-text sub-text-mob card-highlight__label">Bonded Tokens</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">
+            <h4 class="sub-text text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.bonded_tokens | number: global.formatNumberOnlyDecimal }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
@@ -160,16 +160,16 @@
         global.dataHeader.total_validator_num
       ">
       <!-- card -->
-      <div class="card card-h-100 text--white">
+      <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
           <div class="row mb-2 mb-lg-9">
             <div class="col-12">
-              <span class="sub-text sub-text-mob">Validators</span>
+              <span class="sub-text sub-text-mob card-highlight__label">Validators</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="title title-medium-mob text-gradient fw-bold mb-0">
+            <h4 class="sub-text text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.total_validator_active_num }} /
               {{ global?.dataHeader?.total_validator_num }}
             </h4>
@@ -199,7 +199,7 @@
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table body">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="has-border-top">
+                      <th mat-header-cell *matHeaderCellDef>
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
                       <td mat-cell *matCellDef="let data">
@@ -257,17 +257,17 @@
     <div class="col-xl-6">
       <div class="card">
         <div class="align-items-center d-flex justify-content-between px-6 pt-6 pb-0 pb-lg-6">
-          <div class="sub-text text--white">Transactions</div>
+          <div class="sub-text sub-text-mob text--white">Transactions</div>
           <button type="button" class="button button-outline button-outline__in-card body d-none d-lg-block" [routerLink]="'/transaction'"><span class="text-gradient">View more</span></button>
         </div>
         <div class="card-body pt-0">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceTx; else noValues">
               <div class="table-responsive d-none d-lg-block">
-                <table mat-table [dataSource]="dataSourceTx" class="aura-table body">
+                <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
                   <ng-container *ngFor="let template of templatesTx; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="has-border-top">
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
                       <td mat-cell *matCellDef="let data">
@@ -283,7 +283,7 @@
                               {{ data[template.matColumnDef] }}
                             </div>
                             <div *ngSwitchCase="'type'">
-                              {{ data[template.matColumnDef] }}
+                              <span class="label__status">{{ data[template.matColumnDef] }}</span>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                           </ng-container>
@@ -307,9 +307,9 @@
               <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
                 <app-card-mob-simple *ngFor="let data of dataTx"
                                      [link]="'/transaction/' + data.tx_hash"
-                                     [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status'}"
+                                     [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', status: data.code}"
                                      [content]="[
-                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash)},
+                                       {label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash, data.typeOrigin)},
                                        {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
                                      ]"
                 ></app-card-mob-simple>

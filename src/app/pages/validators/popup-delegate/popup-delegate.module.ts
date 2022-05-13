@@ -11,10 +11,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
-import { DetailPopupDelegateComponent } from './detail-popup-delegate.component';
+import { PopupDelegateComponent } from './popup-delegate.component';
 
 @NgModule({
-  declarations: [DetailPopupDelegateComponent],
+  declarations: [PopupDelegateComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -29,6 +29,6 @@ import { DetailPopupDelegateComponent } from './detail-popup-delegate.component'
     TableNoDataModule,
     FormsModule
   ],
-  exports: [DetailPopupDelegateComponent]
+  exports: [PopupDelegateComponent]
 })
-export class DetailPopupDelegateModule { }
+export class PopupDelegateModule { }

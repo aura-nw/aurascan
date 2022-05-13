@@ -40,7 +40,8 @@
 
 .card-footer {
     padding: 0 var(--spacer-5) var(--spacer-5) var(--spacer-5);
-    border-radius: 0 0 12px 12px;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
 }
 
 body[data-layout-mode="dark"] {

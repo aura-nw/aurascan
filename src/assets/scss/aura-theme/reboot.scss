@@ -78,7 +78,7 @@ a {
   padding: 8px 16px;
   white-space: nowrap; 
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   @media (max-width: 414px) {
     padding: 8px 12px;
   }
@@ -89,4 +89,7 @@ a {
   align-items: center;
   color: var(--aura-green);
   text-align: center;
+}
+app-paginator {
+  overflow: hidden;
 }
