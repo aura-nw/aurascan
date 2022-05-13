@@ -1,6 +1,17 @@
 .wallet-list-container {
     color: var(--aura-white);
+
+    .border-bottom-mobile {
+        border: 1px solid var(--aura-dark-gray);
+        margin: 0px -16px 16px;
+    }
+
     .wallet-list {
+        &.disabled-connect {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
         .wallet-item {
             cursor: pointer;
             padding: 12px;
@@ -9,9 +20,15 @@
             &:hover {
                 background-color: var(--aura-dark-gray);
             }
+
             .wallet-icon {
-                width: 48px;
-                height: 48px;
+                width: 36px;
+                height: 36px;
+
+                @media (min-width: 1200px) {
+                    width: 48px;
+                    height: 48px;
+                }
             }
         }
     }
