@@ -5,7 +5,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="title-small mb-2">
           <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div>
-          <div>{{ currentValidatorDetail?.title }}</div>
+          <div  [class.fw-500]="breakpoint.value.matches">{{ currentValidatorDetail?.title }}</div>
         </div>
         <div
           [ngClass]="{ 'valid-status status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
@@ -53,6 +53,12 @@
     </div>
     <div class="card-body">
       <div class="row mb-3">
+        <div class="col-3">
+          <div class="card-text fw-semibold">Website</div>
+        </div>
+        <div class="ol-12 col-lg-6">{{currentValidatorDetail?.website}}</div>
+      </div>
+      <div class="row mb-3">
         <div class="col-12 col-lg-3">
           <div class="card-text fw-semibold">Commission</div>
         </div>
@@ -90,12 +96,12 @@
           }})
         </div>
       </div>
-      <!-- <div class="row mb-3">
+      <div class="row mb-3">
         <div class="col-3">
-          <div class="card-text">Details</div>
+          <div class="card-text fw-semibold">Details</div>
         </div>
-        <div class="col-6">{{item?.details}}</div>
-      </div> -->
+        <div class="ol-12 col-lg-6">{{currentValidatorDetail?.details}}</div>
+      </div>
     </div>
   </div>
   <div class="card py-10" *ngIf="!currentValidatorDetail">

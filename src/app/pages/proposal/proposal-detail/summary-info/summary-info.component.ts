@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import * as moment from 'moment';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
@@ -83,7 +84,7 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalDetail.pro_votes_abstain;
 
         if (this.proposalDetail.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
-          const expiredTime = new Date(this.proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
+          const expiredTime = +moment(this.proposalDetail.pro_voting_end_time).format('x') - +moment().format('x');
           if (expiredTime < 0) {
             this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res: ResponseDto) => {
               this.proposalDetail.pro_status = res.data.status;
@@ -135,7 +136,8 @@ export class SummaryInfoComponent implements OnInit {
   openVoteDialog(proposalDetail) {
     const id = proposalDetail.pro_id;
     const title = proposalDetail.pro_title;
-    const expiredTime = new Date(proposalDetail.pro_voting_end_time).getTime() - new Date().getTime();
+    const expiredTime = +moment(proposalDetail.pro_voting_end_time).format('x') - +moment().format('x');
+
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
       if (account) {

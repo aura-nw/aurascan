@@ -156,11 +156,15 @@
                   </div>
                   <div class="d-flex justify-content-between mb-3">
                     <div class="small-body body-mobile">Voting Start</div>
-                    <div class="small-body body-mobile">{{ lastedItem.pro_voting_start_time | mask: '0000-00-00 00:00:00' }}</div>
+                    <div class="small-body body-mobile">
+                      {{ lastedItem.pro_voting_start_time | mask: '0000-00-00 00:00:00' }}
+                    </div>
                   </div>
                   <div class="d-flex justify-content-between">
                     <div class="small-body body-mobile">Voting End</div>
-                    <div class="small-body body-mobile">{{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}</div>
+                    <div class="small-body body-mobile">
+                      {{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}
+                    </div>
                   </div>
                 </div>
               </div>

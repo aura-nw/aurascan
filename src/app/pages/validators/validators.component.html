@@ -6,16 +6,16 @@
         <div class="row justify-content-between">
           <div class="col-12 col-lg-6">
             <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
-              <span>Available Balance: </span>
+              <span [class.fw-semibold]="breakpoint.value.matches">Available Balance: </span>
               <span>
-                <span>{{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span>
+                <span [class.small-body]="breakpoint.value.matches">{{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}</span>
                 <span class="ml-2 text--green">{{ globals.stableToken }}</span>
               </span>
             </div>
             <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
-              <span>Total Staked: </span>
+              <span [class.fw-semibold]="breakpoint.value.matches">Total Staked: </span>
               <span>
-                <span>{{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}</span>
+                <span [class.small-body]="breakpoint.value.matches">{{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}</span>
                 <span class="ml-2 text--green">{{ globals.stableToken }}</span>
               </span>
             </div>
@@ -123,7 +123,7 @@
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
                     <div class="title body-mob text--green" [routerLink]="['/validators', validator.validator_address]">
-                      <span> {{ validator.validator_name }} </span>
+                      <span class="fw-semibold"> {{ validator.validator_name }} </span>
                     </div>
                   </div>
                   <div class="table-header__action">
@@ -140,7 +140,10 @@
                   <ng-container *ngFor="let template of templatesWallet; index as idx">
                     <div class="d-flex justify-content-between text--white mb-2" *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
-                      <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
+                      <div>
+                        <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
+                        <span *ngIf="template['headerCellDef']" class="ml-2 text--green">{{ globals.stableToken }}</span>
+                      </div>
                     </div>
                   </ng-container>
                 </div>
@@ -152,7 +155,7 @@
     </div>
 
     <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
-      <div class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white">
+      <div class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white" [class.fw-500]="breakpoint.value.matches">
         Undelegating
       </div>
       <div class="card-body" *ngIf="!breakpoint.value.matches">
@@ -175,7 +178,7 @@
         <div class="table-mobile">
           <ng-container *ngFor="let validator of lstUndelegate">
             <div class="table-mobile__item undelegate-item">
-              <div class="body">
+              <div class="body fw-semibold">
                 <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
                   {{ validator.validator_name }}</a>
               </div>
@@ -195,7 +198,7 @@
 
   <div class="card box-validators">
     <div class="card-header card-header-dark d-flex align-items-center justify-content-between header-mob">
-      <div class="sub-text text--white">Validators</div>
+      <div class="sub-text text--white" [class.fw-500]="breakpoint.value.matches">Validators</div>
       <div class="d-flex align-item-center">
         <form class="aura-form single-input-field search-form mr-6" *ngIf="!breakpoint.value.matches">
           <div class="input-group">
@@ -342,7 +345,7 @@
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
-                    <div class="title body-mob text--green">
+                    <div class="title body-mob text--green fw-semibold">
                       <div class="box-rank mr-2">
                         <span>{{ validator.rank }}</span>
                       </div>
@@ -417,7 +420,7 @@
         </div>
       </div>
       <div>
-        <detail-popup-delegate [data]="dataDelegate"></detail-popup-delegate>
+        <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
           <div class="mt-2 body">
             <span>Available for undelegatation</span>

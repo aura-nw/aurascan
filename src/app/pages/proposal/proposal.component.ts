@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import * as moment from 'moment';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
@@ -89,7 +90,7 @@ export class ProposalComponent implements OnInit {
             pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD'
           ) {
             this.getVoteResult(pro.pro_id, index);
-            const expiredTime = new Date(pro.pro_voting_end_time).getTime() - new Date().getTime();
+            const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
             if (expiredTime < 0) {
               this.getProposalDetailFromNode(pro.pro_id, index);
             }
@@ -156,7 +157,7 @@ export class ProposalComponent implements OnInit {
   openVoteDialog(item: IProposal, index: number) {
     const id = item.pro_id;
     const title = item.pro_title;
-    const expiredTime = new Date(item.pro_voting_end_time).getTime() - new Date().getTime();
+    const expiredTime = +moment(item.pro_voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
