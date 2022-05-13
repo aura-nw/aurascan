@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {DatePipe, ViewportScroller} from '@angular/common';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -51,6 +51,11 @@ export class ProposalComponent implements OnInit {
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  pageYOffset = 0;
+  scrolling = false;
+  @HostListener('window:scroll', ['$event']) onScroll(event){
+    this.pageYOffset = window.pageYOffset;
+  }
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
@@ -60,6 +65,7 @@ export class ProposalComponent implements OnInit {
     private environmentService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
+    private scroll: ViewportScroller
   ) {}
 
   ngOnInit(): void {
@@ -172,7 +178,7 @@ export class ProposalComponent implements OnInit {
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
-            
+
 
           this.openDialog({
             id,
@@ -201,7 +207,15 @@ export class ProposalComponent implements OnInit {
         let votedValue = this.lastedList.find((s)=> s.pro_id === data.id);
         votedValue.vote_option = result.keyVote;
       }
+      this.scrollToTop();
     });
+  }
+
+
+  scrollToTop(){
+    this.scroll.scrollToPosition([0, 0]);
+    this.scrolling = true;
+    setTimeout(() => {this.scrolling = !this.scrolling; }, 500);
   }
 
   parsingStatus(sts) {
