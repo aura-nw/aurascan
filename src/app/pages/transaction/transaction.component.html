@@ -82,7 +82,7 @@
         <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
           <app-card-mob-simple *ngFor="let data of dataTx"
                                [link]="'/transaction/' + data.tx_hash"
-                               [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', isFail: data.status !== 'Success'}"
+                               [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', status: data.code}"
                                [content]="[
                                        {label: 'Amount', info: data.amount > 0 ? ((data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>') : checkAmountValue(data.amount, data.tx_hash)},
                                        {label: 'Fee', info: data.fee + '<span class=text--primary> '+ global.stableToken + '</span>'},
