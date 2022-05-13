@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
@@ -22,7 +22,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
@@ -30,7 +30,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -49,11 +49,11 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Contract</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.contract }}</div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
@@ -71,11 +71,11 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Label</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.label }}</div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
@@ -98,7 +98,7 @@
     </div>
     <ng-container *ngIf="transactionDetail?.type === eTransType.GetReward && transactionDetail?.messages.length > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages, let i = index">
-        <div class="row mb-3 body small-body-mob">
+        <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
           <div class="col-12 col-lg-6">
             <a class="text--green" [routerLink]="['/account', item.delegator_address]">
@@ -106,7 +106,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body small-body-mob">
+        <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
           <div class="col-12 col-lg-6">
             <a class="text--green" [routerLink]="['/validators', item.validator_address]">
@@ -115,7 +115,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-5 body small-body-mob">
+        <div class="row mb-5 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
           <div class="col-12 col-lg-6">
             <ng-container *ngIf="listAmountClaim[i] > 0">
@@ -127,7 +127,7 @@
       </ng-container>
     </ng-container>
     <ng-container *ngIf="transactionDetail?.messages.length === 1">
-      <div class="row mb-3 body small-body-mob">
+      <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
         <div class="col-12 col-lg-6">
           <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
@@ -135,7 +135,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body small-body-mob">
+      <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
         <div class="col-12 col-lg-6">
           <a class="text--green"
@@ -145,7 +145,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body small-body-mob">
+      <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
         <div class="col-12 col-lg-6">
           <ng-container *ngIf="amount > 0">
@@ -154,7 +154,7 @@
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
-      <div class="row mb-3 body small-body-mob" *ngIf="amountClaim > 0">
+      <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
         <div class="col-12 col-lg-6">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
@@ -171,7 +171,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
@@ -179,7 +179,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Voter</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
@@ -187,7 +187,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Option</div>
       <div class="col-12 col-lg-6">
         {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
@@ -203,7 +203,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green"
@@ -212,7 +212,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green"
@@ -221,7 +221,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Vesting Schedule</div>
       <div class="col-12 col-lg-6">
         {{ dateVesting }}
@@ -237,7 +237,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Initial Deposit</div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -248,7 +248,7 @@
         >
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposer</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
@@ -256,19 +256,19 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-6">
         {{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Type</div>
       <div class="col-12 col-lg-6">
         {{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Title</div>
       <div class="col-12 col-lg-6">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}
@@ -284,7 +284,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegate Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green"
@@ -293,7 +293,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Source Validator Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
@@ -302,7 +302,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Destination Validator Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
@@ -311,7 +311,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -320,7 +320,7 @@
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob" *ngIf="amountClaim > 0">
+    <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
       <div class="col-12 col-lg-6">
         {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
@@ -336,7 +336,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
@@ -344,7 +344,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Depositor</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
@@ -352,7 +352,7 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-6">
         <ng-container *ngIf="amount > 0">
@@ -371,11 +371,11 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <div class="col-12 col-lg-6">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
@@ -393,11 +393,11 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
     </div>
-    <div class="row mb-3 body small-body-mob">
+    <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <a class="col-12 col-lg-6 text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
         {{ transactionDetail?.messages[0]?.validator_address }}
