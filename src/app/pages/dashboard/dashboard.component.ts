@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subscription, timer } from 'rxjs';
+import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
@@ -110,6 +111,7 @@ export class DashboardComponent implements OnInit {
     this.transactionService.txs(this.PAGE_SIZE, 0).subscribe((res) => {
       if (res?.data?.length > 0) {
         res.data.forEach((trans) => {
+          trans.typeOrigin = trans.type;
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
@@ -313,13 +315,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  checkAmountValue(message: any[], txHash: string) {
+  checkAmountValue(message: any[], txHash: string, type: string) {
+    let eTransType = TRANSACTION_TYPE_ENUM;
     if(message?.length > 1) {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
     } else if(message?.length === 0 || (message?.length === 1 && !message[0]?.amount)){
       return '-';
     } else {
-      return this.numberPipe.transform(balanceOf(message[0]?.amount?.amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
+      let amount = message[0]?.amount[0]?.amount;
+      //check type is Delegate/Undelegate/Redelegate
+      if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
+        amount = message[0]?.amount?.amount;
+      }
+      return this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
     }
   }
 }

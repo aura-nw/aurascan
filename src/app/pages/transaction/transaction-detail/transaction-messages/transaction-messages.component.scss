@@ -10,8 +10,10 @@
   font-size: 18px;
 }
 
-.label__status {
-  @media (max-width: 375px) {
-    max-width: 175px !important; 
+.tx-detail {
+  .label__status {
+    @media (max-width: 375px) {
+      max-width: 175px !important; 
+    }
   }
 }

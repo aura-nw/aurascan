@@ -16,7 +16,7 @@ import {
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
@@ -287,6 +287,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         if (res?.data?.length > 0) {
           res.data.forEach((trans) => {
             //get amount of transaction
+            trans.typeOrigin = trans.type;
             trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
             const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
             trans.type = typeTrans?.value;
@@ -446,13 +447,19 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.modalReference.close();
   }
 
-  checkAmountValue(message: any[], txHash: string) {
+  checkAmountValue(message: any[], txHash: string, type: string) {
+    let eTransType = TRANSACTION_TYPE_ENUM;
     if(message?.length > 1) {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
     } else if(message?.length === 0 || (message.length === 1 && !message[0]?.amount)){
       return '-';
     } else {
-      return this.numberPipe.transform(balanceOf(message[0]?.amount?.amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
+      let amount = message[0]?.amount[0]?.amount;
+      //check type is Delegate/Undelegate/Redelegate
+      if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
+        amount = message[0]?.amount?.amount;
+      }
+      return this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
     }
   }
 }
