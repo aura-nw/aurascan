@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { formatDistanceToNowStrict } from 'date-fns';
+import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -64,7 +65,7 @@ export class CommonService {
             `(${formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC)})`,
           ];
         } else {
-          if (new Date(time).getTime() - new Date().getTime() > 0) {
+          if (+moment(time).format('x') - +moment().format('x') > 0) {
             return [
               formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC),
               formatDistanceToNowStrict(new Date(time).getTime()) + ' remaining',

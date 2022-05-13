@@ -79,7 +79,9 @@
   </ng-container>
   <ng-container *ngIf="isRawData">
     <ng-container *ngIf="item?.json_data; else noValues">
-      <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
+      <div class="body">
+        <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
+      </div>
     </ng-container>
   </ng-container>
 </div>
@@ -160,7 +162,7 @@
       <div class="d-lg-none" *ngIf="dataTxs && dataTxs.length > 0">
         <app-card-mob-simple *ngFor="let data of dataTxs"
                              [link]="'/transaction/' + data.tx_hash"
-                             [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', isFail: data.status !== 'Success'}"
+                             [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', status: data.code}"
                              [content]="[
                                {label: 'Amount', info: data.amount > 0 ? ((data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>') : checkAmountValue(data.amount, data.tx_hash)},
                                {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
