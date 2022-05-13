@@ -130,7 +130,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
     this._routerSubscription = this.router.events
         .subscribe(() => {
-          this.modalReference.close();
+          if(this.modalReference) {
+            this.modalReference.close();
+          }
         });
   }
 
