@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {DatePipe, ViewportScroller} from '@angular/common';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -55,6 +55,11 @@ export class ProposalComponent implements OnInit {
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  pageYOffset = 0;
+  scrolling = false;
+  @HostListener('window:scroll', ['$event']) onScroll(event){
+    this.pageYOffset = window.pageYOffset;
+  }
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
@@ -64,6 +69,7 @@ export class ProposalComponent implements OnInit {
     private environmentService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
+    private scroll: ViewportScroller
   ) {}
 
   ngOnInit(): void {
@@ -192,7 +198,6 @@ export class ProposalComponent implements OnInit {
     const title = item.pro_title;
     const expiredTime = +moment(item.pro_voting_end_time).format('x') - +moment().format('x');
 
-    // if (expiredTime > 0) {
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
 
@@ -236,7 +241,15 @@ export class ProposalComponent implements OnInit {
         this.getVoteResult(data.id, data.idx);
         this.proposalVotes[data.idx].vote = result.keyVote;
       }
+      this.scrollToTop();
     });
+  }
+
+
+  scrollToTop(){
+    this.scroll.scrollToPosition([0, 0]);
+    this.scrolling = true;
+    setTimeout(() => {this.scrolling = !this.scrolling; }, 500);
   }
 
   parsingStatus(sts) {

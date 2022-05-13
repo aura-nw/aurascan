@@ -399,14 +399,16 @@
 <div class="col-lg-6">
   <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
     <div class="box-staking aura-form">
+      <img src="assets/icons/icons-svg/white/arrow-left.svg" alt="" class="d-lg-none mb-6"
+           width="24px" height="24px" (click)="closeDialog(modal)">
       <div class="d-lg-flex align-items-end mb-4 mb-xl-8">
         <div class="mr-lg-10 mb-4 mb-lg-0">
-          <div class="title title-medium-mob text-gradient fw-bolder">{{ dataModal?.title }}</div>
-          <div class="body body-small-mob text--white">
+          <div class="title title-medium-mob text-gradient fw-bolder d-inline-block">{{ dataModal?.title }}</div>
+          <div class="body small-body-mob text--white">
             Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
           </div>
         </div>
-        <div class="body text--greyscale-3">
+        <div class="body small-body-mob text--greyscale-3">
           <div class="mb-1">
             <span
               >Voting power - {{ dataModal?.percent_power }}% ({{
@@ -422,7 +424,7 @@
       <div>
         <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
-          <div class="mt-2 body">
+          <div class="mt-2 body small-body-mob">
             <span>Available for undelegatation</span>
             <span class="ml-3">{{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}</span>
             <span class="text--green"> {{ globals.stableToken }}</span>
@@ -435,11 +437,11 @@
               [(ngModel)]="amountFormat"
               (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
-              <button class="button button-primary active button-max" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
+              <button class="button button-primary active button-max body small-body-mob" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append">{{ globals.stableToken }}</div>
+            <div class="input-group-append body small-body-mob">{{ globals.stableToken }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
@@ -483,7 +485,7 @@
             </mat-select>
           </mat-form-field>
           <div *ngIf="selectedValidator">
-            <div class="mt-6 body">
+            <div class="mt-6 body small-body-mob">
               <span>Available for redelegatation</span>
               <span class="ml-3">{{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}</span>
               <span class="text--green"> {{ globals.stableToken }}</span>
@@ -505,7 +507,7 @@
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
             <div class="dropdown aura-dropdown mr-4">
               <button
-                class="button button-outline   d-flex align-items-center fw-semibold"
+                class="button button-outline d-flex align-items-center"
                 type="button"
                 id="delegateAction"
                 data-bs-toggle="dropdown"
