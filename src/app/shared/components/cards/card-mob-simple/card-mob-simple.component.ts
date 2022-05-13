@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 
 export interface CardMobSimpleTitle {
   size: 'sm' | 'md' | 'lg',
@@ -6,6 +7,7 @@ export interface CardMobSimpleTitle {
   subLabelContent: string,
   subLabelClass?: string,
   rankNum?: number,
+  status?: number,
   isFail?: boolean,
 }
 export interface CardMobSimpleContent {
@@ -23,9 +25,10 @@ export class CardMobSimpleComponent implements OnInit {
   @Input() title: CardMobSimpleTitle;
   @Input() content: CardMobSimpleContent[];
 
+  statusTransaction = CodeTransaction;
+
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }
