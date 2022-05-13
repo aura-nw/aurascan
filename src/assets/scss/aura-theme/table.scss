@@ -7,7 +7,7 @@
 .aura-table {
   background: transparent;
   mat-footer-row, mat-header-row, mat-row, td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
-    border-bottom-color: var(--aura-light-gray);
+    border-bottom-color: var(--aura-dark-gray);
   }
   .mat-row:last-child {
     td.mat-cell {
@@ -15,18 +15,19 @@
     }
   }
   th.mat-header-cell {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    font-weight: 600;
     color: var(--aura-white);
     &.has-border-top {
       border-top-width: 1px;
       border-top-style: solid;
-      border-top-color: var(--aura-light-gray);
+      border-top-color: var(--aura-dark-gray);
     }
   }
   .mat-cell, .mat-footer-cell {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
     color: var(--aura-white);
   }
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {

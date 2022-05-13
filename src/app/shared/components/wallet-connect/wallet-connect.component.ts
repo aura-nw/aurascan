@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Key } from '@keplr-wallet/types';
 import { Observable, Subject } from 'rxjs';
@@ -20,12 +21,14 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.apiUrl.value.chainId;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   destroy$ = new Subject();
   constructor(
     private walletService: WalletService,
     private envService: EnvironmentService,
     private dlgService: DialogService,
+    private layout: BreakpointObserver,
   ) {
     this.walletService.dialogState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state === 'open') {

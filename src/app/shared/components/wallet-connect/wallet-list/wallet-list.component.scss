@@ -1,18 +1,47 @@
 .wallet-list-container {
-    color: var(--aura-white);
-    .wallet-list {
-        .wallet-item {
-            cursor: pointer;
-            padding: 12px;
-            border-radius: 8px;
+  color: var(--aura-white);
 
-            &:hover {
-                background-color: var(--aura-dark-gray);
-            }
-            .wallet-icon {
-                width: 48px;
-                height: 48px;
-            }
-        }
+  .border-bottom-mobile {
+    border: 1px solid var(--aura-dark-gray);
+    margin: 0px -16px 16px;
+
+    @media (min-width: 992px) {
+      margin: 0px -24px 16px;
     }
+  }
+
+  .wallet-title {
+    margin-left: -24px;
+
+    @media (min-width: 992px) {
+      margin-left: 0px;
+    }
+  }
+
+  .wallet-list {
+    &.disabled-connect {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .wallet-item {
+      cursor: pointer;
+      padding: 12px;
+      border-radius: 8px;
+
+      &:hover {
+        background-color: var(--aura-dark-gray);
+      }
+
+      .wallet-icon {
+        width: 36px;
+        height: 36px;
+
+        @media (min-width: 992px) {
+          width: 48px;
+          height: 48px;
+        }
+      }
+    }
+  }
 }
