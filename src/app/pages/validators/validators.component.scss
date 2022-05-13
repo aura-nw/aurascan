@@ -50,8 +50,10 @@
 
 .undelegate-item {
   padding: var(--spacer-3) 0;
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--aura-light-gray);
+  @media (min-width: 991.99px) {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--aura-light-gray);
+    }
   }
   &.table-mobile__item {
     padding: 12px;
