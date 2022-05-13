@@ -1,12 +1,24 @@
 <div class="wallet-list-container">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <div class="sub-text">Connect a wallet</div>
-    <img class="icon-close" src="../../../../../assets/icons/icons-svg/basic/close.svg" alt="" (click)="dismiss()" />
+  <div class="d-flex justify-content-center justify-content-lg-between align-items-center mb-4">
+    <img
+      class="icon-close d-block d-lg-none"
+      src="../../../../../assets/icons/icons-svg/white/arrow-left.svg"
+      alt=""
+      (click)="dismiss()" />
+    <div class="sub-text w-100 text-center text-lg-start">Connect a wallet</div>
+    <img
+      class="icon-close d-none d-lg-block"
+      src="../../../../../assets/icons/icons-svg/basic/close.svg"
+      alt=""
+      (click)="dismiss()" />
   </div>
-  <p class="body">{{ 'WALLET.MSG_CONNECT' | translate }}</p>
-  <div class="wallet-list">
+  <div class="border-bottom-mobile d-block d-lg-none"></div>
+  <p class="body small-text-mob" [class.text--danger]="disabled">
+    {{ (disabled ? 'WALLET.MSG_CONNECT_DISABLED' : 'WALLET.MSG_CONNECT') | translate }}
+  </p>
+  <div class="wallet-list" [class.disabled-connect]="disabled">
     <ul class="list-group">
-      <li class="wallet-item" *ngFor="let wallet of walletList" (click)="connect(wallet)">
+      <li class="wallet-item" *ngFor="let wallet of walletList" (click)="!disabled && connect(wallet)">
         <div class="d-flex align-items-center gap-3">
           <img class="wallet-icon" [src]="wallet.icon" />
           <span class="title-small">{{ wallet.name | titlecase }}</span>
