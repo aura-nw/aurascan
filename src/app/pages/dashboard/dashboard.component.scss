@@ -11,6 +11,18 @@
     width: 23%;
 }
 
+.card-highlight {
+    .card-highlight__label {
+        font-weight: 500;
+        @media (min-width: 992px) {
+            font-weight: 400;
+        }
+    }
+    .card-highlight__content {
+        font-weight: 500;
+    }
+}
+
 :host::ng-deep {
     apx-chart {
         .apexcharts-text tspan {
