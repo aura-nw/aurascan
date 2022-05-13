@@ -9,10 +9,10 @@
 </div>
 
 <div class="card text--white">
-  <div class="card-header title-small d-none d-lg-flex">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
+  <div class="card-header title-small d-none d-lg-flex fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
   <div class="card-body body">
     <div class="d-flex justify-content-between align-items-center d-lg-none">
-      <div class="sub-text-mob">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
+      <div class="title-small fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
       <div class="button-switch-stage">
         <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
         <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
