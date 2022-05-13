@@ -2,16 +2,16 @@
   <div class="box-notice">
     <div class="warning-icon mr-3"></div>
     <div>
-      <div class="title-small">Staking will lock your funds for {{timeStaking}}+ day(s)</div>
-      <div class="body mt-2 text--greyscale-4">You will need to undelegate in order for your staked assets to be liquid again. This process will take {{timeStaking}} day(s) to complete.</div>
+      <div class="body fw-semibold">Staking will lock your funds for {{timeStaking}}+ day(s)</div>
+      <div class="small-body mt-2 text--greyscale-4">You will need to undelegate in order for your staked assets to be liquid again. This process will take {{timeStaking}} day(s) to complete.</div>
     </div>
   </div>
-  <div class="box-token mt-8">
-    <div class="title-small">My delegation</div>
-    <div class="body mt-2 text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
-    <div class="title-small mt-6">Available Balance</div>
-    <div class="body mt-2 text--greyscale-4">{{data?.availableToken || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
-    <div class="title-small mt-6">Amount to Delegate</div>
+  <div class="box-token mt-8 body small-body-mob">
+    <div class="">My delegation</div>
+    <div class="mt-2 text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
+    <div class="mt-6">Available Balance</div>
+    <div class="mt-2 text--greyscale-4">{{data?.availableToken || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
+    <div class="mt-6">Amount to Delegate</div>
   </div>
 </ng-container>
 
@@ -24,22 +24,22 @@
       <div>Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.</div>
     </div>
   </div>
-  <div>
+  <div class="body small-body-mob">
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 body mb-1 mb-lg-0">My delegation</div>
-      <div class="text--greyscale-4 body">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0">My delegation</div>
+      <div class="text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 body mb-1 mb-lg-0">Pending Reward</div>
-      <div class="text--greyscale-4 body">{{data?.validatorDetail?.pending_reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0">Pending Reward</div>
+      <div class="text--greyscale-4">{{data?.validatorDetail?.pending_reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
-      <div class="dialog-title mr-10 body mb-1 mb-lg-0">Total Reward</div>
-      <div class="text--greyscale-4 body">{{data?.validatorDetail?.reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0">Total Reward</div>
+      <div class="text--greyscale-4">{{data?.validatorDetail?.reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
     </div>
     <div class="d-lg-flex">
-      <div class="dialog-title mr-10 body mb-1 mb-lg-0">Available Balance</div>
-      <div class="text--greyscale-4 body">{{data?.availableToken || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0">Available Balance</div>
+      <div class="text--greyscale-4">{{data?.availableToken || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
     </div>
   </div>
 </ng-container>

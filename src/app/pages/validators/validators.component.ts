@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {Router, RouterEvent} from '@angular/router';
@@ -27,6 +27,7 @@ import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
+import {ViewportScroller} from "@angular/common";
 
 @Component({
   selector: 'app-validators',
@@ -100,6 +101,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
+
+  pageYOffset = 0;
+  scrolling = false;
+  @HostListener('window:scroll', ['$event']) onScroll(event){
+    this.pageYOffset = window.pageYOffset;
+  }
   
   constructor(
     private validatorService: ValidatorService,
@@ -113,6 +120,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private mappingErrorService: MappingErrorService,
     private router: Router,
     private layout: BreakpointObserver,
+    private scroll: ViewportScroller
   ) {}
 
   ngOnInit(): void {
@@ -539,6 +547,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   closeDialog(modal) {
     this.selectedValidator = '';
     modal.close('Close click');
+    this.scrollToTop();
+  }
+
+  scrollToTop(){
+    this.scroll.scrollToPosition([0, 0]);
+    this.scrolling = true;
+    setTimeout(() => {this.scrolling = !this.scrolling; }, 500);
   }
 
   changeTypePopup(type) {
