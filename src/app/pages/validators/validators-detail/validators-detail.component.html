@@ -7,10 +7,10 @@
           <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div>
           <div  [class.fw-500]="breakpoint.value.matches">{{ currentValidatorDetail?.title }}</div>
         </div>
-        <div
-          [ngClass]="{ 'valid-status status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
-          [ngClass]="{ 'valid-status status-jailed': currentValidatorDetail?.jailed }"
-          [ngClass]="{ 'label__status small-body': breakpoint.value.matches }">
+        <div [class.valid-status]="!breakpoint.value.matches"
+          [ngClass]="{ 'status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
+          [ngClass]="{ 'status-jailed': currentValidatorDetail?.jailed }"
+          [ngClass]="{ 'label__status small-body fw-semibold': breakpoint.value.matches }">
           <ng-container *ngIf="currentValidatorDetail?.jailed">
             <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches"/> Jailed
           </ng-container>
@@ -113,7 +113,7 @@
       <div class="card text--white">
         <div class="card-header d-flex align-items-center justify-content-between header-mob">
           <div class="title-small fw-500">Proposed Blocks</div>
-          <div>
+          <div class="body-mob">
             <span class="fw-bold mr-2">Total :</span><span>{{ lengthBlock | number }} blocks </span>
           </div>
         </div>
@@ -188,7 +188,7 @@
                 matTooltip="Missed Blocks are displayed with an X" [matTooltipPosition]="'above'" *ngIf="!breakpoint.value.matches" />
             </div>
           </div>
-          <div class="box-info">Last 100 Blocks</div>
+          <div class="box-info body-mob">Last 100 Blocks</div>
         </div>
         <div class="text-center">
           <div class="card-body article-1 uptime-content">
