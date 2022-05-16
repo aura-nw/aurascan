@@ -3,6 +3,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 992px) {
+    justify-content: normal;
+  }
 }
 .aura-table {
   background: transparent;
