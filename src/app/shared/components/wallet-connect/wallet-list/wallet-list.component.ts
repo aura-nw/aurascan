@@ -16,6 +16,7 @@ export class WalletListComponent {
     {
       name: WALLET_PROVIDER.KEPLR,
       icon: '../../../../../../assets/images/icon-keplr.svg',
+      disableMobile: true,
     },
   ];
 
