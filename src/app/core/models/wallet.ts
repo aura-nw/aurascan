@@ -3,6 +3,7 @@ import { WALLET_PROVIDER } from "../constants/wallet.constant";
 export interface IWalletInfo {
   name: WALLET_PROVIDER;
   icon: string;
+  disableMobile?: boolean;
 }
 export type WalletStorage = {
   provider: WALLET_PROVIDER;
