@@ -437,29 +437,29 @@
               [(ngModel)]="amountFormat"
               (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
-              <button class="button button-primary active button-max body small-body-mob" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
+              <button class="button button-primary active button-max body small-body-mob fw-semibold" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append body small-body-mob">{{ globals.stableToken }}</div>
+            <div class="input-group-append body small-body-mob fw-semibold">{{ globals.stableToken }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-2 mr-4">
-              <button class="button button-primary active button-max" type="button" (click)="getMaxToken(dialogMode.Delegate)">
+              <button class="button button-primary active button-max fw-semibold" type="button" (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append">{{ globals.stableToken }}</div>
+            <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
             Insufficient available balance for transaction fee
           </div>
         </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
-          <div class="body mb-2">Redelegate to:</div>
+          <div class="small-body mb-2">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
               class="list-token"
@@ -493,11 +493,11 @@
             <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
                 <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-2 mr-4">
-                <button class="button button-primary active button-max" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
+                <button class="button button-primary active button-max fw-semibold" type="button" (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX
                 </button>
               </div>
-              <div class="input-group-append">{{ globals.stableToken }}</div>
+              <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
             </div>
           </div>
         </div>
@@ -562,7 +562,7 @@
               class="button body mr-2 text--white"
               (click)="closeDialog(modal)"
               *ngIf="isOpenStaking">
-              Cancel
+              Back
             </button>
             <button
               type="button"
