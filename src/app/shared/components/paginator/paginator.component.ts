@@ -67,7 +67,9 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.changePageMax(this.current.list[0].index);
+    if(this.current?.list && this.current.list.length > 0) {
+      this.changePageMax(this.current.list[0].index);
+    }
     this.changePage();
   }
 
@@ -129,7 +131,9 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
         isFirst: true,
         isLast: this.pageLength === 1,
       };
-      this.current.list[0].isActive = true;
+      if(this.current?.list && this.current.list.length > 0 && this.current.list[0].isActive) {
+        this.current.list[0].isActive = true;
+      }
     }
   }
 
