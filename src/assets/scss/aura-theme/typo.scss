@@ -119,11 +119,11 @@ $textColors: (
   }
 }
 .fw-semibold {
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 .fw-500 {
-  font-weight: 500;
+  font-weight: 500 !important;
 }
 
 .text-gradient {
