@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
+  EventEmitter, HostListener,
   Input,
   OnChanges,
   OnInit,
@@ -48,6 +48,11 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
     avgIdx: 2,
   };
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.changePageMax(this.current.list[0].index);
+    this.changePage();
+  }
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -61,17 +66,22 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.changePageMax(this.current.list[0].index);
+    this.changePage();
+  }
 
   ngAfterViewInit(): void {
     this.paginator.emit(this._paginator);
   }
 
   prevPage(): void {
+    this.changePageMax(this.current.list[0].index);
     this.selectPage(this.current.pageIndex - 1);
   }
 
   nextPage(): void {
+    this.changePageMax(this.current.list[0].index);
     this.selectPage(this.current.pageIndex + 1);
   }
 
@@ -121,5 +131,23 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
       };
       this.current.list[0].isActive = true;
     }
+  }
+
+  changePageMax(currPageLenght: number) {
+    if (window.innerWidth <= 768) {
+      if(currPageLenght >= 900) {
+        this.PAGE.max = 2;
+        this.PAGE.avgIdx = 1;
+      } else if(currPageLenght >= 90) {
+        this.PAGE.max = 3;
+        this.PAGE.avgIdx = 1;
+      } else {
+        this.resetPageMax();
+      }
+    }
+  }
+  resetPageMax() {
+    this.PAGE.max = 5;
+    this.PAGE.avgIdx = 2;
   }
 }
