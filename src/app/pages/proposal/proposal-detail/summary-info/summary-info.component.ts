@@ -147,7 +147,7 @@ export class SummaryInfoComponent implements OnInit {
           const { created_at } = data.result ? data.result : { created_at: null };
 
           warning = created_at
-            ? new Date(created_at) < new Date(proposalDetail.pro_voting_start_time)
+            ? +moment(created_at).format('x') < +moment(proposalDetail.pro_voting_start_time).format('x')
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;

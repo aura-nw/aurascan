@@ -11,6 +11,22 @@
     width: 23%;
 }
 
+.aura-table.transaction { 
+    th:not(:last-child) {
+        width: 16%;
+    }
+    .width-type {
+        width: 30% !important;
+    }
+    .label__status {
+        display: inline-block;
+        max-width: 165px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+}
+
 .card-highlight {
     .card-highlight__label {
         font-weight: 500;
