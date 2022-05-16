@@ -75,6 +75,9 @@
       text-decoration: none;
     }
   }
+  &-footer-mobile{
+    padding: 0 var(--spacer-3) var(--spacer-3) var(--spacer-3);
+  }
   .proposal-status-mobile {
     border-radius: 8px;
     text-transform: capitalize;
@@ -87,12 +90,10 @@
   .button-mobile {
     height: 40px;
     padding: 8px 18px;
+    width: auto;
   }
   .border-bottom-mobile {
     border-bottom: 1px solid #38383d;
-  }
-  .button-mobile {
-    height: 40px;
   }
 }
 .vote-bar {
