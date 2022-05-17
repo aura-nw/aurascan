@@ -49,83 +49,83 @@
           </div>
         </div>
       </div>
-      <div>
-        <a class="card__title card__title-mobile">{{ proposalDetail.pro_title }}</a>
-      </div>
+      <a class="card__title card__title-mobile">{{ proposalDetail.pro_title }}</a>
       <div class="message mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
       <div class="divider divider-horizontal mt-4"></div>
     </div>
     <div class="card-body">
       <div class="card__info">
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Proposer</div>
-          <div class="col-12 col-md-10 small-body mt-2">
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Proposer</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">
             <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">{{
               proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
             }}</a>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Initial Deposit</div>
-          <div class="col-12 col-md-10 small-body mt-2">
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Initial Deposit</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
             <span class="text--primary">{{ global.stableToken }}</span>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Total Deposit</div>
-          <div class="col-12 col-md-10 small-body mt-2">
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Total Deposit</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
             <span class="text--primary"> {{ global.stableToken }}</span>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Voting Start</div>
-          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_voting_start_time }}</div>
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Voting Start</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_voting_start_time }}</div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Voting End</div>
-          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_voting_end_time }}</div>
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Voting End</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_voting_end_time }}</div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Type</div>
-          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_type }}</div>
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Type</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_type }}</div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Submit Time</div>
-          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_submit_time }}</div>
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Submit Time</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_submit_time }}</div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Deposit End Time</div>
-          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_deposit_end_time }}</div>
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Deposit End Time</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_deposit_end_time }}</div>
         </div>
-        <div class="row">
-          <div class="col-12 col-md-2 small-body fw-semibold">Details</div>
-          <div class="col-12 col-md-10 small-body mt-2">{{ proposalDetail.pro_description }}</div>
+        <div class="row small-body">
+          <div class="col-12 col-md-2 fw-semibold">Details</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_description }}</div>
         </div>
         <div class="divider divider-horizontal mt-4 mt-lg-5"></div>
       </div>
     </div>
     <div class="card-footer pt-0">
       <div class="proposal__summary-total" *ngIf="!votingBarLoading">
-        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-2 small-body fw-semibold">Current Turnout</div>
-          <div class="col-12 col-md-10 small-body">
+        <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-2 fw-semibold">Current Turnout</div>
+          <div class="col-12 col-md-10">
             {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
           </div>
         </div>
-        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-2 small-body fw-semibold">Quorum</div>
-          <div class="col-12 col-md-10 small-body">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</div>
+        <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="col-12 col-md-2 fw-semibold">Quorum</div>
+          <div class="col-12 col-md-10">
+            {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
+          </div>
         </div>
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-10 small-body text--light-gray">
             {{ proposalDetail.total_has_voted }} of {{ proposalDetail.total_bonded_token }} has voted
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-12 col-md-2 small-body fw-semibold">Total:</div>
-          <div class="col-12 col-md-10 small-body mt-2 mt-lg-0">
+        <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Total:</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
             <span class="text--primary">{{ global.stableToken }}</span>
           </div>
