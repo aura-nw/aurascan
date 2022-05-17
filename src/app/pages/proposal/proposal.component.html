@@ -23,13 +23,11 @@
                 <div>
                   <div class="d-flex mb-2">
                     <div class="content-body">Proposer</div>
-                    <div>
-                      <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--green content-body">{{
-                        lastedItem.pro_proposer
-                          ? lastedItem.pro_proposer
-                          : shortenAddress(lastedItem.pro_proposer_address)
-                      }}</a>
-                    </div>
+                    <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--green content-body">{{
+                      lastedItem.pro_proposer
+                        ? lastedItem.pro_proposer
+                        : shortenAddress(lastedItem.pro_proposer_address)
+                    }}</a>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body">Voting Start</div>
