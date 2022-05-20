@@ -56,8 +56,8 @@ export const ChainsInfo: { [chainId: string]: any } = {
   ['aura-devnet']: {
     chainId: 'aura-devnet',
     chainName: 'aura devnet',
-    rpc: 'http://34.199.79.132:26657',
-    rest: 'http://34.199.79.132:1317',
+    rpc: 'https://rpc.dev.aura.network',
+    rest: 'https://lcd.dev.aura.network',
     bip44: {
       coinType: 118,
     },
