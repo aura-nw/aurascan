@@ -81,7 +81,9 @@
                                [class.active]="router.url === '/' && item.link === '/dashboard'" href="javascript: void(0);" id="topnav-components" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>
                                 <span class="ml-2 fw-bold">{{ item.label | translate}}</span>
-                                <div class="arrow-down"></div>
+                                <span class="nav-link__panel">
+                                    <a [routerLink]="subMenu.link" *ngFor="let subMenu of item.subItems">{{ subMenu.label }}</a>
+                                </span>
                             </a>
                         </li>
                     </ng-container>

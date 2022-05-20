@@ -29,6 +29,7 @@ import { SmartContractService } from '../../../app/core/services/smart-contract.
 import { FormsModule } from '@angular/forms';
 import { TokenErc20Component } from './smart-contract-list/token-erc20/token-erc20.component';
 import { TokenErc721Component } from './smart-contract-list/token-erc721/token-erc721.component';
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { TokenErc721Component } from './smart-contract-list/token-erc721/token-e
     TranslateModule,
     PaginatorModule,
     TableNoDataModule,
+    MatTableModule,
     MaterialModule,
     FormsModule
   ],
