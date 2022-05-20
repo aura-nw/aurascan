@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {PaginatorComponent} from "../../../../../../shared/components/paginator/paginator.component";
 import {TableTemplate} from "../../../../../../core/models/common.model";
 import {MatTableDataSource} from "@angular/material/table";
@@ -10,7 +10,6 @@ import {PROPOSAL_VOTE} from "../../../../../../core/constants/proposal.constant"
 import {PageEvent} from "@angular/material/paginator";
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import {SmartContractService} from "../../../../../../core/services/smart-contract.service";
-import {DatePipe} from "@angular/common";
 import {TYPE_TRANSACTION} from "../../../../../../core/constants/transaction.constant";
 
 interface CustomPageEvent {
@@ -23,8 +22,9 @@ interface CustomPageEvent {
   templateUrl: './transfers.component.html',
   styleUrls: ['./transfers.component.scss']
 })
-export class TransfersComponent implements OnInit {
+export class TransfersComponent implements OnInit, OnChanges {
   @Input() type: 'TABLE_TOKEN' | 'TABLE_ADDRESS';
+  @Input() keyWord = '';
   tokenDataList: any[];
   length: number;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
@@ -56,10 +56,9 @@ export class TransfersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.getDataTable();
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-    this.getDataTable();
     // this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
   }
 
@@ -74,7 +73,6 @@ export class TransfersComponent implements OnInit {
           pageSize: 5,
           pageIndex: 1
         };
-        console.log(this.tokenDataList);
 
         this.tokenDataList.forEach((token) => {
           // k.timestamp = this.datePipe.transform(k.timestamp, DATEFORMAT.DATETIME_UTC);
@@ -133,6 +131,18 @@ export class TransfersComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.tokenDataList) {
+      const filterData = this.tokenDataList.filter(data => data.tx_hash.includes(this.keyWord) || data.from_address.includes(this.keyWord) || data.to_address.includes(this.keyWord));
+      this.pageData = {
+        length: filterData.length,
+        pageSize: 10,
+        pageIndex: 1
+      };
+      this.dataSource = new MatTableDataSource<any>(filterData);
+    }
   }
 
 }
