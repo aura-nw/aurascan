@@ -101,9 +101,10 @@
     <app-smart-contract-table
       [tabId]="countCurrent"
       [type]="'TABLE_TOKEN'"
-      [data]="tokenDataList"></app-smart-contract-table>
-    <!-- <div *ngIf="voteDataListLoading">
+      [length]="tokenTransferList.length"
+      [data]="tokenTransferList"></app-smart-contract-table>
+    <div *ngIf="loading">
       <app-loading-sprint></app-loading-sprint>
-    </div> -->
+    </div>
   </div>
 </section>

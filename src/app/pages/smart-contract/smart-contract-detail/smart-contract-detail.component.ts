@@ -27,7 +27,7 @@ export class SmartContractDetailComponent implements OnInit {
   }));
 
   countCurrent: string = '';
-  tokenDataList: any[];
+  tokenTransferList: any[];
   token: string = '';
   loading = true;
   typeTransaction = TYPE_TRANSACTION;
@@ -43,10 +43,8 @@ export class SmartContractDetailComponent implements OnInit {
     this.smartContractService.getListTokenTransfer(this.token).subscribe((res) => {
       this.loading = true;
       if (res) {
-        this.tokenDataList = [...res];
-        console.log(this.tokenDataList);
-        
-        this.tokenDataList.forEach((token) => {
+        this.tokenTransferList = [...res];
+        this.tokenTransferList.forEach((token) => {
           // k.timestamp = this.datePipe.transform(k.timestamp, DATEFORMAT.DATETIME_UTC);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
           token.type = typeTrans?.value;
