@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SmartContractRoutingModule } from './smart-contract-routing.module';
-import { SmartContractComponent } from './smart-contract.component';
 import { SmartContractDetailComponent } from './smart-contract-detail/smart-contract-detail.component';
 import { OverviewComponent } from './smart-contract-detail/overview/overview.component';
 import { SummaryComponent } from './smart-contract-detail/summary/summary.component';
@@ -20,11 +19,12 @@ import { ContractWriteTypeComponent } from './smart-contract-detail/informations
 import { AnalyticsComponent } from './smart-contract-detail/informations/info-tab/analytics/analytics.component';
 import { TokenContractOverviewComponent } from './smart-contract-detail/informations/info-tab/analytics/token-contract-overview/token-contract-overview.component';
 import { HistoricalPriceComponent } from './smart-contract-detail/informations/info-tab/analytics/historical-price/historical-price.component';
+import { TokenErc20Component } from './smart-contract-list/token-erc20/token-erc20.component';
+import { TokenErc721Component } from './smart-contract-list/token-erc721/token-erc721.component';
 
 
 @NgModule({
   declarations: [
-    SmartContractComponent,
     SmartContractDetailComponent,
     OverviewComponent,
     SummaryComponent,
@@ -41,7 +41,9 @@ import { HistoricalPriceComponent } from './smart-contract-detail/informations/i
     ContractWriteTypeComponent,
     AnalyticsComponent,
     TokenContractOverviewComponent,
-    HistoricalPriceComponent
+    HistoricalPriceComponent,
+    TokenErc20Component,
+    TokenErc721Component
   ],
   imports: [
     CommonModule,
