@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SmartContractRoutingModule } from './smart-contract-routing.module';
-import { SmartContractComponent } from './smart-contract.component';
 import { SmartContractDetailComponent } from './smart-contract-detail/smart-contract-detail.component';
 import { OverviewComponent } from './smart-contract-detail/overview/overview.component';
 import { SummaryComponent } from './smart-contract-detail/summary/summary.component';
@@ -28,10 +27,11 @@ import { TableNoDataModule } from '../../../app/shared/components/table-no-data/
 import { MaterialModule } from '../../../app/app.module';
 import { SmartContractService } from '../../../app/core/services/smart-contract.service';
 import { FormsModule } from '@angular/forms';
+import { TokenErc20Component } from './smart-contract-list/token-erc20/token-erc20.component';
+import { TokenErc721Component } from './smart-contract-list/token-erc721/token-erc721.component';
 
 @NgModule({
   declarations: [
-    SmartContractComponent,
     SmartContractDetailComponent,
     OverviewComponent,
     SummaryComponent,
@@ -49,7 +49,9 @@ import { FormsModule } from '@angular/forms';
     AnalyticsComponent,
     TokenContractOverviewComponent,
     HistoricalPriceComponent,
-    SmartContractTableComponent
+    SmartContractTableComponent,
+    TokenErc20Component,
+    TokenErc721Component
   ],
   imports: [
     CommonModule,

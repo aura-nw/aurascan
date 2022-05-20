@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmartContractComponent } from './smart-contract.component';
+import { TokenErc20Component } from './token-erc20.component';
 
-describe('SmartContractComponent', () => {
-  let component: SmartContractComponent;
-  let fixture: ComponentFixture<SmartContractComponent>;
+describe('TokenErc20Component', () => {
+  let component: TokenErc20Component;
+  let fixture: ComponentFixture<TokenErc20Component>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SmartContractComponent ]
+      declarations: [ TokenErc20Component ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SmartContractComponent);
+    fixture = TestBed.createComponent(TokenErc20Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
