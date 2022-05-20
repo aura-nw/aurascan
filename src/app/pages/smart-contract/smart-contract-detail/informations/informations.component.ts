@@ -51,7 +51,4 @@ export class InformationsComponent implements OnInit {
     }
   }
 
-  searchTokenTable(): void {
-  }
-
 }

@@ -56,7 +56,7 @@
                 </tr>
         </table>
     </ng-container>
-    <app-paginator
+    <app-paginator *ngIf="pageData"
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)">
