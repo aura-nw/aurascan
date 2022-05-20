@@ -36,6 +36,11 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
   },
+  {
+    path: 'smart-contract',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/smart-contract/smart-contract.module').then((m) => m.SmartContractModule),
+  },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   { path: '**', redirectTo: '' },

@@ -33,6 +33,12 @@ export const MENU: MenuItem[] = [
     },
     {
         id: 6,
+        label: 'MENUITEMS.SMARTCONTRACT.TEXT',
+        icon: 'user',
+        link: '/smart-contract',
+    },
+    {
+        id: 7,
         label: 'MENUITEMS.ACCOUNT.TEXT',
         icon: 'user',
         link: '',
