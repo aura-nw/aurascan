@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { SmartContractRoutingModule } from './smart-contract-routing.module';
 import { SmartContractComponent } from './smart-contract.component';
 import { SmartContractDetailComponent } from './smart-contract-detail/smart-contract-detail.component';
@@ -20,7 +19,15 @@ import { ContractWriteTypeComponent } from './smart-contract-detail/informations
 import { AnalyticsComponent } from './smart-contract-detail/informations/info-tab/analytics/analytics.component';
 import { TokenContractOverviewComponent } from './smart-contract-detail/informations/info-tab/analytics/token-contract-overview/token-contract-overview.component';
 import { HistoricalPriceComponent } from './smart-contract-detail/informations/info-tab/analytics/historical-price/historical-price.component';
-
+import { SharedModule } from '../../../app/shared/shared.module';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+import { SmartContractTableComponent } from './smart-contract-table/smart-contract-table.component';
+import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
+import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
+import { MaterialModule } from '../../../app/app.module';
+import { SmartContractService } from '../../../app/core/services/smart-contract.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -41,11 +48,20 @@ import { HistoricalPriceComponent } from './smart-contract-detail/informations/i
     ContractWriteTypeComponent,
     AnalyticsComponent,
     TokenContractOverviewComponent,
-    HistoricalPriceComponent
+    HistoricalPriceComponent,
+    SmartContractTableComponent
   ],
   imports: [
     CommonModule,
-    SmartContractRoutingModule
-  ]
+    SmartContractRoutingModule,
+    SharedModule,
+    NgbNavModule,
+    TranslateModule,
+    PaginatorModule,
+    TableNoDataModule,
+    MaterialModule,
+    FormsModule
+  ],
+  providers: [SmartContractService],
 })
 export class SmartContractModule { }

@@ -1,0 +1,63 @@
+<div class="proposal-table-container aura-table-contain" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <ng-container *ngIf="dataSource.data.length > 0; else noValues">
+    <ng-container *ngIf="!breakpoint.value.matches">
+      <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
+        <ng-container *ngFor="let template of template; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef>
+              <div [innerHTML]="template.headerCellDef | translate"></div>
+            </th>
+
+            <td mat-cell *matCellDef="let data">
+              <div [classList]="[template.cssClass]">
+                <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
+                  <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                    {{
+                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                    '-'
+                    }}
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="template.isUrl && template.isShort">
+                  <a [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                    [class.disabled-link]="!data[template.matColumnDef]">
+                    {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'amount'">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'timestamp'">
+                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'type'">
+                      <span class="label__status">{{ data[template.matColumnDef] }}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{ data[template.matColumnDef] }}
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell g-no-data" colspan="9999">
+            {{ 'NO DATA' | translate }}
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+  </ng-container>
+  <app-paginator [length]="length" [pageSize]="pageSize" (paginator)="paginatorEmit($event)"
+    (pageEvent)="pageEvent($event)"></app-paginator>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</div>
