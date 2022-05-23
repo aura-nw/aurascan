@@ -15,11 +15,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TableTemplate } from '../../../core/models/common.model';
 import { CommonService } from '../../../core/services/common.service';
 import { shortenAddress } from '../../../core/utils/common/shorten';
-import { PROPOSAL_VOTE } from '../../../core/constants/proposal.constant';
 import { Globals } from '../../../global/global';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 import { TokenTab } from '../../../../app/core/constants/smart-contract.enum';
-
+import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
 interface CustomPageEvent {
   next: number;
   type: string;
@@ -40,12 +39,13 @@ export class SmartContractTableComponent implements OnInit, OnChanges {
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
 
   tokenTransferTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true},
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From', isUrl: '/account'},
-    { matColumnDef: 'to_address', headerCellDef: 'To', isUrl: '/account'},
-    { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true},
+    { matColumnDef: 'from_address', headerCellDef: 'From', isUrl: '/account' },
+    { matColumnDef: 'to_address', headerCellDef: 'To', isUrl: '/account' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
   ];
 
   displayedColumns: string[];
@@ -56,6 +56,10 @@ export class SmartContractTableComponent implements OnInit, OnChanges {
   pageIndex = 0;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   typeTokenTab = TokenTab;
+  codeTransaction = CodeTransaction;
+  tokenDetail = undefined;
+  tokenType = 'Aura';
+  tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
 
   constructor(public global: Globals, public commonService: CommonService, private layout: BreakpointObserver) {}
 
@@ -83,7 +87,7 @@ export class SmartContractTableComponent implements OnInit, OnChanges {
       case 'TABLE_TOKEN':
         return this.tokenTransferTemplates;
       case 'TABLE_ADDRESS':
-        // return this.depositorsTemplates;
+      // return this.depositorsTemplates;
       default:
         return [];
     }
@@ -94,11 +98,6 @@ export class SmartContractTableComponent implements OnInit, OnChanges {
       return shortenAddress(address, 8);
     }
     return '';
-  }
-
-  getVoteValue(voteKey) {
-    const vote = PROPOSAL_VOTE.find((vote) => vote.key === voteKey);
-    return vote ? vote.value : 'Did not vote';
   }
 
   pageEvent(e: PageEvent): void {
@@ -130,5 +129,9 @@ export class SmartContractTableComponent implements OnInit, OnChanges {
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
     );
+  }
+
+  getTokenDetail(data: any): void {
+    this.tokenDetail = data;
   }
 }

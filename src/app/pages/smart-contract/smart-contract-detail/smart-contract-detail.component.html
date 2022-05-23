@@ -1,4 +1,4 @@
-<app-pagetitle title="Token Aura"></app-pagetitle>
+<h1 class="title-medium title-small-mob mb-0 text--white">Token <span class="text-secondary small">{{tokenType}}</span></h1>
 <section class="token-info text--white">
   <div class="row card-header">
     <div class="col-12 col-lg-6 tab-info">
@@ -101,7 +101,7 @@
     <app-smart-contract-table
       [tabId]="countCurrent"
       [type]="'TABLE_TOKEN'"
-      [length]="tokenTransferList.length"
+      [length]="tokenTransferList?.length"
       [data]="tokenTransferList"></app-smart-contract-table>
     <div *ngIf="loading">
       <app-loading-sprint></app-loading-sprint>

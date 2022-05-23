@@ -5,7 +5,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "1000"
+    "amount": "1000",
+    "code": "1"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -13,7 +14,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "100"
+    "amount": "100",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -21,7 +23,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "10"
+    "amount": "10",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -29,7 +32,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "1"
+    "amount": "1",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -37,7 +41,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "1000"
+    "amount": "1000",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -45,7 +50,17 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "100"
+    "amount": "100",
+    "code": "0"
+  },
+  {
+    "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
+    "type": "/ibc.applications.transfer.v1.MsgTransfer",
+    "timestamp": "2022-05-20T03:44:57.000Z",
+    "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
+    "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
+    "amount": "100",
+    "code": "1"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -53,7 +68,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "10"
+    "amount": "10",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -61,7 +77,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "1"
+    "amount": "1",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -69,7 +86,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "1000"
+    "amount": "1000",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -77,7 +95,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "100"
+    "amount": "100",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -85,7 +104,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "10"
+    "amount": "10",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -93,7 +113,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "1"
+    "amount": "1",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -101,7 +122,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "1000"
+    "amount": "1000",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -109,7 +131,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "100"
+    "amount": "100",
+    "code": "0"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -117,7 +140,8 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
     "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "10"
+    "amount": "10",
+    "code": "1"
   },
   {
     "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
@@ -125,38 +149,7 @@
     "timestamp": "2022-05-20T03:44:57.000Z",
     "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
     "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "1"
-  },
-  {
-    "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
-    "type": "/cosmos.bank.v1beta1.MsgSend",
-    "timestamp": "2022-05-20T03:44:57.000Z",
-    "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "1000"
-  },
-  {
-    "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
-    "type": "/ibc.applications.transfer.v1.MsgTransfer",
-    "timestamp": "2022-05-20T03:44:57.000Z",
-    "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "100"
-  },
-  {
-    "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
-    "type": "/cosmos.bank.v1beta1.MsgMultiSend",
-    "timestamp": "2022-05-20T03:44:57.000Z",
-    "from_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "to_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "amount": "10"
-  },
-  {
-    "tx_hash": "53A07DF09A57D2EE56C32D8C6DCC8FEE84069BC1F2F7676698D91BD435614E40",
-    "type": "/cosmos.slashing.v1beta1.MsgUnjail",
-    "timestamp": "2022-05-20T03:44:57.000Z",
-    "from_address": "aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq",
-    "to_address": "aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8k",
-    "amount": "1"
+    "amount": "1",
+    "code": "1"
   }
 ]

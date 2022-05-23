@@ -7,3 +7,7 @@
 .table-mobile__item .table-body {
   padding: 8px 0px;
 }
+
+::ng-deep .mat-menu-panel {
+  max-width: 375px !important;
+}

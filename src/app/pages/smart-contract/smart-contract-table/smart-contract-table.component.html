@@ -13,13 +13,14 @@
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
-                    (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                    '-'
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
                     }}
                   </a>
                 </ng-container>
                 <ng-container *ngIf="template.isUrl && template.isShort">
-                  <a [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                  <a
+                    [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                     [class.disabled-link]="!data[template.matColumnDef]">
                     {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                   </a>
@@ -35,6 +36,15 @@
                     <ng-container *ngSwitchCase="'type'">
                       <span class="label__status">{{ data[template.matColumnDef] }}</span>
                     </ng-container>
+                    <div *ngSwitchCase="'action'">
+                      <button
+                        mat-icon-button
+                        [matMenuTriggerFor]="menu"
+                        aria-label="Example icon-button with a menu"
+                        (click)="getTokenDetail(data)">
+                        <i class="mr-3 aura-icon icon--switch-stage icon-discord"></i>
+                      </button>
+                    </div>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}
                     </ng-container>
@@ -55,9 +65,53 @@
       </table>
     </ng-container>
   </ng-container>
-  <app-paginator [length]="length" [pageSize]="pageSize" (paginator)="paginatorEmit($event)"
+  <app-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    (paginator)="paginatorEmit($event)"
     (pageEvent)="pageEvent($event)"></app-paginator>
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>
 </div>
+
+<mat-menu #menu="matMenu">
+  <div class="text--white p-4">
+    <span class="sub-text sub-text-mob">Additional info</span><br />
+    Status:<br />
+    <img
+      [src]="
+        tokenDetail?.code == codeTransaction.Success
+          ? 'assets/icons/icons-svg/color/success.svg'
+          : 'assets/icons/icons-svg/color/fail.svg'
+      "
+      alt="" />
+    {{ tokenDetail?.status }} (504 Block Confirmations)
+    <hr />
+    Token Trasnfer:<br />
+    {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
+      tokenDetail?.price | number: global.formatNumber2Decimal
+    }}) <a class="text--green" [routerLink]="['/smart-contract/token', tokenAddress]">{{ tokenType }}</a
+    ><br />
+    <div>
+      From
+      <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">{{
+        tokenDetail?.from_address_format
+      }}</a>
+      To
+      <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">{{
+        tokenDetail?.to_address_format
+      }}</a>
+    </div>
+    <hr />
+    Transaction Fee:<br />
+    0.00075177042 Ether ($1.52)
+    <hr />
+    Gas info:<br />
+    47,566 Gas Used From 78,549 Gas Limit @ 0.00000001580573182 Ether (15.807219472 Gwei)
+    <hr />
+    Nonce:<br />
+    29 (in the position 92)<br />
+    <a class="fw-normal text--green body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
+  </div>
+</mat-menu>
