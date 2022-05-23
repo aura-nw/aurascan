@@ -31,7 +31,7 @@
     <div class="mt-3">
         <app-transfers *ngIf="countCurrent === ''"
                 [type]="'TABLE_TOKEN'" [keyWord]="textSearch"></app-transfers>
-        <app-holders *ngIf="countCurrent === 'holders'"></app-holders>
+        <app-holders *ngIf="countCurrent === 'holders'" [keyWord]="textSearch"></app-holders>
         <app-contract *ngIf="countCurrent === 'contract'"></app-contract>
     </div>
 </section>
