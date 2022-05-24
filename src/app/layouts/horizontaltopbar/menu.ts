@@ -36,6 +36,18 @@ export const MENU: MenuItem[] = [
         label: 'MENUITEMS.SMARTCONTRACT.TEXT',
         icon: 'user',
         link: '/smart-contract',
+        subItems: [
+            {
+                id: 1,
+                label: 'ERC20 Top Tokens',
+                link: '/smart-contract/tokens',
+            },
+            {
+                id: 2,
+                label: 'ERC721 Top Tokens',
+                link: '/smart-contract/tokens-nft',
+            }
+        ]
     },
     {
         id: 7,

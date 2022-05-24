@@ -12,21 +12,6 @@ import { SmartContractService } from '../../../../app/core/services/smart-contra
   styleUrls: ['./smart-contract-detail.component.scss'],
 })
 export class SmartContractDetailComponent implements OnInit {
-  TABS = TOKEN_TAB.filter((vote) =>
-    [
-      TokenTab.Transfers, 
-      TokenTab.Holders, 
-      // TokenTab.Info, 
-      TokenTab.Contract, 
-      // TokenTab.Analytics
-    ]
-      .includes(vote.key),
-  ).map((vote) => ({
-    ...vote,
-    value: vote.value.toUpperCase(),
-    key: vote.key === TokenTab.Transfers ? '' : vote.key,
-  }));
-
   countCurrent: string = '';
   tokenTransferList: any[];
   token: string = '';
@@ -64,27 +49,5 @@ export class SmartContractDetailComponent implements OnInit {
     });
   }
 
-  changeTab(tabId): void {
-    this.countCurrent = tabId;
-    switch (tabId) {
-      case '':
-        // this.voteDataList = this.voteData.all.proposalVotes;
-        break;
-      case TokenTab.Holders:
-        // this.voteDataList = this.voteData.yes.proposalVotes;
-        break;
-      case TokenTab.Info:
-        // this.voteDataList = this.voteData.abstain.proposalVotes;
-        break;
-      case TokenTab.Contract:
-        // this.voteDataList = this.voteData.abstain.proposalVotes;
-        break;
-      case TokenTab.Analytics:
-        // this.voteDataList = this.voteData.abstain.proposalVotes;
-        break;
-    }
-  }
-
-  searchTokenTable(): void {
-  }
+  searchTokenTable(): void {}
 }

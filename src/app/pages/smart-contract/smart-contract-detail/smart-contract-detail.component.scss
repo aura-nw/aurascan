@@ -1,20 +1,3 @@
-.token-info {
-  .tab-info {
-    border: 1px solid var(--aura-light-gray);
-    border-radius: 10px;
-    > div {
-      height: 50px;
-    }
-    > div:not(:last-child) {
-      border-bottom: 1px solid var(--aura-light-gray);
-    }
-  }
-}
-
-.main-tab {
-  .single-input-field.search-form {
-    @media (min-width: 992px) {
-      min-width: 330px;
-    }
-  }
+.title-medium {
+  padding-bottom: 20px;
 }

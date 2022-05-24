@@ -21,7 +21,6 @@ import { HistoricalPriceComponent } from './smart-contract-detail/informations/i
 import { SharedModule } from '../../../app/shared/shared.module';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { SmartContractTableComponent } from './smart-contract-table/smart-contract-table.component';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { MaterialModule } from '../../../app/app.module';
@@ -29,6 +28,7 @@ import { SmartContractService } from '../../../app/core/services/smart-contract.
 import { FormsModule } from '@angular/forms';
 import { TokenErc20Component } from './smart-contract-list/token-erc20/token-erc20.component';
 import { TokenErc721Component } from './smart-contract-list/token-erc721/token-erc721.component';
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -49,7 +49,6 @@ import { TokenErc721Component } from './smart-contract-list/token-erc721/token-e
     AnalyticsComponent,
     TokenContractOverviewComponent,
     HistoricalPriceComponent,
-    SmartContractTableComponent,
     TokenErc20Component,
     TokenErc721Component
   ],
@@ -61,6 +60,7 @@ import { TokenErc721Component } from './smart-contract-list/token-erc721/token-e
     TranslateModule,
     PaginatorModule,
     TableNoDataModule,
+    MatTableModule,
     MaterialModule,
     FormsModule
   ],
