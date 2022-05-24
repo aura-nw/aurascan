@@ -9,8 +9,8 @@
         </div>
         <div
           [class.valid-status]="!breakpoint.value.matches"
-          [ngClass]="{ 'status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
-          [ngClass]="{ 'status-jailed': currentValidatorDetail?.jailed }"
+          [class.status-inactive]="currentValidatorDetail?.status !== statusValidator.Active"
+          [class.status-jailed]="currentValidatorDetail?.jailed"
           [ngClass]="{ 'label__status small-body fw-semibold': breakpoint.value.matches }">
           <ng-container *ngIf="currentValidatorDetail?.jailed">
             <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches" />
@@ -22,7 +22,7 @@
             Active
           </ng-container>
           <ng-container
-            *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Inactive">
+            *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
             <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches" />
             inActive
           </ng-container>

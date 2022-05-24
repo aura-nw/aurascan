@@ -227,6 +227,41 @@ form.search-form {
   }
 }
 
+.box-title-validator {
+  position: relative;
+  min-height: 35px;
+  align-items: center;
+  overflow: visible;
+  display: inline-block;
+  .text-title {
+    opacity: 0.5;
+    min-width: 60px;
+    display: block;
+  }
+  .label-jailed {
+    text-align: center;
+    transform: rotate(-15deg);
+    span {
+      position: absolute;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 14px;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.05em;
+      color: var(--aura-danger);
+      transform: rotate(-15deg);
+      border: 1px solid var(--aura-danger);
+      padding: 2px 7px;
+      left: 50%;
+      min-width: 50px;
+      top: -19px;
+      transform: translateX(-50%);
+    }
+  }
+}
+
 @media (max-width: 991.99px) {
   .validator-container {
     .button-outline__in-card {

@@ -289,9 +289,6 @@
                         <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'rank'" class="text-left box-rank">
-                          <span>{{ data[template.matColumnDef] }}</span>
-                        </div>
                         <div *ngSwitchCase="'up_time'">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
                             {{ data[template.matColumnDef] }}
@@ -300,9 +297,12 @@
                         </div>
                         <div
                           *ngSwitchCase="'title'"
-                          class="text--green cursor-pointer text-clamp"
+                          class="text--green cursor-pointer text-clamp box-title-validator"
                           [routerLink]="['/validators', data.operator_address]">
-                          <span>{{ data[template.matColumnDef] }}</span>
+                          <span [class.text-title]="data?.jailed">{{ data[template.matColumnDef] }}</span>
+                          <div *ngIf="data?.jailed" class="label-jailed">
+                            <span>jailed</span>
+                          </div>
                         </div>
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">
                           <div class="cumulative-share_container">
@@ -346,7 +346,7 @@
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
                     <div class="title body-mob text--green fw-semibold">
-                      <div class="box-rank mr-2">
+                      <div class="text--white mr-2">
                         <span>{{ validator.rank }}</span>
                       </div>
                       <span class="" [routerLink]="['/validators', validator.operator_address]"> {{ validator.title }} </span>
