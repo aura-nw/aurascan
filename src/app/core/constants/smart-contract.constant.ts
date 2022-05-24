@@ -3,22 +3,22 @@ import { TokenTab } from "./smart-contract.enum";
 export const TOKEN_TAB = [
   {
     key: TokenTab.Transfers,
-    value: 'transfers',
+    value: 'Transfers',
   },
   {
     key: TokenTab.Holders,
-    value: 'holders',
+    value: 'Holders',
   },
   {
     key: TokenTab.Info,
-    value: 'info',
+    value: 'Info',
   },
   {
     key: TokenTab.Contract,
-    value: 'contract',
+    value: 'Contract',
   },
   {
     key: TokenTab.Analytics,
-    value: 'analytics',
+    value: 'Analytics',
   },
 ];

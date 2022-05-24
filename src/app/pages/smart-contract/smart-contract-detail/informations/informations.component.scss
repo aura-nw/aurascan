@@ -1,6 +1,9 @@
 .single-input-field {
-    min-width: 320px;
+  min-width: 320px;
 }
 .aura-basic-table tr td:not(:last-child) {
-    border-right: 1px solid var(--aura-dark-gray);
+  border-right: 1px solid var(--aura-dark-gray);
+}
+.input-group {
+  background-color: var(--aura-bg-form);
 }

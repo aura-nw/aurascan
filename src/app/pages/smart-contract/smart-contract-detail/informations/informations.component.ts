@@ -13,7 +13,7 @@ export class InformationsComponent implements OnInit {
     [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics].includes(vote.key),
   ).map((vote) => ({
     ...vote,
-    value: vote.value.toUpperCase(),
+    value: vote.value,
     key: vote.key === TokenTab.Transfers ? '' : vote.key,
   }));
   countCurrent: string = '';

@@ -9,7 +9,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
 import { SmartContractService } from '../../../../../../core/services/smart-contract.service';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 
 interface CustomPageEvent {
   next: number;
@@ -31,11 +31,11 @@ export class TransfersComponent implements OnInit, OnChanges {
 
   tokenTransferTemplates: Array<TableTemplate> = [
     { matColumnDef: 'action', headerCellDef: '' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'tx_hash_format', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From', isUrl: '/account' },
-    { matColumnDef: 'to_address', headerCellDef: 'To', isUrl: '/account' },
+    { matColumnDef: 'from_address_format', headerCellDef: 'From' },
+    { matColumnDef: 'to_address_format', headerCellDef: 'To' },
     { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
   ];
 
@@ -48,7 +48,7 @@ export class TransfersComponent implements OnInit, OnChanges {
   token: string = '';
   typeTransaction = TYPE_TRANSACTION;
   pageData: PageEvent;
-  pageSize = 5;
+  pageSize = 10;
   pageIndex = 0;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   codeTransaction = CodeTransaction;
@@ -60,15 +60,13 @@ export class TransfersComponent implements OnInit, OnChanges {
     public global: Globals,
     public commonService: CommonService,
     private smartContractService: SmartContractService,
-    private layout: BreakpointObserver,
-  ) // private datePipe: DatePipe
-  {}
+    private layout: BreakpointObserver, // private datePipe: DatePipe
+  ) {}
 
   ngOnInit(): void {
     this.getDataTable();
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-    // this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,18 +94,25 @@ export class TransfersComponent implements OnInit, OnChanges {
       this.loading = true;
       if (res && res.length > 0) {
         this.tokenDataList = [...res];
-        this.dataSource = new MatTableDataSource(this.tokenDataList);
-        this.pageData = {
-          length: res.length,
-          pageSize: 5,
-          pageIndex: 1,
-        };
-
         this.tokenDataList.forEach((token) => {
-          // k.timestamp = this.datePipe.transform(k.timestamp, DATEFORMAT.DATETIME_UTC);
+          token.status = StatusTransaction.Fail;
+          if (token?.code == CodeTransaction.Success) {
+            token.status = StatusTransaction.Success;
+          }
+          token.tx_hash_format = token.tx_hash.replace(token.tx_hash.substring(20), '...');
+          token.from_address_format = token.from_address.replace(token.from_address.substring(20), '...');
+          token.to_address_format = token.to_address.replace(token.to_address.substring(20), '...');
+          token.price = token.amount * 0.5;
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
           token.type = typeTrans?.value;
         });
+
+        this.dataSource = new MatTableDataSource(this.tokenDataList);
+        this.pageData = {
+          length: res.length,
+          pageSize: 10,
+          pageIndex: 1,
+        };
       }
       this.loading = false;
     });

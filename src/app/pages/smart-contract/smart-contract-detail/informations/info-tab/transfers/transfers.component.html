@@ -1,16 +1,33 @@
 <div class="col-12 mt-3">
-  <span class="small-body text--light-gray">A total of {{pageData?.length}} transactions found</span>
+  <span class="small-body text--light-gray">A total of {{ pageData?.length }} transactions found</span>
 </div>
 
-<div class="proposal-table-container aura-table-contain" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="transfer-table-container aura-table-contain" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
     <ng-container *ngIf="!breakpoint.value.matches">
       <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
         <ng-container *ngFor="let template of template; index as i">
-          <ng-container [matColumnDef]="template.matColumnDef">
-            <th mat-header-cell *matHeaderCellDef>
-              <div [innerHTML]="template.headerCellDef | translate"></div>
-            </th>
+          <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+            <ng-container *ngSwitchCase="'type'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchCase="'action'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-8">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchCase="'from_address_format'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-20">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <th mat-header-cell *matHeaderCellDef class="col-per-13">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
 
             <td mat-cell *matCellDef="let data">
               <div [classList]="[template.cssClass]">
@@ -32,13 +49,29 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      ${{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'timestamp'">
                       {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
                       <span class="label__status">{{ data[template.matColumnDef] }}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'tx_hash_format'">
+                      <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'from_address_format'">
+                      <a class="text--green txt-from-address" [routerLink]="['/account', data.from_address]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
+                      <img src="../../../../../../../assets/images/icons/arrow-right.png" class="ml-10"/>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'to_address_format'">
+                      <a class="text--green" [routerLink]="['/account', data.to_address]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
                     </ng-container>
                     <div *ngSwitchCase="'action'">
                       <button
@@ -47,7 +80,11 @@
                         aria-label="Example icon-button with a menu"
                         (click)="getTokenDetail(data)">
                         <!-- <i class="mr-3 aura-icon icon--switch-stage search-icon-search"></i> -->
-                        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                        <img
+                          src="../../../../../../../assets/images/icons/token-detail.png"
+                          alt=""
+                          width="16"
+                          height="16" />
                       </button>
                     </div>
                     <ng-container *ngSwitchDefault>
@@ -71,7 +108,7 @@
     </ng-container>
   </ng-container>
   <app-paginator
-    [length]="length"
+    [length]="dataSource?.data?.length"
     [pageSize]="pageSize"
     (paginator)="paginatorEmit($event)"
     (pageEvent)="pageEvent($event)"></app-paginator>
