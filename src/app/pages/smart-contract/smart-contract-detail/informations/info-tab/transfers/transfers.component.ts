@@ -1,16 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {PaginatorComponent} from "../../../../../../shared/components/paginator/paginator.component";
-import {TableTemplate} from "../../../../../../core/models/common.model";
-import {MatTableDataSource} from "@angular/material/table";
-import {Breakpoints} from "@angular/cdk/layout";
-import {TokenTab} from "../../../../../../core/constants/smart-contract.enum";
-import {Globals} from "../../../../../../global/global";
-import {CommonService} from "../../../../../../core/services/common.service";
-import {PROPOSAL_VOTE} from "../../../../../../core/constants/proposal.constant";
-import {PageEvent} from "@angular/material/paginator";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { TableTemplate } from '../../../../../../core/models/common.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { TokenTab } from '../../../../../../core/constants/smart-contract.enum';
+import { Globals } from '../../../../../../global/global';
+import { CommonService } from '../../../../../../core/services/common.service';
+import { PageEvent } from '@angular/material/paginator';
 import { shortenAddress } from 'src/app/core/utils/common/shorten';
-import {SmartContractService} from "../../../../../../core/services/smart-contract.service";
-import {TYPE_TRANSACTION} from "../../../../../../core/constants/transaction.constant";
+import { SmartContractService } from '../../../../../../core/services/smart-contract.service';
+import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 
 interface CustomPageEvent {
   next: number;
@@ -20,7 +19,7 @@ interface CustomPageEvent {
 @Component({
   selector: 'app-transfers',
   templateUrl: './transfers.component.html',
-  styleUrls: ['./transfers.component.scss']
+  styleUrls: ['./transfers.component.scss'],
 })
 export class TransfersComponent implements OnInit, OnChanges {
   @Input() type: 'TABLE_TOKEN' | 'TABLE_ADDRESS';
@@ -28,14 +27,16 @@ export class TransfersComponent implements OnInit, OnChanges {
   tokenDataList: any[];
   length: number;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
+  @Output() resultLength = new EventEmitter<any>();
 
   tokenTransferTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isUrl: '/transaction', isShort: true },
-    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true},
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address', headerCellDef: 'From', isUrl: '/account'},
-    { matColumnDef: 'to_address', headerCellDef: 'To', isUrl: '/account'},
-    { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true},
+    { matColumnDef: 'from_address', headerCellDef: 'From', isUrl: '/account' },
+    { matColumnDef: 'to_address', headerCellDef: 'To', isUrl: '/account' },
+    { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
   ];
 
   displayedColumns: string[];
@@ -47,19 +48,47 @@ export class TransfersComponent implements OnInit, OnChanges {
   token: string = '';
   typeTransaction = TYPE_TRANSACTION;
   pageData: PageEvent;
+  pageSize = 5;
+  pageIndex = 0;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  codeTransaction = CodeTransaction;
+  tokenDetail = undefined;
+  tokenType = 'Aura';
+  tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
 
   constructor(
-      public global: Globals,
-      public commonService: CommonService,
-      private smartContractService: SmartContractService,
-      // private datePipe: DatePipe
-  ) { }
+    public global: Globals,
+    public commonService: CommonService,
+    private smartContractService: SmartContractService,
+    private layout: BreakpointObserver,
+  ) // private datePipe: DatePipe
+  {}
 
   ngOnInit(): void {
     this.getDataTable();
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
     // this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.tokenDataList) {
+      const filterData = this.tokenDataList.filter(
+        (data) =>
+          data.tx_hash.includes(this.keyWord) ||
+          data.from_address.includes(this.keyWord) ||
+          data.to_address.includes(this.keyWord),
+      );
+      if (filterData.length > 0) {
+        this.pageData = {
+          length: filterData.length,
+          pageSize: 10,
+          pageIndex: 1,
+        };
+        this.dataSource = new MatTableDataSource<any>(filterData);
+      }
+      this.resultLength.emit(filterData.length);
+    }
   }
 
   getDataTable(): void {
@@ -71,7 +100,7 @@ export class TransfersComponent implements OnInit, OnChanges {
         this.pageData = {
           length: res.length,
           pageSize: 5,
-          pageIndex: 1
+          pageIndex: 1,
         };
 
         this.tokenDataList.forEach((token) => {
@@ -89,7 +118,7 @@ export class TransfersComponent implements OnInit, OnChanges {
       case 'TABLE_TOKEN':
         return this.tokenTransferTemplates;
       case 'TABLE_ADDRESS':
-        // return this.depositorsTemplates;
+      // return this.depositorsTemplates;
       default:
         return [];
     }
@@ -100,11 +129,6 @@ export class TransfersComponent implements OnInit, OnChanges {
       return shortenAddress(address, 8);
     }
     return '';
-  }
-
-  getVoteValue(voteKey) {
-    const vote = PROPOSAL_VOTE.find((vote) => vote.key === voteKey);
-    return vote ? vote.value : 'Did not vote';
   }
 
   pageEvent(e: PageEvent): void {
@@ -124,8 +148,8 @@ export class TransfersComponent implements OnInit, OnChanges {
       return [];
     }
     return this.dataSource.data.slice(
-        this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
-        this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
+      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
+      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
     );
   }
 
@@ -133,16 +157,7 @@ export class TransfersComponent implements OnInit, OnChanges {
     this.dataSource.paginator = event;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if(this.tokenDataList) {
-      const filterData = this.tokenDataList.filter(data => data.tx_hash.includes(this.keyWord) || data.from_address.includes(this.keyWord) || data.to_address.includes(this.keyWord));
-      this.pageData = {
-        length: filterData.length,
-        pageSize: 10,
-        pageIndex: 1
-      };
-      this.dataSource = new MatTableDataSource<any>(filterData);
-    }
+  getTokenDetail(data: any): void {
+    this.tokenDetail = data;
   }
-
 }

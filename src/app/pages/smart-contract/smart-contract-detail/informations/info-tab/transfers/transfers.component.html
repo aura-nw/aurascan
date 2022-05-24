@@ -1,67 +1,122 @@
-<div class="aura-table-contain">
-    <div *ngIf="loading" class="m-auto">
-      <app-loading-sprint></app-loading-sprint>
-    </div>
-    <ng-container *ngIf="dataSource.data.length > 0; else noValues">
-        <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
-                <ng-container *ngFor="let template of template; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                        <th mat-header-cell *matHeaderCellDef>
-                            <div [innerHTML]="template.headerCellDef | translate"></div>
-                        </th>
-
-                        <td mat-cell *matCellDef="let data">
-                            <div [classList]="[template.cssClass]">
-                                <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
-                                    <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                                        {{
-                                        (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                                        '-'
-                                        }}
-                                    </a>
-                                </ng-container>
-                                <ng-container *ngIf="template.isUrl && template.isShort">
-                                    <a [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                                       [class.disabled-link]="!data[template.matColumnDef]">
-                                        {{ shortenAddress(data[template.matColumnDef]) || '-' }}
-                                    </a>
-                                </ng-container>
-                                <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
-                                    <ng-container [ngSwitch]="template.matColumnDef">
-                                        <ng-container *ngSwitchCase="'amount'">
-                                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                                        </ng-container>
-                                        <ng-container *ngSwitchCase="'timestamp'">
-                                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                                        </ng-container>
-                                        <ng-container *ngSwitchCase="'type'">
-                                            <span class="label__status">{{ data[template.matColumnDef] }}</span>
-                                        </ng-container>
-                                        <ng-container *ngSwitchDefault>
-                                            {{ data[template.matColumnDef] }}
-                                        </ng-container>
-                                    </ng-container>
-                                </ng-container>
-                            </div>
-                        </td>
-                    </ng-container>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                        {{ 'NO DATA' | translate }}
-                    </td>
-                </tr>
-        </table>
-    </ng-container>
-    <app-paginator *ngIf="pageData"
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)">
-    </app-paginator>
-    <ng-template #noValues>
-        <app-table-no-data></app-table-no-data>
-    </ng-template>
+<div class="col-12 mt-3">
+  <span class="small-body text--light-gray">A total of {{pageData?.length}} transactions found</span>
 </div>
+
+<div class="proposal-table-container aura-table-contain" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+    <ng-container *ngIf="!breakpoint.value.matches">
+      <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
+        <ng-container *ngFor="let template of template; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef>
+              <div [innerHTML]="template.headerCellDef | translate"></div>
+            </th>
+
+            <td mat-cell *matCellDef="let data">
+              <div [classList]="[template.cssClass]">
+                <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
+                  <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                    {{
+                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
+                        '-'
+                    }}
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="template.isUrl && template.isShort">
+                  <a
+                    [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                    [class.disabled-link]="!data[template.matColumnDef]">
+                    {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'amount'">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'timestamp'">
+                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'type'">
+                      <span class="label__status">{{ data[template.matColumnDef] }}</span>
+                    </ng-container>
+                    <div *ngSwitchCase="'action'">
+                      <button
+                        mat-icon-button
+                        [matMenuTriggerFor]="menu"
+                        aria-label="Example icon-button with a menu"
+                        (click)="getTokenDetail(data)">
+                        <!-- <i class="mr-3 aura-icon icon--switch-stage search-icon-search"></i> -->
+                        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                      </button>
+                    </div>
+                    <ng-container *ngSwitchDefault>
+                      {{ data[template.matColumnDef] }}
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell g-no-data" colspan="9999">
+            {{ 'NO DATA' | translate }}
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+  </ng-container>
+  <app-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    (paginator)="paginatorEmit($event)"
+    (pageEvent)="pageEvent($event)"></app-paginator>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</div>
+
+<mat-menu #menu="matMenu" xPosition="after" yPosition="above">
+  <div class="text--white p-4">
+    <span class="sub-text sub-text-mob">Additional info</span><br />
+    Status:<br />
+    <img
+      [src]="
+        tokenDetail?.code == codeTransaction.Success
+          ? 'assets/icons/icons-svg/color/success.svg'
+          : 'assets/icons/icons-svg/color/fail.svg'
+      "
+      alt="" />
+    {{ tokenDetail?.status }} (504 Block Confirmations)
+    <hr />
+    Token Trasnfer:<br />
+    {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
+      tokenDetail?.price | number: global.formatNumber2Decimal
+    }}) <a class="text--green" [routerLink]="['/smart-contract/token', tokenAddress]">{{ tokenType }}</a
+    ><br />
+    <div>
+      From
+      <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">{{
+        tokenDetail?.from_address_format
+      }}</a>
+      To
+      <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">{{
+        tokenDetail?.to_address_format
+      }}</a>
+    </div>
+    <hr />
+    Transaction Fee:<br />
+    0.00075177042 Ether ($1.52)
+    <hr />
+    Gas info:<br />
+    47,566 Gas Used From 78,549 Gas Limit @ 0.00000001580573182 Ether (15.807219472 Gwei)
+    <hr />
+    Nonce:<br />
+    29 (in the position 92)<br />
+    <a class="fw-normal text--green body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
+  </div>
+</mat-menu>

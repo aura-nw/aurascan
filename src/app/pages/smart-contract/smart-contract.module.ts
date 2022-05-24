@@ -21,7 +21,6 @@ import { HistoricalPriceComponent } from './smart-contract-detail/informations/i
 import { SharedModule } from '../../../app/shared/shared.module';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { SmartContractTableComponent } from './smart-contract-table/smart-contract-table.component';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { MaterialModule } from '../../../app/app.module';
@@ -50,7 +49,6 @@ import {MatTableModule} from "@angular/material/table";
     AnalyticsComponent,
     TokenContractOverviewComponent,
     HistoricalPriceComponent,
-    SmartContractTableComponent,
     TokenErc20Component,
     TokenErc721Component
   ],
