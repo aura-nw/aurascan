@@ -71,10 +71,10 @@
   display: inline-flex;
   align-items: center;
   width: auto;
-  height: 32px;
-  padding: 0 var(--spacer-6);
-  background-color: #37cc6e;
-  border-radius: 10rem;
+  padding: 8px 16px;
+  background-color: rgba(94, 230, 157, 0.2);
+  color: var(--aura-active);
+  border-radius: 4px;
   .img-valid {
     filter: $filter-white-icon;
     margin-right: 5px;
@@ -82,10 +82,12 @@
     height: 15px;
   }
   &.status-inactive{
-    background-color: #4b525d;
+    background-color: rgba(119, 126, 144, 0.2);
+    color: var(--aura-light-gray);
   }
   &.status-jailed{
-    background-color: #ff2745;
+    background-color: rgba(230, 94, 94, 0.2);
+    color: var(--aura-danger);
   }
 }
 

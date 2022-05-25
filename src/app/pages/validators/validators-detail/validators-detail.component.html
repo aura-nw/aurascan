@@ -7,23 +7,22 @@
           <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div>
           <div [class.fw-500]="breakpoint.value.matches">{{ currentValidatorDetail?.title }}</div>
         </div>
-        <div
-          [class.valid-status]="!breakpoint.value.matches"
-          [ngClass]="{ 'status-inactive': currentValidatorDetail?.status === statusValidator.Inactive }"
-          [ngClass]="{ 'status-jailed': currentValidatorDetail?.jailed }"
-          [ngClass]="{ 'label__status small-body fw-semibold': breakpoint.value.matches }">
+        <div class="valid-status fw-semibold"
+          [class.status-inactive]="currentValidatorDetail?.status !== statusValidator.Active"
+          [class.status-jailed]="currentValidatorDetail?.jailed"
+          [ngClass]="{ 'small-body': breakpoint.value.matches }">
           <ng-container *ngIf="currentValidatorDetail?.jailed">
-            <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches" />
+            <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> -->
             Jailed
           </ng-container>
           <ng-container
             *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Active">
-            <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" *ngIf="!breakpoint.value.matches" />
+            <!-- <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" /> -->
             Active
           </ng-container>
           <ng-container
-            *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Inactive">
-            <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" *ngIf="!breakpoint.value.matches" />
+            *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
+            <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt=""  /> -->
             inActive
           </ng-container>
         </div>
