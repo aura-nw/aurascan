@@ -227,6 +227,10 @@ form.search-form {
   }
 }
 
+.text-blur {
+  opacity: 0.5;
+}
+
 .box-title-validator {
   position: relative;
   min-height: 35px;
@@ -258,6 +262,14 @@ form.search-form {
       min-width: 50px;
       top: -19px;
       transform: translateX(-50%);
+    }
+  }
+  @media (max-width: 991.99px) {
+    .text-title {
+      min-width: 30px;
+    }
+    .label-jailed span {
+      margin-left: 10px;
     }
   }
 }

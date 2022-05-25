@@ -345,11 +345,16 @@
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
-                    <div class="title body-mob text--green fw-semibold">
+                    <div class="d-flex body-mob text--green fw-semibold">
                       <div class="text--white mr-2">
-                        <span>{{ validator.rank }}</span>
+                        <span [class.text-blur]="validator?.jailed">{{ validator.rank }}</span>
                       </div>
-                      <span class="" [routerLink]="['/validators', validator.operator_address]"> {{ validator.title }} </span>
+                      <div class="box-title-validator" [routerLink]="['/validators', validator.operator_address]">
+                        <span [class.text-title]="validator?.jailed"> {{ validator.title }} </span>
+                        <div *ngIf="validator?.jailed" class="label-jailed">
+                          <span>jailed</span>
+                        </div>
+                      </div>
                     </div>
                     <div class="sub-title small-body-mob fw-semibold">
                       <span class="mr-2 text--white">{{ validator.power | number: globals.formatNumberOnlyDecimal }}</span>
