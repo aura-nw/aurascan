@@ -6,10 +6,11 @@ import { TokenTab } from '../../../../../../core/constants/smart-contract.enum';
 import { Globals } from '../../../../../../global/global';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { PageEvent } from '@angular/material/paginator';
-import { shortenAddress } from 'src/app/core/utils/common/shorten';
+import { shortenAddress } from '../../../../../../core/utils/common/shorten';
 import { SmartContractService } from '../../../../../../core/services/smart-contract.service';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
+import { ADDRESS_PREFIX } from '../../../../../../core/constants/common.constant';
 
 interface CustomPageEvent {
   next: number;
@@ -55,6 +56,7 @@ export class TransfersComponent implements OnInit, OnChanges {
   tokenDetail = undefined;
   tokenType = 'Aura';
   tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
+  isSearchAddres = false;
 
   constructor(
     public global: Globals,
@@ -71,6 +73,10 @@ export class TransfersComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.tokenDataList) {
+      this.isSearchAddres = false;
+      if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
+        this.isSearchAddres = true;
+      }
       const filterData = this.tokenDataList.filter(
         (data) =>
           data.tx_hash.includes(this.keyWord) ||

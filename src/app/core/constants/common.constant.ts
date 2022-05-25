@@ -60,6 +60,8 @@ export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 export const VALIDATOR_ADDRESS_PREFIX = "auravaloper";
 
+export const ADDRESS_PREFIX = "aura";
+
 export const GAS_ESTIMATE = "400000";
 
 export const STABLE_UTOKEN = 'uaura';

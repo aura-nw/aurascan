@@ -1,3 +1,22 @@
 ::ng-deep .mat-menu-panel {
   max-width: 375px !important;
 }
+.box-token-transfer {
+  justify-content: center;
+  min-width: 80px;
+  margin-left: 30px;
+  display: flex;
+  .token-tranfer-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: rgba(94, 230, 157, 0.2);
+    color: var(--aura-active);
+    border-radius: 4px;
+    width: auto;
+    &.status-out {
+      background-color: rgba(230, 94, 94, 0.2);
+      color: var(--aura-danger);
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { VALIDATOR_ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
+import { ADDRESS_PREFIX, VALIDATOR_ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { TOKEN_TAB } from '../../../../core/constants/smart-contract.constant';
 import { TokenTab } from '../../../../core/constants/smart-contract.enum';
 
@@ -20,6 +20,7 @@ export class InformationsComponent implements OnInit {
   textSearch: string = '';
   searchTemp: string = '';
   isSearchTx = false;
+  isSearchAddres = false;
   resultSearch = 0;
   tabsBackup = this.TABS;
 
@@ -36,7 +37,7 @@ export class InformationsComponent implements OnInit {
       HASHRULE: /^[A-Za-z0-9]/,
     };
     const regexRule = VALIDATORS.HASHRULE;
-    this.searchTemp = this.searchTemp.trim();
+    this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
 
@@ -48,9 +49,10 @@ export class InformationsComponent implements OnInit {
           let tempTabs;
           if (this.textSearch.length > 60) {
             this.isSearchTx = true;
-            tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders);
-          } else if (this.textSearch.length > 40) {
             tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
+          } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(ADDRESS_PREFIX)) {
+            this.isSearchAddres = true;
+            tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders);
           }
           this.TABS = tempTabs || this.tabsBackup;
         }
@@ -63,5 +65,13 @@ export class InformationsComponent implements OnInit {
 
   getLength(result: string) {
     this.resultSearch = Number(result) || 0;
+  }
+
+  resetSearch() {
+    this.searchTemp = null;
+    this.textSearch = null;
+    this.isSearchAddres = false;
+    this.isSearchTx = false;
+    this.handleSearch();
   }
 }

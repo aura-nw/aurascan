@@ -13,13 +13,18 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
+            <ng-container *ngSwitchCase="'tx_hash_format'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-17">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
             <ng-container *ngSwitchCase="'action'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-8">
+              <th mat-header-cell *matHeaderCellDef class="col-per-5">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'from_address_format'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-20">
+              <th mat-header-cell *matHeaderCellDef class="col-per-25">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
@@ -63,10 +68,28 @@
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'from_address_format'">
-                      <a class="text--green txt-from-address" [routerLink]="['/account', data.from_address]">
-                        {{ data[template.matColumnDef] }}
-                      </a>
-                      <img src="../../../../../../../assets/images/icons/arrow-right.png" class="ml-10"/>
+                      <div class="d-flex align-items-center">
+                        <a class="text--green txt-from-address" [routerLink]="['/account', data.from_address]">
+                          {{ data[template.matColumnDef] }}
+                        </a>
+                        <ng-container *ngIf="!isSearchAddres">
+                          <img
+                            src="../../../../../../../assets/images/icons/arrow-right.png"
+                            width="14"
+                            height="9"
+                            class="ml-15" />
+                        </ng-container>
+                        <ng-container *ngIf="isSearchAddres">
+                          <div class="box-token-transfer">
+                            <span
+                              class="ml-5 token-tranfer-status d-flex"
+                              [ngClass]="{ 'status-out': data.from_address === keyWord }">
+                              <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
+                              <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
+                            </span>
+                          </div>
+                        </ng-container>
+                      </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'to_address_format'">
                       <a class="text--green" [routerLink]="['/account', data.to_address]">
