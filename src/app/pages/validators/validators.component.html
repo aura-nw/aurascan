@@ -301,7 +301,7 @@
                           [routerLink]="['/validators', data.operator_address]">
                           <span [class.text-title]="data?.jailed">{{ data[template.matColumnDef] }}</span>
                           <div *ngIf="data?.jailed" class="label-jailed">
-                            <span>jailed</span>
+                            <span class="d-flex">jailed</span>
                           </div>
                         </div>
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">
