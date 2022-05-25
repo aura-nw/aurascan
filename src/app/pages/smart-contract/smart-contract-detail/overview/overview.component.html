@@ -1,21 +1,29 @@
 <div class="card box-token-info">
-  <div class="card-body">
+  <div class="">
     <div class="table-responsive aura-table-contain">
       <table class="aura-basic-table w-100">
         <tr>
-          <td>Overview [ERC-20]</td>
-          <td class="text-end">Chart</td>
+          <td class="fw-semibold">Overview <span class="text-secondary">[ERC-20]</span></td>
+          <td class="d-flex justify-content-end">
+            <a [routerLink]="'/'" class="button button-chart button-outline">
+              <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+              <span class="ml-2">Chart</span>
+            </a>
+          </td>
         </tr>
 
         <tr>
           <td colspan="2">
             <div class="d-flex">
               <div class="flex-item">
-                <div>PRICE</div>
-                <div>$0.17 @ 0.217711 Aura (+1.87%)</div>
+                <div class="txt-light">Price</div>
+                <div>
+                  $0.17 <span class="small-text txt-light py-3 mr-2"> @0.217711 Aura</span>
+                  <span class="txt-danger">(-0,87%)</span>
+                </div>
               </div>
               <div class="pl-4">
-                <div>CIRCULATING SUPPLY MARKET CAP</div>
+                <div class="txt-light">CIRCULATING SUPPLY MARKET CAP</div>
                 <div>$7,342,381,252.35</div>
               </div>
             </div>
@@ -26,11 +34,11 @@
           <td colspan="2">
             <div class="d-flex">
               <div class="flex-item">
-                <div>Max Total Supply</div>
+                <div class="txt-light">Max Total Supply</div>
                 <div>1.000.000.000 AURA</div>
               </div>
               <div class="pl-4">
-                <div>FULLY DILUTED MARKET CAP</div>
+                <div class="txt-light">FULLY DILUTED MARKET CAP</div>
                 <div>$27,342,381,252.35</div>
               </div>
             </div>
@@ -39,7 +47,14 @@
 
         <tr>
           <td>Holders:</td>
-          <td>23,130 (+1.87%)</td>
+          <td>
+            23,130
+            <span class="txt-danger ml-1"
+              >(
+              <img src="assets/images/icons/arrow-down.svg" />
+              -0,02%)</span
+            >
+          </td>
         </tr>
 
         <tr>

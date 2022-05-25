@@ -1,24 +1,35 @@
 <ng-container *ngIf="textSearch && textSearch?.length > 0">
-  <section class="text--white" >
-    <div *ngIf="isSearchTx" class="p-4 card main-tab ">
-      <p>FILTERED BY TOKEN TXN HASH</p>
-      <a class="text--green mt-2" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
+  <section class="text--white">
+    <div *ngIf="isSearchTx" class="p-4 card main-tab">
+      <p class="small-text d-flex align-item-center">
+        <img src="../../../../../../../assets/images/icons/token-tx.png" class="mr-2" alt="" width="15" height="15" />
+        FILTER BY TOKEN TXN HASH
+      </p>
+      <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
     </div>
-    <div *ngIf="!isSearchTx && textSearch && textSearch?.length > 40" class="card main-tab ">
+    <div *ngIf="!isSearchTx && isSearchAddres" class="card main-tab p-3">
       <div class="table-responsive">
         <table class="aura-basic-table w-100">
           <tr>
             <td>
-              <p>FILTERED BY TOKEN HOLDER</p>
+              <div class="small-text d-flex align-item-center mb-1">
+                <img
+                  src="../../../../../../../assets/images/icons/token-holder.png"
+                  class="mr-2"
+                  alt=""
+                  width="15"
+                  height="15" />
+                FILTER BY TOKEN HOLDER
+              </div>
               <a class="text--green" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
             </td>
             <td>
-              <p>BALANCE</p>
+              <div class="small-text txt-light mb-1">BALANCE</div>
               0.004999999999999999 stETH
             </td>
             <td>
-              <p>VALUE</p>
-              $10.14 ( ~0.00490867635170134 Eth) [0.0000%]
+              <div class="small-text txt-light mb-1">VALUE</div>
+              $10.14 ( ~0.00490867635170134 Eth)
             </td>
           </tr>
         </table>
@@ -28,7 +39,7 @@
 </ng-container>
 <section class="card main-tab mt-5 p-4">
   <div class="d-flex justify-content-between">
-    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-8">
+    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-6">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
@@ -37,19 +48,25 @@
         </li>
       </ng-container>
     </ul>
-    <div class="d-flex align-item-center justify-content-end col-4">
-      <form class="aura-form single-input-field search-form mr-6">
+    <div class="d-flex align-item-center justify-content-end col-5">
+      <form class="aura-form single-input-field search-form">
         <div class="input-group">
           <input
             type="text"
-            class="form-control"
-            placeholder="Search for Token Name or Address"
+            class="form-control aura-form"
+            placeholder="Search by Token Name or Address"
             [(ngModel)]="searchTemp"
             name="search"
             (keyup.enter)="handleSearch()"
             autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
             <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+          </button>
+          <button
+            type="reset"
+            class="btn-reset {{ !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : '' }}"
+            (click)="resetSearch()">
+            <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
           </button>
         </div>
       </form>

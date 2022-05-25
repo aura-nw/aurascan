@@ -1,6 +1,16 @@
 .single-input-field {
-    min-width: 320px;
+  min-width: 420px;
 }
 .aura-basic-table tr td:not(:last-child) {
-    border-right: 1px solid var(--aura-dark-gray);
+  border-right: 1px solid var(--aura-dark-gray);
+}
+.input-group {
+  background-color: var(--aura-bg-form);
+}
+.txt-light {
+  color: var(--aura-light-gray);
+}
+.aura-nav-tabs.nav-tabs .nav-link{
+  font-weight: 600;
+  font-size: 16px;
 }

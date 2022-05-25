@@ -4,6 +4,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {TableTemplate} from "../../../../core/models/common.model";
 import {TranslateService} from "@ngx-translate/core";
 import {Globals} from "../../../../global/global";
+import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 
 @Component({
   selector: 'app-token-erc20',
@@ -239,8 +240,8 @@ export class TokenErc20Component implements OnInit {
     const filterData = this.mockData.filter(data => data.name.includes(keyWord) || data.hashCode.includes(keyWord));
     this.pageData = {
       length: filterData.length,
-      pageSize: 10,
-      pageIndex: 1
+      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageIndex: PAGE_EVENT.PAGE_INDEX
     };
     this.dataSource = new MatTableDataSource<any>(filterData);
   }
@@ -248,8 +249,8 @@ export class TokenErc20Component implements OnInit {
   getTokenData() {
     this.pageData = {
       length: this.mockData.length,
-      pageSize: 10,
-      pageIndex: 1
+      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageIndex: PAGE_EVENT.PAGE_INDEX
     };
     this.dataSource = new MatTableDataSource<any>(this.mockData);
   }
