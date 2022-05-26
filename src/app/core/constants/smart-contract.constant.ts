@@ -22,3 +22,5 @@ export const TOKEN_TAB = [
     value: 'Analytics',
   },
 ];
+
+export const MAX_LENGTH_SEARCH_TOKEN = 200;

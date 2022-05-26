@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ADDRESS_PREFIX, VALIDATOR_ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
-import { TOKEN_TAB } from '../../../../core/constants/smart-contract.constant';
+import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/smart-contract.constant';
 import { TokenTab } from '../../../../core/constants/smart-contract.enum';
 
 @Component({
@@ -23,6 +23,8 @@ export class InformationsComponent implements OnInit {
   isSearchAddres = false;
   resultSearch = 0;
   tabsBackup = this.TABS;
+  tokenTab = TokenTab;
+  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor() {}
 
