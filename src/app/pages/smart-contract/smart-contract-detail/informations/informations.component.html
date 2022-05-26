@@ -54,8 +54,9 @@
           <input
             type="text"
             class="form-control aura-form"
-            placeholder="Search by Token Name or Address"
+            placeholder="Search for Token Name or Address"
             [(ngModel)]="searchTemp"
+            [maxLength]="maxLengthSearch"
             name="search"
             (keyup.enter)="handleSearch()"
             autocomplete="off" />
@@ -78,7 +79,8 @@
       [type]="'TABLE_TOKEN'"
       [keyWord]="textSearch"
       (resultLength)="getLength($event)"></app-transfers>
-    <app-holders *ngIf="countCurrent === 'holders'" [keyWord]="textSearch"></app-holders>
-    <app-contract *ngIf="countCurrent === 'contract'"></app-contract>
+    <app-holders *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch"></app-holders>
+    <app-info *ngIf="countCurrent === tokenTab.Info"></app-info>
+    <app-contract *ngIf="countCurrent === tokenTab.Contract"></app-contract>
   </div>
 </section>
