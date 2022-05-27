@@ -1,0 +1,34 @@
+.box-contract {
+  .btn-contract {
+    padding: var(--spacer-2) var(--spacer-4);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 1rem;
+    color: var(--aura-light-gray);
+    background-color: var(--aura-bg-contract);
+    border: 1px solid var(--aura-light-gray);
+    &.active {
+      background: var(--aura-green);
+      color: var(--aura-black);
+      border-color: var(--aura-green);
+    }
+  }
+  .box-content {
+    margin-top: 20px;
+    .content-contract {
+      background-color: var(--aura-dark-gray);
+      border-color: var(--aura-light-gray);
+      padding: 10px var(--spacer-4);
+      margin-top: var(--spacer-4);
+      &::after {
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 700;
+        content: "\f054"; 
+        color: var(--aura-white);
+      }
+      &[aria-expanded="true"]::after {
+        content: '\f078';
+      }
+    }
+  }
+}
