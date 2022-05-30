@@ -20,3 +20,23 @@
     }
   }
 }
+::ng-deep {
+  ngb-popover-window {
+    border: none !important;
+    border-radius: 10px !important;
+    min-width: 375px !important;
+    .popover-body {
+      background-color: var(--aura-bg-form);
+      border-color: var(--aura-bg-form);
+      font-size: 1.4rem;
+    }
+    .arrow {
+      &::before {
+        border-right-color: var(--aura-bg-form) !important;
+      }
+      &::after {
+        border-right-color: var(--aura-bg-form) !important;
+      }
+    }
+  }
+}

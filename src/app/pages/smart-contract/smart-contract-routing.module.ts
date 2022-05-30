@@ -1,34 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SmartContractDetailComponent} from "./smart-contract-detail/smart-contract-detail.component";
-import {TokenErc20Component} from "./smart-contract-list/token-erc20/token-erc20.component";
-import {TokenErc721Component} from "./smart-contract-list/token-erc721/token-erc721.component";
+import { SmartContractDetailComponent } from './smart-contract-detail/smart-contract-detail.component';
+import { TokenCw20Component } from './smart-contract-list/token-cw20/token-cw20.component';
+import { TokenCw721Component } from './smart-contract-list/token-cw721/token-cw721.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TokenErc20Component
+    component: TokenCw20Component,
   },
   {
     path: 'tokens',
-    component: TokenErc20Component
+    component: TokenCw20Component,
   },
   {
     path: 'tokens-nft',
-    component: TokenErc721Component
+    component: TokenCw721Component,
   },
   {
     path: 'token/:tokenId',
-    component: SmartContractDetailComponent
+    component: SmartContractDetailComponent,
   },
   {
     path: 'address/:tokenId',
-    component: SmartContractDetailComponent
-  }
+    component: SmartContractDetailComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SmartContractRoutingModule { }
+export class SmartContractRoutingModule {}

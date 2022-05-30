@@ -54,7 +54,7 @@
                 <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
-                      ${{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
+                      {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'timestamp'">
                       {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
@@ -99,9 +99,10 @@
                     <div *ngSwitchCase="'action'">
                       <button
                         mat-icon-button
-                        [matMenuTriggerFor]="menu"
                         aria-label="Example icon-button with a menu"
-                        (click)="getTokenDetail(data)">
+                        placement="right"
+                        (click)="getTokenDetail(data)"
+                        [ngbPopover]="popContent">
                         <img
                           src="../../../../../../../assets/images/icons/token-detail.png"
                           alt=""
@@ -139,8 +140,8 @@
   </ng-template>
 </div>
 
-<mat-menu #menu="matMenu" xPosition="after" yPosition="above">
-  <div class="text--white p-4">
+<ng-template #popContent>
+  <div class="text--white p-2">
     <span class="sub-text sub-text-mob">Additional info</span><br />
     Status:<br />
     <img
@@ -178,4 +179,4 @@
     29 (in the position 92)<br />
     <a class="fw-normal text--green body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
   </div>
-</mat-menu>
+</ng-template>

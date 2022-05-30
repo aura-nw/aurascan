@@ -7,13 +7,14 @@ import { Globals } from '../../../../global/global';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/smart-contract.constant';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-token-erc20',
-  templateUrl: './token-erc20.component.html',
-  styleUrls: ['./token-erc20.component.scss'],
+  selector: 'app-token-cw20',
+  templateUrl: './token-cw20.component.html',
+  styleUrls: ['./token-cw20.component.scss'],
 })
-export class TokenErc20Component implements OnInit {
+export class TokenCw20Component implements OnInit {
   textSearch = '';
   // data table
   mockData = [
@@ -232,7 +233,7 @@ export class TokenErc20Component implements OnInit {
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
-  constructor(public translate: TranslateService, public global: Globals) {}
+  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
 
   ngOnInit(): void {
     this.getTokenData();
@@ -251,7 +252,7 @@ export class TokenErc20Component implements OnInit {
       pageSize: PAGE_EVENT.PAGE_SIZE,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
-    
+
     this.mockData.forEach((data) => {
       data['isValueUp'] = true;
       if (data.change < 0) {
@@ -302,8 +303,12 @@ export class TokenErc20Component implements OnInit {
     });
 
     if (sort.active === 'change') {
-      let lstUp = this.sortedData.filter((data) => data.isValueUp)?.sort((a,b) => this.compare(a.change, b.change, false));
-      let lstDown = this.sortedData.filter((data) => !data.isValueUp).sort((a,b) => this.compare(a.change, b.change, true));
+      let lstUp = this.sortedData
+        .filter((data) => data.isValueUp)
+        ?.sort((a, b) => this.compare(a.change, b.change, false));
+      let lstDown = this.sortedData
+        .filter((data) => !data.isValueUp)
+        .sort((a, b) => this.compare(a.change, b.change, true));
       this.sortedData = lstUp.concat(lstDown);
     }
 
@@ -311,12 +316,16 @@ export class TokenErc20Component implements OnInit {
     this.pageData = {
       length: dataFilter.length,
       pageSize: PAGE_EVENT.PAGE_SIZE,
-      pageIndex: PAGE_EVENT.PAGE_INDEX
+      pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
     this.dataSource = new MatTableDataSource<any>(dataFilter);
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  handleLink(): void {
+    this.router.navigate(['/smart-contract/token', this.filterSearchData[0]?.hashCode]);
   }
 }
