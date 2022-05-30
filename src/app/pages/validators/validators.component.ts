@@ -242,8 +242,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
-    //sort and calculator cumulative
-    // let dataSort = this.calculatorCumulative(dataFilter);
     this.dataSource = new MatTableDataSource(dataFilter);
     this.dataSource.sort = this.sort;
   }

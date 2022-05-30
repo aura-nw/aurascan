@@ -74,9 +74,7 @@ export class TransfersComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.tokenDataList) {
       this.isSearchAddres = false;
-      if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
-        this.isSearchAddres = true;
-      }
+      
       const filterData = this.tokenDataList.filter(
         (data) =>
           data.tx_hash.includes(this.keyWord) ||
@@ -89,6 +87,9 @@ export class TransfersComponent implements OnInit, OnChanges {
           pageSize: 10,
           pageIndex: 1,
         };
+        if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
+          this.isSearchAddres = true;
+        }
         this.dataSource = new MatTableDataSource<any>(filterData);
       }
       this.resultLength.emit(filterData.length);

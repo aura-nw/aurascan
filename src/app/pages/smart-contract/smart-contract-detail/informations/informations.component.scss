@@ -6,6 +6,8 @@
 }
 .input-group {
   background-color: var(--aura-bg-form);
+  height: auto !important;
+  padding: var(--spacer-1) var(--spacer-4) !important;
 }
 .txt-light {
   color: var(--aura-light-gray);
