@@ -19,15 +19,15 @@ import { AnalyticsComponent } from './smart-contract-detail/informations/info-ta
 import { TokenContractOverviewComponent } from './smart-contract-detail/informations/info-tab/analytics/token-contract-overview/token-contract-overview.component';
 import { HistoricalPriceComponent } from './smart-contract-detail/informations/info-tab/analytics/historical-price/historical-price.component';
 import { SharedModule } from '../../../app/shared/shared.module';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { MaterialModule } from '../../../app/app.module';
 import { SmartContractService } from '../../../app/core/services/smart-contract.service';
 import { FormsModule } from '@angular/forms';
-import { TokenErc20Component } from './smart-contract-list/token-erc20/token-erc20.component';
-import { TokenErc721Component } from './smart-contract-list/token-erc721/token-erc721.component';
+import { TokenCw20Component } from './smart-contract-list/token-cw20/token-cw20.component';
+import { TokenCw721Component } from './smart-contract-list/token-cw721/token-cw721.component';
 import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
@@ -49,8 +49,8 @@ import {MatTableModule} from "@angular/material/table";
     AnalyticsComponent,
     TokenContractOverviewComponent,
     HistoricalPriceComponent,
-    TokenErc20Component,
-    TokenErc721Component
+    TokenCw20Component,
+    TokenCw721Component
   ],
   imports: [
     CommonModule,
@@ -62,7 +62,8 @@ import {MatTableModule} from "@angular/material/table";
     TableNoDataModule,
     MatTableModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    NgbPopoverModule
   ],
   providers: [SmartContractService],
 })

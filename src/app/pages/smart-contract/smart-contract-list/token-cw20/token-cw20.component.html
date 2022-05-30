@@ -1,6 +1,6 @@
 <div class="d-lg-flex justify-content-between">
   <div>
-    <p class="title-medium mb-0 text--white fw-bold">CW-20 Tokens</p>
+    <p class="title-medium mb-2 text--white fw-bold">CW-20 Tokens</p>
     <div class="body text--light-gray">A total of {{ pageData?.length }} Token Contracts found</div>
   </div>
   <form class="aura-form single-input-field search-form d-none d-lg-block">
@@ -12,6 +12,7 @@
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
         (keyup)="searchToken()"
+        (keyup.enter)="handleLink()"
         name="search"
         autocomplete="off" />
       <button
@@ -86,9 +87,10 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Price</th>
               <td mat-cell *matCellDef="let element">
                 <div>
-                  <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
+                  <!-- <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
                   <div class="small-text text--light-gray">{{ element.btc }} Btc</div>
-                  <div class="small-text text--light-gray">{{ element.eth }} Eth</div>
+                  <div class="small-text text--light-gray">{{ element.eth }} Eth</div> -->
+                  -
                 </div>
               </td>
             </ng-container>
@@ -97,7 +99,7 @@
             <ng-container matColumnDef="change">
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Change (%)</th>
               <td mat-cell *matCellDef="let element">
-                <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
+                <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
                   <ng-container *ngIf="element.isValueUp">
                     <img src="assets/images/icons/arrow-up.svg" />
                   </ng-container>
@@ -105,21 +107,26 @@
                     <img src="assets/images/icons/arrow-down.svg" />
                   </ng-container>
                   <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
-                </span>
+                </span> -->
+                -
               </td>
             </ng-container>
 
             <!-- Volume Column -->
             <ng-container matColumnDef="volume">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Volume (24H)</th>
-              <td mat-cell *matCellDef="let element">${{ element.volume | number: global.formatNumber2Decimal }}</td>
+              <td mat-cell *matCellDef="let element">
+                <!-- ${{ element.volume | number: global.formatNumber2Decimal }} -->
+                -
+              </td>
             </ng-container>
 
             <!-- Circulating Market Cap Column -->
             <ng-container matColumnDef="circulatingMarketCap">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Circulating Market Cap</th>
               <td mat-cell *matCellDef="let element">
-                ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }}
+                <!-- ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }} -->
+                -
               </td>
             </ng-container>
 
@@ -127,7 +134,8 @@
             <ng-container matColumnDef="onChainMarketCap">
               <th mat-header-cell *matHeaderCellDef>On-Chain Market Cap</th>
               <td mat-cell *matCellDef="let element">
-                ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }}
+                <!-- ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }} -->
+                -
               </td>
             </ng-container>
 

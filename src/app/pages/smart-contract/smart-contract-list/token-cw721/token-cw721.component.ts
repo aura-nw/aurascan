@@ -6,11 +6,11 @@ import {TranslateService} from "@ngx-translate/core";
 import {Globals} from "../../../../global/global";
 
 @Component({
-  selector: 'app-token-erc721',
-  templateUrl: './token-erc721.component.html',
-  styleUrls: ['./token-erc721.component.scss']
+  selector: 'app-token-cw721',
+  templateUrl: './token-cw721.component.html',
+  styleUrls: ['./token-cw721.component.scss']
 })
-export class TokenErc721Component implements OnInit {
+export class TokenCw721Component implements OnInit {
   textSearch = '';
   // data table
   mockData = [

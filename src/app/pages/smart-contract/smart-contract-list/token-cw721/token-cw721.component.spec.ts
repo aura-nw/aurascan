@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TokenErc20Component } from './token-erc20.component';
+import { TokenErc721Component } from './token-cw721.component';
 
-describe('TokenErc20Component', () => {
-  let component: TokenErc20Component;
-  let fixture: ComponentFixture<TokenErc20Component>;
+describe('TokenErc721Component', () => {
+  let component: TokenErc721Component;
+  let fixture: ComponentFixture<TokenErc721Component>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TokenErc20Component ]
+      declarations: [ TokenErc721Component ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TokenErc20Component);
+    fixture = TestBed.createComponent(TokenErc721Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
