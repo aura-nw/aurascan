@@ -8,17 +8,12 @@
       <div class="card mt-8">
         <div class="card-body">
           <div class="d-flex justify-content-between">
-              <div class="small-body">
-                A total of {{ contractInfo.count }} transactions found
-              </div>
-              <div class="">
-
-                <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)">
-
-                </app-dropdown>
-              </div>
+            <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
+            <div class="">
+              <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
+            </div>
           </div>
-          <div class="table-responsive aura-table-contain">
+          <div class="table-responsive aura-table-contain" *ngIf="dataSource">
             <table
               mat-table
               matSort
@@ -26,82 +21,77 @@
               class="aura-table d-none d-lg-table"
               (matSortChange)="sortData($event)">
               <!-- ID Column -->
-              <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
+              <ng-container matColumnDef="txHash">
+                <th mat-header-cell *matHeaderCellDef style="min-width: 50px">Txn Hash</th>
                 <td mat-cell *matCellDef="let element" class="position-relative">
-                  <span class="token-id">{{ element.id }}</span>
+                  <!-- <span class="token-id" class="text--green cursor-pointer hash-link">{{ element?.txHash }}</span> -->
+                  <a class="text--green cursor-pointer hash-link">
+                    {{ element?.txHash | cutStringPipe: 6:6 }}
+                  </a>
                 </td>
               </ng-container>
 
               <!-- Name Column -->
-              <ng-container matColumnDef="token">
-                <th mat-header-cell *matHeaderCellDef style="width: 25%">Token</th>
+              <ng-container matColumnDef="method">
+                <th mat-header-cell *matHeaderCellDef style="width: 25%">Method</th>
                 <td mat-cell *matCellDef="let element" class="title-cell py-4">
                   <div class="d-flex">
-                    <img src="assets/images/icons/token-logo.png" width="18" height="18" />
-                    <div class="ml-3">
-                      <a [routerLink]="['/token/token', element.hashCode]" class="text-clamp">{{ element.name }}</a
-                      ><br />
-                      <div class="pr-5">{{ element.desc }}</div>
-                    </div>
+                    {{ element.method }}
                   </div>
                 </td>
               </ng-container>
 
               <!-- Price Column -->
-              <ng-container matColumnDef="price">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Price</th>
+              <ng-container matColumnDef="block">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Blocks</th>
                 <td mat-cell *matCellDef="let element">
-                  <div>
-                    <!-- <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
-                    <div class="small-text text--light-gray">{{ element.btc }} Btc</div>
-                    <div class="small-text text--light-gray">{{ element.eth }} Eth</div> -->
-                    -
-                  </div>
+                  <a class="text--green cursor-pointer hash-link">
+                    {{ element.block }}
+                  </a>
                 </td>
               </ng-container>
 
               <!-- Change Column -->
-              <ng-container matColumnDef="change">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Change (%)</th>
-                <td mat-cell *matCellDef="let element">
-                  <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
-                    <ng-container *ngIf="element.isValueUp">
-                      <img src="assets/images/icons/arrow-up.svg" />
-                    </ng-container>
-                    <ng-container *ngIf="!element.isValueUp">
-                      <img src="assets/images/icons/arrow-down.svg" />
-                    </ng-container>
-                    <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
-                  </span> -->
-                  -
-                </td>
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Time</th>
+                <td mat-cell *matCellDef="let element">{{ element.time | dfnsFormatDistanceToNowStrictPure }} ago</td>
               </ng-container>
 
               <!-- Volume Column -->
-              <ng-container matColumnDef="volume">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Volume (24H)</th>
+              <ng-container matColumnDef="from">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
                 <td mat-cell *matCellDef="let element">
-                  <!-- ${{ element.volume | number: global.formatNumber2Decimal }} -->
-                  -
+                  <a class="text--green cursor-pointer hash-link">
+                    {{ element.from | cutStringPipe: 18 }}
+                  </a>
                 </td>
               </ng-container>
-
-              <!-- Circulating Market Cap Column -->
-              <ng-container matColumnDef="circulatingMarketCap">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Circulating Market Cap</th>
+              <ng-container matColumnDef="label">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Label</th>
                 <td mat-cell *matCellDef="let element">
-                  <!-- ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }} -->
-                  -
+                  {{ element.label }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="to">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+                <td mat-cell *matCellDef="let element">
+                  <a class="text--green cursor-pointer hash-link">
+                    {{ element.to | cutStringPipe: 18 }}
+                  </a>
                 </td>
               </ng-container>
 
               <!-- On-Chain Market Cap Column -->
-              <ng-container matColumnDef="onChainMarketCap">
-                <th mat-header-cell *matHeaderCellDef>On-Chain Market Cap</th>
+              <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
                 <td mat-cell *matCellDef="let element">
-                  <!-- ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }} -->
-                  -
+                  {{ element.value }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fee">
+                <th mat-header-cell *matHeaderCellDef>Fee</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fee }}
                 </td>
               </ng-container>
 
