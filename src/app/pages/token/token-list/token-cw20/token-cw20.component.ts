@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { TableTemplate } from '../../../../core/models/common.model';
-import { TranslateService } from '@ngx-translate/core';
-import { Globals } from '../../../../global/global';
-import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/smart-contract.constant';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { PAGE_EVENT } from '../../../../core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/smart-contract.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw20',
