@@ -1,0 +1,34 @@
+.box-token-info {
+  .flex-item {
+    width: 50%;
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 1px;
+      background-color: var(--aura-dark-gray);
+    }
+  }
+  // .aura-table-contain {
+  //   min-height: 363px;
+  // }
+  table.aura-basic-table {
+    tr td:first-child {
+      width: 30%;
+    }
+  }
+
+  .txt-light {
+    color: var(--aura-light-gray);
+  }
+
+  .txt-danger {
+    color: var(--aura-danger);
+  }
+  tr {
+    height: 72px;
+  }
+}

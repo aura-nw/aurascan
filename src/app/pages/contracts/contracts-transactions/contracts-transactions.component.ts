@@ -4,11 +4,11 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/smart-contract.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { Globals } from 'src/app/global/global';
-import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { PAGE_EVENT } from '../../../core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/smart-contract.constant';
+import { TableTemplate } from '../../../core/models/common.model';
+import { Globals } from '../../../global/global';
+import { DropdownElement } from '../../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-contracts-transactions',
