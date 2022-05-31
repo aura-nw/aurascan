@@ -3,11 +3,11 @@ import { CodeTransaction } from '../../../../app/core/constants/transaction.enum
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 
 @Component({
-  selector: 'app-smart-contract-detail',
-  templateUrl: './smart-contract-detail.component.html',
-  styleUrls: ['./smart-contract-detail.component.scss'],
+  selector: 'app-token-detail',
+  templateUrl: './token-detail.component.html',
+  styleUrls: ['./token-detail.component.scss'],
 })
-export class SmartContractDetailComponent implements OnInit {
+export class TokenDetailComponent implements OnInit {
   countCurrent: string = '';
   tokenTransferList: any[];
   token: string = '';
