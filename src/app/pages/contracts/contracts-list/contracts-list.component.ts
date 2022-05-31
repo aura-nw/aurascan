@@ -65,6 +65,9 @@ export class ContractsListComponent implements OnInit {
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
       if (res?.data?.length > 0) {
+        res.data.forEach(item => {
+          item.compiler_version = item.compiler_version.slice(6,-21);
+        });
         this.dataSource = res.data;
       }
     });
