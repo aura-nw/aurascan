@@ -51,6 +51,12 @@ export const MENU: MenuItem[] = [
     },
     {
         id: 7,
+        label: 'MENUITEMS.CONTRACT.TEXT',
+        icon: 'user',
+        link: '/contract',
+    },
+    {
+        id: 8,
         label: 'MENUITEMS.ACCOUNT.TEXT',
         icon: 'user',
         link: '',

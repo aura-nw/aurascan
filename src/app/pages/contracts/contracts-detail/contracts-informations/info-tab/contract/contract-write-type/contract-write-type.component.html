@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-between align-items-center fw-bold">
+  <div class="my-3">
+    <a [routerLink]="'/'" class="button button-chart button-outline">
+      <img src="assets/icons/icons-svg/color/chart-pie-right.svg" alt="" width="16px" />
+      <span class="ml-1">Connect to Web3</span>
+    </a>
+  </div>
+  <div>
+    <span class="cursor-pointer text--green mr-5" (click)="expandMenu()">
+      <ng-container *ngIf="!isExpand">Expand all</ng-container>
+      <ng-container *ngIf="isExpand">Collapse All</ng-container>
+    </span>
+    <span class="cursor-pointer text--green">Reset</span>
+  </div>
+</div>

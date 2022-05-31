@@ -86,6 +86,10 @@
             "TEXT": "Token",
             "BADGE": "04"
         },
+        "CONTRACT": {
+            "TEXT": "Contract",
+            "BADGE": "05"
+        },
         "DASHBOARDS": {
             "TEXT": "Dashboard",
             "BADGE": "04"
