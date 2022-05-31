@@ -1,0 +1,27 @@
+.dropdown {
+    .dropdown-menu {
+        min-width: 230px;
+
+        border-radius: 8px;
+
+        li.dropdown-item {
+            &:first-child {
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                padding-top: 10px;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
+                padding-bottom: 10px;
+            }
+
+            .icon-wrapper {
+                width: 24px;
+                height: 24px;
+                margin-right: 8px;
+            }
+        }
+    }
+}
