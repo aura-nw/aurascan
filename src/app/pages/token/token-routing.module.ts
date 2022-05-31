@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SmartContractDetailComponent } from './smart-contract-detail/smart-contract-detail.component';
-import { TokenCw20Component } from './smart-contract-list/token-cw20/token-cw20.component';
-import { TokenCw721Component } from './smart-contract-list/token-cw721/token-cw721.component';
+import { TokenDetailComponent } from './token-detail/token-detail.component';
+import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
+import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 
 const routes: Routes = [
   {
@@ -19,11 +19,11 @@ const routes: Routes = [
   },
   {
     path: 'token/:tokenId',
-    component: SmartContractDetailComponent,
+    component: TokenDetailComponent,
   },
   {
     path: 'address/:tokenId',
-    component: SmartContractDetailComponent,
+    component: TokenDetailComponent,
   },
 ];
 
@@ -31,4 +31,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SmartContractRoutingModule {}
+export class TokenRoutingModule {}

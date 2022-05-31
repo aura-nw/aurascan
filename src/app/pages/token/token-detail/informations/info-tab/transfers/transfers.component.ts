@@ -7,7 +7,7 @@ import { Globals } from '../../../../../../global/global';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { PageEvent } from '@angular/material/paginator';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { SmartContractService } from '../../../../../../core/services/smart-contract.service';
+import { TokenService } from '../../../../../../core/services/token.service';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
 import { ADDRESS_PREFIX } from '../../../../../../core/constants/common.constant';
@@ -61,7 +61,7 @@ export class TransfersComponent implements OnInit, OnChanges {
   constructor(
     public global: Globals,
     public commonService: CommonService,
-    private smartContractService: SmartContractService,
+    private tokenService: TokenService,
     private layout: BreakpointObserver, // private datePipe: DatePipe
   ) {}
 
@@ -97,7 +97,7 @@ export class TransfersComponent implements OnInit, OnChanges {
   }
 
   getDataTable(): void {
-    this.smartContractService.getListTokenTransfer(this.token).subscribe((res) => {
+    this.tokenService.getListTokenTransfer(this.token).subscribe((res) => {
       this.loading = true;
       if (res && res.length > 0) {
         this.tokenDataList = [...res];
