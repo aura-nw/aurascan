@@ -8,12 +8,12 @@ import { ValidatorService } from '../../../../core/services/validator.service';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 
 @Component({
-  selector: 'app-transaction-messages',
-  templateUrl: './transaction-messages.component.html',
-  styleUrls: ['./transaction-messages.component.scss'],
+  selector: 'app-contract-messages',
+  templateUrl: './contract-messages.component.html',
+  styleUrls: ['./contract-messages.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TransactionMessagesComponent implements OnInit {
+export class ContractMessagesComponent implements OnInit {
   @Input() transactionDetail: any;
 
   typeTransaction = TYPE_TRANSACTION;

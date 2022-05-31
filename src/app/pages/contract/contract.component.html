@@ -51,12 +51,17 @@
     <div class="card mt-8">
       <div class="card-body">
         <div class="table-responsive aura-table-contain">
-          <table
+          <!-- <table
             mat-table
             matSort
             [dataSource]="dataSource"
             class="aura-table d-none d-lg-table"
-            (matSortChange)="sortData($event)">
+            (matSortChange)="sortData($event)"> -->
+            <table
+            mat-table
+            matSort
+            [dataSource]="dataSource"
+            class="aura-table d-none d-lg-table">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
@@ -164,8 +169,8 @@
               </td>
             </tr>
           </table>
-          <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
-          </app-paginator>
+          <!-- <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+          </app-paginator> -->
         </div>
       </div>
     </div>

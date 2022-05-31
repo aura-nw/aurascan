@@ -33,24 +33,30 @@ export const MENU: MenuItem[] = [
     },
     {
         id: 6,
-        label: 'MENUITEMS.SMARTCONTRACT.TEXT',
+        label: 'MENUITEMS.TOKEN.TEXT',
         icon: 'user',
-        link: '/smart-contract',
+        link: '/token',
         subItems: [
             {
                 id: 1,
                 label: 'CW-20 Top Tokens',
-                link: '/smart-contract/tokens',
+                link: '/token',
             },
             {
                 id: 2,
                 label: 'CW-721 Top Tokens',
-                link: '/smart-contract/tokens-nft',
+                link: '/token/tokens-nft',
             }
         ]
     },
     {
         id: 7,
+        label: 'MENUITEMS.CONTRACT.TEXT',
+        icon: 'user',
+        link: '/contract',
+    },
+    {
+        id: 8,
         label: 'MENUITEMS.ACCOUNT.TEXT',
         icon: 'user',
         link: '',

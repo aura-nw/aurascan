@@ -156,7 +156,7 @@
     Token Trasnfer:<br />
     {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
       tokenDetail?.price | number: global.formatNumber2Decimal
-    }}) <a class="text--green" [routerLink]="['/smart-contract/token', tokenAddress]">{{ tokenType }}</a
+    }}) <a class="text--green" [routerLink]="['/token/token', tokenAddress]">{{ tokenType }}</a
     ><br />
     <div>
       From

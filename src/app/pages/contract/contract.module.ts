@@ -10,17 +10,18 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SharedModule } from '../../../app/shared/shared.module';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
-import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
-import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
-import { TransactionRoutingModule } from './transaction-routing.module';
-import { TransactionComponent } from './transaction.component';
+import { ContractDetailComponent } from './contract-detail/contract-detail.component';
+import { ContractMessagesComponent } from './contract-detail/contract-messages/contract-messages.component';
+import { ContractRoutingModule } from './contract-routing.module';
+import { ContractComponent } from './contract.component';
 
 @NgModule({
-  declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent],
+  declarations: [ContractComponent, ContractDetailComponent, ContractMessagesComponent],
   imports: [
     CommonModule,
-    TransactionRoutingModule,
+    ContractRoutingModule,
     MaterialModule,
     NgxMaskModule,
     CommonPipeModule,
@@ -30,7 +31,8 @@ import { TransactionComponent } from './transaction.component';
     SharedModule,
     NgxJsonViewerModule,
     TableNoDataModule,
+    PaginatorModule,
   ],
   providers: [TransactionService, ValidatorService, MappingErrorService],
 })
-export class TransactionModule {}
+export class ContractModule {}
