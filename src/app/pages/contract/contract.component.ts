@@ -9,6 +9,7 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../core/constants/smart-contract.constant';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -27,6 +28,11 @@ export class ContractComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any>;
   dataTx: any[];
+  pageData: PageEvent;
+  textSearch = '';
+  filterSearchData = [];
+  mockData = [];
+  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   length: number;
   pageSize = 20;
@@ -91,5 +97,22 @@ export class ContractComponent implements OnInit {
     } else {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
     }
+  }
+
+  filterData(keyWord: string) {
+    keyWord = keyWord.toLowerCase();
+    this.filterSearchData = this.mockData.filter(
+      (data) => data.name.toLowerCase().includes(keyWord) || data.hashCode.toLowerCase().includes(keyWord),
+    );
+  }
+
+  searchToken(): void {
+    this.filterSearchData = null;
+    if (this.textSearch.length > 0) {
+      this.filterData(this.textSearch);
+    }
+  }
+  handleLink(): void {
+    this.router.navigate(['/smart-contract/token', this.filterSearchData[0]?.hashCode]);
   }
 }

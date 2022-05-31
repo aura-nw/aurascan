@@ -326,6 +326,6 @@ export class TokenCw20Component implements OnInit {
   }
 
   handleLink(): void {
-    this.router.navigate(['/smart-contract/token', this.filterSearchData[0]?.hashCode]);
+    this.router.navigate(['/token/token', this.filterSearchData[0]?.hashCode]);
   }
 }

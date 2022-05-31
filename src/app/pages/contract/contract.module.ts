@@ -10,6 +10,7 @@ import { MappingErrorService } from '../../../app/core/services/mapping-error.se
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SharedModule } from '../../../app/shared/shared.module';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { ContractDetailComponent } from './contract-detail/contract-detail.component';
 import { ContractMessagesComponent } from './contract-detail/contract-messages/contract-messages.component';
@@ -30,6 +31,7 @@ import { ContractComponent } from './contract.component';
     SharedModule,
     NgxJsonViewerModule,
     TableNoDataModule,
+    PaginatorModule,
   ],
   providers: [TransactionService, ValidatorService, MappingErrorService],
 })

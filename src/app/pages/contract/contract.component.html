@@ -1,94 +1,176 @@
-<app-pagetitle title="Contracts" [displayInfo]="true"></app-pagetitle>
-<section *ngIf="!loading">
-  <ng-container *ngIf="length > 0; else noValues">
-    <div class="card">
-      <div class="card-body">
-        <div class="table-responsive d-none d-lg-block">
-          <table mat-table [dataSource]="dataSource" class="aura-table">
-            <ng-container *ngFor="let template of templates; index as i">
-              <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
-                  <div [innerHTML]="template.headerCellDef | translate"></div>
-                </th>
+<div class="d-lg-flex justify-content-between">
+  <div>
+    <p class="title-medium mb-2 text--white fw-bold">CW-20 Tokens</p>
+    <div class="body text--light-gray">A total of {{ pageData?.length }} Token Contracts found</div>
+  </div>
+  <form class="aura-form single-input-field search-form d-none d-lg-block">
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search for Token Name or Address"
+        [(ngModel)]="textSearch"
+        [maxLength]="maxLengthSearch"
+        (keyup)="searchToken()"
+        (keyup.enter)="handleLink()"
+        name="search"
+        autocomplete="off" />
+      <button
+        type="submit"
+        class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+        (click)="searchToken()">
+        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+      </button>
+      <button
+        type="reset"
+        class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+        (click)="textSearch = ''; searchToken()">
+        <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+      </button>
+    </div>
+    <div class="box-search-data text-white" *ngIf="filterSearchData && filterSearchData.length > 0">
+      <div class="txt-title-search">Tokens (CW-20)</div>
+      <ng-container *ngFor="let item of filterSearchData">
+        <div class="d-flex p-3 cursor-pointer" [routerLink]="['/token/token', item.hashCode]">
+          <img src="assets/images/icons/token-logo.png" class="logo-token" />
+          <div class="ml-3">
+            <div class="d-flex align-items-center">
+              <span class="text-clamp">{{ item.name }}</span>
+              <div class="box-price">${{ item.price | number: global.formatNumber2Decimal }}</div>
+            </div>
+            <div class="pr-5">{{ item.hashCode }}</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>
 
-                <td mat-cell *matCellDef="let data">
-                  <div>
-                    <ng-container [ngSwitch]="template.matColumnDef">
-                      <div *ngSwitchCase="'timestamp'">
-                        {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                      </div>
-                      <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'type'" class="text--green">
-                        {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'status'">
-                        <div [ngSwitch]="data[template.matColumnDef]">
-                          <div *ngSwitchCase="'Success'" class="text--primary">
-                            {{ data[template.matColumnDef] }}
-                          </div>
-                          <div *ngSwitchCase="'Fail'" class="text--danger">
-                            {{ data[template.matColumnDef] }}
-                          </div>
-                          <div *ngSwitchCase="'Pending'" class="text--warning">
-                            {{ data[template.matColumnDef] }}
-                          </div>
-                        </div>
-                      </div>
-                      <div *ngSwitchCase="'fee'">
-                        {{ data[template.matColumnDef] }} <span class="text--primary">{{ global.stableToken }}</span>
-                      </div>
-                      <div *ngSwitchCase="'amount'">
-                        <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                          {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                          <span class="text--primary">{{ global.stableToken }}</span>
-                        </ng-container>
-                        <ng-template #displayNonNumber>
-                          <span *ngIf="data[template.matColumnDef] === 0"> - </span>
-                          <span
-                                  *ngIf="data[template.matColumnDef] !== 0"
-                                  class="text--primary cursor-pointer"
-                                  [routerLink]="['/transaction', data['tx_hash']]"
-                          >
-                          More
-                      </span>
-                        </ng-template>
-                      </div>
-                      <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                    </ng-container>
+<section>
+  <ng-container *ngIf="pageData?.length > 0; else noValues">
+    <div class="card mt-8">
+      <div class="card-body">
+        <div class="table-responsive aura-table-contain">
+          <!-- <table
+            mat-table
+            matSort
+            [dataSource]="dataSource"
+            class="aura-table d-none d-lg-table"
+            (matSortChange)="sortData($event)"> -->
+            <table
+            mat-table
+            matSort
+            [dataSource]="dataSource"
+            class="aura-table d-none d-lg-table">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
+              <td mat-cell *matCellDef="let element" class="position-relative">
+                <span class="token-id">{{ element.id }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="token">
+              <th mat-header-cell *matHeaderCellDef style="width: 25%">Token</th>
+              <td mat-cell *matCellDef="let element" class="title-cell py-4">
+                <div class="d-flex">
+                  <img src="assets/images/icons/token-logo.png" width="18" height="18" />
+                  <div class="ml-3">
+                    <a [routerLink]="['/token/token', element.hashCode]" class="text-clamp">{{
+                      element.name
+                    }}</a
+                    ><br />
+                    <div class="pr-5">{{ element.desc }}</div>
                   </div>
-                </td>
-              </ng-container>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Price</th>
+              <td mat-cell *matCellDef="let element">
+                <div>
+                  <!-- <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
+                  <div class="small-text text--light-gray">{{ element.btc }} Btc</div>
+                  <div class="small-text text--light-gray">{{ element.eth }} Eth</div> -->
+                  -
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Change Column -->
+            <ng-container matColumnDef="change">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%">Change (%)</th>
+              <td mat-cell *matCellDef="let element">
+                <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
+                  <ng-container *ngIf="element.isValueUp">
+                    <img src="assets/images/icons/arrow-up.svg" />
+                  </ng-container>
+                  <ng-container *ngIf="!element.isValueUp">
+                    <img src="assets/images/icons/arrow-down.svg" />
+                  </ng-container>
+                  <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
+                </span> -->
+                -
+              </td>
+            </ng-container>
+
+            <!-- Volume Column -->
+            <ng-container matColumnDef="volume">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Volume (24H)</th>
+              <td mat-cell *matCellDef="let element">
+                <!-- ${{ element.volume | number: global.formatNumber2Decimal }} -->
+                -
+              </td>
+            </ng-container>
+
+            <!-- Circulating Market Cap Column -->
+            <ng-container matColumnDef="circulatingMarketCap">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Circulating Market Cap</th>
+              <td mat-cell *matCellDef="let element">
+                <!-- ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }} -->
+                -
+              </td>
+            </ng-container>
+
+            <!-- On-Chain Market Cap Column -->
+            <ng-container matColumnDef="onChainMarketCap">
+              <th mat-header-cell *matHeaderCellDef>On-Chain Market Cap</th>
+              <td mat-cell *matCellDef="let element">
+                <!-- ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }} -->
+                -
+              </td>
+            </ng-container>
+
+            <!-- Holders Column -->
+            <ng-container matColumnDef="holders">
+              <th mat-header-cell *matHeaderCellDef style="width: 10%">Holders</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
+                <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
+                  <ng-container *ngIf="element.isValueUp">
+                    <img src="assets/images/icons/arrow-up.svg" />
+                  </ng-container>
+                  <ng-container *ngIf="!element.isValueUp">
+                    <img src="assets/images/icons/arrow-down.svg" />
+                  </ng-container>
+                  <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
+                </span>
+              </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumns"
-                    [class]="displayedColumns"
-                    (click)="openTxsDetail($event, row)"
-            ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
                 {{ 'NO DATA' | translate }}
               </td>
             </tr>
           </table>
-        </div>
-        <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
-          <app-card-mob-simple *ngFor="let data of dataTx"
-                               [link]="'/transaction/' + data.tx_hash"
-                               [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', status: data.code}"
-                               [content]="[
-                                       {label: 'Amount', info: data.amount > 0 ? ((data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>') : checkAmountValue(data.amount, data.tx_hash)},
-                                       {label: 'Fee', info: data.fee + '<span class=text--primary> '+ global.stableToken + '</span>'},
-                                       {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
-                                     ]"
-          ></app-card-mob-simple>
+          <!-- <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+          </app-paginator> -->
         </div>
       </div>
     </div>
@@ -97,7 +179,3 @@
     <app-table-no-data></app-table-no-data>
   </ng-template>
 </section>
-
-<div *ngIf="loading">
-  <app-loading-sprint></app-loading-sprint>
-</div>
