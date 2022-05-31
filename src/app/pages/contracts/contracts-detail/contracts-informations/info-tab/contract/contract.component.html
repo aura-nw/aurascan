@@ -1,0 +1,12 @@
+<div class="box-contract">
+  <div class="d-flex mb-3">
+    <button class="btn-contract" [class.active]="countCurrent === contractType.ReadContract" (click)="changeTab(contractType.ReadContract)">Read Contract</button>
+    <button class="btn-contract" [class.active]="countCurrent === contractType.WriteContract" (click)="changeTab(contractType.WriteContract)">Write Contract</button>
+    <button class="btn-contract" [class.active]="countCurrent === contractType.ReadProxy" (click)="changeTab(contractType.ReadProxy)">Read as Proxy</button>
+    <button class="btn-contract" [class.active]="countCurrent === contractType.WriteProxy" (click)="changeTab(contractType.WriteProxy)">Write as Proxy</button>
+  </div>
+  <!-- <div class="mt-3">
+    <app-contract-read-type *ngIf="countCurrent === contractType.ReadContract"></app-contract-read-type>
+    <app-contract-write-type *ngIf="countCurrent === contractType.WriteContract"></app-contract-write-type>
+  </div> -->
+</div>

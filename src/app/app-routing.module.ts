@@ -42,9 +42,9 @@ const routes: Routes = [
     loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
   },
   {
-    path: 'contract',
+    path: 'contracts',
     component: LayoutComponent,
-    loadChildren: () => import('./pages/contract/contract.module').then((m) => m.ContractModule),
+    loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
   },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },

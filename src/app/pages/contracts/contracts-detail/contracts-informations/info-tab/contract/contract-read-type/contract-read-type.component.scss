@@ -1,0 +1,29 @@
+mat-expansion-panel {
+  border: 1px solid var(--aura-light-gray);
+  margin-bottom: var(--spacer-5);
+  mat-expansion-panel-header {
+    background-color: var(--aura-dark-gray);
+    border-color: var(--aura-light-gray);
+    padding: 10px var(--spacer-4);
+    &::after {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 700;
+      content: '\f054';
+      color: var(--aura-white);
+    }
+    &[aria-expanded='true']::after {
+      content: '\f078';
+    }
+    &[aria-expanded='true'] {
+      border-bottom: 1px solid var(--aura-light-gray);
+    }
+  }
+  ::ng-deep .mat-expansion-panel-body {
+    background-color: #20262b;
+    padding: var(--spacer-3) var(--spacer-4);
+  }
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  height: 48px;
+}
