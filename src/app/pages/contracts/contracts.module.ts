@@ -20,6 +20,7 @@ import { ContractsInfoComponent } from './contracts-detail/contracts-info/contra
 import { Cw20TokenComponent } from './contracts-detail/contracts-informations/info-tab/cw20-token/cw20-token.component';
 import { TransactionsComponent } from './contracts-detail/contracts-informations/info-tab/transactions/transactions.component';
 import { ContractsOverviewComponent } from './contracts-detail/contracts-overview/contracts-overview.component';
+import { CommonPipeModule } from '../../core/pipes/common-pipe.module';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ContractsOverviewComponent } from './contracts-detail/contracts-overvie
     MaterialModule,
     DropdownModule,
     MatTableModule,
-    NgbNavModule
+    NgbNavModule,
+    CommonPipeModule,
   ],
   providers: [ContractService],
 })

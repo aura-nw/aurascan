@@ -1,10 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { PAGE_EVENT } from '../../../core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/smart-contract.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
@@ -38,6 +39,7 @@ export class ContractsListComponent implements OnInit {
     public global: Globals,
     private router: Router,
     private contractService: ContractService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -65,8 +67,9 @@ export class ContractsListComponent implements OnInit {
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
       if (res?.data?.length > 0) {
-        res.data.forEach(item => {
-          item.compiler_version = item.compiler_version.slice(6,-21);
+        res.data.forEach((item) => {
+          item.compiler_version = item.compiler_version.slice(6, -21);
+          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
         });
         this.dataSource = res.data;
       }
@@ -83,7 +86,7 @@ export class ContractsListComponent implements OnInit {
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
   }
-  
+
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }

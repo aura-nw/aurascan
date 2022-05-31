@@ -65,7 +65,18 @@
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                     </a>
                   </ng-container>
-                  <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                  <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
+                    {{ data[template.matColumnDef] !== 'UNVERIFIED' ? data['updated_at'] : '-' }}
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'contract_name'">
+                    {{ (data[template.matColumnDef] | cutStringPipe: 20) || '-' }}
+                  </ng-container>
+                  <ng-container
+                    *ngIf="
+                      (!template.isUrl || data[template.matColumnDef] === '') &&
+                      template.matColumnDef !== 'contract_verification' &&
+                      template.matColumnDef !== 'contract_name'
+                    ">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>
                         {{
