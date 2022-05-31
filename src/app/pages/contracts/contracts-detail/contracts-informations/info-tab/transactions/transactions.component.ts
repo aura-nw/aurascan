@@ -2,13 +2,13 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { shortenAddress } from 'src/app/core/utils/common/shorten';
-import { Globals } from 'src/app/global/global';
+import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
+import { TableTemplate } from '../../../../../../core/models/common.model';
+import { CommonService } from '../../../../../../core/services/common.service';
+import { ContractService } from '../../../../../../core/services/contract.service';
+import { shortenAddress } from '../../../../../../core/utils/common/shorten';
+import { Globals } from '../../../../../../global/global';
 
 interface CustomPageEvent {
   next: number;
@@ -56,7 +56,7 @@ export class TransactionsComponent implements OnInit {
     public global: Globals,
     private layout: BreakpointObserver,
     public commonService: CommonService,
-    private tokenService: TokenService,
+    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
@@ -66,7 +66,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   getDataTable(): void {
-    this.tokenService.getListTokenTransfer(this.token).subscribe((res) => {
+    this.contractService.getListTransaction(this.token).subscribe((res) => {
       this.loading = true;
       if (res && res.length > 0) {
         this.tokenDataList = [...res];
