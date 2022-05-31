@@ -141,3 +141,13 @@ export class DataDelegateDto {
   dialogMode: string = '';
   validatorDetail: any;
 }
+
+
+export class TableTemplate2 {
+  matColumnDef: string;
+  headerCellDef: string;
+  type: 'date' | 'numb' | 'status' | 'url' | 'prefix' | 'url-address' | 'moment-detail' | 'level' | '';
+  value?: string;
+  idColumnDef?: string;
+  headerWidth?: number;
+}
