@@ -5,6 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../../app.module';
+import { ContractService } from '../../core/services/contract.service';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { ContractsInformationsComponent } from './contracts-detail/contracts-informations/contracts-informations.component';
@@ -31,6 +32,6 @@ import { ContractsRoutingModule } from './contracts-routing.module';
     FormsModule,
     MaterialModule,
   ],
-  providers: [],
+  providers: [ContractService],
 })
 export class ContractsModule {}
