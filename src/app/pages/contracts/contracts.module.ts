@@ -2,20 +2,24 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from 'src/app/app.module';
-import { ContractsInformationsComponent } from 'src/app/pages/contracts/contracts-detail/contracts-informations/contracts-informations.component';
-import { ContractReadTypeComponent } from 'src/app/pages/contracts/contracts-detail/contracts-informations/info-tab/contract/contract-read-type/contract-read-type.component';
-import { ContractWriteTypeComponent } from 'src/app/pages/contracts/contracts-detail/contracts-informations/info-tab/contract/contract-write-type/contract-write-type.component';
-import { ContractsListComponent } from 'src/app/pages/contracts/contracts-list/contracts-list.component';
-import { ContractsRoutingModule } from 'src/app/pages/contracts/contracts-routing.module';
-import { ContractsTransactionsComponent } from 'src/app/pages/contracts/contracts-transactions/contracts-transactions.component';
-import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
-import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
-import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { MaterialModule } from '../../app.module';
+import { ContractsInformationsComponent } from '../../pages/contracts/contracts-detail/contracts-informations/contracts-informations.component';
+import { ContractReadTypeComponent } from '../../pages/contracts/contracts-detail/contracts-informations/info-tab/contract/contract-read-type/contract-read-type.component';
+import { ContractWriteTypeComponent } from '../../pages/contracts/contracts-detail/contracts-informations/info-tab/contract/contract-write-type/contract-write-type.component';
+import { ContractsListComponent } from '../../pages/contracts/contracts-list/contracts-list.component';
+import { ContractsRoutingModule } from '../..//pages/contracts/contracts-routing.module';
+import { ContractsTransactionsComponent } from '../../pages/contracts/contracts-transactions/contracts-transactions.component';
+import { DropdownModule } from '../../shared/components/dropdown/dropdown.module';
+import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
+import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { ContractService } from '../../core/services/contract.service';
-
+import { ContractsDetailComponent } from './contracts-detail/contracts-detail.component';
+import { ContractsInfoComponent } from './contracts-detail/contracts-info/contracts-info.component';
+import { Cw20TokenComponent } from './contracts-detail/contracts-informations/info-tab/cw20-token/cw20-token.component';
+import { TransactionsComponent } from './contracts-detail/contracts-informations/info-tab/transactions/transactions.component';
+import { ContractsOverviewComponent } from './contracts-detail/contracts-overview/contracts-overview.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,12 @@ import { ContractService } from '../../core/services/contract.service';
     ContractReadTypeComponent,
     ContractsListComponent,
     ContractsTransactionsComponent,
-    ContractWriteTypeComponent
+    ContractWriteTypeComponent,
+    ContractsInfoComponent,
+    ContractsDetailComponent,
+    ContractsOverviewComponent,
+    TransactionsComponent,
+    Cw20TokenComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +44,8 @@ import { ContractService } from '../../core/services/contract.service';
     FormsModule,
     MaterialModule,
     DropdownModule,
-    MatTableModule
+    MatTableModule,
+    NgbNavModule
   ],
   providers: [ContractService],
 })
