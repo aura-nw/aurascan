@@ -10,11 +10,11 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
 @Component({
-  selector: 'app-transaction',
-  templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.scss'],
+  selector: 'app-contract',
+  templateUrl: './contract.component.html',
+  styleUrls: ['./contract.component.scss'],
 })
-export class TransactionComponent implements OnInit {
+export class ContractComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },

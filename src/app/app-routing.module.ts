@@ -41,6 +41,11 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
   },
+  {
+    path: 'contract',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/contract/contract.module').then((m) => m.ContractModule),
+  },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   { path: '**', redirectTo: '' },

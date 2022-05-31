@@ -16,11 +16,11 @@ import { Globals } from '../../../global/global';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 
 @Component({
-  selector: 'app-transaction-detail',
-  templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.scss'],
+  selector: 'app-contract-detail',
+  templateUrl: './contract-detail.component.html',
+  styleUrls: ['./contract-detail.component.scss'],
 })
-export class TransactionDetailComponent implements OnInit {
+export class ContractDetailComponent implements OnInit {
   txHash = '';
   transaction = null;
   codeTransaction = CodeTransaction;

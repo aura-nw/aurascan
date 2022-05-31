@@ -75,7 +75,7 @@
 </div>
 
 <div class="card text--white" *ngIf="!isRawData && transaction?.messages">
-  <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
+  <app-contract-messages [transactionDetail]="transaction"> </app-contract-messages>
 </div>
 
 <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
