@@ -5,7 +5,7 @@ import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
-export class SmartContractService extends CommonService {
+export class TokenService extends CommonService {
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }

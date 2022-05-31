@@ -82,13 +82,13 @@
         }
     },
     "MENUITEMS": {
-        "SMARTCONTRACT": {
+        "TOKEN": {
             "TEXT": "Token",
             "BADGE": "04"
         },
         "CONTRACT": {
-            "TEXT": "Contract",
-            "BADGE": "05"
+            "TEXT": "Contracts",
+            "BADGE": "04"
         },
         "DASHBOARDS": {
             "TEXT": "Dashboard",

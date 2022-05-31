@@ -31,32 +31,32 @@ export const MENU: MenuItem[] = [
         icon: 'archive',
         link: '/proposal',
     },
+    // {
+    //     id: 6,
+    //     label: 'MENUITEMS.TOKEN.TEXT',
+    //     icon: 'user',
+    //     link: '/token',
+    //     subItems: [
+    //         {
+    //             id: 1,
+    //             label: 'CW-20 Top Tokens',
+    //             link: '/token',
+    //         },
+    //         {
+    //             id: 2,
+    //             label: 'CW-721 Top Tokens',
+    //             link: '/token/tokens-nft',
+    //         }
+    //     ]
+    // },
     {
         id: 6,
-        label: 'MENUITEMS.SMARTCONTRACT.TEXT',
+        label: 'MENUITEMS.CONTRACT.TEXT',
         icon: 'user',
-        link: '/smart-contract',
-        subItems: [
-            {
-                id: 1,
-                label: 'CW-20 Top Tokens',
-                link: '/smart-contract/tokens',
-            },
-            {
-                id: 2,
-                label: 'CW-721 Top Tokens',
-                link: '/smart-contract/tokens-nft',
-            }
-        ]
+        link: '/contracts',
     },
     {
         id: 7,
-        label: 'MENUITEMS.CONTRACT.TEXT',
-        icon: 'user',
-        link: '/contract',
-    },
-    {
-        id: 8,
         label: 'MENUITEMS.ACCOUNT.TEXT',
         icon: 'user',
         link: '',
