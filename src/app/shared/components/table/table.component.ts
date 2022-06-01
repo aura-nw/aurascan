@@ -11,6 +11,18 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { Globals } from 'src/app/global/global';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
 
+export interface TableData {
+  txHash: string;
+  method: string;
+  block: number;
+  time: Date;
+  from: string;
+  to: string;
+  label: string;
+  value: number;
+  fee: number;
+}
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -36,17 +48,7 @@ export class TableComponent implements OnInit {
   ];
   textSearch = '';
 
-  @Input() data: {
-    txHash: string;
-    method: string;
-    block: number;
-    time: Date;
-    from: string;
-    to: string;
-    label: string;
-    value: number;
-    fee: number;
-  }[];
+  @Input() data: TableData[];
   // data table
 
   @Input() templates!: Array<TableTemplate>;
@@ -65,7 +67,7 @@ export class TableComponent implements OnInit {
   @Input() contractInfo: {
     contractsAddress: string;
     count: number;
-    viewAll?: boolean
+    viewAll?: boolean;
   };
 
   constructor(public translate: TranslateService, public global: Globals, private router: Router) {}

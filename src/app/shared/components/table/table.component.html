@@ -23,13 +23,15 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'hash-url'">
                   <a
+                    *ngIf="data[template.matColumnDef]"
                     class="text--green cursor-pointer hash-link"
                     [routerLink]="[template?.isUrl, data[template.matColumnDef]]">
                     {{ data[template.matColumnDef] | cutStringPipe: 20 }}
                   </a>
+                  <div class="" *ngIf="!data[template.matColumnDef]"> - </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'status'">
-                  <div class="aura-status" [style.justify-content]="template?.justify || 'flex-start'">
+                  <div class="aura-status" [style.justify-content]="template?.justify || 'flex-start'" *ngIf="data[template.matColumnDef]">
                     <div class="status" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
                       {{ data[template.matColumnDef] }}
                     </div>

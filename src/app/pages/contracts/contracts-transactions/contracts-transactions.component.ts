@@ -2,14 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { of } from 'rxjs';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/smart-contract.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { IResponsesTemplates, TableTemplate } from 'src/app/core/models/common.model';
+import { IContractsResponse } from 'src/app/core/models/contract.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { Globals } from 'src/app/global/global';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { TableData } from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-contracts-transactions',
@@ -70,9 +75,56 @@ export class ContractsTransactionsComponent implements OnInit {
     count: 21231231,
   };
 
-  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
+  contract$ = this.activeRouter.params.pipe(
+    mergeMap((e) => {
+      if (e?.addressId) {
+        this.contractInfo.contractsAddress = e?.addressId;
+        return this.contractService.getTransactions(e.addressId);
+      }
+      this.router.navigate(['']);
+      return of(null);
+    }),
+    map((dta: IResponsesTemplates<IContractsResponse[]>) => {
+      if (dta?.data) {
+        this.contractInfo.count = dta.meta?.count || 0;
 
-  ngOnInit(): void {}
+        const ret = dta.data.map((contract) => {
+          const method = Object.keys(contract.messages[0].msg)[0];
+
+          const value: TableData = {
+            txHash: contract.tx_hash,
+            method,
+            block: contract.blockId,
+            time: new Date(contract.timestamp),
+            from: contract.messages[0].sender,
+            label: '',
+            to: '',
+            value: 0,
+            fee: +contract.fee,
+          };
+
+          return value;
+        });
+
+        return ret;
+      }
+
+      this.router.navigate(['']);
+
+      return null;
+    }),
+  );
+
+  constructor(
+    public translate: TranslateService,
+    private router: Router,
+    private contractService: ContractService,
+    private activeRouter: ActivatedRoute,
+  ) {}
+
+  ngOnInit(): void {
+    this.contract$.subscribe();
+  }
 
   filterData(keyWord: string) {
     // keyWord = keyWord.toLowerCase();
