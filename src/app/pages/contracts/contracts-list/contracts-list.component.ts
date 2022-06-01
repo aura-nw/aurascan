@@ -28,6 +28,8 @@ export class ContractsListComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent;
+  pageSize = 20;
+  pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
@@ -55,15 +57,15 @@ export class ContractsListComponent implements OnInit {
 
   getListContract() {
     let payload = {
-      limit: 20,
-      offset: 0,
+      limit: this.pageSize,
+      offset: this.pageIndex * this.pageSize,
       keyword: '',
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {
       this.pageData = {
         length: res?.meta?.count,
-        pageSize: PAGE_EVENT.PAGE_SIZE,
+        pageSize: 20,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
       if (res?.data?.length > 0) {
@@ -85,6 +87,11 @@ export class ContractsListComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  pageEvent(e: PageEvent): void {
+    this.pageIndex = e.pageIndex;
+    this.getListContract();
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
