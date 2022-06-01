@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContractType } from '../../../../../../core/constants/smart-contract.enum';
+import { TokenContractType } from '../../../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-contract',

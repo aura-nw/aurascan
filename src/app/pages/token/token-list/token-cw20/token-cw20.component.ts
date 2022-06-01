@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/smart-contract.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
