@@ -50,10 +50,10 @@
       </ul>
     </div>
     <div class="mt-5">
-      <app-transactions
+      <app-contract-transactions-tab
         *ngIf="countCurrent === ''"
         [type]="'TABLE_TOKEN'"
-        (resultLength)="getLength('')"></app-transactions>
+        (resultLength)="getLength('')"></app-contract-transactions-tab>
       <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
     </div>
   </section>
