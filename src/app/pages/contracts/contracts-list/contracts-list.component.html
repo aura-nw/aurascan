@@ -1,7 +1,7 @@
 <div class="d-lg-flex justify-content-between">
   <div>
     <p class="title-medium mb-2 text--white fw-bold">Contracts</p>
-    <div class="body text--light-gray">A total of {{ pageData?.length }} Token Contracts found</div>
+    <div class="body text--light-gray">A total of {{ pageData?.length }} Contracts found</div>
   </div>
   <form class="aura-form single-input-field search-form d-none d-lg-block">
     <div class="input-group">
@@ -65,7 +65,18 @@
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                     </a>
                   </ng-container>
-                  <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                  <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
+                    {{ data[template.matColumnDef] !== 'UNVERIFIED' ? data['updated_at'] : '-' }}
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'contract_name'">
+                    {{ (data[template.matColumnDef] | cutStringPipe: 20) || '-' }}
+                  </ng-container>
+                  <ng-container
+                    *ngIf="
+                      (!template.isUrl || data[template.matColumnDef] === '') &&
+                      template.matColumnDef !== 'contract_verification' &&
+                      template.matColumnDef !== 'contract_name'
+                    ">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>
                         {{
@@ -87,7 +98,11 @@
               </td>
             </tr>
           </table>
-          <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+          <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>

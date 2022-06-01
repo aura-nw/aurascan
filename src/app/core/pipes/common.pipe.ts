@@ -22,10 +22,15 @@ export class pipeCalDate implements PipeTransform {
 
 @Pipe({ name: 'cutStringPipe' })
 export class PipeCutString implements PipeTransform {
-  transform(value: string, start: number, end: number): string {
-    if (value) {
-      const middleText = value.substring(start, value.length - end);
-      value = value.replace(middleText, '...');
+  transform(value: string, start: number, end?: number): string {
+    if (value && value.length > start) {
+      if (end) {
+        const middleText = value.substring(start, value.length - end);
+        value = value.replace(middleText, '...');
+      } else {
+        const middleText = value.substring(0, start);
+        value = middleText + '...';
+      }
     }
     return value;
   }
