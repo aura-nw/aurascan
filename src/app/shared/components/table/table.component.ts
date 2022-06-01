@@ -65,6 +65,7 @@ export class TableComponent implements OnInit {
   @Input() contractInfo: {
     contractsAddress: string;
     count: number;
+    viewAll?: boolean
   };
 
   constructor(public translate: TranslateService, public global: Globals, private router: Router) {}

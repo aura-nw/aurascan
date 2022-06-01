@@ -1,7 +1,8 @@
 <section>
   <div class="d-flex justify-content-between">
     <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
-    <div class="">
+    <div class="d-flex gap-3 align-items-center">
+      <button class="button account-button button-outline" *ngIf="contractInfo.viewAll"> ViewAll </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
     </div>
   </div>
