@@ -28,19 +28,26 @@
         <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
       </button>
     </div>
-    <div class="box-search-data text-white" *ngIf="filterSearchData && filterSearchData.length > 0">
-      <div class="txt-title-search">Contracts</div>
-      <ng-container *ngFor="let item of filterSearchData">
-        <div class="d-flex p-3 cursor-pointer" [routerLink]="['/token/token', item.hashCode]">
-          <img src="assets/images/icons/token-logo.png" class="logo-token" />
-          <div class="ml-3">
-            <div class="d-flex align-items-center">
-              <span class="text-clamp">{{ item.contract_name }}</span>
+    <ng-container *ngIf="textSearch?.length > 0">
+      <div class="box-search-data text-white">
+        <ng-container *ngIf="filterSearchData?.length === 0">
+          <span> There are no matching contracts </span>
+        </ng-container>
+        <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+          <div class="txt-title-search">Contracts</div>
+          <ng-container *ngFor="let item of filterSearchData">
+            <div class="d-flex p-3 cursor-pointer" [routerLink]="['/token/token', item.hashCode]">
+              <img src="assets/images/icons/token-logo.png" class="logo-token" />
+              <div class="ml-3">
+                <div class="d-flex align-items-center">
+                  <span class="text-clamp">{{ item.contract_name }}</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
   </form>
 </div>
 

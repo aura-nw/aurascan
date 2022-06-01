@@ -101,7 +101,7 @@ export class ContractsListComponent implements OnInit {
   }
 
   handleLink(): void {
-    this.router.navigate(['/token/token', this.filterSearchData[0]?.hashCode]);
+    this.router.navigate(['/token/token', this.filterSearchData[0]?.contract_name]);
   }
 
   shortenAddress(address: string): string {
