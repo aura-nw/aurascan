@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/smart-contract.constant';
-import { TokenTab } from '../../../../core/constants/smart-contract.enum';
+import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
+import { TokenTab } from '../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-content',
