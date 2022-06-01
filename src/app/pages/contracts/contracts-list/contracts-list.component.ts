@@ -31,6 +31,7 @@ export class ContractsListComponent implements OnInit {
   pageSize = 20;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSearch: any;
   sortedData: any;
   sort: MatSort;
   filterSearchData = [];
@@ -50,9 +51,9 @@ export class ContractsListComponent implements OnInit {
 
   filterData(keyWord: string) {
     keyWord = keyWord.toLowerCase();
-    // this.filterSearchData = this.mockData.filter(
-    //   (data) => data.name.toLowerCase().includes(keyWord) || data.hashCode.toLowerCase().includes(keyWord),
-    // );
+    this.filterSearchData = this.dataSearch.filter(
+      (data) => data.contract_name.toLowerCase().includes(keyWord),
+    );
   }
 
   getListContract() {
@@ -74,6 +75,7 @@ export class ContractsListComponent implements OnInit {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
         });
         this.dataSource = res.data;
+        this.dataSearch = res.data;
       }
     });
   }

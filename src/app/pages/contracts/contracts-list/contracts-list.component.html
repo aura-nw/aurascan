@@ -29,16 +29,14 @@
       </button>
     </div>
     <div class="box-search-data text-white" *ngIf="filterSearchData && filterSearchData.length > 0">
-      <div class="txt-title-search">Tokens (CW-20)</div>
+      <div class="txt-title-search">Contracts</div>
       <ng-container *ngFor="let item of filterSearchData">
         <div class="d-flex p-3 cursor-pointer" [routerLink]="['/token/token', item.hashCode]">
           <img src="assets/images/icons/token-logo.png" class="logo-token" />
           <div class="ml-3">
             <div class="d-flex align-items-center">
-              <span class="text-clamp">{{ item.name }}</span>
-              <div class="box-price">${{ item.price | number: global.formatNumber2Decimal }}</div>
+              <span class="text-clamp">{{ item.contract_name }}</span>
             </div>
-            <div class="pr-5">{{ item.hashCode }}</div>
           </div>
         </div>
       </ng-container>

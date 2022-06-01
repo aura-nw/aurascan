@@ -1,0 +1,37 @@
+.search-form {
+    min-width: 350px;
+  }
+  .token-id {
+    position: absolute;
+    top: 0;
+    transform: translateY(100%);
+  }
+  .box-search-data{
+    position: absolute;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1;
+    background-color: var(--aura-bg-form);
+    width: 350px;
+    margin-top: 5px;
+    border-radius: 10px;
+    .logo-token{
+      margin-top: 5px;
+      max-width: 18px;
+      max-height: 18px;
+    }
+    .txt-title-search {
+      background-color: var(--aura-dark-gray);
+      border-radius: 48px;
+      padding: 4px 12px;
+      font-weight: 600;
+    }
+    .box-price {
+      background-color: rgba(94, 230, 208, 0.2);
+      border-radius: 4px;
+      color: var(--aura-green);
+      padding: 2px 6px;
+      margin-left: 8px;
+    }
+  }
