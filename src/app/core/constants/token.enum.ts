@@ -12,3 +12,9 @@ export enum TokenContractType {
   ReadProxy = 'readProxy',
   WriteProxy = 'writeProxy',
 }
+
+export enum ContractType {
+  Code = 'code',
+  ReadContract = 'read',
+  WriteContract = 'write',
+}

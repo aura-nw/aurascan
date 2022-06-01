@@ -7,11 +7,13 @@ import { TokenContractType } from '../../../../../../core/constants/token.enum';
   styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit {
-  contractType = TokenContractType;
-  countCurrent = this.contractType.ReadContract;
+  contractType = ContractType;
+  countCurrent = this.contractType.Code;
+  isVerifyContract = false;
   constructor() { }
 
   ngOnInit(): void {
+    this.isVerifyContract = true;
   }
 
   changeTab(tabId): void {
