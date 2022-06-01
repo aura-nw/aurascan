@@ -56,8 +56,7 @@
         (resultLength)="getLength('')"></app-contract-transactions-tab> -->
       <app-table *ngIf="countCurrent === ''" [data]="mockData" [templates]="templates" [contractInfo]="contractInfo"></app-table>
       <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
-
-      
+      <app-contract *ngIf="countCurrent === contractTab.Contract"></app-contract>
     </div>
   </section>
   

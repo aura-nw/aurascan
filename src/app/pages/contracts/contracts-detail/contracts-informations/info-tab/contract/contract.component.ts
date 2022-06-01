@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenContractType } from '../../../../../../core/constants/smart-contract.enum';
+import { ContractType } from '../../../../../../core/constants/smart-contract.enum';
 
 @Component({
   selector: 'app-contract',
@@ -7,11 +7,13 @@ import { TokenContractType } from '../../../../../../core/constants/smart-contra
   styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit {
-  contractType = TokenContractType;
-  countCurrent = this.contractType.ReadContract;
+  contractType = ContractType;
+  countCurrent = this.contractType.Code;
+  isVerifyContract = false;
   constructor() { }
 
   ngOnInit(): void {
+    this.isVerifyContract = true;
   }
 
   changeTab(tabId): void {

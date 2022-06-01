@@ -180,6 +180,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (res?.data?.length > 0) {
         this.rawData = res.data;
         res.data.forEach((val) => {
+          val.vote_count = val.vote_count || 0;
           if (val.target_count > 0 && val.vote_count / val.target_count <= 0.5) {
             val.isPartiDown = true;
           }
