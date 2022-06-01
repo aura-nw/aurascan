@@ -21,7 +21,9 @@
                   </a>
                 </ng-container>
                 <ng-container *ngSwitchCase="'hash-url'">
-                  <a class="text--green cursor-pointer hash-link">
+                  <a
+                    class="text--green cursor-pointer hash-link"
+                    [routerLink]="[template?.isUrl, data[template.matColumnDef]]">
                     {{ data[template.matColumnDef] | cutStringPipe: 20 }}
                   </a>
                 </ng-container>
@@ -36,7 +38,7 @@
                   {{ data[template.matColumnDef] | mask: 'separator.6':',' }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'time-distance'">
-                  {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }} ago
+                  {{ data[template.matColumnDef] | dfnsFormatDistanceToNowPure: { includeSeconds: true } }} ago
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>

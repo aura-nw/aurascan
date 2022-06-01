@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
+import { RouterModule } from '@angular/router';
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
@@ -23,7 +24,8 @@ import { TableComponent } from './table.component';
     CommonPipeModule,
     DateFnsModule,
     NgxMaskModule,
-    DropdownModule
+    DropdownModule,
+    RouterModule
   ],
   exports: [TableComponent],
 })

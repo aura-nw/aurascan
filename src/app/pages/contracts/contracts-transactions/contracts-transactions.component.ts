@@ -32,7 +32,7 @@ export class ContractsTransactionsComponent implements OnInit {
     {
       txHash: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
       method: 'Transfer',
-      block: 2341234,
+      block: 2722076,
       time: moment().subtract(100, 's').toDate(),
       from: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
       to: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
@@ -43,8 +43,8 @@ export class ContractsTransactionsComponent implements OnInit {
     {
       txHash: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
       method: 'Transfer',
-      block: 2341234,
-      time: moment().subtract(100, 's').toDate(),
+      block: 2722076,
+      time: moment().subtract(100, 'm').toDate(),
       from: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
       to: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
       label: 'OUT',
@@ -56,7 +56,7 @@ export class ContractsTransactionsComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url' },
     { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
-    { matColumnDef: 'block', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8 },
+    { matColumnDef: 'block', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/block' },
     { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10 },
     { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15 },
     { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 8, justify: 'center' },
