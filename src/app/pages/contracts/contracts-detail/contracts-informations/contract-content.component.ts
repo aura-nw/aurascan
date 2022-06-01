@@ -1,23 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/smart-contract.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { Globals } from 'src/app/global/global';
-import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
-
+import { CONTRACT_TAB, MAX_LENGTH_SEARCH_CONTRACT } from '../../../../core/constants/contract.constant';
+import { ContractTab } from '../../../../core/constants/contract.enum';
 @Component({
-  selector: 'app-contracts-transactions',
-  templateUrl: './contracts-transactions.component.html',
-  styleUrls: ['./contracts-transactions.component.scss'],
+  selector: 'app-contract-content',
+  templateUrl: './contract-content.component.html',
+  styleUrls: ['./contract-content.component.scss'],
 })
-export class ContractsTransactionsComponent implements OnInit {
-  // data table
+export class ContractContentComponent implements OnInit {
+  TABS = CONTRACT_TAB.filter((vote) =>
+    [ContractTab.Transactions, ContractTab.Cw20Token, ContractTab.Contract, ContractTab.Events, ContractTab.Analytics].includes(vote.key),
+  ).map((vote) => ({
+    ...vote,
+    value: vote.value,
+    key: vote.key === ContractTab.Transactions ? '' : vote.key,
+  }));
+  countCurrent: string = '';
+  textSearch: string = '';
+  searchTemp: string = '';
+  isSearchTx = false;
+  isSearchAddres = false;
+  resultSearch = 0;
+  tabsBackup = this.TABS;
+  contractTab = ContractTab;
+  maxLengthSearch = MAX_LENGTH_SEARCH_CONTRACT;
+
   mockData: {
     txHash: string;
     method: string;
@@ -68,16 +76,17 @@ export class ContractsTransactionsComponent implements OnInit {
   contractInfo = {
     contractsAddress: 'aura1gp7qcchk3y8emexal0r0s2txc94fkhnywslp2wnc3qcd8ng0wtys9aq24r',
     count: 21231231,
+    viewAll: true
   };
-
-  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
-  filterData(keyWord: string) {
-    // keyWord = keyWord.toLowerCase();
-    // this.filterSearchData = this.mockData.filter(
-    //   (data) => data.method.toLowerCase().includes(keyWord) || data.fee.toLowerCase().includes(keyWord),
-    // );
+  changeTab(tabId): void {
+    this.countCurrent = tabId;
+  }
+
+  getLength(result: string) {
+    this.resultSearch = Number(result) || 0;
   }
 }

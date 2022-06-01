@@ -1,0 +1,60 @@
+<section>
+  <div class="d-flex justify-content-between">
+    <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
+    <div class="d-flex gap-3 align-items-center">
+      <button class="button account-button button-outline" *ngIf="contractInfo.viewAll"> ViewAll </button>
+      <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
+    </div>
+  </div>
+  <ng-container *ngIf="pageData?.length > 0 && dataSource; else noValues">
+    <div class="table-responsive aura-table-contain">
+      <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+        <ng-container *ngFor="let template of templates; index as i">
+          <ng-container [matColumnDef]="template.matColumnDef">
+            <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">
+              <div [innerHTML]="template.headerCellDef"></div>
+            </th>
+            <td mat-cell *matCellDef="let data">
+              <ng-container [ngSwitch]="template.type">
+                <ng-container *ngSwitchCase="'hash-url-se'">
+                  <a class="text--green cursor-pointer hash-link">
+                    {{ data[template.matColumnDef] | cutStringPipe: 6:6 }}
+                  </a>
+                </ng-container>
+                <ng-container *ngSwitchCase="'hash-url'">
+                  <a
+                    class="text--green cursor-pointer hash-link"
+                    [routerLink]="[template?.isUrl, data[template.matColumnDef]]">
+                    {{ data[template.matColumnDef] | cutStringPipe: 20 }}
+                  </a>
+                </ng-container>
+                <ng-container *ngSwitchCase="'status'">
+                  <div class="aura-status" [style.justify-content]="template?.justify || 'flex-start'">
+                    <div class="status" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'numb'">
+                  {{ data[template.matColumnDef] | mask: 'separator.6':',' }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'time-distance'">
+                  {{ data[template.matColumnDef] | dfnsFormatDistanceToNowPure: { includeSeconds: true } }} ago
+                </ng-container>
+                <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+              </ng-container>
+              <span class="d-inline" *ngIf="template?.suffix"> {{ template.suffix }} </span>
+            </td>
+          </ng-container>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+      </app-paginator>
+    </div>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</section>
