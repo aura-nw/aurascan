@@ -13,3 +13,34 @@
     <span class="cursor-pointer text--green">Reset</span>
   </div>
 </div>
+
+<div class="box-content text--white mt-3">
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header class="content-contract">
+      <mat-panel-title class="item-content">1. upgrade to</mat-panel-title>
+      <mat-panel-description> </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="d-flex row p-3">
+      <p>newImplementation (address)</p>
+      <input class="form-check-input col-12 mb-4" type="text" placeholder="newImplementation (address)" />
+      <a [routerLink]="'/'" class="button button-chart button-outline">
+        <span class="ml-1">Write</span>
+      </a>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header class="content-contract">
+      <mat-panel-title class="item-content"> 2. upgrade to and call </mat-panel-title>
+      <mat-panel-description> </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="d-flex row p-3">
+      <p>newImplementation (address)</p>
+      <input class="form-check-input col-12 mb-4" type="text" placeholder="newImplementation (address)" />
+      <p>newImplementation (address)</p>
+      <input class="form-check-input col-12 mb-4" type="text" placeholder="newImplementation (address)" />
+      <a [routerLink]="'/'" class="button button-chart button-outline">
+        <span class="ml-1">Write</span>
+      </a>
+    </div>
+  </mat-expansion-panel>
+</div>

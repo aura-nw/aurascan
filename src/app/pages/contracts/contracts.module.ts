@@ -20,6 +20,8 @@ import { ContractsInfoComponent } from './contracts-detail/contracts-info/contra
 import { Cw20TokenComponent } from './contracts-detail/contracts-informations/info-tab/cw20-token/cw20-token.component';
 import { TransactionsComponent } from './contracts-detail/contracts-informations/info-tab/transactions/transactions.component';
 import { ContractsOverviewComponent } from './contracts-detail/contracts-overview/contracts-overview.component';
+import { ContractComponent } from './contracts-detail/contracts-informations/info-tab/contract/contract.component';
+import { ContractCodeComponent } from './contracts-detail/contracts-informations/info-tab/contract/contract-code/contract-code.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ContractsOverviewComponent } from './contracts-detail/contracts-overvie
     ContractsDetailComponent,
     ContractsOverviewComponent,
     TransactionsComponent,
-    Cw20TokenComponent
+    Cw20TokenComponent,
+    ContractComponent,
+    ContractCodeComponent
   ],
   imports: [
     CommonModule,

@@ -55,6 +55,7 @@
         [type]="'TABLE_TOKEN'"
         (resultLength)="getLength('')"></app-transactions>
       <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
+      <app-contract *ngIf="countCurrent === contractTab.Contract"></app-contract>
     </div>
   </section>
   
