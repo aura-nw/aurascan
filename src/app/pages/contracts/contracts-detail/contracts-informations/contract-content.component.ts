@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CONTRACT_TAB, MAX_LENGTH_SEARCH_CONTRACT } from '../../../../core/constants/contract.constant';
 import { ContractTab } from '../../../../core/constants/contract.enum';
 @Component({
-  selector: 'app-contracts-informations',
-  templateUrl: './contracts-informations.component.html',
-  styleUrls: ['./contracts-informations.component.scss'],
+  selector: 'app-contract-content',
+  templateUrl: './contract-content.component.html',
+  styleUrls: ['./contract-content.component.scss'],
 })
-export class ContractsInformationsComponent implements OnInit {
+export class ContractContentComponent implements OnInit {
   TABS = CONTRACT_TAB.filter((vote) =>
     [ContractTab.Transactions, ContractTab.Cw20Token, ContractTab.Contract, ContractTab.Events, ContractTab.Analytics].includes(vote.key),
   ).map((vote) => ({

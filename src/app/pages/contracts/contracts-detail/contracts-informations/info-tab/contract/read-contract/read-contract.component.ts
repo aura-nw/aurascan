@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-contract-write-type',
-  templateUrl: './contract-write-type.component.html',
-  styleUrls: ['./contract-write-type.component.scss']
+  selector: 'app-read-contract',
+  templateUrl: './read-contract.component.html',
+  styleUrls: ['./read-contract.component.scss'],
 })
-export class ContractWriteTypeComponent implements OnInit {
+export class ReadContractComponent implements OnInit {
   isExpand = false;
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   expandMenu(): void {
     for(let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {

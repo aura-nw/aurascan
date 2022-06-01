@@ -16,11 +16,11 @@ interface CustomPageEvent {
 }
 
 @Component({
-  selector: 'app-transactions',
-  templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.scss'],
+  selector: 'app-contract-transactions-tab',
+  templateUrl: './contract-transactions-tab.component.html',
+  styleUrls: ['./contract-transactions-tab.component.scss'],
 })
-export class TransactionsComponent implements OnInit {
+export class ContractTransactionsTabComponent implements OnInit {
   @Input() type: 'TABLE_TOKEN' | 'TABLE_ADDRESS';
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
 

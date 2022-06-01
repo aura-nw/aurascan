@@ -32,6 +32,10 @@ export class TableTemplate {
   isShort?: boolean;
   cssClass?: string;
   paramField?: string;
+  type?: string;
+  suffix?: string;
+  headerWidth?: number;
+  justify?: 'center' | 'flex-start' | 'flex-end'
 }
 
 export class ATBalanceDto {
