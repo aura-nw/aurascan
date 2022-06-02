@@ -41,7 +41,7 @@ export class ContractContentComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', isUrl: '/transaction' },
     { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
-    { matColumnDef: 'block', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/blocks/id' },
+    { matColumnDef: 'blockHeight', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/blocks/id', paramField: 'blockId' },
     { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10, suffix: 'ago' },
     { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
     { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 8, justify: 'center' },
@@ -89,7 +89,8 @@ export class ContractContentComponent implements OnInit {
             const tableDta: TableData = {
               txHash: contract.tx_hash,
               method,
-              block: contract.blockId,
+              blockHeight: contract.height,
+              blockId: contract.blockId,
               time: new Date(contract.timestamp),
               from: contract.messages[0].sender,
               label,
