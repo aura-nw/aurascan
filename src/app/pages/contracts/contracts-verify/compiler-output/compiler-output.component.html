@@ -29,7 +29,7 @@
 <!-- Code -->
 <div class="mt-6 border-box">
     <div>
-        <span class="fw-semibold mr-1">Compiler Version:</span>
+        <span class="fw-semibold mr-1" (click)="switchErrStatus()">Compiler Version:</span>
         <span>v0.7.6+commit.7338295f</span>
     </div>
     <div class="mt-4" *ngIf="!logError">

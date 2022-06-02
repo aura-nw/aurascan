@@ -13,4 +13,7 @@ export class CompilerOutputComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  switchErrStatus() {
+    this.logError = !this.logError
+  }
 }
