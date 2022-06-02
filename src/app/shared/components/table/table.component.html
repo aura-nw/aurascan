@@ -2,7 +2,12 @@
   <div class="d-flex justify-content-between">
     <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
     <div class="d-flex gap-3 align-items-center">
-      <button class="button account-button button-outline" *ngIf="contractInfo.viewAll"> ViewAll </button>
+      <button
+        class="button account-button button-outline"
+        *ngIf="contractInfo.viewAll"
+        [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
+        ViewAll
+      </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
     </div>
   </div>
@@ -28,10 +33,13 @@
                     [routerLink]="[template?.isUrl, data[template.matColumnDef]]">
                     {{ data[template.matColumnDef] | cutStringPipe: 20 }}
                   </a>
-                  <div class="" *ngIf="!data[template.matColumnDef]"> - </div>
+                  <div class="" *ngIf="!data[template.matColumnDef]">-</div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'status'">
-                  <div class="aura-status" [style.justify-content]="template?.justify || 'flex-start'" *ngIf="data[template.matColumnDef]">
+                  <div
+                    class="aura-status"
+                    [style.justify-content]="template?.justify || 'flex-start'"
+                    *ngIf="data[template.matColumnDef]">
                     <div class="status" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
                       {{ data[template.matColumnDef] }}
                     </div>
@@ -41,7 +49,7 @@
                   {{ data[template.matColumnDef] | mask: 'separator.6':',' }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'time-distance'">
-                  {{ data[template.matColumnDef] | dfnsFormatDistanceToNowPure: { includeSeconds: true } }} ago
+                  {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }}
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>

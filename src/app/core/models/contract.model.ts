@@ -19,3 +19,10 @@ export interface IContractsResponse {
     contract: string;
   }[];
 }
+
+
+export interface ITableContract {
+  contractsAddress: string;
+  count: number;
+  viewAll?: boolean;
+}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contracts-detail',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contracts-detail.component.scss'],
 })
 export class ContractsDetailComponent implements OnInit {
-  constructor() {}
+  constructor(private activeRouter: ActivatedRoute) {}
 
   ngOnInit(): void {
   }
