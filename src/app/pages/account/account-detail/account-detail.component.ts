@@ -16,7 +16,12 @@ import {
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  StatusTransaction,
+  TRANSACTION_TYPE_ENUM,
+  TypeTransaction,
+} from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
@@ -182,7 +187,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private numberPipe: DecimalPipe,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -419,10 +424,15 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   openTxsDetail(event: any, data: any) {
     const linkHash = event?.target.classList.contains('hash-link');
     const linkBlock = event?.target.classList.contains('block-link');
+    let url = '';
     if (linkHash) {
-      this.router.navigate(['transaction', data.tx_hash]);
+      //this.router.navigate(['transaction', data.tx_hash]);
+      url = this.router.serializeUrl(this.router.createUrlTree(['transaction/', data.tx_hash]));
+      window.open(url);
     } else if (linkBlock) {
-      this.router.navigate(['blocks/id', data.blockId]);
+      //this.router.navigate(['blocks/id', data.blockId]);
+      url = this.router.serializeUrl(this.router.createUrlTree(['blocks/id', data.blockId]));
+      window.open(url);
     }
   }
 
@@ -449,9 +459,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   checkAmountValue(message: any[], txHash: string, type: string) {
     let eTransType = TRANSACTION_TYPE_ENUM;
-    if(message?.length > 1) {
+    if (message?.length > 1) {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    } else if(message?.length === 0 || (message.length === 1 && !message[0]?.amount)){
+    } else if (message?.length === 0 || (message.length === 1 && !message[0]?.amount)) {
       return '-';
     } else {
       let amount = message[0]?.amount[0]?.amount;
@@ -459,7 +469,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
         amount = message[0]?.amount?.amount;
       }
-      return this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
+      return (
+        this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
+        '<span class=text--primary> AURA </span>'
+      );
     }
   }
 }
