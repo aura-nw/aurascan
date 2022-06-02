@@ -4,11 +4,13 @@
       <table class="aura-basic-table w-100">
         <tr>
           <td class="body fw-bold">Contract Overview</td>
-          <td class="d-flex justify-content-end">
-            <a href="javascript:void(0)" class="button button-chart button-outline">
-              <span class="mr-2">Aura: Aura Token</span>
-              <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
-            </a>
+          <td class="justify-content-end">
+            <div class="d-flex justify-content-end">
+              <a href="javascript:void(0)" class="button button-chart button-outline">
+                <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+                <span class="ml-2">Aura: Aura Token</span>
+              </a>
+            </div>
           </td>
         </tr>
 
@@ -36,15 +38,13 @@
           <td>Token:</td>
           <td>
             <div class="aura-form list-token d-flex align-items-center justify-content-between">
-              <mat-select #assetTypeSelect
+              <mat-select
+                #assetTypeSelect
                 class="list-token form-control select-input-field"
                 panelClass="aura-optional-panel"
                 [disableOptionCentering]="true"
-                [(value)]="selectedToken"
-              >
-                <mat-option [value]="'$10,430,364.81'">
-                  > $10,430,364.81
-                </mat-option>
+                [(value)]="selectedToken">
+                <mat-option [value]="'$10,430,364.81'"> > $10,430,364.81 </mat-option>
               </mat-select>
               <a href="javascript:void(0)" class="button button-chart button-outline">
                 <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
