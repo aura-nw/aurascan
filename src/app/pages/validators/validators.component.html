@@ -96,7 +96,7 @@
                         <div *ngSwitchDefault>
                           <span
                             class="text--green cursor-pointer"
-                            [routerLink]="['/validators', data['validator_address']]">
+                            [routerLink]="['/validators', data['validator_address']]" target="_blank">
                             {{ data[template.matColumnDef] }}
                           </span>
                         </div>
@@ -122,9 +122,9 @@
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
-                    <div class="title body-mob text--green" [routerLink]="['/validators', validator.validator_address]">
+                    <a class="title body-mob text--green" [routerLink]="['/validators', validator.validator_address]" target="_blank">
                       <span class="fw-semibold"> {{ validator.validator_name }} </span>
-                    </div>
+                    </a>
                   </div>
                   <div class="table-header__action">
                     <button
@@ -162,7 +162,7 @@
         <ng-container *ngFor="let validator of lstUndelegate">
           <div class="row col-12 mb-3 m-0 undelegate-item">
             <div class="col-3 body title-name">
-              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
+              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green" target="_blank">
                 {{ validator.validator_name }}</a>
             </div>
             <div class="col-9 text--white body small-body-mob">
@@ -179,7 +179,7 @@
           <ng-container *ngFor="let validator of lstUndelegate">
             <div class="table-mobile__item undelegate-item">
               <div class="body fw-semibold">
-                <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
+                <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green" target="_blank">
                   {{ validator.validator_name }}</a>
               </div>
               <div class="d-flex align-items-center justify-content-between text--white small-body-mob">
@@ -295,15 +295,15 @@
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
                         </div>
-                        <div
+                        <a
                           *ngSwitchCase="'title'"
                           class="text--green cursor-pointer text-clamp box-title-validator"
-                          [routerLink]="['/validators', data.operator_address]">
+                          [routerLink]="['/validators', data.operator_address]" target="_blank">
                           <span [class.text-title]="data?.jailed">{{ data[template.matColumnDef] }}</span>
                           <div *ngIf="data?.jailed" class="label-jailed">
                             <span class="d-flex">jailed</span>
                           </div>
-                        </div>
+                        </a>
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">
                           <div class="cumulative-share_container">
                             <div
@@ -349,12 +349,12 @@
                       <div class="text--white mr-2">
                         <span [class.text-blur]="validator?.jailed">{{ validator.rank }}</span>
                       </div>
-                      <div class="box-title-validator" [routerLink]="['/validators', validator.operator_address]">
+                      <a class="box-title-validator" [routerLink]="['/validators', validator.operator_address]" target="_blank">
                         <span [class.text-title]="validator?.jailed"> {{ validator.title }} </span>
                         <div *ngIf="validator?.jailed" class="label-jailed">
                           <span>jailed</span>
                         </div>
-                      </div>
+                      </a>
                     </div>
                     <div class="sub-title small-body-mob fw-semibold">
                       <span class="mr-2 text--white">{{ validator.power | number: globals.formatNumberOnlyDecimal }}</span>

@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
-    private numberPipe: DecimalPipe
+    private numberPipe: DecimalPipe,
   ) {}
 
   ngOnInit(): void {
@@ -144,42 +144,42 @@ export class DashboardComponent implements OnInit {
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
-        // const data0 = res[0].data.map((i) => i.count);
-        const data1 = res.data.map((i) => i.count);
-        let categories = res.data.map((i) => i.timestamp);
-        // let missing1 = data0.filter((item) => this.chartOptions.series[0].data.indexOf(item) < 0);
-        // let missing2 = data1.filter((item) => this.chartOptions.series[1].data.indexOf(item) < 0);
-        // this.chartOptions.xaxis = {
-        //   type: "datetime",
-        //   categories: []
-        // }
-        // if (missing1?.length > 0 || missing2?.length > 0) {
-        this.chartOptions.series = [
-          // {
-          //   name: 'blocks',
-          //   type: 'area',
-          //   data: data0,
-          // },
-          {
-            name: 'transactions',
-            type: 'line',
-            data: data1,
-            color: '#5EE6D0',
-          },
-        ];
+      // const data0 = res[0].data.map((i) => i.count);
+      const data1 = res.data.map((i) => i.count);
+      let categories = res.data.map((i) => i.timestamp);
+      // let missing1 = data0.filter((item) => this.chartOptions.series[0].data.indexOf(item) < 0);
+      // let missing2 = data1.filter((item) => this.chartOptions.series[1].data.indexOf(item) < 0);
+      // this.chartOptions.xaxis = {
+      //   type: "datetime",
+      //   categories: []
+      // }
+      // if (missing1?.length > 0 || missing2?.length > 0) {
+      this.chartOptions.series = [
+        // {
+        //   name: 'blocks',
+        //   type: 'area',
+        //   data: data0,
+        // },
+        {
+          name: 'transactions',
+          type: 'line',
+          data: data1,
+          color: '#5EE6D0',
+        },
+      ];
 
-        this.chartOptions.xAxis = {
-          type: 'datetime',
-          categories: categories,
-          labels: {
-            datetimeUTC: false,
-          },
-          axisBorder: {
-            show: true,
-            color: '#FFA741',
-          },
-        };
-        // }
+      this.chartOptions.xAxis = {
+        type: 'datetime',
+        categories: categories,
+        labels: {
+          datetimeUTC: false,
+        },
+        axisBorder: {
+          show: true,
+          color: '#FFA741',
+        },
+      };
+      // }
     });
   }
 
@@ -308,18 +308,23 @@ export class DashboardComponent implements OnInit {
   openTxsDetail(event: any, data: any) {
     const linkHash = event?.target.classList.contains('hash-link');
     const linkBlock = event?.target.classList.contains('block-link');
+    let url = '';
     if (linkHash) {
-      this.router.navigate(['transaction', data.tx_hash]);
+      //this.router.navigate(['transaction', data.tx_hash]);
+      url = this.router.serializeUrl(this.router.createUrlTree(['transaction/', data.tx_hash]));
+      window.open(url);
     } else if (linkBlock) {
-      this.router.navigate(['blocks/id', data.blockId]);
+      //this.router.navigate(['blocks/id', data.blockId]);
+      url = this.router.serializeUrl(this.router.createUrlTree(['blocks/id', data.blockId]));
+      window.open(url);
     }
   }
 
   checkAmountValue(message: any[], txHash: string, type: string) {
     let eTransType = TRANSACTION_TYPE_ENUM;
-    if(message?.length > 1) {
+    if (message?.length > 1) {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    } else if(message?.length === 0 || (message?.length === 1 && !message[0]?.amount)){
+    } else if (message?.length === 0 || (message?.length === 1 && !message[0]?.amount)) {
       return '-';
     } else {
       let amount = message[0]?.amount[0]?.amount;
@@ -327,7 +332,10 @@ export class DashboardComponent implements OnInit {
       if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
         amount = message[0]?.amount?.amount;
       }
-      return this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) + '<span class=text--primary> AURA </span>';
+      return (
+        this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
+        '<span class=text--primary> AURA </span>'
+      );
     }
   }
 }
