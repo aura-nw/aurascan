@@ -19,8 +19,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]"
-          target="_blank">
+          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
@@ -28,7 +27,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
       </div>
@@ -59,7 +58,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
@@ -81,7 +80,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
@@ -106,7 +105,7 @@
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
           <div class="col-12 col-lg-6">
-            <a class="text--green" [routerLink]="['/account', item.delegator_address]" target="_blank">
+            <a class="text--green" [routerLink]="['/account', item.delegator_address]">
               {{ item.delegator_address }}
             </a>
           </div>
@@ -114,7 +113,7 @@
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
           <div class="col-12 col-lg-6">
-            <a class="text--green" [routerLink]="['/validators', item.validator_address]" target="_blank">
+            <a class="text--green" [routerLink]="['/validators', item.validator_address]">
               {{ item.validator_address }}<br />
               <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
             </a>
@@ -138,8 +137,7 @@
         <div class="col-12 col-lg-6">
           <a
             class="text--green"
-            [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
-            target="_blank">
+            [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
             {{ transactionDetail?.messages[0]?.delegator_address }}
           </a>
         </div>
@@ -149,8 +147,7 @@
         <div class="col-12 col-lg-6">
           <a
             class="text--green"
-            [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]"
-            target="_blank">
+            [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
             <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
           </a>
@@ -187,8 +184,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]"
-          target="_blank">
+          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
@@ -196,7 +192,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Voter</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
           {{ transactionDetail?.messages[0]?.voter }}
         </a>
       </div>
@@ -222,8 +218,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]"
-          target="_blank">
+          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
@@ -231,7 +226,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
       </div>
@@ -266,7 +261,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposer</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
           {{ transactionDetail?.messages[0]?.proposer }}
         </a>
       </div>
@@ -304,8 +299,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]"
-          target="_blank">
+          [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
       </div>
@@ -315,8 +309,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]"
-          target="_blank">
+          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
           {{ transactionDetail?.messages[0]?.validator_src_address }}
           <ng-container *ngIf="validatorName"><br />({{ validatorName }})</ng-container>
         </a>
@@ -327,8 +320,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]"
-          target="_blank">
+          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
           {{ transactionDetail?.messages[0]?.validator_dst_address }}
           <ng-container *ngIf="validatorNameDes"><br />({{ validatorNameDes }})</ng-container>
         </a>
@@ -364,8 +356,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]"
-          target="_blank">
+          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
@@ -373,7 +364,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Depositor</div>
       <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]" target="_blank">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
           {{ transactionDetail?.messages[0]?.depositor }}
         </a>
       </div>
@@ -406,8 +397,7 @@
       <div class="col-12 col-lg-6">
         <a
           class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]"
-          target="_blank">
+          [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}
         </a>
       </div>
@@ -430,8 +420,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <a
         class="col-12 col-lg-6 text--green"
-        [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]"
-        target="_blank">
+        [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
         {{ transactionDetail?.messages[0]?.validator_address }}
       </a>
     </div>

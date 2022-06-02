@@ -220,15 +220,13 @@
                             <a
                               *ngSwitchCase="'proposer'"
                               class="text--green cursor-pointer"
-                              [routerLink]="['/validators', data.operator_address]"
-                              target="_blank">
+                              [routerLink]="['/validators', data.operator_address]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
                               class="text--green cursor-pointer"
-                              [routerLink]="['/blocks', data.height]"
-                              target="_blank">
+                              [routerLink]="['/blocks', data.height]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -307,12 +305,18 @@
                             <div *ngSwitchCase="'timestamp'">
                               {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
-                            <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
+                            <a
+                              *ngSwitchCase="'tx_hash_format'"
+                              class="text--green cursor-pointer hash-link"
+                              [routerLink]="['/transaction', data[template.matColumnDef]]">
                               {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
+                            </a>
+                            <a
+                              *ngSwitchCase="'height'"
+                              class="text--green cursor-pointer block-link"
+                              [routerLink]="['/blocks/id', data[template.matColumnDef]]">
                               {{ data[template.matColumnDef] }}
-                            </div>
+                            </a>
                             <div *ngSwitchCase="'type'">
                               <span class="label__status">{{ data[template.matColumnDef] }}</span>
                             </div>
@@ -324,10 +328,7 @@
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
-                  <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumnsTx"
-                    (click)="openTxsDetail($event, row)"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
                   <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell g-no-data" colspan="9999">
                       {{ 'NO DATA' | translate }}

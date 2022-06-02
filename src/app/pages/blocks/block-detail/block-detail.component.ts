@@ -70,21 +70,6 @@ export class BlockDetailComponent implements OnInit {
     }
   }
 
-  openTxsDetail(event: any, data: any) {
-    const linkHash = event?.target.classList.contains('hash-link');
-    const linkBlock = event?.target.classList.contains('block-link');
-    let url = '';
-    if (linkHash) {
-      //this.router.navigate(['transaction', data.tx_hash]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['transaction', data.tx_hash]));
-      window.open(url);
-    } else if (linkBlock) {
-      //this.router.navigate(['blocks', data.height]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['blocks', data.height]));
-      window.open(url);
-    }
-  }
-
   getDetailById() {
     this.blockService.blockDetailById(this.blockId).subscribe(
       (res) => {

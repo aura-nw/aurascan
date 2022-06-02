@@ -7,7 +7,10 @@
           <table mat-table [dataSource]="dataSource" class="aura-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
-                <th mat-header-cell *matHeaderCellDef [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  [class.col-per-13]="template.headerCellDef === 'Height' || template.headerCellDef === 'Result'">
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
 
@@ -17,12 +20,18 @@
                       <div *ngSwitchCase="'timestamp'">
                         {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                       </div>
-                      <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
+                      <a
+                        *ngSwitchCase="'tx_hash_format'"
+                        class="text--green cursor-pointer hash-link"
+                        [routerLink]="['/transaction', data['tx_hash']]">
                         {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
+                      </a>
+                      <a
+                        *ngSwitchCase="'height'"
+                        class="text--green cursor-pointer block-link"
+                        [routerLink]="['/blocks/id', data['blockId']]">
                         {{ data[template.matColumnDef] }}
-                      </div>
+                      </a>
                       <div *ngSwitchCase="'type'" class="text--green">
                         {{ data[template.matColumnDef] }}
                       </div>
@@ -49,13 +58,12 @@
                         </ng-container>
                         <ng-template #displayNonNumber>
                           <span *ngIf="data[template.matColumnDef] === 0"> - </span>
-                          <span
-                                  *ngIf="data[template.matColumnDef] !== 0"
-                                  class="text--primary cursor-pointer"
-                                  [routerLink]="['/transaction', data['tx_hash']]"
-                          >
-                          More
-                      </span>
+                          <a
+                            *ngIf="data[template.matColumnDef] !== 0"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/transaction', data['tx_hash']]">
+                            More
+                          </a>
                         </ng-template>
                       </div>
                       <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -66,12 +74,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumns"
-                    [class]="displayedColumns"
-                    (click)="openTxsDetail($event, row)"
-            ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [class]="displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
                 {{ 'NO DATA' | translate }}
@@ -80,15 +83,27 @@
           </table>
         </div>
         <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
-          <app-card-mob-simple *ngFor="let data of dataTx"
-                               [link]="'/transaction/' + data.tx_hash"
-                               [title]="{size: 'md', label: data.tx_hash_format , subLabelContent: data.type, subLabelClass: 'label__status', status: data.code}"
-                               [content]="[
-                                       {label: 'Amount', info: data.amount > 0 ? ((data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>') : checkAmountValue(data.amount, data.tx_hash)},
-                                       {label: 'Fee', info: data.fee + '<span class=text--primary> '+ global.stableToken + '</span>'},
-                                       {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}
-                                     ]"
-          ></app-card-mob-simple>
+          <app-card-mob-simple
+            *ngFor="let data of dataTx"
+            [link]="'/transaction/' + data.tx_hash"
+            [title]="{
+              size: 'md',
+              label: data.tx_hash_format,
+              subLabelContent: data.type,
+              subLabelClass: 'label__status',
+              status: data.code
+            }"
+            [content]="[
+              {
+                label: 'Amount',
+                info:
+                  data.amount > 0
+                    ? (data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>'
+                    : checkAmountValue(data.amount, data.tx_hash)
+              },
+              { label: 'Fee', info: data.fee + '<span class=text--primary> ' + global.stableToken + '</span>' },
+              { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+            ]"></app-card-mob-simple>
         </div>
       </div>
     </div>
