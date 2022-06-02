@@ -310,14 +310,19 @@ export class DashboardComponent implements OnInit {
     const linkBlock = event?.target.classList.contains('block-link');
     let url = '';
     if (linkHash) {
-      //this.router.navigate(['transaction', data.tx_hash]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['transaction/', data.tx_hash]));
-      window.open(url);
+      this.router.navigate(['transaction', data.tx_hash]);
+      // url = this.router.serializeUrl(this.router.createUrlTree(['transaction/', data.tx_hash]));
+      // window.open(url);
+      return ['transaction', data.tx_hash]
     } else if (linkBlock) {
       //this.router.navigate(['blocks/id', data.blockId]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['blocks/id', data.blockId]));
-      window.open(url);
+      // url = this.router.serializeUrl(this.router.createUrlTree(['blocks/id', data.blockId]));
+
+      return ['blocks/id', data.blockId]
+      // window.open(url);
     }
+
+    return '';
   }
 
   checkAmountValue(message: any[], txHash: string, type: string) {

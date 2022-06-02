@@ -12,8 +12,7 @@
               <div [classList]="[template.cssClass]">
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                   <a
-                    [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]"
-                    target="_blank">
+                    [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
                       (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
                         '-'
@@ -23,8 +22,7 @@
                 <ng-container *ngIf="template.isUrl && template.isShort">
                   <a
                     [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                    [class.disabled-link]="!data[template.matColumnDef]"
-                    target="_blank">
+                    [class.disabled-link]="!data[template.matColumnDef]">
                     {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                   </a>
                 </ng-container>

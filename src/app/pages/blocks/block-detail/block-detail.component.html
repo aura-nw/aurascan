@@ -32,7 +32,7 @@
         <div class="col-12 col-lg-3">
           <p class="card-text fw-semibold">Height</p>
         </div>
-        <div class="col-12 col-lg-6">{{ item?.height }}</div>
+        <a class="col-12 col-lg-6 text--green" [routerLink]="['/blocks', item?.height]">{{ item?.height }}</a>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
@@ -69,7 +69,7 @@
           <p class="card-text fw-semibold">Proposer</p>
         </div>
         <div class="col-12 col-lg-6">
-          <a class="text--green" routerLink="/validators/{{ item?.operator_address }}" target="_blank">
+          <a class="text--green" routerLink="/validators/{{ item?.operator_address }}">
             {{ item?.proposer }}
           </a>
         </div>
@@ -106,12 +106,15 @@
                     <div *ngSwitchCase="'timestamp'">
                       {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                     </div>
-                    <div *ngSwitchCase="'tx_hash_format'" class="text--green cursor-pointer hash-link">
+                    <a
+                      *ngSwitchCase="'tx_hash_format'"
+                      class="text--green cursor-pointer hash-link"
+                      [routerLink]="['/transaction', data['tx_hash']]">
                       {{ data[template.matColumnDef] }}
-                    </div>
-                    <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
+                    </a>
+                    <a *ngSwitchCase="'height'" class="text--green cursor-pointer block-link" [routerLink]="['/blocks', data['height']]">
                       {{ data[template.matColumnDef] }}
-                    </div>
+                    </a>
                     <div *ngSwitchCase="'type'" class="g-type">
                       {{ data[template.matColumnDef] }}
                     </div>
@@ -138,12 +141,12 @@
                       </ng-container>
                       <ng-template #displayNonNumber>
                         <span *ngIf="data[template.matColumnDef] === 0"> - </span>
-                        <span
+                        <a
                           *ngIf="data[template.matColumnDef] !== 0"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data['tx_hash']]">
                           More
-                        </span>
+                        </a>
                       </ng-template>
                     </div>
                     <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -154,7 +157,7 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openTxsDetail($event, row)"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
               {{ 'NO DATA' | translate }}
