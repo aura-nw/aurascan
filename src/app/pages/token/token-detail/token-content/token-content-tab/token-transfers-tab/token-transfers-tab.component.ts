@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { TokenTab } from '../../../../../../core/constants/smart-contract.enum';
+import { TokenTab } from '../../../../../../core/constants/token.enum';
 import { Globals } from '../../../../../../global/global';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { PageEvent } from '@angular/material/paginator';
