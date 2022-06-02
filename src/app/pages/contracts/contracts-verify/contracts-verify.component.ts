@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {validator} from "@cosmjs/stargate/build/testutils.spec";
+import {ContractService} from "../../../core/services/contract.service";
 
 @Component({
   selector: 'app-contracts-verify',
@@ -10,9 +10,10 @@ import {validator} from "@cosmjs/stargate/build/testutils.spec";
 })
 export class ContractsVerifyComponent implements OnInit {
   tabCurrent = 1;
-  contractAddress = 'D6DA41500228CE6C3A545298CB44F45B3EB'
+  contractAddress = 'aura1q6u4ajrfs9zv9gh9u8h88j24yujerk2d24rsjqutrzwqvhpqd3tsxsg4yz'
   constructor(
-      private layout: BreakpointObserver
+      private layout: BreakpointObserver,
+      private contractService: ContractService,
   ) {}
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   TAB = [
@@ -25,21 +26,26 @@ export class ContractsVerifyComponent implements OnInit {
       value: 'Compiler Output'
     }
   ]
-  versionList = ['v1','v1.1','v1.03','v2','v2.1.3']
+  versionList = ['1.61.0','v1.1','v1.03','v2','v2.1.3']
   contractForm: FormGroup;
   ngOnInit(): void {
     this.contractForm = new FormGroup({
-      address: new FormControl(''),
-      link: new FormControl('', [Validators.required, Validators.max(200)]),
-      version: new FormControl('', [Validators.required]),
+      contract_address: new FormControl(''),
+      url: new FormControl('', [Validators.required, Validators.max(200)]),
+      compiler_version: new FormControl('', [Validators.required]),
     })
     this.contractForm.patchValue({address: this.contractAddress});
   }
   changeTab(tabId): void {
     this.tabCurrent = tabId;
-    console.log(this.tabCurrent)
   }
   onSubmit() {
-    console.log(this.contractForm.value)
+    // console.log(this.contractForm.value)
+    if(this.contractForm.valid) {
+      this.contractService.verifyContract(this.contractForm.value).subscribe(res => {
+        console.log(res)
+        this.contractForm.reset();
+      })
+    }
   }
 }
