@@ -10,6 +10,14 @@
       justify-content: space-between;
       align-items: center;
       height: 50px;
+      &.small-input {
+        height: 36px;
+        padding: var(--spacer-1) 22px var(--spacer-1) var(--spacer-5);
+        input {
+          font-size: 14px;
+          font-weight: 400;
+        }
+      }
       input {
         max-width: 80%;
         padding: 0;

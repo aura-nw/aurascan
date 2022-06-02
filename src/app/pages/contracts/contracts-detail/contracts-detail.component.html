@@ -1,14 +1,14 @@
-<h1 class="title-medium title-small-mob mb-5 text--white">
-  Contract <span class="text-secondary small">aura1du0amfm3l0ye0w76m3fkxhe0ckk4m7zjypv847</span>
+<h1 class="title-small fw-500 mb-5 text--white">
+  Contract <span class="text-secondary body fw-normal ml-1">{{contractAddress}}</span>
 </h1>
 <div class="row">
   <div class="col-12 col-lg-6">
-    <app-contracts-overview-card></app-contracts-overview-card>
+    <app-contracts-overview-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contracts-overview-card>
   </div>
 
   <div class="col-12 col-lg-6">
-    <app-contract-info-card></app-contract-info-card>
+    <app-contract-info-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
   </div>
 </div>
 
-<app-contract-content></app-contract-content>
+<app-contract-content [contractsAddress]="contractAddress + ''"></app-contract-content>

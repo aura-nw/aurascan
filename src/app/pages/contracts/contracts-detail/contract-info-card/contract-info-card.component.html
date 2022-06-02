@@ -1,31 +1,34 @@
 <div class="card box-token-info">
   <div class="">
-    <div class="table-responsive aura-table-contain">
+    <div class="table-responsive">
       <table class="aura-basic-table w-100">
         <tr>
-          <td colspan="2">More Info</td>
-          <td class="d-flex justify-content-end">
-            <a href="javascript:void(0)" class="button button-chart button-outline">
-              <span class="ml-2">More</span>
-              <img src="assets/images/icons/arrow-move-down.svg" alt="" width="24px" />
-            </a>
+          <td colspan="2 body fw-bold">More Info</td>
+          <td class="">
+            <div class="d-flex justify-content-end">
+              <img src="assets/icons/icons-svg/basic/icon-love.svg" alt="" width="16px" />
+              <a href="javascript:void(0)" class="ml-3 button button-chart button-outline">
+                <span class="ml-2">More</span>
+                <img src="assets/images/icons/arrow-move-down.svg" alt="" width="24px" />
+              </a>
+            </div>
           </td>
         </tr>
 
         <tr>
           <td>My Name Tag:</td>
-          <td colspan="2">Not Available, <a class="text--green" href="https://aura.network">Update?</a></td>
+          <td colspan="2">Not Available, <a class="text--green ml-1" href="https://aura.network">Update?</a></td>
         </tr>
 
         <tr>
           <td>Contract Creator:</td>
           <td colspan="2">
-            <a class="text--green" [routerLink]="['/account', 'aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8f']">
-              aura1fceaesaz0fpckeeyt4dt6l6cd7nk7f7gsjpk8f
+            <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+              {{ contractDetail?.creator_address_format }}
             </a>
             at txn
-            <a class="text--green" [routerLink]="['/account', 'aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq']">
-              aura1kqmvuhlyj68l37vf7k7f6umvq400u5q88kx5wq
+            <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+              {{ contractDetail?.tx_hash_format }}
             </a>
           </td>
         </tr>
@@ -33,7 +36,8 @@
         <tr>
           <td>Token Tracker:</td>
           <td colspan="2">
-            <span class="text--green">Aura (Aura)</span> (@$442.8586)
+            <a class="text--green" [routerLink]="['/token', contractDetail?.contract_address]">Aura (Aura)</a>
+            <span class="ml-1 text-secondary">(@$1)</span>
           </td>
         </tr>
       </table>

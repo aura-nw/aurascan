@@ -1,21 +1,23 @@
-<div class="card box-token-info">
+<div class="card box-contract-overview">
   <div class="">
-    <div class="table-responsive aura-table-contain">
+    <div class="table-responsive">
       <table class="aura-basic-table w-100">
         <tr>
-          <td class="fw-semibold">Contract Overview <span class="text-secondary">[CW-20]</span></td>
-          <td class="d-flex justify-content-end">
-            <a href="javascript:void(0)" class="button button-chart button-outline">
-              <span class="mr-2">Aura: Aura Token</span>
-              <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
-            </a>
+          <td class="body fw-bold">Contract Overview</td>
+          <td class="justify-content-end">
+            <div class="d-flex justify-content-end">
+              <a href="javascript:void(0)" class="button button-chart button-outline">
+                <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+                <span class="ml-2">Aura: Aura Token</span>
+              </a>
+            </div>
           </td>
         </tr>
 
         <tr>
           <td>Balance:</td>
           <td>
-            12.50918034
+            {{ contractDetail?.balance | number: global.formatNumberToken }}
             <span class="text--green">{{ global.stableToken }}</span>
           </td>
         </tr>
@@ -23,15 +25,31 @@
         <tr>
           <td>Aura Value:</td>
           <td>
-            $28,620.98 (@ $2,086.30/<span class="text--green">{{ global.stableToken }}</span>)
+            ${{ contractDetail?.price | number: global.formatNumberToken }}
+            <span class="text-secondary ml-1"
+              >(@ ${{ contractDetail?.price | number: global.formatNumberToken }}/{{
+                global.stableToken | titlecase
+              }})</span
+            >
           </td>
         </tr>
 
         <tr>
           <td>Token:</td>
           <td>
-            > $10,430,364.81
-            <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+            <div class="aura-form list-token d-flex align-items-center justify-content-between">
+              <mat-select
+                #assetTypeSelect
+                class="list-token form-control select-input-field"
+                panelClass="aura-optional-panel"
+                [disableOptionCentering]="true"
+                [(value)]="selectedToken">
+                <mat-option [value]="'$10,430,364.81'"> > $10,430,364.81 </mat-option>
+              </mat-select>
+              <a href="javascript:void(0)" class="button button-chart button-outline">
+                <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
+              </a>
+            </div>
           </td>
         </tr>
       </table>
