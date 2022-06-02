@@ -1,11 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import { ViewportScroller } from '@angular/common';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {Router, RouterEvent} from '@angular/router';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import {
   GAS_ESTIMATE,
   NUMBER_CONVERT,
@@ -27,7 +28,6 @@ import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
 import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
-import {ViewportScroller} from "@angular/common";
 
 @Component({
   selector: 'app-validators',
@@ -38,9 +38,9 @@ import {ViewportScroller} from "@angular/common";
 export class ValidatorsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly : true },
-    { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly : true },
-    { matColumnDef: 'power', headerCellDef: 'Voting Power', desktopOnly : true },
+    { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
+    { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly: true },
+    { matColumnDef: 'power', headerCellDef: 'Voting Power', desktopOnly: true },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
@@ -54,7 +54,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageIndex = 0;
 
   templatesWallet: Array<TableTemplate> = [
-    { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly : true },
+    { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
     { matColumnDef: 'pending_reward', headerCellDef: 'Pending Reward' },
     { matColumnDef: 'action', headerCellDef: '' },
@@ -104,10 +104,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   pageYOffset = 0;
   scrolling = false;
-  @HostListener('window:scroll', ['$event']) onScroll(event){
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
-  
+
   constructor(
     private validatorService: ValidatorService,
     public globals: Globals,
@@ -120,7 +120,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private mappingErrorService: MappingErrorService,
     private router: Router,
     private layout: BreakpointObserver,
-    private scroll: ViewportScroller
+    private scroll: ViewportScroller,
   ) {}
 
   ngOnInit(): void {
@@ -136,12 +136,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     });
     this.getList();
 
-    this._routerSubscription = this.router.events
-        .subscribe(() => {
-          if(this.modalReference) {
-            this.modalReference.close();
-          }
-        });
+    this._routerSubscription = this.router.events.subscribe(() => {
+      if (this.modalReference) {
+        this.modalReference.close();
+      }
+    });
   }
 
   /**
@@ -551,10 +550,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.scrollToTop();
   }
 
-  scrollToTop(){
+  scrollToTop() {
     this.scroll.scrollToPosition([0, 0]);
     this.scrolling = true;
-    setTimeout(() => {this.scrolling = !this.scrolling; }, 500);
+    setTimeout(() => {
+      this.scrolling = !this.scrolling;
+    }, 500);
   }
 
   changeTypePopup(type) {

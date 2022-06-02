@@ -12,12 +12,13 @@
               <td mat-cell *matCellDef="let data" style="max-width: 200px">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                    <div
+                    <a
                       *ngSwitchCase="'validator_name'"
                       class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_address']]">
+                      [routerLink]="['/validators', data['validator_address']]"
+                      target="_blank">
                       {{ data[template.matColumnDef] }}
-                    </div>
+                    </a>
                     <div *ngSwitchCase="'amount'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       <span class="text--green">{{ global.stableToken }}</span>
@@ -45,20 +46,21 @@
                     </div>
                     <div *ngSwitchCase="'total_value'" class="fw-normal">
                       $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
-                      <!--                  <span class="price-token">$ {{ data['price'] | number: global.formatNumber2Decimal }}</span>-->
                     </div>
-                    <div
+                    <a
                       *ngSwitchCase="'validator_src_name'"
                       class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_src_address']]">
+                      [routerLink]="['/validators', data['validator_src_address']]"
+                      target="_blank">
                       {{ data[template.matColumnDef] }}
-                    </div>
-                    <div
+                    </a>
+                    <a
                       *ngSwitchCase="'validator_dst_name'"
                       class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_dst_address']]">
+                      [routerLink]="['/validators', data['validator_dst_address']]"
+                      target="_blank">
                       {{ data[template.matColumnDef] }}
-                    </div>
+                    </a>
                     <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
                   </ng-container>
                 </div>
@@ -77,14 +79,19 @@
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
         <div class="table-mobile">
-          <ng-container *ngFor="let item of dataSource.data, let i = index">
-            <div class="box-mob-table fw-normal mb-3" *ngIf="i >= (pageData.pageSize * currentPage) && i < (pageData.pageSize * (currentPage + 1))">
+          <ng-container *ngFor="let item of dataSource.data; let i = index">
+            <div
+              class="box-mob-table fw-normal mb-3"
+              *ngIf="i >= pageData.pageSize * currentPage && i < pageData.pageSize * (currentPage + 1)">
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
-                  <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
-                    item.validator_name
-                  }}</span
-                  ><br />
+                  <a
+                    class="fw-normal text--green body-mob"
+                    [routerLink]="['/validators', item['validator_address']]"
+                    target="_blank">
+                    {{ item.validator_name }}
+                  </a>
+                  <br />
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
                       Amount<br />
@@ -102,10 +109,13 @@
                 <div *ngSwitchCase="pageType.Unbonding">
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
-                      <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
-                        item.validator_name
-                      }}</span
-                      ><br />
+                      <a
+                        class="fw-normal text--green body-mob"
+                        [routerLink]="['/validators', item['validator_address']]"
+                        target="_blank">
+                        {{ item.validator_name }}
+                      </a>
+                      <br />
                       Amount<br />
                       Completion Time
                     </div>
@@ -121,18 +131,24 @@
                 <div *ngSwitchCase="pageType.Redelegation">
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
-                      <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
-                        item.validator_src_name
-                      }}</span
-                      ><br />
+                      <a
+                        class="fw-normal text--green body-mob"
+                        [routerLink]="['/validators', item['validator_address']]"
+                        target="_blank">
+                        {{ item.validator_src_name }}
+                      </a>
+                      <br />
                       Amount<br />
                       Time
                     </div>
                     <div class="txt-right">
-                      <span class="fw-normal text--green body-mob" [routerLink]="['/validators', item['validator_address']]">{{
-                        item.validator_dst_name
-                      }}</span
-                      ><br />
+                      <a
+                        class="fw-normal text--green body-mob"
+                        [routerLink]="['/validators', item['validator_address']]"
+                        target="_blank">
+                        {{ item.validator_dst_name }}
+                      </a>
+                      <br />
                       {{ item.amount | number: global.formatNumberToken }}
                       <span class="text--green">{{ global.stableToken }}</span
                       ><br />

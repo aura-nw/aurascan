@@ -11,7 +11,7 @@
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
 
-                <td mat-cell *matCellDef="let data" style="max-width: 300px;">
+                <td mat-cell *matCellDef="let data" style="max-width: 300px">
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
@@ -43,14 +43,15 @@
           </table>
         </div>
         <div class="d-lg-none" *ngIf="dataBlock && dataBlock.length > 0">
-          <app-card-mob-simple *ngFor="let data of dataBlock"
-                               [link]="'/blocks/' + data.height"
-                               [title]="{size: 'md', label: data.height , subLabelContent: commonService.getDateValue(data.timestamp)[0]}"
-                               [content]="[
-                               {label: 'Proposer', info: '<span class=text--green>' + data.proposer + '</span>'},
-                               {label: 'Txs', info: data.num_txs.toString()},
-                               {label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1]}]"
-          ></app-card-mob-simple>
+          <app-card-mob-simple
+            *ngFor="let data of dataBlock"
+            [link]="'/blocks/' + data.height"
+            [title]="{ size: 'md', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0] }"
+            [content]="[
+              { label: 'Proposer', info: '<span class=text--green>' + data.proposer + '</span>' },
+              { label: 'Txs', info: data.num_txs.toString() },
+              { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+            ]"></app-card-mob-simple>
         </div>
       </div>
     </div>
