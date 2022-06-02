@@ -22,7 +22,7 @@ export class ContractService extends CommonService {
   }
 
   verifyContract(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/verify-contract`, data);
+    return this.http.post<any>(`https://verify-job.dev.aura.network/contracts/verify-contract`, data);
   }
 
   getMatchCreationCode(contractAddress: string): Observable<any>{
