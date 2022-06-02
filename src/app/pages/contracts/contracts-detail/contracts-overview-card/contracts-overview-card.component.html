@@ -3,10 +3,10 @@
     <div class="table-responsive">
       <table class="aura-basic-table w-100">
         <tr>
-          <td class="body fw-bold">Contract Overview</td>
+          <td class="body fw-semibold">Contract Overview</td>
           <td class="justify-content-end">
             <div class="d-flex justify-content-end">
-              <a href="javascript:void(0)" class="button button-chart button-outline">
+              <a href="javascript:void(0)" class="button button-chart button-outline button-outline__in-card">
                 <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
                 <span class="ml-2">Aura: Aura Token</span>
               </a>
@@ -18,7 +18,7 @@
           <td>Balance:</td>
           <td>
             {{ contractDetail?.balance | number: global.formatNumberToken }}
-            <span class="text--green">{{ global.stableToken }}</span>
+            {{ global.stableToken }}
           </td>
         </tr>
 
@@ -46,9 +46,9 @@
                 [(value)]="selectedToken">
                 <mat-option [value]="'$10,430,364.81'"> > $10,430,364.81 </mat-option>
               </mat-select>
-              <a href="javascript:void(0)" class="button button-chart button-outline">
+              <div class="box-wallet">
                 <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
-              </a>
+              </div>
             </div>
           </td>
         </tr>

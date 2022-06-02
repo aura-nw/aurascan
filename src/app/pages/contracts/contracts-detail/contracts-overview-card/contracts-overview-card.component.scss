@@ -17,6 +17,12 @@
     tr td:first-child {
       width: 30%;
     }
+    tr {
+      height: 72px;
+    }
+    tr:not(:first-child) td:first-child{
+      color: var(--aura-contract);
+    }
   }
 
   .txt-light {
@@ -26,9 +32,6 @@
   .txt-danger {
     color: var(--aura-danger);
   }
-  tr {
-    height: 72px;
-  }
 
   .list-token .select-input-field {
     background-color: var(--aura-bg-form);
@@ -37,5 +40,15 @@
     @media (min-width: 992px) {
       width: 186px;
     }
+  }
+
+  .box-wallet{
+    background-color: var(--aura-bg-form);
+    border-radius: 30px;
+    width: 48px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

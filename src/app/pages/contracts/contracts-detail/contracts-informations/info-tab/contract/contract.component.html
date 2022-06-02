@@ -23,21 +23,21 @@
     <div class="d-flex mb-3">
       <button
         class="btn-contract"
-        [class.active]="countCurrent === contractType.Code"
+        [ngClass]="{'button-outline button-outline__in-card': countCurrent === contractType.Code}"
         (click)="changeTab(contractType.Code)">
-        Code
+        <span [class.text-gradient]="countCurrent === contractType.Code">Code</span>
       </button>
       <button
         class="btn-contract"
-        [class.active]="countCurrent === contractType.ReadContract"
+        [ngClass]="{'button-outline button-outline__in-card': countCurrent === contractType.ReadContract}"
         (click)="changeTab(contractType.ReadContract)">
-        Read Contract
+        <span [class.text-gradient]="countCurrent === contractType.ReadContract">Read Contract</span>
       </button>
       <button
         class="btn-contract"
-        [class.active]="countCurrent === contractType.WriteContract"
+        [ngClass]="{'button-outline button-outline__in-card': countCurrent === contractType.WriteContract}"
         (click)="changeTab(contractType.WriteContract)">
-        Write Contract
+        <span [class.text-gradient]="countCurrent === contractType.WriteContract">Write Contract</span>
       </button>
     </div>
   </ng-container>

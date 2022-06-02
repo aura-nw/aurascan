@@ -1,8 +1,12 @@
 <div class="d-flex justify-content-between align-items-center fw-bold">
   <div class="my-3">
-    <a [routerLink]="'/'" class="button button-chart button-outline">
-      <img src="assets/icons/icons-svg/color/chart-pie-right.svg" alt="" width="16px" />
-      <span class="ml-1">Connect to Web3</span>
+    <a [routerLink]="'/'" class="button button-chart button-outline button-outline__in-card btn-unconnect" *ngIf="!isConnectedWallet">
+      <div class="icon-connect"></div>
+      <span class="">Connect to Web3</span>
+    </a>
+    <a [routerLink]="'/'" class="button button-chart button-outline button-outline__in-card" *ngIf="isConnectedWallet">
+      <div class="icon-connect connected"></div>
+      <span class="">Connected to Web3</span>
     </a>
   </div>
   <div>
@@ -15,6 +19,31 @@
 </div>
 
 <div class="box-content text--white mt-3">
+  <ng-container *ngFor="let writeContract of jsonWriteContract.oneOf; index as i">
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header class="content-contract">
+        <mat-panel-title class="item-content"> {{ i + 1 }}. {{ writeContract.required }} </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="d-flex row p-3">
+        <ng-container *ngFor="let item of writeContract?.properties[writeContract.required[0]].required; index as idx">
+          <p>{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
+          <input
+            class="form-check-input col-12 mb-4"
+            type="text"
+            placeholder="{{ item }} ({{
+              writeContract.properties[writeContract.required[0]].properties[item].type
+            }})" />
+        </ng-container>
+        <a [routerLink]="'/'" class="button button-chart button-outline">
+          <span class="ml-1">Write</span>
+        </a>
+      </div>
+    </mat-expansion-panel>
+  </ng-container>
+</div>
+
+<!-- <div class="box-content text--white mt-3">
   <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header class="content-contract">
       <mat-panel-title class="item-content">1. upgrade to</mat-panel-title>
@@ -43,4 +72,4 @@
       </a>
     </div>
   </mat-expansion-panel>
-</div>
+</div> -->

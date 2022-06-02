@@ -1,10 +1,14 @@
-table.aura-basic-table {
-  min-height: 330px;
-  tr td:first-child {
-    width: 30%;
+.box-contract-info {
+  table.aura-basic-table {
+    min-height: 330px;
+    tr td:first-child {
+      width: 30%;
+    }
+    tr {
+      height: 72px;
+    }
+    tr:not(:first-child) td:first-child {
+      color: var(--aura-contract);
+    }
   }
-}
-
-tr {
-  height: 72px;
 }

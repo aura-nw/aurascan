@@ -7,6 +7,72 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WriteContractComponent implements OnInit {
   isExpand = false;
+  isConnectedWallet = false;
+  jsonWriteContract = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ExecuteMsg",
+    "oneOf": [
+      {
+        "type": "object",
+        "required": [
+          "add_new"
+        ],
+        "properties": {
+          "add_new": {
+            "type": "object",
+            "required": [
+              "amount",
+              "id",
+              "name",
+              "price"
+            ],
+            "properties": {
+              "amount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "required": [
+          "sell"
+        ],
+        "properties": {
+          "sell": {
+            "type": "object",
+            "required": [
+              "amount",
+              "id"
+            ],
+            "properties": {
+              "amount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    ]
+  };
   constructor() { }
 
   ngOnInit(): void {
