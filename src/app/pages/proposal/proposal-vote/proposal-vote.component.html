@@ -1,8 +1,8 @@
 <div (clickOutside)="closeVoteForm()">
     <ng-container *ngIf="!data.warning">
         <div class="d-flex">
-            <img src="assets/icons/icons-svg/white/arrow-left.svg" alt="" width="24px" height="24px" (click)="closeVoteForm()">
-            <div class="sub-text sub-text-mob fw-500 ml-3">Your vote</div>
+            <img src="assets/icons/icons-svg/white/arrow-left.svg" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
+            <div class="sub-text sub-text-mob fw-500 ml-3 ml-lg-0">Your vote</div>
         </div>
         <div class="mt-4 small-body">#{{data.id}} {{data.title}}</div>
         <form #voteForm="ngForm">

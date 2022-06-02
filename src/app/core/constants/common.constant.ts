@@ -1,22 +1,3 @@
-export const NAVBARITEM = [
-    {
-        link: '/primary-market',
-        label: 'Thị trường sơ cấp'
-    },
-    {
-        link: '/2',
-        label: 'Thị trường thứ cấp'
-    },
-    {
-        link: '/exchange',
-        label: 'Giao Dịch'
-    },
-    {
-        link: '/account',
-        label: 'Tài khoản'
-    }
-];
-
 export const MY_FORMATS = {
     parse: {
         dateInput: 'LL',

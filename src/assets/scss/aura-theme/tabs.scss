@@ -15,3 +15,14 @@
     background-color: var(--aura-white) !important;
   }
 }
+
+.mobile-tab{
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow: auto;
+}
+
+.mobile-tab::-webkit-scrollbar{
+  display: none;
+}
