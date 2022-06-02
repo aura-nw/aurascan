@@ -1,5 +1,10 @@
 .aura-nav-tabs.nav-tabs-custom {
+    width: 100%;
     .nav-item {
+
+        flex-grow: 0;
+        flex-shrink: 1;
+        min-width: 180px;
         .nav-link {
             &::after {
                 color: var(--aura-white);
