@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,15 +7,29 @@ import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { ITableContract } from 'src/app/core/models/contract.model';
 import { Globals } from 'src/app/global/global';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+
+export interface TableData {
+  txHash: string;
+  method: string;
+  block: number;
+  time: Date;
+  from: string;
+  to: string;
+  label: string;
+  value: number;
+  fee: number;
+}
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
   elements: DropdownElement[] = [
     {
       image: 'assets/icons/icons-svg/white/arrow-right-2.svg',
@@ -33,21 +47,10 @@ export class TableComponent implements OnInit {
       key: 2,
     },
   ];
-  textSearch = '';
 
-  @Input() data: {
-    txHash: string;
-    method: string;
-    block: number;
-    time: Date;
-    from: string;
-    to: string;
-    label: string;
-    value: number;
-    fee: number;
-  }[];
+  @Input() data: TableData[];
   // data table
-
+  @Input() contractInfo: ITableContract;
   @Input() templates!: Array<TableTemplate>;
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
 
@@ -55,26 +58,18 @@ export class TableComponent implements OnInit {
 
   pageData: PageEvent;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  sortedData: any;
-  sort: MatSort;
-  filterSearchData = [];
 
-  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  constructor(public translate: TranslateService, public global: Globals) {}
 
-  @Input() contractInfo: {
-    contractsAddress: string;
-    count: number;
-    viewAll?: boolean
-  };
-
-  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
+  ngOnChanges(changes: SimpleChanges): void {
+    this.loadTableData();
+  }
 
   ngOnInit(): void {
     this.displayedColumns = this.templates?.map((dta) => dta.matColumnDef);
-    this.initTableData();
   }
 
-  initTableData() {
+  loadTableData() {
     this.pageData = {
       length: this.data.length,
       pageSize: PAGE_EVENT.PAGE_SIZE,

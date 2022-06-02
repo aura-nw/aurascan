@@ -5,8 +5,8 @@
   </div>
   <section>
     <div class="card mt-8">
-      <div class="card-body">
-        <app-table [data]="mockData" [templates]="templates" [contractInfo]="contractInfo"></app-table>
+      <div class="card-body" *ngIf="contract$ | async as contract">
+        <app-table [data]="contract" [templates]="templates" [contractInfo]="contractInfo"></app-table>
       </div>
     </div>
   </section>
