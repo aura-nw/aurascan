@@ -349,7 +349,7 @@
                       <div class="text--white mr-2">
                         <span [class.text-blur]="validator?.jailed">{{ validator.rank }}</span>
                       </div>
-                      <a class="box-title-validator" [routerLink]="['/validators', validator.operator_address]" target="_blank">
+                      <a class="box-title-validator text--green" [routerLink]="['/validators', validator.operator_address]" target="_blank">
                         <span [class.text-title]="validator?.jailed"> {{ validator.title }} </span>
                         <div *ngIf="validator?.jailed" class="label-jailed">
                           <span>jailed</span>
