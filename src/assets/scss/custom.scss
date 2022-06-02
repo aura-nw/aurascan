@@ -556,3 +556,16 @@ body {
 .txt-right {
     text-align: right;
 }
+
+
+.custom-popover {
+    background: #1C1C1F;
+    border: none;
+
+    box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+
+    .popover-body {
+        padding: 16px;
+    }
+}

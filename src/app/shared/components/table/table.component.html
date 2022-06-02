@@ -21,6 +21,27 @@
             </th>
             <td mat-cell *matCellDef="let data">
               <ng-container [ngSwitch]="template.type">
+                <ng-container *ngSwitchCase="'popover'">
+                  <button
+                    mat-icon-button
+                    aria-label="Example icon-button with a menu"
+                    placement="right"
+                    [ngbPopover]="popContent"
+                    popoverClass="custom-popover"
+                    >
+                    <img
+                      src="assets/images/icons/token-detail.png"
+                      alt=""
+                      width="16"
+                      height="16" />
+                  </button>
+                  <ng-template  #popContent class="popContent">
+                    <div class="d">
+
+                    </div>
+                    <app-popover ></app-popover>
+                  </ng-template>
+                </ng-container>
                 <ng-container *ngSwitchCase="'hash-url-se'">
                   <a class="text--green cursor-pointer hash-link">
                     {{ data[template.matColumnDef] | cutStringPipe: 6:6 }}
@@ -34,8 +55,7 @@
                       template?.isUrl,
                       template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
                     ]"
-                    target="_blank"
-                    >
+                    target="_blank">
                     {{ data[template.matColumnDef] | cutStringPipe: 20 }}
                   </a>
                   <div class="" *ngIf="!data[template.matColumnDef]">-</div>

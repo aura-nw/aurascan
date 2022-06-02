@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { IResponsesTemplates, TableTemplate } from 'src/app/core/models/common.model';
 import { IContractsResponse, ITableContract } from 'src/app/core/models/contract.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -15,21 +16,12 @@ import { TableData } from 'src/app/shared/components/table/table.component';
   styleUrls: ['./contracts-transactions.component.scss'],
 })
 export class ContractsTransactionsComponent implements OnInit {
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', isUrl: '/transaction' },
-    { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
-    { matColumnDef: 'blockHeight', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/blocks/id', paramField: 'blockId'  },
-    { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10, suffix: 'ago' },
-    { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
-    { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 8, justify: 'center' },
-    { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
-    { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'Aura', headerWidth: 10 },
-    { matColumnDef: 'fee', headerCellDef: 'Fee', type: 'numb', headerWidth: 10 },
-  ];
+  templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
 
   contractInfo: ITableContract = {
     contractsAddress: '',
     count: 0,
+    popover: true
   };
 
   contract$ = this.activeRouter.params.pipe(
