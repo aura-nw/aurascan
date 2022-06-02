@@ -26,6 +26,9 @@ import { Cw20TokenComponent } from './contracts-detail/contracts-informations/in
 import { ContractComponent } from './contracts-detail/contracts-informations/info-tab/contract/contract.component';
 import { ContractsOverviewCardComponent } from './contracts-detail/contracts-overview-card/contracts-overview-card.component';
 import { CodeContractComponent } from './contracts-detail/contracts-informations/info-tab/contract/contract-code/code-contract.component';
+import {ContractsVerifyComponent} from "./contracts-verify/contracts-verify.component";
+import { ReactiveFormsModule } from '@angular/forms';
+import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,9 @@ import { CodeContractComponent } from './contracts-detail/contracts-informations
     ContractTransactionsTabComponent,
     Cw20TokenComponent,
     ContractComponent,
-    CodeContractComponent
+    CodeContractComponent,
+    ContractsVerifyComponent,
+    CompilerOutputComponent
   ],
   imports: [
     CommonModule,
@@ -58,6 +63,7 @@ import { CodeContractComponent } from './contracts-detail/contracts-informations
     DateFnsModule,
     NgxMaskModule,
     TableModule,
+    ReactiveFormsModule
   ],
   providers: [ContractService],
 })

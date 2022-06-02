@@ -1,1 +1,64 @@
-<p>contracts verify work</p>
+<section class="contract-verify">
+    <div class="title-small fw-500 text--white mb-6">
+        Verify & Publish Contract Source Code
+    </div>
+    <div class="divider divider-horizontal"></div>
+    <div class="small-text mt-6 text--light-gray">Source code verification provides transparency for users interacting with smart contracts.
+        By uploading link GitHub source code, Aurascan will match the compiled code with that on the blockchain.
+        Just like contracts, a smart contract should provide end users with more information on what
+        they are "digitally signing" for and give users an opportunity to audit the code to independently verify
+        that it actually does what it is supposed to do.</div>
+    <div class="card mt-6" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+        <div class="card-body">
+            <!-- Tabs -->
+            <ul ngbNav
+                #customNav="ngbNav"
+                [activeId]="0"
+                class="aura-nav-tabs nav-tabs nav-tabs-custom"
+                [class.mobile-tab]="breakpoint.value.matches">
+                <ng-container *ngFor="let tab of TAB; index as index">
+                    <li [ngbNavItem]="index">
+                        <a ngbNavLink (click)="changeTab(tab.id)">
+                            <span class="small-body" [class.tab-title-mobile]="breakpoint.value.matches">{{ tab.value }}</span >
+                        </a>
+                    </li>
+                </ng-container>
+            </ul>
+            <!-- Contract Source Code -->
+            <form *ngIf="tabCurrent === 1"  [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form mt-6" autocomplete="off">
+                <div class="form-group mb-6">
+                    <label for="address" class="form-label">Contract Address to verify</label>
+                    <input formControlName="address" type="text" class="form-control" id="address" placeholder="aura...">
+                </div>
+                <div class="form-group mb-6">
+                    <label for="link" class="form-label">Link GitHub Source Code</label>
+                    <input formControlName="link" type="text" class="form-control" id="link" placeholder="Enter the github URL at the right commit version of source code you would like to verify">
+                </div>
+                <div class="form-group mb-6">
+                    <label for="version" class="form-label">Compiler Version</label>
+                    <mat-select #version id="version"
+                                formControlName="version"
+                                class="form-control select-input-field select-input--flat"
+                                panelClass="aura-optional-panel aura-optional-panel--flat"
+                                [disableOptionCentering]="true"
+                                placeholder="Please select compiler version">
+                        <mat-option *ngFor="let item of versionList" [value]="item">
+                            {{ item }}
+                        </mat-option>
+                    </mat-select>
+
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <button class="button text--white" type="reset">Reset</button>
+                    <button class="button button-outline button-outline__in-card ml-4" type="submit"><span class="text-gradient">Verify & Publish</span></button>
+                </div>
+            </form>
+            <!-- Compiler Output -->
+            <div *ngIf="tabCurrent === 2">
+                <div class="mt-6">
+                    <app-compiler-output [contractAddress]="contractAddress"></app-compiler-output>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

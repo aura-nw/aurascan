@@ -23,17 +23,6 @@
     margin-bottom: 16px;
 }
 
-.mobile-tab{
-    display: flex;
-    width: 100%;
-    flex-wrap: nowrap;
-    overflow: auto;
-}
-
-.mobile-tab::-webkit-scrollbar{
-    display: none;
-}
-
 :host::ng-deep {
     app-proposal-table {
         table th {
