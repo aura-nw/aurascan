@@ -20,7 +20,7 @@ import { Globals } from '../../../global/global';
 export class ContractsListComponent implements OnInit {
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/account', isShort: true },
+    { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
