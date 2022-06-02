@@ -25,4 +25,5 @@ export interface ITableContract {
   contractsAddress: string;
   count: number;
   viewAll?: boolean;
+  popover?: boolean;
 }

@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as moment from 'moment';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
 import { TableData } from 'src/app/shared/components/table/table.component';
-import { CONTRACT_TAB, MAX_LENGTH_SEARCH_CONTRACT } from '../../../../core/constants/contract.constant';
+import {
+  CONTRACT_TAB,
+  CONTRACT_TABLE_TEMPLATES,
+  MAX_LENGTH_SEARCH_CONTRACT,
+} from '../../../../core/constants/contract.constant';
 import { ContractTab } from '../../../../core/constants/contract.enum';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
@@ -38,17 +41,7 @@ export class ContractContentComponent implements OnInit {
   contractTab = ContractTab;
   maxLengthSearch = MAX_LENGTH_SEARCH_CONTRACT;
 
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', isUrl: '/transaction' },
-    { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
-    { matColumnDef: 'blockHeight', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/blocks/id', paramField: 'blockId' },
-    { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10, suffix: 'ago' },
-    { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
-    { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 8, justify: 'center' },
-    { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
-    { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'Aura', headerWidth: 10 },
-    { matColumnDef: 'fee', headerCellDef: 'Fee', type: 'numb', headerWidth: 10 },
-  ];
+  templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
 
   contractTransaction: TableData[] = [];
 
@@ -56,6 +49,7 @@ export class ContractContentComponent implements OnInit {
     contractsAddress: this.contractsAddress,
     count: 0,
     viewAll: true,
+    popover: true,
   };
 
   constructor(private contractService: ContractService) {}

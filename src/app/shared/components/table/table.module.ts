@@ -9,6 +9,7 @@ import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { PopoverModule } from 'src/app/shared/components/popover/popover.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { TableComponent } from './table.component';
 
@@ -25,7 +26,8 @@ import { TableComponent } from './table.component';
     DateFnsModule,
     NgxMaskModule,
     DropdownModule,
-    RouterModule
+    RouterModule,
+    PopoverModule
   ],
   exports: [TableComponent],
 })
