@@ -14,7 +14,8 @@ import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.com
 export interface TableData {
   txHash: string;
   method: string;
-  block: number;
+  blockHeight: number;
+  blockId: number;
   time: Date;
   from: string;
   to: string;

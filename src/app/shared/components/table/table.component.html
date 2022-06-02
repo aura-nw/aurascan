@@ -30,7 +30,12 @@
                   <a
                     *ngIf="data[template.matColumnDef]"
                     class="text--green cursor-pointer hash-link"
-                    [routerLink]="[template?.isUrl, data[template.matColumnDef]]">
+                    [routerLink]="[
+                      template?.isUrl,
+                      template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
+                    ]"
+                    target="_blank"
+                    >
                     {{ data[template.matColumnDef] | cutStringPipe: 20 }}
                   </a>
                   <div class="" *ngIf="!data[template.matColumnDef]">-</div>
