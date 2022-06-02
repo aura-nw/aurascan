@@ -55,19 +55,4 @@ export class BlocksComponent implements OnInit {
       this.loading = false;
     });
   }
-
-  openBlockDetail(event: any, data: any) {
-    const linkValidator = event?.target.classList.contains('validator-link');
-    const linkBlock = event?.target.classList.contains('block-link');
-    let url = '';
-    if (linkValidator) {
-      //this.router.navigate(['validators', data.operator_address]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['validators', data.operator_address]));
-      window.open(url);
-    } else if (linkBlock) {
-      //this.router.navigate(['blocks', data.height]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['blocks', data.height]));
-      window.open(url);
-    }
-  }
 }
