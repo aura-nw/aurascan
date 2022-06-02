@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { TYPE_ACCOUNT } from 'src/app/core/constants/account.constant';
 import { Globals } from '../../../../global/global';
 
 @Component({
@@ -7,10 +8,11 @@ import { Globals } from '../../../../global/global';
   styleUrls: ['./contracts-overview-card.component.scss']
 })
 export class ContractsOverviewCardComponent implements OnInit {
-
+  @Input() contractDetail: any;
+  selectedToken: any;
+  assetsType = TYPE_ACCOUNT;
   constructor(public global: Globals) { }
 
   ngOnInit(): void {
   }
-
 }

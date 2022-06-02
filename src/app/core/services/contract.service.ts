@@ -19,4 +19,8 @@ export class ContractService extends CommonService {
     // return this.http.get<any>(`${this.apiUrl}/proposals`);
     return this.http.get('../../assets/mock-data/token-list-transfer.json');
   }
+
+  getContractDetail(contractAddress): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
+  }
 }
