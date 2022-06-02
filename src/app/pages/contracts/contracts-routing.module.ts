@@ -19,7 +19,7 @@ const routes: Routes = [
     component: ContractsTransactionsComponent
   },
   {
-    path: ':contractId',
+    path: ':contractAddress',
     component: ContractsDetailComponent,
   },
 ];

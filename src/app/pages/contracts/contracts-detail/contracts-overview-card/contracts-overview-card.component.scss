@@ -1,4 +1,4 @@
-.box-token-info {
+.box-contract-overview {
   .flex-item {
     width: 50%;
     position: relative;
@@ -12,10 +12,8 @@
       background-color: var(--aura-dark-gray);
     }
   }
-  // .aura-table-contain {
-  //   min-height: 363px;
-  // }
   table.aura-basic-table {
+    min-height: 330px;
     tr td:first-child {
       width: 30%;
     }
@@ -30,5 +28,14 @@
   }
   tr {
     height: 72px;
+  }
+
+  .list-token .select-input-field {
+    background-color: var(--aura-bg-form);
+    width: 100%;
+    min-width: 300px;
+    @media (min-width: 992px) {
+      width: 186px;
+    }
   }
 }

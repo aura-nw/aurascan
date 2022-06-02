@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
-import { Globals } from 'src/app/global/global';
-import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+import { IResponsesTemplates, TableTemplate } from 'src/app/core/models/common.model';
+import { IContractsResponse, ITableContract } from 'src/app/core/models/contract.model';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { isContract } from 'src/app/core/utils/common/validation';
+import { TableData } from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-contracts-transactions',
@@ -17,60 +15,73 @@ import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.com
   styleUrls: ['./contracts-transactions.component.scss'],
 })
 export class ContractsTransactionsComponent implements OnInit {
-  // data table
-  mockData: {
-    txHash: string;
-    method: string;
-    block: number;
-    time: Date;
-    from: string;
-    to: string;
-    label: string;
-    value: number;
-    fee: number;
-  }[] = [
-    {
-      txHash: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
-      method: 'Transfer',
-      block: 2722076,
-      time: moment().subtract(100, 's').toDate(),
-      from: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
-      to: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
-      label: 'TO',
-      value: 123.123,
-      fee: 2.134,
-    },
-    {
-      txHash: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
-      method: 'Transfer',
-      block: 2722076,
-      time: moment().subtract(100, 'm').toDate(),
-      from: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
-      to: 'DCE3D1C7FDCD2A620940DE97235A4D484C769486493B51ECC3E06BF0DBE9D5C8',
-      label: 'OUT',
-      value: 123.123,
-      fee: 2.134,
-    },
-  ];
-
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url' },
+    { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', isUrl: '/transaction' },
     { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
-    { matColumnDef: 'block', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/block' },
-    { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10 },
-    { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15 },
+    { matColumnDef: 'blockHeight', headerCellDef: 'Blocks', type: 'hash-url', headerWidth: 8, isUrl: '/blocks/id', paramField: 'blockId'  },
+    { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 10, suffix: 'ago' },
+    { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
     { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 8, justify: 'center' },
-    { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 15 },
+    { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
     { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'Aura', headerWidth: 10 },
     { matColumnDef: 'fee', headerCellDef: 'Fee', type: 'numb', headerWidth: 10 },
   ];
 
-  contractInfo = {
-    contractsAddress: 'aura1gp7qcchk3y8emexal0r0s2txc94fkhnywslp2wnc3qcd8ng0wtys9aq24r',
-    count: 21231231,
+  contractInfo: ITableContract = {
+    contractsAddress: '',
+    count: 0,
   };
 
-  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
+  contract$ = this.activeRouter.params.pipe(
+    mergeMap((e) => {
+      if (isContract(e?.addressId)) {
+        this.contractInfo.contractsAddress = e?.addressId;
+        return this.contractService.getTransactions(e.addressId);
+      }
+      this.router.navigate(['']);
+      return of(null);
+    }),
+    map((dta: IResponsesTemplates<IContractsResponse[]>) => {
+      if (dta?.data && Array.isArray(dta.data)) {
+        this.contractInfo.count = dta.meta?.count || 0;
+
+        const ret = dta.data.map((contract) => {
+          const method = Object.keys(contract.messages[0].msg)[0];
+          const value = +contract.messages[0].funds[0]?.amount || 0;
+
+          const label = contract.messages[0].sender === this.contractInfo.contractsAddress ? 'OUT' : 'TO';
+
+          const tableDta: TableData = {
+            txHash: contract.tx_hash,
+            method,
+            blockHeight: contract.height,
+            blockId: contract.blockId,
+            time: new Date(contract.timestamp),
+            from: contract.messages[0].sender,
+            label,
+            to: contract.messages[0].contract,
+            value,
+            fee: +contract.fee,
+          };
+
+          return tableDta;
+        });
+
+        return ret;
+      }
+
+      this.router.navigate(['']);
+
+      return null;
+    }),
+  );
+
+  constructor(
+    public translate: TranslateService,
+    private router: Router,
+    private contractService: ContractService,
+    private activeRouter: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {}
 
