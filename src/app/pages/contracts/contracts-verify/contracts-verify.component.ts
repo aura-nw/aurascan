@@ -40,10 +40,8 @@ export class ContractsVerifyComponent implements OnInit {
     this.tabCurrent = tabId;
   }
   onSubmit() {
-    // console.log(this.contractForm.value)
     if(this.contractForm.valid) {
       this.contractService.verifyContract(this.contractForm.value).subscribe(res => {
-        console.log(res)
         this.contractForm.reset();
       })
     }

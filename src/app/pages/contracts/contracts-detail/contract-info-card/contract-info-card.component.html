@@ -36,8 +36,12 @@
         <tr>
           <td>Token Tracker:</td>
           <td colspan="2">
-            <a class="text--green" [routerLink]="['/token', contractDetail?.contract_address]">Aura (Aura)</a>
-            <span class="ml-1 text-secondary">(@$1)</span>
+            <ng-container *ngIf="contractDetail?.token_tracker">
+              <a class="text--green" [routerLink]="['/token', contractDetail?.contract_address]">
+                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+              </a>
+              <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->
+            </ng-container>
           </td>
         </tr>
       </table>

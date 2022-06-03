@@ -26,7 +26,7 @@
           <td>Aura Value:</td>
           <td>
             ${{ contractDetail?.price | number: global.formatNumberToken }}
-            <span class="text-secondary ml-1"
+            <span class="text--light-gray ml-1" *ngIf="contractDetail?.price"
               >(@ ${{ contractDetail?.price | number: global.formatNumberToken }}/{{
                 global.stableToken | titlecase
               }})</span

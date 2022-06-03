@@ -12,7 +12,16 @@
 .txt-light {
   color: var(--aura-light-gray);
 }
-.aura-nav-tabs.nav-tabs .nav-link{
+.aura-nav-tabs.nav-tabs .nav-link {
   font-weight: 600;
   font-size: 16px;
+}
+a.verify-contract {
+  .tab-title {
+    margin-right: 8px;
+  }
+  img {
+    position: absolute;
+    top: 2px;
+  }
 }

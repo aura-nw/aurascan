@@ -68,7 +68,7 @@
                     <div class="d-flex align-items-center gap-2">
                       <div class="" [style.width]="'16px'">
                         <img
-                          *ngIf="data['contract_verification'] !== 'UNVERIFIED'"
+                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
                           src="assets/icons/icons-svg/color/check-circle.svg"
                           alt="contract_verification"
                           width="16px"
@@ -90,7 +90,7 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
-                    {{ data[template.matColumnDef] !== 'UNVERIFIED' ? data['updated_at'] : '-' }}
+                    {{ data[template.matColumnDef] !== contractVerifyType.Unverifed ? data['updated_at'] : '-' }}
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
                     {{ (data[template.matColumnDef] | cutStringPipe: 20) || '-' }}
