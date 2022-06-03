@@ -319,10 +319,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr
-                      mat-row
-                      *matRowDef="let row; columns: displayedColumns"
-                      (click)="openTxsDetail($event, row)"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     <tr class="mat-row" *matNoDataRow>
                       <td class="mat-cell g-no-data pt-8" colspan="9999">
                         <app-loading-sprint></app-loading-sprint>
