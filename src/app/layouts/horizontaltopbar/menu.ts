@@ -52,7 +52,7 @@ export const MENU: MenuItem[] = [
     {
         id: 6,
         label: 'MENUITEMS.CONTRACT.TEXT',
-        icon: 'user',
+        icon: 'file-document',
         link: '/contracts',
     },
     {
