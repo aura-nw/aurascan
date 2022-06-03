@@ -40,6 +40,10 @@
     @media (min-width: 992px) {
       width: 186px;
     }
+    ::ng-deep mat-select-trigger {
+      display: inline-flex;
+      align-items: center;
+    }
   }
 
   .box-wallet{
@@ -50,5 +54,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+.selected-token__label {
+  margin-left: var(--spacer-2);
+  background: var(--aura-gradient-simple);
+  height: 22px;
+  color: #121212;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0 var(--spacer-2);
+}
+
+::ng-deep {
+  .aura-optional-panel.aura-optional-token-panel {
+    .mat-option-text {
+      display: inline-flex;
+      align-items: center;
+    }
   }
 }
