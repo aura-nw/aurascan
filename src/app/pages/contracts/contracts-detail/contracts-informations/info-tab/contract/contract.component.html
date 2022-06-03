@@ -1,5 +1,5 @@
 <div class="box-contract text--white">
-  <ng-container *ngIf="!isVerifyContract">
+  <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed">
     <div class="d-flex align-items-center">
       <img
         src="../../../../../../../assets/icons/icons-svg/color/info-circle.svg"
@@ -19,7 +19,7 @@
       157510££10183117855520001=2565h82800160010185558215620001=2570182015h82811115620001-157825182554
     </div>
   </ng-container>
-  <ng-container *ngIf="isVerifyContract">
+  <ng-container *ngIf="contractTypeData !== contractVerifyType.Unverifed">
     <div class="d-flex mb-3">
       <button
         class="btn-contract"
@@ -43,7 +43,7 @@
   </ng-container>
 </div>
 <div class="mt-3">
-  <app-code-contract *ngIf="countCurrent === contractType.Code"></app-code-contract>
+  <app-code-contract *ngIf="countCurrent === contractType.Code" [contractTypeData]="contractTypeData"></app-code-contract>
   <app-read-contract *ngIf="countCurrent === contractType.ReadContract"></app-read-contract>
   <app-write-contract *ngIf="countCurrent === contractType.WriteContract"></app-write-contract>
 </div>

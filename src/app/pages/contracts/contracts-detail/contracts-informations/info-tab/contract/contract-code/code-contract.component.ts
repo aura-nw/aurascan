@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 
 @Component({
   selector: 'app-code-contract',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./code-contract.component.scss'],
 })
 export class CodeContractComponent implements OnInit {
+  @Input() contractTypeData: string;
+
+  contractVerifyType = ContractVerifyType;
   isExpand = false;
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   expandMenu(): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -23,11 +28,11 @@ export class CodeContractComponent implements OnInit {
   }
 
   copyData(text: string): void {
-    var dummy = document.createElement("textarea");
+    var dummy = document.createElement('textarea');
     document.body.appendChild(dummy);
     dummy.value = text;
     dummy.select();
-    document.execCommand("copy");
+    document.execCommand('copy');
     document.body.removeChild(dummy);
   }
 }

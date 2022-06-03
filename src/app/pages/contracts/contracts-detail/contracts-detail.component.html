@@ -1,5 +1,5 @@
 <h1 class="title-small fw-500 mb-5 text--white">
-  Contract <span class="text-secondary body fw-normal ml-1">{{contractAddress}}</span>
+  Contract <span class="text--light-gray body fw-normal ml-1">{{ contractAddress }}</span>
 </h1>
 <div class="row">
   <div class="col-12 col-lg-6">
@@ -11,4 +11,7 @@
   </div>
 </div>
 
-<app-contract-content [contractsAddress]="contractAddress + ''"></app-contract-content>
+<app-contract-content
+  *ngIf="contractDetail"
+  [contractsAddress]="contractAddress + ''"
+  [contractTypeData]="contractDetail.contract_verification"></app-contract-content>
