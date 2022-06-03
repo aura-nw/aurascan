@@ -40,6 +40,12 @@ i {
 .icon-user:before {
   content: "\e90b";
 }
+.icon-file-document:before {
+  content: "\e90f";
+}
+.icon-coin:before {
+  content: "\e911";
+}
 .icon-collab:before {
   content: "\e90c";
 }

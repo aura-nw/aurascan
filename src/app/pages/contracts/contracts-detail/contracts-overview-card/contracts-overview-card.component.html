@@ -41,10 +41,17 @@
               <mat-select
                 #assetTypeSelect
                 class="list-token form-control select-input-field"
-                panelClass="aura-optional-panel"
+                panelClass="aura-optional-panel aura-optional-token-panel"
                 [disableOptionCentering]="true"
                 [(value)]="selectedToken">
-                <mat-option [value]="'$10,430,364.81'"> > $10,430,364.81 </mat-option>
+                <mat-select-trigger>
+                  <span>> {{ selectedToken }}</span>
+                  <span class="selected-token__label">>103</span>
+                </mat-select-trigger>
+                <mat-option [value]="'$10,430,364.81'">
+                  <span>> $10,430,364.81</span>
+                  <span class="selected-token__label">>103</span>
+                </mat-option>
               </mat-select>
               <div class="box-wallet">
                 <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
