@@ -562,8 +562,22 @@ body {
     background: #1C1C1F;
     border: none;
 
-    box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
+    box-shadow: 2px 2px 30px #ffffff05;
     border-radius: 8px;
+
+    .arrow {
+        position: relative;
+        &::before {
+            position: absolute;
+            content: "";
+            width: 16px;
+            height: 16px;
+            background-color: #1C1C1F;
+            top: 145px;
+            left: -6px;
+            transform: rotate(45deg);
+        }
+    }
 
     .popover-body {
         padding: 16px;

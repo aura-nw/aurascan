@@ -71,7 +71,6 @@ export class ContractContentComponent implements OnInit {
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
       this.contractService.getTransactions(this.contractsAddress).subscribe((res) => {
-        console.log(res);
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
           const ret = res.data.map((contract) => {
@@ -95,8 +94,6 @@ export class ContractContentComponent implements OnInit {
 
             return tableDta;
           });
-
-          console.log(ret);
 
           this.contractTransaction = ret;
         }

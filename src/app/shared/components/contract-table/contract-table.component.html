@@ -24,7 +24,7 @@
                 <ng-container *ngSwitchCase="'popover'">
                   <button
                     mat-icon-button
-                    aria-label="Example icon-button with a menu"
+                    aria-label="Contract Transaction Detail"
                     placement="right"
                     [ngbPopover]="popContent"
                     popoverClass="custom-popover"
@@ -36,10 +36,7 @@
                       height="16" />
                   </button>
                   <ng-template  #popContent class="popContent">
-                    <div class="d">
-
-                    </div>
-                    <app-contract-popover ></app-contract-popover>
+                    <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
                   </ng-template>
                 </ng-container>
                 <ng-container *ngSwitchCase="'hash-url-se'">

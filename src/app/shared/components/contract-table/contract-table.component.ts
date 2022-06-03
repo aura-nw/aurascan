@@ -39,8 +39,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
   pageData: PageEvent = null;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
-  popoverData: IContractPopoverData = null;
-
   constructor(public translate: TranslateService) {}
 
   ngOnChanges(): void {
@@ -67,5 +65,20 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   viewSelected(e: DropdownElement): void {
     this.onViewSelected.emit(e);
+  }
+
+  getPopoverData(data): IContractPopoverData {
+    return {
+      amount: 1000,
+      code: 0,
+      fee: 0.111,
+      from_address: 'aura1tuc47nqcfr426gdynf7yqaz4u0psl5609ccsadp276vgkeykda9s96yv0z',
+      to_address: 'aura1h6r78trkk2ewrry7s3lclrqu9a22ca3hpmyqfu',
+      price: 123,
+      status: 'Success',
+      symbol: 'AURA',
+      tokenAddress: 'aura1tuc47nqcfr426gdynf7yqaz4u0psl5609ccsadp276vgkeykda9s96yv0z',
+      tx_hash: '8B830E4B7339EB68933D40AC62E24E51867F5447D2703F6605672E44E42A8358',
+    };
   }
 }
