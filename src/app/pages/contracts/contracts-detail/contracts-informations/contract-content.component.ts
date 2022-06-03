@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { TableData } from 'src/app/shared/components/table/table.component';
+import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 import {
   CONTRACT_TAB,
   CONTRACT_TABLE_TEMPLATES,
