@@ -372,7 +372,7 @@
                             <a
                               *ngSwitchCase="'tx_hash_format'"
                               class="text--green cursor-pointer hash-link"
-                              [routerLink]="['/transaction', data['tx_hash]']]">
+                              [routerLink]="['/transaction', data['tx_hash']]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <div
@@ -395,10 +395,7 @@
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsPower"></tr>
-                  <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumnsPower"
-                    (click)="openTxsDetail($event, row)"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsPower"></tr>
                   <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell g-no-data pt-8" colspan="9999">
                       <app-loading-sprint></app-loading-sprint>
