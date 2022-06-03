@@ -305,21 +305,6 @@ export class DashboardComponent implements OnInit {
   //   });
   // }
 
-  openTxsDetail(event: any, data: any) {
-    const linkHash = event?.target.classList.contains('hash-link');
-    const linkBlock = event?.target.classList.contains('block-link');
-    let url = '';
-    if (linkHash) {
-      //this.router.navigate(['transaction', data.tx_hash]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['transaction/', data.tx_hash]));
-      window.open(url);
-    } else if (linkBlock) {
-      //this.router.navigate(['blocks/id', data.blockId]);
-      url = this.router.serializeUrl(this.router.createUrlTree(['blocks/id', data.blockId]));
-      window.open(url);
-    }
-  }
-
   checkAmountValue(message: any[], txHash: string, type: string) {
     let eTransType = TRANSACTION_TYPE_ENUM;
     if (message?.length > 1) {

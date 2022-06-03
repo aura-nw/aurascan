@@ -15,8 +15,7 @@
                     <a
                       *ngSwitchCase="'validator_name'"
                       class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_address']]"
-                      target="_blank">
+                      [routerLink]="['/validators', data['validator_address']]">
                       {{ data[template.matColumnDef] }}
                     </a>
                     <div *ngSwitchCase="'amount'" class="fw-normal">
@@ -50,15 +49,13 @@
                     <a
                       *ngSwitchCase="'validator_src_name'"
                       class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_src_address']]"
-                      target="_blank">
+                      [routerLink]="['/validators', data['validator_src_address']]">
                       {{ data[template.matColumnDef] }}
                     </a>
                     <a
                       *ngSwitchCase="'validator_dst_name'"
                       class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_dst_address']]"
-                      target="_blank">
+                      [routerLink]="['/validators', data['validator_dst_address']]">
                       {{ data[template.matColumnDef] }}
                     </a>
                     <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
@@ -87,8 +84,7 @@
                 <div *ngSwitchCase="pageType.Delegation">
                   <a
                     class="fw-normal text--green body-mob"
-                    [routerLink]="['/validators', item['validator_address']]"
-                    target="_blank">
+                    [routerLink]="['/validators', item['validator_address']]">
                     {{ item.validator_name }}
                   </a>
                   <br />
@@ -111,8 +107,7 @@
                     <div class="fw-normal">
                       <a
                         class="fw-normal text--green body-mob"
-                        [routerLink]="['/validators', item['validator_address']]"
-                        target="_blank">
+                        [routerLink]="['/validators', item['validator_address']]">
                         {{ item.validator_name }}
                       </a>
                       <br />
@@ -133,8 +128,7 @@
                     <div class="fw-normal">
                       <a
                         class="fw-normal text--green body-mob"
-                        [routerLink]="['/validators', item['validator_address']]"
-                        target="_blank">
+                        [routerLink]="['/validators', item['validator_address']]">
                         {{ item.validator_src_name }}
                       </a>
                       <br />
@@ -144,8 +138,7 @@
                     <div class="txt-right">
                       <a
                         class="fw-normal text--green body-mob"
-                        [routerLink]="['/validators', item['validator_address']]"
-                        target="_blank">
+                        [routerLink]="['/validators', item['validator_address']]">
                         {{ item.validator_dst_name }}
                       </a>
                       <br />
