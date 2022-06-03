@@ -1,15 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { ITableContract } from 'src/app/core/models/contract.model';
-import { Globals } from 'src/app/global/global';
+import { IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import { DROPDOWN_ELEMENT } from 'src/app/core/models/contract.model';
 
 export interface TableData {
   txHash: string;
@@ -25,44 +22,28 @@ export interface TableData {
 }
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-contract-table',
+  templateUrl: './contract-table.component.html',
+  styleUrls: ['./contract-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent implements OnInit, OnChanges {
-  elements: DropdownElement[] = [
-    {
-      image: 'assets/icons/icons-svg/white/arrow-right-2.svg',
-      label: 'View OutGoing Txns',
-      key: 0,
-    },
-    {
-      image: 'assets/icons/icons-svg/white/arrow-left-2.svg',
-      label: 'View Ingoing Txns',
-      key: 1,
-    },
-    {
-      image: 'assets/icons/icons-svg/white/contract.svg',
-      label: 'View Contract Creation',
-      key: 2,
-    },
-  ];
-
+export class ContractTableComponent implements OnInit, OnChanges {
   @Input() data: TableData[];
-  // data table
-  @Input() contractInfo: ITableContract;
+  @Input() contractInfo!: ITableContract;
   @Input() templates!: Array<TableTemplate>;
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
 
-  displayedColumns: string[];
+  elements: DropdownElement[] = DROPDOWN_ELEMENT;
+  displayedColumns: string[] = [];
 
-  pageData: PageEvent;
+  pageData: PageEvent = null;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
-  constructor(public translate: TranslateService, public global: Globals) {}
+  popoverData: IContractPopoverData = null;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  constructor(public translate: TranslateService) {}
+
+  ngOnChanges(): void {
     this.loadTableData();
   }
 

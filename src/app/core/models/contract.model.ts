@@ -1,3 +1,5 @@
+import { CodeTransaction } from "src/app/core/constants/transaction.enum";
+
 export interface IContractsResponse {
   tx_hash: string;
   height: number;
@@ -27,3 +29,36 @@ export interface ITableContract {
   viewAll?: boolean;
   popover?: boolean;
 }
+
+
+export interface IContractPopoverData {
+  status: string;
+  code: CodeTransaction;
+  amount: string;
+  price: string;
+  tokenAddress: string;
+  from_address: string;
+  symbol: string;
+  to_address: string;
+  tx_hash: string;
+  fee: string;
+}
+
+
+export const DROPDOWN_ELEMENT = [
+  {
+    image: 'assets/icons/icons-svg/white/arrow-right-2.svg',
+    label: 'View OutGoing Txns',
+    key: 0,
+  },
+  {
+    image: 'assets/icons/icons-svg/white/arrow-left-2.svg',
+    label: 'View Ingoing Txns',
+    key: 1,
+  },
+  {
+    image: 'assets/icons/icons-svg/white/contract.svg',
+    label: 'View Contract Creation',
+    key: 2,
+  },
+];

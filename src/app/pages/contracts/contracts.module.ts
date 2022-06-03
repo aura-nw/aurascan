@@ -17,7 +17,7 @@ import { ContractsTransactionsComponent } from 'src/app/pages/contracts/contract
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TableModule } from 'src/app/shared/components/table/table.module';
+import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
 import { ContractService } from '../../core/services/contract.service';
 import { ContractInfoCardComponent } from './contracts-detail/contract-info-card/contract-info-card.component';
 import { ContractsDetailComponent } from './contracts-detail/contracts-detail.component';
@@ -62,7 +62,7 @@ import { CompilerOutputComponent } from './contracts-verify/compiler-output/comp
     CommonPipeModule,
     DateFnsModule,
     NgxMaskModule,
-    TableModule,
+    ContractTableModule,
     ReactiveFormsModule
   ],
   providers: [ContractService],

@@ -9,12 +9,12 @@ import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
-import { PopoverModule } from 'src/app/shared/components/popover/popover.module';
+import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
-import { TableComponent } from './table.component';
+import { ContractTableComponent } from './contract-table.component';
 
 @NgModule({
-  declarations: [TableComponent],
+  declarations: [ContractTableComponent],
   imports: [
     CommonModule,
     NgbPopoverModule,
@@ -27,8 +27,8 @@ import { TableComponent } from './table.component';
     NgxMaskModule,
     DropdownModule,
     RouterModule,
-    PopoverModule
+    ContractPopoverModule
   ],
-  exports: [TableComponent],
+  exports: [ContractTableComponent],
 })
-export class TableModule {}
+export class ContractTableModule {}

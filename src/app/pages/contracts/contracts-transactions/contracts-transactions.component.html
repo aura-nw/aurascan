@@ -6,7 +6,7 @@
   <section>
     <div class="card mt-8">
       <div class="card-body" *ngIf="contract$ | async as contract">
-        <app-table [data]="contract" [templates]="templates" [contractInfo]="contractInfo"></app-table>
+        <app-contract-table [data]="contract" [templates]="templates" [contractInfo]="contractInfo"></app-contract-table>
       </div>
     </div>
   </section>

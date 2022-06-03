@@ -1,4 +1,4 @@
-<div class="popover-container">
+<div class="contract-popover-container">
   <div class="text--white">
     <div class="sub-text sub-text-mob">Additional info</div>
     <div class="small-body">Status:</div>
@@ -13,30 +13,34 @@
     <hr />
     <div class="small-body">Token Transfer</div>
     <div class="small-body">
-      {{ tokenDetail?.amount | number: global.formatNumberToken }}
-      (${{ tokenDetail?.price | number: global.formatNumber2Decimal }})
-      <a class="text--green" [routerLink]="['/token/token', tokenAddress]"> {{ tokenType }} </a>
+      {{ tokenDetail?.amount | mask: 'separator' }}
+      (${{ tokenDetail?.price | mask: 'separator' }})
+      <a class="text--green" [routerLink]="['/token/token', tokenDetail.tokenAddress]"> {{ tokenDetail.symbol }} </a>
     </div>
     <div class="small-body">
-      <span class="small-body text--light-gray">From</span> ... 
+      <span class="small-body text--light-gray">From</span>
       <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">
-        {{ tokenDetail?.from_address_format }} 
+        {{ tokenDetail?.from_address || '-' | cutStringPipe: 10 }}
       </a>
-      <span class="small-body text--light-gray">To</span> ... 
+      <span class="small-body text--light-gray">To</span>
       <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">
-        {{ tokenDetail?.to_address_format }}
+        {{ tokenDetail?.to_address || '-' | cutStringPipe: 10 }}
       </a>
     </div>
     <hr />
 
     <div class="small-body">Transaction Fee:</div>
-    <div class="small-body text--contract">0.00075177042 Ether ($1.52)</div>
+    <div class="small-body text--contract">
+      {{ tokenDetail.fee | mask: 'separator' }}
+    </div>
     <hr />
 
     <div class="small-body">Gas info:</div>
-    <div class="small-body">47,566 Gas Used From 78,549 Gas Limit @ 0.00000001580573182 Ether (15.807219472 Gwei)</div>
+    <!-- <div class="small-body">Fee: {{ tokenDetail.fee | mask: 'separator' }}</div> -->
     <hr />
 
-    <a class="small-text text--green cursor-pointer" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
+    <a class="small-text text--green cursor-pointer" [routerLink]="['/transaction', tokenDetail?.tx_hash]">
+      See more details
+    </a>
   </div>
 </div>

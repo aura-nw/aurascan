@@ -8,7 +8,7 @@ import { IResponsesTemplates, TableTemplate } from 'src/app/core/models/common.m
 import { IContractsResponse, ITableContract } from 'src/app/core/models/contract.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { TableData } from 'src/app/shared/components/table/table.component';
+import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 
 @Component({
   selector: 'app-contracts-transactions',
