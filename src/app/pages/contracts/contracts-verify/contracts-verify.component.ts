@@ -11,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ContractsVerifyComponent implements OnInit {
   tabCurrent = 1;
-  contractAddress = ''
+  contractAddress = '';
   constructor(
       private layout: BreakpointObserver,
       private contractService: ContractService,
@@ -38,8 +38,8 @@ export class ContractsVerifyComponent implements OnInit {
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractForm = new FormGroup({
-      contract_address: new FormControl(''),
-      link: new FormControl('', [Validators.required, Validators.max(200)]),
+      contract_address: new FormControl('',[Validators.required]),
+      link: new FormControl('', [Validators.required, Validators.maxLength(200)]),
       url: new FormControl(''),
       compiler_version: new FormControl('', [Validators.required]),
       commit: new FormControl(''),
@@ -56,9 +56,9 @@ export class ContractsVerifyComponent implements OnInit {
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
       this.contractForm.controls['commit'].setValue(link.split('/')[link.split('/').length - 1]);
       this.contractForm.removeControl('link');
-      console.log(this.contractForm.value)
+      // console.log(this.contractForm.value)
       this.contractService.verifyContract(this.contractForm.value).subscribe(res => {
-        console.log(res)
+        // console.log(res)
         this.contractForm.reset();
       })
     }
