@@ -34,11 +34,7 @@ export class ContractContentComponent implements OnInit {
 
   countCurrent: string = '';
   textSearch: string = '';
-  searchTemp: string = '';
-  isSearchTx = false;
-  isSearchAddres = false;
   resultSearch = 0;
-  tabsBackup = this.TABS;
   contractTab = ContractTab;
   maxLengthSearch = MAX_LENGTH_SEARCH_CONTRACT;
   contractVerifyType = ContractVerifyType;
@@ -67,10 +63,6 @@ export class ContractContentComponent implements OnInit {
     this.countCurrent = tabId;
   }
 
-  getLength(result: string) {
-    this.resultSearch = Number(result) || 0;
-  }
-
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
       let payload = {
@@ -85,7 +77,12 @@ export class ContractContentComponent implements OnInit {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
           const ret = res.data.map((contract) => {
-            const method = Object.keys(contract.messages[0].msg)[0];
+            let method = '';
+            if (contract.messages[0]['@type'] === '/cosmwasm.wasm.v1.MsgInstantiateContract') {
+              method = 'instantiate';
+            } else {
+              method = Object.keys(contract.messages[0].msg)[0];
+            }
             const value = +contract.messages[0].funds[0]?.amount || 0;
 
             const label = contract.messages[0].sender === this.contractsAddress ? 'OUT' : 'TO';
@@ -121,7 +118,7 @@ export class ContractContentComponent implements OnInit {
     } else if (event.key === 2) {
       this.textSearch = this.contractTransactionType.CREATION;
     } else {
-      this.textSearch = '';
+      this.textSearch = this.contractTransactionType.OUT;
     }
     this.getTransaction();
   }

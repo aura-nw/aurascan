@@ -23,7 +23,7 @@ export class ContractsTransactionsComponent implements OnInit {
     contractsAddress: '',
     count: 0,
     popover: true,
-    tableData: []
+    tableData: [],
   };
   contractTransactionType = ContractTransactionType;
   textSearch = '';
@@ -41,12 +41,12 @@ export class ContractsTransactionsComponent implements OnInit {
         //   contract_address: e.addressId,
         // };
         // return this.contractService.getTransactions(payload);
-        
+
         this.getListTransaction();
       }
       //this.router.navigate(['']);
       return of(null);
-    })
+    }),
   );
 
   constructor(
@@ -57,13 +57,13 @@ export class ContractsTransactionsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contract$.subscribe()
+    this.contract$.subscribe();
     // this.getListTransaction();
   }
 
   getListTransaction(): void {
     console.log(this.contractInfo);
-    
+
     if (isContract(this.contractInfo.contractsAddress)) {
       let payload = {
         //limit: this.pageSize,
@@ -77,7 +77,12 @@ export class ContractsTransactionsComponent implements OnInit {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
           this.contractInfo.tableData = res.data.map((contract) => {
-            const method = Object.keys(contract.messages[0].msg)[0];
+            let method = '';
+            if (contract.messages[0]['@type'] === '/cosmwasm.wasm.v1.MsgInstantiateContract') {
+              method = 'instantiate';
+            } else {
+              method = Object.keys(contract.messages[0].msg)[0];
+            }
             const value = +contract.messages[0].funds[0]?.amount || 0;
 
             const label = contract.messages[0].sender === this.contractInfo.contractsAddress ? 'OUT' : 'TO';
@@ -97,11 +102,6 @@ export class ContractsTransactionsComponent implements OnInit {
 
             return tableDta;
           });
-
-          // this.contractTransaction = ret;
-          // if (this.contractTypeData !== this.contractVerifyType.Unverifed) {
-          //   this.isVerifyContract = true;
-          // }
         }
       });
     }
@@ -120,7 +120,7 @@ export class ContractsTransactionsComponent implements OnInit {
     } else if (event.key === 2) {
       this.textSearch = this.contractTransactionType.CREATION;
     } else {
-      this.textSearch = '';
+      this.textSearch = this.contractTransactionType.OUT;
     }
     this.getListTransaction();
   }
