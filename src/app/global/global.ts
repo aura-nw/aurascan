@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NUMBER_CONVERT, STABLE_UTOKEN } from '../core/constants/common.constant';
+import { NUMBER_CONVERT, AURA_DENOM } from '../core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 
@@ -33,7 +33,7 @@ export function getAmount(arrayMsg, type, rawRog = '') {
     //check error with rawlog
     try {
       const jsonData = JSON.parse(rawRog);
-      amount = jsonData[0].events[0].attributes[1].value.replace(STABLE_UTOKEN,'');
+      amount = jsonData[0].events[0].attributes[1].value.replace(AURA_DENOM,'');
     } catch {
     }
   }
