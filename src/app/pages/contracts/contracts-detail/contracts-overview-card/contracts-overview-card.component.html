@@ -6,10 +6,14 @@
           <td class="body fw-semibold">Contract Overview</td>
           <td class="justify-content-end">
             <div class="d-flex justify-content-end">
-              <a href="javascript:void(0)" class="button button-chart button-outline button-outline__in-card">
-                <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
-                <span class="ml-2">Aura: Aura Token</span>
-              </a>
+              <ng-container *ngIf="contractDetail?.token_tracker">
+                <a href="javascript:void(0)" class="button button-chart button-outline button-outline__in-card">
+                  <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+                  <span class="ml-2 small-text"
+                    >{{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})</span
+                  >
+                </a>
+              </ng-container>
             </div>
           </td>
         </tr>
@@ -25,9 +29,9 @@
         <tr>
           <td>Aura Value:</td>
           <td>
-            ${{ contractDetail?.price | number: global.formatNumberToken }}
+            ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
             <span class="text--light-gray ml-1" *ngIf="contractDetail?.price"
-              >(@ ${{ contractDetail?.price | number: global.formatNumberToken }}/{{
+              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{
                 global.stableToken | titlecase
               }})</span
             >
@@ -45,12 +49,12 @@
                 [disableOptionCentering]="true"
                 [(value)]="selectedToken">
                 <mat-select-trigger>
-                  <span>> {{ selectedToken }}</span>
-                  <span class="selected-token__label">>103</span>
+                  <span>{{ selectedToken }}</span>
+                  <span class="selected-token__label">1</span>
                 </mat-select-trigger>
-                <mat-option [value]="'$10,430,364.81'">
-                  <span>> $10,430,364.81</span>
-                  <span class="selected-token__label">>103</span>
+                <mat-option [value]="'$0.00'">
+                  <span>$0.00</span>
+                  <span class="selected-token__label">1</span>
                 </mat-option>
               </mat-select>
               <div class="box-wallet">
