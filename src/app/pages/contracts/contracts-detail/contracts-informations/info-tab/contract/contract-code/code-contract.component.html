@@ -8,7 +8,7 @@
   <ng-container *ngIf="contractTypeData === contractVerifyType.Similar_Match">
     <img src="assets/images/icons/contract-simimar.svg" alt="" width="16" height="16" />
     <span class="ml-2 mr-1 fw-semibold">Similar Match Source Code</span>
-    <div class="text--light-gray mt-3">
+    <div class="text--light-gray mt-4 mb-2">
       Note: This contract matches the deployed ByteCode of the Source Code for Contract
       <a class="text--green ml-1" [routerLink]="['/account', 'aura1a6xdrvyree2jrpn2fcxqd0rychu8gcczftld2c']">
         aura1a6xdrvyree2jrpn2fcxqd0rychu8gcczftld2c</a
@@ -20,11 +20,11 @@
     <div class="col-lg-6">
       <table class="aura-basic-table w-100">
         <tr>
-          <td>Contract Name:</td>
+          <td class="text--contract">Contract Name:</td>
           <td class="fw-semibold">FiatTokenProxy</td>
         </tr>
         <tr>
-          <td>Compiler Version:</td>
+          <td class="text--contract">Compiler Version:</td>
           <td class="fw-semibold">v0.4.24+commit.e67f0147</td>
         </tr>
       </table>
@@ -32,12 +32,12 @@
     <div class="col-lg-6">
       <table class="aura-basic-table w-100">
         <tr>
-          <td>Optimization Enabled:</td>
-          <td>No with 200 runs</td>
+          <td class="text--contract">Optimization Enabled:</td>
+          <td><span class="fw-semibold">No</span> with <span class="fw-semibold">200</span> runs</td>
         </tr>
         <tr>
-          <td>Other Settings:</td>
-          <td>default evmVersion</td>
+          <td class="text--contract">Other Settings:</td>
+          <td><span class="fw-semibold">default</span> evmVersion</td>
         </tr>
       </table>
     </div>
