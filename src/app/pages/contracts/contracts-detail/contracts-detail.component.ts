@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 
@@ -12,7 +13,13 @@ export class ContractsDetailComponent implements OnInit {
   contractAddress: string | number;
   contractDetail: any;
   priceToken = 0;
-  constructor(private route: ActivatedRoute, private contractService: ContractService) {}
+  modalReference: any;
+
+  constructor(
+    private route: ActivatedRoute,
+    private contractService: ContractService,
+    private modalService: NgbModal,
+  ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -34,12 +41,25 @@ export class ContractsDetailComponent implements OnInit {
     });
   }
 
-  copyData(text: string): void {
+  copyData(): void {
+    let text = this.contractAddress.toString();
     var dummy = document.createElement('textarea');
     document.body.appendChild(dummy);
     dummy.value = text;
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
+  }
+
+  viewQrAddress(staticDataModal: any): void {
+    this.modalReference = this.modalService.open(staticDataModal, {
+      keyboard: false,
+      centered: true,
+      windowClass: 'modal-holder',
+    });
+  }
+
+  closePopup() {
+    this.modalReference.close();
   }
 }
