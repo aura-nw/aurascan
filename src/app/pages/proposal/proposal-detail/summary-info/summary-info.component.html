@@ -58,9 +58,9 @@
         <div class="row mb-3 small-body">
           <div class="col-12 col-md-2 fw-semibold">Proposer</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
-            <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}"  target="_blank">{{
-              proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address
-            }}</a>
+            <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">
+              {{ proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address }}
+            </a>
           </div>
         </div>
         <div class="row mb-3 small-body">
@@ -108,15 +108,11 @@
       <div class="proposal__summary-total" *ngIf="!votingBarLoading">
         <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-2 fw-semibold">Current Turnout</div>
-          <div class="col-12 col-md-10">
-            {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
-          </div>
+          <div class="col-12 col-md-10">{{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%</div>
         </div>
         <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-2 fw-semibold">Quorum</div>
-          <div class="col-12 col-md-10">
-            {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
-          </div>
+          <div class="col-12 col-md-10">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</div>
         </div>
         <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
           <div class="col-12 col-md-10 small-body text--light-gray">

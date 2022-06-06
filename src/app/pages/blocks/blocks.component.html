@@ -14,15 +14,24 @@
                 <td mat-cell *matCellDef="let data" style="max-width: 300px">
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
-                      <div *ngSwitchCase="'height'" class="text--green cursor-pointer block-link">
+                      <a
+                        *ngSwitchCase="'height'"
+                        class="text--green cursor-pointer block-link"
+                        [routerLink]="['/blocks', data[template.matColumnDef]]">
                         {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'block_hash_format'" class="text--green cursor-pointer block-link">
+                      </a>
+                      <a
+                        *ngSwitchCase="'block_hash_format'"
+                        class="text--green cursor-pointer block-link"
+                        [routerLink]="['/blocks', data['height']]">
                         {{ data[template.matColumnDef] }}
-                      </div>
-                      <div *ngSwitchCase="'proposer'" class="text-clamp text--green cursor-pointer validator-link">
+                      </a>
+                      <a
+                        *ngSwitchCase="'proposer'"
+                        class="text-clamp text--green cursor-pointer validator-link"
+                        [routerLink]="['/validators', data['operator_address']]">
                         {{ data[template.matColumnDef] }}
-                      </div>
+                      </a>
                       <div *ngSwitchCase="'timestamp'">
                         {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                       </div>
@@ -34,7 +43,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openBlockDetail($event, row)"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell g-no-data" colspan="9999">
                 {{ 'NO DATA' | translate }}
