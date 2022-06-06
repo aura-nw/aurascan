@@ -1,4 +1,5 @@
 import { CodeTransaction } from "src/app/core/constants/transaction.enum";
+import { TableData } from "src/app/shared/components/contract-table/contract-table.component";
 
 export interface IContractsResponse {
   tx_hash: string;
@@ -28,6 +29,7 @@ export interface ITableContract {
   count: number;
   viewAll?: boolean;
   popover?: boolean;
+  tableData?: TableData[]
 }
 
 
