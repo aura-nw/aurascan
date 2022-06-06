@@ -3,10 +3,10 @@
     <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
     <div class="d-flex gap-3 align-items-center">
       <button
-        class="button account-button button-outline"
+        class="button account-button button-outline button-outline__in-card"
         *ngIf="contractInfo.viewAll"
         [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
-        ViewAll
+        View all
       </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
     </div>

@@ -9,7 +9,7 @@ import { Globals } from '../../../../global/global';
 })
 export class ContractsOverviewCardComponent implements OnInit {
   @Input() contractDetail: any;
-  selectedToken: any;
+  selectedToken: any = '$0.00';
   assetsType = TYPE_ACCOUNT;
   constructor(public global: Globals) { }
 

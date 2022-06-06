@@ -1,5 +1,5 @@
 <section class="contract-verify">
-    <div class="title-small fw-500 text--white mb-6">
+    <div class="title-small fw-500 text--white-2 mb-6">
         Verify & Publish Contract Source Code
     </div>
     <div class="divider divider-horizontal"></div>
@@ -18,7 +18,7 @@
                 [class.mobile-tab]="breakpoint.value.matches">
                 <ng-container *ngFor="let tab of TAB; index as index">
                     <li [ngbNavItem]="index">
-                        <a ngbNavLink (click)="changeTab(tab.id)">
+                        <a ngbNavLink (click)="changeTab(tab.id)" class="fw-semibold">
                             <span class="small-body" [class.tab-title-mobile]="breakpoint.value.matches">{{ tab.value }}</span >
                         </a>
                     </li>
@@ -32,7 +32,10 @@
                 </div>
                 <div class="form-group mb-6">
                     <label for="link" class="form-label">Link GitHub Source Code</label>
-                    <input formControlName="url" type="text" class="form-control" id="link" placeholder="Enter the github URL at the right commit version of source code you would like to verify">
+                    <input formControlName="link" type="text" class="form-control" id="link"
+                           placeholder="Enter the github URL at the right commit version of source code you would like to verify"
+                           maxlength="200"
+                    >
                 </div>
                 <div class="form-group mb-6">
                     <label for="version" class="form-label">Compiler Version</label>
@@ -42,13 +45,13 @@
                                 panelClass="aura-optional-panel aura-optional-panel--flat"
                                 [disableOptionCentering]="true"
                                 placeholder="Please select compiler version">
-                        <mat-option *ngFor="let item of versionList" [value]="item">
-                            {{ item }}
+                        <mat-option *ngFor="let item of versionList" [value]="item.value">
+                            {{ item.label }}
                         </mat-option>
                     </mat-select>
 
                 </div>
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center body">
                     <button class="button text--white" type="reset">Reset</button>
                     <button class="button button-outline button-outline__in-card ml-4" type="submit"><span class="text-gradient">Verify & Publish</span></button>
                 </div>

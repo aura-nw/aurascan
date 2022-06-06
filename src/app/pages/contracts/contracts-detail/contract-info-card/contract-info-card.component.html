@@ -8,7 +8,7 @@
             <div class="d-flex justify-content-end">
               <img src="assets/icons/icons-svg/basic/icon-love.svg" alt="" width="16px" />
               <a href="javascript:void(0)" class="ml-3 button button-chart button-outline button-outline__in-card">
-                <span class="ml-2">More</span>
+                <span class="ml-2 small-text">More</span>
                 <img src="assets/images/icons/arrow-move-down.svg" alt="" width="24px" />
               </a>
             </div>
@@ -36,8 +36,12 @@
         <tr>
           <td>Token Tracker:</td>
           <td colspan="2">
-            <a class="text--green" [routerLink]="['/token', contractDetail?.contract_address]">Aura (Aura)</a>
-            <span class="ml-1 text-secondary">(@$1)</span>
+            <ng-container *ngIf="contractDetail?.token_tracker">
+              <a class="text--green" [routerLink]="['/token', contractDetail?.contract_address]">
+                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+              </a>
+              <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->
+            </ng-container>
           </td>
         </tr>
       </table>

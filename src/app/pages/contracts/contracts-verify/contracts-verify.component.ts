@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ContractService} from "../../../core/services/contract.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-contracts-verify',
@@ -10,10 +11,11 @@ import {ContractService} from "../../../core/services/contract.service";
 })
 export class ContractsVerifyComponent implements OnInit {
   tabCurrent = 1;
-  contractAddress = 'aura1q6u4ajrfs9zv9gh9u8h88j24yujerk2d24rsjqutrzwqvhpqd3tsxsg4yz'
+  contractAddress = ''
   constructor(
       private layout: BreakpointObserver,
       private contractService: ContractService,
+      private route: ActivatedRoute,
   ) {}
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   TAB = [
@@ -26,22 +28,35 @@ export class ContractsVerifyComponent implements OnInit {
       value: 'Compiler Output'
     }
   ]
-  versionList = ['1.61.0','v1.1','v1.03','v2','v2.1.3']
+  versionList = [
+    {
+      label: 'cargo 1.61.0',
+      value: 'cargo 1.61.0 (a028ae4 2022-04-29)'
+    }
+  ]
   contractForm: FormGroup;
   ngOnInit(): void {
+    this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractForm = new FormGroup({
       contract_address: new FormControl(''),
-      url: new FormControl('', [Validators.required, Validators.max(200)]),
+      link: new FormControl('', [Validators.required, Validators.max(200)]),
+      url: new FormControl(''),
       compiler_version: new FormControl('', [Validators.required]),
+      commit: new FormControl(''),
     })
-    this.contractForm.patchValue({address: this.contractAddress});
+    this.contractForm.patchValue({contract_address: this.contractAddress});
   }
   changeTab(tabId): void {
     this.tabCurrent = tabId;
   }
   onSubmit() {
-    // console.log(this.contractForm.value)
     if(this.contractForm.valid) {
+      // handle contract_address & commit
+      const link = this.contractForm.controls['link'].value;
+      this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
+      this.contractForm.controls['commit'].setValue(link.split('/')[link.split('/').length - 1]);
+      this.contractForm.removeControl('link');
+      console.log(this.contractForm.value)
       this.contractService.verifyContract(this.contractForm.value).subscribe(res => {
         console.log(res)
         this.contractForm.reset();

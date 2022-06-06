@@ -308,13 +308,13 @@
                             <a
                               *ngSwitchCase="'tx_hash_format'"
                               class="text--green cursor-pointer hash-link"
-                              [routerLink]="['/transaction', data[template.matColumnDef]]">
+                              [routerLink]="['/transaction', data['tx_hash']]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
                               class="text--green cursor-pointer block-link"
-                              [routerLink]="['/blocks/id', data[template.matColumnDef]]">
+                              [routerLink]="['/blocks/id', data['blockId']]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <div *ngSwitchCase="'type'">

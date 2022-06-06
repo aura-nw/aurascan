@@ -5,3 +5,9 @@ export enum ContractTab {
   Events = 'events',
   Analytics = 'analytics',
 }
+
+export enum ContractVerifyType {
+  Unverifed = 'UNVERIFIED',
+  Similar_Match = 'SIMILAR MATCH',
+  Exact_Match = 'EXACT MATCH',
+}

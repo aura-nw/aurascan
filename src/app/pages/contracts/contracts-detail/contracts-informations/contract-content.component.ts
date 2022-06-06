@@ -8,7 +8,7 @@ import {
   CONTRACT_TABLE_TEMPLATES,
   MAX_LENGTH_SEARCH_CONTRACT,
 } from '../../../../core/constants/contract.constant';
-import { ContractTab } from '../../../../core/constants/contract.enum';
+import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
   templateUrl: './contract-content.component.html',
@@ -16,6 +16,7 @@ import { ContractTab } from '../../../../core/constants/contract.enum';
 })
 export class ContractContentComponent implements OnInit {
   @Input() contractsAddress = '';
+  @Input() contractTypeData: ContractVerifyType;
 
   TABS = CONTRACT_TAB.filter((vote) =>
     [
@@ -40,6 +41,8 @@ export class ContractContentComponent implements OnInit {
   tabsBackup = this.TABS;
   contractTab = ContractTab;
   maxLengthSearch = MAX_LENGTH_SEARCH_CONTRACT;
+  contractVerifyType = ContractVerifyType;
+  isVerifyContract = false;
 
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
 
@@ -56,7 +59,6 @@ export class ContractContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
-
     this.getTransaction();
   }
 
@@ -96,6 +98,9 @@ export class ContractContentComponent implements OnInit {
           });
 
           this.contractTransaction = ret;
+          if (this.contractTypeData !== this.contractVerifyType.Unverifed) {
+            this.isVerifyContract = true;
+          }
         }
       });
     }
