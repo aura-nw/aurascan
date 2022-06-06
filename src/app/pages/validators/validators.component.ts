@@ -11,7 +11,7 @@ import {
   GAS_ESTIMATE,
   NUMBER_CONVERT,
   PAGE_SIZE_OPTIONS,
-  STABLE_UTOKEN,
+  AURA_DENOM,
 } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
@@ -451,7 +451,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -470,7 +470,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
-      const excuteClaim = async () => {
+      const executeClaim = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
           message: {
@@ -480,12 +480,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           network: ChainsInfo[this.walletService.chainId],
           signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
-        });
-
+        },
+        this.listStakingValidator?.length
+        );
+        
         this.checkStatuExcuteBlock(hash, error, '');
       };
 
-      excuteClaim();
+      executeClaim();
     }
   }
 
@@ -499,7 +501,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             from: [this.dataModal.operator_address],
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -527,7 +529,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to_address: this.selectedValidator,
             amount: {
               amount: Number(this.amountFormat) * Math.pow(10, 6),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -571,7 +573,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       //check amout for high fee
       const amountCheck = (
         Number(this.dataDelegate.availableToken) -
-        (Number(GAS_ESTIMATE) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
+        (Number(GAS_ESTIMATE.DEFAULT) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;

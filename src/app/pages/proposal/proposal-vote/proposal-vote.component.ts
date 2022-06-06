@@ -12,7 +12,6 @@ import { IVotingDialog } from '../../../core/models/proposal.model';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 import { createSignBroadcast } from '../../../core/utils/signing/transaction-manager';
-import {ViewportScroller} from "@angular/common";
 
 @Component({
   selector: 'app-proposal-vote',
