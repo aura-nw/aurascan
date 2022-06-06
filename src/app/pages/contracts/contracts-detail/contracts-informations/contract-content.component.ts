@@ -59,7 +59,6 @@ export class ContractContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
-
     this.getTransaction();
   }
 

@@ -30,6 +30,9 @@
       [templates]="templates"
       [contractInfo]="contractInfo"></app-contract-table>
     <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
-    <app-contract *ngIf="countCurrent === contractTab.Contract" [contractTypeData]="contractTypeData"></app-contract>
+    <app-contract *ngIf="countCurrent === contractTab.Contract"
+                  [contractTypeData]="contractTypeData"
+                  [contractsAddress]="contractsAddress"
+    ></app-contract>
   </div>
 </section>
