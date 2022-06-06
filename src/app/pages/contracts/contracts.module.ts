@@ -29,6 +29,7 @@ import { CodeContractComponent } from './contracts-detail/contracts-informations
 import {ContractsVerifyComponent} from "./contracts-verify/contracts-verify.component";
 import { ReactiveFormsModule } from '@angular/forms';
 import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
+import { QrModule } from 'src/app/shared/components/qr/qr.module';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { CompilerOutputComponent } from './contracts-verify/compiler-output/comp
     DateFnsModule,
     NgxMaskModule,
     ContractTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QrModule
   ],
   providers: [ContractService],
 })
