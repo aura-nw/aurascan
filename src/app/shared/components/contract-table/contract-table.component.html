@@ -3,10 +3,10 @@
     <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
     <div class="d-flex gap-3 align-items-center">
       <button
-        class="button account-button button-outline"
+        class="button account-button button-outline button-outline__in-card"
         *ngIf="contractInfo.viewAll"
         [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
-        ViewAll
+        View all
       </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
     </div>
@@ -24,22 +24,14 @@
                 <ng-container *ngSwitchCase="'popover'">
                   <button
                     mat-icon-button
-                    aria-label="Example icon-button with a menu"
+                    aria-label="Contract Transaction Detail"
                     placement="right"
                     [ngbPopover]="popContent"
-                    popoverClass="custom-popover"
-                    >
-                    <img
-                      src="assets/images/icons/token-detail.png"
-                      alt=""
-                      width="16"
-                      height="16" />
+                    popoverClass="custom-popover">
+                    <img src="assets/images/icons/token-detail.png" alt="" width="16" height="16" />
                   </button>
-                  <ng-template  #popContent class="popContent">
-                    <div class="d">
-
-                    </div>
-                    <app-contract-popover ></app-contract-popover>
+                  <ng-template #popContent class="popContent">
+                    <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
                   </ng-template>
                 </ng-container>
                 <ng-container *ngSwitchCase="'hash-url-se'">

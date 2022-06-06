@@ -75,7 +75,10 @@ export class ContractTransactionsTabComponent implements OnInit {
           if (token?.code == CodeTransaction.Success) {
             token.status = StatusTransaction.Success;
           }
-          token.tx_hash_format = token.tx_hash.replace(token.tx_hash.substring(20), '...');
+          token.tx_hash_format = token.tx_hash.replace(
+            token.tx_hash.substring(6, token.tx_hash.length - 6),
+            '...',
+          );
           token.from_address_format = token.from_address.replace(token.from_address.substring(20), '...');
           token.to_address_format = token.to_address.replace(token.to_address.substring(20), '...');
           token.price = token.amount * 0.5;
