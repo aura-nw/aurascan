@@ -16,10 +16,7 @@ export function getFee(messageType: TRANSACTION_TYPE_ENUM | string, validatorsCo
     case MessageType.Redelegate:
       return '300000';
     case MessageType.GetReward:
-      const f = 130000 * ((0.4 * validatorsCount )+ 1);
-      console.log(f, validatorsCount);
-
-      return (130000 * (0.4 * validatorsCount + 1)).toFixed(0);
+      return validatorsCount > 1 ? (130000 * (0.4 * validatorsCount + 1)).toFixed(0) : '130000';
     case MessageType.Vote:
       return '70000';
     default:
