@@ -57,7 +57,7 @@
                     [style.justify-content]="template?.justify || 'flex-start'"
                     *ngIf="data[template.matColumnDef]">
                     <div class="status" [ngClass]="data[template.matColumnDef]?.toUpperCase()">
-                      {{ data[template.matColumnDef] }}
+                      {{ data[template.matColumnDef] | titlecase }}
                     </div>
                   </div>
                 </ng-container>

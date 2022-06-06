@@ -21,14 +21,22 @@ export class ContractsTransactionsComponent implements OnInit {
   contractInfo: ITableContract = {
     contractsAddress: '',
     count: 0,
-    popover: true
+    popover: true,
   };
 
   contract$ = this.activeRouter.params.pipe(
     mergeMap((e) => {
       if (isContract(e?.addressId)) {
         this.contractInfo.contractsAddress = e?.addressId;
-        return this.contractService.getTransactions(e.addressId);
+        let payload = {
+          //limit: this.pageSize,
+          limit: 25,
+          //offset: this.pageIndex * this.pageSize,
+          offset: 0,
+          label: '',
+          contract_address: e.addressId,
+        };
+        return this.contractService.getTransactions(payload);
       }
       this.router.navigate(['']);
       return of(null);

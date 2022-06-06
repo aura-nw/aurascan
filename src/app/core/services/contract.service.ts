@@ -13,7 +13,7 @@ export class ContractService extends CommonService {
     super(http, environmentService);
   }
 
-  getListContract(data): Observable<any> {
+  getListContract(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
@@ -23,13 +23,8 @@ export class ContractService extends CommonService {
     return this.http.get('../../assets/mock-data/token-list-transfer.json');
   }
 
-  getTransactions(
-    address: string,
-    _params: { limit: number; offset: number } = { limit: 5, offset: 0 },
-  ): Observable<IResponsesSuccess<IContractsResponse[]>> {
-    return this.http.get<IResponsesSuccess<IContractsResponse[]>>(`${this.apiUrl}/account/${address}/transaction`, {
-      params: _params,
-    });
+  getTransactions(data: any): Observable<IResponsesSuccess<IContractsResponse[]>> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/search-transactions`, data);
   }
 
   getContractDetail(contractAddress): Observable<any> {
@@ -40,7 +35,7 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts/verify-contract`, data);
   }
 
-  getMatchCreationCode(contractAddress: string): Observable<any>{
+  getMatchCreationCode(contractAddress: string): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/contracts/match-creation-code/${contractAddress}`);
   }

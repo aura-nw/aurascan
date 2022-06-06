@@ -72,7 +72,15 @@ export class ContractContentComponent implements OnInit {
 
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
-      this.contractService.getTransactions(this.contractsAddress).subscribe((res) => {
+      let payload = {
+        //limit: this.pageSize,
+        limit: 25,
+        //offset: this.pageIndex * this.pageSize,
+        offset: 0,
+        label: '',
+        contract_address: this.contractsAddress,
+      };
+      this.contractService.getTransactions(payload).subscribe((res) => {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
           const ret = res.data.map((contract) => {
