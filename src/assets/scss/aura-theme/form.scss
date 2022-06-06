@@ -158,6 +158,13 @@
         color: var(--aura-light-gray);
       }
     }
+    .error {
+      color: var(--aura-danger);
+      font-size: 1.4rem;
+      line-height: 2.1rem;
+      font-weight: 400;
+      margin-top: var(--spacer-2);
+    }
   }
 }
 
