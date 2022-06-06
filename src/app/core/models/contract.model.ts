@@ -34,14 +34,14 @@ export interface ITableContract {
 export interface IContractPopoverData {
   status: string;
   code: CodeTransaction;
-  amount: string;
-  price: string;
+  amount: number;
+  price: number;
   tokenAddress: string;
   from_address: string;
   symbol: string;
   to_address: string;
   tx_hash: string;
-  fee: string;
+  fee: number;
 }
 
 
