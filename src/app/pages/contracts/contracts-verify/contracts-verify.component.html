@@ -29,13 +29,19 @@
                 <div class="form-group mb-6">
                     <label for="address" class="form-label">Contract Address to verify</label>
                     <input formControlName="contract_address" type="text" class="form-control" id="address" placeholder="aura...">
+                    <div class="error" *ngIf="contractForm.controls['contract_address'].invalid &&
+                    (contractForm.controls['contract_address'].dirty || contractForm.controls['contract_address'].touched)">Contract address is required!</div>
                 </div>
                 <div class="form-group mb-6">
                     <label for="link" class="form-label">Link GitHub Source Code</label>
-                    <input formControlName="url" type="text" class="form-control" id="link"
+                    <input formControlName="link" type="text" class="form-control" id="link"
                            placeholder="Enter the github URL at the right commit version of source code you would like to verify"
                            maxlength="200"
                     >
+                    <div class="error" *ngIf="contractForm.controls['link'].errors?.required &&
+                    (contractForm.controls['link'].dirty || contractForm.controls['link'].touched)">Link GitHub Source Code is required!</div>
+                    <div class="error" *ngIf="contractForm.controls['link'].errors?.maxlength &&
+                    (contractForm.controls['link'].dirty || contractForm.controls['link'].touched)">Link GitHub Source Code is not allowed more 200 characters!</div>
                 </div>
                 <div class="form-group mb-6">
                     <label for="version" class="form-label">Compiler Version</label>
@@ -45,15 +51,17 @@
                                 panelClass="aura-optional-panel aura-optional-panel--flat"
                                 [disableOptionCentering]="true"
                                 placeholder="Please select compiler version">
-                        <mat-option *ngFor="let item of versionList" [value]="item">
-                            {{ item }}
+                        <mat-option *ngFor="let item of versionList" [value]="item.value">
+                            {{ item.label }}
                         </mat-option>
                     </mat-select>
+                    <div class="error" *ngIf="contractForm.controls['compiler_version'].errors?.required &&
+                    (contractForm.controls['compiler_version'].dirty || contractForm.controls['compiler_version'].touched)">Compiler version is required!</div>
 
                 </div>
                 <div class="d-flex justify-content-center align-items-center body">
                     <button class="button text--white" type="reset">Reset</button>
-                    <button class="button button-outline button-outline__in-card ml-4" type="submit"><span class="text-gradient">Verify & Publish</span></button>
+                    <button class="button button-outline button-outline__in-card ml-4" type="submit" [disabled]="!contractForm.valid"><span class="text-gradient">Verify & Publish</span></button>
                 </div>
             </form>
             <!-- Compiler Output -->

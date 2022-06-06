@@ -9,6 +9,7 @@ import { ContractType } from '../../../../../../core/constants/token.enum';
 })
 export class ContractComponent implements OnInit {
   @Input() contractTypeData: string;
+  @Input() contractsAddress: string;
 
   contractType = ContractType;
   countCurrent = this.contractType.Code;
@@ -17,6 +18,7 @@ export class ContractComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.contractsAddress)
     this.isVerifyContract = true;
   }
 
