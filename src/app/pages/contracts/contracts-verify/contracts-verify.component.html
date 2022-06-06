@@ -32,7 +32,7 @@
                 </div>
                 <div class="form-group mb-6">
                     <label for="link" class="form-label">Link GitHub Source Code</label>
-                    <input formControlName="url" type="text" class="form-control" id="link"
+                    <input formControlName="link" type="text" class="form-control" id="link"
                            placeholder="Enter the github URL at the right commit version of source code you would like to verify"
                            maxlength="200"
                     >
@@ -45,8 +45,8 @@
                                 panelClass="aura-optional-panel aura-optional-panel--flat"
                                 [disableOptionCentering]="true"
                                 placeholder="Please select compiler version">
-                        <mat-option *ngFor="let item of versionList" [value]="item">
-                            {{ item }}
+                        <mat-option *ngFor="let item of versionList" [value]="item.value">
+                            {{ item.label }}
                         </mat-option>
                     </mat-select>
 
