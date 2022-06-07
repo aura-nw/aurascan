@@ -23,8 +23,13 @@ export class ContractService extends CommonService {
     return this.http.get('../../assets/mock-data/token-list-transfer.json');
   }
 
-  getTransactions(data: any): Observable<IResponsesSuccess<IContractsResponse[]>> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/search-transactions`, data);
+  getTransactions(payload: {
+    contract_address: string;
+    label: string;
+    limit: number;
+    offset: number;
+  }): Observable<IResponsesSuccess<IContractsResponse[]>> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/search-transactions`, payload);
   }
 
   getContractDetail(contractAddress): Observable<any> {

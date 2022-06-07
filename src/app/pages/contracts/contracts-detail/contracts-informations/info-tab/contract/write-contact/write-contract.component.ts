@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-write-contract',
@@ -8,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class WriteContractComponent implements OnInit {
   isExpand = false;
   isConnectedWallet = false;
+  walletAddress = '';
   jsonWriteContract = {
     $schema: 'http://json-schema.org/draft-07/schema#',
     title: 'ExecuteMsg',
@@ -61,9 +63,19 @@ export class WriteContractComponent implements OnInit {
       },
     ],
   };
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor(public walletService: WalletService) {}
+
+  ngOnInit(): void {
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.isConnectedWallet = true;
+        this.walletAddress = this.walletService.wallet?.bech32Address;
+      } else {
+        this.isConnectedWallet = false;
+      }
+    });
+  }
 
   expandMenu(closeAll = false): void {
     for (let i = 0; i < document.getElementsByClassName('content-contract').length; i++) {
@@ -89,5 +101,9 @@ export class WriteContractComponent implements OnInit {
       (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
     }
     this.expandMenu(true);
+  }
+
+  connectWallet(): void {
+    const account = this.walletService.getAccount();
   }
 }

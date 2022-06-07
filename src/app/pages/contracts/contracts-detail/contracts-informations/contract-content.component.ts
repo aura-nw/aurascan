@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
@@ -33,7 +34,6 @@ export class ContractContentComponent implements OnInit {
   }));
 
   countCurrent: string = '';
-  textSearch: string = '';
   resultSearch = 0;
   contractTab = ContractTab;
   maxLengthSearch = MAX_LENGTH_SEARCH_CONTRACT;
@@ -52,7 +52,7 @@ export class ContractContentComponent implements OnInit {
     popover: true,
   };
 
-  constructor(private contractService: ContractService) {}
+  constructor(private contractService: ContractService, private router: Router, private aRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
@@ -66,13 +66,12 @@ export class ContractContentComponent implements OnInit {
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
       let payload = {
-        //limit: this.pageSize,
         limit: 25,
-        //offset: this.pageIndex * this.pageSize,
         offset: 0,
-        label: this.textSearch,
+        label: '',
         contract_address: this.contractsAddress,
       };
+
       this.contractService.getTransactions(payload).subscribe((res) => {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
@@ -113,13 +112,14 @@ export class ContractContentComponent implements OnInit {
   }
 
   filterTransaction(event): void {
-    if (event.key === 1) {
-      this.textSearch = this.contractTransactionType.IN;
-    } else if (event.key === 2) {
-      this.textSearch = this.contractTransactionType.CREATION;
+    if (event?.key) {
+      this.router.navigate([`/contracts/transactions`, this.contractsAddress], {
+        queryParams: {
+          label: event.key,
+        },
+      });
     } else {
-      this.textSearch = this.contractTransactionType.OUT;
+      this.router.navigate([`/contracts/transactions`, this.contractsAddress]);
     }
-    this.getTransaction();
   }
 }

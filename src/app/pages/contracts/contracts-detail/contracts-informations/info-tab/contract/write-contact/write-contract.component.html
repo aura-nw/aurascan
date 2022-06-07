@@ -1,16 +1,19 @@
 <div class="d-flex justify-content-between align-items-center">
   <div class="my-3 small-text">
-    <a
-      [routerLink]="'/'"
+    <button
+      (click)="connectWallet()"
       class="button button-chart button-outline button-outline__in-card btn-unconnect"
       *ngIf="!isConnectedWallet">
       <div class="icon-connect"></div>
       <span class="">Connect to Web3</span>
-    </a>
-    <a [routerLink]="'/'" class="button button-chart button-outline button-outline__in-card" *ngIf="isConnectedWallet">
+    </button>
+    <button
+      [routerLink]="['/account/', walletAddress]"
+      class="button button-chart button-outline button-outline__in-card"
+      *ngIf="isConnectedWallet">
       <div class="icon-connect connected"></div>
       <span class="">Connected to Web3</span>
-    </a>
+    </button>
   </div>
   <div class="small-text">
     <span class="cursor-pointer text--green mr-5" (click)="expandMenu()">
