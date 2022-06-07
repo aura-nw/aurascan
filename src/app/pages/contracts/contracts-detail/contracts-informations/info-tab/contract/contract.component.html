@@ -8,7 +8,9 @@
         height="16"
         class="mr-2" />
       Are you the contract creator?
-      <a class="text--green fw-semibold ml-1 mr-1" [routerLink]="['/contracts/verify', contractsAddress]">Verify and Publish</a>
+      <a class="text--green fw-semibold ml-1 mr-1" [routerLink]="['/contracts/verify', contractsAddress]"
+        >Verify and Publish</a
+      >
       your contract source code today!
     </div>
     <div class="mt-3 small-text content-info">
@@ -23,19 +25,19 @@
     <div class="d-flex mb-3">
       <button
         class="btn-contract"
-        [ngClass]="{'button-outline button-outline__in-card': countCurrent === contractType.Code}"
+        [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.Code }"
         (click)="changeTab(contractType.Code)">
         <span [class.text-gradient]="countCurrent === contractType.Code">Code</span>
       </button>
       <button
         class="btn-contract"
-        [ngClass]="{'button-outline button-outline__in-card': countCurrent === contractType.ReadContract}"
+        [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.ReadContract }"
         (click)="changeTab(contractType.ReadContract)">
         <span [class.text-gradient]="countCurrent === contractType.ReadContract">Read Contract</span>
       </button>
       <button
         class="btn-contract"
-        [ngClass]="{'button-outline button-outline__in-card': countCurrent === contractType.WriteContract}"
+        [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.WriteContract }"
         (click)="changeTab(contractType.WriteContract)">
         <span [class.text-gradient]="countCurrent === contractType.WriteContract">Write Contract</span>
       </button>
@@ -43,7 +45,11 @@
   </ng-container>
 </div>
 <div class="mt-3">
-  <app-code-contract *ngIf="countCurrent === contractType.Code" [contractTypeData]="contractTypeData"></app-code-contract>
-  <app-read-contract *ngIf="countCurrent === contractType.ReadContract"></app-read-contract>
-  <app-write-contract *ngIf="countCurrent === contractType.WriteContract"></app-write-contract>
+  <ng-container *ngIf="contractDetail">
+    <app-code-contract
+      *ngIf="countCurrent === contractType.Code"
+      [contractDetailData]="contractDetail"></app-code-contract>
+    <app-read-contract *ngIf="countCurrent === contractType.ReadContract"></app-read-contract>
+    <app-write-contract *ngIf="countCurrent === contractType.WriteContract"></app-write-contract>
+  </ng-container>
 </div>

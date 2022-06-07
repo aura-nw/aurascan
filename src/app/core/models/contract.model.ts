@@ -1,4 +1,5 @@
 import { CodeTransaction } from "src/app/core/constants/transaction.enum";
+import { ContractVerifyType } from "../constants/contract.enum";
 import { TableData } from "src/app/shared/components/contract-table/contract-table.component";
 
 export interface IContractsResponse {

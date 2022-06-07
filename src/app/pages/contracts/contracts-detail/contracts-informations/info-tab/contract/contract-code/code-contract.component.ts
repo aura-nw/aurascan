@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 
 @Component({
@@ -7,7 +8,7 @@ import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
   styleUrls: ['./code-contract.component.scss'],
 })
 export class CodeContractComponent implements OnInit {
-  @Input() contractTypeData: string;
+  @Input() contractDetailData: any;
 
   contractVerifyType = ContractVerifyType;
   isExpand = false;
