@@ -11,3 +11,9 @@ export enum ContractVerifyType {
   Similar_Match = 'SIMILAR MATCH',
   Exact_Match = 'EXACT MATCH',
 }
+
+export enum ContractTransactionType {
+  IN = 'IN',
+  CREATION = 'CREATION',
+  OUT = 'OUT'
+}

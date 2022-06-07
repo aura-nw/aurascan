@@ -8,7 +8,7 @@ import {
   CONTRACT_TABLE_TEMPLATES,
   MAX_LENGTH_SEARCH_CONTRACT,
 } from '../../../../core/constants/contract.constant';
-import { ContractTab, ContractVerifyType } from '../../../../core/constants/contract.enum';
+import { ContractTab, ContractTransactionType, ContractVerifyType } from '../../../../core/constants/contract.enum';
 @Component({
   selector: 'app-contract-content[contractsAddress]',
   templateUrl: './contract-content.component.html',
@@ -34,14 +34,11 @@ export class ContractContentComponent implements OnInit {
 
   countCurrent: string = '';
   textSearch: string = '';
-  searchTemp: string = '';
-  isSearchTx = false;
-  isSearchAddres = false;
   resultSearch = 0;
-  tabsBackup = this.TABS;
   contractTab = ContractTab;
   maxLengthSearch = MAX_LENGTH_SEARCH_CONTRACT;
   contractVerifyType = ContractVerifyType;
+  contractTransactionType = ContractTransactionType;
   isVerifyContract = false;
 
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
@@ -66,17 +63,26 @@ export class ContractContentComponent implements OnInit {
     this.countCurrent = tabId;
   }
 
-  getLength(result: string) {
-    this.resultSearch = Number(result) || 0;
-  }
-
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
-      this.contractService.getTransactions(this.contractsAddress).subscribe((res) => {
+      let payload = {
+        //limit: this.pageSize,
+        limit: 25,
+        //offset: this.pageIndex * this.pageSize,
+        offset: 0,
+        label: this.textSearch,
+        contract_address: this.contractsAddress,
+      };
+      this.contractService.getTransactions(payload).subscribe((res) => {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
           const ret = res.data.map((contract) => {
-            const method = Object.keys(contract.messages[0].msg)[0];
+            let method = '';
+            if (contract.messages[0]['@type'] === '/cosmwasm.wasm.v1.MsgInstantiateContract') {
+              method = 'instantiate';
+            } else {
+              method = Object.keys(contract.messages[0].msg)[0];
+            }
             const value = +contract.messages[0].funds[0]?.amount || 0;
 
             const label = contract.messages[0].sender === this.contractsAddress ? 'OUT' : 'TO';
@@ -104,5 +110,16 @@ export class ContractContentComponent implements OnInit {
         }
       });
     }
+  }
+
+  filterTransaction(event): void {
+    if (event.key === 1) {
+      this.textSearch = this.contractTransactionType.IN;
+    } else if (event.key === 2) {
+      this.textSearch = this.contractTransactionType.CREATION;
+    } else {
+      this.textSearch = this.contractTransactionType.OUT;
+    }
+    this.getTransaction();
   }
 }
