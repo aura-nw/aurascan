@@ -82,7 +82,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+      <app-paginator [length]="length || data.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)"
+      (pageEvent)="pageEvent($event)">
       </app-paginator>
     </div>
   </ng-container>

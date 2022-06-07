@@ -19,12 +19,19 @@ import { TableData } from 'src/app/shared/components/contract-table/contract-tab
 })
 export class ContractsTransactionsComponent implements OnInit {
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
-  currentLabel = '';
 
   contractInfo: ITableContract = {
     contractsAddress: '',
     count: 0,
     popover: true,
+  };
+
+  queryParams: {
+    offset: number;
+    label: number | string;
+  } = {
+    offset: 0,
+    label: '',
   };
 
   contractTransactionType = ContractTransactionType;
@@ -39,12 +46,15 @@ export class ContractsTransactionsComponent implements OnInit {
         this.contractInfo.contractsAddress = params?.addressId;
         let payload = {
           limit: 25,
-          offset: queryParams['offset'] || 0,
+          offset: +queryParams['offset'] || 0,
           label: parseLabel(queryParams['label'] || ''),
           contract_address: params.addressId,
         };
 
-        this.currentLabel = queryParams['label'];
+        this.queryParams = {
+          offset: +queryParams['offset'] || 0,
+          label: queryParams['label'],
+        };
 
         return this.contractService.getTransactions(payload);
       }
@@ -65,53 +75,13 @@ export class ContractsTransactionsComponent implements OnInit {
     // this.getListTransaction();
   }
 
-  getListTransaction(): void {
-    if (isContract(this.contractInfo.contractsAddress)) {
-      let payload = {
-        limit: 25,
-        offset: 0,
-        label: '',
-        contract_address: this.contractInfo.contractsAddress,
-      };
-      this.contractService.getTransactions(payload).subscribe((res) => {
-        if (res.data && Array.isArray(res.data)) {
-          this.contractInfo.count = res.meta.count || 0;
-          this.contractInfo.tableData = res.data.map((contract) => {
-            let method = '';
-            if (contract.messages[0]['@type'] === '/cosmwasm.wasm.v1.MsgInstantiateContract') {
-              method = 'instantiate';
-            } else {
-              method = Object.keys(contract.messages[0].msg)[0];
-            }
-            const value = +contract.messages[0].funds[0]?.amount || 0;
-
-            const label = contract.messages[0].sender === this.contractInfo.contractsAddress ? 'OUT' : 'TO';
-
-            const tableDta: TableData = {
-              txHash: contract.tx_hash,
-              method,
-              blockHeight: contract.height,
-              blockId: contract.blockId,
-              time: new Date(contract.timestamp),
-              from: contract.messages[0].sender,
-              label,
-              to: contract.messages[0].contract,
-              value,
-              fee: +contract.fee,
-            };
-
-            return tableDta;
-          });
-        }
-      });
-    }
-  }
-
-  filterData(keyWord: string) {
-    // keyWord = keyWord.toLowerCase();
-    // this.filterSearchData = this.mockData.filter(
-    //   (data) => data.method.toLowerCase().includes(keyWord) || data.fee.toLowerCase().includes(keyWord),
-    // );
+  onChangePage(event) {
+    this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress], {
+      queryParams: {
+        label: this.queryParams?.label || '',
+        offset: (event?.next || 0) * 25,
+      },
+    });
   }
 
   filterTransaction(event): void {
