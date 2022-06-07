@@ -1,30 +1,39 @@
-.content-info {
-  background: var(--aura-dark-gray);
-  padding: var(--spacer-2) var(--spacer-4);
-  border-radius: 8px;
-  color: var(--aura-contract);
-  &.link-url {
-    padding: var(--spacer-3) var(--spacer-4);
-  }
-}
-li.dropdown-item {
-  &:first-child {
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
-    padding-top: 10px;
-  }
-  &:last-child {
-    border-bottom-left-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
-    padding-bottom: 10px;
-  }
-}
-.txt-title {
-  margin: 10px 4px 10px 8px;
-}
-.aura-basic-table {
-  tr,
-  td {
+.code-contract {
+  .content-info {
+    background: var(--aura-dark-gray);
+    padding: var(--spacer-2) var(--spacer-4);
+    border-radius: 8px;
     color: var(--aura-contract);
+    &.link-url {
+      padding: var(--spacer-3) var(--spacer-4);
+    }
+  }
+  li.dropdown-item {
+    padding: var(--spacer-2) var(--spacer-6);
+    button {
+      color: var(--aura-contract);
+    }
+    &:first-child {
+      border-top-left-radius: 8px !important;
+      border-top-right-radius: 8px !important;
+      padding-top: 10px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 8px !important;
+      border-bottom-right-radius: 8px !important;
+      padding-bottom: 10px;
+    }
+  }
+  .txt-title {
+    margin: 10px 4px 10px 8px;
+  }
+  .aura-basic-table {
+    tr,
+    td {
+      color: var(--aura-contract);
+    }
+  }
+  .btn-copy {
+    padding: var(--spacer-2) var(--spacer-4);
   }
 }
