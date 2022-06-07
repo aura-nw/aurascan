@@ -56,9 +56,7 @@ export class ContractsVerifyComponent implements OnInit {
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
       this.contractForm.controls['commit'].setValue(link.split('/')[link.split('/').length - 1]);
       this.contractForm.removeControl('link');
-      // console.log(this.contractForm.value)
       this.contractService.verifyContract(this.contractForm.value).subscribe(res => {
-        // console.log(res)
         this.contractForm.reset();
       })
     }

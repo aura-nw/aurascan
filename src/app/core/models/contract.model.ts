@@ -1,4 +1,5 @@
 import { CodeTransaction } from "src/app/core/constants/transaction.enum";
+import { ContractVerifyType } from "../constants/contract.enum";
 
 export interface IContractsResponse {
   tx_hash: string;
@@ -62,3 +63,7 @@ export const DROPDOWN_ELEMENT = [
     key: 2,
   },
 ];
+
+export class ContractDetailDto {
+  contractTypeData: string = ContractVerifyType.Unverifed;
+}
