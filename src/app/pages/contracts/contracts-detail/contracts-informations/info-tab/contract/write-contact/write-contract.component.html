@@ -17,7 +17,7 @@
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse All</ng-container>
     </span>
-    <span class="cursor-pointer text--green">Reset</span>
+    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
   </div>
 </div>
 

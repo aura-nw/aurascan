@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 
 @Component({

@@ -62,8 +62,6 @@ export class ContractsTransactionsComponent implements OnInit {
   }
 
   getListTransaction(): void {
-    console.log(this.contractInfo);
-
     if (isContract(this.contractInfo.contractsAddress)) {
       let payload = {
         //limit: this.pageSize,

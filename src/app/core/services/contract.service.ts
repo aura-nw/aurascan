@@ -39,4 +39,8 @@ export class ContractService extends CommonService {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/contracts/match-creation-code/${contractAddress}`);
   }
+
+  readContract(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/read`, data);
+  }
 }
