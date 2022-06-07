@@ -5,11 +5,14 @@
   </div>
   <section>
     <div class="card mt-8">
-      <div class="card-body">
+      <div class="card-body" *ngIf="contract$ | async as contract">
         <app-contract-table
-          [data]="contractInfo.tableData"
+          [length]="contractInfo?.count"
+          [label]="queryParams?.label?.toString()"
+          [data]="contract"
           [templates]="templates"
           [contractInfo]="contractInfo"
+          (onChangePage)="onChangePage($event)"
           (onViewSelected)="filterTransaction($event)"></app-contract-table>
       </div>
     </div>
