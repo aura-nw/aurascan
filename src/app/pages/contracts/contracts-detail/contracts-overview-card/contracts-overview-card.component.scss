@@ -37,7 +37,10 @@
   .list-token .select-input-field {
     background-color: var(--aura-bg-form);
     width: 100%;
-    min-width: 300px;
+    min-width: 315px;
+    padding: 7px 22px 7px 24px;
+    height: auto;
+    border: 1px solid var(--aura-dark-gray);
     @media (min-width: 992px) {
       width: 186px;
     }
@@ -50,18 +53,19 @@
   .box-wallet{
     background-color: var(--aura-bg-form);
     border-radius: 30px;
-    width: 48px;
-    height: 30px;
+    width: 60px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid var(--aura-dark-gray);
   }
 }
 .selected-token__label {
   margin-left: var(--spacer-2);
   background: var(--aura-gradient-simple);
   height: 22px;
-  color: #121212;
+  color: var(--aura-select-label);
   font-size: 1.2rem;
   line-height: 1.8rem;
   display: inline-flex;

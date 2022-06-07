@@ -1,9 +1,9 @@
-<div class="d-flex justify-content-between fw-bold">
+<div class="d-flex justify-content-between">
   <div>
     <img src="assets/images/icons/token-contract.svg" alt="" width="14" height="17" />
     <span class="small-text text--white ml-2">Read Contract Information</span>
   </div>
-  <div>
+  <div class="small-text">
     <span class="cursor-pointer text--green mr-5" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse All</ng-container>

@@ -1,6 +1,9 @@
-<div class="d-flex justify-content-between align-items-center fw-bold">
-  <div class="my-3">
-    <a [routerLink]="'/'" class="button button-chart button-outline button-outline__in-card btn-unconnect" *ngIf="!isConnectedWallet">
+<div class="d-flex justify-content-between align-items-center">
+  <div class="my-3 small-text">
+    <a
+      [routerLink]="'/'"
+      class="button button-chart button-outline button-outline__in-card btn-unconnect"
+      *ngIf="!isConnectedWallet">
       <div class="icon-connect"></div>
       <span class="">Connect to Web3</span>
     </a>
@@ -9,7 +12,7 @@
       <span class="">Connected to Web3</span>
     </a>
   </div>
-  <div>
+  <div class="small-text">
     <span class="cursor-pointer text--green mr-5" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse All</ng-container>
@@ -35,9 +38,11 @@
               writeContract.properties[writeContract.required[0]].properties[item].type
             }})" />
         </ng-container>
-        <a [routerLink]="'/'" class="button button-chart button-outline">
-          <span class="ml-1">Write</span>
-        </a>
+        <div>
+          <button class="button button-chart button-outline body">
+            <span class="ml-1 text-gradient">Write</span>
+          </button>
+        </div>
       </div>
     </mat-expansion-panel>
   </ng-container>
