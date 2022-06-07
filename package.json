@@ -10,7 +10,7 @@
     },
     "private": true,
     "dependencies": {
-        "@agm/core": "^3.0.0-beta.0",
+        "@agm/core": "^1.1.0",
         "@angular-slider/ngx-slider": "^2.0.3",
         "@angular/animations": "~12.0.2",
         "@angular/cdk": "^12.2.8",
