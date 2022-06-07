@@ -51,16 +51,16 @@ export const DROPDOWN_ELEMENT = [
   {
     image: 'assets/icons/icons-svg/white/arrow-right-2.svg',
     label: 'View OutGoing Txns',
-    key: 0,
+    key: '0',
   },
   {
     image: 'assets/icons/icons-svg/white/arrow-left-2.svg',
     label: 'View Ingoing Txns',
-    key: 1,
+    key: '1',
   },
   {
     image: 'assets/icons/icons-svg/white/contract.svg',
     label: 'View Contract Creation',
-    key: 2,
+    key: '2',
   },
 ];

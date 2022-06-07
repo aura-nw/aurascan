@@ -1,6 +1,12 @@
-<section>
+<section class="contract-table">
   <div class="d-flex justify-content-between">
-    <div class="small-body">A total of {{ contractInfo.count }} transactions found</div>
+    <div class="small-body">
+      A total of {{ contractInfo.count }}
+      <div class="d-inline aura-status" *ngIf="label">
+        <div  class="d-inline status" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>
+      </div>
+      transactions found
+    </div>
     <div class="d-flex gap-3 align-items-center">
       <button
         class="button account-button button-outline button-outline__in-card"
@@ -8,7 +14,7 @@
         [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
         View all
       </button>
-      <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)"> </app-dropdown>
+      <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"> </app-dropdown>
     </div>
   </div>
   <ng-container *ngIf="pageData?.length > 0 && dataSource; else noValues">

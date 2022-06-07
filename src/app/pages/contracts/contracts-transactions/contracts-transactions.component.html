@@ -5,9 +5,10 @@
   </div>
   <section>
     <div class="card mt-8">
-      <div class="card-body">
+      <div class="card-body" *ngIf="contract$ | async as contract">
         <app-contract-table
-          [data]="contractInfo.tableData"
+          [label]="currentLabel"
+          [data]="contract"
           [templates]="templates"
           [contractInfo]="contractInfo"
           (onViewSelected)="filterTransaction($event)"></app-contract-table>

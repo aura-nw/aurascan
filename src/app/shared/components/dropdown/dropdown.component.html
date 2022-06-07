@@ -9,8 +9,16 @@
       [id]="element.key"
       (click)="elementClick(element)">
       <button type="button" class="button p-0">
+        <div class="icon-wrapper d-inline-block icon-check">
+          <img
+            *ngIf="element.key == currentLabel"
+            src="assets/icons/icons-svg/color/check-green.svg"
+            alt="icon"
+            class="icon"
+            width="25px" />
+        </div>
         <div class="icon-wrapper d-inline">
-            <img *ngIf="element?.image" [src]="element?.image" alt="icon" class="icon" />
+          <img *ngIf="element?.image" [src]="element?.image" alt="icon" class="icon" />
         </div>
         {{ element?.disableTranslate ? element.label : (element.label | translate) }}
       </button>

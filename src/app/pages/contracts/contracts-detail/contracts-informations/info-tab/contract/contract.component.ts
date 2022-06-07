@@ -18,7 +18,6 @@ export class ContractComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.contractsAddress)
     this.isVerifyContract = true;
   }
 
