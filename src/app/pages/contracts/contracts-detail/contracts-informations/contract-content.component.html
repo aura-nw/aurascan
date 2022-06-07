@@ -20,19 +20,16 @@
     </ul>
   </div>
   <div class="mt-5">
-    <!-- <app-contract-transactions-tab
-        *ngIf="countCurrent === ''"
-        [type]="'TABLE_TOKEN'"
-        (resultLength)="getLength('')"></app-contract-transactions-tab> -->
     <app-contract-table
       *ngIf="countCurrent === ''"
       [data]="contractTransaction"
       [templates]="templates"
-      [contractInfo]="contractInfo"></app-contract-table>
+      [contractInfo]="contractInfo"
+      (onViewSelected)="filterTransaction($event)"></app-contract-table>
     <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
-    <app-contract *ngIf="countCurrent === contractTab.Contract"
-                  [contractTypeData]="contractTypeData"
-                  [contractsAddress]="contractsAddress"
-    ></app-contract>
+    <app-contract
+      *ngIf="countCurrent === contractTab.Contract"
+      [contractTypeData]="contractTypeData"
+      [contractsAddress]="contractsAddress"></app-contract>
   </div>
 </section>

@@ -52,7 +52,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   loadTableData() {
     this.pageData = {
       length: this.data.length,
-      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageSize: 25,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
 

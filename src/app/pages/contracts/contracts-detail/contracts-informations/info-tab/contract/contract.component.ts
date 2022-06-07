@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ResponseDto } from 'src/app/core/models/common.model';
-import { ContractDetailDto } from 'src/app/core/models/contract.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { ContractType } from '../../../../../../core/constants/token.enum';
 
