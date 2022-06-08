@@ -1,7 +1,7 @@
 <div class="contract-popover-container">
   <div class="text--white">
-    <div class="sub-text sub-text-mob">Additional info</div>
-    <div class="small-body">Status:</div>
+    <div class="title-small fw-500 sub-text-mob">Additional info</div>
+    <div class="small-body fw-semibold">Status:</div>
 
     <div
       class="small-body d-flex align-items-center gap-2"
@@ -20,18 +20,18 @@
     <hr />
     <div class="small-body">Token Transfer</div>
     <div class="small-body">
-      {{ popoverData?.amount | mask: 'separator' }}
-      (${{ popoverData?.price | mask: 'separator' }})
+      {{ popoverData?.amount | mask: 'separator.6' }}
+      (${{ popoverData?.price | mask: 'separator.6' }})
       <a class="text--green" [routerLink]="['/token/token', popoverData.tokenAddress]"> {{ popoverData.symbol }} </a>
     </div>
     <div class="small-body">
       <span class="small-body text--light-gray">From</span>
       <a class="text--white" [routerLink]="['/account', popoverData?.from_address]">
-        {{ popoverData?.from_address || '-' | cutStringPipe: 11 }}
+        {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
       </a>
       <span class="small-body text--light-gray">To</span>
       <a class="text--white" [routerLink]="['/account', popoverData?.to_address]">
-        {{ popoverData?.to_address || '-' | cutStringPipe: 11 }}
+        {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
       </a>
     </div>
     <hr />

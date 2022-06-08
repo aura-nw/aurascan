@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { combineLatest, of } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
 import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { IResponsesSuccess, TableTemplate } from 'src/app/core/models/common.model';
 import { IContractsResponse, ITableContract } from 'src/app/core/models/contract.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { parseLabel } from 'src/app/core/utils/common/parsing';
+import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { isContract } from 'src/app/core/utils/common/validation';
 import { TableData } from 'src/app/shared/components/contract-table/contract-table.component';
 
@@ -99,17 +100,30 @@ export class ContractsTransactionsComponent implements OnInit {
   checkResponse(response): TableData[] {
     if (response.data && Array.isArray(response.data)) {
       this.contractInfo.count = response.meta.count || 0;
-
+      let value = 0;
+      let from = '';
+      let to = '';
       const ret = response.data.map((contract) => {
         let method = '';
-        if (contract.messages[0]['@type'] === '/cosmwasm.wasm.v1.MsgInstantiateContract') {
-          method = 'instantiate';
-        } else {
-          method = Object.keys(contract.messages[0].msg)[0];
+        switch (contract.type) {
+          case TRANSACTION_TYPE_ENUM.InstantiateContract:
+            method = 'instantiate';
+            break;
+          case TRANSACTION_TYPE_ENUM.Send:
+            method = 'transfer';
+            value = +contract.messages[0]?.amount[0].amount;
+            from = contract.messages[0].from_address;
+            to = contract.messages[0].to_address;
+            break;
+          default:
+            method = Object.keys(contract.messages[0].msg)[0];
+            value = +contract.messages[0].funds[0]?.amount || 0;
+            from = contract.messages[0].sender;
+            to = contract.messages[0].contract;
+            break;
         }
-        const value = +contract.messages[0].funds[0]?.amount || 0;
 
-        const label = contract.messages[0].sender === this.contractInfo.contractsAddress ? 'OUT' : 'TO';
+        const label = contract.messages[0].sender === this.contractInfo.contractsAddress ? 'OUT' : 'IN';
 
         const tableDta: TableData = {
           txHash: contract.tx_hash,
@@ -117,10 +131,10 @@ export class ContractsTransactionsComponent implements OnInit {
           blockHeight: contract.height,
           blockId: contract.blockId,
           time: new Date(contract.timestamp),
-          from: contract.messages[0].sender,
+          from,
           label,
-          to: contract.messages[0].contract,
-          value,
+          to,
+          value: balanceOf(value),
           fee: +contract.fee,
         };
 

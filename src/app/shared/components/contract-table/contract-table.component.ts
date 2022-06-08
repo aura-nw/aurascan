@@ -97,13 +97,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   parseLabel(id: string): string {
-    return (
-      {
-        0: 'OUT',
-        1: 'TO',
-        2: 'CREATION',
-      }[id] || ''
-    );
+    return parseLabel(+id);
   }
 
   pageEvent({ pageIndex }) {

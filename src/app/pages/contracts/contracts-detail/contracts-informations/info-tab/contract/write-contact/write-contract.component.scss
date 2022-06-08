@@ -53,7 +53,7 @@ mat-expansion-panel {
 
 .mat-expansion-panel-header {
   font-size: 14px;
-  .mat-expanded {
+  &.mat-expanded {
     height: 48px;
   }
 }
