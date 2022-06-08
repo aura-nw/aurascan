@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
@@ -75,16 +76,27 @@ export class ContractContentComponent implements OnInit {
       this.contractService.getTransactions(payload).subscribe((res) => {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
+          let value = 0;
           const ret = res.data.map((contract) => {
             let method = '';
-            if (contract.messages[0]['@type'] === '/cosmwasm.wasm.v1.MsgInstantiateContract') {
-              method = 'instantiate';
-            } else {
-              method = Object.keys(contract.messages[0].msg)[0];
+            switch (contract.type) {
+              case TRANSACTION_TYPE_ENUM.InstantiateContract:
+                method = 'instantiate';
+                break;
+              case TRANSACTION_TYPE_ENUM.Send:
+                method = 'transfer';
+                value = +contract.messages[0]?.amount[0].amount;
+                break;
+              default:
+                method = Object.keys(contract.messages[0].msg)[0];
+                value = +contract.messages[0].funds[0]?.amount || 0;
+                break;
             }
-            const value = +contract.messages[0].funds[0]?.amount || 0;
 
-            const label = contract.messages[0].sender === this.contractsAddress ? 'OUT' : 'IN';
+            const label =
+              contract.messages[0].sender === this.contractsAddress
+                ? ContractTransactionType.OUT
+                : ContractTransactionType.IN;
 
             const tableDta: TableData = {
               txHash: contract.tx_hash,

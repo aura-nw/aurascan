@@ -1,15 +1,26 @@
 import { CodeTransaction } from "src/app/core/constants/transaction.enum";
-import { ContractVerifyType } from "../constants/contract.enum";
 import { TableData } from "src/app/shared/components/contract-table/contract-table.component";
 
 export interface IContractsResponse {
+  codespace: string;
+  contract_address: string;
   tx_hash: string;
   height: number;
   type: string;
+  data: string;
   timestamp: Date;
+  gas_used: string;
+  gas_wanted: string;
+  id: number;
+  info: string;
+  created_at: Date;
+  updated_at: Date;
   code: number;
   fee: string;
   blockId: number;
+  raw_log: string;
+  raw_log_data: unknown;
+  tx: string;
   messages: {
     msg: {
       [key: string]: any
@@ -21,6 +32,10 @@ export interface IContractsResponse {
     }[];
     sender: string;
     contract: string;
+    amount: {
+      denom: string;
+      amount: string;
+    }[];
   }[];
 }
 
