@@ -7,8 +7,8 @@ export function balanceOf(amount: string | number): number {
 export function parseLabel(label: number) {
   return (
     {
-      0: 'IN',
-      1: 'OUT',
+      0: 'OUT',
+      1: 'IN',
       2: 'CREATION',
     }[label] || ''
   );
