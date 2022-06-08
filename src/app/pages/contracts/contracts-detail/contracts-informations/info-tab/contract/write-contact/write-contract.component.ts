@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GAS_ESTIMATE, STABLE_UTOKEN } from 'src/app/core/constants/common.constant';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { SigningCosmWasmClient } from 'cosmwasm';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { ResponseDto } from 'src/app/core/models/common.model';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-write-contract',
   templateUrl: './write-contract.component.html',
@@ -26,6 +24,7 @@ export class WriteContractComponent implements OnInit {
     public walletService: WalletService,
     private transactionService: TransactionService,
     private toastr: NgxToastrService,
+    public translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -78,78 +77,54 @@ export class WriteContractComponent implements OnInit {
     const account = this.walletService.getAccount();
   }
 
-  async excuteSmartContract() {
+  async excuteSmartContract(name: string) {
     let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
     const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
-    const msg = {
-      add_new: {
-        id: 'f1',
-        name: 'violet',
-        amount: 150,
-        price: 100,
-      },
-    };
 
-    const fee: any = {
-      amount: [
-        {
-          denom: STABLE_UTOKEN,
-          amount: '1',
-        },
-      ],
-      gas: GAS_ESTIMATE,
-    };
-
-    let result;
-    try {
-      result = await client.execute(
-        // 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e',
-        this.userAddress,
-        // 'aura18s3u7wvpwhavuukdp0x5jrh028ua4vjjtls4hvgkvgy6lvpkprfsmg5tjt',
-        this.contractDetailData.contract_address,
-        msg,
-        fee,
-      );
-      this.checkStatuExcuteBlock(result.transactionHash, result.logs, '');
-    } catch (error) {
-      if (!error.toString().includes('Request rejected')) {
-        let msgError = error.toString() || 'Error';
-        this.toastr.error(msgError);
-      }
-    }
-    return {
-      hash: result.transactionHash || null,
-      error: result.logs,
-    };
-  }
-
-  checkStatuExcuteBlock(hash, error, msg) {
-    if (error) {
-      if (error != 'Request rejected') {
-        this.toastr.error(error);
-      }
-    } else {
-      setTimeout(() => {
-        this.checkDetailTx(hash, msg);
-      }, 4000);
-    }
-  }
-
-  checkDetailTx(id, message) {
-    this.transactionService.txsDetail(id).subscribe(
-      (res: ResponseDto) => {
-        let numberCode = res?.data?.code;
-        message = res?.data?.raw_log || message;
-        // message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (numberCode !== undefined) {
-          if (!!!numberCode && numberCode === CodeTransaction.Success) {
-            this.toastr.success(message);
-          } else {
-            this.toastr.error(message);
-          }
+    const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
+    if (contractTemp) {
+      let objWriteContract = {};
+      contractTemp.properties[name].required.forEach((contract) => {
+        // console.log(contract);
+        // console.log(contractTemp.properties[name].properties[contract]);
+        let type = contractTemp.properties[name].properties[contract].type;
+        let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
+          contract
+        ] as HTMLInputElement;
+        objWriteContract[contract] = element.value;
+        if (type !== 'string') {
+          objWriteContract[contract] = Number(element.value);
         }
-      },
-      (error) => {},
-    );
+      });
+      // console.log(objWriteContract);
+      const msg = {
+        [name]: objWriteContract,
+      };
+
+      const fee: any = {
+        amount: [
+          {
+            denom: STABLE_UTOKEN,
+            amount: '1',
+          },
+        ],
+        gas: GAS_ESTIMATE,
+      };
+
+      try {
+        let result = await client.execute(
+          this.userAddress,
+          this.contractDetailData.contract_address,
+          msg,
+          fee,
+        );
+        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+      } catch (error) {
+        if (!error.toString().includes('Request rejected')) {
+          let msgError = error.toString() || 'Error';
+          this.toastr.error(msgError);
+        }
+      }
+    }
   }
 }

@@ -61,7 +61,6 @@ export class ReadContractComponent implements OnInit {
 
     try {
       const config = await client.queryContractSmart(
-        // 'aura1jsr7jcs9ew9au3tj9h7ypwf2vdj4j706tzw7skpxyjkamkepltysh8fcj0',
         this.contractDetailData.contract_address,
         queryData,
       );
