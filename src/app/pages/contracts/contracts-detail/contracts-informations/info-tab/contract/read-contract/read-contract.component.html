@@ -8,7 +8,7 @@
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse All</ng-container>
     </span>
-    <span class="cursor-pointer text--green">Reset</span>
+    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
   </div>
 </div>
 <div class="box-content text--white mt-3">
@@ -18,8 +18,25 @@
         <mat-panel-title class="item-content"> {{ i + 1 }}. {{ readContract.required }} </mat-panel-title>
         <mat-panel-description> </mat-panel-description>
       </mat-expansion-panel-header>
-      <span class="text--green">aura</span>
-      {{ readContract.properties[readContract.required[0]].type }}
+      <div class="d-flex row p-3">
+        <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
+          <p>{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})</p>
+          <input
+            [(ngModel)]="idRead"
+            [ngStyle]="{ 'border-color': errorInput ? 'red' : '' }"
+            class="form-check-input col-12 mb-4"
+            type="text"
+            (blur)="resetCheck()"
+            placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
+        </ng-container>
+        <div class="w-100 mb-3">
+          <button class="button button-chart button-outline button-outline__in-card body" [disabled]="errorInput">
+            <span class="ml-1 text-gradient" (click)="querySmartContract(readContract.required)">Query</span>
+          </button>
+        </div>
+        <br />
+        <pre class="small-body text--white">{{ dataResponse }}</pre>
+      </div>
     </mat-expansion-panel>
   </ng-container>
 </div>
