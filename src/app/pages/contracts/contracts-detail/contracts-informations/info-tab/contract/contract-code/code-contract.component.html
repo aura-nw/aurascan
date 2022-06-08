@@ -65,67 +65,18 @@
         <img src="../../../assets/icons/icons-svg/basic/menu.svg" alt="" width="16" height="16" />
         <span class="text--white ml-2 fw-semibold">Contract Schema</span>
       </div>
-      <div
-        class="d-flex align-items-center"
-        *ngIf="contractDetailData?.contract_verification === contractVerifyType.Similar_Match">
-        <div class="dropdown aura-dropdown mr-4 small-text">
-          <button
-            class="button button-outline button-outline__in-card d-flex align-items-center"
-            type="button"
-            id="delegateAction"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <img
-              class="flex-shrink-0"
-              src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
-              alt="wallet-avatar"
-              height="24px"
-              width="24px" />
-            <span class="">Export Schema</span>
-          </button>
-          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
-            <li class="dropdown-item cursor-pointer">
-              <button type="button" class="button p-0 small-text">JSON Format</button>
-            </li>
-            <li class="dropdown-item cursor-pointer">
-              <button type="button" class="button p-0 small-text">RAW/Text Format</button>
-            </li>
-          </ul>
-        </div>
-        <img
-          src="assets/icons/icons-svg/basic/copy.svg"
-          class="ml-4 mr-4 cursor-pointer"
-          alt=""
-          width="24"
-          height="24"
-          (click)="copyData('test2')" />
-        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" />
-      </div>
     </div>
   </ng-container>
 
-  <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Similar_Match">
-    <pre class="mt-3 small-text content-info">
-      "http://ison-schema.org/draft-07/schema#"
-      "titien:
-      "QueryMsg",
-      wanvoE':
-      "description": "Returns the current balance of the given address, 0 if unset. Return type: BalanceRegponse."
-      levoel:
-      "object",
-      "required":
-    </pre>
-  </ng-container>
-
-  <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
+  <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="d-flex justify-content-between align-items-center">
       <span class="text--contract">File 1 of 3: execute msg.ison</span>
       <div class="d-flex align-items-center">
-        <div class="dropdown aura-dropdown mr-4 small-text">
+        <div class="dropdown aura-dropdown small-text">
           <button
             class="button button-outline button-outline__in-card d-flex align-items-center"
             type="button"
-            id="delegateAction"
+            id="delegateAction1"
             data-bs-toggle="dropdown"
             aria-expanded="false">
             <img
@@ -136,35 +87,36 @@
               width="24px" />
             <span class="">Export Schema</span>
           </button>
-          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
-            <li class="dropdown-item cursor-pointer">
+          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction1">
+            <li class="dropdown-item cursor-pointer" (click)="sendRouteObject('json', contractDetailData?.execute_msg_schema)">
               <button type="button" class="button p-0 small-text">JSON Format</button>
             </li>
-            <li class="dropdown-item cursor-pointer">
-              <button type="button" class="button p-0 small-text">RAW/Text Format</button>
+            <li class="dropdown-item cursor-pointer" (click)="sendRouteObject('text', contractDetailData?.execute_msg_schema)">
+              <button type="button" class="button p-0 small-text">JRAW/Text Format</button>
             </li>
           </ul>
         </div>
         <img
           src="assets/icons/icons-svg/basic/copy.svg"
-          class="ml-4 mr-4 cursor-pointer"
+          class="mx-6 cursor-pointer"
           alt=""
           width="24"
           height="24"
           (click)="copyData(contractDetailData?.execute_msg_schema)" />
-        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" />
+        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" class="cursor-pointer"
+             (click)="(pre1.className.includes('show')) ? pre1.classList.remove('show') : pre1.classList.add('show')"/>
       </div>
     </div>
-    <pre class="mt-3 small-text content-info">{{ contractDetailData?.execute_msg_schema }}</pre>
+    <pre class="mt-3 small-text content-info" #pre1>{{ contractDetailData?.execute_msg_schema }}</pre>
 
     <div class="d-flex justify-content-between align-items-center mt-2">
       <span class="text--contract">File 2 of 3: instantiate msg.json</span>
       <div class="d-flex align-items-center">
-        <div class="dropdown aura-dropdown mr-4 small-text">
+        <div class="dropdown aura-dropdown small-text">
           <button
             class="button button-outline button-outline__in-card d-flex align-items-center"
             type="button"
-            id="delegateAction"
+            id="delegateAction2"
             data-bs-toggle="dropdown"
             aria-expanded="false">
             <img
@@ -175,35 +127,36 @@
               width="24px" />
             <span class="">Export Schema</span>
           </button>
-          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
-            <li class="dropdown-item cursor-pointer">
+          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction2">
+            <li class="dropdown-item cursor-pointer" (click)="sendRouteObject('json', contractDetailData?.execute_msg_schema)">
               <button type="button" class="button p-0 small-text">JSON Format</button>
             </li>
-            <li class="dropdown-item cursor-pointer">
-              <button type="button" class="button p-0 small-text">RAW/Text Format</button>
+            <li class="dropdown-item cursor-pointer" (click)="sendRouteObject('text', contractDetailData?.execute_msg_schema)">
+              <button type="button" class="button p-0 small-text">JRAW/Text Format</button>
             </li>
           </ul>
         </div>
         <img
           src="assets/icons/icons-svg/basic/copy.svg"
-          class="ml-4 mr-4 cursor-pointer"
+          class="mx-6 cursor-pointer"
           alt=""
           width="24"
           height="24"
           (click)="copyData(contractDetailData?.instantiate_msg_schema)" />
-        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" />
+        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" class="cursor-pointer"
+             (click)="(pre2.className.includes('show')) ? pre2.classList.remove('show') : pre2.classList.add('show')" />
       </div>
     </div>
-    <pre class="mt-3 small-text content-info">{{ contractDetailData?.instantiate_msg_schema }}</pre>
+    <pre class="mt-3 small-text content-info" #pre2>{{ contractDetailData?.instantiate_msg_schema }}</pre>
 
     <div class="d-flex justify-content-between align-items-center mt-2">
       <span class="text--contract">File 3 of 3: query msg.json</span>
       <div class="d-flex align-items-center">
-        <div class="dropdown aura-dropdown mr-4 small-text">
+        <div class="dropdown aura-dropdown small-text">
           <button
             class="button button-outline button-outline__in-card d-flex align-items-center"
             type="button"
-            id="delegateAction"
+            id="delegateAction3"
             data-bs-toggle="dropdown"
             aria-expanded="false">
             <img
@@ -214,26 +167,27 @@
               width="24px" />
             <span class="">Export Schema</span>
           </button>
-          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
-            <li class="dropdown-item cursor-pointer">
+          <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction3">
+            <li class="dropdown-item cursor-pointer" (click)="sendRouteObject('json', contractDetailData?.execute_msg_schema)">
               <button type="button" class="button p-0 small-text">JSON Format</button>
             </li>
-            <li class="dropdown-item cursor-pointer">
-              <button type="button" class="button p-0 small-text">RAW/Text Format</button>
+            <li class="dropdown-item cursor-pointer" (click)="sendRouteObject('text', contractDetailData?.execute_msg_schema)">
+              <button type="button" class="button p-0 small-text">JRAW/Text Format</button>
             </li>
           </ul>
         </div>
         <img
           src="assets/icons/icons-svg/basic/copy.svg"
-          class="ml-4 mr-4 cursor-pointer"
+          class="mx-6 cursor-pointer"
           alt=""
           width="24"
           height="24"
           (click)="copyData(contractDetailData?.query_msg_schema)" />
-        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" />
+        <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" class="cursor-pointer"
+             (click)="(pre3.className.includes('show')) ? pre3.classList.remove('show') : pre3.classList.add('show')" />
       </div>
     </div>
-    <pre class="mt-3 small-text content-info">{{ contractDetailData?.query_msg_schema }}</pre>
+    <pre class="mt-3 small-text content-info" #pre3>{{ contractDetailData?.query_msg_schema }}</pre>
   </ng-container>
 
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router} from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 
 @Component({
@@ -12,7 +12,7 @@ export class CodeContractComponent implements OnInit {
 
   contractVerifyType = ContractVerifyType;
   isExpand = false;
-  constructor() {}
+  constructor(public router: Router) {}
 
   ngOnInit(): void {
   }
@@ -35,5 +35,10 @@ export class CodeContractComponent implements OnInit {
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
+  }
+  sendRouteObject(type: 'json' | 'text', content: string) {
+    localStorage.setItem('contractRawData', JSON.stringify({content, type}));
+    let url = this.router.serializeUrl(this.router.createUrlTree(['raw-data']));
+    window.open(url, '_blank');
   }
 }

@@ -46,6 +46,11 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
   },
+  {
+    path: 'raw-data',
+    loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
+    pathMatch: 'full',
+  },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   { path: '**', redirectTo: '' },

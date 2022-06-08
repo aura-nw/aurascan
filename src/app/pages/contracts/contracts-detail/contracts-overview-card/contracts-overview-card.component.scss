@@ -42,7 +42,7 @@
     height: auto;
     border: 1px solid var(--aura-dark-gray);
     @media (min-width: 992px) {
-      width: 186px;
+      margin-right: 12px;
     }
     ::ng-deep mat-select-trigger {
       display: inline-flex;

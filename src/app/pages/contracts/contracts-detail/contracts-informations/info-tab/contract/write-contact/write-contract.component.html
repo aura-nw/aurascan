@@ -20,7 +20,7 @@
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse All</ng-container>
     </span>
-    <span class="cursor-pointer text--green">Reset</span>
+    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
   </div>
 </div>
 
@@ -33,17 +33,18 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of writeContract?.properties[writeContract.required[0]].required; index as idx">
-          <p>{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
+          <p class="px-0 text--greyscale-1">{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
           <input
             class="form-check-input col-12 mb-4"
             type="text"
+            id="{{ item }}"
             placeholder="{{ item }} ({{
               writeContract.properties[writeContract.required[0]].properties[item].type
             }})" />
         </ng-container>
         <div>
-          <button class="button button-chart button-outline body">
-            <span class="ml-1 text-gradient">Write</span>
+          <button class="button button-chart button-outline button-outline__in-card body">
+            <span class="ml-1 text-gradient" (click)="excuteSmartContract()">Write</span>
           </button>
         </div>
       </div>

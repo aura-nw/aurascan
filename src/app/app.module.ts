@@ -53,6 +53,7 @@ import { CommonService } from './core/services/common.service';
 import { ExtrapagesModule } from './extrapages/extrapages.module';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
+import {BlankModule} from "./pages/blank/blank.module";
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -90,7 +91,9 @@ export function createTranslateLoader(http: HttpClient): any {
     MatTooltipModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    BlankModule,
   ],
+  declarations: [],
 })
 export class MaterialModule {}
 
