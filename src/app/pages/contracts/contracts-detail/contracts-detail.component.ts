@@ -15,6 +15,8 @@ export class ContractsDetailComponent implements OnInit {
   priceToken = 0;
   modalReference: any;
 
+  isCopy = false;
+
   constructor(
     private route: ActivatedRoute,
     private contractService: ContractService,
@@ -30,14 +32,6 @@ export class ContractsDetailComponent implements OnInit {
     this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.contractDetail = res?.data;
       this.contractDetail.price = this.contractDetail.balance * this.priceToken || 0;
-      this.contractDetail.creator_address_format = this.contractDetail.creator_address.replace(
-        this.contractDetail.creator_address.substring(20),
-        '...',
-      );
-      this.contractDetail.tx_hash_format = this.contractDetail.tx_hash.replace(
-        this.contractDetail.tx_hash.substring(6, this.contractDetail.tx_hash.length - 6),
-        '...',
-      );
     });
   }
 
@@ -49,13 +43,19 @@ export class ContractsDetailComponent implements OnInit {
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
+
+    this.isCopy = true;
+
+    setTimeout(() => {
+      this.isCopy = false;
+    }, 500)
   }
 
   viewQrAddress(staticDataModal: any): void {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
-      windowClass: 'modal-holder',
+      windowClass: 'modal-holder fit-modal',
     });
   }
 

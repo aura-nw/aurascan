@@ -24,11 +24,11 @@
           <td>Contract Creator:</td>
           <td colspan="2">
             <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
-              {{ contractDetail?.creator_address_format }}
+              {{ contractDetail?.creator_address | cutStringPipe : 8:8 }}
             </a>
             at txn
             <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
-              {{ contractDetail?.tx_hash_format }}
+              {{ contractDetail?.tx_hash | cutStringPipe : 8:8}}
             </a>
           </td>
         </tr>

@@ -16,6 +16,12 @@
       }
     }
   }
+
+  &.fit-modal {
+    .modal-dialog {
+      width: fit-content;
+    }
+  }
   &.modal-holder.fade.show {
     z-index: 1090;
   }
