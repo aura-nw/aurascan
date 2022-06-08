@@ -32,6 +32,8 @@ export interface IContractsResponse {
     }[];
     sender: string;
     contract: string;
+    from_address: string;
+    to_address: string;
     amount: {
       denom: string;
       amount: string;
