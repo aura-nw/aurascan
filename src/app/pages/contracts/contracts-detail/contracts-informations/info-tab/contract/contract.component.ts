@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -19,7 +19,11 @@ export class ContractComponent implements OnInit {
   contractVerifyType = ContractVerifyType;
   contractAddress: string;
   contractDetail: any;
-  constructor(private contractService: ContractService, private route: ActivatedRoute) { }
+  constructor(
+      private contractService: ContractService,
+      private route: ActivatedRoute,
+      private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
@@ -29,9 +33,18 @@ export class ContractComponent implements OnInit {
   getContractDetail() {
     this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.contractDetail = res?.data;
+      console.log(this.contractDetail)
     });
   }
-
+  navigateContractDetail() {
+    this.router.navigate(['contracts/verify'],
+    { state: {
+            contractAddress: this.contractAddress,
+            contractTxHash: this.contractDetail.tx_hash,
+            contractName: this.contractDetail.contract_name,
+          }
+        });
+  }
 
   changeTab(tabId): void {
     this.countCurrent = tabId;

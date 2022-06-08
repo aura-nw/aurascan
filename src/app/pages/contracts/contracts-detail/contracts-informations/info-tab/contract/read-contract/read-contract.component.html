@@ -6,7 +6,7 @@
   <div class="small-text">
     <span class="cursor-pointer text--green mr-5" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
-      <ng-container *ngIf="isExpand">Collapse All</ng-container>
+      <ng-container *ngIf="isExpand">Collapse all</ng-container>
     </span>
     <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
   </div>
@@ -20,7 +20,7 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
-          <p>{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})</p>
+          <p class="px-0">{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})</p>
           <input
             [(ngModel)]="idRead"
             [ngStyle]="{ 'border-color': errorInput ? 'red' : '' }"
@@ -29,7 +29,7 @@
             (blur)="resetCheck()"
             placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
         </ng-container>
-        <div class="w-100 mb-3">
+        <div class="w-100 mb-3 px-0">
           <button class="button button-chart button-outline button-outline__in-card body" [disabled]="errorInput">
             <span class="ml-1 text-gradient" (click)="querySmartContract(readContract.required)">Query</span>
           </button>

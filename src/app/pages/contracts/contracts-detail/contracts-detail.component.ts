@@ -15,8 +15,6 @@ export class ContractsDetailComponent implements OnInit {
   priceToken = 0;
   modalReference: any;
 
-  isCopy = false;
-
   constructor(
     private route: ActivatedRoute,
     private contractService: ContractService,
@@ -43,12 +41,11 @@ export class ContractsDetailComponent implements OnInit {
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
-
-    this.isCopy = true;
-
-    setTimeout(() => {
-      this.isCopy = false;
-    }, 500)
+    // fake event click out side copy button
+     // this event for hidden tooltip
+    setTimeout(function (){
+      document.getElementById('ttiopa123').click();
+    }, 800)
   }
 
   viewQrAddress(staticDataModal: any): void {

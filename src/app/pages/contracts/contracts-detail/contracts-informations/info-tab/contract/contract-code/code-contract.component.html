@@ -1,4 +1,4 @@
-<div class="code-contract justify-content-between text--white mt-5">
+<div class="code-contract justify-content-between text--white mt-5" id="wsead123">
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
     <img src="assets/images/icons/contract-verify.svg" alt="" width="16" height="16" />
     <span class="ml-2 mr-1 fw-semibold">Contract Source Code Verified</span
@@ -53,7 +53,10 @@
         <div class="d-flex justify-content-end">
           <button
             class="button button-chart button-outline button-outline__in-card btn-copy"
-            (click)="copyData(contractDetailData?.url)">
+            matTooltip="Coppied!" #tooltip1="matTooltip"
+            (mouseenter)="$event.stopImmediatePropagation()"
+            (mouseleave)="$event.stopImmediatePropagation()"
+            (click)="copyData(contractDetailData?.url); tooltip1.toggle()">
             <span class="ml-1">Copy</span>
           </button>
         </div>
@@ -100,9 +103,11 @@
           src="assets/icons/icons-svg/basic/copy.svg"
           class="mx-6 cursor-pointer"
           alt=""
-          width="24"
-          height="24"
-          (click)="copyData(contractDetailData?.execute_msg_schema)" />
+          width="24" height="24"
+          matTooltip="Coppied!" #tooltip2="matTooltip"
+          (mouseenter)="$event.stopImmediatePropagation()"
+          (mouseleave)="$event.stopImmediatePropagation()"
+          (click)="copyData(contractDetailData?.execute_msg_schema); tooltip2.toggle()" />
         <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" class="cursor-pointer"
              (click)="(pre1.className.includes('show')) ? pre1.classList.remove('show') : pre1.classList.add('show')"/>
       </div>
@@ -140,9 +145,11 @@
           src="assets/icons/icons-svg/basic/copy.svg"
           class="mx-6 cursor-pointer"
           alt=""
-          width="24"
-          height="24"
-          (click)="copyData(contractDetailData?.instantiate_msg_schema)" />
+          width="24" height="24"
+          matTooltip="Coppied!" #tooltip3="matTooltip"
+          (mouseenter)="$event.stopImmediatePropagation()"
+          (mouseleave)="$event.stopImmediatePropagation()"
+          (click)="copyData(contractDetailData?.instantiate_msg_schema); tooltip3.toggle()" />
         <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" class="cursor-pointer"
              (click)="(pre2.className.includes('show')) ? pre2.classList.remove('show') : pre2.classList.add('show')" />
       </div>
@@ -180,9 +187,11 @@
           src="assets/icons/icons-svg/basic/copy.svg"
           class="mx-6 cursor-pointer"
           alt=""
-          width="24"
-          height="24"
-          (click)="copyData(contractDetailData?.query_msg_schema)" />
+          width="24" height="24"
+          matTooltip="Coppied!" #tooltip4="matTooltip"
+          (mouseenter)="$event.stopImmediatePropagation()"
+          (mouseleave)="$event.stopImmediatePropagation()"
+          (click)="copyData(contractDetailData?.query_msg_schema); tooltip4.toggle()" />
         <img src="assets/images/icons/address-popup.png" alt="" width="24" height="24" class="cursor-pointer"
              (click)="(pre3.className.includes('show')) ? pre3.classList.remove('show') : pre3.classList.add('show')" />
       </div>

@@ -35,6 +35,11 @@ export class CodeContractComponent implements OnInit {
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function (){
+      document.getElementById('wsead123').click();
+    }, 800)
   }
   sendRouteObject(type: 'json' | 'text', content: string) {
     localStorage.setItem('contractRawData', JSON.stringify({content, type}));
