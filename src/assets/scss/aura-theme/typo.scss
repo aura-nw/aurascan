@@ -114,7 +114,8 @@ $textColors: (
   "neutrals-6",
   "neutrals-8",
   "contract",
-  "active"
+  "active",
+  "greyscale-1"
 );
 @each $color in $textColors {
   .text--#{$color} {
