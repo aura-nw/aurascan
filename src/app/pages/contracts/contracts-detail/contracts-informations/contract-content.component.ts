@@ -84,7 +84,7 @@ export class ContractContentComponent implements OnInit {
             }
             const value = +contract.messages[0].funds[0]?.amount || 0;
 
-            const label = contract.messages[0].sender === this.contractsAddress ? 'OUT' : 'TO';
+            const label = contract.messages[0].sender === this.contractsAddress ? 'OUT' : 'IN';
 
             const tableDta: TableData = {
               txHash: contract.tx_hash,
