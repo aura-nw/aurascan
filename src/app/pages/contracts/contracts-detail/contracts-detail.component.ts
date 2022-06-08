@@ -49,6 +49,11 @@ export class ContractsDetailComponent implements OnInit {
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
+    // fake event click out side copy button
+     // this event for hidden tooltip
+    setTimeout(function (){
+      document.getElementById('ttiopa123').click();
+    }, 800)
   }
 
   viewQrAddress(staticDataModal: any): void {

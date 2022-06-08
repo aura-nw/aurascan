@@ -7,14 +7,14 @@
             <img src="assets/icons/icons-svg/color/info.svg" alt="" width="16px" height="16px">
             <div class="ml-2 d-flex">
                 <span>Note: Contract was created at TxHash</span>
-                <span class="text--green ml-1">unas192910hadbh192aendb10afce120129102012211aecbde</span>
+                <span class="text--green ml-1">{{ contractTxHash }}</span>
             </div>
         </div>
         <div class="mt-3 d-flex">
             <img src="assets/icons/icons-svg/color/check-circle.svg" alt="" width="16px" height="16px">
             <div class="ml-2 d-flex">
                 <span>Successfully generated Creation Code and Schema for Contract Address</span>
-                <span class="text--green ml-1">[unas192910hadbh192a29102012211aechde]</span>
+                <a class="text--green ml-1" [routerLink]="['/contracts', contractAddress]">[{{contractAddress}}]</a>
             </div>
         </div>
     </div>
@@ -30,11 +30,11 @@
 <div class="mt-6 border-box">
     <div>
         <span class="fw-semibold mr-1" (click)="switchErrStatus()">Compiler Version:</span>
-        <span>v0.7.6+commit.7338295f</span>
+        <span>{{ compilerVersion }}</span>
     </div>
-    <div class="mt-4" *ngIf="!logError">
+    <div class="mt-4">
         <span class="fw-semibold mr-1">Contract Name:</span>
-        <span>Aura</span>
+        <span>{{contractName}}</span>
     </div>
     <div class="mt-4">
         <div class="fw-semibold">Contract Creation Code <span *ngIf="logError"> (What we are looking for)</span> :</div>
@@ -76,4 +76,8 @@ levoel:
 "object",
 "required":</pre>
     </div>
+</div>
+
+<div *ngIf="logError" class="mt-6">
+    <button class="button button-outline button-outline__in-card ml-auto" type="button"><span class="text-gradient" (click)="switchStageEmmit()">Start Over</span></button>
 </div>

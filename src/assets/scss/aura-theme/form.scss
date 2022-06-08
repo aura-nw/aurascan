@@ -78,6 +78,11 @@
         color: var(--aura-light-gray);
       }
     }
+    &.select-input__arrow--gray {
+      .mat-select-arrow-wrapper .mat-select-arrow {
+        background: url("../../icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      }
+    }
   }
   .input-group {
     display: flex;
