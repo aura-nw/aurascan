@@ -33,7 +33,7 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of writeContract?.properties[writeContract.required[0]].required; index as idx">
-          <p>{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
+          <p class="px-0 text--greyscale-1">{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
           <input
             class="form-check-input col-12 mb-4"
             type="text"
