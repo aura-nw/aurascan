@@ -1,7 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-
+import { SigningCosmWasmClient } from 'cosmwasm';
+import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+import { WalletService } from 'src/app/core/services/wallet.service';
 @Component({
   selector: 'app-read-contract',
   templateUrl: './read-contract.component.html',
@@ -12,9 +13,11 @@ export class ReadContractComponent implements OnInit {
 
   isExpand = false;
   jsonReadContract: any;
-  idRead: string;
+  idRead: string = '';
+  dataResponse: any;
+  errorInput = false;
 
-  constructor(private contractService: ContractService) {}
+  constructor(public walletService: WalletService) {}
 
   ngOnInit(): void {
     this.jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
@@ -46,14 +49,32 @@ export class ReadContractComponent implements OnInit {
     this.expandMenu(true);
   }
 
-  querySmartContract(name: string) {
-    let msg = { [name]: { id: this.idRead } };
+  async querySmartContract(name: string) {
+    if (this.idRead?.length === 0) {
+      this.errorInput = true;
+      return;
+    }
     let queryData = {
-      contract_address: this.contractDetailData?.contract_address,
-      query_msg: msg,
+      [name]: { id: this.idRead },
     };
-    this.contractService.readContract(queryData).subscribe((res: ResponseDto) => {
-      // console.log(res);
-    });
+    const client = await SigningCosmWasmClient.connect(ChainsInfo[this.walletService.chainId].rpc);
+
+    try {
+      const config = await client.queryContractSmart(
+        // 'aura1jsr7jcs9ew9au3tj9h7ypwf2vdj4j706tzw7skpxyjkamkepltysh8fcj0',
+        this.contractDetailData.contract_address,
+        queryData,
+      );
+
+      if (config) {
+        this.dataResponse = JSON.stringify(config);
+      }
+    } catch (error) {
+      this.dataResponse = error;
+    }
+  }
+
+  resetCheck() {
+    this.errorInput = false;
   }
 }

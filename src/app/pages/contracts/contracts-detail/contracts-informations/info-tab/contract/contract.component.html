@@ -50,6 +50,6 @@
       *ngIf="countCurrent === contractType.Code"
       [contractDetailData]="contractDetail"></app-code-contract>
     <app-read-contract *ngIf="countCurrent === contractType.ReadContract" [contractDetailData]="contractDetail"></app-read-contract>
-    <app-write-contract *ngIf="countCurrent === contractType.WriteContract"></app-write-contract>
+    <app-write-contract *ngIf="countCurrent === contractType.WriteContract" [contractDetailData]="contractDetail"></app-write-contract>
   </ng-container>
 </div>
