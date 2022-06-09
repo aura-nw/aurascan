@@ -67,6 +67,11 @@
   &__in-card {
     box-shadow: 2px 1000px 1px #20262B inset;
   }
+
+  &.-small {
+    height: 30px;
+    padding: 0 var(--spacer-3);
+  }
 }
 .card-header {
   .button-outline {

@@ -31,7 +31,7 @@
   .mat-cell, .mat-footer-cell {
     font-size: 1.4rem;
     line-height: 1.6rem;
-    color: var(--aura-white);
+    color: var(--aura-greyscale-1);
   }
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 16px;
@@ -56,7 +56,7 @@
   tr {
     td {
     padding: var(--spacer-4);
-    color: var(--aura-white);
+    color: var(--aura-greyscale-1);
     border-bottom: 1px solid var(--aura-dark-gray);
     }
     &:last-child td {

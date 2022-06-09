@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { SigningCosmWasmClient } from 'cosmwasm';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { WalletService } from 'src/app/core/services/wallet.service';
 @Component({
@@ -16,6 +16,7 @@ export class ReadContractComponent implements OnInit {
   idRead: string = '';
   dataResponse: any;
   errorInput = false;
+  isLoading = false;
 
   constructor(public walletService: WalletService) {}
 
@@ -47,11 +48,15 @@ export class ReadContractComponent implements OnInit {
       (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
     }
     this.expandMenu(true);
+    this.dataResponse = null;
+    this.errorInput = false;
   }
 
   async querySmartContract(name: string) {
+    this.isLoading = true;
     if (this.idRead?.length === 0) {
       this.errorInput = true;
+      this.isLoading = false;
       return;
     }
     let queryData = {
@@ -61,7 +66,6 @@ export class ReadContractComponent implements OnInit {
 
     try {
       const config = await client.queryContractSmart(
-        // 'aura1jsr7jcs9ew9au3tj9h7ypwf2vdj4j706tzw7skpxyjkamkepltysh8fcj0',
         this.contractDetailData.contract_address,
         queryData,
       );
@@ -70,8 +74,9 @@ export class ReadContractComponent implements OnInit {
         this.dataResponse = JSON.stringify(config);
       }
     } catch (error) {
-      this.dataResponse = error;
+      this.dataResponse = 'No Data';
     }
+    this.isLoading = false;
   }
 
   resetCheck() {

@@ -18,7 +18,7 @@
   <div class="small-text">
     <span class="cursor-pointer text--green mr-5" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
-      <ng-container *ngIf="isExpand">Collapse All</ng-container>
+      <ng-container *ngIf="isExpand">Collapse all</ng-container>
     </span>
     <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
   </div>
@@ -33,52 +33,32 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of writeContract?.properties[writeContract.required[0]].required; index as idx">
-          <p class="px-0 text--greyscale-1">{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
+          <p class="px-0 text--greyscale-1">
+            {{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})
+          </p>
           <input
-            class="form-check-input col-12 mb-4"
+            class="form-check-input {{ writeContract.required }} col-12 mb-4"
             type="text"
-            id="{{ item }}"
+            (keyup)="resetCheck()"
+            [type]="writeContract.properties[writeContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'"
+            [class.error-null]="
+              writeContract?.properties[writeContract.required[0]].checkErr &&
+              writeContract?.properties[writeContract.required[0]].checkErr[item] &&
+              errorInput
+            "
             placeholder="{{ item }} ({{
               writeContract.properties[writeContract.required[0]].properties[item].type
             }})" />
         </ng-container>
-        <div>
-          <button class="button button-chart button-outline button-outline__in-card body">
-            <span class="ml-1 text-gradient" (click)="excuteSmartContract()">Write</span>
+        <div class="px-0">
+          <button
+            class="button button-chart button-outline button-outline__in-card body"
+            [disabled]="errorInput && currentFrom === i"
+            (click)="excuteSmartContract(writeContract.required[0], i)">
+            <span class="ml-1 text-gradient">Write</span>
           </button>
         </div>
       </div>
     </mat-expansion-panel>
   </ng-container>
 </div>
-
-<!-- <div class="box-content text--white mt-3">
-  <mat-expansion-panel hideToggle>
-    <mat-expansion-panel-header class="content-contract">
-      <mat-panel-title class="item-content">1. upgrade to</mat-panel-title>
-      <mat-panel-description> </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div class="d-flex row p-3">
-      <p>newImplementation (address)</p>
-      <input class="form-check-input col-12 mb-4" type="text" placeholder="newImplementation (address)" />
-      <a [routerLink]="'/'" class="button button-chart button-outline">
-        <span class="ml-1">Write</span>
-      </a>
-    </div>
-  </mat-expansion-panel>
-  <mat-expansion-panel hideToggle>
-    <mat-expansion-panel-header class="content-contract">
-      <mat-panel-title class="item-content"> 2. upgrade to and call </mat-panel-title>
-      <mat-panel-description> </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div class="d-flex row p-3">
-      <p>newImplementation (address)</p>
-      <input class="form-check-input col-12 mb-4" type="text" placeholder="newImplementation (address)" />
-      <p>newImplementation (address)</p>
-      <input class="form-check-input col-12 mb-4" type="text" placeholder="newImplementation (address)" />
-      <a [routerLink]="'/'" class="button button-chart button-outline">
-        <span class="ml-1">Write</span>
-      </a>
-    </div>
-  </mat-expansion-panel>
-</div> -->

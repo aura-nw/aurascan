@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-compiler-output',
@@ -7,6 +7,10 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class CompilerOutputComponent implements OnInit {
   @Input() contractAddress: string = '';
+  @Input() contractTxHash: string = '';
+  @Input() compilerVersion: string = '';
+  @Input() contractName: string = '';
+  @Output() switchStage = new EventEmitter();
   logError = false;
   constructor() { }
 
@@ -15,5 +19,9 @@ export class CompilerOutputComponent implements OnInit {
 
   switchErrStatus() {
     this.logError = !this.logError
+  }
+
+  switchStageEmmit() {
+    this.switchStage.emit();
   }
 }
