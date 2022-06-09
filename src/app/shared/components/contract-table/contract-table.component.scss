@@ -1,26 +1,31 @@
 .contract-table {
-    .aura-status {
-        display: flex;
-        align-items: center;
+  .aura-status {
+    display: flex;
+    align-items: center;
 
-        .status {
-            padding: 8px 16px;
-            border-radius: 4px;
+    .status {
+      padding: 8px 16px;
+      border-radius: 4px;
 
-            background-color: #7b7b7b33;
-            color: var(--aura-white);
-            font-weight: 600;
-        }
-
-        .TO,
-        .IN {
-            background: var(--aura-active-background);
-            color: var(--aura-active);
-        }
-
-        .OUT {
-            background: var(--aura-danger-background);
-            color: var(--aura-danger);
-        }
+      background-color: #7b7b7b33;
+      color: var(--aura-white);
     }
+
+    .TO,
+    .IN {
+      background: var(--aura-active-background);
+      color: var(--aura-active);
+    }
+
+    .OUT {
+      background: var(--aura-danger-background);
+      color: var(--aura-danger);
+    }
+    .TO,
+    .IN,
+    .OUT,
+    .CREATION {
+      font-weight: 600;
+    }
+  }
 }
