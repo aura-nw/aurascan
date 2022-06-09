@@ -37,10 +37,9 @@
             {{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})
           </p>
           <input
-            class="form-check-input {{ writeContract.required }} col-12 mb-4"
+            class="form-check-input {{ writeContract.required }} {{ item }} col-12 mb-4"
             type="text"
             (keyup)="resetCheck()"
-            [type]="writeContract.properties[writeContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'"
             [class.error-null]="
               writeContract?.properties[writeContract.required[0]].checkErr &&
               writeContract?.properties[writeContract.required[0]].checkErr[item] &&

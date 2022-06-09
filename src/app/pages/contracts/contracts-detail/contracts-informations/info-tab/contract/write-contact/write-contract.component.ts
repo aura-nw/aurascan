@@ -85,10 +85,11 @@ export class WriteContractComponent implements OnInit {
     const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
     let err = {};
     contractTemp.properties[name].required.forEach((contract) => {
-      let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
-        contract
-      ] as HTMLInputElement;
-      if (element.value.length === 0) {
+      let element: HTMLInputElement = document.getElementsByClassName(
+        'form-check-input ' + name + ' ' + contract,
+      )[0] as HTMLInputElement;
+
+      if (element?.value?.length === 0) {
         err[contract.toString()] = true;
         this.errorInput = true;
         this.currentFrom = currentFrom;
@@ -97,21 +98,20 @@ export class WriteContractComponent implements OnInit {
     });
     contractTemp.properties[name].checkErr = err;
 
-    if (Object.keys(contractTemp.properties[name].checkErr).length === 0) {
+    if (Object.keys(contractTemp.properties[name]?.checkErr).length === 0) {
       let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
       const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
-
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
       if (contractTemp) {
         let objWriteContract = {};
         contractTemp.properties[name].required.forEach((contract) => {
           let type = contractTemp.properties[name].properties[contract].type;
-          let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
-            contract
-          ] as HTMLInputElement;
-          objWriteContract[contract] = element.value;
+          let element: HTMLInputElement = document.getElementsByClassName(
+            'form-check-input ' + name + ' ' + contract,
+          )[0] as HTMLInputElement;
+          objWriteContract[contract] = element?.value;
           if (type !== 'string') {
-            objWriteContract[contract] = Number(element.value);
+            objWriteContract[contract] = Number(element?.value);
           }
         });
         const msg = {
