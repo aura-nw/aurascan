@@ -8,7 +8,7 @@ mat-expansion-panel {
     &::after {
       font-family: 'Font Awesome 5 Free';
       font-weight: 700;
-      content: '\f054';
+      content: '\f077';
       color: var(--aura-white);
     }
     &[aria-expanded='true']::after {
@@ -29,7 +29,11 @@ mat-expansion-panel {
     width: 100%;
     height: 40px;
     border-radius: var(--spacer-1);
+    border-color: none;
     cursor: text !important;
+    &::placeholder {
+      color: var(--aura-light-gray);
+    }
   }
 }
 

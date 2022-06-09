@@ -30,7 +30,7 @@
           <td>Aura Value:</td>
           <td>
             ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
-            <span class="text--light-gray ml-1" *ngIf="contractDetail?.price"
+            <span class="text--light-gray ml-1"
               >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{
                 global.stableToken | titlecase
               }})</span
@@ -44,7 +44,7 @@
             <div class="aura-form list-token d-flex align-items-center justify-content-between">
               <mat-select
                 #assetTypeSelect
-                class="list-token form-control select-input-field"
+                class="list-token form-control select-input-field select-input__arrow--gray"
                 panelClass="aura-optional-panel aura-optional-token-panel"
                 [disableOptionCentering]="true"
                 [(value)]="selectedToken">

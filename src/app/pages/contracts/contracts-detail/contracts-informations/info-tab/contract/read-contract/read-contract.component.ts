@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { SigningCosmWasmClient } from 'cosmwasm';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { WalletService } from 'src/app/core/services/wallet.service';
 @Component({
@@ -49,12 +49,14 @@ export class ReadContractComponent implements OnInit {
     }
     this.expandMenu(true);
     this.dataResponse = null;
+    this.errorInput = false;
   }
 
   async querySmartContract(name: string) {
     this.isLoading = true;
     if (this.idRead?.length === 0) {
       this.errorInput = true;
+      this.isLoading = false;
       return;
     }
     let queryData = {

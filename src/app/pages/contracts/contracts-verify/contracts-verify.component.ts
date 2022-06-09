@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ContractService} from "../../../core/services/contract.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-contracts-verify',
@@ -10,21 +10,32 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./contracts-verify.component.scss'],
 })
 export class ContractsVerifyComponent implements OnInit {
-  tabCurrent = 1;
+  tabCurrent = 0;
   contractAddress = '';
+  contractTxHash = '';
+  contractName = '';
   constructor(
       private layout: BreakpointObserver,
       private contractService: ContractService,
       private route: ActivatedRoute,
-  ) {}
+      private router: Router
+  ) {
+    if(this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
+      this.contractAddress = this.router.getCurrentNavigation().extras.state.contractAddress;
+      this.contractTxHash = this.router.getCurrentNavigation().extras.state.contractTxHash;
+      this.contractName = this.router.getCurrentNavigation().extras.state.contractName;
+    } else {
+      this.router.navigate(['contracts']);
+    }
+  }
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   TAB = [
     {
-      id: 1,
+      id: 0,
       value: 'Contract Source Code'
     },
     {
-      id: 2,
+      id: 1,
       value: 'Compiler Output'
     }
   ]
@@ -36,7 +47,6 @@ export class ContractsVerifyComponent implements OnInit {
   ]
   contractForm: FormGroup;
   ngOnInit(): void {
-    this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractForm = new FormGroup({
       contract_address: new FormControl('',[Validators.required]),
       link: new FormControl('', [Validators.required, Validators.maxLength(200)]),
@@ -61,9 +71,8 @@ export class ContractsVerifyComponent implements OnInit {
         compiler_version:  this.contractForm.controls['compiler_version'].value,
         commit:  this.contractForm.controls['commit'].value,
       }
-      // console.log(this.contractForm.value)
       this.contractService.verifyContract(contractData).subscribe(res => {
-        // console.log(res)
+        console.log(res)
         this.contractForm.reset();
       })
     }
