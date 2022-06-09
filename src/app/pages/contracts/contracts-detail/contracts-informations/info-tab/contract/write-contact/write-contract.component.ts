@@ -6,6 +6,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-write-contract',
   templateUrl: './write-contract.component.html',
@@ -19,6 +20,8 @@ export class WriteContractComponent implements OnInit {
   walletAddress = '';
   jsonWriteContract: any;
   userAddress = '';
+  errorInput = false;
+  currentFrom = 0;
 
   constructor(
     public walletService: WalletService,
@@ -77,54 +80,67 @@ export class WriteContractComponent implements OnInit {
     const account = this.walletService.getAccount();
   }
 
-  async excuteSmartContract(name: string) {
-    let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-    const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
-
+  async excuteSmartContract(name: string, currentFrom: number) {
     const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
-    if (contractTemp) {
-      let objWriteContract = {};
-      contractTemp.properties[name].required.forEach((contract) => {
-        // console.log(contract);
-        // console.log(contractTemp.properties[name].properties[contract]);
-        let type = contractTemp.properties[name].properties[contract].type;
-        let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
-          contract
-        ] as HTMLInputElement;
-        objWriteContract[contract] = element.value;
-        if (type !== 'string') {
-          objWriteContract[contract] = Number(element.value);
-        }
-      });
-      // console.log(objWriteContract);
-      const msg = {
-        [name]: objWriteContract,
-      };
+    let err = {};
+    contractTemp.properties[name].required.forEach((contract) => {
+      let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
+        contract
+      ] as HTMLInputElement;
+      if (element.value.length === 0) {
+        err[contract.toString()] = true;
+        this.errorInput = true;
+        this.currentFrom = currentFrom;
+        return;
+      }
+    });
+    contractTemp.properties[name].checkErr = err;
 
-      const fee: any = {
-        amount: [
-          {
-            denom: STABLE_UTOKEN,
-            amount: '1',
-          },
-        ],
-        gas: GAS_ESTIMATE,
-      };
+    if (Object.keys(contractTemp.properties[name].checkErr).length === 0) {
+      let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
+      const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
 
-      try {
-        let result = await client.execute(
-          this.userAddress,
-          this.contractDetailData.contract_address,
-          msg,
-          fee,
-        );
-        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-      } catch (error) {
-        if (!error.toString().includes('Request rejected')) {
-          let msgError = error.toString() || 'Error';
-          this.toastr.error(msgError);
+      const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
+      if (contractTemp) {
+        let objWriteContract = {};
+        contractTemp.properties[name].required.forEach((contract) => {
+          let type = contractTemp.properties[name].properties[contract].type;
+          let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
+            contract
+          ] as HTMLInputElement;
+          objWriteContract[contract] = element.value;
+          if (type !== 'string') {
+            objWriteContract[contract] = Number(element.value);
+          }
+        });
+        const msg = {
+          [name]: objWriteContract,
+        };
+
+        const fee: any = {
+          amount: [
+            {
+              denom: STABLE_UTOKEN,
+              amount: '1',
+            },
+          ],
+          gas: GAS_ESTIMATE,
+        };
+
+        try {
+          let result = await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+          this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+        } catch (error) {
+          if (!error.toString().includes('Request rejected')) {
+            let msgError = error.toString() || 'Error';
+            this.toastr.error(msgError);
+          }
         }
       }
     }
+  }
+
+  resetCheck() {
+    this.errorInput = false;
   }
 }

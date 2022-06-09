@@ -33,18 +33,28 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of writeContract?.properties[writeContract.required[0]].required; index as idx">
-          <p class="px-0 text--greyscale-1">{{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})</p>
+          <p class="px-0 text--greyscale-1">
+            {{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})
+          </p>
           <input
-            class="form-check-input {{writeContract.required}} col-12 mb-4"
+            class="form-check-input {{ writeContract.required }} col-12 mb-4"
             type="text"
+            (blur)="resetCheck()"
             id="{{ item }}"
+            [class.error-null]="
+              writeContract?.properties[writeContract.required[0]].checkErr &&
+              writeContract?.properties[writeContract.required[0]].checkErr[item]
+            "
             placeholder="{{ item }} ({{
               writeContract.properties[writeContract.required[0]].properties[item].type
             }})" />
         </ng-container>
         <div>
-          <button class="button button-chart button-outline button-outline__in-card body">
-            <span class="ml-1 text-gradient" (click)="excuteSmartContract(writeContract.required[0])">Write</span>
+          <button
+            class="button button-chart button-outline button-outline__in-card body"
+            [disabled]="errorInput && currentFrom === i"
+            (click)="excuteSmartContract(writeContract.required[0], i)">
+            <span class="ml-1 text-gradient">Write</span>
           </button>
         </div>
       </div>
