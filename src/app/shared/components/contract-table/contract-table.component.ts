@@ -8,6 +8,7 @@ import { IContractPopoverData, ITableContract } from 'src/app/core/models/contra
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
 import { DROPDOWN_ELEMENT } from 'src/app/core/models/contract.model';
 import { parseLabel } from 'src/app/core/utils/common/parsing';
+import { Globals } from 'src/app/global/global';
 
 export interface TableData {
   txHash: string;
@@ -43,7 +44,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   pageData: PageEvent = null;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
-  constructor(public translate: TranslateService) {}
+  constructor(public translate: TranslateService, public global: Globals) {}
 
   ngOnChanges(): void {
     this.loadTableData();

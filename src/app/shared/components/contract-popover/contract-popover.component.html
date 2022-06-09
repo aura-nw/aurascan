@@ -1,7 +1,7 @@
 <div class="contract-popover-container">
   <div class="text--white">
-    <div class="title-small fw-500 sub-text-mob">Additional info</div>
-    <div class="small-body fw-semibold">Status:</div>
+    <div class="title-small fw-500 sub-text-mob mb-1">Additional info</div>
+    <div class="small-body fw-semibold" style="padding-bottom: 5px">Status:</div>
 
     <div
       class="small-body d-flex align-items-center gap-2"
@@ -18,34 +18,40 @@
       {{ popoverData?.status }}
     </div>
     <hr />
-    <div class="small-body">Token Transfer</div>
-    <div class="small-body">
-      {{ popoverData?.amount | mask: 'separator.6' }}
-      (${{ popoverData?.price | mask: 'separator.6' }})
-      <a class="text--green" [routerLink]="['/token/token', popoverData.tokenAddress]"> {{ popoverData.symbol }} </a>
+    <div class="d-flex flex-column gap-2 small-body">
+      <div>Token Transfer</div>
+      <div>
+        {{ popoverData?.amount | mask: 'separator.6' }}
+        (${{ popoverData?.price | mask: 'separator.2' }})
+        <a class="text--green" [routerLink]="['/token/token', popoverData.tokenAddress]"> {{ popoverData.symbol }} </a>
+      </div>
+      <div>
+        <span class="text--light-gray mr-1">From</span>
+        <a class="text--white" [routerLink]="['/account', popoverData?.from_address]">
+          {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
+        </a>
+        <span class="text--light-gray mr-1 ml-1">To</span>
+        <a class="text--white" [routerLink]="['/account', popoverData?.to_address]">
+          {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
+        </a>
+      </div>
     </div>
-    <div class="small-body">
-      <span class="small-body text--light-gray">From</span>
-      <a class="text--white" [routerLink]="['/account', popoverData?.from_address]">
-        {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
-      </a>
-      <span class="small-body text--light-gray">To</span>
-      <a class="text--white" [routerLink]="['/account', popoverData?.to_address]">
-        {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
-      </a>
+
+    <hr />
+
+    <div class="d-flex flex-column gap-2 small-body">
+      <div>Transaction Fee:</div>
+      <div class="text--contract">
+        {{ popoverData.fee | mask: 'separator' }}
+      </div>
     </div>
     <hr />
 
-    <div class="small-body">Transaction Fee:</div>
-    <div class="small-body text--contract">
-      {{ popoverData.fee | mask: 'separator' }}
+    <div class="d-flex flex-column gap-2 small-body">
+      <div>Gas info:</div>
+      <!-- <div class="small-body">Fee: {{ popoverData.fee | mask: 'separator' }}</div> -->
     </div>
     <hr />
-
-    <div class="small-body">Gas info:</div>
-    <!-- <div class="small-body">Fee: {{ popoverData.fee | mask: 'separator' }}</div> -->
-    <hr />
-
     <a class="small-text text--green cursor-pointer" [routerLink]="['/transaction', popoverData?.tx_hash]">
       See more details
     </a>

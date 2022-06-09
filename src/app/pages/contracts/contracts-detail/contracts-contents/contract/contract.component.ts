@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { ContractType } from '../../../../../../core/constants/token.enum';
+import { ContractType } from '../../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-contract',
