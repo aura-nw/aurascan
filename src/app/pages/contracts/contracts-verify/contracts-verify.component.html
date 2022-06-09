@@ -13,7 +13,7 @@
             <!-- Tabs -->
             <ul ngbNav
                 #customNav="ngbNav"
-                [activeId]="0"
+                [activeId]="tabCurrent"
                 class="aura-nav-tabs nav-tabs nav-tabs-custom"
                 [class.mobile-tab]="breakpoint.value.matches">
                 <ng-container *ngFor="let tab of TAB; index as index">
@@ -25,7 +25,7 @@
                 </ng-container>
             </ul>
             <!-- Contract Source Code -->
-            <form *ngIf="tabCurrent === 1"  [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form mt-6" autocomplete="off">
+            <form *ngIf="tabCurrent === 0"  [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form mt-6" autocomplete="off">
                 <div class="form-group mb-6">
                     <label for="address" class="form-label">Contract Address to verify</label>
                     <input formControlName="contract_address" type="text" class="form-control" id="address" placeholder="aura...">
@@ -65,9 +65,13 @@
                 </div>
             </form>
             <!-- Compiler Output -->
-            <div *ngIf="tabCurrent === 2">
+            <div *ngIf="tabCurrent === 1">
                 <div class="mt-6">
-                    <app-compiler-output [contractAddress]="contractAddress"></app-compiler-output>
+                    <app-compiler-output [contractAddress]="contractAddress"
+                                         [contractTxHash]="contractTxHash"
+                                         [compilerVersion]="contractForm.controls['compiler_version'].value"
+                                         [contractName]="contractName"
+                                         (switchStage)="changeTab(0)"></app-compiler-output>
                 </div>
             </div>
         </div>

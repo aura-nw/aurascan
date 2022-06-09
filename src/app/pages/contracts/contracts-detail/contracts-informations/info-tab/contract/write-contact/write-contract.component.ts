@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GAS_ESTIMATE, STABLE_UTOKEN } from 'src/app/core/constants/common.constant';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { SigningCosmWasmClient } from 'cosmwasm';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
