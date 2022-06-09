@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { GAS_ESTIMATE, STABLE_UTOKEN } from 'src/app/core/constants/common.constant';
-import { WalletService } from 'src/app/core/services/wallet.service';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { TranslateService } from '@ngx-translate/core';
+import { GAS_ESTIMATE, STABLE_UTOKEN } from 'src/app/core/constants/common.constant';
+import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-write-contract',
@@ -22,10 +21,10 @@ export class WriteContractComponent implements OnInit {
   userAddress = '';
   errorInput = false;
   currentFrom = 0;
+  walletAccount: any;
 
   constructor(
     public walletService: WalletService,
-    private transactionService: TransactionService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
   ) {}
@@ -78,66 +77,74 @@ export class WriteContractComponent implements OnInit {
   }
 
   connectWallet(): void {
-    const account = this.walletService.getAccount();
+    this.walletAccount = this.walletService.getAccount();
   }
 
   async excuteSmartContract(name: string, currentFrom: number) {
-    const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
-    let err = {};
-    contractTemp.properties[name].required.forEach((contract) => {
-      let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
-        contract
-      ] as HTMLInputElement;
-      if (element.value.length === 0) {
-        err[contract.toString()] = true;
-        this.errorInput = true;
-        this.currentFrom = currentFrom;
-        return;
-      }
-    });
-    contractTemp.properties[name].checkErr = err;
-
-    if (Object.keys(contractTemp.properties[name].checkErr).length === 0) {
-      let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-      const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
-
+    this.walletAccount = this.walletService.getAccount();
+    if (this.walletAccount) {
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
-      if (contractTemp) {
-        let objWriteContract = {};
-        contractTemp.properties[name].required.forEach((contract) => {
-          let type = contractTemp.properties[name].properties[contract].type;
-          let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
-            contract
-          ] as HTMLInputElement;
-          objWriteContract[contract] = element.value;
-          if (type !== 'string') {
-            objWriteContract[contract] = Number(element.value);
-          }
-        });
-        const msg = {
-          [name]: objWriteContract,
-        };
+      let err = {};
+      contractTemp.properties[name].required.forEach((contract) => {
+        let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
+          contract
+        ] as HTMLInputElement;
+        if (element.value.length === 0) {
+          err[contract.toString()] = true;
+          this.errorInput = true;
+          this.currentFrom = currentFrom;
+          return;
+        }
+      });
+      contractTemp.properties[name].checkErr = err;
 
-        const fee: any = {
-          amount: [
-            {
-              denom: STABLE_UTOKEN,
-              amount: '1',
-            },
-          ],
-          gas: GAS_ESTIMATE,
-        };
+      if (Object.keys(contractTemp.properties[name].checkErr).length === 0) {
+        let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
+        const client = await SigningCosmWasmClient.connectWithSigner(
+          ChainsInfo[this.walletService.chainId].rpc,
+          singer,
+        );
 
-        try {
-          let result = await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-          this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-        } catch (error) {
-          if (!error.toString().includes('Request rejected')) {
-            let msgError = error.toString() || 'Error';
-            this.toastr.error(msgError);
+        const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
+        if (contractTemp) {
+          let objWriteContract = {};
+          contractTemp.properties[name].required.forEach((contract) => {
+            let type = contractTemp.properties[name].properties[contract].type;
+            let element: HTMLInputElement = document.getElementsByClassName('form-check-input ' + name)[
+              contract
+            ] as HTMLInputElement;
+            objWriteContract[contract] = element.value;
+            if (type !== 'string') {
+              objWriteContract[contract] = Number(element.value);
+            }
+          });
+          const msg = {
+            [name]: objWriteContract,
+          };
+
+          const fee: any = {
+            amount: [
+              {
+                denom: STABLE_UTOKEN,
+                amount: '1',
+              },
+            ],
+            gas: GAS_ESTIMATE,
+          };
+
+          try {
+            let result = await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+          } catch (error) {
+            if (!error.toString().includes('Request rejected')) {
+              let msgError = error.toString() || 'Error';
+              this.toastr.error(msgError);
+            }
           }
         }
       }
+    } else {
+      this.connectWallet();
     }
   }
 

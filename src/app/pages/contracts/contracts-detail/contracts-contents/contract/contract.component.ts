@@ -33,7 +33,6 @@ export class ContractComponent implements OnInit {
   getContractDetail() {
     this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.contractDetail = res?.data;
-      console.log(this.contractDetail)
     });
   }
   navigateContractDetail() {
