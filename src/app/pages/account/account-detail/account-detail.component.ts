@@ -348,7 +348,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
               f.amount = this.currentAccountDetail.unbonding;
               break;
             case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-              f.amount = this.currentAccountDetail.vesting?.amount;
+              f.amount = this.currentAccountDetail?.delegatable_vesting;
               break;
             default:
               break;
@@ -385,7 +385,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
         if (this.currentAccountDetail?.vesting) {
-          this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.delegatable_vesting]);
+          this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
           this.pageDataVesting.length = 1;
         }
         this.accDetailLoading = false;
