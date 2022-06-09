@@ -81,7 +81,7 @@ export class WriteContractComponent implements OnInit {
   }
 
   async excuteSmartContract(name: string, currentFrom: number) {
-    this.walletAccount = this.walletService.getAccount();
+    this.connectWallet();
     if (this.walletAccount) {
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
       let err = {};
@@ -143,8 +143,6 @@ export class WriteContractComponent implements OnInit {
           }
         }
       }
-    } else {
-      this.connectWallet();
     }
   }
 
