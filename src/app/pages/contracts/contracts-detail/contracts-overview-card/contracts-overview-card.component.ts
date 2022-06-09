@@ -5,14 +5,13 @@ import { Globals } from '../../../../global/global';
 @Component({
   selector: 'app-contracts-overview-card',
   templateUrl: './contracts-overview-card.component.html',
-  styleUrls: ['./contracts-overview-card.component.scss']
+  styleUrls: ['./contracts-overview-card.component.scss'],
 })
 export class ContractsOverviewCardComponent implements OnInit {
   @Input() contractDetail: any;
-  selectedToken: any = '$0.00';
+  selectedToken = '$0.00';
   assetsType = TYPE_ACCOUNT;
-  constructor(public global: Globals) { }
+  constructor(public global: Globals) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }
