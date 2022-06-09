@@ -74,6 +74,7 @@ export class WriteContractComponent implements OnInit {
       (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
     }
     this.expandMenu(true);
+    this.errorInput = false;
   }
 
   connectWallet(): void {
