@@ -25,7 +25,7 @@
             [(ngModel)]="idRead"
             [class.error-null]="errorInput"
             class="form-check-input col-12 mb-4"
-            type="text"
+            [type]="readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'"
             (keyup)="resetCheck()"
             placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
         </ng-container>
