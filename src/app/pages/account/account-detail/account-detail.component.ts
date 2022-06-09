@@ -384,9 +384,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
-
         if (this.currentAccountDetail?.vesting) {
-          this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
+          this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.delegatable_vesting]);
           this.pageDataVesting.length = 1;
         }
         this.accDetailLoading = false;
