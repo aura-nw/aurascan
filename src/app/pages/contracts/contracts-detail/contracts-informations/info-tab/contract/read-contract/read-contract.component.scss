@@ -28,8 +28,8 @@ mat-expansion-panel {
     color: var(--aura-white);
     width: 100%;
     height: 40px;
-    border: none;
-    border-radius: var(--spacer-1);
+    cursor: text !important;
+    border-color: none;
     &::placeholder {
       color: var(--aura-light-gray);
     }
@@ -41,4 +41,8 @@ mat-expansion-panel {
   &.mat-expanded {
     height: 48px;
   }
+}
+
+.error-null {
+  border-color: red !important;
 }

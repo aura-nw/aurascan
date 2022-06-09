@@ -16,6 +16,7 @@ export class ReadContractComponent implements OnInit {
   idRead: string = '';
   dataResponse: any;
   errorInput = false;
+  isLoading = false;
 
   constructor(public walletService: WalletService) {}
 
@@ -47,11 +48,15 @@ export class ReadContractComponent implements OnInit {
       (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
     }
     this.expandMenu(true);
+    this.dataResponse = null;
+    this.errorInput = false;
   }
 
   async querySmartContract(name: string) {
+    this.isLoading = true;
     if (this.idRead?.length === 0) {
       this.errorInput = true;
+      this.isLoading = false;
       return;
     }
     let queryData = {
@@ -69,8 +74,9 @@ export class ReadContractComponent implements OnInit {
         this.dataResponse = JSON.stringify(config);
       }
     } catch (error) {
-      this.dataResponse = error;
+      this.dataResponse = 'No Data';
     }
+    this.isLoading = false;
   }
 
   resetCheck() {
