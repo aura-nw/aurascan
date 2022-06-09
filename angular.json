@@ -32,7 +32,8 @@
                             "@cosmjs/stargate",
                             "ngx-lightbox",
                             "simplebar",
-                            "simplebar-angular"
+                            "simplebar-angular",
+                            "@cosmjs/cosmwasm-stargate"
                         ],
                         "outputPath": "dist/frontend",
                         "index": "src/index.html",
