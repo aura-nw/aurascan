@@ -37,7 +37,6 @@ export class TransactionMessagesComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
-    const jsonData = JSON.parse(this.transactionDetail.raw_log);
     if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
@@ -45,10 +44,10 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate
     ) {
       this.getListValidator();
-      this.checkGetReward(jsonData);
+      this.checkGetReward();
     }
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
-      this.checkStoreCode(jsonData);
+      this.checkStoreCode();
     }
     //get amount of transaction
     this.amount = getAmount(
@@ -93,8 +92,9 @@ export class TransactionMessagesComponent implements OnInit {
     );
   }
 
-  checkGetReward(jsonData: any): void {
+  checkGetReward(): void {
     try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
       if (jsonData && jsonData[0]) {
         jsonData.forEach((j) => {
           let rawType = 'transfer';
@@ -132,8 +132,9 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (e) {}
   }
 
-  checkStoreCode(jsonData: any): void {
+  checkStoreCode(): void {
     try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
       if (jsonData && jsonData[0]) {
         const temp = jsonData[0]?.events.filter((f) => f.type === 'store_code');
         if (temp) {
