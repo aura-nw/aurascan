@@ -9,18 +9,25 @@
       [id]="element.key"
       (click)="elementClick(element)">
       <button type="button" class="button p-0">
-        <div class="icon-wrapper d-inline-block icon-check" *ngIf="currentLabel">
+        <!-- <div class="icon-wrapper d-inline-block icon-check" *ngIf="currentLabel">
           <img
             *ngIf="element.key == currentLabel"
             src="assets/icons/icons-svg/color/check-green.svg"
             alt="icon"
             class="icon"
             width="25px" />
-        </div>
+        </div> -->
         <div class="icon-wrapper d-inline">
-          <img *ngIf="element?.image" [src]="element?.image" alt="icon" class="icon" />
+          <img
+            *ngIf="element?.image"
+            [src]="element.key == currentLabel ? element?.imageActive : element?.image"
+            alt="icon"
+            class="icon" />
+          <!-- <img *ngIf="element?.image" [src]="element?.image" alt="icon" class="icon" /> -->
         </div>
-        <span class="text--contract small-body">{{ element?.disableTranslate ? element.label : (element.label | translate) }}</span>
+        <span class="text--{{ element.key == currentLabel ? 'primary' : 'contract' }} small-body">{{
+          element?.disableTranslate ? element.label : (element.label | translate)
+        }}</span>
       </button>
     </li>
   </ul>

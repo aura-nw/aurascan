@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 
 export interface DropdownElement {
   image?: string;
+  imageActive?: string;
   key: string | number;
   label: string;
   disableTranslate?: boolean;

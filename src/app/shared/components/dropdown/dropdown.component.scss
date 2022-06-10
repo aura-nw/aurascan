@@ -1,32 +1,33 @@
 .dropdown {
     .dropdown-menu {
-        min-width: 250px;
+        min-width: 230px;
 
         border-radius: 8px;
         inset: 28px 0px auto auto !important;
 
         li.dropdown-item {
 
+            padding: 6px 24px;
+
             &:first-child {
                 border-top-left-radius: 8px;
                 border-top-right-radius: 8px;
-                padding-top: 10px;
+                padding-top: 16px;
             }
 
             &:last-child {
                 border-bottom-left-radius: 8px;
                 border-bottom-right-radius: 8px;
-                padding-bottom: 10px;
+                padding-bottom: 16px;
             }
 
             .icon-wrapper {
-                width: 24px;
-                height: 24px;
+                width: 20px;
+                height: 20px;
                 margin-right: 8px;
 
-                &.icon-check {
-                    width: 25px;
-                    // margin-left: -20px;
+                img {
+                    width: 20px;
                 }
             }
         }

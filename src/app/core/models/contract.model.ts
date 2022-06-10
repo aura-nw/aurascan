@@ -68,16 +68,19 @@ export interface IContractPopoverData {
 export const DROPDOWN_ELEMENT = [
   {
     image: 'assets/icons/icons-svg/white/arrow-right-2.svg',
+    imageActive: 'assets/icons/icons-svg/color/arrow-right-active.svg',
     label: 'View OutGoing Txns',
     key: '0',
   },
   {
     image: 'assets/icons/icons-svg/white/arrow-left-2.svg',
+    imageActive: 'assets/icons/icons-svg/color/arrow-left-active.svg',
     label: 'View Ingoing Txns',
     key: '1',
   },
   {
     image: 'assets/icons/icons-svg/white/contract.svg',
+    imageActive: 'assets/icons/icons-svg/color/contract-active.svg',
     label: 'View Contract Creation',
     key: '2',
   },
