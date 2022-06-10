@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 
 @Component({
   selector: 'app-contracts-detail',
@@ -29,6 +30,7 @@ export class ContractsDetailComponent implements OnInit {
   getContractDetail(): void {
     this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.contractDetail = res?.data;
+      this.contractDetail.balance = balanceOf(this.contractDetail.balance);
       this.contractDetail.price = this.contractDetail.balance * this.priceToken || 0;
     });
   }
