@@ -3,24 +3,34 @@ import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 
 const MessageType = TRANSACTION_TYPE_ENUM;
 
+enum EFees {
+  Send = '100000',
+  Delegate = '220000',
+  Undelegate = '250000',
+  Redelegate = '300000',
+  GetReward = '150000',
+  Vote = '100000',
+  Default = '400000',
+}
+
 export function getFee(messageType: TRANSACTION_TYPE_ENUM | string, validatorsCount?: number): string {
   console.log(TRANSACTION_TYPE_ENUM[messageType], MessageType.GetReward);
 
   switch (TRANSACTION_TYPE_ENUM[messageType]) {
     case MessageType.Send:
-      return '80000';
+      return EFees.Send;
     case MessageType.Delegate:
-      return '180000';
+      return EFees.Delegate;
     case MessageType.Undelegate:
-      return '200000';
+      return EFees.Undelegate;
     case MessageType.Redelegate:
-      return '300000';
+      return EFees.Redelegate;
     case MessageType.GetReward:
-      return validatorsCount > 1 ? (130000 * (0.4 * validatorsCount + 1)).toFixed(0) : '130000';
+      return validatorsCount > 1 ? (+EFees.GetReward * (0.4 * validatorsCount + 1)).toFixed(0) : EFees.GetReward;
     case MessageType.Vote:
-      return '70000';
+      return EFees.Vote;
     default:
-      return GAS_ESTIMATE.DEFAULT;
+      return EFees.Default;
   }
 }
 
