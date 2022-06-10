@@ -6,39 +6,49 @@
     color: var(--aura-contract);
     max-height: 203px;
     transition: all .5s ease-in-out;
+
     &.link-url {
       padding: var(--spacer-3) var(--spacer-4);
     }
+
     &.show {
       max-height: 9999px;
       height: auto;
     }
   }
+
   li.dropdown-item {
     padding: var(--spacer-2) var(--spacer-6);
+
     button {
       color: var(--aura-contract);
     }
+
     &:first-child {
       border-top-left-radius: 8px !important;
       border-top-right-radius: 8px !important;
       padding-top: 10px;
     }
+
     &:last-child {
       border-bottom-left-radius: 8px !important;
       border-bottom-right-radius: 8px !important;
       padding-bottom: 10px;
     }
   }
+
   .txt-title {
     margin: 10px 4px 10px 8px;
   }
+
   .aura-basic-table {
+
     tr,
     td {
       color: var(--aura-contract);
     }
   }
+
   .btn-copy {
     padding: var(--spacer-2) var(--spacer-4);
   }

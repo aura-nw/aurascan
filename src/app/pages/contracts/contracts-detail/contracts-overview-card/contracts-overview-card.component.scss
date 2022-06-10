@@ -1,23 +1,18 @@
 .box-contract-overview {
   table.aura-basic-table {
     min-height: 224px;
-    tr, td {
+
+    tr,
+    td {
       color: var(--aura-contract);
       height: 56px;
       padding: 0px var(--spacer-4);
     }
+
     tr:first-child td:first-child {
       width: 30%;
       color: var(--aura-white);
     }
-  }
-
-  .txt-light {
-    color: var(--aura-light-gray);
-  }
-
-  .txt-danger {
-    color: var(--aura-danger);
   }
 
   .list-token .select-input-field {
@@ -27,16 +22,18 @@
     padding: 7px 22px 7px 24px;
     height: auto;
     border: 1px solid var(--aura-dark-gray);
+
     @media (min-width: 992px) {
       margin-right: 12px;
     }
+
     ::ng-deep mat-select-trigger {
       display: inline-flex;
       align-items: center;
     }
   }
 
-  .box-wallet{
+  .box-wallet {
     background-color: var(--aura-bg-form);
     border-radius: 30px;
     width: 60px;
@@ -47,6 +44,7 @@
     border: 1px solid var(--aura-dark-gray);
   }
 }
+
 .selected-token__label {
   margin-left: var(--spacer-2);
   background: var(--aura-gradient-simple);
@@ -68,6 +66,7 @@
       align-items: center;
     }
   }
+
   .mat-select-value {
     color: var(--aura-contract);
   }

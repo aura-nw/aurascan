@@ -1,12 +1,10 @@
 .dropdown {
     .dropdown-menu {
         min-width: 230px;
-
         border-radius: 8px;
         inset: 28px 0px auto auto !important;
 
         li.dropdown-item {
-
             padding: 6px 24px;
 
             &:first-child {
