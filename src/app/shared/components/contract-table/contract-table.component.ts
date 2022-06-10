@@ -21,6 +21,8 @@ export interface TableData {
   label: string;
   value: number;
   fee: number;
+  gas_used: number;
+  gas_wanted: number;
 }
 
 @Component({
@@ -94,6 +96,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
       symbol: 'AURA',
       tokenAddress: this.contractInfo?.contractsAddress,
       tx_hash: data?.txHash || '-',
+      gas_used: data.gas_used,
+      gas_wanted: data.gas_wanted
     };
   }
 

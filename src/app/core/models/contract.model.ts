@@ -62,6 +62,8 @@ export interface IContractPopoverData {
   to_address: string;
   tx_hash: string;
   fee: number;
+  gas_wanted?: string;
+  gas_used?: string;
 }
 
 

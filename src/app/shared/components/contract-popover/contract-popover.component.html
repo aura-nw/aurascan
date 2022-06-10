@@ -21,8 +21,9 @@
     <div class="d-flex flex-column gap-2 small-body">
       <div>Token Transfer</div>
       <div>
-        {{ popoverData?.amount | mask: 'separator.6' }}
-        (${{ popoverData?.price | mask: 'separator.2' }})
+        <img class="d-inline" width="20px" src="assets/icons/icons-svg/color/aura.svg" alt="aura" />
+        {{ popoverData?.amount | number: FORMAT.PRICE_6 }}
+        (${{ popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
         <a class="text--green" [routerLink]="['/token/token', popoverData.tokenAddress]"> {{ popoverData.symbol }} </a>
       </div>
       <div>
@@ -41,19 +42,23 @@
 
     <div class="d-flex flex-column gap-2 small-body">
       <div>Transaction Fee:</div>
-      <div class="text--contract">
-        {{ popoverData?.fee | mask: 'separator' }}
-      </div>
+      <div class="text--contract">{{ popoverData.fee | number: FORMAT.PRICE_6 }} AURA ($0.00)</div>
     </div>
     <hr />
 
     <div class="d-flex flex-column gap-2 small-body">
       <div>Gas info:</div>
-      <!-- <div class="small-body">Fee: {{ popoverData.fee | mask: 'separator' }}</div> -->
+      <div class="text--contract">
+        {{ popoverData.gas_used | mask: 'separator' }} Gas Used From
+        {{ popoverData.gas_wanted | mask: 'separator' }} Gas Limit
+      </div>
     </div>
     <hr />
-    <a class="small-text text--green cursor-pointer" [routerLink]="['/transaction', popoverData?.tx_hash]">
-      See more details
+    <a
+      class="small-text text--green cursor-pointer d-flex align-items-center gap-2"
+      [routerLink]="['/transaction', popoverData?.tx_hash]"
+      target="_blank">
+      See more details <img class="d-inline" src="assets/icons/icons-svg/color/share.svg" alt="share" />
     </a>
   </div>
 </div>
