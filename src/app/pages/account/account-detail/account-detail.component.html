@@ -328,7 +328,6 @@
                   </table>
                 </ng-container>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <!-- <app-card-type-one [data]="dataSource?.data"></app-card-type-one> -->
                   <app-card-mob-simple
                     *ngFor="let data of dataSource?.data"
                     [link]="'/transaction/' + data.tx_hash"
