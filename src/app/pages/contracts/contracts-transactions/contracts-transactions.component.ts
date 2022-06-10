@@ -136,6 +136,8 @@ export class ContractsTransactionsComponent implements OnInit {
           to,
           value: balanceOf(value),
           fee: +contract.fee,
+          gas_used: +contract.gas_used,
+          gas_wanted: +contract.gas_wanted,
         };
 
         return tableDta;

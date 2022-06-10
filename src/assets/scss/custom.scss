@@ -559,7 +559,7 @@ body {
 
 
 .custom-popover {
-    background: #1C1C1F;
+    background: var(--aura-bg-form);
     border: none;
     min-width: 357px;
     box-shadow: 2px 2px 30px #ffffff05;
@@ -572,8 +572,8 @@ body {
             content: "";
             width: 16px;
             height: 16px;
-            background-color: #1C1C1F;
-            top: 145px;
+            background-color: var(--aura-bg-form);
+            top: 160px;
             left: -6px;
             transform: rotate(45deg);
         }

@@ -8,6 +8,8 @@ export const MY_FORMATS = {
         dateA11yLabel: 'LL',
         monthYearA11yLabel: 'YYYY',
     },
+    PRICE_6: '1.6-6',
+    PRICE_2: '1.2-2'
 };
 
 export const NETWORK = [

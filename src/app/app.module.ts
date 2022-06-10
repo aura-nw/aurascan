@@ -38,7 +38,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule, NgbNavModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgxMaskModule } from 'ngx-mask';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { NgProgressModule } from 'ngx-progressbar';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
@@ -58,6 +58,11 @@ import {BlankModule} from "./pages/blank/blank.module";
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
+
+const maskConfig: Partial<IConfig> = {
+  thousandSeparator: ','
+};
+
 @NgModule({
   exports: [
     MatAutocompleteModule,
@@ -129,7 +134,7 @@ export class MaterialModule {}
       registrationStrategy: 'registerWhenStable:30000',
     }),
     ToastrModule.forRoot({ positionClass: 'inline' }),
-    NgxMaskModule.forRoot(),
+    NgxMaskModule.forRoot(maskConfig),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
