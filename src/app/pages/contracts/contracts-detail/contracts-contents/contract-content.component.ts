@@ -85,6 +85,8 @@ export class ContractContentComponent implements OnInit {
             switch (contract.type) {
               case TRANSACTION_TYPE_ENUM.InstantiateContract:
                 method = 'instantiate';
+                from = contract.messages[0].sender;
+                to = contract.contract_address;
                 break;
               case TRANSACTION_TYPE_ENUM.Send:
                 method = 'transfer';
@@ -120,7 +122,7 @@ export class ContractContentComponent implements OnInit {
               from,
               label,
               to,
-              value: balanceOf(value),
+              value: balanceOf(value) || 0,
               fee: +contract.fee,
               gas_used: +contract.gas_used,
               gas_wanted: +contract.gas_wanted,
