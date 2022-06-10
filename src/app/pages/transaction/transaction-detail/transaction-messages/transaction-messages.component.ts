@@ -22,6 +22,7 @@ export class TransactionMessagesComponent implements OnInit {
   eTransType = TRANSACTION_TYPE_ENUM;
   amount = 0;
   amountClaim = 0;
+  storeCodeId = 0;
   dateVesting: string;
   isVestingDelay: boolean;
   validatorName = '';
@@ -36,6 +37,7 @@ export class TransactionMessagesComponent implements OnInit {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
     }
+    const jsonData = JSON.parse(this.transactionDetail.raw_log);
     if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
@@ -43,7 +45,10 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate
     ) {
       this.getListValidator();
-      this.checkGetReward();
+      this.checkGetReward(jsonData);
+    }
+    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
+      this.checkStoreCode(jsonData);
     }
     //get amount of transaction
     this.amount = getAmount(
@@ -72,7 +77,7 @@ export class TransactionMessagesComponent implements OnInit {
               this.validatorName = validatorSrcAddress?.title || '';
 
               const validatorDstAddress = this.listValidator.find(
-                (f) => f.operator_address === messages[0]?.validator_dst_address, 
+                (f) => f.operator_address === messages[0]?.validator_dst_address,
               );
               this.validatorNameDes = validatorDstAddress?.title || '';
             } else if (messages?.length > 0) {
@@ -88,9 +93,8 @@ export class TransactionMessagesComponent implements OnInit {
     );
   }
 
-  checkGetReward(): void {
+  checkGetReward(jsonData: any): void {
     try {
-      const jsonData = JSON.parse(this.transactionDetail.raw_log);
       if (jsonData && jsonData[0]) {
         jsonData.forEach((j) => {
           let rawType = 'transfer';
@@ -124,6 +128,17 @@ export class TransactionMessagesComponent implements OnInit {
             }
           }
         });
+      }
+    } catch (e) {}
+  }
+
+  checkStoreCode(jsonData: any): void {
+    try {
+      if (jsonData && jsonData[0]) {
+        const temp = jsonData[0]?.events.filter((f) => f.type === 'store_code');
+        if (temp) {
+          this.storeCodeId = temp[0]?.attributes[0]?.value || 0;
+        }
       }
     } catch (e) {}
   }
