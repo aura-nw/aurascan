@@ -32,7 +32,7 @@
             ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
             <span class="text--light-gray ml-1"
               >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{
-                global.stableToken | titlecase
+                global.stableToken | uppercase
               }})</span
             >
           </td>

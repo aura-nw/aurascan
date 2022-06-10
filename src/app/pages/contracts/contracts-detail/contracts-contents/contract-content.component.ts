@@ -77,10 +77,10 @@ export class ContractContentComponent implements OnInit {
       this.contractService.getTransactions(payload).subscribe((res) => {
         if (res.data && Array.isArray(res.data)) {
           this.contractInfo.count = res.meta.count || 0;
-          let value = 0;
-          let from = '';
-          let to = '';
           const ret = res.data.map((contract) => {
+            let value = 0;
+            let from = '';
+            let to = '';
             let method = '';
             switch (contract.type) {
               case TRANSACTION_TYPE_ENUM.InstantiateContract:
@@ -92,9 +92,15 @@ export class ContractContentComponent implements OnInit {
                 from = contract.messages[0].from_address;
                 to = contract.messages[0].to_address;
                 break;
+              case TRANSACTION_TYPE_ENUM.ExecuteContract:
+                method = Object.keys(contract.messages[0].msg)[0];
+                value = +contract.messages[0].funds[0]?.amount;
+                from = contract.messages[0].sender;
+                to = contract.messages[0].contract;
+                break;
               default:
                 method = Object.keys(contract.messages[0].msg)[0];
-                value = +contract.messages[0].funds[0]?.amount || 0;
+                value = 0;
                 from = contract.messages[0].sender;
                 to = contract.messages[0].contract;
                 break;
