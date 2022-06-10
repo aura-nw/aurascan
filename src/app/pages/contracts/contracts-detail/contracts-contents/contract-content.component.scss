@@ -1,32 +1,36 @@
 .single-input-field {
   min-width: 420px;
 }
+
 .aura-basic-table tr td:not(:last-child) {
   border-right: 1px solid var(--aura-dark-gray);
 }
+
 .input-group {
   background-color: var(--aura-bg-form);
   height: auto !important;
   padding: var(--spacer-1) var(--spacer-4) !important;
 }
-.txt-light {
-  color: var(--aura-light-gray);
-}
+
 .aura-nav-tabs.nav-tabs .nav-link {
   font-weight: 600;
   font-size: 14px;
 }
+
 a.verify-contract {
   .tab-title {
     margin-right: 8px;
   }
+
   img {
     position: absolute;
     top: 2px;
   }
 }
+
 .tab-contract {
   width: 100%;
+
   .nav-item {
     flex-grow: 0;
     flex-shrink: 1;

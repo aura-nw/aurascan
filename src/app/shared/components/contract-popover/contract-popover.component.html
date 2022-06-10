@@ -28,11 +28,11 @@
       </div>
       <div>
         <span class="text--light-gray mr-1">From</span>
-        <a class="text--white" [routerLink]="['/account', popoverData?.from_address]">
+        <a class="text--green" [routerLink]="['/account', popoverData?.from_address]">
           {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
         </a>
         <span class="text--light-gray mr-1 ml-1">To</span>
-        <a class="text--white" [routerLink]="['/account', popoverData?.to_address]">
+        <a class="text--green" [routerLink]="['/account', popoverData?.to_address]">
           {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
         </a>
       </div>

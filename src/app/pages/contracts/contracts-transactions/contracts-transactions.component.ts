@@ -72,9 +72,7 @@ export class ContractsTransactionsComponent implements OnInit {
     private activeRouter: ActivatedRoute,
   ) {}
 
-  ngOnInit(): void {
-    // this.getListTransaction();
-  }
+  ngOnInit(): void {}
 
   onChangePage(event) {
     this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress], {
@@ -100,10 +98,10 @@ export class ContractsTransactionsComponent implements OnInit {
   checkResponse(response): TableData[] {
     if (response.data && Array.isArray(response.data)) {
       this.contractInfo.count = response.meta.count || 0;
-      let value = 0;
-      let from = '';
-      let to = '';
       const ret = response.data.map((contract) => {
+        let value = 0;
+        let from = '';
+        let to = '';
         let method = '';
         switch (contract.type) {
           case TRANSACTION_TYPE_ENUM.InstantiateContract:
@@ -115,15 +113,24 @@ export class ContractsTransactionsComponent implements OnInit {
             from = contract.messages[0].from_address;
             to = contract.messages[0].to_address;
             break;
+          case TRANSACTION_TYPE_ENUM.ExecuteContract:
+            method = Object.keys(contract.messages[0].msg)[0];
+            value = +contract.messages[0].funds[0]?.amount;
+            from = contract.messages[0].sender;
+            to = contract.messages[0].contract;
+            break;
           default:
             method = Object.keys(contract.messages[0].msg)[0];
-            value = +contract.messages[0].funds[0]?.amount || 0;
+            value = 0;
             from = contract.messages[0].sender;
             to = contract.messages[0].contract;
             break;
         }
 
-        const label = contract.messages[0].sender === this.contractInfo.contractsAddress ? 'OUT' : 'IN';
+        const label =
+          contract.messages[0].sender === this.contractInfo.contractsAddress
+            ? ContractTransactionType.OUT
+            : ContractTransactionType.IN;
 
         const tableDta: TableData = {
           txHash: contract.tx_hash,

@@ -2,31 +2,38 @@
   .text {
     font-size: 16px;
   }
+
   .img-wallet {
     width: 32px;
     cursor: pointer;
     height: auto;
   }
+
   .wallet-avatar {
     width: 26px;
     height: 26px;
     border: 1px solid #d2d2d2;
     border-radius: 100%;
     overflow: hidden;
+
     img {
       width: 100%;
       height: auto;
     }
   }
+
   .account-button {
     white-space: nowrap;
+
     @media (max-width: 991.99px) {
       height: 40px;
     }
+
     @media (min-width: 992px) {
       width: 192px;
     }
   }
+
   .walletMenu {
     .button__title {
       min-width: 100px;
@@ -36,12 +43,14 @@
       cursor: pointer;
     }
   }
+
   #walletMenu {
     @media (max-width: 414px) {
       padding: 10px;
       height: 40px;
     }
   }
+
   .offcanvas-wallet {
     background: #141416;
     box-shadow: -2px 0px 18px rgba(0, 0, 0, 0.25);
@@ -51,6 +60,7 @@
       background: #141416;
     }
   }
+
   .wallet-container {
     position: relative;
 
@@ -70,9 +80,7 @@
         margin-top: 80px;
         height: fit-content;
         width: 80%;
-
         box-shadow: 1px 1px 1px 1px rgba(219, 219, 225, 0.5);
-
         border: 1px solid rgb(204, 204, 204);
         background: rgb(255, 255, 255);
         overflow: auto;

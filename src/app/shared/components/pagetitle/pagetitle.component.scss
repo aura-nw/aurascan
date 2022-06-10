@@ -4,17 +4,21 @@
   display: flex;
   align-items: center;
   color: var(--aura-white);
+
   .img-valid {
     width: auto;
     height: 20px;
     margin-right: 10px;
   }
+
   .item-info {
     margin-right: 1rem;
   }
 }
+
 .page-title-box h1 {
   font-weight: 500;
+
   @media (min-width: 992px) {
     font-weight: 700;
   }

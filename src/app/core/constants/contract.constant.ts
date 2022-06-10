@@ -35,6 +35,6 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
   { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 8, justify: 'center' },
   { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 15, isUrl: '/account' },
-  { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'Aura', headerWidth: 10 },
+  { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'AURA', headerWidth: 10 },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];

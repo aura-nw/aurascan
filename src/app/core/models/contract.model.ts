@@ -71,7 +71,7 @@ export const DROPDOWN_ELEMENT = [
   {
     image: 'assets/icons/icons-svg/white/arrow-right-2.svg',
     imageActive: 'assets/icons/icons-svg/color/arrow-right-active.svg',
-    label: 'View OutGoing Txns',
+    label: 'View Outgoing Txns',
     key: '0',
   },
   {
