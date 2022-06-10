@@ -584,3 +584,37 @@ body {
         min-width: 230px;
     }
 }
+
+.aura__change {
+    position: relative;
+    color: var(--aura-white) !important;
+    font-size: 2rem;
+    line-height: 2.3rem;
+    font-weight: 500;
+    &--desc {
+        color: var(--aura-danger) !important;
+        padding-left: 24px;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            transform: translateX(-100%);
+            width: 24px;
+            height: 24px;
+            background: url("../../assets/icons/icons-svg/color/arrow-down-red.svg") center no-repeat;
+        }
+    }
+    &--asc {
+        padding-left: 24px;
+        color: var(--aura-primary) !important;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            transform: translateX(-100%);
+            width: 24px;
+            height: 24px;
+            background: url("../../assets/icons/icons-svg/color/arrow-up-green.svg") center no-repeat;
+        }
+    }
+}

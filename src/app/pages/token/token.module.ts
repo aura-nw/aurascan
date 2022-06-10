@@ -22,6 +22,9 @@ import { TokenSummaryComponent } from './token-detail/token-summary/token-summar
 import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
+import { TokenHoldingComponent } from './token-holding/token-holding.component';
+import { TokenHodingWalletComponent } from './token-holding/token-hoding-wallet/token-hoding-wallet.component';
+import { TokenHodingNftComponent } from './token-holding/token-hoding-nft/token-hoding-nft.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,10 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenInfoTabComponent,
     TokenContractTabComponent,
     TokenContractReadComponent,
-    TokenContractWriteComponent
+    TokenContractWriteComponent,
+    TokenHoldingComponent,
+    TokenHodingWalletComponent,
+    TokenHodingNftComponent
   ],
   imports: [
     CommonModule,
