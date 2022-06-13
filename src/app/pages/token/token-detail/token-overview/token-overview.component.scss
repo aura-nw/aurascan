@@ -12,23 +12,17 @@
       background-color: var(--aura-dark-gray);
     }
   }
-  .aura-table-contain {
-    min-height: 363px;
-  }
   table.aura-basic-table {
-    tr td:first-child {
-      width: 30%;
+    min-height: 224px;
+    tr,
+    td {
+      color: var(--aura-contract);
+      height: 56px;
+      padding: 0px var(--spacer-4);
     }
-  }
-
-  .txt-light {
-    color: var(--aura-light-gray);
-  }
-
-  .txt-danger {
-    color: var(--aura-danger);
-  }
-  tr {
-    height: 72px;
+    tr:first-child td:first-child {
+      width: 30%;
+      color: var(--aura-white);
+    }
   }
 }

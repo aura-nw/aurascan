@@ -40,3 +40,14 @@
     }
   }
 }
+
+.aura-status {
+  display: flex;
+  align-items: center;
+  .status {
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #7b7b7b33;
+    color: var(--aura-white);
+  }
+}

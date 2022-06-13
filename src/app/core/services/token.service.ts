@@ -21,4 +21,8 @@ export class TokenService extends CommonService {
     // return this.http.get<any>(`${this.apiUrl}/proposals`);
     return this.http.get('../../assets/mock-data/token-list-transfer.json');
   }
+
+  getTokenDetail(tokenAddress): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/${tokenAddress}`);
+  }
 }

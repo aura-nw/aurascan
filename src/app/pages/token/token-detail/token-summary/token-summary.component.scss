@@ -1,7 +1,17 @@
-.aura-table-contain {
-  min-height: 363px;
-}
+.box-token-info {
+  table.aura-basic-table {
+    min-height: 224px;
 
-tr {
-  height: 72px;
+    tr,
+    td {
+      color: var(--aura-contract);
+      height: 56px;
+      padding: 0px var(--spacer-4);
+    }
+
+    tr:first-child td:first-child {
+      width: 30%;
+      color: var(--aura-white);
+    }
+  }
 }

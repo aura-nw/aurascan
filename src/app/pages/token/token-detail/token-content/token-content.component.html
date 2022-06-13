@@ -38,8 +38,8 @@
   </section>
 </ng-container>
 <section class="card main-tab mt-5 p-4">
-  <div class="d-flex justify-content-between">
-    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-6">
+  <div class="d-flex justify-content-between tab-wrapper tab-token">
+    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-8">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
@@ -48,7 +48,7 @@
         </li>
       </ng-container>
     </ul>
-    <div class="d-flex align-item-center justify-content-end col-5">
+    <div class="d-flex align-item-center justify-content-end pd-1">
       <form class="aura-form single-input-field search-form">
         <div class="input-group">
           <input
