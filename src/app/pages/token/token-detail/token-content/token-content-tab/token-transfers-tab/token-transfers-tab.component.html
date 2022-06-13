@@ -60,7 +60,9 @@
                       {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
-                      <span class="label__status">{{ data[template.matColumnDef] }}</span>
+                      <div class="aura-status text-uppercase">
+                        <span class="status">{{ data[template.matColumnDef] }}</span>
+                      </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash_format'">
                       <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
