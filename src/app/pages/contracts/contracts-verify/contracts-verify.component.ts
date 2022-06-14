@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ContractService } from '../../../core/services/contract.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -19,6 +20,7 @@ export class ContractsVerifyComponent implements OnInit {
     private contractService: ContractService,
     private route: ActivatedRoute,
     private router: Router,
+    private wSService: WSService,
   ) {
     if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
       this.contractAddress = this.router.getCurrentNavigation().extras.state.contractAddress;
@@ -41,9 +43,13 @@ export class ContractsVerifyComponent implements OnInit {
   ];
   versionList = [
     {
-      label: 'cargo 1.61.0',
-      value: 'cargo 1.61.0 (a028ae4 2022-04-29)',
-    },
+    label: 'cosmwasm/rust-optimizer:0.12.4',
+    value: 'cosmwasm/rust-optimizer:0.12.4',
+  },
+  {
+    label: 'cosmwasm/rust-optimizer:0.12.6',
+    value: 'cosmwasm/rust-optimizer:0.12.6',
+  },
   ];
   contractForm: FormGroup;
   ngOnInit(): void {
@@ -55,6 +61,15 @@ export class ContractsVerifyComponent implements OnInit {
       commit: new FormControl(''),
     });
     this.contractForm.patchValue({ contract_address: this.contractAddress });
+
+    this.wSService.connect();
+
+    this.wSService.socket.emit('eventVerifyContract', 'from aurascan')
+
+    this.wSService.socket.on('eventVerifyContract', (response) => {
+      console.log(response);
+
+    })
   }
   changeTab(tabId): void {
     this.tabCurrent = tabId;
@@ -73,7 +88,17 @@ export class ContractsVerifyComponent implements OnInit {
       };
       this.contractService.verifyContract(contractData).subscribe((res) => {
         this.contractForm.reset();
+
+        this.socket();
       });
     }
+  }
+
+  socket(): void {
+    this.wSService.connect();
+    const wsData = { event: 'verify-contract' };
+    this.wSService.on('register', wsData).subscribe((data: any) => {
+      console.log(data);
+    });
   }
 }
