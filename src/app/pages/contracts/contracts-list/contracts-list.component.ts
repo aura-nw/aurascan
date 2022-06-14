@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -53,9 +53,7 @@ export class ContractsListComponent implements OnInit {
 
   filterData(keyWord: string) {
     keyWord = keyWord.toLowerCase();
-    this.filterSearchData = this.dataSearch.filter(
-      (data) => data.contract_name.toLowerCase().includes(keyWord),
-    );
+    this.filterSearchData = this.dataSearch.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
   }
 
   getListContract() {
@@ -73,7 +71,6 @@ export class ContractsListComponent implements OnInit {
       };
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
-          item.compiler_version = item.compiler_version.slice(6, -21);
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
         });
         this.dataSource = res.data;
