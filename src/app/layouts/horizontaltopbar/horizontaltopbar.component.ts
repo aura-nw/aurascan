@@ -324,7 +324,13 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
     if (regexRule.test(this.searchValue)) {
       if (this.searchValue.length > 60) {
-        this.getTxhDetail(this.searchValue);
+        if (this.searchValue.toLowerCase() === this.searchValue) {
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['contracts', this.searchValue]);
+          });
+        } else {
+          this.getTxhDetail(this.searchValue);
+        }
       } else if (this.searchValue.length > 40) {
         let urlLink = this.searchValue.startsWith(VALIDATOR_ADDRESS_PREFIX) ? 'validators' : 'account';
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
