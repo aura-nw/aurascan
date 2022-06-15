@@ -398,11 +398,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.getDataWallet();
+            this.getList();
           }, halftime);
         },
         (error) => {
           setTimeout(() => {
             this.getDataWallet();
+            this.getList();
           }, halftime);
         },
       );
