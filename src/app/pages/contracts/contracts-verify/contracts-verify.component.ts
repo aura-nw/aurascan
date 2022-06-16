@@ -71,7 +71,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       commit: new FormControl(''),
     });
     this.contractForm.patchValue({ contract_address: this.contractAddress });
-    this.dlgServOpen();
   }
   changeTab(tabId): void {
     this.tabCurrent = tabId;
@@ -90,8 +89,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         commit: this.contractForm.controls['commit'].value,
       };
       this.contractService.verifyContract(contractData).subscribe((res) => {
-        this.contractForm.reset();
-
+        // this.contractForm.reset();
         this.socket();
       });
     }
@@ -105,9 +103,11 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         this.isVerified = true;
       }
     });
+
+    this.dlgServiceOpen();
   }
 
-  dlgServOpen(): void {
+  dlgServiceOpen(): void {
     this.dlgService.showDialog({
       content: 'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
       title: '',
