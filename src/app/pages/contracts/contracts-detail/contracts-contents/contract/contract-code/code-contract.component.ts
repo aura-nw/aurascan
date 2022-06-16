@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -12,7 +13,9 @@ export class CodeContractComponent implements OnInit {
 
   contractVerifyType = ContractVerifyType;
   isExpand = false;
-  constructor(public router: Router) {}
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  
+  constructor(public router: Router, private layout: BreakpointObserver) {}
 
   ngOnInit(): void {
   }
