@@ -336,6 +336,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }).subscribe(
         (res) => {
           if (res.dataWallet) {
+            this.dataDelegate.delegatableVesting = res?.dataWallet?.data?.delegatable_vesting;
             this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
             this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
             this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;

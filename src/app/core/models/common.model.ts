@@ -139,6 +139,7 @@ export class CommonDataDto {
 export class DataDelegateDto {
   delegatedToken: string;
   availableToken: string;
+  delegatableVesting: string;
   stakingToken: string;
   historyTotalReward: number;
   stakingCurrentValidate: string;
