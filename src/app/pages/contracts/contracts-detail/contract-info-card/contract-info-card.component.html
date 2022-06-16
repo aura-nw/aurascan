@@ -20,7 +20,22 @@
           <td colspan="2">Not Available, <span class="text--green ml-1">Update?</span></td>
         </tr>
 
-        <tr>
+        <tr class="d-lg-none">
+          <td colspan="3">
+            <div>Contract Creator:</div>
+            <div>
+              <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+                {{ contractDetail?.creator_address | cutStringPipe : 8:8 }}
+              </a>
+              at txn
+              <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+                {{ contractDetail?.tx_hash | cutStringPipe : 8:8}}
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="d-none d-lg-table-row">
           <td>Contract Creator:</td>
           <td colspan="2">
             <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
