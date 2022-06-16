@@ -17,4 +17,17 @@
       border: solid 1.5px transparent;
     }
   }
+  .content-contract {
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 414px) {
+  .box-btn {
+    white-space: nowrap;
+    flex-wrap: wrap;
+    button {
+      margin-bottom: 10px;
+    }
+  }
 }

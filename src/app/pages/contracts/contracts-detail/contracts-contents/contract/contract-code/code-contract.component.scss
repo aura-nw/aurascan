@@ -5,7 +5,7 @@
     border-radius: 8px;
     color: var(--aura-contract);
     max-height: 203px;
-    transition: all .5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 
     &.link-url {
       padding: var(--spacer-3) var(--spacer-4);
@@ -42,7 +42,6 @@
   }
 
   .aura-basic-table {
-
     tr,
     td {
       color: var(--aura-contract);
@@ -51,5 +50,30 @@
 
   .btn-copy {
     padding: var(--spacer-2) var(--spacer-4);
+  }
+}
+
+@media (max-width: 414px) {
+  .content-info {
+    max-height: 162px;
+  }
+  pre.content-info {
+    white-space: break-spaces;
+  }
+  .aura-basic-table {
+    tr,
+    td {
+      width: 50%;
+    }
+  }
+  .btn-export-mob {
+    width: 100%;
+    justify-content: end;
+    margin-top: 8px;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .box-note{
+    word-break: break-all;
   }
 }
