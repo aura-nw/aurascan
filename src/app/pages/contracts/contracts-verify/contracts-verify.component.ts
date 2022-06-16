@@ -1,35 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ContractService } from '../../../core/services/contract.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WSService } from 'src/app/core/services/ws.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-contracts-verify',
   templateUrl: './contracts-verify.component.html',
   styleUrls: ['./contracts-verify.component.scss'],
 })
-export class ContractsVerifyComponent implements OnInit {
+export class ContractsVerifyComponent implements OnInit, OnDestroy {
   tabCurrent = 0;
   contractAddress = '';
   contractTxHash = '';
   contractName = '';
-  constructor(
-    private layout: BreakpointObserver,
-    private contractService: ContractService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private wSService: WSService,
-  ) {
-    if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
-      this.contractAddress = this.router.getCurrentNavigation().extras.state.contractAddress;
-      this.contractTxHash = this.router.getCurrentNavigation().extras.state.contractTxHash;
-      this.contractName = this.router.getCurrentNavigation().extras.state.contractName;
-    } else {
-      this.router.navigate(['contracts']);
-    }
-  }
+  isVerified = false;
+
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   TAB = [
     {
@@ -43,14 +31,36 @@ export class ContractsVerifyComponent implements OnInit {
   ];
   versionList = [
     {
-    label: 'cosmwasm/rust-optimizer:0.12.4',
-    value: 'cosmwasm/rust-optimizer:0.12.4',
-  },
-  {
-    label: 'cosmwasm/rust-optimizer:0.12.6',
-    value: 'cosmwasm/rust-optimizer:0.12.6',
-  },
+      label: 'cosmwasm/rust-optimizer:0.12.4',
+      value: 'cosmwasm/rust-optimizer:0.12.4',
+    },
+    {
+      label: 'cosmwasm/rust-optimizer:0.12.6',
+      value: 'cosmwasm/rust-optimizer:0.12.6',
+    },
   ];
+
+  constructor(
+    private layout: BreakpointObserver,
+    private contractService: ContractService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private wSService: WSService,
+    private dlgService: DialogService,
+  ) {
+    if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
+      this.contractAddress = this.router.getCurrentNavigation().extras.state.contractAddress;
+      this.contractTxHash = this.router.getCurrentNavigation().extras.state.contractTxHash;
+      this.contractName = this.router.getCurrentNavigation().extras.state.contractName;
+    } else {
+      this.router.navigate(['contracts']);
+    }
+  }
+
+  ngOnDestroy(): void {
+    // this.wSService?.disconnect();
+  }
+
   contractForm: FormGroup;
   ngOnInit(): void {
     this.contractForm = new FormGroup({
@@ -61,19 +71,12 @@ export class ContractsVerifyComponent implements OnInit {
       commit: new FormControl(''),
     });
     this.contractForm.patchValue({ contract_address: this.contractAddress });
-
-    this.wSService.connect();
-
-    this.wSService.socket.emit('eventVerifyContract', 'from aurascan')
-
-    this.wSService.socket.on('eventVerifyContract', (response) => {
-      console.log(response);
-
-    })
+    this.dlgServOpen();
   }
   changeTab(tabId): void {
     this.tabCurrent = tabId;
   }
+
   onSubmit() {
     if (this.contractForm.valid) {
       // handle contract_address & commit
@@ -96,9 +99,21 @@ export class ContractsVerifyComponent implements OnInit {
 
   socket(): void {
     this.wSService.connect();
-    const wsData = { event: 'verify-contract' };
+    const wsData = { event: 'eventVerifyContract' };
     this.wSService.on('register', wsData).subscribe((data: any) => {
-      console.log(data);
+      if (this.contractAddress === data?.ContractAddress) {
+        this.isVerified = true;
+      }
+    });
+  }
+
+  dlgServOpen(): void {
+    this.dlgService.showDialog({
+      content: 'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
+      title: '',
+      callback : () => {
+        this.router.navigate(['contracts', this.contractAddress])
+      }
     });
   }
 }

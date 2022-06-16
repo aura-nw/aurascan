@@ -24,19 +24,15 @@ export class WSService {
   public connect(): void {
     this.socket = io('https://explorer-api.dev.aura.network', {
       path: '/ws/socket.io',
-      autoConnect: true
+      autoConnect: true,
     });
   }
 
-  public on(name: string, data2: any) {
-    this.socket.emit(name, data2);
+  public on(name: string, data: any) {
+    this.socket.emit(name, data);
     return new Observable((subscriber) => {
-      this.socket.on(name, (e) => {
-        console.log(e);
-
-        this.socket.on(data2?.event, (res) => {
-          console.log(res);
-
+      this.socket.on(name, () => {
+        this.socket.on(data?.event, (res) => {
           subscriber.next(res);
         });
       });
