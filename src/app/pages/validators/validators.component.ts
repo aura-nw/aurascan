@@ -336,6 +336,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }).subscribe(
         (res) => {
           if (res.dataWallet) {
+            this.dataDelegate.delegatableVesting = res?.dataWallet?.data?.delegatable_vesting;
             this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
             this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
             this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
@@ -421,7 +422,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkAmountStaking(): void {
     let amountCheck;
     if (this.dataDelegate.dialogMode === this.dialogMode.Delegate) {
-      amountCheck = this.dataDelegate.availableToken || 0;
+      amountCheck = +this.dataDelegate.availableToken + +this.dataDelegate.delegatableVesting || 0;
     } else if (
       this.dataDelegate.dialogMode === this.dialogMode.Redelegate ||
       this.dataDelegate.dialogMode === this.dialogMode.Undelegate
@@ -570,7 +571,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (type === this.dialogMode.Delegate) {
       //check amout for high fee
       const amountCheck = (
-        Number(this.dataDelegate.availableToken) -
+        Number(this.dataDelegate.availableToken) + Number(this.dataDelegate.delegatableVesting) -
         (Number(GAS_ESTIMATE) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
