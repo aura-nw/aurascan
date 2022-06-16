@@ -47,6 +47,11 @@
       height: 30px;
     }
   }
+
+  .button-chart {
+    height: 30px;
+    padding: 0 var(--spacer-4);
+  }
 }
 
 .selected-token__label {
