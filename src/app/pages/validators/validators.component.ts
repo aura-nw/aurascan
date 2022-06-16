@@ -203,7 +203,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   changeType(type): void {
     this.typeValidator = type;
     let data = this.rawData.filter((event) =>
-      (type === this.statusValidator.Active && event.jailed)
+      (type === this.statusValidator.Active)
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
@@ -398,11 +398,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.getDataWallet();
+            this.getList();
           }, halftime);
         },
         (error) => {
           setTimeout(() => {
             this.getDataWallet();
+            this.getList();
           }, halftime);
         },
       );

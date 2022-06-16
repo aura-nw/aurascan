@@ -14,29 +14,18 @@ export class PopupDelegateComponent implements OnInit {
   @Input() data: any;
 
   amountFormat: string | number;
-  delegatedToken = 0;
   availableToken = 0;
-  stakingToken = 0;
-  totalDelegator = 0;
-  isExceedAmount = false;
   dialogMode = DIALOG_STAKE_MODE;
   timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
-  }
-
-  getMaxToken(): void{
-    this.amountFormat = this.availableToken;
-  }
-
-  resetCheck() {
-    this.isExceedAmount = false;
+    this.availableToken = +this.data?.availableToken + +this.data?.delegatedToken;
   }
 }

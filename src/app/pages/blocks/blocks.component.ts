@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { getInfo } from 'src/app/core/utils/common/info-common';
+import { Globals } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -27,7 +29,13 @@ export class BlocksComponent implements OnInit {
   pageSize = 20;
   pageIndex = 0;
   loading = true;
-  constructor(private router: Router, private blockService: BlockService, public commonService: CommonService) {}
+
+  constructor(
+    private router: Router,
+    private blockService: BlockService,
+    public commonService: CommonService,
+    private globals: Globals,
+  ) {}
 
   ngOnInit(): void {
     this.getList();
@@ -41,6 +49,7 @@ export class BlocksComponent implements OnInit {
   getList(): void {
     this.blockService.blocks(this.pageSize, this.pageIndex * this.pageSize).subscribe((res) => {
       this.loading = true;
+      this.getInfoCommon();
       if (res?.data?.length > 0) {
         res.data.forEach((block) => {
           block.block_hash_format = block.block_hash.replace(
@@ -53,6 +62,12 @@ export class BlocksComponent implements OnInit {
         this.length = res.meta.count;
       }
       this.loading = false;
+    });
+  }
+
+  getInfoCommon(): void {
+    this.commonService.status().subscribe((res) => {
+      getInfo(this.globals, res.data);
     });
   }
 }
