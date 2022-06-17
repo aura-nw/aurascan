@@ -30,7 +30,15 @@ a.verify-contract {
 
 .tab-contract {
   width: 100%;
-
+  ul.aura-nav-tabs {
+    flex-wrap: nowrap;
+    overflow: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .nav-item {
     flex-grow: 0;
     flex-shrink: 1;

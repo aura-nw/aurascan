@@ -6,7 +6,7 @@
     td {
       color: var(--aura-contract);
       height: 56px;
-      padding: 0px var(--spacer-4);
+      padding: 0 var(--spacer-4);
     }
 
     tr:first-child td:first-child {
@@ -18,13 +18,13 @@
   .list-token .select-input-field {
     background-color: var(--aura-bg-form);
     width: 100%;
-    min-width: 315px;
-    padding: 7px 22px 7px 24px;
+    padding: 4px 16px;
     height: auto;
     border: 1px solid var(--aura-dark-gray);
 
     @media (min-width: 992px) {
       margin-right: 12px;
+      padding: 7px 22px 7px 24px;
     }
 
     ::ng-deep mat-select-trigger {
@@ -42,6 +42,15 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--aura-dark-gray);
+    @media (min-width: 992px) {
+      width: 48px;
+      height: 30px;
+    }
+  }
+
+  .button-chart {
+    height: 30px;
+    padding: 0 var(--spacer-4);
   }
 }
 
