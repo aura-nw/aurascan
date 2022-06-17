@@ -141,7 +141,7 @@ export class ContractsTransactionsComponent implements OnInit {
           from,
           label,
           to,
-          value: balanceOf(value),
+          value: balanceOf(value) || 0,
           fee: +contract.fee,
           gas_used: +contract.gas_used,
           gas_wanted: +contract.gas_wanted,
