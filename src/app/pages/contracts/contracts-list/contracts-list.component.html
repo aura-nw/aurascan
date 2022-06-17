@@ -36,7 +36,7 @@
         <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
           <div class="txt-title-search">Contracts</div>
           <ng-container *ngFor="let item of filterSearchData">
-            <div class="d-flex p-3 cursor-pointer" [routerLink]="['/token/token', item.hashCode]">
+            <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
               <img src="assets/images/icons/token-logo.png" class="logo-token" />
               <div class="ml-3">
                 <div class="d-flex align-items-center">

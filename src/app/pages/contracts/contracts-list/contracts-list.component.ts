@@ -1,7 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,8 +32,6 @@ export class ContractsListComponent implements OnInit {
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSearch: any;
-  sortedData: any;
-  sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
@@ -51,16 +48,11 @@ export class ContractsListComponent implements OnInit {
     this.getListContract();
   }
 
-  filterData(keyWord: string) {
-    keyWord = keyWord.toLowerCase();
-    this.filterSearchData = this.dataSearch.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
-  }
-
   getListContract() {
     let payload = {
       limit: this.pageSize,
       offset: this.pageIndex * this.pageSize,
-      keyword: '',
+      keyword: this.textSearch,
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {
@@ -82,7 +74,22 @@ export class ContractsListComponent implements OnInit {
   searchToken(): void {
     this.filterSearchData = null;
     if (this.textSearch.length > 0) {
-      this.filterData(this.textSearch);
+      let payload = {
+        limit: 0,
+        offset: 0,
+        keyword: this.textSearch,
+      };
+
+      this.contractService.getListContract(payload).subscribe((res) => {
+        if (res?.data?.length > 0) {
+          res.data.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          });
+          this.dataSearch = res.data;
+        }
+      });
+      let keyWord = this.textSearch.toLowerCase();
+      this.filterSearchData = this.dataSearch.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
     }
   }
 
@@ -95,12 +102,8 @@ export class ContractsListComponent implements OnInit {
     this.getListContract();
   }
 
-  compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-
   handleLink(): void {
-    this.router.navigate(['/token/token', this.filterSearchData[0]?.contract_name]);
+    this.router.navigate(['/contracts/', this.filterSearchData[0]?.contract_address]);
   }
 
   shortenAddress(address: string): string {
