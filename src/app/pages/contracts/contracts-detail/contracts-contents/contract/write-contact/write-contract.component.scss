@@ -58,6 +58,9 @@ mat-expansion-panel {
 
 .btn-unconnect {
   border: 1.5px solid var(--aura-light-gray);
+  @media (max-width: 991.99px) {
+    height: 30px;
+  }
 }
 
 .mat-expansion-panel-header {

@@ -1,4 +1,4 @@
-<div
+<div id="wsead123"
   class="code-contract justify-content-between text--white mt-5"
   *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
@@ -18,9 +18,9 @@
       </div>
   </ng-container>
 
-  <div class="d-flex row" *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
+  <div class="d-flex row my-1 my-lg-0" *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="col-lg-6 col-12">
-      <table class="aura-basic-table w-100">
+      <table class="aura-basic-table w-100 table-detail">
         <tr>
           <td>Contract Name:</td>
           <td class="fw-semibold">{{ contractDetailData?.contract_name }}</td>
@@ -32,7 +32,7 @@
       </table>
     </div>
     <div class="col-lg-6 col-12">
-      <table class="aura-basic-table w-100">
+      <table class="aura-basic-table w-100 table-detail">
         <tr>
           <td>Optimization Enabled:</td>
           <td><span class="fw-semibold">No</span> with <span class="fw-semibold">200</span> runs</td>
@@ -50,7 +50,7 @@
       <span class="text--white ml-2 fw-semibold">Link Contract Source Code</span>
     </div>
     <div class="d-flex justify-content-between align-items-center">
-      <div class="col-lg-11 col-9 small-text content-info link-url" [class.g-ellipsis]="breakpoint.value.matches">
+      <div class="w-100 small-text content-info link-url mr-6" [class.g-ellipsis]="breakpoint.value.matches">
         {{ contractDetailData?.url }}
       </div>
       <div class="">
@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mt-5 mb-2">
+    <div class="d-flex justify-content-between align-items-center my-4 mt-lg-6 mb-lg-5">
       <div>
         <img src="../../../assets/icons/icons-svg/basic/menu.svg" alt="" width="16" height="16" />
         <span class="text--white ml-2 fw-semibold">Contract Schema</span>
@@ -79,10 +79,10 @@
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="d-flex justify-content-between align-items-center" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.ison</span>
-      <div class="d-flex align-items-center" [class.btn-export-mob]="breakpoint.value.matches">
+      <div class="d-flex align-items-center justify-content-end mt-1 mt-lg-0" [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
           <button
-            class="button button-outline button-outline__in-card d-flex align-items-center"
+            class="button button-outline button-outline__in-card d-flex align-items-center button-export"
             type="button"
             id="delegateAction1"
             data-bs-toggle="dropdown"
@@ -132,10 +132,10 @@
 
     <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 2 of 3: instantiate msg.json</span>
-      <div class="d-flex align-items-center" [class.btn-export-mob]="breakpoint.value.matches">
+      <div class="d-flex align-items-center justify-content-end mt-1 mt-lg-0" [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
           <button
-            class="button button-outline button-outline__in-card d-flex align-items-center"
+            class="button button-outline button-outline__in-card d-flex align-items-center button-export"
             type="button"
             id="delegateAction2"
             data-bs-toggle="dropdown"
@@ -185,10 +185,10 @@
 
     <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 3 of 3: query msg.json</span>
-      <div class="d-flex align-items-center" [class.btn-export-mob]="breakpoint.value.matches">
+      <div class="d-flex align-items-center justify-content-end mt-1 mt-lg-0" [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
           <button
-            class="button button-outline button-outline__in-card d-flex align-items-center"
+            class="button button-outline button-outline__in-card d-flex align-items-center button-export"
             type="button"
             id="delegateAction3"
             data-bs-toggle="dropdown"

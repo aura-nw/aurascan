@@ -13,8 +13,11 @@
 }
 
 .aura-nav-tabs.nav-tabs .nav-link {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
+  @media (min-width: 992px) {
+    font-weight: 600;
+  }
 }
 
 a.verify-contract {
