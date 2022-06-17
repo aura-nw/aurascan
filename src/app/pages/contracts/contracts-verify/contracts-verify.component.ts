@@ -38,6 +38,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       label: 'cosmwasm/rust-optimizer:0.12.6',
       value: 'cosmwasm/rust-optimizer:0.12.6',
     },
+    {
+      label: '	cosmwasm/rust-optimizer:0.10.9',
+      value: '	cosmwasm/rust-optimizer:0.10.9',
+    },
   ];
 
   constructor(
@@ -58,7 +62,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.wSService?.disconnect();
+    this.wSService?.disconnect();
   }
 
   contractForm: FormGroup;

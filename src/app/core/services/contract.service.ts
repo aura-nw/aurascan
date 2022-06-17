@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IResponsesSuccess } from 'src/app/core/models/common.model';
+import { IResponsesSuccess, IResponsesTemplates } from 'src/app/core/models/common.model';
 import { IContractsResponse } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -47,5 +47,9 @@ export class ContractService extends CommonService {
 
   readContract(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts/read`, data);
+  }
+
+  checkVerified(contractAddress: string): Observable<IResponsesTemplates<any>> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${contractAddress}`);
   }
 }
