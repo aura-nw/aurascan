@@ -451,7 +451,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           message: {
             to: [this.dataModal.operator_address],
             amount: {
-              amount: Number(this.amountFormat) * Math.pow(10, 6),
+              amount: (Number(this.amountFormat) * Math.pow(10, 6)).toFixed(6),
               denom: STABLE_UTOKEN,
             },
           },
@@ -499,7 +499,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           message: {
             from: [this.dataModal.operator_address],
             amount: {
-              amount: Number(this.amountFormat) * Math.pow(10, 6),
+              amount: (Number(this.amountFormat) * Math.pow(10, 6)).toFixed(6),
               denom: STABLE_UTOKEN,
             },
           },
@@ -527,7 +527,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             src_address: this.dataModal.operator_address,
             to_address: this.selectedValidator,
             amount: {
-              amount: Number(this.amountFormat) * Math.pow(10, 6),
+              amount: (Number(this.amountFormat) * Math.pow(10, 6)).toFixed(6),
               denom: STABLE_UTOKEN,
             },
           },
