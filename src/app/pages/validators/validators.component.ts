@@ -203,7 +203,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   changeType(type): void {
     this.typeValidator = type;
     let data = this.rawData.filter((event) =>
-      (type === this.statusValidator.Active)
+      type === this.statusValidator.Active
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
@@ -451,7 +451,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           message: {
             to: [this.dataModal.operator_address],
             amount: {
-              amount: (Number(this.amountFormat) * Math.pow(10, 6)).toFixed(6),
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
               denom: STABLE_UTOKEN,
             },
           },
@@ -499,7 +499,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           message: {
             from: [this.dataModal.operator_address],
             amount: {
-              amount: (Number(this.amountFormat) * Math.pow(10, 6)).toFixed(6),
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
               denom: STABLE_UTOKEN,
             },
           },
@@ -527,7 +527,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             src_address: this.dataModal.operator_address,
             to_address: this.selectedValidator,
             amount: {
-              amount: (Number(this.amountFormat) * Math.pow(10, 6)).toFixed(6),
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
               denom: STABLE_UTOKEN,
             },
           },
@@ -571,7 +571,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (type === this.dialogMode.Delegate) {
       //check amout for high fee
       const amountCheck = (
-        Number(this.dataDelegate.availableToken) + Number(this.dataDelegate.delegatableVesting) -
+        Number(this.dataDelegate.availableToken) +
+        Number(this.dataDelegate.delegatableVesting) -
         (Number(GAS_ESTIMATE) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
