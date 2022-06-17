@@ -12,8 +12,8 @@
     <span class="ml-2 mr-1 fw-semibold">Similar Match Source Code</span>
     <div class="text--light-gray mt-4 mb-2 box-note">
       <span>Note: This contract matches the deployed ByteCode of the Source Code for Contract</span>
-      <a class="text--green ml-1" [routerLink]="['/account', contractDetailData?.contract_address]">
-        {{ contractDetailData?.contract_address }}</a
+      <a class="text--green ml-1" href="/contracts/{{ contractDetailData?.contract_match }}">
+        {{ contractDetailData?.contract_match }}</a
       >
       </div>
   </ng-container>
