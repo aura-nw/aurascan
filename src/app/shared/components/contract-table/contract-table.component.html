@@ -7,9 +7,9 @@
       </div>
       transactions found
     </div>
-    <div class="d-flex gap-3 align-items-center">
+    <div class="d-flex align-items-center flex-shrink-0 ml-4">
       <button
-        class="button account-button button-outline button-outline__in-card -small"
+        class="button account-button button-outline button-outline__in-card -small small-text mr-4"
         *ngIf="contractInfo.viewAll"
         [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
         View all
@@ -19,7 +19,7 @@
   </div>
   <ng-container *ngIf="pageData?.length > 0 && dataSource; else noValues">
     <div class="table-responsive aura-table-contain">
-      <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+      <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef [style.width.%]="template?.headerWidth">

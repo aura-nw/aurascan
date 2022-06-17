@@ -5,16 +5,16 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 
 @Injectable()
 export class WSService {
-  public wsData: BehaviorSubject<any>;
-  public dataob: Observable<any>;
   socketUrl = `${this.environmentService.apiUrl.value.urlSocket}`;
-  currentUser;
+
+  public wsData: BehaviorSubject<any>;
+  public data$: Observable<any>;
+
   socket: Socket;
 
   constructor(private environmentService: EnvironmentService) {
     this.wsData = new BehaviorSubject<any>(null);
-    this.dataob = this.wsData.asObservable();
-    // this.connect();
+    this.data$ = this.wsData.asObservable();
   }
 
   public get wsDataValue() {
@@ -22,7 +22,7 @@ export class WSService {
   }
 
   public connect(): void {
-    this.socket = io('https://explorer-api.dev.aura.network', {
+    this.socket = io(this.socketUrl, {
       path: '/ws/socket.io',
       autoConnect: true,
     });
@@ -40,7 +40,7 @@ export class WSService {
   }
 
   public disconnect() {
-    this.socket.on('disconnect', (reason) => {
+    this.socket?.on('disconnect', (reason) => {
       // ...
     });
   }

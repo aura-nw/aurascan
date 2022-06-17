@@ -5,6 +5,7 @@ import { ContractService } from '../../../core/services/contract.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WSService } from 'src/app/core/services/ws.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
+import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -19,6 +20,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   isVerified = false;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
   TAB = [
     {
       id: 0,
@@ -29,16 +31,8 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       value: 'Compiler Output',
     },
   ];
-  versionList = [
-    {
-      label: 'cosmwasm/rust-optimizer:0.12.4',
-      value: 'cosmwasm/rust-optimizer:0.12.4',
-    },
-    {
-      label: 'cosmwasm/rust-optimizer:0.12.6',
-      value: 'cosmwasm/rust-optimizer:0.12.6',
-    },
-  ];
+
+  versionList = CONTRACT_VERSIONS;
 
   constructor(
     private layout: BreakpointObserver,
@@ -57,9 +51,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    // this.wSService?.disconnect();
-  }
+  ngOnDestroy(): void {}
 
   contractForm: FormGroup;
   ngOnInit(): void {
@@ -109,11 +101,12 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
 
   dlgServiceOpen(): void {
     this.dlgService.showDialog({
-      content: 'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
+      content:
+        'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
       title: '',
-      callback : () => {
-        this.router.navigate(['contracts', this.contractAddress])
-      }
+      callback: () => {
+        this.router.navigate(['contracts', this.contractAddress]);
+      },
     });
   }
 }
