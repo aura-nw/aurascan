@@ -80,7 +80,7 @@ export class ContractComponent implements OnInit, OnDestroy {
     const wsData = { event: 'eventVerifyContract' };
     this.wSService.on('register', wsData).subscribe((data: any) => {
       if (this.contractAddress === data?.ContractAddress) {
-        this.getContractDetail(data.Verified === false);
+        this.getContractDetail(true);
       }
     });
   }

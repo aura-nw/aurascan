@@ -40,7 +40,7 @@ export class WSService {
   }
 
   public disconnect() {
-    this.socket.on('disconnect', (reason) => {
+    this.socket?.on('disconnect', (reason) => {
       // ...
     });
   }

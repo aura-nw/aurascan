@@ -38,3 +38,19 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'AURA', headerWidth: 10 },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];
+
+
+export const CONTRACT_VERSIONS = [
+  { label: 'cosmwasm/rust-optimizer:0.10.9', value: 'cosmwasm/rust-optimizer:0.10.9' },
+  { label: 'cosmwasm/rust-optimizer:0.11.0', value: 'cosmwasm/rust-optimizer:0.11.0' },
+  { label: 'cosmwasm/rust-optimizer:0.11.2', value: 'cosmwasm/rust-optimizer:0.11.2' },
+  { label: 'cosmwasm/rust-optimizer:0.11.3', value: 'cosmwasm/rust-optimizer:0.11.3' },
+  { label: 'cosmwasm/rust-optimizer:0.11.4', value: 'cosmwasm/rust-optimizer:0.11.4' },
+  { label: 'cosmwasm/rust-optimizer:0.11.5', value: 'cosmwasm/rust-optimizer:0.11.5' },
+  { label: 'cosmwasm/rust-optimizer:0.12.0', value: 'cosmwasm/rust-optimizer:0.12.0' },
+  { label: 'cosmwasm/rust-optimizer:0.12.1', value: 'cosmwasm/rust-optimizer:0.12.1' },
+  { label: 'cosmwasm/rust-optimizer:0.12.3', value: 'cosmwasm/rust-optimizer:0.12.3' },
+  { label: 'cosmwasm/rust-optimizer:0.12.4', value: 'cosmwasm/rust-optimizer:0.12.4' },
+  { label: 'cosmwasm/rust-optimizer:0.12.5', value: 'cosmwasm/rust-optimizer:0.12.5' },
+  { label: 'cosmwasm/rust-optimizer:0.12.6', value: 'cosmwasm/rust-optimizer:0.12.6' },
+];
