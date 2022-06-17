@@ -76,3 +76,7 @@ body[data-layout-mode="dark"] {
         }
     }
 }
+// Card Height 100
+.card-h-100 {
+    height: calc(100% - #{$grid-gutter-width});
+}

@@ -55,47 +55,6 @@
     border-top-color: $border-color;
 }
 
-// Dropdown Mega Menu
-
-.dropdown-mega {
-    position: static !important;
-}
-
-.dropdown-megamenu[style] {
-    padding: 20px;
-    left: 20px !important;
-    right: 20px !important;
-}
-
-// Dropdown size
-
-.dropdown-mega-menu-xl {
-    width: 40rem;
-}
-
-.dropdown-mega-menu-lg {
-    width: 26rem;
-}
-
-// 
-// Dropdown menu item color
-// 
-
-@each $color,
-$value in $theme-colors {
-    .dropdownmenu-#{$color} {
-        .dropdown-item {
-
-            &:focus,
-            &:hover,
-            &.active {
-                background-color: rgba(($value), 0.07) !important;
-                color: $value;
-            }
-        }
-    }
-}
-
 body[data-layout-mode="dark"] {
     // Dropdown
     .dropdown-menu {
