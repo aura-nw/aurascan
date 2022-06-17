@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { getFee } from 'src/app/core/utils/signing/fee';
 import {
-  GAS_ESTIMATE,
   NUMBER_CONVERT,
   PAGE_SIZE_OPTIONS,
   AURA_DENOM,
@@ -573,7 +573,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       //check amout for high fee
       const amountCheck = (
         Number(this.dataDelegate.availableToken) -
-        (Number(GAS_ESTIMATE.DEFAULT) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
+        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
