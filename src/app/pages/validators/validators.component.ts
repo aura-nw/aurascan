@@ -570,7 +570,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getMaxToken(type): void {
     if (type === this.dialogMode.Delegate) {
       //check amout for high fee
-      const amountCheck = (
+      let amountCheck = (
         Number(this.dataDelegate.availableToken) +
         Number(this.dataDelegate.delegatableVesting) -
         (Number(GAS_ESTIMATE) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
@@ -578,6 +578,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
         this.errorExceedAmount = true;
+        amountCheck = '0';
       }
       this.amountFormat = amountCheck || 0;
     } else if (type === this.dialogMode.Undelegate) {
