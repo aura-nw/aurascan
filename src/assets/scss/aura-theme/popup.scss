@@ -1,6 +1,10 @@
 .modal {
   .modal-dialog {
     max-width: 720px;
+    @media (max-width: 414px) {
+      margin: 0.5rem auto;
+    }
+
     .modal-content {
       padding: var(--spacer-4);
       background: var(--aura-black);

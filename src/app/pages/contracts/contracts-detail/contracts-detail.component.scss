@@ -12,3 +12,6 @@
 .break-word {
   word-break: break-word;
 }
+::ng-deep .contact-qr-modal .modal-content {
+  padding-bottom: 16px !important;
+}
