@@ -6,10 +6,6 @@
     color: var(--aura-contract);
     max-height: 203px;
     transition: all 0.5s ease-in-out;
-    margin-bottom: var(--spacer-4);
-    @media (min-width: 992px) {
-      margin-bottom: var(--spacer-5);
-    }
 
     &.link-url {
       padding: var(--spacer-3) var(--spacer-4);
@@ -18,6 +14,14 @@
     &.show {
       max-height: 9999px;
       height: auto;
+    }
+  }
+  .icon-contract {
+    width: 24px;
+    height: 24px;
+    @media (max-width: 414px) {
+      width: 16.67px;
+      height: 16.67px;
     }
   }
 
@@ -77,7 +81,7 @@
     margin-left: -10px;
     margin-right: -10px;
   }
-  .box-note{
+  .box-note {
     word-break: break-all;
   }
 }

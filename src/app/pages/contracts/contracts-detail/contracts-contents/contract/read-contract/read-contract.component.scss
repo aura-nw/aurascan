@@ -37,6 +37,9 @@ mat-expansion-panel {
     cursor: text !important;
     border: none;
     border-radius: 4px;
+    @media (max-width: 414px) {
+      height: 34px;
+    }
 
     &::placeholder {
       color: var(--aura-light-gray);

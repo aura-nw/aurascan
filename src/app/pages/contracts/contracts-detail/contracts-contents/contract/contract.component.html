@@ -1,17 +1,19 @@
 <div class="box-contract text--white">
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed && contractDetail && !isVerifying">
-    <div class="align-items-center fw-normal content-contract">
+    <div class="d-flex fw-normal content-contract">
       <img
         src="../../../../../../../assets/icons/icons-svg/color/info-circle.svg"
         alt=""
         width="16"
         height="16"
-        class="mr-2" />
-      Are you the contract creator?
-      <span class="text--green fw-semibold ml-1 mr-1 cursor-pointer" (click)="navigateContractDetail()">
-        Verify and Publish
-      </span>
-      your contract source code today!
+        class="mr-2 mt-1" />
+      <div>
+        Are you the contract creator?
+        <span class="text--green fw-semibold ml-1 mr-1 cursor-pointer" (click)="navigateContractDetail()">
+          Verify and Publish
+        </span>
+        your contract source code today!
+      </div>
     </div>
     <div class="mt-3 small-text content-info">{{ contractDetail.tx_hash }}</div>
   </ng-container>
@@ -40,13 +42,19 @@
         class="btn-contract"
         [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.ReadContract }"
         (click)="changeTab(contractType.ReadContract)">
-        <span [class.text-gradient]="countCurrent === contractType.ReadContract">Read Contract</span>
+        <span [class.text-gradient]="countCurrent === contractType.ReadContract">
+          <span class="d-none d-lg-block">Read Contract</span>
+          <span class="d-lg-none">Read</span>
+        </span>
       </button>
       <button
         class="btn-contract"
         [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.WriteContract }"
         (click)="changeTab(contractType.WriteContract)">
-        <span [class.text-gradient]="countCurrent === contractType.WriteContract">Write Contract</span>
+        <span [class.text-gradient]="countCurrent === contractType.WriteContract">
+          <span class="d-none d-lg-block">Write Contract</span>
+          <span class="d-lg-none">Write</span>
+        </span>
       </button>
     </div>
   </ng-container>
