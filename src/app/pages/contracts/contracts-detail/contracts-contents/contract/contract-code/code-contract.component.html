@@ -1,4 +1,4 @@
-<div id="wsead123"
+<div id=""
   class="code-contract justify-content-between text--white mt-5"
   *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
@@ -31,7 +31,7 @@
         </tr>
       </table>
     </div>
-    <div class="col-lg-6 col-12">
+    <div class="col-lg-6 col-12 d-none d-lg-block">
       <table class="aura-basic-table w-100 table-detail">
         <tr>
           <td>Optimization Enabled:</td>
@@ -110,10 +110,8 @@
         </div>
         <img
           src="assets/icons/icons-svg/basic/copy.svg"
-          class="mx-6 cursor-pointer"
+          class="mx-6 cursor-pointer icon-contract"
           alt=""
-          width="24"
-          height="24"
           matTooltip="Coppied!"
           #tooltip2="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
@@ -122,9 +120,7 @@
         <img
           src="assets/images/icons/address-popup.png"
           alt=""
-          width="24"
-          height="24"
-          class="cursor-pointer"
+          class="cursor-pointer icon-contract"
           (click)="pre1.className.includes('show') ? pre1.classList.remove('show') : pre1.classList.add('show')" />
       </div>
     </div>
@@ -141,11 +137,9 @@
             data-bs-toggle="dropdown"
             aria-expanded="false">
             <img
-              class="flex-shrink-0"
+              class="flex-shrink-0 icon-contract"
               src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
-              alt="wallet-avatar"
-              height="24px"
-              width="24px" />
+              alt="wallet-avatar" />
             <span class="">Export Schema</span>
           </button>
           <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction2">
@@ -163,10 +157,8 @@
         </div>
         <img
           src="assets/icons/icons-svg/basic/copy.svg"
-          class="mx-6 cursor-pointer"
+          class="mx-6 cursor-pointer icon-contract"
           alt=""
-          width="24"
-          height="24"
           matTooltip="Coppied!"
           #tooltip3="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
@@ -175,9 +167,7 @@
         <img
           src="assets/images/icons/address-popup.png"
           alt=""
-          width="24"
-          height="24"
-          class="cursor-pointer"
+          class="cursor-pointer icon-contract"
           (click)="pre2.className.includes('show') ? pre2.classList.remove('show') : pre2.classList.add('show')" />
       </div>
     </div>
@@ -216,10 +206,8 @@
         </div>
         <img
           src="assets/icons/icons-svg/basic/copy.svg"
-          class="mx-6 cursor-pointer"
+          class="mx-6 cursor-pointer icon-contract"
           alt=""
-          width="24"
-          height="24"
           matTooltip="Coppied!"
           #tooltip4="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
@@ -228,9 +216,7 @@
         <img
           src="assets/images/icons/address-popup.png"
           alt=""
-          width="24"
-          height="24"
-          class="cursor-pointer"
+          class="cursor-pointer icon-contract"
           (click)="pre3.className.includes('show') ? pre3.classList.remove('show') : pre3.classList.add('show')" />
       </div>
     </div>

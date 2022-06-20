@@ -56,17 +56,17 @@
     <div class="card mt-8">
       <div class="card-body">
         <div class="table-responsive aura-table-contain">
-          <table mat-table matSort [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+          <table mat-table matSort [dataSource]="dataSource" class="aura-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
                 <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                  <div [innerHTML]="template.headerCellDef | translate" [style.width]="'180px'"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
                   <ng-container
                     *ngIf="template.isUrl && template.isShort && template.matColumnDef === 'contract_address'">
                     <div class="d-flex align-items-center gap-2">
-                      <div class="" [style.width]="'16px'">
+                      <div class="mr-2" [style.width]="'16px'">
                         <img
                           *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
                           src="assets/icons/icons-svg/color/check-circle.svg"

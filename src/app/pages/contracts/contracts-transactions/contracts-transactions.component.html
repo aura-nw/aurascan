@@ -1,7 +1,11 @@
 <div class="">
   <div *ngIf="contractInfo">
     <p class="title-medium mb-2 text--white fw-bold">Transactions</p>
-    <span class="body text--gray">For<a class="text--green" [routerLink]="['/contracts', contractInfo.contractsAddress]"> {{ contractInfo.contractsAddress }}</a></span>
+    <div class="body text--gray d-flex"
+      >For<a class="text--green ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
+        {{ contractInfo.contractsAddress }}</a
+      ></div
+    >
   </div>
   <section>
     <div class="card mt-8">
