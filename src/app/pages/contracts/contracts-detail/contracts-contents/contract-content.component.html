@@ -23,7 +23,7 @@
     <app-contract-table
       [length]="25"
       *ngIf="countCurrent === ''"
-      [data]="contractTransaction"
+      [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"
       (onViewSelected)="filterTransaction($event)"></app-contract-table>
