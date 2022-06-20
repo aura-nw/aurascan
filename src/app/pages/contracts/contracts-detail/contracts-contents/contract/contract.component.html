@@ -19,14 +19,16 @@
   </ng-container>
 
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed && contractDetail && isVerifying">
-    <div class="align-items-center fw-normal content-contract">
+    <div class="d-flex fw-normal content-contract">
       <img
         src="../../../../../../../assets/icons/icons-svg/color/info-circle.svg"
         alt=""
         width="16"
         height="16"
-        class="mr-2" />
-      Contract source code verification is pending! We will notify the compiler output after verification is successful.
+        class="mr-2 mt-1" />
+      <div>
+        Contract source code verification is pending! We will notify the compiler output after verification is successful.
+      </div>
     </div>
     <div class="mt-3 small-text content-info">{{ contractDetail.tx_hash }}</div>
   </ng-container>

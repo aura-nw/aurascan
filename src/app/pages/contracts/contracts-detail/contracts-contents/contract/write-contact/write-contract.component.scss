@@ -77,3 +77,10 @@ mat-expansion-panel {
 .error-null {
   border: 2px solid red !important;
 }
+
+@media (max-width: 414px) {
+  .btn-contract {
+    height: 34px;
+    padding: 0 var(--spacer-5);
+  }
+}
