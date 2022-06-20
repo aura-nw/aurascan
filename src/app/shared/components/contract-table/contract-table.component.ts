@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
-import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
-import { DROPDOWN_ELEMENT } from 'src/app/core/models/contract.model';
-import { parseLabel } from 'src/app/core/utils/common/parsing';
+import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
+import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
+import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
 
 export interface TableData {
   txHash: string;
@@ -29,10 +30,9 @@ export interface TableData {
   selector: 'app-contract-table',
   templateUrl: './contract-table.component.html',
   styleUrls: ['./contract-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContractTableComponent implements OnInit, OnChanges {
-  @Input() data: TableData[];
+  @Input() dataList;
   @Input() length: number;
   @Input() contractInfo!: ITableContract;
   @Input() templates!: Array<TableTemplate>;
@@ -42,6 +42,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   elements: DropdownElement[] = DROPDOWN_ELEMENT;
   displayedColumns: string[] = [];
+  transactionTableData: TableData[];
 
   pageData: PageEvent = null;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -49,6 +50,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   constructor(public translate: TranslateService, public global: Globals) {}
 
   ngOnChanges(): void {
+    this.getListContractTransaction();
     this.loadTableData();
   }
 
@@ -58,16 +60,16 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   loadTableData() {
     this.pageData = {
-      length: this.data.length,
+      length: this.dataList?.data?.length,
       pageSize: 25,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
 
     if (this.dataSource) {
       // this.dataSource.paginator = event;
-      this.dataSource.data = this.data;
+      this.dataSource.data = this.transactionTableData;
     } else {
-      this.dataSource = new MatTableDataSource<any>(this.data);
+      this.dataSource = new MatTableDataSource<any>(this.transactionTableData);
     }
   }
 
@@ -75,7 +77,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
     if (this.dataSource) {
       this.dataSource.paginator = event;
     } else {
-      this.dataSource = new MatTableDataSource(this.data);
+      this.dataSource = new MatTableDataSource(this.transactionTableData);
       this.dataSource.paginator = event;
     }
   }
@@ -97,7 +99,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       tokenAddress: this.contractInfo?.contractsAddress,
       tx_hash: data?.txHash || '-',
       gas_used: data.gas_used,
-      gas_wanted: data.gas_wanted
+      gas_wanted: data.gas_wanted,
     };
   }
 
@@ -111,5 +113,62 @@ export class ContractTableComponent implements OnInit, OnChanges {
         next: pageIndex,
       });
     }
+  }
+
+  getListContractTransaction(): void {
+    this.contractInfo.count = this.dataList?.meta?.count || 0;
+    const ret = this.dataList?.data.map((contract) => {
+      let value = 0;
+      let from = '';
+      let to = '';
+      let method = '';
+      switch (contract.type) {
+        case TRANSACTION_TYPE_ENUM.InstantiateContract:
+          method = 'instantiate';
+          from = contract.messages[0].sender;
+          to = contract.contract_address;
+          break;
+        case TRANSACTION_TYPE_ENUM.Send:
+          method = 'transfer';
+          value = +contract.messages[0]?.amount[0].amount;
+          from = contract.messages[0].from_address;
+          to = contract.messages[0].to_address;
+          break;
+        case TRANSACTION_TYPE_ENUM.ExecuteContract:
+          method = Object.keys(contract.messages[0].msg)[0];
+          value = +contract.messages[0].funds[0]?.amount;
+          from = contract.messages[0].sender;
+          to = contract.messages[0].contract;
+          break;
+        default:
+          method = Object.keys(contract.messages[0].msg)[0];
+          value = 0;
+          from = contract.messages[0].sender;
+          to = contract.messages[0].contract;
+          break;
+      }
+
+      const label =
+        contract.messages[0].sender === this.contractInfo?.contractsAddress
+          ? ContractTransactionType.OUT
+          : ContractTransactionType.IN;
+
+      const tableDta: TableData = {
+        txHash: contract.tx_hash,
+        method,
+        blockHeight: contract.height,
+        blockId: contract.blockId,
+        time: new Date(contract.timestamp),
+        from,
+        label,
+        to,
+        value: balanceOf(value) || 0,
+        fee: +contract.fee,
+        gas_used: +contract.gas_used,
+        gas_wanted: +contract.gas_wanted,
+      };
+      return tableDta;
+    });
+    this.transactionTableData = ret;
   }
 }

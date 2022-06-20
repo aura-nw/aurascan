@@ -53,4 +53,26 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/rust-optimizer:0.12.4', value: 'cosmwasm/rust-optimizer:0.12.4' },
   { label: 'cosmwasm/rust-optimizer:0.12.5', value: 'cosmwasm/rust-optimizer:0.12.5' },
   { label: 'cosmwasm/rust-optimizer:0.12.6', value: 'cosmwasm/rust-optimizer:0.12.6' },
+
+  { label: 'cosmwasm/rust-optimizer-arm64:0.12.4', value: 'cosmwasm/rust-optimizer-arm64:0.12.4' },
+  { label: 'cosmwasm/rust-optimizer-arm64:0.12.5', value: 'cosmwasm/rust-optimizer-arm64:0.12.5' },
+  { label: 'cosmwasm/rust-optimizer-arm64:0.12.6', value: 'cosmwasm/rust-optimizer-arm64:0.12.6' },
+
+  { label: 'cosmwasm/workspace-optimizer:0.10.8', value: 'cosmwasm/workspace-optimizer:0.10.8' },
+  { label: 'cosmwasm/workspace-optimizer:0.10.9', value: 'cosmwasm/workspace-optimizer:0.10.9' },
+  { label: 'cosmwasm/workspace-optimizer:0.11.0', value: 'cosmwasm/workspace-optimizer:0.11.0' },
+  { label: 'cosmwasm/workspace-optimizer:0.11.2', value: 'cosmwasm/workspace-optimizer:0.11.2' },
+  { label: 'cosmwasm/workspace-optimizer:0.11.3', value: 'cosmwasm/workspace-optimizer:0.11.3' },
+  { label: 'cosmwasm/workspace-optimizer:0.11.4', value: 'cosmwasm/workspace-optimizer:0.11.4' },
+  { label: 'cosmwasm/workspace-optimizer:0.11.5', value: 'cosmwasm/workspace-optimizer:0.11.5' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.0', value: 'cosmwasm/workspace-optimizer:0.12.0' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.1', value: 'cosmwasm/workspace-optimizer:0.12.1' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.3', value: 'cosmwasm/workspace-optimizer:0.12.3' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.4', value: 'cosmwasm/workspace-optimizer:0.12.4' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.5', value: 'cosmwasm/workspace-optimizer:0.12.5' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.6', value: 'cosmwasm/workspace-optimizer:0.12.6' },
+
+  { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
+  { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
+  { label: 'cosmwasm/workspace-optimizer-arm64:0.12.6', value: 'cosmwasm/workspace-optimizer-arm64:0.12.6' },
 ];
