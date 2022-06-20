@@ -9,7 +9,7 @@
         <app-contract-table
           [length]="contractInfo?.count"
           [label]="queryParams?.label?.toString()"
-          [data]="contract"
+          [dataList]="contract"
           [templates]="templates"
           [contractInfo]="contractInfo"
           (onChangePage)="onChangePage($event)"
