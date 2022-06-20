@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EnvironmentService } from '../../core/data-services/environment.service';
-import {MenuItem} from "../horizontaltopbar/menu.model";
-import {MENU} from "../horizontaltopbar/menu";
+import { MenuItem } from '../horizontaltopbar/menu.model';
+import { MENU } from '../horizontaltopbar/menu';
 
 @Component({
   selector: 'app-footer',
