@@ -312,9 +312,12 @@ body {
 .custom-popover {
     background: var(--aura-bg-form);
     border: none;
-    min-width: 357px;
+    min-width: 200px;
     box-shadow: 2px 2px 30px #ffffff05;
     border-radius: 8px;
+    @media (min-width: 576px) {
+        min-width: 357px;
+    }
 
     .arrow {
         position: relative;
@@ -324,7 +327,10 @@ body {
             width: 16px;
             height: 16px;
             background-color: var(--aura-bg-form);
-            top: 160px;
+            top: 179px;
+            @media (min-width: 576px) {
+                top: 163px;
+            }
             left: -6px;
             transform: rotate(45deg);
         }
