@@ -122,6 +122,10 @@
             "TEXT": "User management",
             "BADGE": "04"
         },
+        "MORE": {
+            "TEXT": "More",
+            "BADGE": "03"
+        },
         "APPS": {
             "TEXT": "Apps",
             "LIST": {
