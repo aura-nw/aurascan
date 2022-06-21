@@ -38,6 +38,8 @@ a.verify-contract {
     overflow: auto;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    overflow: hidden;
+    overflow-x: auto;
     &::-webkit-scrollbar {
       display: none;
     }
