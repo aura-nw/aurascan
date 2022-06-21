@@ -1,10 +1,10 @@
-<footer>
+<footer (clickOutside)="resetClickMore()">
   <section class="container-fluid container-lg footer">
     <div class="row">
       <div class="col-12 col-lg-2">
         <div class="footer__menu pt-10 pt-md-0">
           <a routerLink="" class="footer__logo aura-logo ml-2 ml-md-0">
-            <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
+            <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100" />
           </a>
         </div>
       </div>
@@ -17,7 +17,7 @@
                 <div class="mb-4"><a target="_blank" href="{{ getUrl(dashboardURL) }}">Dashboard</a></div>
                 <div class="mb-4"><a target="_blank" href="{{ getUrl(blocksURL) }}">Blocks</a></div>
                 <div class="mb-4">
-                  <a target="_blank" href="{{  getUrl(transactionURL) }}">Transactions</a>
+                  <a target="_blank" href="{{ getUrl(transactionURL) }}">Transactions</a>
                 </div>
                 <div class="mb-4">
                   <a target="_blank" href="{{ getUrl(validatorURL) }}">Validators</a>
@@ -65,11 +65,7 @@
                   >
                 </div>
                 <div class="mb-4">
-                  <a
-                    target="_blank"
-                    href="https://discord.com/invite/PNCp4CXj7K"
-                    >Contact us</a
-                  >
+                  <a target="_blank" href="https://discord.com/invite/PNCp4CXj7K">Contact us</a>
                 </div>
               </div>
             </div>
@@ -118,15 +114,52 @@
   </section>
   <section class="menu-bar d-lg-none">
     <ul class="d-flex justify-content-around mb-0 p-0">
-      <ng-container *ngFor="let item of menuItems">
-        <li class="menu-item" *ngIf="item.id !== 7">
-          <a class="menu-link text-center"
-             [routerLink]="item.link" routerLinkActive="active" [class.active]="router.url === '/' && item.link === '/dashboard'">
-            <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-            <div class="small-text d-block mt-1">{{ item.label | translate}}</div>
-          </a>
+      <ng-container *ngFor="let item of menuDefault; index as idx">
+        <li class="menu-item" *ngIf="item.id !== 7 && idx <= numberMenuFooter + 1">
+          <ng-container *ngIf="item.id === 99">
+            <a
+              class="menu-link text-center"
+              [ngbPopover]="popContent"
+              routerLinkActive="active"
+              (click)="handleClickMore()"
+              [class.active]="isClickMore">
+              <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
+              <div class="small-text d-block mt-1">{{ item.label | translate }}</div>
+            </a>
+          </ng-container>
+         <ng-container *ngIf="item.id !== 99">
+            <a
+              class="menu-link text-center"
+              [routerLink]="item.link"
+              routerLinkActive="active"
+              [class.active]="router.url === '/' && item.link === '/dashboard'">
+              <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
+              <div class="small-text d-block mt-1">{{ item.label | translate }}</div>
+            </a>
+          </ng-container>
         </li>
       </ng-container>
     </ul>
   </section>
 </footer>
+
+<ng-template #popContent>
+  <div class="text--white p-2 box-menu">
+    <ul class="justify-content-around mb-0 p-0">
+      <ng-container *ngFor="let item of menuMore; index as idx">
+        <li class="menu-item" *ngIf="item.id !== 7 && idx <= numberMenuFooter + 1">
+          <ng-container *ngIf="item.link !== 'more'">
+            <a
+              class="menu-link text-center d-flex"
+              [routerLink]="item.link"
+              routerLinkActive="active"
+              [class.active]="router.url === '/' && item.link === '/dashboard'">
+              <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
+              <div class="fw-semibold d-block ml-4">{{ item.label | translate }}</div>
+            </a>
+          </ng-container>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</ng-template>
