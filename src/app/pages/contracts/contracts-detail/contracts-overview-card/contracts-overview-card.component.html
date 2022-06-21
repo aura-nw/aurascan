@@ -8,12 +8,10 @@
               <div class="body fw-semibold">Contract Overview</div>
               <div class="justify-content-end">
                 <div class="d-flex justify-content-end">
-                  <ng-container>
+                  <ng-container *ngIf="contractDetail?.token_tracker">
                     <button class="button button-chart button-outline button-outline__in-card">
                       <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
-                      <span class="ml-2 small-text"
-                            *ngIf="contractDetail && contractDetail.token_tracker
-                            && contractDetail.token_tracker.symbol && contractDetail.token_tracker.name">
+                      <span class="ml-2 small-text">
                         {{ contractDetail?.token_tracker?.symbol }}: {{ contractDetail?.token_tracker?.name }}
                       </span>
                     </button>
@@ -51,11 +49,11 @@
             <div class="mt-1">
               <div class="aura-form list-token d-flex align-items-center justify-content-between">
                 <mat-select
-                        #assetTypeSelect
-                        class="list-token form-control select-input-field select-input__arrow--gray"
-                        panelClass="aura-optional-panel aura-optional-token-panel"
-                        [disableOptionCentering]="true"
-                        [(value)]="selectedToken">
+                  #assetTypeSelect
+                  class="list-token form-control select-input-field select-input__arrow--gray"
+                  panelClass="aura-optional-panel aura-optional-token-panel"
+                  [disableOptionCentering]="true"
+                  [(value)]="selectedToken">
                   <mat-select-trigger>
                     <span class="small-body">{{ selectedToken }}</span>
                     <span class="selected-token__label">1</span>
@@ -66,7 +64,7 @@
                   </mat-option>
                 </mat-select>
                 <div class="box-wallet ml-3">
-                  <a [routerLink]="['/token/token-holding/', 'tokenID-123456789010']">
+                  <a [routerLink]="['/token/token-holding/', 'tokenID-123456789010']" class="d-flex">
                     <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
                   </a>
                 </div>
@@ -95,7 +93,7 @@
                 </mat-option>
               </mat-select>
               <div class="box-wallet">
-                <a [routerLink]="['/token/token-holding/', 'tokenID-123456789010']">
+                <a [routerLink]="['/token/token-holding/', 'tokenID-123456789010']" class="d-flex">
                   <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
                 </a>
               </div>

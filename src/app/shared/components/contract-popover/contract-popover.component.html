@@ -31,7 +31,8 @@
         <a class="text--green" [routerLink]="['/account', popoverData?.from_address]">
           {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
         </a>
-        <span class="text--light-gray mr-1 ml-1">To</span>
+        <br class="d-sm-none">
+        <span class="text--light-gray mr-1 ml-sm-1">To</span>
         <a class="text--green" [routerLink]="['/account', popoverData?.to_address]">
           {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
         </a>

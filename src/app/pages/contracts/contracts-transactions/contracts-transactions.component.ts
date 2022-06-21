@@ -19,7 +19,6 @@ import { TableData } from 'src/app/shared/components/contract-table/contract-tab
 })
 export class ContractsTransactionsComponent implements OnInit {
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
-  contractTransaction;
   contractInfo: ITableContract = {
     contractsAddress: '',
     count: 0,
