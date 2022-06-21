@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { MenuItem } from '../horizontaltopbar/menu.model';
 import { MENU } from '../horizontaltopbar/menu';
-import { DROPDOWN_ELEMENT } from 'src/app/core/models/contract.model';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
 
 @Component({
@@ -27,25 +26,28 @@ export class FooterComponent implements OnInit {
   governanceURL = 'proposal';
   menuItems: MenuItem[] = MENU;
   numberMenuFooter = 3;
-  menuDefault : MenuItem[] = MENU;
-  menuMore : MenuItem[] = MENU;
-  elements: DropdownElement[] = DROPDOWN_ELEMENT;
+  menuDefault: MenuItem[] = MENU;
+  menuMore: MenuItem[] = MENU;
   isClickMore = false;
-  
-  constructor(private environmentService: EnvironmentService, public router: Router) {}
+  currentUrl = '';
+
+  constructor(private environmentService: EnvironmentService, public router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    console.log(this.menuItems);
+    this.route.url.subscribe((url) => {
+      if (url) {
+        this.currentUrl = url[0]?.path;
+      }
+    });
     this.menuDefault = this.menuItems.slice(0, 4);
     this.menuDefault.push({
       id: 99,
       label: 'MENUITEMS.MORE.TEXT',
       icon: 'burger',
       link: '/more',
-    })
+    });
     this.menuMore = this.menuItems.slice(4);
-    console.log(this.menuMore);
-    
+    this.checkMenuMore();
   }
 
   getUrl(url: string): string {
@@ -54,5 +56,30 @@ export class FooterComponent implements OnInit {
 
   viewSelected(e: DropdownElement): void {
     this.onViewSelected.emit(e);
+  }
+
+  handleClickMore() {
+    if (!this.isClickMore) {
+      this.isClickMore = true;
+    } else {
+      this.isClickMore = false;
+      this.checkMenuMore();
+    }
+  }
+
+  resetClickMore() {
+    this.isClickMore = false;
+    this.checkMenuMore();
+  }
+
+  checkMenuMore() {
+    this.menuMore.forEach((element) => {
+      if (element?.link && element?.link?.length > 0) {
+        if (element.link.indexOf(this.currentUrl) > -1) {
+          this.isClickMore = true;
+          return;
+        }
+      }
+    });
   }
 }

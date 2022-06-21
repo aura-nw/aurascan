@@ -1,4 +1,4 @@
-<footer>
+<footer (clickOutside)="resetClickMore()">
   <section class="container-fluid container-lg footer">
     <div class="row">
       <div class="col-12 col-lg-2">
@@ -121,7 +121,7 @@
               class="menu-link text-center"
               [ngbPopover]="popContent"
               routerLinkActive="active"
-              (click)="isClickMore = !isClickMore"
+              (click)="handleClickMore()"
               [class.active]="isClickMore">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="small-text d-block mt-1">{{ item.label | translate }}</div>

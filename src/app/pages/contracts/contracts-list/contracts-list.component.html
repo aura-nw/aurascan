@@ -3,7 +3,7 @@
     <p class="title-medium mb-2 text--white fw-bold">Contracts</p>
     <div class="body text--light-gray">A total of {{ pageData?.length }} Contracts found</div>
   </div>
-  <form class="aura-form single-input-field search-form d-none d-lg-block">
+  <form class="aura-form single-input-field search-form mt-4">
     <div class="input-group small-input">
       <input
         type="text"
@@ -53,7 +53,7 @@
 
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
-    <div class="card mt-8">
+    <div class="card mt-4 mt-lg-6">
       <div class="card-body">
         <div class="table-responsive aura-table-contain">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table">
@@ -122,13 +122,13 @@
               </td>
             </tr>
           </table>
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
-          </app-paginator>
         </div>
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
       </div>
     </div>
   </ng-container>
