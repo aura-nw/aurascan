@@ -39,3 +39,9 @@
     font-weight: 600;
   }
 }
+
+@media (min-width: 992px) {
+  .search-form {
+    min-width: 350px;
+  }
+}

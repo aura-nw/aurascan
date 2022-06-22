@@ -1,4 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ResponseDto } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-compiler-output',
@@ -12,9 +14,11 @@ export class CompilerOutputComponent implements OnInit {
   @Input() contractName: string = '';
   @Output() switchStage = new EventEmitter();
   logError = false;
-  constructor() { }
+  contractOutput: any;
+  constructor(private contractService: ContractService) { }
 
   ngOnInit(): void {
+    this.getContractDetail();
   }
 
   switchErrStatus() {
@@ -23,5 +27,11 @@ export class CompilerOutputComponent implements OnInit {
 
   switchStageEmmit() {
     this.switchStage.emit();
+  }
+
+  getContractDetail() {
+    this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
+      this.contractOutput = res?.data;
+    });
   }
 }
