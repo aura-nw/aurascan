@@ -24,7 +24,7 @@ export class TokenHoldingComponent implements OnInit {
     // fake event click out side copy button
     // this event for hidden tooltip
     setTimeout(function (){
-      document.getElementById('wsead123').click();
+      document.getElementById('popupCopy').click();
     }, 800)
   }
 }
