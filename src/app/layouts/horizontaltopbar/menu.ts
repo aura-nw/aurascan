@@ -9,27 +9,27 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 2,
-    label: 'MENUITEMS.BLOCKS.TEXT',
-    icon: 'block',
-    link: '/blocks',
-  },
-  {
-    id: 3,
     label: 'MENUITEMS.TRANSACTION.TEXT',
     icon: 'credit-card',
     link: '/transaction',
   },
   {
-    id: 4,
+    id: 3,
     label: 'MENUITEMS.VALIDATORS.TEXT',
     icon: 'collab',
     link: '/validators',
   },
   {
-    id: 5,
+    id: 4,
     label: 'MENUITEMS.PROPOSAL.TEXT',
     icon: 'archive',
     link: '/proposal',
+  },
+  {
+    id: 5,
+    label: 'MENUITEMS.BLOCKS.TEXT',
+    icon: 'block',
+    link: '/blocks',
   },
   // {
   //     id: 6,

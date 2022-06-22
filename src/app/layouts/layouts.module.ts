@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
@@ -44,7 +44,8 @@ import { VerticalComponent } from './vertical/vertical.component';
     SimplebarAngularModule,
     ClickOutsideModule,
     FormsModule,
-    WalletConnectModule
+    WalletConnectModule,
+    NgbPopoverModule
   ],
   providers: [LanguageService, CommonService , TransactionService],
   exports: [VerticalComponent]

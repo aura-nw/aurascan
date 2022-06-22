@@ -87,7 +87,7 @@
             "BADGE": "04"
         },
         "CONTRACT": {
-            "TEXT": "Contracts",
+            "TEXT": "Contract",
             "BADGE": "04"
         },
         "DASHBOARDS": {
@@ -121,6 +121,10 @@
         "USER_MANAGEMENT": {
             "TEXT": "User management",
             "BADGE": "04"
+        },
+        "MORE": {
+            "TEXT": "More",
+            "BADGE": "03"
         },
         "APPS": {
             "TEXT": "Apps",
