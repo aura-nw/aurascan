@@ -61,16 +61,6 @@ export class ContractComponent implements OnInit, OnDestroy {
       });
   }
 
-  navigateContractDetail() {
-    this.router.navigate(['contracts/verify'], {
-      state: {
-        contractAddress: this.contractAddress,
-        contractTxHash: this.contractDetail.tx_hash,
-        contractName: this.contractDetail.contract_name,
-      },
-    });
-  }
-
   changeTab(tabId): void {
     this.countCurrent = tabId;
   }

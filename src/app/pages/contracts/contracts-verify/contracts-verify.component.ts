@@ -42,11 +42,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     private wSService: WSService,
     private dlgService: DialogService,
   ) {
-    if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
-      this.contractAddress = this.router.getCurrentNavigation().extras.state.contractAddress;
-      this.contractTxHash = this.router.getCurrentNavigation().extras.state.contractTxHash;
-      this.contractName = this.router.getCurrentNavigation().extras.state.contractName;
-    } else {
+    this.contractAddress = this.route.snapshot.paramMap.get('addressId');
+    this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
+    this.contractName = this.route.snapshot.paramMap.get('contractName');
+    if (this.contractAddress.trim().length === 0 || this.contractTxHash.trim().length === 0 || this.contractName.trim().length === 0) {
       this.router.navigate(['contracts']);
     }
   }

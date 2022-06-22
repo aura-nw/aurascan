@@ -159,6 +159,9 @@
       font-size: 1.4rem;
       font-weight: 400;
       height: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &::placeholder {
         color: var(--aura-light-gray);
       }
