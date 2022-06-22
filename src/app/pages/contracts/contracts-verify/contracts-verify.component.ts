@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ContractService } from '../../../core/services/contract.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WSService } from 'src/app/core/services/ws.service';
-import { DialogService } from 'src/app/core/services/dialog.service';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import { WSService } from 'src/app/core/services/ws.service';
+import { ContractService } from '../../../core/services/contract.service';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -26,10 +26,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       id: 0,
       value: 'Contract Source Code',
     },
-    {
-      id: 1,
-      value: 'Compiler Output',
-    },
+    // {
+    //   id: 1,
+    //   value: 'Compiler Output',
+    // },
   ];
 
   versionList = CONTRACT_VERSIONS;
@@ -51,24 +51,44 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     }
   }
 
+  githubCommitPattern = /https:\/\/github.com\/[\w-\/]+\/commit\/\w+/;
+
   ngOnDestroy(): void {}
 
   contractForm: FormGroup;
-  ngOnInit(): void {
-    this.contractForm = new FormGroup({
-      contract_address: new FormControl('', [Validators.required]),
-      link: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      url: new FormControl(''),
-      compiler_version: new FormControl('', [Validators.required]),
-      commit: new FormControl(''),
-    });
-    this.contractForm.patchValue({ contract_address: this.contractAddress });
+
+  get formControls() {
+    return this.contractForm.controls;
   }
+
+  ngOnInit(): void {
+    this.contractForm = new FormGroup(
+      {
+        contract_address: new FormControl(
+          { value: this.contractAddress, disabled: true },
+          { validators: [Validators.required], updateOn: 'submit' },
+        ),
+        link: new FormControl('', {
+          validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
+          updateOn: 'submit',
+        }),
+        url: new FormControl(''),
+        compiler_version: new FormControl('', { validators: [Validators.required], updateOn: 'submit' }),
+        commit: new FormControl(''),
+      },
+      {
+        updateOn: 'submit',
+      },
+    );
+  }
+
   changeTab(tabId): void {
     this.tabCurrent = tabId;
   }
 
   onSubmit() {
+    this.formControls['link'].markAsTouched();
+    this.formControls['compiler_version'].markAsTouched();
     if (this.contractForm.valid) {
       // handle contract_address & commit
       const link = this.contractForm.controls['link'].value;
@@ -81,7 +101,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         commit: this.contractForm.controls['commit'].value,
       };
       this.contractService.verifyContract(contractData).subscribe((res) => {
-        // this.contractForm.reset();
         this.socket();
       });
     }
@@ -108,5 +127,9 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         this.router.navigate(['contracts', this.contractAddress]);
       },
     });
+  }
+
+  handleReset() {
+    this.contractForm.reset({ contract_address: this.contractAddress });
   }
 }
