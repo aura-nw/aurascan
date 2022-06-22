@@ -117,15 +117,16 @@
       <ng-container *ngFor="let item of menuDefault; index as idx">
         <li class="menu-item" *ngIf="item.id !== 7 && idx <= numberMenuFooter + 1">
           <ng-container *ngIf="item.id === 99">
-            <a
+            <button
               class="menu-link text-center"
               [ngbPopover]="popContent"
+              [popoverClass]="'mobile-menu-more'"
               routerLinkActive="active"
               (click)="handleClickMore()"
               [class.active]="isClickMore">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="small-text d-block mt-1">{{ item.label | translate }}</div>
-            </a>
+            </button>
           </ng-container>
          <ng-container *ngIf="item.id !== 99">
             <a
@@ -144,7 +145,7 @@
 </footer>
 
 <ng-template #popContent>
-  <div class="text--white p-2 box-menu">
+  <div class="text--white box-menu">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuMore; index as idx">
         <li class="menu-item" *ngIf="item.id !== 7 && idx <= numberMenuFooter + 1">

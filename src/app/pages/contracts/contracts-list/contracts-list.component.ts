@@ -1,3 +1,4 @@
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -35,6 +36,7 @@ export class ContractsListComponent implements OnInit {
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     public translate: TranslateService,
@@ -42,6 +44,7 @@ export class ContractsListComponent implements OnInit {
     private router: Router,
     private contractService: ContractService,
     private datePipe: DatePipe,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
