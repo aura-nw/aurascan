@@ -28,7 +28,6 @@ export class FooterComponent implements OnInit {
   numberMenuFooter = 3;
   menuDefault: MenuItem[] = MENU;
   menuMore: MenuItem[] = MENU;
-  isClickMore = false;
   currentUrl = '';
 
   constructor(private environmentService: EnvironmentService, public router: Router, private route: ActivatedRoute) {}
@@ -47,7 +46,6 @@ export class FooterComponent implements OnInit {
       link: '/more',
     });
     this.menuMore = this.menuItems.slice(4);
-    this.checkMenuMore();
   }
 
   getUrl(url: string): string {
@@ -56,30 +54,5 @@ export class FooterComponent implements OnInit {
 
   viewSelected(e: DropdownElement): void {
     this.onViewSelected.emit(e);
-  }
-
-  handleClickMore() {
-    if (!this.isClickMore) {
-      this.isClickMore = true;
-    } else {
-      this.isClickMore = false;
-      this.checkMenuMore();
-    }
-  }
-
-  resetClickMore() {
-    this.isClickMore = false;
-    this.checkMenuMore();
-  }
-
-  checkMenuMore() {
-    this.menuMore.forEach((element) => {
-      if (element?.link && element?.link?.length > 0) {
-        if (element.link.indexOf(this.currentUrl) > -1) {
-          this.isClickMore = true;
-          return;
-        }
-      }
-    });
   }
 }

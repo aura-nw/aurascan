@@ -1,4 +1,4 @@
-<footer (clickOutside)="resetClickMore()">
+<footer>
   <section class="container-fluid container-lg footer">
     <div class="row">
       <div class="col-12 col-lg-2">
@@ -119,11 +119,10 @@
           <ng-container *ngIf="item.id === 99">
             <button
               class="menu-link text-center"
+              #popover="ngbPopover"
               [ngbPopover]="popContent"
               [popoverClass]="'mobile-menu-more'"
-              routerLinkActive="active"
-              (click)="handleClickMore()"
-              [class.active]="isClickMore">
+              [class.active]="popover.isOpen()">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="small-text d-block mt-1">{{ item.label | translate }}</div>
             </button>
