@@ -7,11 +7,17 @@
       height: 56px;
       padding: 0px var(--spacer-4);
     }
+
     tr:first-child td:first-child {
       width: 30%;
       color: var(--aura-white);
     }
   }
+
+  @media (max-width: 992px) {
+    margin-bottom: 16px;
+  }
+
   @media (max-width: 414px) {
     tr td {
       width: 40%;
