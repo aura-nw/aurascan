@@ -1,83 +1,68 @@
 <!-- Compiler debug log -->
 <div class="small-body text--white">
-    <div class="fw-semibold">Compiler debug log:</div>
-    <!-- Compiler debug log Success -->
-    <div *ngIf="!logError">
-        <div class="mt-3 d-flex">
-            <img src="assets/icons/icons-svg/color/info.svg" alt="" width="16px" height="16px">
-            <div class="ml-2 d-flex">
-                <span>Note: Contract was created at TxHash</span>
-                <span class="text--green ml-1">{{ contractTxHash }}</span>
-            </div>
-        </div>
-        <div class="mt-3 d-flex">
-            <img src="assets/icons/icons-svg/color/check-circle.svg" alt="" width="16px" height="16px">
-            <div class="ml-2 d-flex">
-                <span>Successfully generated Creation Code and Schema for Contract Address</span>
-                <a class="text--green ml-1" [routerLink]="['/contracts', contractAddress]">[{{contractAddress}}]</a>
-            </div>
-        </div>
+  <div class="fw-semibold">Compiler debug log:</div>
+  <!-- Compiler debug log Success -->
+  <div *ngIf="!logError">
+    <div class="d-flex fw-normal text-break mt-3">
+      <img src="assets/icons/icons-svg/color/info.svg" alt="" width="16px" height="16px" />
+      <div class="ml-2">
+        <span>Note: Contract was created at TxHash</span>
+        <span class="text--green ml-1">{{ contractTxHash | cutStringPipe: 20 }}</span>
+      </div>
     </div>
-    <!-- Compiler debug log Error -->
-    <div *ngIf="logError">
-        <div class="mt-3 d-flex">
-            <img src="assets/icons/icons-svg/color/block.svg" alt="" width="16px" height="16px">
-            <div class="ml-2">Error! Unable to generate Contract Creation Code and Schema</div>
-        </div>
+
+    <div class="d-flex fw-normal text-break mt-3">
+      <img src="assets/icons/icons-svg/color/check-circle.svg" alt="" width="16px" height="16px" />
+      <div class="ml-2">
+        <span class="mr-1">Successfully generated Creation Code and Schema for Contract Address</span>
+        <a class="text--green d-block d-lg-inline-block" [routerLink]="['/contracts', contractAddress]">[{{ contractAddress }}]</a>
+      </div>
     </div>
+  </div>
+  <!-- Compiler debug log Error -->
+  <div *ngIf="logError">
+    <div class="d-flex fw-normal text-break mt-3">
+      <img src="assets/icons/icons-svg/color/block.svg" alt="" width="16px" height="16px" />
+      <div class="ml-2">Error! Unable to generate Contract Creation Code and Schema</div>
+    </div>
+  </div>
 </div>
 <!-- Code -->
 <div class="mt-6 border-box">
-    <div>
-        <span class="fw-semibold mr-1" (click)="switchErrStatus()">Compiler Version:</span>
-        <span>{{ compilerVersion }}</span>
-    </div>
-    <div class="mt-4">
-        <span class="fw-semibold mr-1">Contract Name:</span>
-        <span>{{contractName}}</span>
-    </div>
-    <div class="mt-4">
-        <div class="fw-semibold">Contract Creation Code <span *ngIf="logError"> (What we are looking for)</span> :</div>
-        <pre class="mt-3 small-text code-block">606060405234156200001057600080fd5b604051620016d8380380620016d883398101604052808051906020019091908051820191906020018051906020019091908051820191
-9050505683600560003373EEEEEEffEREEEEfE16815260200190815260200160002081905550836003819055508260009080519060200190620000ad92919062000125656508060019080519060200190620000c69291906200
-012e56505081600260006101000a81548160220219169083601216021790555033600460006101000a8154817388PEEPEEEEEEEEEEEEEEEEEEEEEEEffE
-Iffffff0219169083731PPfIffE===€PIPPffffffffff1602179055505650505050620001d565682805460018160011615610100020316600290049060005260206000209060120160209004810192826017106200017157805160181916838001178555620001a2565082800160010185558215620001a2579182015082811115620001a1578251825591a919999999999212102199aaaaaaaaaaa39dic91200001323211111111111111532312131212</pre>
-    </div>
-    <div class="mt-4" *ngIf="!logError">
-        <div class="fw-semibold">Contract Schema</div>
-        <div class="mt-3">File 1 of 3: execute msg.ison</div>
-        <pre class="mt-2 small-text code-block">
-"http://ison-schema.org/draft-07/schema#"
-"titien:
-"QueryMsg",
-wanvoE'：
-"description": "Returns the current balance of the given address, 0 if unset. Return type: BalanceRegponse."
-levoel:
-"object",
-"required":</pre>
-        <div class="mt-3">File 2 of 3: instantiate msg.json</div>
-        <pre class="mt-2 small-text code-block">
-"http://ison-schema.org/draft-07/schema#"
-"titien:
-"QueryMsg",
-wanvoE'：
-"description": "Returns the current balance of the given address, 0 if unset. Return type: BalanceRegponse."
-levoel:
-"object",
-"required":</pre>
-        <div class="mt-3">File 3 of 3: query msg.json</div>
-        <pre class="mt-2 small-text code-block">
-"http://ison-schema.org/draft-07/schema#"
-"titien:
-"QueryMsg",
-wanvoE'：
-"description": "Returns the current balance of the given address, 0 if unset. Return type: BalanceRegponse."
-levoel:
-"object",
-"required":</pre>
-    </div>
+  <div>
+    <span class="fw-semibold mr-1" (click)="switchErrStatus()">Compiler Version:</span>
+    <span>{{ contractOutput?.compiler_version }}</span>
+  </div>
+  <div class="mt-4">
+    <span class="fw-semibold mr-1">Contract Name:</span>
+    <span>{{ contractOutput?.contract_name }}</span>
+  </div>
+  <div class="mt-4">
+    <div class="fw-semibold">Contract Creation Code <span *ngIf="logError"> (What we are looking for)</span> :</div>
+    <pre class="mt-3 small-text code-block">
+        {{ contractOutput?.contract_hash }}
+    </pre>
+  </div>
+  <div class="mt-4" *ngIf="!logError">
+    <div class="fw-semibold">Contract Schema</div>
+    <div class="mt-3">File 1 of 3: execute msg.ison</div>
+    <pre class="mt-2 small-text code-block">
+        {{ contractOutput?.execute_msg_schema }}
+    </pre>
+    <div class="mt-3">File 2 of 3: instantiate msg.json</div>
+    <pre class="mt-2 small-text code-block">
+        {{ contractOutput?.instantiate_msg_schema }}
+    </pre>
+
+    <div class="mt-3">File 3 of 3: query msg.json</div>
+    <pre class="mt-2 small-text code-block">
+        {{ contractOutput?.query_msg_schema }}
+    </pre>
+  </div>
 </div>
 
 <div *ngIf="logError" class="mt-6">
-    <button class="button button-outline button-outline__in-card ml-auto" type="button"><span class="text-gradient" (click)="switchStageEmmit()">Start Over</span></button>
+  <button class="button button-outline button-outline__in-card ml-auto" type="button">
+    <span class="text-gradient" (click)="switchStageEmmit()">Start Over</span>
+  </button>
 </div>

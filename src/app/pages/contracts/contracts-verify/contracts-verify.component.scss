@@ -7,7 +7,10 @@
     background-color: var(--aura-dark-gray);
   }
   ul.aura-nav-tabs li {
-    min-width: 200px;
+    min-width: 100px;
     text-align: center;
+    @media (min-width: 992px) {
+      min-width: 200px;
+    }
   }
 }
