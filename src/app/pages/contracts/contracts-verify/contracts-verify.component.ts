@@ -26,10 +26,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       id: 0,
       value: 'Contract Source Code',
     },
-    {
-      id: 1,
-      value: 'Compiler Output',
-    },
+    // {
+    //   id: 1,
+    //   value: 'Compiler Output',
+    // },
   ];
 
   versionList = CONTRACT_VERSIONS;

@@ -48,5 +48,8 @@ a.verify-contract {
     flex-grow: 0;
     flex-shrink: 1;
     min-width: 180px;
+    @media (max-width: 414px) {
+      min-width: 140px;
+    }
   }
 }

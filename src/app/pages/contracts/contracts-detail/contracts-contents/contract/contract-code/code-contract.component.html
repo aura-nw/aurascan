@@ -1,4 +1,5 @@
-<div id=""
+<div
+  id=""
   class="code-contract justify-content-between text--white mt-5"
   *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
@@ -15,10 +16,12 @@
       <a class="text--green ml-1" href="/contracts/{{ contractDetailData?.contract_match }}">
         {{ contractDetailData?.contract_match }}</a
       >
-      </div>
+    </div>
   </ng-container>
 
-  <div class="d-flex row my-1 my-lg-0" *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
+  <div
+    class="d-flex row my-1 my-lg-0"
+    *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="col-lg-6 col-12">
       <table class="aura-basic-table w-100 table-detail">
         <tr>
@@ -57,7 +60,7 @@
         <div class="d-flex justify-content-end">
           <button
             class="button button-chart button-outline button-outline__in-card btn-copy"
-            matTooltip="Coppied!"
+            matTooltip="Copied!"
             #tooltip1="matTooltip"
             (mouseenter)="$event.stopImmediatePropagation()"
             (mouseleave)="$event.stopImmediatePropagation()"
@@ -79,7 +82,9 @@
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="d-flex justify-content-between align-items-center" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.ison</span>
-      <div class="d-flex align-items-center justify-content-end mt-1 mt-lg-0" [class.btn-export-mob]="breakpoint.value.matches">
+      <div
+        class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
+        [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
           <button
             class="button button-outline button-outline__in-card d-flex align-items-center button-export"
@@ -112,7 +117,7 @@
           src="assets/icons/icons-svg/basic/copy.svg"
           class="mx-6 cursor-pointer icon-contract"
           alt=""
-          matTooltip="Coppied!"
+          matTooltip="Copied!"
           #tooltip2="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
@@ -128,7 +133,9 @@
 
     <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 2 of 3: instantiate msg.json</span>
-      <div class="d-flex align-items-center justify-content-end mt-1 mt-lg-0" [class.btn-export-mob]="breakpoint.value.matches">
+      <div
+        class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
+        [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
           <button
             class="button button-outline button-outline__in-card d-flex align-items-center button-export"
@@ -159,7 +166,7 @@
           src="assets/icons/icons-svg/basic/copy.svg"
           class="mx-6 cursor-pointer icon-contract"
           alt=""
-          matTooltip="Coppied!"
+          matTooltip="Copied!"
           #tooltip3="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
@@ -175,7 +182,9 @@
 
     <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 3 of 3: query msg.json</span>
-      <div class="d-flex align-items-center justify-content-end mt-1 mt-lg-0" [class.btn-export-mob]="breakpoint.value.matches">
+      <div
+        class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
+        [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
           <button
             class="button button-outline button-outline__in-card d-flex align-items-center button-export"
@@ -208,7 +217,7 @@
           src="assets/icons/icons-svg/basic/copy.svg"
           class="mx-6 cursor-pointer icon-contract"
           alt=""
-          matTooltip="Coppied!"
+          matTooltip="Copied!"
           #tooltip4="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
