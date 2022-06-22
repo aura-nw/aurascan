@@ -1,5 +1,18 @@
-.form-control {
-  width: auto !important;
+.search-form {
+  min-width: 350px;
+  &.single-input-field {
+    .input-group {
+      &.textbox_search {
+        width: 97%;
+        padding: var(--spacer-1) var(--spacer-4) var(--spacer-4) var(--spacer-4);
+
+        input {
+          padding-left: 0;
+          width: 90%;
+        }
+      }
+    }
+  }
 }
 
 .box-search-data {

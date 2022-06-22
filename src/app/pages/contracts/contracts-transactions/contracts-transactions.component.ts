@@ -1,10 +1,10 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
-import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
 import { IResponsesSuccess, TableTemplate } from 'src/app/core/models/common.model';
 import { IContractsResponse, ITableContract } from 'src/app/core/models/contract.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -61,11 +61,14 @@ export class ContractsTransactionsComponent implements OnInit {
     map((res: IResponsesSuccess<IContractsResponse[]>) => res && this.checkResponse(res)),
   );
 
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
   constructor(
     public translate: TranslateService,
     private router: Router,
     private contractService: ContractService,
     private activeRouter: ActivatedRoute,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {}

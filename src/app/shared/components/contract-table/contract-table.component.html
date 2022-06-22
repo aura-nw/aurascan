@@ -1,6 +1,6 @@
 <section class="contract-table">
   <div class="d-flex justify-content-between">
-    <div class="small-body">
+    <div class="small-body total-text">
       A total of {{ contractInfo.count | mask : 'separator.6'}}
       <div class="d-inline aura-status" *ngIf="label">
         <div  class="d-inline status" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>

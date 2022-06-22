@@ -1,10 +1,16 @@
-<div class="d-lg-flex justify-content-between">
+<div class="d-lg-flex justify-content-between" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div>
-    <p class="title-medium mb-2 text--white fw-bold">Contracts</p>
-    <div class="body text--light-gray">A total of {{ pageData?.length }} Contracts found</div>
+    <ng-container *ngIf="!breakpoint.value.matches">
+      <p class="title-medium mb-2 text--white fw-bold">Contracts</p>
+      <div class="body text--light-gray">A total of {{ pageData?.length }} Contracts found</div>
+    </ng-container>
+    <ng-container *ngIf="breakpoint.value.matches">
+      <p class="title-medium mb-2 text--white title-small fw-500">Contracts</p>
+      <div class="text--light-gray small-body-mob fw-500">A total of {{ pageData?.length }} Contracts found</div>
+    </ng-container>
   </div>
   <form class="aura-form single-input-field search-form mt-4">
-    <div class="input-group small-input">
+    <div class="input-group small-input" [class.textbox_search]="breakpoint.value.matches">
       <input
         type="text"
         class="form-control"

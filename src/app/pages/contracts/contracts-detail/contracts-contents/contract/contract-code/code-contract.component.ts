@@ -41,7 +41,7 @@ export class CodeContractComponent implements OnInit {
     // fake event click out side copy button
     // this event for hidden tooltip
     setTimeout(function (){
-      document.getElementById('wsead123').click();
+      document.getElementById('popupCopy').click();
     }, 800)
   }
   sendRouteObject(type: 'json' | 'text', content: string) {
