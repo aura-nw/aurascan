@@ -1,14 +1,15 @@
-<div class="">
+<div *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div *ngIf="contractInfo">
-    <p class="title-medium mb-2 text--white fw-bold">Transactions</p>
-    <div class="body text--gray d-flex"
-      >For<a class="text--green ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
+    <p class="title-medium mb-2 text--white fw-bold" *ngIf="!breakpoint.value.matches">Transactions</p>
+    <p class="title-medium mb-2 text--white sub-text-mob fw-500" *ngIf="breakpoint.value.matches">Transactions</p>
+    <div class="body text--gray d-flex">
+      <span class="text-gray">for</span><a class="text--green ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
         {{ contractInfo.contractsAddress }}</a
-      ></div
-    >
+      >
+    </div>
   </div>
   <section>
-    <div class="card mt-8">
+    <div class="card mt-6">
       <div class="card-body" *ngIf="contract$ | async as contract">
         <app-contract-table
           [length]="contractInfo?.count"
