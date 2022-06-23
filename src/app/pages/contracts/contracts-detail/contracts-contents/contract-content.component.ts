@@ -19,10 +19,10 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   TABS = CONTRACT_TAB.filter((vote) =>
     [
       ContractTab.Transactions,
-      ContractTab.Cw20Token,
+      // ContractTab.Cw20Token,
       ContractTab.Contract,
-      ContractTab.Events,
-      ContractTab.Analytics,
+      // ContractTab.Events,
+      // ContractTab.Analytics,
     ].includes(vote.key),
   ).map((vote) => ({
     ...vote,
