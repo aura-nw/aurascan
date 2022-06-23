@@ -65,6 +65,6 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ReactiveFormsModule,
     QrModule,
   ],
-  providers: [ContractService, WSService],
+  providers: [ContractService],
 })
 export class ContractsModule {}

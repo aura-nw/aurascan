@@ -1,15 +1,21 @@
 <section class="card main-tab p-4">
   <div class="d-flex justify-content-between tab-wrapper tab-contract">
-    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="activeId"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a
             ngbNavLink
             (click)="changeTab(tab.key)"
-            [class.verify-contract]="tab.key === contractTab.Contract && isVerifyContract">
+            [class.verify-contract]="
+              tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed
+            ">
             <span class="tab-title">{{ tab.value }}</span>
             <img
-              *ngIf="tab.key === contractTab.Contract && isVerifyContract"
+              *ngIf="tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed"
               src="assets/icons/icons-svg/color/check-circle.svg"
               alt="contract_verification"
               width="16px"
@@ -22,7 +28,7 @@
   <div class="mt-5">
     <app-contract-table
       [length]="25"
-      *ngIf="countCurrent === ''"
+      *ngIf="countCurrent === contractTab.Transactions"
       [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"
