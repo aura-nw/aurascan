@@ -106,19 +106,22 @@
     </div>
     <div class="card-footer pt-0">
       <div class="proposal__summary-total" *ngIf="!votingBarLoading">
-        <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-2 fw-semibold">Current Turnout</div>
-          <div class="col-12 col-md-10">{{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%</div>
-        </div>
-        <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-2 fw-semibold">Quorum</div>
-          <div class="col-12 col-md-10">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</div>
-        </div>
-        <div class="row mb-3" *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-          <div class="col-12 col-md-10 small-body text--light-gray">
-            {{ proposalDetail.total_has_voted }} of {{ proposalDetail.total_bonded_token }} has voted
+        <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+          <div class="row mb-3 small-body">
+            <div class="col-12 col-md-2 fw-semibold">Current Turnout</div>
+            <div class="col-12 col-md-10">{{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%</div>
           </div>
-        </div>
+          <div class="row mb-3 small-body">
+            <div class="col-12 col-md-2 fw-semibold">Quorum</div>
+            <div class="col-12 col-md-10">{{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12 col-md-10 small-body text--light-gray">
+              {{ proposalDetail.total_has_voted }} of
+              {{ proposalDetail.total_bonded_token }} has voted
+            </div>
+          </div>
+        </ng-container>
         <div class="row mb-3 small-body">
           <div class="col-12 col-md-2 fw-semibold">Total:</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">

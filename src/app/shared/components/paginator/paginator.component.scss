@@ -44,6 +44,7 @@
 
 .position-paginator {
     justify-content: flex-end;
+
     @media (max-width: 991.99px) {
         justify-content: center;
     }

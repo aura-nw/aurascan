@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
@@ -39,6 +39,7 @@ export class SummaryInfoComponent implements OnInit {
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
     public commonService: CommonService,
+    private numberPipe: DecimalPipe,
   ) {}
 
   ngOnInit(): void {
@@ -272,6 +273,12 @@ export class SummaryInfoComponent implements OnInit {
         key = powers[i].key;
         break;
       }
+    }
+    
+    if (key === '') {
+      let numberVote: string;
+      numberVote = this.numberPipe.transform(abs, this.global.formatNumberOnlyDecimal);
+      return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;
   }

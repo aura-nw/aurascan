@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
@@ -69,6 +69,6 @@ import { ProposalComponent } from './proposal.component';
     PaginatorModule,
     ClickOutsideModule,
   ],
-  providers: [ProposalService, MappingErrorService],
+  providers: [ProposalService, MappingErrorService, DecimalPipe],
 })
 export class ProposalModule {}

@@ -30,11 +30,10 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     public translate: TranslateService,
     public global: Globals,
     public commonService: CommonService,
-    private layout: BreakpointObserver
+    private layout: BreakpointObserver,
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {}
 
@@ -43,7 +42,13 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
       this.dataSource.data.forEach((f) => {
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
-          f.type_format = f.type.toLowerCase().indexOf('perio') > -1 ? 'Periodic' : 'Delayed';
+          if (f.type.toLowerCase().indexOf('continuous') > -1) {
+            f.type_format = 'Continuous';
+          } else if (f.type.toLowerCase().indexOf('period') > -1) {
+            f.type_format = 'Period';
+          } else {
+            f.type_format = 'Delayed';
+          }
         }
       });
     }
@@ -64,7 +69,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   }
   paginatorEvent(event: PageEvent): void {}
 
-  showPageEvent(event): void{
+  showPageEvent(event): void {
     this.currentPage = event?.target.innerText - 1;
   }
 }

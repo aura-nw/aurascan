@@ -1,0 +1,17 @@
+.txt-copied {
+    height: 0;
+    opacity: 0;
+    -webkit-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+    padding: 0px 8px;
+    &.show {
+      opacity: 1;
+      height: 24px;
+    }
+  }
+.break-word {
+  word-break: break-word;
+}
+::ng-deep .contact-qr-modal .modal-content {
+  padding-bottom: 16px !important;
+}

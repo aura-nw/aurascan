@@ -1,0 +1,86 @@
+<ng-container *ngIf="textSearch && textSearch?.length > 0">
+  <section class="text--white">
+    <div *ngIf="isSearchTx" class="p-4 card main-tab">
+      <p class="small-text d-flex align-item-center">
+        <img src="../../../../../../../assets/images/icons/token-tx.png" class="mr-2" alt="" width="15" height="15" />
+        FILTER BY TOKEN TXN HASH
+      </p>
+      <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
+    </div>
+    <div *ngIf="!isSearchTx && isSearchAddres" class="card main-tab p-3">
+      <div class="table-responsive">
+        <table class="aura-basic-table w-100">
+          <tr>
+            <td>
+              <div class="small-text d-flex align-item-center mb-1">
+                <img
+                  src="../../../../../../../assets/images/icons/token-holder.png"
+                  class="mr-2"
+                  alt=""
+                  width="15"
+                  height="15" />
+                FILTER BY TOKEN HOLDER
+              </div>
+              <a class="text--green" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
+            </td>
+            <td>
+              <div class="small-text txt-light mb-1">BALANCE</div>
+              0.004999999999999999 stETH
+            </td>
+            <td>
+              <div class="small-text txt-light mb-1">VALUE</div>
+              $10.14 ( ~0.00490867635170134 Eth)
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+</ng-container>
+<section class="card main-tab mt-5 p-4">
+  <div class="d-flex justify-content-between tab-wrapper tab-token">
+    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-8">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a ngbNavLink (click)="changeTab(tab.key)">
+            <span class="tab-title">{{ tab.value }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+    <div class="d-flex align-item-center justify-content-end pd-1">
+      <form class="aura-form single-input-field search-form">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control aura-form"
+            placeholder="Search for Token Name or Address"
+            [(ngModel)]="searchTemp"
+            [maxLength]="maxLengthSearch"
+            name="search"
+            (keyup.enter)="handleSearch()"
+            autocomplete="off" />
+          <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
+            <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+          </button>
+          <button
+            type="reset"
+            class="btn-reset {{ !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : '' }}"
+            (click)="resetSearch()">
+            <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="mt-5">
+    <app-token-transfers-tab
+      *ngIf="countCurrent === ''"
+      [type]="'TABLE_TOKEN'"
+      [keyWord]="textSearch"
+      (resultLength)="getLength($event)"></app-token-transfers-tab>
+    <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch"></app-token-holders-tab>
+    <app-token-info-tab *ngIf="countCurrent === tokenTab.Info"></app-token-info-tab>
+    <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract"></app-token-contract-tab>
+  </div>
+</section>

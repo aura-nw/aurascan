@@ -22,6 +22,7 @@ export class TransactionMessagesComponent implements OnInit {
   eTransType = TRANSACTION_TYPE_ENUM;
   amount = 0;
   amountClaim = 0;
+  storeCodeId = 0;
   dateVesting: string;
   isVestingDelay: boolean;
   validatorName = '';
@@ -44,6 +45,9 @@ export class TransactionMessagesComponent implements OnInit {
     ) {
       this.getListValidator();
       this.checkGetReward();
+    }
+    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
+      this.checkStoreCode();
     }
     //get amount of transaction
     this.amount = getAmount(
@@ -72,7 +76,7 @@ export class TransactionMessagesComponent implements OnInit {
               this.validatorName = validatorSrcAddress?.title || '';
 
               const validatorDstAddress = this.listValidator.find(
-                (f) => f.operator_address === messages[0]?.validator_dst_address, 
+                (f) => f.operator_address === messages[0]?.validator_dst_address,
               );
               this.validatorNameDes = validatorDstAddress?.title || '';
             } else if (messages?.length > 0) {
@@ -90,7 +94,7 @@ export class TransactionMessagesComponent implements OnInit {
 
   checkGetReward(): void {
     try {
-      const jsonData = JSON.parse(this.transactionDetail.raw_log);
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
       if (jsonData && jsonData[0]) {
         jsonData.forEach((j) => {
           let rawType = 'transfer';
@@ -124,6 +128,18 @@ export class TransactionMessagesComponent implements OnInit {
             }
           }
         });
+      }
+    } catch (e) {}
+  }
+
+  checkStoreCode(): void {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      if (jsonData && jsonData[0]) {
+        const temp = jsonData[0]?.events.filter((f) => f.type === 'store_code');
+        if (temp) {
+          this.storeCodeId = temp[0]?.attributes[0]?.value || 0;
+        }
       }
     } catch (e) {}
   }

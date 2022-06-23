@@ -101,6 +101,7 @@ h5,
 }
 $textColors: (
   "white",
+  "white-2",
   "light-gray",
   "dark-gray",
   "black",
@@ -111,7 +112,10 @@ $textColors: (
   "neutrals-3",
   "neutrals-4",
   "neutrals-6",
-  "neutrals-8"
+  "neutrals-8",
+  "contract",
+  "active",
+  "greyscale-1"
 );
 @each $color in $textColors {
   .text--#{$color} {

@@ -30,7 +30,7 @@
     .nav-item {
       padding: var(--spacer-5) 15px;
       @media (min-width: 1440px) {
-        padding: var(--spacer-5) 30px;
+        padding: var(--spacer-5) 20px;
       }
       &:first-child {
         padding-left: 0;
@@ -47,8 +47,8 @@
         font-size: 2rem;
         line-height: 2.3rem;
         @media (min-width: 1440px) {
-          font-size: 2.6rem;
-          line-height: 3.2rem;
+          font-size: 2rem;
+          line-height: 2.5rem;
         }
         &:hover, &.active {
           i.icon, span {
@@ -59,12 +59,45 @@
     }
     i.icon {
       font-size: 2.3rem;
-      @media (min-width: 1440px) {
-        font-size: 3.2rem;
-        &.icon-collab {
-          font-size: 2.8rem;
+    }
+    .nav-link__panel {
+      position: absolute;
+      bottom: -100%;
+      transform: translateY(80%);
+      background-color: var(--aura-bg-form);
+      border-radius: 25px;
+      z-index: 1500;
+      border: none;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .35s ease-in-out;
+      a {
+        display: block;
+        font-size: 1.4rem;
+        color: var(--aura-light-gray);
+        padding: 8px 16px;
+        transition: all .35s ease-in-out;
+        &:first-child {
+          padding-top: 16px;
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
+        }
+        &:last-child {
+          padding-bottom: 16px;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+        }
+        &:hover {
+          color: var(--aura-white);
+          background-color: var(--aura-dark-gray);
         }
       }
     }
+    .nav-item.dropdown:hover {
+        .nav-link__panel {
+          border: 2px solid var(--aura-dark-gray);
+          max-height: 900px;
+        }
+      }
   }
 }
