@@ -11,7 +11,7 @@ import { getFee } from 'src/app/core/utils/signing/fee';
 import {
   NUMBER_CONVERT,
   PAGE_SIZE_OPTIONS,
-  STABLE_UTOKEN
+  AURA_DENOM
 } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
@@ -452,7 +452,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -500,7 +500,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             from: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -528,7 +528,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to_address: this.selectedValidator,
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
