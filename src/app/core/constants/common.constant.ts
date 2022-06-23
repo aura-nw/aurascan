@@ -8,6 +8,8 @@ export const MY_FORMATS = {
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'YYYY',
   },
+  PRICE_6: '1.6-6',
+  PRICE_2: '1.2-2',
 };
 
 export const NETWORK = [
@@ -41,9 +43,9 @@ export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 export const VALIDATOR_ADDRESS_PREFIX = 'auravaloper';
 
-export const GAS_ESTIMATE = {
-  DEFAULT: '400000',
-};
+export const ADDRESS_PREFIX = 'aura';
+
+export const GAS_ESTIMATE = '400000';
 
 export const AURA_DENOM = 'uaura';
 

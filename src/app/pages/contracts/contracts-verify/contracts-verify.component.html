@@ -1,0 +1,93 @@
+<section class="contract-verify">
+  <div class="title-small fw-500 text--white-2 mb-6">Verify & Publish Contract Source Code</div>
+  <div class="divider divider-horizontal"></div>
+  <div class="small-text mt-6 text--light-gray">
+    Source code verification provides transparency for users interacting with smart contracts. By uploading link GitHub
+    source code, Aurascan will match the compiled code with that on the blockchain. Just like contracts, a smart
+    contract should provide end users with more information on what they are "digitally signing" for and give users an
+    opportunity to audit the code to independently verify that it actually does what it is supposed to do.
+  </div>
+  <div class="card mt-6">
+    <div class="card-body">
+      <!-- Tabs -->
+      <ul
+        ngbNav
+        #customNav="ngbNav"
+        [activeId]="tabCurrent"
+        class="aura-nav-tabs nav-tabs nav-tabs-custom">
+        <ng-container *ngFor="let tab of TAB; index as index">
+          <li [ngbNavItem]="index">
+            <a ngbNavLink (click)="changeTab(tab.id)" class="fw-semibold">
+              <span class="small-body">{{ tab.value }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+      <!-- Contract Source Code -->
+      <form
+        *ngIf="tabCurrent === 0"
+        [formGroup]="contractForm"
+        (ngSubmit)="onSubmit()"
+        class="aura-form mt-6"
+        autocomplete="off">
+        <div class="form-group mb-6">
+          <label for="address" class="form-label">Contract Address to verify </label>
+          <input
+            formControlName="contract_address"
+            type="text"
+            class="form-control"
+            id="address"
+            placeholder="aura..." />
+          <div class="error" *ngIf="formControls['contract_address'].invalid">Contract address is required!</div>
+        </div>
+        <div class="form-group mb-6">
+          <label for="link" class="form-label">
+            Link GitHub Source Code
+            <div class="d-block small-text text--light-gray">
+              Enter the github URL at the right commit version of source code you would like to verify
+              <br />
+              e.g
+              <br />
+              https://github.com/***/commit/***
+            </div>
+          </label>
+          <input formControlName="link" type="text" class="form-control" id="link" maxlength="200" />
+          <ng-container *ngIf="formControls['link'].touched">
+            <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
+            <div class="error" *ngIf="formControls['link'].errors?.maxlength">
+              Link GitHub Source Code is not allowed more 200 characters!
+            </div>
+            <div class="error" *ngIf="formControls['link'].errors?.pattern && !formControls['link'].errors?.required">
+              Invalid link Github Source Code
+            </div>
+          </ng-container>
+        </div>
+        <div class="form-group mb-6">
+          <label for="version" class="form-label">Compiler Version</label>
+          <mat-select
+            #version
+            id="version"
+            formControlName="compiler_version"
+            class="form-control select-input-field select-input--flat"
+            panelClass="aura-optional-panel aura-optional-panel--flat"
+            [disableOptionCentering]="true"
+            placeholder="Please select compiler version">
+            <mat-option *ngFor="let item of versionList" [value]="item.value">
+              {{ item.label }}
+            </mat-option>
+          </mat-select>
+
+          <ng-container *ngIf="formControls['compiler_version'].touched">
+            <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
+          </ng-container>
+        </div>
+        <div class="d-flex justify-content-center align-items-center body">
+          <button class="button text--white" type="button" (click)="handleReset()">Reset</button>
+          <button class="button button-outline button-outline__in-card ml-4" type="submit">
+            <span class="text-gradient">Verify & Publish</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

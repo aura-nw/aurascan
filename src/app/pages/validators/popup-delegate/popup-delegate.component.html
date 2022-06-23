@@ -9,8 +9,8 @@
   <div class="box-token mt-8 body small-body-mob">
     <div class="fw-500">My delegation</div>
     <div class="mt-2 text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
-    <div class="mt-6 fw-500">Available Balance</div>
-    <div class="mt-2 text--greyscale-4">{{data?.availableToken || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
+    <div class="mt-6 fw-500">Delegatable Balance</div>
+    <div class="mt-2 text--greyscale-4">{{availableToken || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
     <div class="mt-6 fw-500">Amount to Delegate</div>
   </div>
 </ng-container>
@@ -38,8 +38,8 @@
       <div class="text--greyscale-4">{{data?.validatorDetail?.reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
     </div>
     <div class="d-lg-flex">
-      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Available Balance</div>
-      <div class="text--greyscale-4">{{data?.availableToken || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Delegatable Balance</div>
+      <div class="text--greyscale-4">{{availableToken || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
     </div>
   </div>
 </ng-container>

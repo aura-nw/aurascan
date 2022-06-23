@@ -17,21 +17,15 @@
     margin-bottom: 32px;
 }
 
+.mobile-tab {
+    overflow: hidden;
+    overflow-x: auto;
+}
+
 .card__title-mobile {
     font-size: 2rem;
     line-height: 2.3rem;
     margin-bottom: 16px;
-}
-
-.mobile-tab{
-    display: flex;
-    width: 100%;
-    flex-wrap: nowrap;
-    overflow: auto;
-}
-
-.mobile-tab::-webkit-scrollbar{
-    display: none;
 }
 
 :host::ng-deep {

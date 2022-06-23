@@ -10,6 +10,14 @@
       justify-content: space-between;
       align-items: center;
       height: 50px;
+      &.small-input {
+        height: 36px;
+        padding: var(--spacer-1) 22px var(--spacer-1) var(--spacer-5);
+        input {
+          font-size: 14px;
+          font-weight: 400;
+        }
+      }
       input {
         max-width: 80%;
         padding: 0;
@@ -61,6 +69,19 @@
       width: 24px;
       height: 24px;
       background: url("../../icons/icons-svg/white/chevron-down.svg") center no-repeat;
+    }
+    &.select-input--flat {
+      .mat-select-arrow-wrapper .mat-select-arrow {
+        background: url("../../icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      }
+      .mat-select-placeholder {
+        color: var(--aura-light-gray);
+      }
+    }
+    &.select-input__arrow--gray {
+      .mat-select-arrow-wrapper .mat-select-arrow {
+        background: url("../../icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      }
     }
   }
   .input-group {
@@ -119,6 +140,43 @@
       }
     }
   }
+  .form-group {
+    label {
+      font-size: 1.4rem;
+      line-height: 21px;
+      color: var(--aura-white);
+      margin-bottom: var(--spacer-2);
+      font-weight: 400;
+      &.src-only {
+        display: none;
+      }
+    }
+    input.form-control, .select-input--flat {
+      border-radius: var(--spacer-2);
+      background-color: var(--aura-dark-gray);
+      padding: var(--spacer-2) var(--spacer-4);
+      color: #E6E7E8;
+      font-size: 1.4rem;
+      font-weight: 400;
+      height: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &::placeholder {
+        color: var(--aura-light-gray);
+      }
+    }
+    input.form-control:disabled {
+      pointer-events: none;
+    }
+    .error {
+      color: var(--aura-danger);
+      font-size: 1.4rem;
+      line-height: 2.1rem;
+      font-weight: 400;
+      margin-top: var(--spacer-2);
+    }
+  }
 }
 
 .aura-optional-panel {
@@ -140,7 +198,21 @@
       border-bottom-right-radius: 25px;
     }
   }
+  &--flat {
+    border-radius: var(--spacer-2) !important;
+    mat-option {
+      &:first-child {
+        border-top-left-radius: var(--spacer-2);
+        border-top-right-radius: var(--spacer-2);
+      }
+      &:last-child {
+        border-bottom-left-radius: var(--spacer-2);
+        border-bottom-right-radius: var(--spacer-2);
+      }
+    }
+  }
 }
+
 .aura-dropdown {
   position: relative;
   font-size: 1.6rem;

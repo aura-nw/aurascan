@@ -1,0 +1,56 @@
+
+<div class="d-flex justify-content-between justify-content-lg-start mb-2 mb-lg-5">
+  <h1 class="title-small fw-500 mb-0 text--white" id="ttiopa123">
+    Contract
+  </h1>
+  <div class="d-flex align-items-center ml-2">
+    <span class="d-none d-lg-block text--light-gray body fw-normal ml-1">{{ contractAddress }}</span>
+    <img
+            src="assets/icons/icons-svg/basic/copy.svg"
+            class="ml-2 cursor-pointer"
+            alt=""
+            width="16" height="16"
+            matTooltip="Copied!" #tooltip="matTooltip"
+            (mouseenter)="$event.stopImmediatePropagation()"
+            (mouseleave)="$event.stopImmediatePropagation()"
+            (click)="copyData(); tooltip.toggle();" />
+    <img
+            src="assets/icons/icons-svg/basic/qrcode-scan.svg"
+            class="ml-2 cursor-pointer"
+            alt=""
+            width="16"
+            height="16"
+            (click)="viewQrAddress(modalManage)" />
+  </div>
+</div>
+<div class="d-lg-none mb-4"><span class="text--light-gray small-body fw-500 break-word">{{ contractAddress }}</span></div>
+<div class="row">
+  <div class="col-12 col-lg-6">
+    <app-contracts-overview-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contracts-overview-card>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <app-contract-info-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
+  </div>
+</div>
+
+<app-contract-content
+  *ngIf="contractDetail"
+  [contractsAddress]="contractAddress + ''"
+  [contractTypeData]="contractDetail.contract_verification"></app-contract-content>
+
+<div class="col-lg-3">
+  <ng-template #modalManage let-modal>
+    <div class="box-address">
+      <div class="txt-right mb-4 cursor-pointer">
+        <img
+          src="../../../../assets/images/icons/close-popup.png"
+          alt=""
+          width="16"
+          height="16"
+          (click)="closePopup()" />
+      </div>
+      <app-qr [address]="contractAddress?.toString() || ''"> </app-qr>
+    </div>
+  </ng-template>
+</div>
