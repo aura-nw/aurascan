@@ -166,6 +166,9 @@
         color: var(--aura-light-gray);
       }
     }
+    input.form-control:disabled {
+      pointer-events: none;
+    }
     .error {
       color: var(--aura-danger);
       font-size: 1.4rem;
