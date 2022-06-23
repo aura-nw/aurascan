@@ -1,0 +1,36 @@
+<section class="card main-tab p-4">
+  <div class="d-flex justify-content-between tab-wrapper tab-contract">
+    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
+      <ng-container *ngFor="let tab of TABS; index as index">
+        <li [ngbNavItem]="index">
+          <a
+            ngbNavLink
+            (click)="changeTab(tab.key)"
+            [class.verify-contract]="tab.key === contractTab.Contract && isVerifyContract">
+            <span class="tab-title">{{ tab.value }}</span>
+            <img
+              *ngIf="tab.key === contractTab.Contract && isVerifyContract"
+              src="assets/icons/icons-svg/color/check-circle.svg"
+              alt="contract_verification"
+              width="16px"
+              height="16px" />
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="mt-5">
+    <app-contract-table
+      [length]="25"
+      *ngIf="countCurrent === ''"
+      [dataList]="contractTransaction"
+      [templates]="templates"
+      [contractInfo]="contractInfo"
+      (onViewSelected)="filterTransaction($event)"></app-contract-table>
+    <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
+    <app-contract
+      *ngIf="countCurrent === contractTab.Contract"
+      [contractTypeData]="contractTypeData"
+      [contractsAddress]="contractsAddress"></app-contract>
+  </div>
+</section>

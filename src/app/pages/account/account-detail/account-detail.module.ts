@@ -12,15 +12,13 @@ import { TransactionService } from '../../../core/services/transaction.service';
 import { QrModule } from '../../../shared/components/qr/qr.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../../shared/components/paginator/paginator.module';
-import { SharedModule } from "../../../shared/shared.module";
+import { SharedModule } from '../../../shared/shared.module';
 import { AccountDetailRoutingModule } from './account-detail-routing.module';
 import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountDetailComponent } from './account-detail.component';
-import { CardTypeOneModule } from '../../../../app/shared/components/card/card-type-one/card-type-one.module';
+
 @NgModule({
-  declarations: [
-    AccountDetailComponent,
-  ],
+  declarations: [AccountDetailComponent],
   imports: [
     CommonModule,
     AccountDetailRoutingModule,
@@ -37,8 +35,7 @@ import { CardTypeOneModule } from '../../../../app/shared/components/card/card-t
     TableNoDataModule,
     PaginatorModule,
     QrModule,
-    CardTypeOneModule
   ],
-  providers: [TransactionService, AccountService, DecimalPipe]
+  providers: [TransactionService, AccountService, DecimalPipe],
 })
-export class AccountDetailModule { }
+export class AccountDetailModule {}

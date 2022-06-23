@@ -32,6 +32,10 @@ export class TableTemplate {
   isShort?: boolean;
   cssClass?: string;
   paramField?: string;
+  type?: string;
+  suffix?: string;
+  headerWidth?: number;
+  justify?: 'center' | 'flex-start' | 'flex-end'
 }
 
 export class ATBalanceDto {
@@ -135,9 +139,20 @@ export class CommonDataDto {
 export class DataDelegateDto {
   delegatedToken: string;
   availableToken: string;
+  delegatableVesting: string;
   stakingToken: string;
   historyTotalReward: number;
   stakingCurrentValidate: string;
   dialogMode: string = '';
   validatorDetail: any;
+}
+
+
+export class TableTemplate2 {
+  matColumnDef: string;
+  headerCellDef: string;
+  type: 'date' | 'numb' | 'status' | 'url' | 'prefix' | 'url-address' | 'moment-detail' | 'level' | '';
+  value?: string;
+  idColumnDef?: string;
+  headerWidth?: number;
 }

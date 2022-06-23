@@ -1,0 +1,28 @@
+.box-token-info {
+  .flex-item {
+    width: 50%;
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 1px;
+      background-color: var(--aura-dark-gray);
+    }
+  }
+  table.aura-basic-table {
+    min-height: 224px;
+    tr,
+    td {
+      color: var(--aura-contract);
+      height: 56px;
+      padding: 0px var(--spacer-4);
+    }
+    tr:first-child td:first-child {
+      width: 30%;
+      color: var(--aura-white);
+    }
+  }
+}

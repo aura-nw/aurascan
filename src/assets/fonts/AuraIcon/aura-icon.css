@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ico-aura';
-  src:  url('ico-aura.eot?w8bdhl');
-  src:  url('ico-aura.eot?w8bdhl#iefix') format('embedded-opentype'),
-  url('ico-aura.ttf?w8bdhl') format('truetype'),
-  url('ico-aura.woff?w8bdhl') format('woff'),
-  url('ico-aura.svg?w8bdhl#ico-aura') format('svg');
+  src:  url('ico-aura.eot?28oy7s');
+  src:  url('ico-aura.eot?28oy7s#iefix') format('embedded-opentype'),
+  url('ico-aura.ttf?28oy7s') format('truetype'),
+  url('ico-aura.woff?28oy7s') format('woff'),
+  url('ico-aura.svg?28oy7s#ico-aura') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -39,6 +39,12 @@ i {
 }
 .icon-user:before {
   content: "\e90b";
+}
+.icon-file-document:before {
+  content: "\e90f";
+}
+.icon-coin:before {
+  content: "\e911";
 }
 .icon-collab:before {
   content: "\e90c";

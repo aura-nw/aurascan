@@ -1,0 +1,16 @@
+.border-box {
+  border: 1px solid var(--aura-light-gray);
+  border-radius: var(--spacer-1);
+  padding: var(--spacer-4);
+  padding-bottom: 6px;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--aura-white);
+}
+pre.code-block {
+  padding: var(--spacer-1) var(--spacer-4);
+  background: var(--aura-dark-gray);
+  border-radius: var(--spacer-2);
+  color: var(--aura-contract);
+  white-space: pre-wrap;
+}

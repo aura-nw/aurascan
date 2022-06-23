@@ -82,6 +82,14 @@
         }
     },
     "MENUITEMS": {
+        "TOKEN": {
+            "TEXT": "Token",
+            "BADGE": "04"
+        },
+        "CONTRACT": {
+            "TEXT": "Contracts",
+            "BADGE": "04"
+        },
         "DASHBOARDS": {
             "TEXT": "Dashboard",
             "BADGE": "04"
@@ -113,6 +121,10 @@
         "USER_MANAGEMENT": {
             "TEXT": "User management",
             "BADGE": "04"
+        },
+        "MORE": {
+            "TEXT": "More",
+            "BADGE": "03"
         },
         "APPS": {
             "TEXT": "Apps",

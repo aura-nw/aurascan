@@ -2,7 +2,7 @@
 <section class="account-detail" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="row">
     <div class="col-lg-3 col-12">
-      <div class="card">
+      <div class="card card-h-100">
         <div class="box-account article-1">
           <div>
             <div class="mb-8 qr-code d-none d-lg-block">
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="col-lg-9 col-12">
-      <div class="card">
+      <div class="card card-h-100">
         <div class="px-4 py-4 px-lg-6 py-lg-6 article-1">
           <div class="d-flex align-items-center justify-content-between mb-4 mb-lg-8">
             <div class="d-flex align-items-center">
@@ -328,7 +328,6 @@
                   </table>
                 </ng-container>
                 <ng-container *ngIf="breakpoint.value.matches">
-                  <!-- <app-card-type-one [data]="dataSource?.data"></app-card-type-one> -->
                   <app-card-mob-simple
                     *ngFor="let data of dataSource?.data"
                     [link]="'/transaction/' + data.tx_hash"

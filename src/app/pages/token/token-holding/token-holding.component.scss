@@ -1,0 +1,25 @@
+.overview {
+  &-row {
+    display: flex;
+  }
+  &-col {
+    padding: 12px 24px;
+    &:not(:last-child) {
+      border-right: 1px solid #353945;
+    }
+  }
+  &__label {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    font-weight: 400;
+    color: var(--aura-light-gray);
+    margin-bottom: var(--spacer-1);
+  }
+  &__content {
+    display: inline-flex;
+    color: var(--aura-white);
+    font-size: 2rem;
+    line-height: 2.3rem;
+    font-weight: 500;
+  }
+}
