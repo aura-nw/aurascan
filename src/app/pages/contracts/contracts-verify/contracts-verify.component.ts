@@ -130,7 +130,14 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       title: '',
       callback: (e) => {
         if (e) {
-          this.router.navigate(['contracts', this.contractAddress]);
+          this.router.navigate(['contracts', this.contractAddress], {
+            queryParams: {
+              tabId: 'contract',
+            },
+            state: {
+              reload: true,
+            },
+          });
         } else {
           this.handleReset();
         }
