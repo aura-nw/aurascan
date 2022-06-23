@@ -7,19 +7,18 @@
     contract should provide end users with more information on what they are "digitally signing" for and give users an
     opportunity to audit the code to independently verify that it actually does what it is supposed to do.
   </div>
-  <div class="card mt-6" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="card mt-6">
     <div class="card-body">
       <!-- Tabs -->
       <ul
         ngbNav
         #customNav="ngbNav"
         [activeId]="tabCurrent"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom"
-        [class.mobile-tab]="breakpoint.value.matches">
+        class="aura-nav-tabs nav-tabs nav-tabs-custom">
         <ng-container *ngFor="let tab of TAB; index as index">
           <li [ngbNavItem]="index">
             <a ngbNavLink (click)="changeTab(tab.id)" class="fw-semibold">
-              <span class="small-body" [class.tab-title-mobile]="breakpoint.value.matches">{{ tab.value }}</span>
+              <span class="small-body">{{ tab.value }}</span>
             </a>
           </li>
         </ng-container>
