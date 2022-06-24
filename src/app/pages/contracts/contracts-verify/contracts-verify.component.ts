@@ -1,11 +1,13 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
+import { IResponsesTemplates } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
-import { ContractService } from '../../../core/services/contract.service';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -19,34 +21,31 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractName = '';
   isVerified = false;
 
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
   TAB = [
     {
       id: 0,
       value: 'Contract Source Code',
     },
-    // {
-    //   id: 1,
-    //   value: 'Compiler Output',
-    // },
   ];
 
   versionList = CONTRACT_VERSIONS;
 
   constructor(
-    private layout: BreakpointObserver,
     private contractService: ContractService,
     private route: ActivatedRoute,
     private router: Router,
     private wSService: WSService,
     private dlgService: DialogService,
   ) {
-    if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
-      this.contractAddress = this.router.getCurrentNavigation().extras.state.contractAddress;
-      this.contractTxHash = this.router.getCurrentNavigation().extras.state.contractTxHash;
-      this.contractName = this.router.getCurrentNavigation().extras.state.contractName;
-    } else {
+    this.contractAddress = this.route.snapshot.paramMap.get('addressId');
+    this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
+    this.contractName = this.route.snapshot.paramMap.get('contractName');
+
+    if (
+      this.contractAddress.trim().length === 0 ||
+      this.contractTxHash.trim().length === 0 ||
+      this.contractName.trim().length === 0
+    ) {
       this.router.navigate(['contracts']);
     }
   }
@@ -89,6 +88,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.formControls['link'].markAsTouched();
     this.formControls['compiler_version'].markAsTouched();
+
     if (this.contractForm.valid) {
       // handle contract_address & commit
       const link = this.contractForm.controls['link'].value;
@@ -100,31 +100,47 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         compiler_version: this.contractForm.controls['compiler_version'].value,
         commit: this.contractForm.controls['commit'].value,
       };
-      this.contractService.verifyContract(contractData).subscribe((res) => {
-        this.socket();
+
+      this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
+        if (res.data) {
+          this.dlgServiceOpen();
+          this.wSService.subscribeVerifyContract(contractData.contract_address);
+        }
       });
     }
   }
 
-  socket(): void {
-    this.wSService.connect();
-    const wsData = { event: 'eventVerifyContract' };
-    this.wSService.on('register', wsData).subscribe((data: any) => {
-      if (this.contractAddress === data?.ContractAddress) {
-        this.isVerified = true;
-      }
-    });
+  // socket(): void {
+  //   this.wSService.connect();
+  //   const wsData = { event: 'eventVerifyContract' };
 
-    this.dlgServiceOpen();
-  }
+  //   this.wSService.on('register', wsData).subscribe((data: any) => {
+  //     if (this.contractAddress === data?.ContractAddress) {
+  //       this.isVerified = true;
+  //     }
+  //   });
+
+  //   this.dlgServiceOpen();
+  // }
 
   dlgServiceOpen(): void {
     this.dlgService.showDialog({
       content:
         'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
       title: '',
-      callback: () => {
-        this.router.navigate(['contracts', this.contractAddress]);
+      callback: (e) => {
+        if (e) {
+          this.router.navigate(['contracts', this.contractAddress], {
+            queryParams: {
+              tabId: 'contract',
+            },
+            state: {
+              reload: true,
+            },
+          });
+        } else {
+          this.handleReset();
+        }
       },
     });
   }

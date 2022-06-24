@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
@@ -10,17 +12,17 @@ import { ContractTab, ContractVerifyType } from '../../../../core/constants/cont
   templateUrl: './contract-content.component.html',
   styleUrls: ['./contract-content.component.scss'],
 })
-export class ContractContentComponent implements OnInit {
+export class ContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
   @Input() contractTypeData: ContractVerifyType;
 
   TABS = CONTRACT_TAB.filter((vote) =>
     [
       ContractTab.Transactions,
-      ContractTab.Cw20Token,
+      // ContractTab.Cw20Token,
       ContractTab.Contract,
-      ContractTab.Events,
-      ContractTab.Analytics,
+      // ContractTab.Events,
+      // ContractTab.Analytics,
     ].includes(vote.key),
   ).map((vote) => ({
     ...vote,
@@ -28,12 +30,14 @@ export class ContractContentComponent implements OnInit {
     key: vote.key === ContractTab.Transactions ? '' : vote.key,
   }));
 
-  countCurrent: string = '';
+  countCurrent: string = ContractTab.Transactions;
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
-  isVerifyContract = false;
+
   contractTransaction;
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
+
+  activeId = 0;
 
   contractInfo = {
     contractsAddress: this.contractsAddress,
@@ -42,15 +46,45 @@ export class ContractContentComponent implements OnInit {
     popover: true,
   };
 
+  destroyed$ = new Subject();
+
   constructor(private contractService: ContractService, private router: Router, private aRoute: ActivatedRoute) {}
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 
   ngOnInit(): void {
     this.contractInfo.contractsAddress = this.contractsAddress;
     this.getTransaction();
+
+    this.aRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+      const { tabId } = params;
+      if (tabId && Object.values(ContractTab).includes(tabId as ContractTab)) {
+        this.countCurrent = tabId as ContractTab;
+        const _tabId = this.TABS.findIndex((tab) => tab.key === tabId);
+        this.activeId = _tabId >= 0 ? _tabId : 0;
+
+        if (tabId === ContractTab.Contract) {
+          const reload = this.router.getCurrentNavigation()?.extras?.state?.reload;
+
+          if (reload) {
+            this.contractService.loadContractDetail(this.contractsAddress);
+          }
+        }
+      } else {
+        this.changeTab(ContractTab.Transactions);
+      }
+    });
   }
 
   changeTab(tabId): void {
-    this.countCurrent = tabId;
+    this.router.navigate([], {
+      relativeTo: this.aRoute,
+      queryParams: { tabId: tabId || ContractTab.Transactions },
+      queryParamsHandling: 'merge',
+    });
   }
 
   getTransaction(): void {
@@ -65,9 +99,6 @@ export class ContractContentComponent implements OnInit {
       this.contractService.getTransactions(payload).subscribe((res) => {
         if (res.data && Array.isArray(res.data)) {
           this.contractTransaction = res;
-          if (this.contractTypeData !== this.contractVerifyType.Unverifed) {
-            this.isVerifyContract = true;
-          }
         }
       });
     }

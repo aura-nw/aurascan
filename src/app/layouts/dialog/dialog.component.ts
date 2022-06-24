@@ -31,13 +31,14 @@ export class DialogComponent implements OnInit {
 
   close(): void {
     if (this.dialogData?.callback) {
-      this.dialogData.callback();
+      this.dialogData.callback(true);
     }
     this.dialogService.hideDialog();
   }
 
   clickOutside(isShow): void {
     if (this.enableOutSide) {
+      this.dialogData.callback(false);
       isShow && this.dialogService.hideDialog();
     }
   }

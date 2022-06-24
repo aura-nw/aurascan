@@ -9,9 +9,10 @@
         class="mr-2 mt-1" />
       <div>
         Are you the contract creator?
-        <span class="text--green fw-semibold ml-1 mr-1 cursor-pointer" (click)="navigateContractDetail()">
+        <a class="text--green fw-semibold ml-1 mr-1 cursor-pointer"
+           [routerLink]="['/contracts/verify', contractAddress, contractDetail.tx_hash, contractDetail.contract_name]">
           Verify and Publish
-        </span>
+        </a>
         your contract source code today!
       </div>
     </div>

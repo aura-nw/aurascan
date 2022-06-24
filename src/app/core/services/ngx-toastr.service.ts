@@ -1,54 +1,66 @@
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { ActiveToast, ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 import { MESSAGES_CODE } from '../constants/messages.constant';
 import { ResponseTemplate } from '../models/common.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NgxToastrService {
-  private positionClass = 'toast-bottom-right';
+  private POSITION_CLASS = 'toast-bottom-right';
 
-  constructor(private toastrService: ToastrService) { }
+  TIMEOUT_DEFAULT = 3000;
+
+  constructor(private toastrService: ToastrService) {}
 
   success(message: string, title = '', configTimeOut = 3000): void {
-    this.toastrService.success(message, title,
-      {
-        positionClass: this.positionClass,
-        timeOut: configTimeOut
-      });
+    this.toastrService.success(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: configTimeOut,
+    });
+  }
+
+  successWithTap(message: string, title = ''): Observable<void> {
+    return this.toastrService.success(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: 20000,
+    }).onTap;
   }
 
   error(message: string, title = '', configTimeOut = 3000): void {
-    this.toastrService
-      .error(message, title, {
-        positionClass: this.positionClass,
-        timeOut: configTimeOut
-      });
+    this.toastrService.error(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: 20000,
+    });
+  }
+
+  errorWithTap(message: string, title = ''): Observable<void> {
+    return this.toastrService.error(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: this.TIMEOUT_DEFAULT,
+    }).onTap;
   }
 
   errorApi(response: ResponseTemplate<any>, title = '', configTimeOut = 3000): void {
     const message = MESSAGES_CODE[response.ErrorCode]?.Code ? MESSAGES_CODE[response.ErrorCode].Code : response.Message;
-    this.toastrService
-      .error(message, title, {
-        positionClass: this.positionClass,
-        timeOut: configTimeOut
-      });
+    this.toastrService.error(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: configTimeOut,
+    });
   }
 
   warning(message: string, title = '', configTimeOut = 3000): void {
-    this.toastrService
-      .warning(message, title, {
-        positionClass: this.positionClass,
-        timeOut: configTimeOut
-      });
+    this.toastrService.warning(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: configTimeOut,
+    });
   }
 
   info(message: string, title = '', configTimeOut = 3000): void {
-    this.toastrService
-      .info(message, title, {
-        positionClass: this.positionClass,
-        timeOut: configTimeOut
-      });
+    this.toastrService.info(message, title, {
+      positionClass: this.POSITION_CLASS,
+      timeOut: configTimeOut,
+    });
   }
 }

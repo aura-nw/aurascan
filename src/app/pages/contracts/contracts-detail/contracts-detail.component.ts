@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -10,11 +11,13 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
   templateUrl: './contracts-detail.component.html',
   styleUrls: ['./contracts-detail.component.scss'],
 })
-export class ContractsDetailComponent implements OnInit {
+export class ContractsDetailComponent implements OnInit, OnDestroy {
   contractAddress: string | number;
   contractDetail: any;
   priceToken = 0;
   modalReference: any;
+
+  subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,9 +25,22 @@ export class ContractsDetailComponent implements OnInit {
     private modalService: NgbModal,
   ) {}
 
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.getContractDetail();
+
+    this.contractService.loadContractDetail(this.contractAddress);
+
+    this.subscription = this.contractService.contractObservable.subscribe((res: ResponseDto) => {
+      if (res) {
+        this.contractDetail = res?.data;
+        this.contractDetail.balance = balanceOf(this.contractDetail.balance);
+        this.contractDetail.price = this.contractDetail.balance * this.priceToken || 0;
+      }
+    });
   }
 
   getContractDetail(): void {
@@ -44,10 +60,10 @@ export class ContractsDetailComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(dummy);
     // fake event click out side copy button
-     // this event for hidden tooltip
-    setTimeout(function (){
+    // this event for hidden tooltip
+    setTimeout(function () {
       document.getElementById('ttiopa123').click();
-    }, 800)
+    }, 800);
   }
 
   viewQrAddress(staticDataModal: any): void {
