@@ -458,7 +458,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
 
       excuteStaking();
@@ -467,22 +467,24 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
-      const excuteClaim = async () => {
-        const { hash, error } = await createSignBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
-          message: {
-            from: this.listStakingValidator,
+      const executeClaim = async () => {
+        const { hash, error } = await createSignBroadcast(
+          {
+            messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
+            message: {
+              from: this.listStakingValidator,
+            },
+            senderAddress: this.userAddress,
+            network: ChainsInfo[this.walletService.chainId],
+            signingType: ESigningType.Keplr,
+            chainId: this.walletService.chainId,
           },
-          senderAddress: this.userAddress,
-          network: ChainsInfo[this.walletService.chainId],
-          signingType: ESigningType.Keplr,
-          chainId: this.walletService.chainId,
-        });
+          this.listStakingValidator?.length,
+        );
 
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
-      excuteClaim();
+      executeClaim();
     }
   }
 
@@ -506,9 +508,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
       excuteUnStaking();
     }
   }
@@ -516,7 +517,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleRedelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const excuteReStaking = async () => {
+      const executeReStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
@@ -534,10 +535,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
-      excuteReStaking();
+      executeReStaking();
     }
   }
 
@@ -589,7 +589,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.commissionLabel = label;
   }
 
-  checkStatuExcuteBlock(hash, error, msg) {
+  checkStatusExecuteBlock(hash, error, msg) {
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(error);
