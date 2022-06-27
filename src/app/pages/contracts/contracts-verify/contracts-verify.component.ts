@@ -6,7 +6,6 @@ import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
@@ -104,7 +103,16 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
         if (res.data) {
           this.dlgServiceOpen();
-          this.wSService.subscribeVerifyContract(contractData.contract_address);
+          this.wSService.subscribeVerifyContract(contractData.contract_address, () => {
+            this.router.navigate(['contracts', this.contractAddress], {
+              queryParams: {
+                tabId: 'contract',
+              },
+              state: {
+                reload: true,
+              },
+            });
+          });
         }
       });
     }
