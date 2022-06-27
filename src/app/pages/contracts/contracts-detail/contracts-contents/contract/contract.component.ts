@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ContractType } from 'src/app/core/constants/token.enum';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
@@ -28,7 +28,7 @@ export class ContractComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.getContractDetail();
+    this.getContractDetail2();
   }
 
   getContractDetail(notCheck = false) {
@@ -50,6 +50,50 @@ export class ContractComponent implements OnInit, OnDestroy {
           this.contractDetail = res.data;
         }
       });
+  }
+
+  getContractDetail2(notCheck = false) {
+    this.contractService.contractObservable
+      .pipe(
+        mergeMap(({ data }) => {
+          if (data) {
+            this.contractDetail = data;
+          }
+          if (data?.status === 'verifying' && !notCheck) {
+            this.isVerifying = true;
+          } else {
+            this.isVerifying = false;
+          }
+
+          return this.contractService.checkVerified(this.contractAddress);
+        }),
+      )
+      .subscribe(({ data }) => {
+        if (data?.status === 'verifying' && !notCheck) {
+          this.isVerifying = true;
+        } else {
+          this.isVerifying = false;
+        }
+      });
+
+    /*     this.contractService
+      .checkVerified(this.contractAddress)
+      .pipe(
+        mergeMap(({ data }) => {
+          if (data?.status === 'verifying' && !notCheck) {
+            this.isVerifying = true;
+          } else {
+            this.isVerifying = false;
+          }
+
+          return this.contractService.contractObservable;
+        }),
+      )
+      .subscribe((res: IResponsesTemplates<any>) => {
+        if (res.data) {
+          this.contractDetail = res.data;
+        }
+      }); */
   }
 
   changeTab(tabId): void {
