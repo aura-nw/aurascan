@@ -103,16 +103,22 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
         if (res.data) {
           this.dlgServiceOpen();
-          this.wSService.subscribeVerifyContract(contractData.contract_address, () => {
-            this.router.navigate(['contracts', this.contractAddress], {
-              queryParams: {
-                tabId: 'contract',
-              },
-              state: {
-                reload: true,
-              },
-            });
-          });
+          this.wSService.subscribeVerifyContract(
+            contractData.contract_address,
+            () => {
+              this.contractService.loadContractDetail(contractData.contract_address);
+            },
+            () => {
+              this.router.navigate(['contracts', this.contractAddress], {
+                queryParams: {
+                  tabId: 'contract',
+                },
+                state: {
+                  reload: true,
+                },
+              });
+            },
+          );
         }
       });
     }
