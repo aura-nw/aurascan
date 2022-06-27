@@ -29,6 +29,7 @@ export class TransactionMessagesComponent implements OnInit {
   validatorNameDes = '';
   listValidator: any[];
   listAmountClaim = [];
+  objMsgContract: any;
 
   constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
 
@@ -45,9 +46,13 @@ export class TransactionMessagesComponent implements OnInit {
     ) {
       this.getListValidator();
       this.checkGetReward();
-    }
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
       this.checkStoreCode();
+    } else if (
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
+    ) {
+      this.displayMsgRaw();
     }
     //get amount of transaction
     this.amount = getAmount(
@@ -130,6 +135,16 @@ export class TransactionMessagesComponent implements OnInit {
         });
       }
     } catch (e) {}
+  }
+
+  displayMsgRaw(): void {
+    const obj = this.transactionDetail?.tx?.tx?.body?.messages[0];
+    this.objMsgContract = Object.keys(obj).reduce((newObj, key) => {
+      if (key === 'msg' || key === 'funds') {
+        newObj[key] = obj[key];
+      }
+      return newObj;
+    }, {});
   }
 
   checkStoreCode(): void {
