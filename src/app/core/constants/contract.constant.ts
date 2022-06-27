@@ -24,6 +24,12 @@ export const CONTRACT_TAB = [
   },
 ];
 
+export const CONTRACT_RESULT = {
+  TBD: 'TBD',
+  CORRECT: 'Correct',
+  INCORRECT: 'Incorrect'
+}
+
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
 export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
