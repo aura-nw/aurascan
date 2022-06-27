@@ -82,7 +82,7 @@ export class WSService {
     });
   }
 
-  subscribeVerifyContract(contractAdr: string, tabCallBack?: () => void) {
+  subscribeVerifyContract(contractAdr: string, callBack?: () => void, tabCallBack?: () => void) {
     this.connect();
 
     this.contractAddress = contractAdr;
@@ -98,22 +98,25 @@ export class WSService {
     register.subscribe((data: any) => {
       const { Verified, ContractAddress } = (data && JSON.parse(data)) || { Verified: false, ContractAddress: '' };
 
-      if (Verified && ContractAddress === this.contractAddress) {
-        this.toastr
-          .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
-          .pipe(take(1))
-          .subscribe((_) => {
-            tabCallBack && tabCallBack();
-          });
-      } else {
-        this.toastr
-          .errorWithTap(
-            `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-          )
-          .pipe(take(1))
-          .subscribe((_) => {
-            tabCallBack && tabCallBack();
-          });
+      if (ContractAddress === this.contractAddress) {
+        callBack && callBack();
+        if (Verified) {
+          this.toastr
+            .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
+        } else {
+          this.toastr
+            .errorWithTap(
+              `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
+            )
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
+        }
       }
     });
   }
