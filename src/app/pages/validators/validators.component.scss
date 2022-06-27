@@ -9,16 +9,20 @@
     display: flex;
     width: 100%;
     height: 48px;
+
     .cumulative-share_cum {
       height: 100%;
       background: #ecf8f4;
     }
+
     .cumulative-share_fill {
       height: 100%;
       background: #c5f1de;
     }
   }
-  .box-undelegate, .box-validators {
+
+  .box-undelegate,
+  .box-validators {
     .card-header {
       @media (max-width: 991.99px) {
         padding-bottom: 0;
@@ -29,11 +33,13 @@
 
 .undelegate-item {
   padding: var(--spacer-3) 0;
+
   @media (min-width: 991.99px) {
     &:not(:last-child) {
       border-bottom: 1px solid var(--aura-light-gray);
     }
   }
+
   &.table-mobile__item {
     padding: 12px;
   }
@@ -42,14 +48,18 @@
 form.search-form {
   .input-group {
     background-color: var(--aura-bg-form);
+
     input.form-control {
       width: 100%;
+
       @media (min-width: 992px) {
         width: 300px;
       }
+
       @media (min-width: 1200px) {
         width: 500px;
       }
+
       @media (min-width: 1440px) {
         width: 782px;
       }
@@ -65,27 +75,34 @@ form.search-form {
   justify-content: center;
   align-items: center;
   min-height: 48px;
+
   @media (min-width: 992px) {
     min-height: 60px;
   }
+
   .mat-form-field-wrapper {
     width: 100%;
     text-align: center;
     padding: 0;
   }
+
   .mat-form-field-flex {
     padding: 0;
     background: transparent;
   }
-  .mat-select-placeholder, mat-select-trigger {
+
+  .mat-select-placeholder,
+  mat-select-trigger {
     position: relative;
     color: var(--aura-white);
     font-size: 1.4rem;
     line-height: 1.6rem;
+
     @media (min-width: 992px) {
       font-size: 1.6rem;
       line-height: 1.9rem;
     }
+
     &:after {
       content: '';
       position: absolute;
@@ -98,9 +115,11 @@ form.search-form {
       background-size: cover;
     }
   }
+
   .mat-select-arrow {
     border: none;
   }
+
   .mat-form-field-underline {
     display: none;
   }
@@ -108,6 +127,7 @@ form.search-form {
 
 .mat-option {
   background: #25252C;
+
   @media (max-width: 991.99px) {
     padding: var(--spacer-3) 0;
   }
@@ -115,17 +135,21 @@ form.search-form {
   .option-contain {
     font-size: 1.4rem;
     line-height: 1.6rem;
+
     @media (min-width: 992px) {
       font-size: 1.6rem;
       line-height: 2.4rem;
     }
+
     .option-lable {
       &:first-child {
         width: 50%;
       }
+
       &.active {
         span {
           position: relative;
+
           &:after {
             content: '';
             position: absolute;
@@ -149,6 +173,7 @@ form.search-form {
   padding: var(--spacer-3) 0 !important;
   border-radius: 8px;
   transform: translate3D(16px, 40px, 0) !important;
+
   @media (min-width: 992px) {
     padding: var(--spacer-4) 0 !important;
     transform: translate3D(16px, 45px, 0) !important;
@@ -163,6 +188,7 @@ form.search-form {
       line-height: 1.6rem;
       font-weight: 500;
       border-radius: 4px;
+
       @media (min-width: 992px) {
         font-size: 1.6rem;
         line-height: 2rem;
@@ -180,6 +206,7 @@ form.search-form {
 .button-outline__claim-reward {
   min-height: 40px;
   height: auto;
+
   @media (min-width: 992px) {
     height: 50px;
   }
@@ -195,14 +222,35 @@ form.search-form {
   align-items: center;
   overflow: visible;
   display: inline-block;
+
+  display: flex;
+  align-items: center;
+
+  .validator-avatar {
+    display: inline-block;
+    overflow: hidden;
+    margin-right: 8px;
+
+    width: 24px;
+    height: 24px;
+    border-radius: 1000px;
+
+    img {
+      width: 100%;
+    }
+
+  }
+
   .text-title {
     opacity: 0.5;
     min-width: 60px;
     display: block;
   }
+
   .label-jailed {
     text-align: center;
     transform: rotate(-15deg);
+
     span {
       position: absolute;
       font-weight: 700;
@@ -220,10 +268,12 @@ form.search-form {
       transform: translateX(-50%);
     }
   }
+
   @media (max-width: 991.99px) {
     .text-title {
       min-width: 30px;
     }
+
     .label-jailed span {
       margin-left: 10px;
     }
@@ -243,6 +293,7 @@ form.search-form {
   height: 32px;
   display: flex;
   align-items: center;
+
   @media (min-width: 992px) {
     height: 34px;
   }
@@ -253,6 +304,7 @@ form.search-form {
     .modal-dialog {
       margin: 0;
     }
+
     .modal-content {
       position: fixed;
       top: 0;

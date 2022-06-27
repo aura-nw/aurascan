@@ -299,6 +299,7 @@
                           *ngSwitchCase="'title'"
                           class="text--green cursor-pointer text-clamp box-title-validator"
                           [routerLink]="['/validators', data.operator_address]">
+                          <div class="validator-avatar"><img  src="assets/icons/icons-svg/color/instagram.svg" alt="validator" ></div>
                           <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">{{ data[template.matColumnDef] }}</span>
                           <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="label-jailed">
                             <span class="d-flex">jailed</span>
