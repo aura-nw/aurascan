@@ -18,6 +18,10 @@ export class WSService {
 
   socket: Socket;
 
+  registered = false;
+
+  contractAddress = '';
+
   constructor(
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
@@ -32,24 +36,36 @@ export class WSService {
   }
 
   public connect(): void {
+    if (this.socket?.connected) {
+      return;
+    }
+
     this.socket = io(this.socketUrl, {
       path: '/ws/socket.io',
       autoConnect: true,
     });
   }
 
-  public on(name: string, data: any) {
-    this.socket.emit(name, data);
-    return new Observable((subscriber) => {
-      this.socket.on(name, () => {
-        this.socket.on(data?.event, (res) => {
-          subscriber.next(res);
+  public on(name: string, data: any): Observable<any> | undefined {
+    if (!this.registered) {
+      this.socket.emit(name, data);
+
+      this.registered = true;
+
+      return new Observable((subscriber) => {
+        this.socket.on(name, () => {
+          this.socket.on(data?.event, (res) => {
+            subscriber.next(res);
+          });
         });
       });
-    });
+    }
+
+    return undefined;
   }
 
   public disconnect() {
+    this.registered = false;
     this.socket?.on('disconnect', (reason) => {
       // ...
       console.log('reason disconnect', reason);
@@ -66,29 +82,38 @@ export class WSService {
     });
   }
 
-  subscribeVerifyContract(contractAdr) {
+  subscribeVerifyContract(contractAdr: string, tabCallBack?: () => void) {
     this.connect();
+
+    this.contractAddress = contractAdr;
 
     const wsData = { event: 'eventVerifyContract' };
 
-    this.on('register', wsData).subscribe((data: any) => {
-      const { Verified } = (data && JSON.parse(data)) || { Verified: false };
-      if (Verified) {
+    const register = this.on('register', wsData);
+
+    if (register === undefined) {
+      return;
+    }
+
+    register.subscribe((data: any) => {
+      const { Verified, ContractAddress } = (data && JSON.parse(data)) || { Verified: false, ContractAddress: '' };
+
+      if (Verified && ContractAddress === this.contractAddress) {
         this.toastr
           .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
           .pipe(take(1))
           .subscribe((_) => {
-            this.router.navigate(['contracts', contractAdr], {
-              queryParams: {
-                tabId: 'contract',
-              },
-              state: {
-                reload: true,
-              },
-            });
+            tabCallBack && tabCallBack();
           });
       } else {
-        this.toastr.error(`Error! Unable to generate Contract Creation Code and Schema for Contract ${contractAdr}`);
+        this.toastr
+          .errorWithTap(
+            `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
+          )
+          .pipe(take(1))
+          .subscribe((_) => {
+            tabCallBack && tabCallBack();
+          });
       }
     });
   }
