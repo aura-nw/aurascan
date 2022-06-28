@@ -8,6 +8,10 @@
   }
 }
 
+.validator-detail {
+  max-width: calc(100% - 28px);
+}
+
 .article-1.uptime-content {
   white-space: pre-wrap;
   flex-wrap: wrap;

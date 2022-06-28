@@ -3,18 +3,18 @@
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob">
       <div class="d-flex">
-        <div class="avatar-wrapper">
-          <div class="validator-avatar x-large mr-5">
+        <div class="avatar-wrapper flex-shrink-0">
+          <div class="validator-avatar mr-1 mr-lg-5" [class.x-large]="!breakpoint.value.matches">
             <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
             </app-loading-image>
           </div>
-          <div class="rank-wrapper">
-            <div class="box-rank _fill">
+          <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
+            <div class="box-rank _fill" [class._small]="breakpoint.value.matches">
               <span> {{ currentValidatorDetail?.rank }} </span>
             </div>
           </div>
         </div>
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 validator-detail">
           <div class="d-flex justify-content-between align-items-center">
             <div class="title-small mb-2">
               <!-- <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div> -->

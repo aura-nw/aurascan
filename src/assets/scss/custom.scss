@@ -224,6 +224,7 @@ body {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+
                 .title {
                     display: flex;
                     align-items: center;
@@ -243,7 +244,7 @@ body {
 
             &__item {
                 width: 100%;
-                        
+
                 .item-link {
                     color: var(--aura-green);
 
@@ -297,6 +298,7 @@ body {
 
     &._fill {
         background-color: #5EE6D0;
+
         span {
             color: var(--aura-bg-contract);
         }
@@ -336,12 +338,14 @@ body {
     min-width: 200px;
     box-shadow: 2px 2px 30px #ffffff05;
     border-radius: 8px;
+
     @media (min-width: 576px) {
         min-width: 357px;
     }
 
     .arrow {
         position: relative;
+
         &::before {
             position: absolute;
             content: "";
@@ -349,9 +353,11 @@ body {
             height: 16px;
             background-color: var(--aura-bg-form);
             top: 179px;
+
             @media (min-width: 576px) {
                 top: 163px;
             }
+
             left: -6px;
             transform: rotate(45deg);
         }
@@ -369,9 +375,11 @@ body {
     font-size: 2rem;
     line-height: 2.3rem;
     font-weight: 500;
+
     &--desc {
         color: var(--aura-danger) !important;
         padding-left: 24px;
+
         &::after {
             content: '';
             position: absolute;
@@ -382,9 +390,11 @@ body {
             background: url("../../assets/icons/icons-svg/color/arrow-down-red.svg") center no-repeat;
         }
     }
+
     &--asc {
         padding-left: 24px;
         color: var(--aura-primary) !important;
+
         &::after {
             content: '';
             position: absolute;
@@ -406,6 +416,7 @@ body {
 
 .avatar-wrapper {
     position: relative;
+
     .rank-wrapper {
         position: absolute;
         top: 0;
