@@ -141,19 +141,28 @@
 
 <div class="col-lg-6">
   <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
-    Register Type Contract
-    <hr />
-    <p>Code ID *</p>
-    <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Code ID" />
-    <span class="">Enter a Code ID that you owned/ created.</span>
-    <p class="body text--neutrals-4">Type Contract *</p>
-    <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Code ID" />
-    <hr />
-    <div class="d-flex align-items-center justify-content-end">
-      <button type="button" class="button body mr-2 text--white">Close</button>
-      <button type="button" class="button body button-outline">
-        <span class="text-gradient">Register</span>
-      </button>
+    <div class="aura-form d-flex row p-3">
+      <div class="col-12 d-flex justify-content-between px-0 mb-4">
+        <span>Register Type Contract</span>
+        <img src="/assets/icons/icons-svg/white/close.svg" alt="" width="14" height="14" class="mr-2 cursor-pointer" />
+      </div>
+      <div class="box-body-register col-12">
+        <p class="input-require">Code ID</p>
+        <div class="box-input">
+          <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Code ID" />
+        </div>
+        <p class="small-text text--neutrals-4">Enter a Code ID that you owned/ created.</p>
+        <p class="body input-require">Type Contract</p>
+        <div class="box-input">
+          <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Type Contract" />
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-end w-100 mt-4">
+        <button type="button" class="button body mr-2 text--white">Close</button>
+        <button type="button" class="button body button-outline">
+          <span class="text-gradient">Register</span>
+        </button>
+      </div>
     </div>
   </ng-template>
 </div>

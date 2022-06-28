@@ -31,7 +31,7 @@ export class ContractsRegisterComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent;
-  pageSize = 20;
+  pageSize = 5;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSearch: any;
@@ -74,6 +74,18 @@ export class ContractsRegisterComponent implements OnInit {
       result: 'Correct',
       time: moment().subtract(100, 's').toDate(),
     },
+    {
+      codeID: '21',
+      typeContract: 'CW20 Contract',
+      result: 'Correct',
+      time: moment().subtract(100, 's').toDate(),
+    },
+    {
+      codeID: '21',
+      typeContract: 'CW20 Contract',
+      result: 'Correct',
+      time: moment().subtract(100, 's').toDate(),
+    },
   ];
 
   constructor(
@@ -100,7 +112,7 @@ export class ContractsRegisterComponent implements OnInit {
     this.contractService.getListContract(payload).subscribe((res) => {
       this.pageData = {
         length: res?.meta?.count,
-        pageSize: 20,
+        pageSize: 5,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
       if (res?.data?.length > 0) {

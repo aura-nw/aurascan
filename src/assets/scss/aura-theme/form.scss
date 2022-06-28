@@ -255,3 +255,8 @@
     }
   }
 }
+
+.input-require::after{
+  content: " *";
+  color: var(--aura-danger);
+}
