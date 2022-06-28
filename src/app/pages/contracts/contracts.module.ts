@@ -8,7 +8,6 @@ import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
-import { WSService } from 'src/app/core/services/ws.service';
 import { ContractsListComponent } from 'src/app/pages/contracts/contracts-list/contracts-list.component';
 import { ContractsRoutingModule } from 'src/app/pages/contracts/contracts-routing.module';
 import { ContractsTransactionsComponent } from 'src/app/pages/contracts/contracts-transactions/contracts-transactions.component';

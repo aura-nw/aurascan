@@ -74,7 +74,8 @@ export class ContractContentComponent implements OnInit, OnDestroy {
           }
         }
       } else {
-        this.changeTab(ContractTab.Transactions);
+        this.countCurrent = ContractTab.Transactions;
+        this.activeId = 0;
       }
     });
   }
