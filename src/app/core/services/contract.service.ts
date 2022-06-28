@@ -67,4 +67,19 @@ export class ContractService extends CommonService {
       this.contract$.next(res);
     });
   }
+
+  registerContractType(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contract-codes`, data);
+  }
+
+  getListTypeContract(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contract-codes/list`, data);
+  }
+
+  updateContractType(codeID: number, typeContract: string): Observable<any> {
+    const payload = {
+      type: typeContract
+    }
+    return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
+  }
 }

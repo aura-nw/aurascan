@@ -1,5 +1,5 @@
 import { TableTemplate } from "src/app/core/models/common.model";
-import { ContractTab } from "./contract.enum";
+import { ContractRegisterType, ContractTab } from "./contract.enum";
 
 export const CONTRACT_TAB = [
   {
@@ -75,4 +75,15 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
   { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
   { label: 'cosmwasm/workspace-optimizer-arm64:0.12.6', value: 'cosmwasm/workspace-optimizer-arm64:0.12.6' },
+];
+
+export const REGISTER_CONTRACT = [
+  {
+    key: ContractRegisterType.CW20,
+    value: ContractRegisterType.CW20,
+  },
+  {
+    key: ContractRegisterType.CW721,
+    value: ContractRegisterType.CW721,
+  },
 ];

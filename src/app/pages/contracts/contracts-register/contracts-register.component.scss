@@ -1,5 +1,10 @@
-.box-title-register {
-  border-bottom: 1px solid var(--aura-dark-gray);
+
+
+
+.aura-table-contain {
+  tr {
+    height: 60px;
+  }
 }
 
 .search-form {
@@ -69,7 +74,44 @@
   }
 }
 
+::ng-deep {
+  .mat-form-field[dense] {
+    width: 100%;
+    background: var(--aura-dark-gray);
+    border-radius: 8px;
+    display: flex;
+    height: 40px;
+    .mat-form-field-wrapper {
+      width: 100%;
+      padding-bottom: 0;
+    }
+    .mat-form-field-flex {
+      padding: 0 0.75em 0 0.75em;
+      background: transparent;
+    }
+    .mat-form-field-infix {
+      padding: 0 0 0.75em 0;
+    }
+    .mat-select-placeholder,
+    mat-select-trigger {
+      position: relative;
+      color: var(--aura-neutrals-4);
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+    }
+    .mat-form-field-underline {
+      display: none;
+    }
+    .mat-select-arrow-wrapper {
+      transform: translateY(-5%);
+    }
+  }
+}
+
 @media (min-width: 992px) {
+  .box-title-register {
+    border-bottom: 1px solid var(--aura-dark-gray);
+  }
   .search-form {
     min-width: 350px;
   }

@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -23,10 +26,10 @@ import { Globals } from '../../../global/global';
 export class ContractsRegisterComponent implements OnInit {
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'codeID', headerCellDef: 'Code ID' },
-    { matColumnDef: 'typeContract', headerCellDef: 'Type Contract' },
+    { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
+    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'result', headerCellDef: 'Result registration' },
-    { matColumnDef: 'time', headerCellDef: 'Time Registered' },
+    { matColumnDef: 'created_at', headerCellDef: 'Time Registered' },
     { matColumnDef: 'action', headerCellDef: '' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -41,52 +44,11 @@ export class ContractsRegisterComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   currentValidatorDialog: string;
   modalReference: any;
-
-  // data table
-  mockData = [
-    {
-      codeID: '1',
-      typeContract: 'CW20 Contract',
-      result: 'Correct',
-      time: moment().subtract(100, 's').toDate(),
-    },
-    {
-      codeID: '6',
-      typeContract: 'CW721 Contract',
-      result: 'Incorrect',
-      time: moment().subtract(100, 's').toDate(),
-    },
-    {
-      codeID: '8',
-      typeContract: 'CW20 Contract',
-      result: 'TBD',
-      time: moment().subtract(100, 's').toDate(),
-    },
-    {
-      codeID: '13',
-      typeContract: 'CW20 Contract',
-      result: 'Correct',
-      time: moment().subtract(100, 's').toDate(),
-    },
-    {
-      codeID: '21',
-      typeContract: 'CW20 Contract',
-      result: 'Correct',
-      time: moment().subtract(100, 's').toDate(),
-    },
-    {
-      codeID: '21',
-      typeContract: 'CW20 Contract',
-      result: 'Correct',
-      time: moment().subtract(100, 's').toDate(),
-    },
-    {
-      codeID: '21',
-      typeContract: 'CW20 Contract',
-      result: 'Correct',
-      time: moment().subtract(100, 's').toDate(),
-    },
-  ];
+  currentCodeID: undefined;
+  isEditMode = false;
+  selectedTypeContract: string;
+  lstTypeContract = REGISTER_CONTRACT;
+  userAddress = '';
 
   constructor(
     public translate: TranslateService,
@@ -96,9 +58,18 @@ export class ContractsRegisterComponent implements OnInit {
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
+    private toastr: NgxToastrService,
+    public walletService: WalletService
   ) {}
 
   ngOnInit(): void {
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.userAddress = wallet.bech32Address;
+      } else {
+        this.userAddress = null;
+      }
+    });
     this.getListContract();
   }
 
@@ -109,18 +80,19 @@ export class ContractsRegisterComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.contractService.getListContract(payload).subscribe((res) => {
+    this.contractService.getListTypeContract(payload).subscribe((res) => {
       this.pageData = {
         length: res?.meta?.count,
         pageSize: 5,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
+      console.log(res);
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          item.created_at = this.datePipe.transform(item.created_at, DATEFORMAT.DATETIME_UTC);
         });
         this.dataSource = res.data;
-        this.dataSearch = res.data;
+        //   this.dataSearch = res.data;
       }
     });
   }
@@ -167,11 +139,83 @@ export class ContractsRegisterComponent implements OnInit {
     return '';
   }
 
-  viewPopupDetail(staticDataModal: any, address: string, isOpenStaking = false) {
+  viewPopupDetail(staticDataModal: any, codeID: any) {
+    this.isEditMode = false;
+    this.currentCodeID = undefined;
+    if (codeID) {
+      this.currentCodeID = codeID || undefined;
+      this.isEditMode = true;
+    }
+    console.log(this.selectedTypeContract);
+
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
+      backdrop: 'static',
       windowClass: 'modal-holder',
     });
+  }
+
+  handleButtonContract(currentCodeID = undefined) {
+    if (currentCodeID) {
+      this.handleUpdate(currentCodeID);
+    } else {
+      this.handleRegister();
+    }
+  }
+
+  handleRegister() {
+    const payload = {
+      code_id: Number(this.currentCodeID),
+      type: this.selectedTypeContract,
+      account_address: this.userAddress
+    };
+    console.log(this.selectedTypeContract);
+
+    this.contractService.registerContractType(payload).subscribe(
+      (res) => {
+        console.log(res);
+        if (res) {
+          this.modalReference.close();
+          this.getListContract();
+          this.selectedTypeContract = '';
+          if (res?.data?.Message) {
+            let msgError = res?.data?.Message.toString() || 'Error';
+            this.toastr.error(msgError);
+          }
+        }
+      },
+      (error) => {},
+    );
+  }
+
+  handleUpdate(codeID = undefined) {
+    // const payload = {
+    //   code_id: Number(codeID),
+    //   type: this.selectedTypeContract,
+    //   account_address: 'aura1h6r78trkk2ewrry7s3lclrqu9a22ca3hpmyqfu',
+    // };
+    console.log(this.selectedTypeContract);
+
+    this.contractService.updateContractType(Number(codeID), this.selectedTypeContract).subscribe(
+      (res) => {
+        console.log(res);
+        if (res) {
+          this.modalReference.close();
+          this.getListContract();
+          this.selectedTypeContract = '';
+          if (res?.data?.Message) {
+            let msgError = res?.data?.Message.toString() || 'Error';
+            this.toastr.error(msgError);
+          }
+        }
+      },
+      (error) => {},
+    );
+  }
+
+  closeDialog(modal) {
+    this.selectedTypeContract = '';
+    modal.close('Close click');
   }
 }

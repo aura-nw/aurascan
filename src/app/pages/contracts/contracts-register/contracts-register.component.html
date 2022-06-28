@@ -1,7 +1,7 @@
 <div class="" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-lg-flex justify-content-between box-title-register mb-5 pb-4">
-    <p class="title-medium mb-2 text--white fw-bold">Type Smart Contract</p>
-    <button class="ml-3 button button-outline button-outline__in-card">
+    <p class="title-medium mb-2 text--white fw-500 sub-text mr-3">Type Smart Contract</p>
+    <button class="button button-outline col-12 col-lg-2" (click)="viewPopupDetail(modalManage, '')">
       <img src="assets/icons/icons-svg/color/plus.svg" alt="" width="24" height="24" />
       <span class="text-gradient">Register Contract</span>
     </button>
@@ -67,7 +67,7 @@
   <div class="card mt-4 mt-lg-6">
     <div class="card-body">
       <div class="table-responsive aura-table-contain">
-        <table mat-table matSort [dataSource]="mockData" class="aura-table">
+        <table mat-table matSort [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>
@@ -76,17 +76,15 @@
               <ng-container *ngIf="pageData?.length > 0">
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <ng-container *ngSwitchCase="'codeID'">
+                    <!-- <ng-container *ngSwitchCase="'code_id'">
                       <a
                         *ngIf="data[template.matColumnDef]"
                         class="text--green cursor-pointer hash-link"
-                        [routerLink]="['/contracts/', data['codeID']]">
+                        [routerLink]="['/contracts/', data['code_id']]">
                         {{ data[template.matColumnDef] }}
                       </a>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'time'">
-                      {{ data['time'] }}
-                    </ng-container>
+                    </ng-container> -->
+                    <ng-container *ngSwitchCase="'type'"> {{ data[template.matColumnDef] }} Contract </ng-container>
                     <ng-container *ngSwitchCase="'result'">
                       <div
                         [ngStyle]="{
@@ -105,7 +103,8 @@
                         <button
                           type="button"
                           class="button button-outline button-outline__in-card ml-auto"
-                          (click)="viewPopupDetail(modalManage, data['validator_address'])">
+                          [disabled]="data['result'] === 'Correct'"
+                          (click)="viewPopupDetail(modalManage, data['code_id'])">
                           <img src="assets/icons/icons-svg/color/edit.svg" alt="" width="20" height="20" />
                           <span class="text-gradient ml-1">Edit</span>
                         </button>
@@ -140,26 +139,53 @@
 </section>
 
 <div class="col-lg-6">
-  <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
+  <ng-template #modalManage let-modal>
     <div class="aura-form d-flex row p-3">
       <div class="col-12 d-flex justify-content-between px-0 mb-4">
         <span>Register Type Contract</span>
-        <img src="/assets/icons/icons-svg/white/close.svg" alt="" width="14" height="14" class="mr-2 cursor-pointer" />
+        <img
+          src="/assets/icons/icons-svg/white/close.svg"
+          alt=""
+          width="14"
+          height="14"
+          class="mr-2 cursor-pointer"
+          (click)="closeDialog(modal)" />
       </div>
       <div class="box-body-register col-12">
         <p class="input-require">Code ID</p>
         <div class="box-input">
-          <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Code ID" />
+          <input
+            class="form-check-input col-12 mb-4"
+            [type]="'string'"
+            [(ngModel)]="currentCodeID"
+            [disabled]="isEditMode"
+            placeholder="Enter a Code ID" />
+          />
         </div>
         <p class="small-text text--neutrals-4">Enter a Code ID that you owned/ created.</p>
         <p class="body input-require">Type Contract</p>
         <div class="box-input">
-          <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Type Contract" />
+          <mat-form-field appearance="fill" dense>
+            <mat-select
+              class="list-token"
+              placeholder="Select a type contract"
+              panelClass="commissionPanel"
+              [(value)]="selectedTypeContract"
+              [disableOptionCentering]="true">
+              <mat-option *ngFor="let item of lstTypeContract" [value]="item.value">
+                <div class="d-flex option-contain">
+                  <div class="option-lable">
+                    <span>{{ item.value | translate }}</span>
+                  </div>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-end w-100 mt-4">
-        <button type="button" class="button body mr-2 text--white">Close</button>
-        <button type="button" class="button body button-outline">
+        <button type="button" class="button body mr-2 text--white" (click)="closeDialog(modal)">Close</button>
+        <button type="button" class="button body button-outline" (click)="handleButtonContract(currentCodeID)">
           <span class="text-gradient">Register</span>
         </button>
       </div>
