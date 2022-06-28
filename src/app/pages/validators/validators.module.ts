@@ -21,6 +21,7 @@ import { PaginatorModule } from '../../shared/components/paginator/paginator.mod
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { LayoutModule } from '@angular/cdk/layout';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     PopupDelegateModule,
     PaginatorModule,
     LayoutModule,
-    MatTooltipModule
+    MatTooltipModule,
+    LoadingImageModule
   ],
   providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe]
 })

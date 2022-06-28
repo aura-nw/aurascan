@@ -12,6 +12,9 @@ import {
   NUMBER_CONVERT,
   PAGE_SIZE_OPTIONS,
   STABLE_UTOKEN,
+  VALIDATOR_AVATARS,
+  VALIDATOR_AVATAR_DF,
+  VALIDATOR_AVATAR_URL,
 } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
@@ -108,6 +111,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.pageYOffset = window.pageYOffset;
   }
 
+  AVT_DF = VALIDATOR_AVATAR_DF;
+
   constructor(
     private validatorService: ValidatorService,
     public globals: Globals,
@@ -178,13 +183,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
         this.rawData = res.data;
-        res.data.forEach((val) => {
+        res.data.forEach((val, idx) => {
           val.vote_count = val.vote_count || 0;
           if (val.target_count > 0 && val.vote_count / val.target_count <= 0.5) {
             val.isPartiDown = true;
           }
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
+
+          val.avatar = `${VALIDATOR_AVATAR_URL}${VALIDATOR_AVATARS[idx]}`;
         });
 
         let dataFilter = res.data.filter((event) =>
