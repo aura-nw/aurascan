@@ -15,6 +15,7 @@
   width: 77%;
   margin: auto;
   align-items: center;
+
   .block-uptime {
     margin: 0px 3px 7px 3px;
     color: inherit;
@@ -30,6 +31,7 @@
     justify-content: center;
     width: 31px;
     height: 31px;
+
     .block-item {
       border-radius: 3px;
       display: inline-block;
@@ -44,26 +46,71 @@
       visibility: hidden;
       z-index: 999;
     }
+
     .img-uptime-miss {
       filter: $filter-uptime-icon;
     }
   }
+
   @media (max-width: 1199.99px) {
     min-height: 300px;
   }
+
   @media (max-width: 767.99px) {
     width: 100%;
     max-width: fit-content;
     min-height: 230px;
+
     .block-uptime {
       margin: 0 5px 7px 5px;
       width: 24px;
       height: 24px;
     }
+
     .header-mob {
       background: transparent;
       padding-bottom: 2px;
     }
+  }
+}
+
+.validator-avatar {
+  display: inline-block;
+  overflow: hidden;
+  margin-right: 8px;
+
+  width: 24px;
+  height: 24px;
+  border-radius: 1000px;
+
+  &.x-large {
+    width: 80px;
+    height: 80px;
+  }
+
+  &.large {
+    width: 56px;
+    height: 56px;
+  }
+
+  &.medium {
+    width: 40px;
+    height: 40px;
+  }
+
+  img {
+    width: 100%;
+  }
+
+}
+
+.avatar-wrapper {
+  position: relative;
+
+  .rank-wrapper {
+    position: absolute;
+    top: 0;
+    right: 20px;
   }
 }
 
@@ -75,17 +122,20 @@
   background-color: rgba(94, 230, 157, 0.2);
   color: var(--aura-active);
   border-radius: 4px;
+
   .img-valid {
     filter: $filter-white-icon;
     margin-right: 5px;
     width: auto;
     height: 15px;
   }
-  &.status-inactive{
+
+  &.status-inactive {
     background-color: rgba(119, 126, 144, 0.2);
     color: var(--aura-light-gray);
   }
-  &.status-jailed{
+
+  &.status-jailed {
     background-color: rgba(230, 94, 94, 0.2);
     color: var(--aura-danger);
   }
@@ -95,6 +145,7 @@
   @media (min-width: 1200px) and (max-width: 1399.99px) {
     min-height: 430px;
   }
+
   min-height: 410px;
 }
 
@@ -102,6 +153,7 @@ form.search-form {
   .input-group {
     input.form-control {
       width: 100%;
+
       @media (min-width: 992px) {
         width: 500px;
       }
@@ -114,6 +166,7 @@ form.search-form {
     background: transparent;
     padding-bottom: 2px;
   }
+
   .border-header {
     height: 1px;
     margin-top: 15px;

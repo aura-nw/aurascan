@@ -277,6 +277,7 @@ body {
     border: 2px solid #5EE6D0;
     border-radius: 1000px;
 
+
     span {
         //font-family: 'SF Pro Display';
         font-style: normal;
@@ -292,6 +293,13 @@ body {
         /* Green */
 
         color: #5EE6D0;
+    }
+
+    &._fill {
+        background-color: #5EE6D0;
+        span {
+            color: var(--aura-bg-contract);
+        }
     }
 }
 

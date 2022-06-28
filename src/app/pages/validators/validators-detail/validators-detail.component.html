@@ -2,64 +2,79 @@
 <section *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="title-small mb-2">
-          <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div>
-          <div [class.fw-500]="breakpoint.value.matches">{{ currentValidatorDetail?.title }}</div>
+      <div class="d-flex">
+        <div class="avatar-wrapper">
+          <div class="validator-avatar x-large mr-5">
+            <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+            </app-loading-image>
+          </div>
+          <div class="rank-wrapper">
+            <div class="box-rank _fill">
+              <span> {{ currentValidatorDetail?.rank }} </span>
+            </div>
+          </div>
         </div>
-        <div
-          class="valid-status fw-semibold"
-          [class.status-inactive]="currentValidatorDetail?.status !== statusValidator.Active"
-          [class.status-jailed]="currentValidatorDetail?.jailed"
-          [ngClass]="{ 'small-body': breakpoint.value.matches }">
-          <ng-container *ngIf="currentValidatorDetail?.jailed">
-            <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> -->
-            Jailed
-          </ng-container>
-          <ng-container
-            *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Active">
-            <!-- <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" /> -->
-            Active
-          </ng-container>
-          <ng-container
-            *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
-            <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt=""  /> -->
-            inActive
-          </ng-container>
-        </div>
-      </div>
-      <div>
-        <div class="row">
-          <div class="col-12 col-lg-6">
-            <div class="mt-3">
-              <div class="d-flex position-relative">
-                <div class="header-title fw-semibold">Operator Address</div>
-                <div class="img-wrap">
-                  <img
-                    class="img-question ml-1"
-                    [src]="'assets/images/icons/questionmark-icon.svg'"
-                    alt=""
-                    matTooltip="Validator operator address at which token
-                                     holders delegate their voting powers to."
-                    [matTooltipPosition]="'above'"
-                    *ngIf="!breakpoint.value.matches" />
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="title-small mb-2">
+              <!-- <div *ngIf="!breakpoint.value.matches">#{{ currentValidatorDetail?.rank }}</div> -->
+              <div [class.fw-500]="breakpoint.value.matches">{{ currentValidatorDetail?.title }}</div>
+            </div>
+            <div
+              class="valid-status fw-semibold"
+              [class.status-inactive]="currentValidatorDetail?.status !== statusValidator.Active"
+              [class.status-jailed]="currentValidatorDetail?.jailed"
+              [ngClass]="{ 'small-body': breakpoint.value.matches }">
+              <ng-container *ngIf="currentValidatorDetail?.jailed">
+                <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> -->
+                Jailed
+              </ng-container>
+              <ng-container
+                *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Active">
+                <!-- <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" /> -->
+                Active
+              </ng-container>
+              <ng-container
+                *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
+                <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt=""  /> -->
+                inActive
+              </ng-container>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <div class="mt-3">
+                  <div class="d-flex position-relative">
+                    <div class="header-title fw-semibold">Operator Address</div>
+                    <div class="img-wrap">
+                      <img
+                        class="img-question ml-1"
+                        [src]="'assets/images/icons/questionmark-icon.svg'"
+                        alt=""
+                        matTooltip="Validator operator address at which token
+                                         holders delegate their voting powers to."
+                        [matTooltipPosition]="'above'"
+                        *ngIf="!breakpoint.value.matches" />
+                    </div>
+                  </div>
+                  <span class="fw-normal">{{ currentValidatorDetail?.operator_address }}</span>
                 </div>
               </div>
-              <span class="fw-normal">{{ currentValidatorDetail?.operator_address }}</span>
+              <div class="col-12 col-lg-6">
+                <div class="mt-3">
+                  <div class="header-title fw-semibold">Address</div>
+                  <a
+                    class="text--green cursor-pointer fw-normal"
+                    [routerLink]="['/account', currentValidatorDetail?.acc_address]">
+                    {{ currentValidatorDetail?.acc_address }}
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-12 col-lg-6">
-            <div class="mt-3">
-              <div class="header-title fw-semibold">Address</div>
-              <a
-                class="text--green cursor-pointer fw-normal"
-                [routerLink]="['/account', currentValidatorDetail?.acc_address]">
-                {{ currentValidatorDetail?.acc_address }}
-              </a>
-            </div>
+            <div class="border-header"></div>
           </div>
         </div>
-        <div class="border-header"></div>
       </div>
     </div>
     <div class="card-body">
