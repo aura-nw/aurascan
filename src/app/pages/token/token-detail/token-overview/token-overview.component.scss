@@ -1,7 +1,9 @@
 .box-token-info {
   .flex-item {
     width: 50%;
+    flex-shrink: 0;
     position: relative;
+    padding-right: 20px;
     &:after {
       content: '';
       position: absolute;
@@ -21,7 +23,7 @@
       padding: 0px var(--spacer-4);
     }
     tr:first-child td:first-child {
-      width: 30%;
+      width: 60%;
       color: var(--aura-white);
     }
   }

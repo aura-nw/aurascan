@@ -1,11 +1,11 @@
-<div class="col-12 mt-3">
+<div class="col-12 mb-4 mb-lg-3">
   <span class="small-body text--light-gray">A total of {{ pageData?.length }} transactions found</span>
 </div>
 
-<div class="transfer-table-container aura-table-contain" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="transfer-table-container aura-table-contain table-responsive">
   <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-    <ng-container *ngIf="!breakpoint.value.matches">
-      <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
+    <ng-container>
+      <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of template; index as i">
           <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
             <ng-container *ngSwitchCase="'type'">
@@ -79,7 +79,7 @@
                             src="../../../../../../../assets/images/icons/arrow-right.png"
                             width="14"
                             height="9"
-                            class="ml-15" />
+                            class="ml-8 ml-lg-15" />
                         </ng-container>
                         <ng-container *ngIf="isSearchAddres">
                           <div class="box-token-transfer">
@@ -104,7 +104,8 @@
                         aria-label="Example icon-button with a menu"
                         placement="right"
                         (click)="getTokenDetail(data)"
-                        [ngbPopover]="popContent">
+                        [ngbPopover]="popContent"
+                        popoverClass="custom-popover token-popover">
                         <img
                           src="../../../../../../../assets/images/icons/token-detail.png"
                           alt=""
@@ -143,7 +144,7 @@
 </div>
 
 <ng-template #popContent>
-  <div class="text--white p-2">
+  <div class="text--white">
     <span class="sub-text sub-text-mob">Additional info</span><br />
     Status:<br />
     <img
@@ -161,24 +162,27 @@
     }}) <a class="text--green" [routerLink]="['/token/token', tokenAddress]">{{ tokenType }}</a
     ><br />
     <div>
-      From
-      <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">{{
-        tokenDetail?.from_address_format
-      }}</a>
-      To
-      <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">{{
-        tokenDetail?.to_address_format
-      }}</a>
+      <span class="text--light-gray mr-1">From</span>
+      <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">
+        {{ tokenDetail?.from_address_format }}
+      </a>
+      <br class="d-sm-none">
+      <span class="text--light-gray mr-1 ml-sm-1">To</span>
+      <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">
+        {{ tokenDetail?.to_address_format }}
+      </a>
     </div>
     <hr />
     Transaction Fee:<br />
     0.00075177042 Ether ($1.52)
     <hr />
-    Gas info:<br />
-    47,566 Gas Used From 78,549 Gas Limit @ 0.00000001580573182 Ether (15.807219472 Gwei)
-    <hr />
-    Nonce:<br />
-    29 (in the position 92)<br />
+    <div>
+      Gas info:<br />
+      47,566 Gas Used From 78,549 <br class="d-sm-none" />Gas Limit @ 0.00000001580573182 <br class="d-sm-none" /> Ether (15.807219472 Gwei)
+      <hr />
+      Nonce:<br />
+      29 (in the position 92)
+    </div>
     <a class="fw-normal text--green body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
   </div>
 </ng-template>
