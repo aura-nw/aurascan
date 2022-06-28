@@ -1,0 +1,33 @@
+.box-contract {
+  .content-info {
+    background: var(--aura-dark-gray);
+    padding: var(--spacer-2) var(--spacer-4);
+    border-radius: 8px;
+    color: var(--aura-contract);
+  }
+  .btn-contract {
+    padding: var(--spacer-2) var(--spacer-4);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 1rem;
+    color: var(--aura-light-gray);
+    background-color: var(--aura-bg-contract);
+    border: 1.5px solid var(--aura-light-gray);
+    &.button-outline {
+      border: solid 1.5px transparent;
+    }
+  }
+  .content-contract {
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 414px) {
+  .box-btn {
+    white-space: nowrap;
+    flex-wrap: wrap;
+    button {
+      margin-bottom: 10px;
+    }
+  }
+}

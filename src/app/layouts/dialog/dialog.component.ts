@@ -10,10 +10,19 @@ import { DialogService } from '../../core/services/dialog.service';
 })
 export class DialogComponent implements OnInit {
   enableOutSide = false;
+  dialogData = null;
+
+  isInnerText = false;
+
   dialogState$ = this.dialogService.dialogState$.pipe(
     debounce(() => timer(2)),
     tap((e) => {
+      this.dialogData = e;
       this.enableOutSide = e.show;
+
+      if (e.content.includes('<br>')) {
+        this.isInnerText = true;
+      }
     }),
   );
   constructor(private dialogService: DialogService) {}
@@ -21,11 +30,15 @@ export class DialogComponent implements OnInit {
   ngOnInit(): void {}
 
   close(): void {
+    if (this.dialogData?.callback) {
+      this.dialogData.callback(true);
+    }
     this.dialogService.hideDialog();
   }
 
   clickOutside(isShow): void {
     if (this.enableOutSide) {
+      this.dialogData.callback(false);
       isShow && this.dialogService.hideDialog();
     }
   }

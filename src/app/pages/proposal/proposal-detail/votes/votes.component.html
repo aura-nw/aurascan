@@ -5,7 +5,7 @@
       ngbNav
       #customNav="ngbNav"
       [activeId]="0"
-      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
       [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">

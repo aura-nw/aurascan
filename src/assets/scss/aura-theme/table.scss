@@ -31,7 +31,7 @@
   .mat-cell, .mat-footer-cell {
     font-size: 1.4rem;
     line-height: 1.6rem;
-    color: var(--aura-white);
+    color: var(--aura-greyscale-1);
   }
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 16px;
@@ -51,8 +51,26 @@
     padding: var(--spacer-2) var(--spacer-6);
   }
 }
+
+.aura-basic-table {
+  tr {
+    td {
+    padding: var(--spacer-4);
+    color: var(--aura-greyscale-1);
+    border-bottom: 1px solid var(--aura-dark-gray);
+    }
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
 mat-paginator {
   background-color: transparent !important;
+}
+
+.col-per-5 {
+  width: 5%;
 }
 
 .col-per-13 {
@@ -61,6 +79,10 @@ mat-paginator {
 
 .col-per-15 {
   width: 15%;
+}
+
+.col-per-17 {
+  width: 17%;
 }
 
 .col-per-20 {
@@ -74,3 +96,6 @@ mat-paginator {
 .col-per-50 {
   width: 50%;
 }
+
+
+.table-responsive::-webkit-scrollbar{ height : 6px; }

@@ -5,6 +5,7 @@ interface IDialog {
   title: string;
   content: string;
   show?: boolean;
+  callback?: (event?: unknown) => void
 }
 @Injectable({
   providedIn: 'root',

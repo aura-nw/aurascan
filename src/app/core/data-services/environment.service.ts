@@ -6,6 +6,7 @@ export interface IApiUrl {
   cosmos: string;
   chainId: string;
   timeStaking: string;
+  urlSocket: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -18,12 +19,14 @@ export class EnvironmentService {
       fabric: '',
       cosmos: '',
       chainId: '',
-      timeStaking: ''
+      timeStaking: '',
+      urlSocket: '',
     });
   }
 
   load(): Promise<unknown> {
-    return this.http.get('./assets/config/config.json')
+    return this.http
+      .get('./assets/config/config.json')
       .toPromise()
       .then((config: any) => {
         const data = {
@@ -31,6 +34,7 @@ export class EnvironmentService {
           cosmos: config['cosmos'],
           chainId: config['chainId'] || 'aura-testnet',
           timeStaking: config['timeStaking'] || '1814400',
+          urlSocket: config['urlSocket'],
         };
         this.apiUrl.next(data);
       })

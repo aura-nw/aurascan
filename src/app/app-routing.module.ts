@@ -36,13 +36,28 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
   },
+  // {
+  //   path: 'token',
+  //   component: LayoutComponent,
+  //   loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
+  // },
+  {
+    path: 'contracts',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
+  },
+  {
+    path: 'raw-data',
+    loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
+    pathMatch: 'full',
+  },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top', relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

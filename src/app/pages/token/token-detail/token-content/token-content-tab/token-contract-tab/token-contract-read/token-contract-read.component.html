@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between">
+  <div>
+    <img src="assets/images/icons/token-contract.svg" alt="" width="14" height="17" />
+    <span class="small-text text--white ml-2">Read Contract Information</span>
+  </div>
+  <div class="small-text">
+    <span class="cursor-pointer text--green mr-6" (click)="expandMenu()">
+      <ng-container *ngIf="!isExpand">Expand all</ng-container>
+      <ng-container *ngIf="isExpand">Collapse all</ng-container>
+    </span>
+    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
+  </div>
+</div>
+<div class="box-content text--white mt-3">
+  <ng-container *ngFor="let readContract of jsonReadContract?.oneOf; index as i">
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header class="content-token">
+        <mat-panel-title class="item-content"> {{ i + 1 }}. {{ readContract.required }} </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="d-flex row p-3">
+        <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
+          <p class="px-0">{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})</p>
+          <input
+            [(ngModel)]="idRead"
+            [class.error-null]="errorInput"
+            class="form-check-input col-12 mb-4"
+            [type]="readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'"
+            (keyup)="resetCheck()"
+            placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
+        </ng-container>
+        <div class="w-100 mb-2 px-0">
+          <button
+            class="button button-chart button-outline button-outline__in-card body"
+            [disabled]="errorInput"
+            (click)="querySmartContract(readContract.required)">
+            <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+            <span class="ml-1 text-gradient">Query</span>
+          </button>
+        </div>
+        <div>
+          <p>{{ readContract.type }}</p>
+          <ng-container *ngIf="dataResponse">
+            <pre class="small-body text--white txt-response">Response: {{ dataResponse }}</pre>
+          </ng-container>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </ng-container>
+</div>

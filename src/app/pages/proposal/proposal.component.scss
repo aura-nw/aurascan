@@ -1,33 +1,41 @@
 .proposal-lasted {
   margin-bottom: 20px;
   color: var(--aura-white);
+
   &__content {
     .content-body {
       min-width: 140px;
       color: var(--aura-white);
     }
+
     .body-mobile {
       min-width: unset;
     }
   }
+
   .vote-bar {
     margin-right: 20px;
+
     ul {
       background-color: #e3e3e3;
       border-radius: 4px;
       overflow: hidden;
     }
   }
+
   .most-vote {
     margin-left: 20px;
     min-width: 150px;
+
     .title {
       font-weight: 500;
     }
+
     .value {
       position: relative;
       padding-left: 32px;
       font-size: 13px;
+
       &:before {
         content: '';
         position: absolute;
@@ -38,46 +46,58 @@
         height: 24px;
         border-radius: 100%;
       }
+
       &.primary:before {
         background-color: var(--aura-primary);
       }
+
       &.danger:before {
         background-color: var(--aura-danger);
       }
+
       &.info:before {
         background-color: var(--aura-info);
       }
+
       &.secondary:before {
-        background-color: var(--aura-green-disabled);
+        background-color: var(--aura-light-gray);
       }
     }
   }
+
   .message {
     color: var(--aura-greyscale-4);
   }
+
   .btn-detail {
     margin: 0 16px;
   }
 }
+
 .card {
   &__title {
     font-weight: 500;
+
     a {
       text-decoration: none;
     }
   }
+
   &__title-mobile {
     font-size: 16px;
     line-height: 1.5rem;
     font-weight: 500;
+
     a {
       color: var(--aura-white);
       text-decoration: none;
     }
   }
-  &-footer-mobile{
+
+  &-footer-mobile {
     padding: 0 var(--spacer-3) var(--spacer-3) var(--spacer-3);
   }
+
   .proposal-status-mobile {
     border-radius: 8px;
     text-transform: capitalize;
@@ -87,21 +107,26 @@
     justify-content: center;
     padding: 0 var(--spacer-4);
   }
+
   .button-mobile {
     height: 40px;
     padding: 8px 18px;
     width: auto;
   }
+
   .border-bottom-mobile {
     border-bottom: 1px solid #38383d;
   }
 }
+
 .vote-bar {
   width: 60%;
 }
+
 table {
   min-width: 800px;
 }
+
 .title-cell {
   padding-right: 24px;
   max-width: 500px;

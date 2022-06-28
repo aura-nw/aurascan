@@ -6,189 +6,22 @@
     display: none;
 }
 
-// owl-carousel
-@import "~ngx-owl-carousel-o/lib/styles/scss/owl.carousel";
-@import "~ngx-owl-carousel-o/lib/styles/scss/owl.theme.default";
-
-.carousel-indicators li {
-    box-sizing: content-box;
-    -ms-flex: 0 1 auto;
-    flex: 0 1 auto;
-    width: 30px;
-    height: 3px;
-    margin-right: 3px;
-    margin-left: 3px;
-    text-indent: -999px;
-    cursor: pointer;
-    background-color: #fff;
-    background-clip: padding-box;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    opacity: 0.5;
-    transition: opacity 0.6s ease;
-}
-
 /**
 * lightbox
 */
 
 @import "~ngx-lightbox/lightbox.css";
 
-// alert
-.alert-dismissible {
-    .btn-close {
-        font-size: 10px;
-        padding: $alert-padding-y * 1.4 $alert-padding-x;
-        background: transparent escape-svg($btn-close-bg) center / $btn-close-width auto no-repeat;
-    }
-}
-
-.custom-alert {
-    .close {
-        background: transparent;
-        border: 0;
-        font-size: 10px;
-        padding: 1.35rem 1.25rem;
-        background: transparent escape-svg($btn-close-bg) center / $btn-close-width auto no-repeat;
-        position: absolute;
-        top: 0;
-        right: 0;
-        opacity: 0.5;
-        width: 1em;
-        height: 1em;
-        z-index: 2;
-        color: $btn-close-color;
-
-        span {
-            display: none;
-        }
-    }
-}
-
-.vimeo_video iframe {
-    width: 100%;
-}
-
-.vimeo_video #player {
-    max-width: 100% !important;
-}
-
-/**
-* Rating Module
-*/
-
-.stars {
-    font-size: 1.5rem;
-    color: #b0c4de;
-}
-
-.filled {
-    color: #1e90ff;
-}
-
-.bad {
-    color: #deb0b0;
-}
-
-.filled.bad {
-    color: #ff1e1e;
-}
-
-.star {
-    position: relative;
-    display: inline-block;
-    font-size: 1.5rem;
-    color: #d3d3d3;
-}
-
-.full {
-    color: #b0c4de;
-}
-
-.half {
-    position: absolute;
-    display: inline-block;
-    overflow: hidden;
-    color: #b0c4de;
-}
-
-// color picker
-.color_picker {
-    width: auto;
-    margin: 0 auto;
-    display: inline-block;
-}
-
-.color_picker .input-group-text {
-    padding: 20px;
-}
-
 // Select2
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
-// .multi_default .ng-value-icon {
-//   display: none !important;
-// }
-// .ng-select.ng-select-multiple.ng-select-disabled>.ng-select-container .ng-value-container .ng-value .ng-value-label {
-//   padding: 0 5px;
-//   background-color: $gray-600;
-//   border: 1px solid $gray-600;
-//   padding: 4px 10px;
-//   border-radius: 20px;
-// }
-// .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{
-//   background-color: transparent !important;
-//   border:none !important;
-//   color: $white;
-// }
-// Datepicker
-.custom-day {
-    text-align: center;
-    padding: 0.185rem 0.25rem;
-    display: inline-block;
-    height: 2rem;
-    width: 2rem;
-}
-
-.custom-day.focused {
-    background-color: #e6e6e6;
-}
-
-.custom-day.range,
-.custom-day:hover {
-    background-color: rgb(2, 117, 216);
-    color: white;
-}
-
-.custom-day.faded {
-    background-color: rgba(2, 117, 216, 0.5);
-}
-
-/**
-* Image Upload Dropzone
-*/
-
-@import "~dropzone/dist/min/dropzone.min.css";
-
 // Custome css
 .border_none {
-    border: none;
+    border: none !important;
 }
 
 // dark style
 body[data-layout-mode="dark"] {
-
-    // Calender
-    .fc-theme-standard .fc-scrollgrid,
-    .fc-theme-standard td,
-    .fc-theme-standard th {
-        border: 1px solid $gray-dark-300;
-    }
-
-    .fc .fc-daygrid-day-number,
-    .fc .fc-col-header-cell-cushion {
-        color: $white;
-    }
 
     // Accordion
     .accordion {
@@ -229,94 +62,12 @@ body[data-layout-mode="dark"] {
             }
         }
     }
-
-    .switch.checked {
-        border-color: #000;
-    }
-
-    // File Upload
-    .dropzone {
-        background-color: #333836 !important;
-        border-color: $gray-dark-300 !important;
-    }
-
-    .dropzone .dz-message {
-        background-color: #333836 !important;
-    }
-}
-
-// data table
-.datatables {
-    thead {
-        tr {
-            th {
-                position: relative;
-
-                &:before {
-                    content: "\F0143";
-                    position: absolute;
-                    right: 0;
-                    top: 7px;
-                    font: normal normal normal 24px/1 "Material Design Icons";
-                    opacity: 0.3;
-                }
-
-                &:after {
-                    content: "\F0140";
-                    position: absolute;
-                    right: 0;
-                    top: 14px;
-                    opacity: 0.3;
-                    font: normal normal normal 24px/1 "Material Design Icons";
-                }
-            }
-
-            .asc {
-                &:before {
-                    opacity: 1;
-                }
-            }
-
-            .desc {
-                &:after {
-                    opacity: 1;
-                }
-            }
-        }
-    }
-}
-
-body[data-sidebar-size="md"] {
-    #sidebar-menu ul li a {
-        i-feather {
-            display: block;
-            margin: 0px auto;
-        }
-    }
 }
 
 body {
     * {
         outline: none;
     }
-}
-
-// flatpicker
-// @import "~flatpickr/dist/flatpickr.css";
-.g-result {
-    border-radius: 10rem;
-    padding: 0.2rem 1rem;
-    background-color: #f6f2ff;
-    margin-left: 0.3rem;
-    color: #9c6cff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-}
-
-.g-blue {
-    color: #5156be;
 }
 
 .g-ellipsis {
@@ -555,4 +306,72 @@ body {
 //css text align right
 .txt-right {
     text-align: right;
+}
+
+
+.custom-popover {
+    background: var(--aura-bg-form);
+    border: none;
+    min-width: 200px;
+    box-shadow: 2px 2px 30px #ffffff05;
+    border-radius: 8px;
+    @media (min-width: 576px) {
+        min-width: 357px;
+    }
+
+    .arrow {
+        position: relative;
+        &::before {
+            position: absolute;
+            content: "";
+            width: 16px;
+            height: 16px;
+            background-color: var(--aura-bg-form);
+            top: 179px;
+            @media (min-width: 576px) {
+                top: 163px;
+            }
+            left: -6px;
+            transform: rotate(45deg);
+        }
+    }
+
+    .popover-body {
+        padding: 16px;
+        min-width: 230px;
+    }
+}
+
+.aura__change {
+    position: relative;
+    color: var(--aura-white) !important;
+    font-size: 2rem;
+    line-height: 2.3rem;
+    font-weight: 500;
+    &--desc {
+        color: var(--aura-danger) !important;
+        padding-left: 24px;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            transform: translateX(-100%);
+            width: 24px;
+            height: 24px;
+            background: url("../../assets/icons/icons-svg/color/arrow-down-red.svg") center no-repeat;
+        }
+    }
+    &--asc {
+        padding-left: 24px;
+        color: var(--aura-primary) !important;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            transform: translateX(-100%);
+            width: 24px;
+            height: 24px;
+            background: url("../../assets/icons/icons-svg/color/arrow-up-green.svg") center no-repeat;
+        }
+    }
 }

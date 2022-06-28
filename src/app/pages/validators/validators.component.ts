@@ -8,11 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import {
-  NUMBER_CONVERT,
-  PAGE_SIZE_OPTIONS,
-  AURA_DENOM,
-} from '../../../app/core/constants/common.constant';
+import { AURA_DENOM, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
@@ -242,8 +238,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
-    //sort and calculator cumulative
-    // let dataSort = this.calculatorCumulative(dataFilter);
     this.dataSource = new MatTableDataSource(dataFilter);
     this.dataSource.sort = this.sort;
   }
@@ -338,6 +332,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }).subscribe(
         (res) => {
           if (res.dataWallet) {
+            this.dataDelegate.delegatableVesting = res?.dataWallet?.data?.delegatable_vesting;
             this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
             this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
             this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
@@ -400,11 +395,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.getDataWallet();
+            this.getList();
           }, halftime);
         },
         (error) => {
           setTimeout(() => {
             this.getDataWallet();
+            this.getList();
           }, halftime);
         },
       );
@@ -421,7 +418,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkAmountStaking(): void {
     let amountCheck;
     if (this.dataDelegate.dialogMode === this.dialogMode.Delegate) {
-      amountCheck = this.dataDelegate.availableToken || 0;
+      amountCheck = +this.dataDelegate.availableToken + +this.dataDelegate.delegatableVesting || 0;
     } else if (
       this.dataDelegate.dialogMode === this.dialogMode.Redelegate ||
       this.dataDelegate.dialogMode === this.dialogMode.Undelegate
@@ -450,7 +447,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           message: {
             to: [this.dataModal.operator_address],
             amount: {
-              amount: Number(this.amountFormat) * Math.pow(10, 6),
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
               denom: AURA_DENOM,
             },
           },
@@ -461,7 +458,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
 
       excuteStaking();
@@ -471,22 +468,22 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       const executeClaim = async () => {
-        const { hash, error } = await createSignBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
-          message: {
-            from: this.listStakingValidator,
+        const { hash, error } = await createSignBroadcast(
+          {
+            messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
+            message: {
+              from: this.listStakingValidator,
+            },
+            senderAddress: this.userAddress,
+            network: ChainsInfo[this.walletService.chainId],
+            signingType: ESigningType.Keplr,
+            chainId: this.walletService.chainId,
           },
-          senderAddress: this.userAddress,
-          network: ChainsInfo[this.walletService.chainId],
-          signingType: ESigningType.Keplr,
-          chainId: this.walletService.chainId,
-        },
-        this.listStakingValidator?.length
+          this.listStakingValidator?.length,
         );
-        
-        this.checkStatuExcuteBlock(hash, error, '');
-      };
 
+        this.checkStatusExecuteBlock(hash, error, '');
+      };
       executeClaim();
     }
   }
@@ -500,7 +497,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           message: {
             from: [this.dataModal.operator_address],
             amount: {
-              amount: Number(this.amountFormat) * Math.pow(10, 6),
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
               denom: AURA_DENOM,
             },
           },
@@ -511,9 +508,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
       excuteUnStaking();
     }
   }
@@ -521,14 +517,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleRedelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const excuteReStaking = async () => {
+      const executeReStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
             src_address: this.dataModal.operator_address,
             to_address: this.selectedValidator,
             amount: {
-              amount: Number(this.amountFormat) * Math.pow(10, 6),
+              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
               denom: AURA_DENOM,
             },
           },
@@ -539,10 +535,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
-      excuteReStaking();
+      executeReStaking();
     }
   }
 
@@ -571,13 +566,16 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getMaxToken(type): void {
     if (type === this.dialogMode.Delegate) {
       //check amout for high fee
-      const amountCheck = (
-        Number(this.dataDelegate.availableToken) -
-        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
+      let amountCheck = (
+        Number(this.dataDelegate.availableToken) +
+        Number(this.dataDelegate.delegatableVesting) -
+        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) /
+          NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
         this.errorExceedAmount = true;
+        amountCheck = '0';
       }
       this.amountFormat = amountCheck || 0;
     } else if (type === this.dialogMode.Undelegate) {
@@ -591,7 +589,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.commissionLabel = label;
   }
 
-  checkStatuExcuteBlock(hash, error, msg) {
+  checkStatusExecuteBlock(hash, error, msg) {
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(error);

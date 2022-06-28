@@ -22,12 +22,14 @@ export class TransactionMessagesComponent implements OnInit {
   eTransType = TRANSACTION_TYPE_ENUM;
   amount = 0;
   amountClaim = 0;
+  storeCodeId = 0;
   dateVesting: string;
   isVestingDelay: boolean;
   validatorName = '';
   validatorNameDes = '';
   listValidator: any[];
   listAmountClaim = [];
+  objMsgContract: any;
 
   constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
 
@@ -44,6 +46,13 @@ export class TransactionMessagesComponent implements OnInit {
     ) {
       this.getListValidator();
       this.checkGetReward();
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
+      this.checkStoreCode();
+    } else if (
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
+    ) {
+      this.displayMsgRaw();
     }
     //get amount of transaction
     this.amount = getAmount(
@@ -72,7 +81,7 @@ export class TransactionMessagesComponent implements OnInit {
               this.validatorName = validatorSrcAddress?.title || '';
 
               const validatorDstAddress = this.listValidator.find(
-                (f) => f.operator_address === messages[0]?.validator_dst_address, 
+                (f) => f.operator_address === messages[0]?.validator_dst_address,
               );
               this.validatorNameDes = validatorDstAddress?.title || '';
             } else if (messages?.length > 0) {
@@ -90,7 +99,7 @@ export class TransactionMessagesComponent implements OnInit {
 
   checkGetReward(): void {
     try {
-      const jsonData = JSON.parse(this.transactionDetail.raw_log);
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
       if (jsonData && jsonData[0]) {
         jsonData.forEach((j) => {
           let rawType = 'transfer';
@@ -124,6 +133,28 @@ export class TransactionMessagesComponent implements OnInit {
             }
           }
         });
+      }
+    } catch (e) {}
+  }
+
+  displayMsgRaw(): void {
+    const obj = this.transactionDetail?.tx?.tx?.body?.messages[0];
+    this.objMsgContract = Object.keys(obj).reduce((newObj, key) => {
+      if (key === 'msg' || key === 'funds') {
+        newObj[key] = obj[key];
+      }
+      return newObj;
+    }, {});
+  }
+
+  checkStoreCode(): void {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      if (jsonData && jsonData[0]) {
+        const temp = jsonData[0]?.events.filter((f) => f.type === 'store_code');
+        if (temp) {
+          this.storeCodeId = temp[0]?.attributes[0]?.value || 0;
+        }
       }
     } catch (e) {}
   }

@@ -1,0 +1,56 @@
+.single-input-field {
+  min-width: 420px;
+}
+
+.aura-basic-table tr td:not(:last-child) {
+  border-right: 1px solid var(--aura-dark-gray);
+}
+
+.input-group {
+  background-color: var(--aura-bg-form);
+  height: auto !important;
+  padding: var(--spacer-1) var(--spacer-4) !important;
+}
+
+.aura-nav-tabs.nav-tabs .nav-link {
+  font-weight: 500;
+  font-size: 14px;
+  @media (min-width: 992px) {
+    font-weight: 600;
+  }
+}
+
+a.verify-contract {
+  .tab-title {
+    margin-right: 8px;
+  }
+
+  img {
+    position: absolute;
+    top: 2px;
+  }
+}
+
+.tab-contract {
+  width: 100%;
+  ul.aura-nav-tabs {
+    flex-wrap: nowrap;
+    overflow: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow: hidden;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .nav-item {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 180px;
+    @media (max-width: 414px) {
+      width: 50%;
+      min-width: 50%;
+    }
+  }
+}
