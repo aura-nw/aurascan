@@ -271,8 +271,8 @@ export class TokenCw20Component implements OnInit {
   }
 
   searchToken(): void {
-    this.filterSearchData = null;
-    if (this.textSearch.length > 0) {
+    this.filterSearchData = [];
+    if (this.textSearch && this.textSearch.length > 0) {
       this.filterData(this.textSearch);
     }
   }

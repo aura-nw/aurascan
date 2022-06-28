@@ -12,6 +12,7 @@ import {Globals} from "../../../../global/global";
 })
 export class TokenCw721Component implements OnInit {
   textSearch = '';
+  filterSearchData = [];
   // data table
   mockData = [
     {
@@ -235,13 +236,10 @@ export class TokenCw721Component implements OnInit {
   }
 
   filterData(keyWord: string) {
-    const filterData = this.mockData.filter(data => data.name.includes(keyWord) || data.hashCode.includes(keyWord));
-    this.pageData = {
-      length: filterData.length,
-      pageSize: 10,
-      pageIndex: 1
-    };
-    this.dataSource = new MatTableDataSource<any>(filterData);
+    keyWord = keyWord.toLowerCase();
+    this.filterSearchData = this.mockData.filter(
+        (data) => data.name.toLowerCase().includes(keyWord) || data.hashCode.toLowerCase().includes(keyWord),
+    );
   }
 
   getTokenData() {
@@ -253,11 +251,11 @@ export class TokenCw721Component implements OnInit {
     this.dataSource = new MatTableDataSource<any>(this.mockData);
   }
 
+
   searchToken(): void {
-    if (this.textSearch.length > 0) {
+    this.filterSearchData = [];
+    if (this.textSearch && this.textSearch.length > 0) {
       this.filterData(this.textSearch);
-    } else {
-      this.getTokenData();
     }
   }
 

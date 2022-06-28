@@ -340,6 +340,16 @@ body {
         padding: 16px;
         min-width: 230px;
     }
+
+    &.token-popover .arrow::before {
+        top: 227px;
+        @media (min-width: 576px) {
+            top: 217px;
+        }
+        @media (min-width: 992px) {
+            top: 223px;
+        }
+    }
 }
 
 .aura__change {
