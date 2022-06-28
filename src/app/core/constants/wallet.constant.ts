@@ -95,7 +95,6 @@ export const ChainsInfo: { [chainId: string]: any } = {
       average: 0.0025,
       high: 0.004
     },
-    features: ['no-legacy-stdTx'],
     walletUrlForStaking: "https://serenity.aurascan.io/validators",
     logo: "https://i.imgur.com/zi0mTYb.png",
     explorer: "https://serenity.aurascan.io/"
