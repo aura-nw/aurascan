@@ -156,10 +156,10 @@ export class ContractsRegisterComponent implements OnInit {
   }
 
   viewPopupDetail(staticDataModal: any, address: string, isOpenStaking = false) {
-    // this.modalReference = this.modalService.open(staticDataModal, {
-    //   keyboard: false,
-    //   centered: true,
-    //   windowClass: 'modal-holder',
-    // });
+    this.modalReference = this.modalService.open(staticDataModal, {
+      keyboard: false,
+      centered: true,
+      windowClass: 'modal-holder',
+    });
   }
 }

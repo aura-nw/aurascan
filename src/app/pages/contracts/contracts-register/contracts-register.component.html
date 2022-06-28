@@ -75,32 +75,43 @@
               </th>
               <ng-container *ngIf="pageData?.length > 0">
                 <td mat-cell *matCellDef="let data">
-                  <ng-container *ngIf="template.matColumnDef === 'time'">
-                    {{ data['updated_at'] }}
-                  </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'contract_name'">
-                    {{ (data[template.matColumnDef] | cutStringPipe: 20) || '-' }}
-                  </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'result'">
-                    <div [ngStyle]="{ color: data['result'] === 'TBD' ? '#37cc6e' : '#ff2745' }">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'action'">
-                    <div class="d-flex align-items-center">
-                      <button
-                        type="button"
-                        class="button button-outline button-outline__in-card ml-auto"
-                        (click)="viewPopupDetail(modalManage, data['validator_address'])">
-                        <img src="assets/icons/icons-svg/color/edit.svg" alt="" width="20" height="20" />
-                        <span class="text-gradient ml-1">Edit</span>
-                      </button>
-                    </div>
-                  </ng-container>
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <ng-container *ngSwitchDefault>
-                      {{ data[template.matColumnDef] }}
+                    <ng-container *ngSwitchCase="'codeID'">
+                      <a
+                        *ngIf="data[template.matColumnDef]"
+                        class="text--green cursor-pointer hash-link"
+                        [routerLink]="['/contracts/', data['codeID']]">
+                        {{ data[template.matColumnDef] }}
+                      </a>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'time'">
+                      {{ data['time'] }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'result'">
+                      <div
+                        [ngStyle]="{
+                          color:
+                            data['result'] === 'TBD'
+                              ? '#5E84E6'
+                              : data['result'] === 'Incorrect'
+                              ? '#E65E5E'
+                              : '#5EE69D'
+                        }">
+                        {{ data[template.matColumnDef] }}
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'action'">
+                      <div class="d-flex align-items-center">
+                        <button
+                          type="button"
+                          class="button button-outline button-outline__in-card ml-auto"
+                          (click)="viewPopupDetail(modalManage, data['validator_address'])">
+                          <img src="assets/icons/icons-svg/color/edit.svg" alt="" width="20" height="20" />
+                          <span class="text-gradient ml-1">Edit</span>
+                        </button>
+                      </div>
+                    </ng-container>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>
                 </td>
               </ng-container>
@@ -129,5 +140,20 @@
 </section>
 
 <div class="col-lg-6">
-  <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)"> test dialog </ng-template>
+  <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
+    Register Type Contract
+    <hr />
+    <p>Code ID *</p>
+    <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Code ID" />
+    <span class="">Enter a Code ID that you owned/ created.</span>
+    <p class="body text--neutrals-4">Type Contract *</p>
+    <input class="form-check-input col-12 mb-4" [type]="'string'" placeholder="Enter a Code ID" />
+    <hr />
+    <div class="d-flex align-items-center justify-content-end">
+      <button type="button" class="button body mr-2 text--white">Close</button>
+      <button type="button" class="button body button-outline">
+        <span class="text-gradient">Register</span>
+      </button>
+    </div>
+  </ng-template>
 </div>
