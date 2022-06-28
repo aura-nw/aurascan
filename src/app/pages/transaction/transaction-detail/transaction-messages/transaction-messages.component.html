@@ -6,20 +6,19 @@
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
+  <div class="row mb-3 d-none d-lg-flex body small-body-mob">
+    <div class="col-12 col-lg-3">
+      <div class="card-text header-title">
+        <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
       </div>
     </div>
+  </div>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
@@ -44,16 +43,13 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Contract</div>
-      <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.contract }}</div>
+      <div class="col-12 col-lg-6">
+        <a class="text--green" [routerLink]="['/contracts', transactionDetail?.messages[0]?.contract]">
+          {{ transactionDetail?.messages[0]?.contract }}
+        </a>
+      </div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
@@ -63,16 +59,15 @@
         </a>
       </div>
     </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
+      <div class="col-12 col-lg-6">
+        <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
+      </div>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Label</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.label }}</div>
@@ -85,6 +80,12 @@
         </a>
       </div>
     </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
+      <div class="col-12 col-lg-6">
+        <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
+      </div>
+    </div>
   </ng-container>
 
   <ng-container
@@ -93,13 +94,6 @@
       transactionDetail?.type === eTransType.Delegate ||
       transactionDetail?.type === this.eTransType.Undelegate
     ">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <ng-container *ngIf="transactionDetail?.type === eTransType.GetReward && transactionDetail?.messages.length > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
         <div class="row mb-3 small-body">
@@ -135,9 +129,7 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
         <div class="col-12 col-lg-6">
-          <a
-            class="text--green"
-            [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
+          <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
             {{ transactionDetail?.messages[0]?.delegator_address }}
           </a>
         </div>
@@ -145,9 +137,7 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
         <div class="col-12 col-lg-6">
-          <a
-            class="text--green"
-            [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+          <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
             <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
           </a>
@@ -172,19 +162,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
+        <a class="text--green" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
@@ -206,19 +187,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
@@ -240,13 +212,6 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Initial Deposit</div>
       <div class="col-12 col-lg-6">
@@ -287,19 +252,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegate Address</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
       </div>
@@ -307,9 +263,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Source Validator Address</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
+        <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
           {{ transactionDetail?.messages[0]?.validator_src_address }}
           <ng-container *ngIf="validatorName"><br />({{ validatorName }})</ng-container>
         </a>
@@ -318,9 +272,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Destination Validator Address</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
+        <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
           {{ transactionDetail?.messages[0]?.validator_dst_address }}
           <ng-container *ngIf="validatorNameDes"><br />({{ validatorNameDes }})</ng-container>
         </a>
@@ -344,19 +296,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
+        <a class="text--green" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
@@ -381,13 +324,6 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
@@ -395,9 +331,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <div class="col-12 col-lg-6">
-        <a
-          class="text--green"
-          [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}
         </a>
       </div>
@@ -405,13 +339,6 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
       <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
@@ -427,13 +354,6 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
-    <div class="row mb-3 d-none d-lg-flex body small-body-mob">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img src="assets/images/icons/trans-send.svg" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
-        </div>
-      </div>
-    </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-6">
