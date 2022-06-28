@@ -74,45 +74,9 @@
   }
 }
 
-.validator-avatar {
-  display: inline-block;
-  overflow: hidden;
-  margin-right: 8px;
 
-  width: 24px;
-  height: 24px;
-  border-radius: 1000px;
 
-  &.x-large {
-    width: 80px;
-    height: 80px;
-  }
 
-  &.large {
-    width: 56px;
-    height: 56px;
-  }
-
-  &.medium {
-    width: 40px;
-    height: 40px;
-  }
-
-  img {
-    width: 100%;
-  }
-
-}
-
-.avatar-wrapper {
-  position: relative;
-
-  .rank-wrapper {
-    position: absolute;
-    top: 0;
-    right: 20px;
-  }
-}
 
 .valid-status {
   display: inline-flex;

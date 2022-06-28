@@ -244,6 +244,6 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getValidatorAvatar(validatorAddress: string): string {
-    return VALIDATOR_AVATAR_DF;
+    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }

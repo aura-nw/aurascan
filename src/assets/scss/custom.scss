@@ -301,6 +301,19 @@ body {
             color: var(--aura-bg-contract);
         }
     }
+
+    &._small {
+        width: 12px;
+        height: 12px;
+
+        padding: 3.5px;
+
+        span {
+            font-size: 9px;
+            letter-spacing: 0.02em;
+
+        }
+    }
 }
 
 .box-mob-table {
@@ -380,6 +393,56 @@ body {
             width: 24px;
             height: 24px;
             background: url("../../assets/icons/icons-svg/color/arrow-up-green.svg") center no-repeat;
+        }
+    }
+}
+
+.g-flex-start-center {
+    display: flex !important;
+    justify-content: start !important;
+    align-items: center !important;
+}
+
+
+.avatar-wrapper {
+    position: relative;
+    .rank-wrapper {
+        position: absolute;
+        top: 0;
+        right: 20px;
+
+        &._small {
+            right: 3px;
+            top: -3px
+        }
+    }
+
+    .validator-avatar {
+        display: inline-block;
+        overflow: hidden;
+        margin-right: 8px;
+
+        width: 24px;
+        height: 24px;
+        border-radius: 1000px;
+
+        &.x-large {
+            width: 80px;
+            height: 80px;
+        }
+
+        &.large {
+            width: 56px;
+            height: 56px;
+        }
+
+        &.medium {
+            width: 40px;
+            height: 40px;
+        }
+
+        img {
+            width: 100%;
         }
     }
 }

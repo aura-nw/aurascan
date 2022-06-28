@@ -111,9 +111,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.pageYOffset = window.pageYOffset;
   }
 
-  AVT_DF = VALIDATOR_AVATAR_DF;
-  avtMapping: { [key: string]: string } = {};
-
   constructor(
     private validatorService: ValidatorService,
     public globals: Globals,
@@ -191,8 +188,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           }
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
-
-          this.avtMapping[val.operator_address] = `${VALIDATOR_AVATAR_URL}${VALIDATOR_AVATARS[idx]}`;
         });
 
         let dataFilter = res.data.filter((event) =>
@@ -634,6 +629,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getValidatorAvatar(validatorAddress: string): string {
-    return this.avtMapping[validatorAddress] || VALIDATOR_AVATAR_DF;
+    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }
