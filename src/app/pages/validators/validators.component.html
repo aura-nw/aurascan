@@ -100,9 +100,13 @@
                         </div>
                         <div *ngSwitchDefault>
                           <a
-                            class="text--green cursor-pointer"
+                            class="text--green cursor-pointer box-title-validator"
                             [routerLink]="['/validators', data['validator_address']]">
-                            {{ data[template.matColumnDef] }}
+                            <div class="validator-avatar">
+                              <app-loading-image [srcImg]="getValidatorAvatar(data['validator_address'])">
+                              </app-loading-image>
+                            </div>
+                            <span>{{ data[template.matColumnDef] }}</span>
                           </a>
                         </div>
                       </ng-container>
@@ -171,7 +175,12 @@
         <ng-container *ngFor="let validator of lstUndelegate">
           <div class="row col-12 mb-3 m-0 undelegate-item">
             <div class="col-3 body title-name">
-              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
+              <a
+                [routerLink]="['/validators', validator.validator_address]"
+                class="text-clamp text--green box-title-validator">
+                <div class="validator-avatar">
+                  <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])"> </app-loading-image>
+                </div>
                 {{ validator.validator_name }}</a
               >
             </div>
@@ -314,7 +323,7 @@
                           class="text--green cursor-pointer text-clamp box-title-validator"
                           [routerLink]="['/validators', data.operator_address]">
                           <div class="validator-avatar">
-                            <app-loading-image [srcImg]="data?.avatar || AVT_DF"></app-loading-image>
+                            <app-loading-image [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
                           </div>
                           <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
                             {{ data[template.matColumnDef] }}
@@ -439,10 +448,17 @@
         height="24px"
         (click)="closeDialog(modal)" />
       <div class="d-lg-flex align-items-end mb-4 mb-xl-8">
-        <div class="mr-lg-10 mb-4 mb-lg-0">
-          <div class="title title-medium-mob text-gradient fw-bolder d-inline-block">{{ dataModal?.title }}</div>
-          <div class="body small-body-mob text--white">
-            Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
+        <div class="mr-lg-10 mb-4 mb-lg-0 d-flex align-items-center">
+          <div class="validator-avatar large">
+            <app-loading-image [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
+          </div>
+          <div>
+            <div class="title title-medium-mob text-gradient fw-bolder d-inline-block">
+              <span>{{ dataModal?.title }}</span>
+            </div>
+            <div class="body small-body-mob text--white">
+              Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
+            </div>
           </div>
         </div>
         <div class="body small-body-mob text--greyscale-3">
@@ -516,8 +532,11 @@
                 [class.mb-lg-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
-                <div class="d-flex option-contain">
-                  <div class="option-lable" [ngClass]="{ active: item.isStaking }">
+                <div class="d-flex option-contain align-items-center">
+                  <div class="option-lable d-flex align-items-center" [ngClass]="{ active: item.isStaking }">
+                    <div class="validator-avatar medium">
+                      <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
+                    </div>
                     <span>{{ item.title | translate }}</span>
                   </div>
                   <div class="option-lable">
