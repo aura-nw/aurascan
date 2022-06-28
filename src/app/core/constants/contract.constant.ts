@@ -54,9 +54,9 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/rust-optimizer:0.12.5', value: 'cosmwasm/rust-optimizer:0.12.5' },
   { label: 'cosmwasm/rust-optimizer:0.12.6', value: 'cosmwasm/rust-optimizer:0.12.6' },
 
-  { label: 'cosmwasm/rust-optimizer-arm64:0.12.4', value: 'cosmwasm/rust-optimizer-arm64:0.12.4' },
-  { label: 'cosmwasm/rust-optimizer-arm64:0.12.5', value: 'cosmwasm/rust-optimizer-arm64:0.12.5' },
-  { label: 'cosmwasm/rust-optimizer-arm64:0.12.6', value: 'cosmwasm/rust-optimizer-arm64:0.12.6' },
+  // { label: 'cosmwasm/rust-optimizer-arm64:0.12.4', value: 'cosmwasm/rust-optimizer-arm64:0.12.4' },
+  // { label: 'cosmwasm/rust-optimizer-arm64:0.12.5', value: 'cosmwasm/rust-optimizer-arm64:0.12.5' },
+  // { label: 'cosmwasm/rust-optimizer-arm64:0.12.6', value: 'cosmwasm/rust-optimizer-arm64:0.12.6' },
 
   { label: 'cosmwasm/workspace-optimizer:0.10.8', value: 'cosmwasm/workspace-optimizer:0.10.8' },
   { label: 'cosmwasm/workspace-optimizer:0.10.9', value: 'cosmwasm/workspace-optimizer:0.10.9' },
@@ -72,7 +72,7 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer:0.12.5', value: 'cosmwasm/workspace-optimizer:0.12.5' },
   { label: 'cosmwasm/workspace-optimizer:0.12.6', value: 'cosmwasm/workspace-optimizer:0.12.6' },
 
-  { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
-  { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
-  { label: 'cosmwasm/workspace-optimizer-arm64:0.12.6', value: 'cosmwasm/workspace-optimizer-arm64:0.12.6' },
+  // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
+  // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
+  // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.6', value: 'cosmwasm/workspace-optimizer-arm64:0.12.6' },
 ];
