@@ -37,6 +37,7 @@ export class ContractsRegisterComponent implements OnInit {
   pageSize = 5;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataBlock: any[];
   dataSearch: any;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -49,6 +50,7 @@ export class ContractsRegisterComponent implements OnInit {
   selectedTypeContract: string;
   lstTypeContract = REGISTER_CONTRACT;
   userAddress = '';
+  loading = true;
 
   constructor(
     public translate: TranslateService,
@@ -86,15 +88,17 @@ export class ContractsRegisterComponent implements OnInit {
         pageSize: 5,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
-      console.log(res);
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
           item.created_at = this.datePipe.transform(item.created_at, DATEFORMAT.DATETIME_UTC);
         });
         this.dataSource = res.data;
+        this.dataBlock = res.data;
+        console.log(this.dataBlock);
         //   this.dataSearch = res.data;
       }
     });
+    this.loading = false;
   }
 
   searchToken(): void {
@@ -217,5 +221,8 @@ export class ContractsRegisterComponent implements OnInit {
   closeDialog(modal) {
     this.selectedTypeContract = '';
     modal.close('Close click');
+  }
+  validateCurrentCodeID(s: any) {
+    this.currentCodeID = s.target.value.replace(/[-]/g,'');
   }
 }
