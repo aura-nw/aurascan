@@ -22,20 +22,20 @@
           placeholder="Search for Code ID"
           [(ngModel)]="textSearch"
           [maxLength]="maxLengthSearch"
-          (keyup)="searchToken()"
+          (keyup)="searchCode()"
           (keyup.enter)="handleLink()"
           name="search"
           autocomplete="off" />
         <button
           type="submit"
-          class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-          (click)="searchToken()">
+          class="btn-search cursor-pointer {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+          (click)="searchCode()">
           <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
         </button>
         <button
           type="reset"
-          class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-          (click)="textSearch = ''; searchToken()">
+          class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+          (click)="clearSearch()">
           <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
         </button>
       </div>
@@ -45,13 +45,21 @@
             <span> There are no matching contracts </span>
           </ng-container>
           <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-            <div class="txt-title-search">Contracts</div>
+            <div class="txt-title-search">Smart Contract</div>
             <ng-container *ngFor="let item of filterSearchData">
-              <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
-                <img src="assets/images/icons/token-logo.png" class="logo-token" />
-                <div class="ml-3">
+              <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
+                <div class="ml-1">
                   <div class="d-flex align-items-center">
-                    <span class="text-clamp">{{ item.contract_name }}</span>
+                    <span class="text-clamp">
+                      {{ item.code_id }} -
+                      {{ item.type }} Contract -
+                      <span
+                        [ngStyle]="{
+                          color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#E65E5E' : '#5EE69D'
+                        }">
+                        {{ item.result }}
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -76,14 +84,6 @@
               <ng-container *ngIf="pageData?.length > 0">
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <!-- <ng-container *ngSwitchCase="'code_id'">
-                      <a
-                        *ngIf="data[template.matColumnDef]"
-                        class="text--green cursor-pointer hash-link"
-                        [routerLink]="['/contracts/', data['code_id']]">
-                        {{ data[template.matColumnDef] }}
-                      </a>
-                    </ng-container> -->
                     <ng-container *ngSwitchCase="'type'"> {{ data[template.matColumnDef] }} Contract </ng-container>
                     <ng-container *ngSwitchCase="'result'">
                       <div
@@ -104,7 +104,7 @@
                           type="button"
                           class="button button-outline button-outline__in-card ml-auto"
                           [disabled]="data['result'] === 'Correct'"
-                          (click)="viewPopupDetail(modalManage, data['code_id'])">
+                          (click)="viewPopupDetail(modalManage, data)">
                           <img src="assets/icons/icons-svg/color/edit.svg" alt="" width="20" height="20" />
                           <span class="text-gradient ml-1">Edit</span>
                         </button>
@@ -142,7 +142,10 @@
   <ng-template #modalManage let-modal>
     <div class="aura-form d-flex row p-3">
       <div class="col-12 d-flex justify-content-between px-0 mb-4">
-        <span>Register Type Contract</span>
+        <span>
+          <ng-container *ngIf="isEditMode">Update Type Contract</ng-container>
+          <ng-container *ngIf="!isEditMode">Register Type Contract</ng-container>
+        </span>
         <img
           src="/assets/icons/icons-svg/white/close.svg"
           alt=""
@@ -156,7 +159,7 @@
         <div class="box-input">
           <input
             class="form-check-input col-12 mb-4"
-            [type]="'string'"
+            [type]="'number'"
             [(ngModel)]="currentCodeID"
             [disabled]="isEditMode"
             placeholder="Enter a Code ID" />
@@ -185,8 +188,11 @@
       </div>
       <div class="d-flex align-items-center justify-content-end w-100 mt-4">
         <button type="button" class="button body mr-2 text--white" (click)="closeDialog(modal)">Close</button>
-        <button type="button" class="button body button-outline" (click)="handleButtonContract(currentCodeID)">
-          <span class="text-gradient">Register</span>
+        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)">
+          <span class="text-gradient">
+            <ng-container *ngIf="isEditMode">Update</ng-container>
+            <ng-container *ngIf="!isEditMode">Register</ng-container>
+          </span>
         </button>
       </div>
     </div>

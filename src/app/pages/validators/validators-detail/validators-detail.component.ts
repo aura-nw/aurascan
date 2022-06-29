@@ -164,7 +164,8 @@ export class ValidatorsDetailComponent implements OnInit {
             power.isStakeMode = false;
             if (
               power.type === 'delegate' ||
-              (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress)
+              (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress) ||
+              power.type === 'create_validator'
             ) {
               power.isStakeMode = true;
             }

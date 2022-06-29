@@ -8,7 +8,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
-import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
@@ -29,16 +30,19 @@ export class ContractsRegisterComponent implements OnInit {
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'result', headerCellDef: 'Result registration' },
-    { matColumnDef: 'created_at', headerCellDef: 'Time Registered' },
+    { matColumnDef: 'updated_at', headerCellDef: 'Time Registered' },
     { matColumnDef: 'action', headerCellDef: '' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  pageData: PageEvent;
-  pageSize = 5;
-  pageIndex = 0;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSearch: any;
-  filterSearchData = [];
+  filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -49,6 +53,7 @@ export class ContractsRegisterComponent implements OnInit {
   selectedTypeContract: string;
   lstTypeContract = REGISTER_CONTRACT;
   userAddress = '';
+  walletAccount: any;
 
   constructor(
     public translate: TranslateService,
@@ -59,7 +64,7 @@ export class ContractsRegisterComponent implements OnInit {
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private toastr: NgxToastrService,
-    public walletService: WalletService
+    public walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
@@ -75,29 +80,29 @@ export class ContractsRegisterComponent implements OnInit {
 
   getListContract() {
     let payload = {
-      limit: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
     };
 
     this.contractService.getListTypeContract(payload).subscribe((res) => {
       this.pageData = {
         length: res?.meta?.count,
-        pageSize: 5,
+        pageSize: this.pageData.pageSize,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
-      console.log(res);
+
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
-          item.created_at = this.datePipe.transform(item.created_at, DATEFORMAT.DATETIME_UTC);
+          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATE_ONLY);
         });
         this.dataSource = res.data;
-        //   this.dataSearch = res.data;
+        this.dataSourceBk = this.dataSource;
       }
     });
   }
 
-  searchToken(): void {
+  searchCode(): void {
     this.filterSearchData = null;
     if (this.textSearch.length > 0) {
       let payload = {
@@ -105,18 +110,25 @@ export class ContractsRegisterComponent implements OnInit {
         offset: 0,
         keyword: this.textSearch,
       };
-
-      this.contractService.getListContract(payload).subscribe((res) => {
+      this.filterSearchData = [];
+      this.contractService.getListTypeContract(payload).subscribe((res) => {
         if (res?.data?.length > 0) {
           res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATE_ONLY);
           });
-          this.dataSearch = res.data;
+          this.filterSearchData = res.data;
         }
       });
-      let keyWord = this.textSearch.toLowerCase();
-      this.filterSearchData = this.dataSearch.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
     }
+  }
+
+  clearSearch(): void {
+    this.filterSearchData = null;
+    this.dataSource = this.dataSourceBk;
+  }
+
+  replacePageList(item: any): void {
+    this.dataSource = new MatTableDataSource<any>([item]);
   }
 
   paginatorEmit(event): void {
@@ -124,7 +136,7 @@ export class ContractsRegisterComponent implements OnInit {
   }
 
   pageEvent(e: PageEvent): void {
-    this.pageIndex = e.pageIndex;
+    this.pageData.pageIndex = e.pageIndex;
     this.getListContract();
   }
 
@@ -139,14 +151,14 @@ export class ContractsRegisterComponent implements OnInit {
     return '';
   }
 
-  viewPopupDetail(staticDataModal: any, codeID: any) {
+  viewPopupDetail(staticDataModal: any, data: any) {
     this.isEditMode = false;
     this.currentCodeID = undefined;
-    if (codeID) {
-      this.currentCodeID = codeID || undefined;
+    if (data?.code_id) {
+      this.currentCodeID = data.code_id || undefined;
+      this.selectedTypeContract = data.type || undefined;
       this.isEditMode = true;
     }
-    console.log(this.selectedTypeContract);
 
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
@@ -156,62 +168,59 @@ export class ContractsRegisterComponent implements OnInit {
     });
   }
 
-  handleButtonContract(currentCodeID = undefined) {
-    if (currentCodeID) {
-      this.handleUpdate(currentCodeID);
+  handleButtonContract(isEditMode: boolean) {
+    if (isEditMode) {
+      this.handleUpdate(this.currentCodeID);
     } else {
       this.handleRegister();
     }
   }
 
-  handleRegister() {
-    const payload = {
-      code_id: Number(this.currentCodeID),
-      type: this.selectedTypeContract,
-      account_address: this.userAddress
-    };
-    console.log(this.selectedTypeContract);
+  connectWallet(): void {
+    this.walletAccount = this.walletService.getAccount();
+  }
 
-    this.contractService.registerContractType(payload).subscribe(
-      (res) => {
-        console.log(res);
-        if (res) {
-          this.modalReference.close();
-          this.getListContract();
-          this.selectedTypeContract = '';
-          if (res?.data?.Message) {
-            let msgError = res?.data?.Message.toString() || 'Error';
-            this.toastr.error(msgError);
+  handleRegister() {
+    this.connectWallet();
+    if (this.walletAccount) {
+      const payload = {
+        code_id: Number(this.currentCodeID),
+        type: this.selectedTypeContract,
+        account_address: this.userAddress,
+      };
+      this.contractService.registerContractType(payload).subscribe(
+        (res) => {
+          if (res) {
+            this.handleCloseDialog(res);
           }
+        },
+        (error) => {},
+      );
+    }
+  }
+
+  handleUpdate(codeID = undefined) {
+    this.contractService.updateContractType(Number(codeID), this.selectedTypeContract).subscribe(
+      (res) => {
+        if (res) {
+          this.handleCloseDialog(res);
         }
       },
       (error) => {},
     );
   }
 
-  handleUpdate(codeID = undefined) {
-    // const payload = {
-    //   code_id: Number(codeID),
-    //   type: this.selectedTypeContract,
-    //   account_address: 'aura1h6r78trkk2ewrry7s3lclrqu9a22ca3hpmyqfu',
-    // };
-    console.log(this.selectedTypeContract);
-
-    this.contractService.updateContractType(Number(codeID), this.selectedTypeContract).subscribe(
-      (res) => {
-        console.log(res);
-        if (res) {
-          this.modalReference.close();
-          this.getListContract();
-          this.selectedTypeContract = '';
-          if (res?.data?.Message) {
-            let msgError = res?.data?.Message.toString() || 'Error';
-            this.toastr.error(msgError);
-          }
-        }
-      },
-      (error) => {},
-    );
+  handleCloseDialog(res: any) {
+    this.modalReference.close();
+    this.getListContract();
+    this.selectedTypeContract = '';
+    this.isEditMode = false;
+    if (res?.data?.Message) {
+      let msgError = res?.data?.Message.toString() || 'Error';
+      this.toastr.error(msgError);
+    } else {
+      this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
+    }
   }
 
   closeDialog(modal) {
