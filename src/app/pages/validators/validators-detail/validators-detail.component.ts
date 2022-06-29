@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT } from '../../../../app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
-import { STATUS_VALIDATOR } from '../../../../app/core/constants/validator.enum';
-import { TableTemplate } from '../../../../app/core/models/common.model';
-import { BlockService } from '../../../../app/core/services/block.service';
-import { CommonService } from '../../../../app/core/services/common.service';
-import { ValidatorService } from '../../../../app/core/services/validator.service';
-import { Globals } from '../../../../app/global/global';
-import { PageEvent } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { balanceOf } from '../../../../app/core/utils/common/parsing';
+import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NUMBER_CONVERT, VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { BlockService } from 'src/app/core/services/block.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-validators-detail',
@@ -69,7 +68,7 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthBlockLoading = true;
   lengthPowerLoading = true;
 
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall])
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private route: ActivatedRoute,
@@ -79,7 +78,7 @@ export class ValidatorsDetailComponent implements OnInit {
     public commonService: CommonService,
     public global: Globals,
     private layout: BreakpointObserver,
-    private numberPipe: DecimalPipe
+    private numberPipe: DecimalPipe,
   ) {}
 
   ngOnInit(): void {
@@ -229,11 +228,22 @@ export class ValidatorsDetailComponent implements OnInit {
         break;
     }
   }
-  checkAmountStaking(amount, isStakeMode){
+  checkAmountStaking(amount, isStakeMode) {
     if (isStakeMode) {
-      return '<span class=text--info>' + '+ ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>';
+      return (
+        '<span class=text--info>' + '+ ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>'
+      );
     } else {
-      return '<span class=text--danger>' + '- ' + this.numberPipe.transform(amount, this.global.formatNumberToken) + '</span>';
+      return (
+        '<span class=text--danger>' +
+        '- ' +
+        this.numberPipe.transform(amount, this.global.formatNumberToken) +
+        '</span>'
+      );
     }
+  }
+
+  getValidatorAvatar(validatorAddress: string): string {
+    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }
