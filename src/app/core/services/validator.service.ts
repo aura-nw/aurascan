@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Injectable()
 export class ValidatorService extends CommonService {

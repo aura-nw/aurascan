@@ -51,8 +51,7 @@ export const STABLE_UTOKEN = 'uaura';
 
 export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 
-export const VALIDATOR_AVATAR_DF =
-  'https://www.mintscan.io/_next/static/image/assets/Validator/validator_none.983ad4f48d419359dce599901ebb054c.svg';
+export const VALIDATOR_AVATAR_DF = 'assets/icons/icons-svg/color/validator-default.svg';
 export const VALIDATOR_AVATAR_URL =
   'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/chihuahua/';
 

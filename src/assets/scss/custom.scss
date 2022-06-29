@@ -416,14 +416,24 @@ body {
 
 .avatar-wrapper {
     position: relative;
+    height: fit-content;
+    margin-right: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .rank-wrapper {
         position: absolute;
-        top: 0;
-        right: 20px;
+        top: 0px;
+        right: 0px;
+
+        &._jailed {
+            opacity: 0.6;
+        }
 
         &._small {
-            right: 3px;
+            right: -3px;
             top: -3px
         }
     }
@@ -431,7 +441,6 @@ body {
     .validator-avatar {
         display: inline-block;
         overflow: hidden;
-        margin-right: 8px;
 
         width: 24px;
         height: 24px;
@@ -454,6 +463,20 @@ body {
 
         img {
             width: 100%;
+        }
+    }
+
+    .validator-jailed {
+        opacity: 0.6;
+    }
+
+    .jailed {
+        position: absolute;
+        top: 0px;
+        left: -2px;
+
+        @media screen and (min-width: 992px) {
+            top: 4px;
         }
     }
 }
