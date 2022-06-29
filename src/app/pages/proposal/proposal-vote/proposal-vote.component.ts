@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
@@ -12,6 +12,7 @@ import { IVotingDialog } from '../../../core/models/proposal.model';
 import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
 import { WalletService } from '../../../core/services/wallet.service';
 import { createSignBroadcast } from '../../../core/utils/signing/transaction-manager';
+import {ViewportScroller} from "@angular/common";
 
 @Component({
   selector: 'app-proposal-vote',
@@ -77,7 +78,8 @@ export class ProposalVoteComponent implements OnInit {
           }
         }
       },
-      (error) => {},
+      (error) => {
+      },
     );
   }
 
