@@ -9,9 +9,6 @@ import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { AURA_DENOM, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
-  VALIDATOR_AVATARS,
-  VALIDATOR_AVATAR_DF,
-  VALIDATOR_AVATAR_URL,
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
