@@ -51,6 +51,7 @@ export class ValidatorService extends CommonService {
   }
 
   getValidatorAvatar(validatorAddress: string): string {
+    return `${this.environmentService.apiUrl.getValue()?.validator_s3}/${validatorAddress}.png`;
     return VALIDATOR_AVATAR_DF;
   }
 }

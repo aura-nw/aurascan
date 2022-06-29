@@ -12,9 +12,6 @@ import {
   NUMBER_CONVERT,
   PAGE_SIZE_OPTIONS,
   STABLE_UTOKEN,
-  VALIDATOR_AVATARS,
-  VALIDATOR_AVATAR_DF,
-  VALIDATOR_AVATAR_URL,
 } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';

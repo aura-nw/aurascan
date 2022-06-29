@@ -17,10 +17,20 @@
 </div>
 <div class="d-flex justify-content-center align-items-center h-100">
   <img
+    *ngIf="!isError"
     class="image"
     [src]="srcImg"
     alt="aura"
     (load)="load()"
+    [ngClass]="appClass"
+    (error)="error()"
+    [ngStyle]="{ visibility: isLoading ? 'hidden' : '' }" />
+
+  <img
+    *ngIf="isError"
+    class="image"
+    [src]="df"
+    alt="aura"
     [ngClass]="appClass"
     [ngStyle]="{ visibility: isLoading ? 'hidden' : '' }" />
 </div>
