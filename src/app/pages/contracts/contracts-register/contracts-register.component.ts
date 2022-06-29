@@ -98,7 +98,7 @@ export class ContractsRegisterComponent implements OnInit {
 
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATE_ONLY);
+          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
         });
         this.dataSource = res.data;
         this.dataBk = res.data;
@@ -121,7 +121,7 @@ export class ContractsRegisterComponent implements OnInit {
       this.contractService.getListTypeContract(payload).subscribe((res) => {
         if (res?.data?.length > 0) {
           res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATE_ONLY);
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
           });
           this.filterSearchData = res.data;
         }
@@ -173,7 +173,6 @@ export class ContractsRegisterComponent implements OnInit {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
-      backdrop: 'static',
       windowClass: 'modal-holder',
     });
   }
