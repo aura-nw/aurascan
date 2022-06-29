@@ -36,7 +36,7 @@ export class ContractsRegisterComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
