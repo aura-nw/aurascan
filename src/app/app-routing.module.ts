@@ -37,7 +37,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
   },
   {
-    path: 'token',
+    path: 'tokens',
     component: LayoutComponent,
     loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
   },

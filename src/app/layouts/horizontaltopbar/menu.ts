@@ -35,17 +35,17 @@ export const MENU: MenuItem[] = [
       id: 6,
       label: 'MENUITEMS.TOKEN.TEXT',
       icon: 'coin',
-      link: '/token',
+      link: '/tokens',
       subItems: [
           {
               id: 1,
               label: 'CW-20 Top Tokens',
-              link: '/token',
+              link: '/tokens',
           },
           {
               id: 2,
               label: 'CW-721 Top Tokens',
-              link: '/token/tokens-nft',
+              link: '/tokens/tokens-nft',
           }
       ]
   },
