@@ -7,6 +7,7 @@ export interface IApiUrl {
   chainId: string;
   timeStaking: string;
   urlSocket: string;
+  validator_s3: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class EnvironmentService {
       chainId: '',
       timeStaking: '',
       urlSocket: '',
+      validator_s3: ''
     });
   }
 
@@ -35,6 +37,7 @@ export class EnvironmentService {
           chainId: config['chainId'] || 'aura-testnet',
           timeStaking: config['timeStaking'] || '1814400',
           urlSocket: config['urlSocket'],
+          validator_s3: config['validator_s3'],
         };
         this.apiUrl.next(data);
       })
