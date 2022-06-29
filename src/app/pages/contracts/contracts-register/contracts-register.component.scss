@@ -112,6 +112,14 @@
     }
     .mat-select-arrow-wrapper {
       transform: translateY(-5%);
+      .mat-select-arrow {
+        border: solid #E6E7E8;
+        border-width: 0 2.3px 2.3px 0;
+        display: inline-block;
+        padding: 2.8px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
     }
   }
   .contractPanel {
