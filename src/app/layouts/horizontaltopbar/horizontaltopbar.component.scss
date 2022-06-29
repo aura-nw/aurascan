@@ -46,6 +46,7 @@
         padding: 0;
         font-size: 2rem;
         line-height: 2.3rem;
+        position: relative;
         @media (min-width: 1440px) {
           font-size: 2rem;
           line-height: 2.5rem;
@@ -53,6 +54,33 @@
         &:hover, &.active {
           i.icon, span {
             color: var(--aura-white) !important;
+          }
+        }
+        &.dropdown-toggle {
+          &:after {
+            content: '';
+            position: absolute;
+            right: -24px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+            background-size: auto;
+            transition: background .35s ease-in-out;
+          }
+          &.active {
+            &:after {
+              background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
+              background-size: auto;
+              transform: rotate(180deg);
+            }
+          }
+          &:hover {
+            &:after {
+              background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
+              background-size: auto;
+              transform: unset;
+            }
           }
         }
       }
@@ -90,6 +118,9 @@
         &:hover {
           color: var(--aura-white);
           background-color: var(--aura-dark-gray);
+        }
+        &.active {
+          color: var(--aura-white);
         }
       }
     }
