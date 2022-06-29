@@ -200,7 +200,7 @@
           (click)="closeDialog(modal)" />
       </div>
       <div class="box-body-register col-12">
-        <p class="input-require">Code ID</p>
+        <p class="input-require body-small">Code ID</p>
         <div class="box-input">
           <input
             (keyup)="validateCurrentCodeID($event)"
@@ -213,13 +213,13 @@
             placeholder="Enter a Code ID" />
         </div>
         <p class="small-text text--neutrals-4">Enter a Code ID that you owned/ created.</p>
-        <p class="body input-require">Type Contract</p>
+        <p class="body-small input-require">Type Contract</p>
         <div class="box-input">
-          <mat-form-field appearance="fill" dense>
+          <mat-form-field appearance="fill" contract>
             <mat-select
               class="list-token"
               placeholder="Select a type contract"
-              panelClass="commissionPanel"
+              panelClass="contractPanel"
               (selectionChange)="checkInput()"
               [(value)]="selectedTypeContract"
               [disableOptionCentering]="true">

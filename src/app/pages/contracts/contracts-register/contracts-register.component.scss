@@ -83,7 +83,7 @@
 }
 
 ::ng-deep {
-  .mat-form-field[dense] {
+  .mat-form-field[contract] {
     width: 100%;
     background: var(--aura-dark-gray);
     border-radius: 8px;
@@ -112,6 +112,25 @@
     }
     .mat-select-arrow-wrapper {
       transform: translateY(-5%);
+      .mat-select-arrow {
+        border: solid #E6E7E8;
+        border-width: 0 2.3px 2.3px 0;
+        display: inline-block;
+        padding: 2.8px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+    }
+  }
+  .contractPanel {
+    background: #25252C;
+    min-width: calc(100% + 20px) !important;
+    transform: translate3D(5px, 35px, 0) !important;
+    padding: var(--spacer-3) 0 !important;
+    border-radius: 8px;
+
+    @media (min-width: 992px) {
+      padding: var(--spacer-4) 0 !important;
     }
   }
 }
@@ -135,4 +154,10 @@
 }
 .button-edit {
   box-shadow: 2px 1000px 1px var(--aura-dark-gray) inset;
+}
+@media (max-width: 414px) {
+  ::ng-deep .contract-modal.modal .modal-dialog .modal-content {
+    overflow-y: auto;
+    padding-bottom: 0;
+  }
 }
