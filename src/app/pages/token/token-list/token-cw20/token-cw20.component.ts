@@ -232,6 +232,7 @@ export class TokenCw20Component implements OnInit {
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  pageSize = 20;
 
   constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
 
@@ -249,7 +250,7 @@ export class TokenCw20Component implements OnInit {
   getTokenData() {
     this.pageData = {
       length: this.mockData.length,
-      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
 
@@ -315,7 +316,7 @@ export class TokenCw20Component implements OnInit {
     let dataFilter = this.sortedData;
     this.pageData = {
       length: dataFilter.length,
-      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
     this.dataSource = new MatTableDataSource<any>(dataFilter);
