@@ -5,6 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
@@ -23,6 +24,8 @@ export class ContractsListComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
+    { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
+    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', isShort: true },
@@ -67,6 +70,9 @@ export class ContractsListComponent implements OnInit {
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          if (item.type === CONTRACT_RESULT.INCORRECT || !item.type) {
+            item.type = '-';
+          }
         });
         this.dataSource = res.data;
         this.dataSearch = res.data;
