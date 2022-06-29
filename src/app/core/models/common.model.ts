@@ -34,6 +34,7 @@ export class TableTemplate {
   paramField?: string;
   type?: string;
   suffix?: string;
+  prefix?: string;
   headerWidth?: number;
   justify?: 'center' | 'flex-start' | 'flex-end'
 }

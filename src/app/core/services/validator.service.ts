@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { EnvironmentService } from '../data-services/environment.service';
-import { CommonService } from './common.service';
+import { Observable } from 'rxjs';
+import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Injectable()
 export class ValidatorService extends CommonService {
@@ -47,5 +48,9 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(
       `${this.apiUrl}/validators/${address}/delegator-by-validator-addr?limit=${limit}&offset=${offset}`,
     );
+  }
+
+  getValidatorAvatar(validatorAddress: string): string {
+    return VALIDATOR_AVATAR_DF;
   }
 }

@@ -9,10 +9,18 @@
             </th>
 
             <td mat-cell *matCellDef="let data">
-              <div [classList]="[template.cssClass]">
+              <div [classList]="[template.cssClass]" ngClass="d-flex align-items-center">
+                <span *ngIf="template.prefix">
+                  <ng-container *ngIf="template.prefix === 'operator_address'">
+                    <div class="avatar-wrapper">
+                      <span class="validator-avatar d-inline-flex">
+                        <app-loading-image [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
+                      </span>
+                    </div>
+                  </ng-container>
+                </span>
                 <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
-                  <a
-                    [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                  <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                     {{
                       (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
                         '-'
@@ -127,7 +135,21 @@
                       <a
                         class="text--green body fw-semibold"
                         [routerLink]="['/validators', data['operator_address'] || data['validator_name']]">
-                        <span class="text--white mr-1">{{ data['rank'] }}</span> {{ data['validator_name'] || '-' }}
+                        <!-- <span class="text--white mr-1">{{ data['rank'] }}</span>  -->
+                        <div class="g-flex-start-center">
+                          <div class="avatar-wrapper">
+                            <span class="validator-avatar">
+                              <app-loading-image [srcImg]="getValidatorAvatar(data['operator_address'])">
+                              </app-loading-image>
+                            </span>
+                            <div class="rank-wrapper _small">
+                              <div class="box-rank _small _fill">
+                                <span> {{ data['rank'] }} </span>
+                              </div>
+                            </div>
+                          </div>
+                          {{ data['validator_name'] || '-' }}
+                        </div>
                       </a>
                     </div>
                   </div>
