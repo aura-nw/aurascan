@@ -1,9 +1,16 @@
-
-
-
 .aura-table-contain {
   tr {
     height: 60px;
+  }
+}
+
+.btn-register {
+  width: 205px;
+  span {
+    letter-spacing: 0 !important;
+  }
+  @media (max-width: 414px) {
+    width: 100%;
   }
 }
 
@@ -61,6 +68,7 @@
       border-radius: var(--spacer-1);
       border: none;
       cursor: text !important;
+      padding: 0 10px;
 
       &::placeholder {
         color: var(--aura-light-gray);
@@ -115,4 +123,16 @@
   .search-form {
     min-width: 350px;
   }
+}
+.card-info {
+  background-color: var(--aura-dark-gray);
+  border-radius: 8px;
+  padding: var(--spacer-4);
+  color: var(--aura-white);
+  &:not(:last-child) {
+    margin-bottom: var(--spacer-2);
+  }
+}
+.button-edit {
+  box-shadow: 2px 1000px 1px var(--aura-dark-gray) inset;
 }

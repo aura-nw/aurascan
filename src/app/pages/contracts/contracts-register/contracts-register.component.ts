@@ -41,6 +41,8 @@ export class ContractsRegisterComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataBk: any[];
+  dataBlock: any[];
   dataSearch: any;
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -54,6 +56,8 @@ export class ContractsRegisterComponent implements OnInit {
   lstTypeContract = REGISTER_CONTRACT;
   userAddress = '';
   walletAccount: any;
+  loading = true;
+  isHideSearch = false;
 
   constructor(
     public translate: TranslateService,
@@ -97,13 +101,16 @@ export class ContractsRegisterComponent implements OnInit {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATE_ONLY);
         });
         this.dataSource = res.data;
-        this.dataSourceBk = this.dataSource;
+        this.dataBk = res.data;
+        this.dataBlock = res.data;
       }
     });
+    this.loading = false;
   }
 
   searchCode(): void {
     this.filterSearchData = null;
+    this.isHideSearch = false;
     if (this.textSearch.length > 0) {
       let payload = {
         limit: 0,
@@ -124,11 +131,14 @@ export class ContractsRegisterComponent implements OnInit {
 
   clearSearch(): void {
     this.filterSearchData = null;
-    this.dataSource = this.dataSourceBk;
+    this.dataSource = new MatTableDataSource<any>(this.dataBk);
+    this.dataBlock = this.dataBk;
   }
 
   replacePageList(item: any): void {
     this.dataSource = new MatTableDataSource<any>([item]);
+    this.dataBlock = [item];
+    this.isHideSearch = true;
   }
 
   paginatorEmit(event): void {
@@ -226,5 +236,9 @@ export class ContractsRegisterComponent implements OnInit {
   closeDialog(modal) {
     this.selectedTypeContract = '';
     modal.close('Close click');
+  }
+
+  validateCurrentCodeID(s: any) {
+    this.currentCodeID = s.target.value.replace(/[-]/g, '');
   }
 }

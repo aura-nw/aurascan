@@ -1,18 +1,20 @@
-<div class="" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="d-lg-flex justify-content-between box-title-register mb-5 pb-4">
-    <p class="title-medium mb-2 text--white fw-500 sub-text mr-3">Type Smart Contract</p>
-    <button class="button button-outline col-12 col-lg-2" (click)="viewPopupDetail(modalManage, '')">
-      <img src="assets/icons/icons-svg/color/plus.svg" alt="" width="24" height="24" />
-      <span class="text-gradient">Register Contract</span>
-    </button>
+<div class="contract-register" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="d-lg-flex justify-content-between box-title-register mb-lg-5 pb-4">
+    <h1 class="title-medium mb-4 mb-lg-2 text--white fw-500 sub-text mr-3">Type Smart Contract</h1>
+    <div>
+      <button class="button button-outline btn-register" (click)="viewPopupDetail(modalManage, '')">
+        <img src="assets/icons/icons-svg/color/plus.svg" alt="" width="24" height="24" />
+        <span class="text-gradient body">Register Contract</span>
+      </button>
+    </div>
   </div>
   <div class="d-lg-flex justify-content-between">
     <div>
-      <div class="text--white-2 body">
+      <div class="text--white-2 body small-body-mob">
         Before a user wants to register a type contract for a Code ID, the user has to claim ownership of the Code ID
         successfully
       </div>
-      <div class="body text--neutrals-4">{{ pageData?.length }} contract registered</div>
+      <div class="small-body text--light-gray mt-1">{{ pageData?.length }} contract registered</div>
     </div>
     <form class="aura-form single-input-field search-form mt-4">
       <div class="input-group small-input" [class.textbox_search]="breakpoint.value.matches">
@@ -40,7 +42,7 @@
         </button>
       </div>
       <ng-container *ngIf="textSearch?.length > 0">
-        <div class="box-search-data text-white">
+        <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
           <ng-container *ngIf="filterSearchData?.length === 0">
             <span> There are no matching contracts </span>
           </ng-container>
@@ -51,8 +53,7 @@
                 <div class="ml-1">
                   <div class="d-flex align-items-center">
                     <span class="text-clamp">
-                      {{ item.code_id }} -
-                      {{ item.type }} Contract -
+                      {{ item.code_id }} - {{ item.type }} Contract -
                       <span
                         [ngStyle]="{
                           color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#E65E5E' : '#5EE69D'
@@ -74,7 +75,10 @@
 <section>
   <div class="card mt-4 mt-lg-6">
     <div class="card-body">
-      <div class="table-responsive aura-table-contain">
+      <div *ngIf="loading" class="m-auto mt-10">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+      <div class="table-responsive aura-table-contain d-none d-lg-block">
         <table mat-table matSort [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
@@ -110,7 +114,9 @@
                         </button>
                       </div>
                     </ng-container>
-                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                    <ng-container *ngSwitchDefault>
+                      {{ data[template.matColumnDef] }}
+                    </ng-container>
                   </ng-container>
                 </td>
               </ng-container>
@@ -128,12 +134,51 @@
           </tr>
         </table>
       </div>
+      <div class="d-lg-none" *ngIf="dataBlock && dataBlock?.length > 0; else noValues">
+        <div class="card-info small-body" *ngFor="let data of dataBlock; index as i">
+          <div class="d-flex justify-content-between">
+            <span>Code ID</span>
+            <span class="">{{ data.code_id }}</span>
+          </div>
+          <div class="d-flex justify-content-between mt-1">
+            <span>Type Contract</span>
+            <span>{{ data.type }} Contract</span>
+          </div>
+          <div class="d-flex justify-content-between mt-1">
+            <span>Time Registered</span>
+            <span>{{ data.updated_at }}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-1">
+            <span
+              [ngStyle]="{
+                color: data['result'] === 'TBD' ? '#5E84E6' : data['result'] === 'Incorrect' ? '#E65E5E' : '#5EE69D'
+              }"
+              >{{ data.result }}</span
+            >
+            <button
+              type="button"
+              class="button button-outline button-edit ml-auto"
+              [disabled]="data['result'] === 'Correct'"
+              (click)="viewPopupDetail(modalManage, data['code_id'])">
+              <img src="assets/icons/icons-svg/color/edit.svg" alt="" width="20" height="20" />
+              <span class="text-gradient ml-1">Edit</span>
+            </button>
+          </div>
+        </div>
+      </div>
       <app-paginator
+        *ngIf="pageData"
         [length]="pageData.length"
         [pageSize]="pageData.pageSize"
         (paginator)="paginatorEmit($event)"
         (pageEvent)="pageEvent($event)">
       </app-paginator>
+      <ng-template #noValues>
+        <div class="d-flex d-lg-none justify-content-center align-items-center text-white">
+          <img src="/assets/icons/icons-svg/white/info.svg" alt="" width="24" height="24" class="mr-2" />
+          <span class="">You have yet to register any type contract</span>
+        </div>
+      </ng-template>
     </div>
   </div>
 </section>
@@ -158,12 +203,12 @@
         <p class="input-require">Code ID</p>
         <div class="box-input">
           <input
+            (keyup)="validateCurrentCodeID($event)"
             class="form-check-input col-12 mb-4"
             [type]="'number'"
             [(ngModel)]="currentCodeID"
             [disabled]="isEditMode"
             placeholder="Enter a Code ID" />
-          />
         </div>
         <p class="small-text text--neutrals-4">Enter a Code ID that you owned/ created.</p>
         <p class="body input-require">Type Contract</p>

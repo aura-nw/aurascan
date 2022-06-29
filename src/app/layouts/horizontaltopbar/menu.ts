@@ -23,7 +23,7 @@ export const MENU: MenuItem[] = [
     id: 4,
     label: 'MENUITEMS.PROPOSAL.TEXT',
     icon: 'archive',
-    link: '/proposal',
+    link: '/votings',
   },
   {
     id: 5,

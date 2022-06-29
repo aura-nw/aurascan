@@ -224,6 +224,7 @@ body {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+
                 .title {
                     display: flex;
                     align-items: center;
@@ -243,7 +244,7 @@ body {
 
             &__item {
                 width: 100%;
-                        
+
                 .item-link {
                     color: var(--aura-green);
 
@@ -277,6 +278,7 @@ body {
     border: 2px solid #5EE6D0;
     border-radius: 1000px;
 
+
     span {
         //font-family: 'SF Pro Display';
         font-style: normal;
@@ -292,6 +294,27 @@ body {
         /* Green */
 
         color: #5EE6D0;
+    }
+
+    &._fill {
+        background-color: #5EE6D0;
+
+        span {
+            color: var(--aura-bg-contract);
+        }
+    }
+
+    &._small {
+        width: 12px;
+        height: 12px;
+
+        padding: 3.5px;
+
+        span {
+            font-size: 9px;
+            letter-spacing: 0.02em;
+
+        }
     }
 }
 
@@ -315,12 +338,14 @@ body {
     min-width: 200px;
     box-shadow: 2px 2px 30px #ffffff05;
     border-radius: 8px;
+
     @media (min-width: 576px) {
         min-width: 357px;
     }
 
     .arrow {
         position: relative;
+
         &::before {
             position: absolute;
             content: "";
@@ -328,9 +353,11 @@ body {
             height: 16px;
             background-color: var(--aura-bg-form);
             top: 179px;
+
             @media (min-width: 576px) {
                 top: 163px;
             }
+
             left: -6px;
             transform: rotate(45deg);
         }
@@ -358,9 +385,11 @@ body {
     font-size: 2rem;
     line-height: 2.3rem;
     font-weight: 500;
+
     &--desc {
         color: var(--aura-danger) !important;
         padding-left: 24px;
+
         &::after {
             content: '';
             position: absolute;
@@ -371,9 +400,11 @@ body {
             background: url("../../assets/icons/icons-svg/color/arrow-down-red.svg") center no-repeat;
         }
     }
+
     &--asc {
         padding-left: 24px;
         color: var(--aura-primary) !important;
+
         &::after {
             content: '';
             position: absolute;
@@ -382,6 +413,80 @@ body {
             width: 24px;
             height: 24px;
             background: url("../../assets/icons/icons-svg/color/arrow-up-green.svg") center no-repeat;
+        }
+    }
+}
+
+.g-flex-start-center {
+    display: flex !important;
+    justify-content: start !important;
+    align-items: center !important;
+}
+
+
+.avatar-wrapper {
+    position: relative;
+    height: fit-content;
+    margin-right: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .rank-wrapper {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+
+        &._jailed {
+            opacity: 0.6;
+        }
+
+        &._small {
+            right: -3px;
+            top: -3px
+        }
+    }
+
+    .validator-avatar {
+        display: inline-block;
+        overflow: hidden;
+
+        width: 24px;
+        height: 24px;
+        border-radius: 1000px;
+
+        &.x-large {
+            width: 80px;
+            height: 80px;
+        }
+
+        &.large {
+            width: 56px;
+            height: 56px;
+        }
+
+        &.medium {
+            width: 40px;
+            height: 40px;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .validator-jailed {
+        opacity: 0.6;
+    }
+
+    .jailed {
+        position: absolute;
+        top: 0px;
+        left: -2px;
+
+        @media screen and (min-width: 992px) {
+            top: 4px;
         }
     }
 }
