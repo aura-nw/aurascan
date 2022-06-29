@@ -51,7 +51,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   pageData: PageEvent;
   pageSize = 10;
   pageIndex = 0;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
   tokenType = 'Aura';
@@ -62,7 +61,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     public global: Globals,
     public commonService: CommonService,
     private tokenService: TokenService,
-    private layout: BreakpointObserver, // private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {

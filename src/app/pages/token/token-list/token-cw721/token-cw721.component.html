@@ -1,45 +1,73 @@
-<div class="d-lg-flex justify-content-between">
-  <div>
-    <app-pagetitle title="CW-721 Tokens" [displayInfo]="false"></app-pagetitle>
-    <div class="body text--light-gray">A total of 530,908 Token Contracts found</div>
-  </div>
-  <form class="aura-form single-input-field search-form d-none d-lg-block">
-    <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search for Token Name or Address"
-        [(ngModel)]="textSearch"
-        (ngModelChange)="searchToken()"
-        name="search"
-        autocomplete="off" />
-      <button
-        type="submit"
-        class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-        (click)="searchToken()">
-        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
-      </button>
-      <button
-        type="reset"
-        class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-        (click)="textSearch = ''; searchToken()">
-        <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
-      </button>
-    </div>
-  </form>
-</div>
-
+<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-8">
       <div class="card-body">
-        <div class="table-responsive aura-table-contain">
-          <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+        <!-- Title -->
+        <div class="d-lg-flex justify-content-between">
+          <div>
+            <div class="mb-3 mb-lg-0 d-flex justify-content-between d-lg-block">
+              <div class="title-medium sub-text-mob  text--white fw-bold">CW-721 Tokens</div>
+              <button class="button d-lg-none p-0"
+                      (click)="searchForm.classList.contains('show') ? searchForm.classList.remove('show') : searchForm.classList.add('show')">
+                <img src="assets/icons/icons-svg/white/search.svg" alt="" width="24px" height="24px">
+              </button>
+            </div>
+            <div class="mall-body small-text-mob text--light-gray">A total of {{ pageData?.length }} Token Contract{{ pageData?.length > 0 ? 's' : '' }} found</div>
+          </div>
+          <form class="aura-form single-input-field search-form mt-2 mt-lg-0" #searchForm>
+            <div class="input-group">
+              <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search for Token Name or Address"
+                      [(ngModel)]="textSearch"
+                      (ngModelChange)="searchToken()"
+                      name="search"
+                      autocomplete="off" />
+              <button
+                      type="submit"
+                      class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                      (click)="searchToken()">
+                <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+              </button>
+              <button
+                      type="reset"
+                      class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                      (click)="textSearch = ''; searchToken()">
+                <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+              </button>
+            </div>
+            <div class="box-search-data text-white" *ngIf="filterSearchData && filterSearchData.length > 0">
+              <div class="txt-title-search mb-3">Tokens (CW-20)</div>
+              <ng-container *ngFor="let item of filterSearchData">
+                <div class="d-flex p-3 cursor-pointer search-result" [routerLink]="['/token/token', item.hashCode]">
+                  <img src="assets/images/icons/token-logo.png" class="logo-token" />
+                  <div class="ml-2" style="flex: 0 0 95%">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="d-flex">
+                        <span class="text-clamp small-body" style="max-width: 65%; height: 18px">{{ item.name }}</span>
+                        <div class="box-price small-text">${{ item.price | number: global.formatNumber2Decimal }}</div>
+                      </div>
+                      <img src="assets/icons/icons-svg/color/check-circle.svg"
+                           alt="icon" class="icon ml-4 mr-2" width="16px" />
+                    </div>
+                    <div class="pr-5 small-text text--light-gray">{{ item.hashCode }}</div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </form>
+        </div>
+        <div class="divider divider-horizontal d-lg-none mt-4"></div>
+        <!-- Table -->
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-6">
+          <table mat-table [dataSource]="dataSource" class="aura-table">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
-              <td mat-cell *matCellDef="let element" class="position-relative">
-                <span class="token-id">{{ element.id }}</span>
+              <td mat-cell *matCellDef="let element; let i = index;" class="position-relative">
+                <span class="token-id">{{ i + 1 }}</span>
               </td>
             </ng-container>
 

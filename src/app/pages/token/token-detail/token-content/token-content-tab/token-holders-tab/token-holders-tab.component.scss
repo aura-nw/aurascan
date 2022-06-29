@@ -1,0 +1,8 @@
+@media (max-width: 991.99px) {
+  .aura-table th.mat-header-cell:nth-child(1) {
+    min-width: 80px;
+  }
+  .aura-table th.mat-header-cell:not(:nth-child(1)) {
+    min-width: 150px;
+  }
+}

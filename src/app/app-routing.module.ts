@@ -36,11 +36,11 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
   },
-  // {
-  //   path: 'token',
-  //   component: LayoutComponent,
-  //   loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
-  // },
+  {
+    path: 'token',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
+  },
   {
     path: 'contracts',
     component: LayoutComponent,
@@ -57,7 +57,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top', relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
