@@ -7,30 +7,23 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {
-  GAS_ESTIMATE,
-  NUMBER_CONVERT,
-  PAGE_SIZE_OPTIONS,
-  STABLE_UTOKEN,
-  VALIDATOR_AVATARS,
-  VALIDATOR_AVATAR_DF,
-  VALIDATOR_AVATAR_URL,
-} from '../../../app/core/constants/common.constant';
-import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
-import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
-import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
-import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
-import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
-import { AccountService } from '../../../app/core/services/account.service';
-import { CommonService } from '../../../app/core/services/common.service';
-import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
-import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
-import { ValidatorService } from '../../../app/core/services/validator.service';
-import { WalletService } from '../../../app/core/services/wallet.service';
-import local from '../../../app/core/utils/storage/local';
-import { Globals } from '../../../app/global/global';
-import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
+import { AURA_DENOM, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from 'src/app/core/constants/common.constant';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { TYPE_STAKING } from 'src/app/core/constants/validator.constant';
+import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
+import { AccountService } from 'src/app/core/services/account.service';
+import { CommonService } from 'src/app/core/services/common.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { getFee } from 'src/app/core/utils/signing/fee';
+import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
+import local from 'src/app/core/utils/storage/local';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-validators',
@@ -455,7 +448,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -503,7 +496,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             from: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -531,7 +524,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to_address: this.selectedValidator,
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: STABLE_UTOKEN,
+              denom: AURA_DENOM,
             },
           },
           senderAddress: this.userAddress,
@@ -576,7 +569,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       let amountCheck = (
         Number(this.dataDelegate.availableToken) +
         Number(this.dataDelegate.delegatableVesting) -
-        (Number(GAS_ESTIMATE) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) / NUMBER_CONVERT
+        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) /
+          NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
