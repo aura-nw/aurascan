@@ -95,7 +95,6 @@
       background-color: var(--aura-bg-form);
       border-radius: 25px;
       z-index: 1500;
-      border: none;
       overflow: hidden;
       max-height: 0;
       transition: max-height .35s ease-in-out;
@@ -107,13 +106,13 @@
         transition: all .35s ease-in-out;
         &:first-child {
           padding-top: 16px;
-          border-top-left-radius: 20px;
-          border-top-right-radius: 20px;
+          border-top-left-radius: 25px;
+          border-top-right-radius: 25px;
         }
         &:last-child {
           padding-bottom: 16px;
-          border-bottom-left-radius: 20px;
-          border-bottom-right-radius: 20px;
+          border-bottom-left-radius: 25px;
+          border-bottom-right-radius: 25px;
         }
         &:hover {
           color: var(--aura-white);
@@ -126,7 +125,6 @@
     }
     .nav-item.dropdown:hover {
         .nav-link__panel {
-          border: 2px solid var(--aura-dark-gray);
           max-height: 900px;
         }
       }
