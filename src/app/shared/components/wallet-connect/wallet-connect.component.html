@@ -36,13 +36,8 @@
         <li class="dropdown-item" [routerLink]="['/account', ng.wallet?.bech32Address]">
           <a>Account Details</a>
         </li>
-        <li class="dropdown-item" (click)="disconnect()">
-          <button type="button" class="button p-0">Log out</button>
-        </li>
-      </ul>
-      <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
-        <li class="dropdown-item" [routerLink]="['/account', ng.wallet?.bech32Address]">
-          <a>Register Contract</a>
+        <li class="dropdown-item" [routerLink]="['/contracts/register']">
+          <a>Register contract</a>
         </li>
         <li class="dropdown-item" (click)="disconnect()">
           <button type="button" class="button p-0">Log out</button>

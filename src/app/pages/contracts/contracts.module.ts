@@ -29,6 +29,8 @@ import { ContractsOverviewCardComponent } from './contracts-detail/contracts-ove
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
+import {SharedModule} from "src/app/shared/shared.module";
+import {ClickOutsideModule} from "ng-click-outside";
 
 @NgModule({
   declarations: [
@@ -47,25 +49,27 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     CompilerOutputComponent,
     ContractsRegisterComponent
   ],
-  imports: [
-    CommonModule,
-    ContractsRoutingModule,
-    NgbPopoverModule,
-    PaginatorModule,
-    TableNoDataModule,
-    TranslateModule,
-    FormsModule,
-    MaterialModule,
-    DropdownModule,
-    MatTableModule,
-    NgbNavModule,
-    CommonPipeModule,
-    DateFnsModule,
-    NgxMaskModule,
-    ContractTableModule,
-    ReactiveFormsModule,
-    QrModule,
-  ],
+    imports: [
+        CommonModule,
+        ContractsRoutingModule,
+        NgbPopoverModule,
+        PaginatorModule,
+        TableNoDataModule,
+        TranslateModule,
+        FormsModule,
+        MaterialModule,
+        DropdownModule,
+        MatTableModule,
+        NgbNavModule,
+        CommonPipeModule,
+        DateFnsModule,
+        NgxMaskModule,
+        ContractTableModule,
+        ReactiveFormsModule,
+        QrModule,
+        SharedModule,
+        ClickOutsideModule,
+    ],
   providers: [ContractService],
 })
 export class ContractsModule {}
