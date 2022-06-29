@@ -4,6 +4,16 @@
   }
 }
 
+.btn-register {
+  width: 205px;
+  span {
+    letter-spacing: 0 !important;
+  }
+  @media (max-width: 414px) {
+    width: 100%;
+  }
+}
+
 .search-form {
   min-width: 350px;
   &.single-input-field {
