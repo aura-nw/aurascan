@@ -206,7 +206,9 @@
             (keyup)="validateCurrentCodeID($event)"
             class="form-check-input col-12 mb-4"
             [type]="'number'"
+            oninput="javascript: if (this.value.length > 50) this.value = this.value.slice(0, 50);"
             [(ngModel)]="currentCodeID"
+            (ngModelChange)="checkInput()"
             [disabled]="isEditMode"
             placeholder="Enter a Code ID" />
         </div>
@@ -218,6 +220,7 @@
               class="list-token"
               placeholder="Select a type contract"
               panelClass="commissionPanel"
+              (selectionChange)="checkInput()"
               [(value)]="selectedTypeContract"
               [disableOptionCentering]="true">
               <mat-option *ngFor="let item of lstTypeContract" [value]="item.value">
@@ -233,7 +236,7 @@
       </div>
       <div class="d-flex align-items-center justify-content-end w-100 mt-4">
         <button type="button" class="button body mr-2 text--white" (click)="closeDialog(modal)">Close</button>
-        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)">
+        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)" [disabled]="!isEditMode && isDisable">
           <span class="text-gradient">
             <ng-container *ngIf="isEditMode">Update</ng-container>
             <ng-container *ngIf="!isEditMode">Register</ng-container>

@@ -58,6 +58,7 @@ export class ContractsRegisterComponent implements OnInit {
   walletAccount: any;
   loading = true;
   isHideSearch = false;
+  isDisable = true;
 
   constructor(
     public translate: TranslateService,
@@ -164,6 +165,7 @@ export class ContractsRegisterComponent implements OnInit {
   viewPopupDetail(staticDataModal: any, data: any) {
     this.isEditMode = false;
     this.currentCodeID = undefined;
+    this.selectedTypeContract = undefined;
     if (data?.code_id) {
       this.currentCodeID = data.code_id || undefined;
       this.selectedTypeContract = data.type || undefined;
@@ -239,5 +241,12 @@ export class ContractsRegisterComponent implements OnInit {
 
   validateCurrentCodeID(s: any) {
     this.currentCodeID = s.target.value.replace(/[-]/g, '');
+  }
+
+  checkInput(): void {
+    this.isDisable = true;
+    if (this.currentCodeID && this.selectedTypeContract) {
+      this.isDisable = false;
+    }
   }
 }
