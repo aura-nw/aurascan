@@ -51,24 +51,6 @@ export const AURA_DENOM = 'uaura';
 
 export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 
-export const VALIDATOR_AVATAR_DF = 'assets/icons/icons-svg/color/validator-default.svg';
+export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg';
 export const VALIDATOR_AVATAR_URL =
   'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/chihuahua/';
-
-export const VALIDATOR_AVATARS = [
-  'chihuahuavaloper10wxn2lv29yqnw2uf4jf439kwy5ef00qdqj3xsc.png',
-  'chihuahuavaloper13c2hcctczy695gfs5gc637tc844n6a9unlkaqv.png',
-  'chihuahuavaloper1gvg43c4q0d8nyrpt0e0gdwqxpf4lh886sljvyh.png',
-  'chihuahuavaloper126awjy8y8xstj2t0vadjgtcts7rzqcpyej25sd.png',
-  'chihuahuavaloper128jw67hyqd02zxeqeqzy4dzfx67g3dplwqlqjl.png',
-  'chihuahuavaloper12d2a8hfrq784u9lfxp8qj2huxxglejzrqlylwt.png',
-  'chihuahuavaloper12ngvddk8z8gmv5rnn3gk4gme4l85yxw0rlxept.png',
-  'chihuahuavaloper12zy6fanks3gaag3e2j6qg2lhm5nt07q9d4gdqz.png',
-  'chihuahuavaloper13jawsn574rf3f0u5rhu7e8n6sayx5gkwzwdsya.png',
-  'chihuahuavaloper13pk8gc7r68wtp6wurdhlkul4mqkhhd3eeegs5u.png',
-  'chihuahuavaloper13pvq2xe7a5dqauhnxajep67fl5mksw7zr9mgds.png',
-  'chihuahuavaloper140l6y2gp3gxvay6qtn70re7z2s0gn57zum7h5l.png',
-  'chihuahuavaloper147u6ks5e2f556upw9h47j86s4l3j0yggzvw6r9.png',
-  'chihuahuavaloper149c3xwd6al6nphyvx8gkvnd9363rnc4v3uwcfu.png',
-  'chihuahuavaloper14cy7x6xwysrnlznah6jhhc59q4dfgs5n8rlgea.png',
-];
