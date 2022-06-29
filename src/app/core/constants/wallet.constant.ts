@@ -161,14 +161,12 @@ export enum KEPLR_ERRORS {
 }
 
 export const SIGNING_MESSAGE_TYPES = {
-  SEND: `SendTx`,
-  STAKE: `StakeTx`,
-  RESTAKE: `RestakeTx`,
-  UNSTAKE: `UnstakeTx`,
-  VOTE: `VoteTx`,
+  STAKE: 'Delegate',//`StakeTx`,
+  RESTAKE: `Redelegate`,
+  UNSTAKE: 'Undelegate',//`UnstakeTx`,
+  VOTE: `Vote`,
   DEPOSIT: `DepositTx`,
-  CLAIM_REWARDS: `ClaimRewardsTx`,
-  SUBMIT_PROPOSAL: `SubmitProposalTx`,
+  CLAIM_REWARDS: `GetReward`,
   UNKNOWN: `UnknownTx`,
 };
 

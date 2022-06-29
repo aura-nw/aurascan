@@ -48,7 +48,7 @@ export const ADDRESS_PREFIX = 'aura';
 
 export const GAS_ESTIMATE = '400000';
 
-export const STABLE_UTOKEN = 'uaura';
+export const AURA_DENOM = 'uaura';
 
 export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 

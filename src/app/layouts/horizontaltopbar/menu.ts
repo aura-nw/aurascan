@@ -34,7 +34,7 @@ export const MENU: MenuItem[] = [
   {
       id: 6,
       label: 'MENUITEMS.TOKEN.TEXT',
-      icon: 'user',
+      icon: 'coin',
       link: '/token',
       subItems: [
           {

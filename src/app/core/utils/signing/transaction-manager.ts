@@ -1,17 +1,14 @@
-import { DeliverTxResponse, SigningStargateClient } from '@cosmjs/stargate';
-import { GAS_ESTIMATE, STABLE_UTOKEN } from '../../constants/common.constant';
+import { DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
+import { AURA_DENOM } from '../../constants/common.constant';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
+import { getFee } from './fee';
 
-export async function createSignBroadcast({
-  messageType,
-  message,
-  senderAddress,
-  network,
-  signingType,
-  chainId,
-}): Promise<any> {
+export async function createSignBroadcast(
+  { messageType, message, senderAddress, network, signingType, chainId },
+  validatorsCount?: number,
+): Promise<any> {
   let error: KEPLR_ERRORS;
   let broadcastResult: DeliverTxResponse;
   if (signingType === 'extension') {
@@ -23,14 +20,14 @@ export async function createSignBroadcast({
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message, network);
 
-    const fee: any = {
+    const fee: StdFee = {
       amount: [
         {
-          denom: STABLE_UTOKEN,
+          denom: AURA_DENOM,
           amount: '1',
         },
       ],
-      gas: GAS_ESTIMATE,
+      gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
     };
 
     try {

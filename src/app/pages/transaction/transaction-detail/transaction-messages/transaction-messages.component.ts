@@ -3,7 +3,7 @@ import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constan
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import { getAmount, Globals } from '../../../../global/global';
 import { DatePipe } from '@angular/common';
-import { DATEFORMAT, NUMBER_CONVERT, STABLE_UTOKEN } from '../../../../core/constants/common.constant';
+import { DATEFORMAT, NUMBER_CONVERT, AURA_DENOM } from '../../../../core/constants/common.constant';
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 
@@ -115,17 +115,17 @@ export class TransactionMessagesComponent implements OnInit {
                   let arrayAmount = data.filter((k) => k.key === 'amount');
                   this.amountClaim = 0;
                   arrayAmount.forEach((element) => {
-                    this.amountClaim += Number(element.value.replace(STABLE_UTOKEN, '')) / NUMBER_CONVERT || 0;
+                    this.amountClaim += Number(element.value.replace(AURA_DENOM, '')) / NUMBER_CONVERT || 0;
                   });
                 } else {
                   let amount = data.find((k) => k.key === 'amount').value;
-                  this.amountClaim = amount.replace(STABLE_UTOKEN, '') / NUMBER_CONVERT || 0;
+                  this.amountClaim = amount.replace(AURA_DENOM, '') / NUMBER_CONVERT || 0;
                 }
               }
               this.transactionDetail?.messages.forEach((message) => {
                 const validator = data.find((trans) => trans.key === 'validator')?.value;
                 if (validator === message.validator_address) {
-                  let amount = data.find((k) => k.key === 'amount').value.replace(STABLE_UTOKEN, '');
+                  let amount = data.find((k) => k.key === 'amount').value.replace(AURA_DENOM, '');
                   amount = amount / NUMBER_CONVERT || 0;
                   this.listAmountClaim.push(amount);
                 }

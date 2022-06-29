@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
-import { GAS_ESTIMATE, STABLE_UTOKEN } from 'src/app/core/constants/common.constant';
+import { GAS_ESTIMATE, AURA_DENOM } from 'src/app/core/constants/common.constant';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -125,7 +125,7 @@ export class TokenContractWriteComponent implements OnInit {
           const fee: any = {
             amount: [
               {
-                denom: STABLE_UTOKEN,
+                denom: AURA_DENOM,
                 amount: '1',
               },
             ],
