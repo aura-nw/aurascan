@@ -1,17 +1,18 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
-import { ResponseDto } from '../../../../app/core/models/common.model';
-import { MappingErrorService } from '../../../../app/core/services/mapping-error.service';
-import { TransactionService } from '../../../../app/core/services/transaction.service';
-import { MESSAGE_WARNING } from '../../../core/constants/proposal.constant';
-import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../core/constants/wallet.constant';
-import { EnvironmentService } from '../../../core/data-services/environment.service';
-import { IVotingDialog } from '../../../core/models/proposal.model';
-import { NgxToastrService } from '../../../core/services/ngx-toastr.service';
-import { WalletService } from '../../../core/services/wallet.service';
-import { createSignBroadcast } from '../../../core/utils/signing/transaction-manager';
+import { Component, OnInit, Inject } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { MESSAGE_WARNING } from "src/app/core/constants/proposal.constant";
+import { CodeTransaction } from "src/app/core/constants/transaction.enum";
+import { SIGNING_MESSAGE_TYPES, ChainsInfo, ESigningType } from "src/app/core/constants/wallet.constant";
+import { EnvironmentService } from "src/app/core/data-services/environment.service";
+import { ResponseDto } from "src/app/core/models/common.model";
+import { IVotingDialog } from "src/app/core/models/proposal.model";
+import { MappingErrorService } from "src/app/core/services/mapping-error.service";
+import { NgxToastrService } from "src/app/core/services/ngx-toastr.service";
+import { TransactionService } from "src/app/core/services/transaction.service";
+import { WalletService } from "src/app/core/services/wallet.service";
+import { createSignBroadcast } from "src/app/core/utils/signing/transaction-manager";
+
 
 @Component({
   selector: 'app-proposal-vote',
@@ -25,11 +26,11 @@ export class ProposalVoteComponent implements OnInit {
   MESSAGE = MESSAGE_WARNING;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private walletService: WalletService,
-    @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
     private route: Router,
     private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,

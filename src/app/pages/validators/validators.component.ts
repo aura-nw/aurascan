@@ -621,4 +621,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       (error) => {},
     );
   }
+
+  getValidatorAvatar(validatorAddress: string): string {
+    return this.validatorService.getValidatorAvatar(validatorAddress);
+  }
 }
