@@ -1,8 +1,8 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
+import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
 export interface IVotes {
@@ -17,23 +17,23 @@ export interface IVotes {
 @Component({
   selector: 'app-votes',
   templateUrl: './votes.component.html',
-  styleUrls: ['./votes.component.scss']
+  styleUrls: ['./votes.component.scss'],
 })
 export class VotesComponent implements OnInit {
   @Input() proposalId: number = null;
 
   TABS = PROPOSAL_VOTE.filter((vote) =>
     [
-      'VOTE_OPTION_UNSPECIFIED',
-      'VOTE_OPTION_YES',
-      'VOTE_OPTION_ABSTAIN',
-      'VOTE_OPTION_NO',
-      'VOTE_OPTION_NO_WITH_VETO',
+      VOTE_OPTION.VOTE_OPTION_UNSPECIFIED,
+      VOTE_OPTION.VOTE_OPTION_YES,
+      VOTE_OPTION.VOTE_OPTION_ABSTAIN,
+      VOTE_OPTION.VOTE_OPTION_NO,
+      VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO,
     ].includes(vote.key),
   ).map((vote) => ({
     ...vote,
     value: vote.value.toUpperCase(),
-    key: vote.key === 'VOTE_OPTION_UNSPECIFIED' ? '' : vote.key,
+    key: vote.key === VOTE_OPTION.VOTE_OPTION_UNSPECIFIED ? '' : vote.key,
   }));
 
   voteDataList: IVotes[] = [];
@@ -86,10 +86,10 @@ export class VotesComponent implements OnInit {
         if (res['all']) {
           this.voteDataList = [...this.voteData.all.proposalVotes];
           this.countVote.set('', this.voteData.all.countTotal);
-          this.countVote.set('VOTE_OPTION_YES', this.voteData.all.countYes);
-          this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countAbstain);
-          this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNo);
-          this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countNoWithVeto);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.all.countNoWithVeto);
         }
         this.voteDataListLoading = false;
       });
@@ -102,16 +102,16 @@ export class VotesComponent implements OnInit {
       case '':
         this.voteDataList = this.voteData.all.proposalVotes;
         break;
-      case 'VOTE_OPTION_YES':
+      case VOTE_OPTION.VOTE_OPTION_YES:
         this.voteDataList = this.voteData.yes.proposalVotes;
         break;
-      case 'VOTE_OPTION_ABSTAIN':
+      case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
         this.voteDataList = this.voteData.abstain.proposalVotes;
         break;
-      case 'VOTE_OPTION_NO':
+      case VOTE_OPTION.VOTE_OPTION_NO:
         this.voteDataList = this.voteData.no.proposalVotes;
         break;
-      case 'VOTE_OPTION_NO_WITH_VETO':
+      case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
         this.voteDataList = this.voteData.noWithVeto.proposalVotes;
         break;
     }

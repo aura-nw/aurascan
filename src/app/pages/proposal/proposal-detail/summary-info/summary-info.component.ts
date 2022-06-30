@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
+import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTING_STATUS } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
 import { CommonService } from '../../../../core/services/common.service';
@@ -84,7 +84,7 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalDetail.pro_votes_no_with_veto +
           this.proposalDetail.pro_votes_abstain;
 
-        if (this.proposalDetail.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+        if (this.proposalDetail.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
           const expiredTime = +moment(this.proposalDetail.pro_voting_end_time).format('x') - +moment().format('x');
           if (expiredTime < 0) {
             this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res: ResponseDto) => {
