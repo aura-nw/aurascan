@@ -14,8 +14,6 @@ enum EFees {
 }
 
 export function getFee(messageType: TRANSACTION_TYPE_ENUM | string, validatorsCount?: number): string {
-  console.log(TRANSACTION_TYPE_ENUM[messageType], MessageType.GetReward);
-
   switch (TRANSACTION_TYPE_ENUM[messageType]) {
     case MessageType.Send:
       return EFees.Send;

@@ -25,12 +25,11 @@
           [(ngModel)]="textSearch"
           [maxLength]="maxLengthSearch"
           (keyup)="searchCode()"
-          (keyup.enter)="handleLink()"
           name="search"
           autocomplete="off" />
         <button
           type="submit"
-          class="btn-search cursor-pointer {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+          class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
           (click)="searchCode()">
           <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
         </button>
@@ -126,7 +125,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
-              <div class="d-flex justify-content-center align-items-center m-5 p-5">
+              <div class="d-flex justify-content-center align-items-center">
                 <img src="/assets/icons/icons-svg/white/info.svg" alt="" width="24" height="24" class="mr-2" />
                 You have yet to register any type contract
               </div>

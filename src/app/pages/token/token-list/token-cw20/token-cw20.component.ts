@@ -439,6 +439,16 @@ export class TokenCw20Component implements OnInit {
   }
 
   handleLink(): void {
-    this.router.navigate(['/token/token', this.filterSearchData[0]?.hashCode]);
+    this.router.navigate(['/tokens/token', this.filterSearchData[0]?.hashCode]);
+  }
+
+  handlePageEvent(event: any): void {
+    if (this.pageData.pageSize !== event.pageSize) {
+      event.pageIndex = 0;
+    }
+    this.pageData.pageIndex = event.pageIndex;
+    this.pageData.pageSize = event.pageSize;
+    // event.pageEventType = this.pageEventType;
+    // this.pageEvent.emit(event);
   }
 }
