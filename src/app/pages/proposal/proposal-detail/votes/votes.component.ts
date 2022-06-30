@@ -37,14 +37,10 @@ export class VotesComponent implements OnInit {
   }));
 
   voteDataList: IVotes[] = [];
-
-  _voteList: IVotes[] = [];
-
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
   LIMIT_DEFAULT = 10000;
   voteDataListLoading = true;
-
   query = [];
 
   voteData = {

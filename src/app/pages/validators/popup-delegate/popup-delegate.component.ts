@@ -13,7 +13,6 @@ import { Globals } from '../../../global/global';
 export class PopupDelegateComponent implements OnInit {
   @Input() data: any;
 
-  amountFormat: string | number;
   availableToken = 0;
   dialogMode = DIALOG_STAKE_MODE;
   timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;

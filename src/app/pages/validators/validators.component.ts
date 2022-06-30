@@ -47,8 +47,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
   dataSourceBk: MatTableDataSource<any>;
 
-  pageIndex = 0;
-
   templatesWallet: Array<TableTemplate> = [
     { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
     { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
@@ -59,22 +57,17 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   dataSourceWallet: MatTableDataSource<any>;
   lengthWallet = 0;
 
-  pageSizeOptions = PAGE_SIZE_OPTIONS;
-  isActive = true;
   textSearch = '';
   rawData: any[];
   sortedData: any;
-  dataHeader = new CommonDataDto();
   dataModal: any;
   clicked = false;
   totalDelegator = 0;
-  claimReward = 0;
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   validatorAddress = [];
   selectedValidator: string;
-  listTypeStake = TYPE_STAKING;
   searchNullData = false;
   listStakingValidator = [];
   validatorDetail = '';

@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./proposal-detail.component.scss'],
 })
 export class ProposalDetailComponent implements OnInit {
-  // bread crumb items
   proposalId: number;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {

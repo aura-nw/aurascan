@@ -1,18 +1,17 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Router } from "@angular/router";
-import { MESSAGE_WARNING } from "src/app/core/constants/proposal.constant";
-import { CodeTransaction } from "src/app/core/constants/transaction.enum";
-import { SIGNING_MESSAGE_TYPES, ChainsInfo, ESigningType } from "src/app/core/constants/wallet.constant";
-import { EnvironmentService } from "src/app/core/data-services/environment.service";
-import { ResponseDto } from "src/app/core/models/common.model";
-import { IVotingDialog } from "src/app/core/models/proposal.model";
-import { MappingErrorService } from "src/app/core/services/mapping-error.service";
-import { NgxToastrService } from "src/app/core/services/ngx-toastr.service";
-import { TransactionService } from "src/app/core/services/transaction.service";
-import { WalletService } from "src/app/core/services/wallet.service";
-import { createSignBroadcast } from "src/app/core/utils/signing/transaction-manager";
-
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { MESSAGE_WARNING } from 'src/app/core/constants/proposal.constant';
+import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ResponseDto } from 'src/app/core/models/common.model';
+import { IVotingDialog } from 'src/app/core/models/proposal.model';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -22,8 +21,6 @@ import { createSignBroadcast } from "src/app/core/utils/signing/transaction-mana
 export class ProposalVoteComponent implements OnInit {
   keyVote = null;
   chainId = this.environmentService.apiUrl.value.chainId;
-
-  MESSAGE = MESSAGE_WARNING;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
@@ -78,8 +75,7 @@ export class ProposalVoteComponent implements OnInit {
           }
         }
       },
-      (error) => {
-      },
+      (error) => {},
     );
   }
 

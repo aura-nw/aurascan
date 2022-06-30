@@ -1,4 +1,3 @@
-import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 
 const MessageType = TRANSACTION_TYPE_ENUM;

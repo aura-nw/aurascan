@@ -1,19 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '../../../core/services/common.service';
 import { DATEFORMAT, NUMBER_CONVERT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import {
-  CodeTransaction,
-  StatusTransaction,
-  TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
-} from '../../../core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
 import { ResponseDto } from '../../../core/models/common.model';
+import { CommonService } from '../../../core/services/common.service';
+import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Globals } from '../../../global/global';
-import { MappingErrorService } from '../../../core/services/mapping-error.service';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -30,7 +25,6 @@ export class TransactionDetailComponent implements OnInit {
   amount: string | number;
   isRawData = false;
   jsonStr: string;
-  eTransType = TRANSACTION_TYPE_ENUM;
   errorMessage = '';
 
   constructor(
