@@ -40,15 +40,12 @@ export class ContractsRegisterComponent implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataBk: any[];
   dataBlock: any[];
   dataSearch: any;
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  currentValidatorDialog: string;
   modalReference: any;
   currentCodeID: undefined;
   isEditMode = false;
@@ -88,6 +85,7 @@ export class ContractsRegisterComponent implements OnInit {
 
   getListContract() {
     let payload = {
+      account_address: this.userAddress,
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
@@ -118,6 +116,7 @@ export class ContractsRegisterComponent implements OnInit {
     this.isHideSearch = false;
     if (this.textSearch.length > 0) {
       let payload = {
+        account_address: this.userAddress,
         limit: 0,
         offset: 0,
         keyword: this.textSearch,
@@ -131,6 +130,8 @@ export class ContractsRegisterComponent implements OnInit {
           this.filterSearchData = res.data;
         }
       });
+    } else {
+      this.clearSearch();
     }
   }
 
@@ -156,10 +157,6 @@ export class ContractsRegisterComponent implements OnInit {
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getListContract();
-  }
-
-  handleLink(): void {
-    this.router.navigate(['/contracts/', this.filterSearchData[0]?.contract_address]);
   }
 
   shortenAddress(address: string): string {
