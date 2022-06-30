@@ -7,23 +7,23 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AURA_DENOM, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from 'src/app/core/constants/common.constant';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
-import { TYPE_STAKING } from 'src/app/core/constants/validator.constant';
-import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
-import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
-import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
-import { AccountService } from 'src/app/core/services/account.service';
-import { CommonService } from 'src/app/core/services/common.service';
-import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
-import local from 'src/app/core/utils/storage/local';
-import { Globals } from 'src/app/global/global';
+import { AURA_DENOM, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
+import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
+import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
+import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
+import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { AccountService } from '../../../app/core/services/account.service';
+import { CommonService } from '../../../app/core/services/common.service';
+import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
+import { NgxToastrService } from '../../../app/core/services/ngx-toastr.service';
+import { TransactionService } from '../../../app/core/services/transaction.service';
+import { ValidatorService } from '../../../app/core/services/validator.service';
+import { WalletService } from '../../../app/core/services/wallet.service';
+import local from '../../../app/core/utils/storage/local';
+import { Globals } from '../../../app/global/global';
+import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',
@@ -174,7 +174,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
         this.rawData = res.data;
-        res.data.forEach((val, idx) => {
+        res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
           if (val.target_count > 0 && val.vote_count / val.target_count <= 0.5) {
             val.isPartiDown = true;
@@ -458,7 +458,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
 
       excuteStaking();
@@ -467,22 +467,24 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
-      const excuteClaim = async () => {
-        const { hash, error } = await createSignBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
-          message: {
-            from: this.listStakingValidator,
+      const executeClaim = async () => {
+        const { hash, error } = await createSignBroadcast(
+          {
+            messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
+            message: {
+              from: this.listStakingValidator,
+            },
+            senderAddress: this.userAddress,
+            network: ChainsInfo[this.walletService.chainId],
+            signingType: ESigningType.Keplr,
+            chainId: this.walletService.chainId,
           },
-          senderAddress: this.userAddress,
-          network: ChainsInfo[this.walletService.chainId],
-          signingType: ESigningType.Keplr,
-          chainId: this.walletService.chainId,
-        });
+          this.listStakingValidator?.length,
+        );
 
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
-      excuteClaim();
+      executeClaim();
     }
   }
 
@@ -506,9 +508,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
       excuteUnStaking();
     }
   }
@@ -516,7 +517,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleRedelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const excuteReStaking = async () => {
+      const executeReStaking = async () => {
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
@@ -534,10 +535,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         });
 
         this.modalReference.close();
-        this.checkStatuExcuteBlock(hash, error, '');
+        this.checkStatusExecuteBlock(hash, error, '');
       };
-
-      excuteReStaking();
+      executeReStaking();
     }
   }
 
@@ -589,7 +589,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.commissionLabel = label;
   }
 
-  checkStatuExcuteBlock(hash, error, msg) {
+  checkStatusExecuteBlock(hash, error, msg) {
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(error);
