@@ -24,7 +24,6 @@ export class TransactionMessagesComponent implements OnInit {
   amountClaim = 0;
   storeCodeId = 0;
   dateVesting: string;
-  isVestingDelay: boolean;
   validatorName = '';
   validatorNameDes = '';
   listValidator: any[];

@@ -45,14 +45,9 @@ export class ValidatorsVotesComponent implements OnInit {
 
   voteDataList: IValidatorVotes[] = [];
   voteDataListLoading = true;
-
-  _voteList: IValidatorVotes[] = [];
-
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
-
   LIMIT_DEFAULT = 10000;
-
   query = [];
 
   voteData = {

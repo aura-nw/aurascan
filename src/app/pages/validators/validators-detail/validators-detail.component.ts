@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT, VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
+import { NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -19,8 +19,6 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
-  breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: false }, { label: 'Detail', active: true }];
-
   currentAddress: string;
   currentValidatorDetail;
 
@@ -29,14 +27,11 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthPower: number;
 
   pageSize = 5;
-
   pageIndexBlock = 0;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
 
-  typeTransaction = TYPE_TRANSACTION;
   arrayUpTime = new Array(100);
-  isUptimeMiss = true;
   statusValidator = STATUS_VALIDATOR;
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();

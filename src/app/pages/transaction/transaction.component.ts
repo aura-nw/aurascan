@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -31,13 +29,10 @@ export class TransactionComponent implements OnInit {
   length: number;
   pageSize = 20;
   pageIndex = 0;
-  pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
-  statusTransaction = StatusTransaction;
   loading = true;
 
   constructor(
-    private router: Router,
     private transactionService: TransactionService,
     public global: Globals,
     public commonService: CommonService,

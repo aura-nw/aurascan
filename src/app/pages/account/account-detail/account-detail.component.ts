@@ -1,18 +1,25 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DecimalPipe } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
-import local from '../../../../app/core/utils/storage/local';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
+import { balanceOf } from '../../../../app/core/utils/common/parsing';
+import local from '../../../../app/core/utils/storage/local';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -20,7 +27,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
+  TypeTransaction
 } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
@@ -29,13 +36,6 @@ import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { getAmount, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
-import { Subject } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { takeUntil } from 'rxjs/operators';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DecimalPipe } from '@angular/common';
-import { balanceOf } from '../../../../app/core/utils/common/parsing';
-import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -110,7 +110,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   ];
   displayedColumnsVesting: string[] = this.templatesVesting.map((dta) => dta.matColumnDef);
   dataSourceVesting: MatTableDataSource<any>;
-  pageType = '';
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -155,9 +154,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   pageSize = 5;
   pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
-  statusTransaction = StatusTransaction;
   pageEventType = PageEventType;
-  imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
   tokenPrice = 0;
@@ -180,7 +177,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private transactionService: TransactionService,
     public commonService: CommonService,
     private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
     public global: Globals,
     private walletService: WalletService,
