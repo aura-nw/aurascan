@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { Globals } from '../../../app/global/global';
 import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
-import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
+import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTING_STATUS } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
@@ -92,8 +92,8 @@ export class ProposalComponent implements OnInit {
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
           if (
-            (index < 4 && pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') ||
-            pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD'
+            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
+            pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
           ) {
             this.getVoteResult(pro.pro_id, index);
             const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
