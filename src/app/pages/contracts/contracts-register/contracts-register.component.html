@@ -187,7 +187,7 @@
   <ng-template #modalManage let-modal>
     <div class="aura-form d-flex row p-3">
       <div class="col-12 d-flex justify-content-between px-0 mb-4">
-        <span>
+        <span class="fw-500">
           <ng-container *ngIf="isEditMode">Update Type Contract</ng-container>
           <ng-container *ngIf="!isEditMode">Register Type Contract</ng-container>
         </span>
@@ -200,7 +200,7 @@
           (click)="closeDialog(modal)" />
       </div>
       <div class="box-body-register col-12">
-        <p class="input-require body-small">Code ID</p>
+        <p class="body-small" [class.input-require]="!isEditMode">Code ID</p>
         <div class="box-input">
           <input
             (keyup)="validateCurrentCodeID($event)"
@@ -236,7 +236,7 @@
       </div>
       <div class="d-flex align-items-center justify-content-end w-100 mt-4">
         <button type="button" class="button body mr-2 text--white" (click)="closeDialog(modal)">Close</button>
-        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)" [disabled]="!isEditMode && isDisable">
+        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)" [disabled]="(!isEditMode && isDisable) || isProcess">
           <span class="text-gradient">
             <ng-container *ngIf="isEditMode">Update</ng-container>
             <ng-container *ngIf="!isEditMode">Register</ng-container>

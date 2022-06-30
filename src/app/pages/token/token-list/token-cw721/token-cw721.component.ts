@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from '../../../../global/global';
+import {PAGE_EVENT} from "src/app/core/constants/common.constant";
 
 @Component({
   selector: 'app-token-cw721',
@@ -244,7 +245,7 @@ export class TokenCw721Component implements OnInit {
     this.pageData = {
       length: this.mockData.length,
       pageSize: this.pageSize,
-      pageIndex: 1,
+      pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
     this.dataSource = new MatTableDataSource<any>(this.mockData);
   }
@@ -258,5 +259,8 @@ export class TokenCw721Component implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+  handlePageEvent(e: any) {
+    this.pageData = e;
   }
 }
