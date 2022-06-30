@@ -13,11 +13,6 @@
     opacity: 1 !important;
   }
 }
-.token-id {
-  position: absolute;
-  top: 0;
-  transform: translateY(100%);
-}
 .box-search-data{
   position: absolute;
   padding: 10px;
@@ -72,4 +67,7 @@
   .aura-table th.mat-header-cell:nth-child(1) {
     min-width: 50px;
   }
+}
+.vertical-align-top {
+  vertical-align: top;
 }
