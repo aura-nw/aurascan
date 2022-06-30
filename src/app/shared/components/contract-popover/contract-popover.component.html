@@ -24,7 +24,7 @@
         <img class="d-inline" width="20px" src="assets/icons/icons-svg/color/aura.svg" alt="aura" />
         {{ popoverData?.amount | number: FORMAT.PRICE_6 }}
         (${{ popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
-        <a class="text--green" [routerLink]="['/token/token', popoverData.tokenAddress]"> {{ popoverData.symbol }} </a>
+        <a class="text--green" [routerLink]="['/tokens/token', popoverData.tokenAddress]"> {{ popoverData.symbol }} </a>
       </div>
       <div>
         <span class="text--light-gray mr-1">From</span>
