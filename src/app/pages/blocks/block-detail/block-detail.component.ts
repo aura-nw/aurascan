@@ -1,16 +1,16 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '../../../../app/core/services/common.service';
-import { DATEFORMAT, PAGE_SIZE_OPTIONS } from '../../../../app/core/constants/common.constant';
+import { DATEFORMAT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
-import { getAmount, Globals } from '../../../../app/global/global';
+import { CommonService } from '../../../../app/core/services/common.service';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { getAmount, Globals } from '../../../../app/global/global';
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',
@@ -20,7 +20,6 @@ export class BlockDetailComponent implements OnInit {
   id: string | number;
   blockId: string | number;
   item = undefined;
-  breadCrumbItems = [{ label: 'Blocks' }, { label: 'List', active: false }, { label: 'Detail', active: true }];
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
@@ -35,11 +34,7 @@ export class BlockDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   dataTxs: any[];
   length = 0;
-  pageSize = 10;
-  pageIndex = 0;
-  pageSizeOptions = PAGE_SIZE_OPTIONS;
   typeTransaction = TYPE_TRANSACTION;
-  statusTransaction = StatusTransaction;
   dateFormat;
   loading = true;
   isRawData = false;
