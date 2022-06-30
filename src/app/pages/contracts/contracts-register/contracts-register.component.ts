@@ -59,6 +59,8 @@ export class ContractsRegisterComponent implements OnInit {
   loading = true;
   isHideSearch = false;
   isDisable = true;
+  pageLength = 0;
+  isProcess = false;
 
   constructor(
     public translate: TranslateService,
@@ -97,6 +99,7 @@ export class ContractsRegisterComponent implements OnInit {
         pageSize: this.pageData.pageSize,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
+      this.pageLength = this.pageData?.length;
 
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
@@ -135,12 +138,15 @@ export class ContractsRegisterComponent implements OnInit {
     this.filterSearchData = null;
     this.dataSource = new MatTableDataSource<any>(this.dataBk);
     this.dataBlock = this.dataBk;
+    this.pageData.length = this.pageLength;
   }
 
   replacePageList(item: any): void {
+    this.textSearch = item.code_id;
     this.dataSource = new MatTableDataSource<any>([item]);
     this.dataBlock = [item];
     this.isHideSearch = true;
+    this.pageData.length = 1;
   }
 
   paginatorEmit(event): void {
@@ -172,6 +178,7 @@ export class ContractsRegisterComponent implements OnInit {
       this.selectedTypeContract = data.type || undefined;
       this.isEditMode = true;
     }
+    this.isProcess = false;
 
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
@@ -181,6 +188,7 @@ export class ContractsRegisterComponent implements OnInit {
   }
 
   handleButtonContract(isEditMode: boolean) {
+    this.isProcess = true;
     if (isEditMode) {
       this.handleUpdate(this.currentCodeID);
     } else {
@@ -204,6 +212,7 @@ export class ContractsRegisterComponent implements OnInit {
         (res) => {
           if (res) {
             this.handleCloseDialog(res);
+            this.isProcess = false;
           }
         },
         (error) => {},
@@ -216,6 +225,7 @@ export class ContractsRegisterComponent implements OnInit {
       (res) => {
         if (res) {
           this.handleCloseDialog(res);
+          this.isProcess = false;
         }
       },
       (error) => {},

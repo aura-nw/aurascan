@@ -236,7 +236,7 @@
       </div>
       <div class="d-flex align-items-center justify-content-end w-100 mt-4">
         <button type="button" class="button body mr-2 text--white" (click)="closeDialog(modal)">Close</button>
-        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)" [disabled]="!isEditMode && isDisable">
+        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)" [disabled]="(!isEditMode && isDisable) || isProcess">
           <span class="text-gradient">
             <ng-container *ngIf="isEditMode">Update</ng-container>
             <ng-container *ngIf="!isEditMode">Register</ng-container>
