@@ -55,7 +55,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   tokenDetail = undefined;
   tokenType = 'Aura';
   tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
-  isSearchAddres = false;
+  isSearchAddress = false;
 
   constructor(
     public global: Globals,
@@ -71,7 +71,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.tokenDataList) {
-      this.isSearchAddres = false;
+      this.isSearchAddress = false;
       
       const filterData = this.tokenDataList.filter(
         (data) =>
@@ -86,7 +86,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
           pageIndex: 1,
         };
         if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
-          this.isSearchAddres = true;
+          this.isSearchAddress = true;
         }
         this.dataSource = new MatTableDataSource<any>(filterData);
       }
