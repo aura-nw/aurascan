@@ -78,6 +78,7 @@ export class ContractsRegisterComponent implements OnInit {
         this.userAddress = wallet.bech32Address;
       } else {
         this.userAddress = null;
+        this.router.navigate(['/']);
       }
     });
     this.getListContract();
