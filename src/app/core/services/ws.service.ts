@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DialogService } from 'src/app/core/services/dialog.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Injectable({
@@ -25,7 +23,6 @@ export class WSService {
   constructor(
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
-    private router: Router,
   ) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();

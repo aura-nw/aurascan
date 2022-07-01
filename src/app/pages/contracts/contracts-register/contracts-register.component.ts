@@ -1,4 +1,4 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -6,9 +6,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import { from, interval, timer } from 'rxjs';
+import { debounce, delay, mergeMap } from 'rxjs/operators';
 import { REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -42,7 +42,6 @@ export class ContractsRegisterComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataBk: any[];
   dataBlock: any[];
-  dataSearch: any;
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -72,18 +71,24 @@ export class ContractsRegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet) {
-        this.userAddress = wallet.bech32Address;
-      } else {
-        this.userAddress = null;
-        this.router.navigate(['/']);
-      }
-    });
-    this.getListContract();
+    from([1])
+      .pipe(
+        delay(600),
+        mergeMap((_) => this.walletService.wallet$),
+      )
+      .subscribe((wallet) => {
+        if (wallet) {
+          this.userAddress = wallet.bech32Address;
+          this.getListContract();
+        } else {
+          this.userAddress = null;
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   getListContract() {
+    this.loading = true;
     let payload = {
       account_address: this.userAddress,
       limit: this.pageData.pageSize,
@@ -91,24 +96,29 @@ export class ContractsRegisterComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.contractService.getListTypeContract(payload).subscribe((res) => {
-      this.pageData = {
-        length: res?.meta?.count,
-        pageSize: this.pageData.pageSize,
-        pageIndex: PAGE_EVENT.PAGE_INDEX,
-      };
-      this.pageLength = this.pageData?.length;
+    this.contractService.getListTypeContract(payload).subscribe(
+      (res) => {
+        if (res) {
+          this.pageData = {
+            length: res?.meta?.count,
+            pageSize: this.pageData.pageSize,
+            pageIndex: PAGE_EVENT.PAGE_INDEX,
+          };
+          this.pageLength = this.pageData?.length;
 
-      if (res?.data?.length > 0) {
-        res.data.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-        });
-        this.dataSource = res.data;
-        this.dataBk = res.data;
-        this.dataBlock = res.data;
-      }
-    });
-    this.loading = false;
+          res.data?.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          });
+          this.dataSource = new MatTableDataSource<any>(res.data);
+          this.dataBk = res.data || [];
+          this.dataBlock = res.data || [];
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   searchCode(): void {
@@ -151,7 +161,9 @@ export class ContractsRegisterComponent implements OnInit {
   }
 
   paginatorEmit(event): void {
-    this.dataSource.paginator = event;
+    if (this.dataSource) {
+      this.dataSource.paginator = event;
+    }
   }
 
   pageEvent(e: PageEvent): void {
