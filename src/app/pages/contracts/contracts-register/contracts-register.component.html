@@ -77,7 +77,7 @@
       <div *ngIf="loading" class="m-auto mt-10">
         <app-loading-sprint></app-loading-sprint>
       </div>
-      <div class="table-responsive aura-table-contain d-none d-lg-block">
+      <div class="table-responsive aura-table-contain d-none d-lg-block" *ngIf="!loading">
         <table mat-table matSort [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
