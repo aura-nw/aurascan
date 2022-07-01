@@ -25,6 +25,7 @@ import { TokenRoutingModule } from './token-routing.module';
 import { TokenHoldingComponent } from './token-holding/token-holding.component';
 import { TokenHodingWalletComponent } from './token-holding/token-hoding-wallet/token-hoding-wallet.component';
 import { TokenHodingNftComponent } from './token-holding/token-hoding-nft/token-hoding-nft.component';
+import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { TokenHodingNftComponent } from './token-holding/token-hoding-nft/token-
     MatTableModule,
     MaterialModule,
     FormsModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    CommonPipeModule
   ],
   providers: [TokenService],
 })
