@@ -74,14 +74,14 @@
                         <a class="text--green txt-from-address" [routerLink]="['/account', data.from_address]">
                           {{ data[template.matColumnDef] }}
                         </a>
-                        <ng-container *ngIf="!isSearchAddres">
+                        <ng-container *ngIf="!isSearchAddress">
                           <img
                             src="../../../../../../../assets/images/icons/arrow-right.png"
                             width="14"
                             height="9"
                             class="ml-8 ml-lg-15" />
                         </ng-container>
-                        <ng-container *ngIf="isSearchAddres">
+                        <ng-container *ngIf="isSearchAddress">
                           <div class="box-token-transfer">
                             <span
                               class="ml-5 token-tranfer-status d-flex"
@@ -156,10 +156,10 @@
       alt="" />
     {{ tokenDetail?.status }} (504 Block Confirmations)
     <hr />
-    Token Trasnfer:<br />
+    Token Transfer:<br />
     {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
       tokenDetail?.price | number: global.formatNumber2Decimal
-    }}) <a class="text--green" [routerLink]="['/token/token', tokenAddress]">{{ tokenType }}</a
+    }}) <a class="text--green" [routerLink]="['/tokens/token', tokenAddress]">{{ tokenType }}</a
     ><br />
     <div>
       <span class="text--light-gray mr-1">From</span>

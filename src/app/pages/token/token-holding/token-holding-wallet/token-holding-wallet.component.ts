@@ -5,11 +5,11 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Globals} from "../../../../global/global";
 
 @Component({
-  selector: 'app-token-hoding-wallet',
-  templateUrl: './token-hoding-wallet.component.html',
-  styleUrls: ['./token-hoding-wallet.component.scss']
+  selector: 'app-token-holding-wallet',
+  templateUrl: './token-holding-wallet.component.html',
+  styleUrls: ['./token-holding-wallet.component.scss']
 })
-export class TokenHodingWalletComponent implements OnInit {
+export class TokenHoldingWalletComponent implements OnInit {
   searchValue = null;
   loading = true;
   mockData = [
