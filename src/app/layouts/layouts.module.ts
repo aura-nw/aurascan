@@ -17,8 +17,6 @@ import { FooterComponent } from './footer/footer.component';
 import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
-import { RightsidebarComponent } from './rightsidebar/rightsidebar.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { VerticalComponent } from './vertical/vertical.component';
 
@@ -28,9 +26,7 @@ import { VerticalComponent } from './vertical/vertical.component';
     VerticalComponent,
     TopbarComponent,
     LayoutComponent,
-    SidebarComponent,
     FooterComponent,
-    RightsidebarComponent,
     HorizontalComponent,
     HorizontaltopbarComponent,
     DialogComponent
