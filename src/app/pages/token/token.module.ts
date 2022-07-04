@@ -23,9 +23,10 @@ import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
 import { TokenRoutingModule } from './token-routing.module';
 import { TokenHoldingComponent } from './token-holding/token-holding.component';
-import { TokenHodingWalletComponent } from './token-holding/token-hoding-wallet/token-hoding-wallet.component';
-import { TokenHodingNftComponent } from './token-holding/token-hoding-nft/token-hoding-nft.component';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { TokenInventoryComponent } from './token-detail/token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
+import { TokenHoldingNftComponent } from './token-holding/token-holding-nft/token-holding-nft.component';
+import { TokenHoldingWalletComponent } from './token-holding/token-holding-wallet/token-holding-wallet.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +43,9 @@ import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
     TokenContractReadComponent,
     TokenContractWriteComponent,
     TokenHoldingComponent,
-    TokenHodingWalletComponent,
-    TokenHodingNftComponent
+    TokenHoldingWalletComponent,
+    TokenHoldingNftComponent,
+    TokenInventoryComponent
   ],
   imports: [
     CommonModule,
