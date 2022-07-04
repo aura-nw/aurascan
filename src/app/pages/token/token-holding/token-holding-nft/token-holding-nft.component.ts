@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {PageEvent} from "@angular/material/paginator";
 
 @Component({
-  selector: 'app-token-hoding-nft',
-  templateUrl: './token-hoding-nft.component.html',
-  styleUrls: ['./token-hoding-nft.component.scss']
+  selector: 'app-token-holding-nft',
+  templateUrl: './token-holding-nft.component.html',
+  styleUrls: ['./token-holding-nft.component.scss']
 })
-export class TokenHodingNftComponent implements OnInit {
+export class TokenHoldingNftComponent implements OnInit {
   searchValue = null;
   loading = true;
   pageData: PageEvent;

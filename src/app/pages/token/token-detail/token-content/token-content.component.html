@@ -7,7 +7,7 @@
       </p>
       <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
     </div>
-    <div *ngIf="!isSearchTx && isSearchAddres" class="card main-tab p-3">
+    <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab p-3">
       <div class="table-responsive">
         <table class="aura-basic-table w-100">
           <tr>
@@ -65,7 +65,7 @@
           </button>
           <button
             type="reset"
-            class="btn-reset {{ !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : '' }}"
+            class="cursor-pointer btn-reset {{ !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : '' }}"
             (click)="resetSearch()">
             <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
           </button>
@@ -80,6 +80,7 @@
       [keyWord]="textSearch"
       (resultLength)="getLength($event)"></app-token-transfers-tab>
     <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch"></app-token-holders-tab>
+    <app-token-inventory-tab *ngIf="countCurrent === tokenTab.Inventory"></app-token-inventory-tab>
     <app-token-info-tab *ngIf="countCurrent === tokenTab.Info"></app-token-info-tab>
     <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract"></app-token-contract-tab>
   </div>
