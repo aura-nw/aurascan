@@ -50,7 +50,8 @@
             [class.error-null]="
               writeContract?.properties[writeContract.required[0]].checkErr &&
               writeContract?.properties[writeContract.required[0]].checkErr[item] &&
-              errorInput
+              errorInput &&
+              currentFrom === i
             "
             placeholder="{{ item }} ({{
               writeContract.properties[writeContract.required[0]].properties[item].type
@@ -60,6 +61,7 @@
           <button
             class="button button-chart button-outline button-outline__in-card body btn-contract"
             [disabled]="errorInput && currentFrom === i"
+            type="button"
             (click)="executeSmartContract(writeContract.required[0], i)">
             <span class="ml-1 text-gradient">Write</span>
           </button>
