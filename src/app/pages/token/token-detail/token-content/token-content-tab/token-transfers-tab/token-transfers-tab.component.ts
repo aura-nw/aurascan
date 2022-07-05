@@ -32,7 +32,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   tokenTransferTemplates: Array<TableTemplate> = [
     { matColumnDef: 'action', headerCellDef: '' },
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Txn Hash', isShort: true },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address_format', headerCellDef: 'From' },
@@ -104,10 +104,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
           if (token?.code == CodeTransaction.Success) {
             token.status = StatusTransaction.Success;
           }
-          token.tx_hash_format = token.tx_hash.replace(token.tx_hash.substring(20), '...');
-          token.from_address_format = token.from_address.replace(token.from_address.substring(20), '...');
-          token.to_address_format = token.to_address.replace(token.to_address.substring(20), '...');
-          token.price = token.amount * 0.5;
+          token.price = token.amount * 1;
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
           token.type = typeTrans?.value;
         });

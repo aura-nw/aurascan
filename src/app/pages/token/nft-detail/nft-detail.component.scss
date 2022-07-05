@@ -1,0 +1,19 @@
+.aura-status {
+  display: flex;
+  align-items: center;
+  .status {
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #7b7b7b33;
+    color: var(--aura-white);
+  }
+}
+
+.table-info .aura-basic-table tr td:not(:last-child) {
+  border-right: 1px solid var(--white);
+}
+
+.content-transfer {
+  min-width: 170px;
+  display: inline-block;
+}

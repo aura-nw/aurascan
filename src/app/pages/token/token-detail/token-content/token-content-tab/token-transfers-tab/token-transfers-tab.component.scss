@@ -1,9 +1,13 @@
+.content-transfer {
+  min-width: 170px;
+  display: inline-block;
+}
 .box-token-transfer {
   justify-content: center;
   min-width: 80px;
   margin-left: 30px;
   display: flex;
-  .token-tranfer-status {
+  .token-transfer-status {
     display: inline-flex;
     align-items: center;
     padding: var(--spacer-2) var(--spacer-4);

@@ -5,7 +5,10 @@
         <tr class="body">
           <td class="">
             <span class="fw-semibold">Overview </span>
-            <span class="text--light-gray">[CW-20]</span></td>
+            <span class="text--light-gray">
+              <ng-container *ngIf="tokenType !== tokenTypeConstant.NFT">[CW-20]</ng-container>
+              <ng-container *ngIf="tokenType === tokenTypeConstant.NFT">[CW-721]</ng-container>
+            </span></td>
           <td class="">
             <div class="d-flex justify-content-end">
               <button class="button button-chart button-outline button-outline__in-card -small">

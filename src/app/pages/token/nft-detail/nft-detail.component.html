@@ -1,0 +1,181 @@
+<div class="card text--white nft-detail">
+  <div class="d-flex p-3">
+    <div class="col-3">
+      <img
+        src="https://validator-logos.s3.ap-southeast-1.amazonaws.com/auravaloper1p5kp36qlmmczrk56veztdt0re4ly7uzrua9hqs.png"
+        width="300"
+        height="300" />
+    </div>
+    <div class="col-9">
+      <p class="fw-semibold sub-text">AuraDiamond #1289</p>
+      <p>
+        <img src="assets/images/icons/token-logo.png" width="18" height="18" class="mr-2" />
+        <span class="text--green">AuraDiamond</span>
+      </p>
+      <div class="card main-tab p-3 border table-info">
+        <div class="table-responsive">
+          <table class="aura-basic-table w-100">
+            <tr>
+              <td>
+                <div class="small-text d-flex align-item-center mb-1">Min Price</div>
+                0.0297 AURA ($32.42)
+              </td>
+              <td>
+                <div class="small-text txt-light mb-1">Last Sale (item)</div>
+                N/A
+              </td>
+              <td>
+                <div class="small-text txt-light mb-1">Last Sale (Contract)</div>
+                0.304 AURA ($331.50)
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="card main-tab p-3 border">
+        <p class="fw-semibold body">Details</p>
+        <div class="table-responsive border-top pt-3">
+          <table class="aura-basic-table w-100">
+            <tr>
+              <td>Owner:</td>
+              <td>
+                <a
+                  class="text--green cursor-pointer"
+                  [routerLink]="['/account', 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e']"
+                  >aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e</a
+                >
+                <img
+                  src="assets/icons/icons-svg/basic/copy.svg"
+                  class="ml-2 cursor-pointer icon-contract"
+                  alt=""
+                  matTooltip="Copied!"
+                  #tooltip1="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData('aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e'); tooltip1.toggle()" />
+              </td>
+            </tr>
+            <tr>
+              <td>Contract Address:</td>
+              <td>
+                <img
+                  *ngIf="contractType !== contractVerifyType.Unverifed"
+                  src="assets/icons/icons-svg/color/check-circle.svg"
+                  class="mr-2"
+                  alt="contract_verification"
+                  width="16px"
+                  height="16px" />
+                <a
+                  class="text--green cursor-pointer"
+                  [routerLink]="['/contracts', 'aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw']"
+                  >aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw</a
+                >
+                <img
+                  src="assets/icons/icons-svg/basic/copy.svg"
+                  class="ml-2 cursor-pointer icon-contract"
+                  alt=""
+                  matTooltip="Copied!"
+                  #tooltip2="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData('aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw'); tooltip2.toggle()" />
+              </td>
+            </tr>
+            <tr>
+              <td>Creator:</td>
+              <td>
+                <span class="text--green cursor-pointer">Aura: Deployer</span>
+                <img
+                  src="assets/icons/icons-svg/basic/copy.svg"
+                  class="ml-2 cursor-pointer icon-contract"
+                  alt=""
+                  matTooltip="Copied!"
+                  #tooltip3="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData('Aura: Deployer'); tooltip3.toggle()" />
+              </td>
+            </tr>
+            <tr>
+              <td>Token ID:</td>
+              <td>1289</td>
+            </tr>
+            <tr>
+              <td>Token Standard</td>
+              <td>CW-721</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-body">
+  <span class="text--white sub-text">Item Activity</span>
+  <div class="text--light-gray small-body-mob fw-500">A total of {{ dataSource?.data?.length }} records found</div>
+  <div class="table-responsive aura-table-contain">
+    <table mat-table [dataSource]="dataSource" class="aura-table">
+      <ng-container *ngFor="let template of templates; index as i">
+        <ng-container [matColumnDef]="template.matColumnDef">
+          <th mat-header-cell *matHeaderCellDef class="">
+            <div [innerHTML]="template.headerCellDef | translate"></div>
+          </th>
+
+          <td mat-cell *matCellDef="let data">
+            <ng-container [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'tx_hash'">
+                <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                  {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'timestamp'">
+                {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'type'">
+                <div class="aura-status text-uppercase">
+                  <span class="status">{{ data[template.matColumnDef] }}</span>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'from_address'">
+                <a class="text--green content-transfer" [routerLink]="['/account', data[template.matColumnDef]]">
+                  {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                </a>
+                <img
+                  src="../../../../../../../assets/images/icons/arrow-right.png"
+                  width="14"
+                  height="9"
+                  class="ml-10 ml-lg-15" />
+              </ng-container>
+              <ng-container *ngSwitchCase="'to_address'">
+                <a class="text--green" [routerLink]="['/account', data[template.matColumnDef]]">
+                  {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'price'">
+                {{ data[template.matColumnDef] | number }} {{ global.stableToken }}
+              </ng-container>
+              <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+            </ng-container>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell g-no-data pt-8" colspan="9999">
+          <app-loading-sprint></app-loading-sprint>
+        </td>
+      </tr>
+    </table>
+    <app-paginator
+      [length]="dataSource?.data?.length"
+      [pageSize]="pageData?.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="handlePageEvent($event)">
+    </app-paginator>
+  </div>
+  <ng-template #noValues> </ng-template>
+</div>
