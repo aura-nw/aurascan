@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
+import { TokenType } from 'src/app/core/constants/token.enum';
 
 @Component({
   selector: 'app-token-detail',
@@ -15,11 +16,14 @@ export class TokenDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   textSearch: string = '';
   codeTransaction = CodeTransaction;
-  tokenType = 'Aura';
+  tokenName = 'Aura';
+  tokenType: TokenType;
 
   constructor() {}
 
   ngOnInit(): void {
+    //change type of Token
+    this.tokenType = TokenType.Token;
   }
   
   searchTokenTable(): void {}

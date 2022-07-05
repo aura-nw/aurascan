@@ -64,15 +64,15 @@
                         <span class="status">{{ data[template.matColumnDef] }}</span>
                       </div>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'tx_hash_format'">
+                    <ng-container *ngSwitchCase="'tx_hash'">
                       <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
-                        {{ data[template.matColumnDef] }}
+                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'from_address_format'">
                       <div class="d-flex align-items-center">
-                        <a class="text--green txt-from-address" [routerLink]="['/account', data.from_address]">
-                          {{ data[template.matColumnDef] }}
+                        <a class="text--green txt-from-address content-transfer" [routerLink]="['/account', data.from_address]">
+                          {{ data['from_address'] | cutStringPipe: 8:8 }}
                         </a>
                         <ng-container *ngIf="!isSearchAddress">
                           <img
@@ -84,7 +84,7 @@
                         <ng-container *ngIf="isSearchAddress">
                           <div class="box-token-transfer">
                             <span
-                              class="ml-5 token-tranfer-status d-flex"
+                              class="ml-5 token-transfer-status d-flex"
                               [ngClass]="{ 'status-out': data.from_address === keyWord }">
                               <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
                               <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
@@ -95,7 +95,7 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'to_address_format'">
                       <a class="text--green" [routerLink]="['/account', data.to_address]">
-                        {{ data[template.matColumnDef] }}
+                        {{ data['to_address'] | cutStringPipe: 8:8 }}
                       </a>
                     </ng-container>
                     <div *ngSwitchCase="'action'">
@@ -166,7 +166,7 @@
       <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">
         {{ tokenDetail?.from_address_format }}
       </a>
-      <br class="d-sm-none">
+      <br class="d-sm-none" />
       <span class="text--light-gray mr-1 ml-sm-1">To</span>
       <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">
         {{ tokenDetail?.to_address_format }}
@@ -178,7 +178,8 @@
     <hr />
     <div>
       Gas info:<br />
-      47,566 Gas Used From 78,549 <br class="d-sm-none" />Gas Limit @ 0.00000001580573182 <br class="d-sm-none" /> Ether (15.807219472 Gwei)
+      47,566 Gas Used From 78,549 <br class="d-sm-none" />Gas Limit @ 0.00000001580573182 <br class="d-sm-none" />
+      Ether (15.807219472 Gwei)
       <hr />
       Nonce:<br />
       29 (in the position 92)

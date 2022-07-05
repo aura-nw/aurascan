@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { TokenDetailComponent } from './token-detail/token-detail.component';
 import { TokenCw20Component } from './token-list/token-cw20/token-cw20.component';
 import { TokenCw721Component } from './token-list/token-cw721/token-cw721.component';
-import {TokenHoldingComponent} from "./token-holding/token-holding.component";
+import { TokenHoldingComponent } from './token-holding/token-holding.component';
+import { NFTDetailComponent } from './nft-detail/nft-detail.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'token-holding/:tokenId',
     component: TokenHoldingComponent,
+  },
+  {
+    path: 'token/:tokenId/:nftId',
+    component: NFTDetailComponent,
   },
 ];
 

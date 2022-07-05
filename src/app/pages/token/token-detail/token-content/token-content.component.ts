@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab, TokenType } from '../../../../core/constants/token.enum';
@@ -9,18 +9,22 @@ import { TokenTab, TokenType } from '../../../../core/constants/token.enum';
   styleUrls: ['./token-content.component.scss'],
 })
 export class TokenContentComponent implements OnInit {
+  @Input() tokenType: TokenType;
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
-  tokenType = TokenType.NFT;
-  TABS = [];
+  TABS = TOKEN_TAB.filter((vote) => this.tabToken.includes(vote.key)).map((vote) => ({
+    ...vote,
+    value: vote.value,
+    key: vote.key === TokenTab.Transfers ? '' : vote.key,
+  }));
   countCurrent: string = '';
   textSearch: string = '';
   searchTemp: string = '';
   isSearchTx = false;
   isSearchAddress = false;
   resultSearch = 0;
-  tabsBackup = this.TABS;
   tokenTab = TokenTab;
+  tabsBackup;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor() {}
@@ -33,6 +37,7 @@ export class TokenContentComponent implements OnInit {
       value: vote.value,
       key: vote.key === TokenTab.Transfers ? '' : vote.key,
     }));
+    this.tabsBackup = this.TABS;
   }
 
   changeTab(tabId): void {
