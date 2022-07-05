@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Globals } from '../../../../global/global';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { MatSort, Sort } from '@angular/material/sort';
+import {MatSort, MatSortable, Sort} from '@angular/material/sort';
 import { Router } from '@angular/router';
 
 @Component({
@@ -189,7 +189,10 @@ export class TokenCw721Component implements OnInit {
   sortedData: any;
   sort: MatSort;
 
-  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
+  constructor(
+      public translate: TranslateService,
+      public global: Globals,
+      private router: Router) {}
 
   ngOnInit(): void {
     this.getTokenData();
@@ -243,7 +246,7 @@ export class TokenCw721Component implements OnInit {
         case 'transfer':
           return this.compare(a.transfer, b.transfer, isAsc);
         case 'transfer3d':
-          return this.compare(a.transfer3d, b.transfer3d, !isAsc);
+          return this.compare(a.transfer3d, b.transfer3d, isAsc);
         default:
           return 0;
       }
