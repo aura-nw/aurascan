@@ -80,7 +80,7 @@ export class WriteContractComponent implements OnInit {
     this.walletAccount = this.walletService.getAccount();
   }
 
-  async excuteSmartContract(name: string, currentFrom: number) {
+  async executeSmartContract(name: string, currentFrom: number) {
     this.connectWallet();
     if (this.walletAccount) {
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
