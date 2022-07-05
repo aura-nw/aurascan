@@ -246,29 +246,29 @@
           </ul>
         </div>
       </div>
-      <!-- <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'"> -->
-        <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-        <div class="row proposal__summary-total mt-6">
+      <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+        <div class="row proposal__summary-total">
           <div class="col-12 col-lg-6 pr-lg-8 border-right">
             <div class="d-lg-flex justify-content-between">
               <div class="title-small fw-semibold text--white">
-                Current Turnot: {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
+                Current Turnout: {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
               </div>
               <div class="body text--light-gray">
                 ({{ proposalDetail.total_has_voted }} of {{ proposalDetail.total_bonded_token }} has voted)
               </div>
             </div>
             <div class="mt-2 small-body text--white content--fixed-height">
-              The result of governance will only be applied when quorum is more than 33% of the total votes.
+              The result of governance will only be applied when quorum is more than
+              {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}% of the total votes.
             </div>
             <div class="vote-bar mt-20 mb-4">
               <ul>
-                <li class="bg--info" [style.width]="'44%'"></li>
+                <li class="bg--info" [style.width]="proposalDetail.pro_turnout + '%'"></li>
               </ul>
-              <div class="vote-bar__info" [style.left]="'33%'">
-                <span class="fw-semibold"
-                  >Quorum: {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%</span
-                >
+              <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
+                <span class="fw-semibold">
+                  Quorum: {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
+                </span>
                 <span class="text--green ml-1" *ngIf="isNotReached">(Not Reached)</span>
               </div>
             </div>
@@ -290,45 +290,51 @@
             </div>
             <div class="row mt-2">
               <div class="col-5 fw-semibold">Did not vote</div>
-              <div class="col-3 fw-semibold">55.62%</div>
-              <div class="col-4 text-end">147.366781</div>
+              <div class="col-3 fw-semibold">{{ 100 - proposalDetail.pro_turnout }}%</div>
+              <div class="col-4 text-end">{{ proposalDetail.total_bonded_token - proposalDetail.voted }}</div>
             </div>
           </div>
           <div class="col-12 col-lg-6 pl-lg-8">
             <div class="title-small fw-semibold text--white">Current Status: <span class="text--green">Pass</span></div>
-            <div class="mt-2 small-body text--white content--fixed-height">
-              This proposal may pass when the voting period is over because current quorum is more than 33% and there
-              are more than 50% of Yes votes
-            </div>
+            <div class="mt-2 small-body text--white content--fixed-height">{{ this.currentSubTitle }}</div>
             <div class="vote-bar mt-20 mb-4">
               <ul>
-                <li class="bg--primary" [style.width]="'86%'"></li>
-                <li class="bg--danger" [style.width]="'14%'"></li>
+                <li class="bg--primary" [style.width]="proposalDetail.yesPercent + '%'"></li>
+                <li class="bg--danger" [style.width]="proposalDetail.noPercent + '%'"></li>
+                <li class="bg--secondary" [style.width]="proposalDetail.noWithVetoPercent + '%'"></li>
               </ul>
-              <div class="vote-bar__info" [style.left]="'50%'">
-                <span class="fw-semibold">Threshold : 50%</span>
+              <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
+                <span class="fw-semibold">
+                  Threshold: {{ proposalDetail.threshold | number: global.formatNumber2Decimal }}%
+                </span>
               </div>
             </div>
             <div class="row">
               <div class="col-5 fw-semibold">
                 <span class="vote-status vote-status--primary ml-8">Yes</span>
               </div>
-              <div class="col-3 fw-semibold">86.00%</div>
-              <div class="col-4 text-end">147.366781</div>
+              <div class="col-3 fw-semibold">
+                {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col-4 text-end">{{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}</div>
             </div>
             <div class="row mt-2">
               <div class="col-5 fw-semibold">
                 <span class="vote-status vote-status--danger ml-8">No</span>
               </div>
-              <div class="col-3 fw-semibold">14%</div>
-              <div class="col-4 text-end">147.366781</div>
+              <div class="col-3 fw-semibold">{{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%</div>
+              <div class="col-4 text-end">{{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}</div>
             </div>
             <div class="row mt-2">
               <div class="col-5 fw-semibold">
                 <span class="vote-status vote-status--secondary ml-8">NoWithVeto</span>
               </div>
-              <div class="col-3 fw-semibold">0.00%</div>
-              <div class="col-4 text-end">147.366781</div>
+              <div class="col-3 fw-semibold">
+                {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col-4 text-end">
+                {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
+              </div>
             </div>
           </div>
         </div>
