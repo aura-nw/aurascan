@@ -369,7 +369,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
                 f.validator_address = data.validator_address;
                 f.validator_name = data.validator_name;
                 let timeConvert = new Date(f.completion_time);
-                if (now <= timeConvert) {
+                if (now < timeConvert) {
                   this.lstUndelegate.push(f);
                 }
               });
