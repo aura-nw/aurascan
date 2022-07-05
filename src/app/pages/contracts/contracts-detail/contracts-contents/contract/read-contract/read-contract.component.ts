@@ -56,8 +56,9 @@ export class ReadContractComponent implements OnInit {
     this.isLoading = true;
     this.currentFrom = currentFrom;
     let queryData;
-    const contractTemp = this.jsonReadContract.oneOf.find((contract) => contract.required[0] === name);
+    this.dataResponse = null;
     let err = {};
+    const contractTemp = this.jsonReadContract.oneOf.find((contract) => contract.required[0] === name);
     if (contractTemp.properties[name].hasOwnProperty('required')) {
       contractTemp.properties[name].required.forEach((contract) => {
         let element: HTMLInputElement = document.getElementsByClassName(
@@ -71,7 +72,8 @@ export class ReadContractComponent implements OnInit {
         }
       });
       contractTemp.properties[name].checkErr = err;
-      if (contractTemp) {
+
+      if (Object.keys(contractTemp.properties[name]?.checkErr).length === 0) {
         let objReadContract = {};
         contractTemp.properties[name].required.forEach((contract) => {
           let type = contractTemp.properties[name].properties[contract].type;
@@ -86,17 +88,16 @@ export class ReadContractComponent implements OnInit {
         queryData = {
           [name]: objReadContract,
         };
-      }
-      const client = await SigningCosmWasmClient.connect(ChainsInfo[this.walletService.chainId].rpc);
+        const client = await SigningCosmWasmClient.connect(ChainsInfo[this.walletService.chainId].rpc);
 
-      try {
-        const config = await client.queryContractSmart(this.contractDetailData.contract_address, queryData);
-
-        if (config) {
-          this.dataResponse = JSON.stringify(config);
+        try {
+          const config = await client.queryContractSmart(this.contractDetailData.contract_address, queryData);
+          if (config) {
+            this.dataResponse = JSON.stringify(config);
+          }
+        } catch (error) {
+          this.dataResponse = 'No Data';
         }
-      } catch (error) {
-        this.dataResponse = 'No Data';
       }
       this.isLoading = false;
     }
