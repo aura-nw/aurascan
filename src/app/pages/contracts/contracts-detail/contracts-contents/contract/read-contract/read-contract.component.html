@@ -20,27 +20,47 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
-          <p class="px-0">{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})</p>
+          <p class="px-0">
+            {{ item }} ({{
+              readContract.properties[readContract.required[0]].properties[item].type ||
+                readContract.properties[readContract.required[0]].properties[item].$ref
+            }})
+          </p>
           <input
-            [(ngModel)]="idRead"
             [class.error-null]="errorInput"
-            class="form-check-input col-12 mb-4"
-            [type]="readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'"
+            class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
+            [type]="
+              readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'
+            "
             (keyup)="resetCheck()"
             placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
         </ng-container>
         <div class="w-100 mb-2 px-0">
           <button
+            *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
             class="button button-chart button-outline button-outline__in-card body btn-contract"
-            [disabled]="errorInput"
-            (click)="querySmartContract(readContract.required)">
-            <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+            [disabled]="errorInput && currentFrom === i"
+            (click)="querySmartContract(readContract.required[0], i)">
+            <img
+              src="assets/icons/icons-svg/color/spinner.svg"
+              alt=""
+              width="20"
+              height="20"
+              *ngIf="isLoading && currentFrom === i" />
             <span class="ml-1 text-gradient">Query</span>
           </button>
         </div>
         <div>
-          <p>{{ readContract.type }}</p>
-          <ng-container *ngIf="dataResponse">
+          <ng-container *ngIf="!readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
+            {{ readContract.required }}
+            <span class="ml-1 font-italic text--light-gray small-body">{{
+              readContract.properties[readContract.required[0]].type
+            }}</span>
+          </ng-container>
+          <ng-container *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
+            <p>{{ readContract.type }}</p>
+          </ng-container>
+          <ng-container *ngIf="dataResponse && currentFrom === i">
             <pre class="small-body text--white txt-response">Response: {{ dataResponse }}</pre>
           </ng-container>
         </div>
