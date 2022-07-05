@@ -23,7 +23,7 @@ export class TokenDetailComponent implements OnInit {
 
   ngOnInit(): void {
     //change type of Token
-    this.tokenType = TokenType.Token;
+    this.tokenType = TokenType.NFT;
   }
   
   searchTokenTable(): void {}
