@@ -13,10 +13,10 @@ export class ReadContractComponent implements OnInit {
 
   isExpand = false;
   jsonReadContract: any;
-  idRead: string = '';
   dataResponse: any;
   errorInput = false;
   isLoading = false;
+  currentFrom = 0;
 
   constructor(public walletService: WalletService) {}
 
@@ -52,31 +52,54 @@ export class ReadContractComponent implements OnInit {
     this.errorInput = false;
   }
 
-  async querySmartContract(name: string) {
+  async querySmartContract(name: string, currentFrom: number) {
     this.isLoading = true;
-    if (this.idRead?.length === 0) {
-      this.errorInput = true;
-      this.isLoading = false;
-      return;
-    }
-    let queryData = {
-      [name]: { id: this.idRead },
-    };
-    const client = await SigningCosmWasmClient.connect(ChainsInfo[this.walletService.chainId].rpc);
+    this.currentFrom = currentFrom;
+    let queryData;
+    const contractTemp = this.jsonReadContract.oneOf.find((contract) => contract.required[0] === name);
+    let err = {};
+    if (contractTemp.properties[name].hasOwnProperty('required')) {
+      contractTemp.properties[name].required.forEach((contract) => {
+        let element: HTMLInputElement = document.getElementsByClassName(
+          'form-check-input ' + name + ' ' + contract,
+        )[0] as HTMLInputElement;
 
-    try {
-      const config = await client.queryContractSmart(
-        this.contractDetailData.contract_address,
-        queryData,
-      );
-
-      if (config) {
-        this.dataResponse = JSON.stringify(config);
+        if (element?.value?.length === 0) {
+          err[contract.toString()] = true;
+          this.errorInput = true;
+          return;
+        }
+      });
+      contractTemp.properties[name].checkErr = err;
+      if (contractTemp) {
+        let objReadContract = {};
+        contractTemp.properties[name].required.forEach((contract) => {
+          let type = contractTemp.properties[name].properties[contract].type;
+          let element: HTMLInputElement = document.getElementsByClassName(
+            'form-check-input ' + name + ' ' + contract,
+          )[0] as HTMLInputElement;
+          objReadContract[contract] = element?.value;
+          if (type !== 'string') {
+            objReadContract[contract] = Number(element?.value);
+          }
+        });
+        queryData = {
+          [name]: objReadContract,
+        };
       }
-    } catch (error) {
-      this.dataResponse = 'No Data';
+      const client = await SigningCosmWasmClient.connect(ChainsInfo[this.walletService.chainId].rpc);
+
+      try {
+        const config = await client.queryContractSmart(this.contractDetailData.contract_address, queryData);
+
+        if (config) {
+          this.dataResponse = JSON.stringify(config);
+        }
+      } catch (error) {
+        this.dataResponse = 'No Data';
+      }
+      this.isLoading = false;
     }
-    this.isLoading = false;
   }
 
   resetCheck() {
