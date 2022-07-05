@@ -5,7 +5,14 @@ import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTING_STATUS } from '../../../../core/constants/proposal.constant';
+import {
+  MESSAGE_WARNING,
+  PROPOSAL_STATUS,
+  PROPOSAL_VOTE,
+  VOTING_FINAL_STATUS,
+  VOTING_STATUS,
+  VOTING_SUBTITLE
+} from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { ResponseDto } from '../../../../core/models/common.model';
 import { CommonService } from '../../../../core/services/common.service';
@@ -29,6 +36,9 @@ export class SummaryInfoComponent implements OnInit {
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  currentStatus = VOTING_FINAL_STATUS.REJECT;
+  finalSubTitle = VOTING_SUBTITLE.PASS;
+  isNotReached = true;
 
   constructor(
     private proposalService: ProposalService,
@@ -98,6 +108,20 @@ export class SummaryInfoComponent implements OnInit {
               this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote) || 0;
             }
           });
+
+          this.proposalDetail.voted_percent =
+            this.proposalDetail.yesPercent + this.proposalDetail.noPercent + this.proposalDetail.noWithVetoPercent;
+          
+          this.proposalDetail.voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+
+          if (
+            this.proposalDetail.pro_turnout >= this.proposalDetail.quorum &&
+            this.proposalDetail.yesPercent > this.proposalDetail.threshold &&
+            this.proposalDetail.noWithVetoPercent <= this.proposalDetail.veto_threshold
+          ) {
+            this.currentStatus = VOTING_FINAL_STATUS.PASS;
+            this.isNotReached = false;
+          }
         } else {
           this.proposalDetail.pro_vote_yes_bar =
             (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
@@ -108,14 +132,8 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalDetail.pro_vote_abstain_bar =
             (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
 
-          this.proposalDetail.yesPercent =
-            (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
-          this.proposalDetail.noPercent =
-            (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
-          this.proposalDetail.noWithVetoPercent =
-            (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
-          this.proposalDetail.abstainPercent =
-            (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
+          if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
+          }
         }
       }
     });
@@ -220,14 +238,14 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalDetail.pro_votes_abstain;
 
         //vote bar data
-        this.proposalDetail.pro_vote_yes_bar =
-          (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
-        this.proposalDetail.pro_vote_no_bar =
-          (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
-        this.proposalDetail.pro_vote_no_with_veto_bar =
-          (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
-        this.proposalDetail.pro_vote_abstain_bar =
-          (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
+        // this.proposalDetail.pro_vote_yes_bar =
+        //   (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
+        // this.proposalDetail.pro_vote_no_bar =
+        //   (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
+        // this.proposalDetail.pro_vote_no_with_veto_bar =
+        //   (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
+        // this.proposalDetail.pro_vote_abstain_bar =
+        //   (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
 
         this.proposalDetail.yesPercent =
           (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
@@ -274,7 +292,7 @@ export class SummaryInfoComponent implements OnInit {
         break;
       }
     }
-    
+
     if (key === '') {
       let numberVote: string;
       numberVote = this.numberPipe.transform(abs, this.global.formatNumberOnlyDecimal);

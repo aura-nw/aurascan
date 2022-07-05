@@ -74,3 +74,15 @@ export enum MESSAGE_WARNING {
   NOT_PARTICIPATE = 'NOT_PARTICIPATE',
   LATE = 'LATE',
 }
+
+export enum VOTING_FINAL_STATUS {
+  REJECT = 'Reject',
+  PASS = 'Pass',
+}
+
+export enum VOTING_SUBTITLE {
+  PASS = 'The proposal is passed because it is above the threshold and receive more than 50% of Yes votes.',
+  REJECT_1 = 'This proposal is rejected because there are more than 33.4% of No With Veto votes.',
+  REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50% of No votes.',
+  REJECT_3 = 'This proposal is failed because it did not reach the quorum.',
+}
