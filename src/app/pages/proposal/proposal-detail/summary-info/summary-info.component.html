@@ -246,7 +246,7 @@
           </ul>
         </div>
       </div>
-      <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+      <ng-container *ngIf="true">
         <div class="row proposal__summary-total">
           <div class="col-12 col-lg-6 pr-lg-8 border-right">
             <div class="d-lg-flex justify-content-between">
@@ -295,7 +295,10 @@
             </div>
           </div>
           <div class="col-12 col-lg-6 pl-lg-8">
-            <div class="title-small fw-semibold text--white">Current Status: <span class="text--green">Pass</span></div>
+            <div class="title-small fw-semibold text--white">
+              Current Status:
+              <span class="text--green" [class.text--danger]="currentStatus === 'Reject'">{{ currentStatus }}</span>
+            </div>
             <div class="mt-2 small-body text--white content--fixed-height">{{ this.currentSubTitle }}</div>
             <div class="vote-bar mt-20 mb-4">
               <ul>

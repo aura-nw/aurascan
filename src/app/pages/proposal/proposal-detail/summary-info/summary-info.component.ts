@@ -3,6 +3,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { mergeMap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import {
@@ -95,7 +96,8 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalDetail.pro_votes_no_with_veto +
           this.proposalDetail.pro_votes_abstain;
 
-        if (this.proposalDetail.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+        // if (this.proposalDetail.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+        if (true) {
           const expiredTime = +moment(this.proposalDetail.pro_voting_end_time).format('x') - +moment().format('x');
           if (expiredTime < 0) {
             this.proposalService.getProposalDetailFromNode(this.proposalId).subscribe((res: ResponseDto) => {
@@ -103,17 +105,6 @@ export class SummaryInfoComponent implements OnInit {
             });
           }
           this.getVoteResult();
-          this.commonService.status().subscribe((res) => {
-            if (res?.data) {
-              this.proposalDetail.total_bonded_token = this.formatNumber(balanceOf(res.data.bonded_tokens));
-              this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote) || 0;
-            }
-          });
-
-          this.proposalDetail.voted_percent =
-            this.proposalDetail.yesPercent + this.proposalDetail.noPercent + this.proposalDetail.noWithVetoPercent;
-
-          this.proposalDetail.voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
 
           if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
             if (this.proposalDetail.yesPercent >= this.proposalDetail.threshold) {
@@ -122,26 +113,26 @@ export class SummaryInfoComponent implements OnInit {
                 this.currentStatus = VOTING_FINAL_STATUS.PASS;
                 this.isNotReached = false;
                 this.currentSubTitle =
-                  'This proposal may pass when the voting period is over because current quorum is more than' +
+                  'This proposal may pass when the voting period is over because current quorum is more than ' +
                   this.proposalDetail.quorum +
-                  'and there are more than' +
+                  ' and there are more than ' +
                   this.proposalDetail.veto_threshold +
-                  'of Yes votes.';
+                  ' of Yes votes.';
               } else {
                 this.currentStatus = VOTING_FINAL_STATUS.REJECT;
                 this.currentSubTitle =
-                  'The proportion of NoWithVeto votes is superior to' + this.proposalDetail.veto_threshold;
+                  'The proportion of NoWithVeto votes is superior to ' + this.proposalDetail.veto_threshold;
               }
             } else {
               this.currentStatus = VOTING_FINAL_STATUS.REJECT;
-              this.currentSubTitle = 'The proportion of Yes votes is inferior to' + this.proposalDetail.veto_threshold;
+              this.currentSubTitle = 'The proportion of Yes votes is inferior to ' + this.proposalDetail.veto_threshold;
             }
           } else {
             this.currentStatus = VOTING_FINAL_STATUS.REJECT;
             this.currentSubTitle =
-              'Current quorum is less than' +
+              'Current quorum is less than ' +
               this.proposalDetail.quorum +
-              'and this proposal requires more participation';
+              ' and this proposal requires more participation';
           }
         } else {
           this.proposalDetail.pro_vote_yes_bar =
@@ -253,6 +244,20 @@ export class SummaryInfoComponent implements OnInit {
     }
   }
 
+  getVoteResult2() {
+    this.commonService
+      .status()
+      .pipe(
+        mergeMap((res) => {
+          console.log('status',res);
+          return this.proposalService.getProposalTally(this.proposalId);
+        }),
+      )
+      .subscribe((e) => {
+        console.log('e', e);
+      });
+  }
+
   getVoteResult() {
     this.votingBarLoading = true;
     this.proposalService.getProposalTally(this.proposalId).subscribe(
@@ -273,14 +278,14 @@ export class SummaryInfoComponent implements OnInit {
           this.proposalDetail.pro_votes_abstain;
 
         //vote bar data
-        // this.proposalDetail.pro_vote_yes_bar =
-        //   (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
-        // this.proposalDetail.pro_vote_no_bar =
-        //   (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
-        // this.proposalDetail.pro_vote_no_with_veto_bar =
-        //   (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
-        // this.proposalDetail.pro_vote_abstain_bar =
-        //   (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
+        this.proposalDetail.pro_vote_yes_bar =
+          (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
+        this.proposalDetail.pro_vote_no_bar =
+          (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
+        this.proposalDetail.pro_vote_no_with_veto_bar =
+          (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
+        this.proposalDetail.pro_vote_abstain_bar =
+          (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
 
         this.proposalDetail.yesPercent =
           (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
@@ -291,6 +296,11 @@ export class SummaryInfoComponent implements OnInit {
         this.proposalDetail.abstainPercent =
           (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
         this.votingBarLoading = false;
+
+        this.proposalDetail.voted_percent =
+          this.proposalDetail.yesPercent + this.proposalDetail.noPercent + this.proposalDetail.noWithVetoPercent;
+
+        this.proposalDetail.voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
       },
       (e) => {
         this.votingBarLoading = false;
