@@ -38,7 +38,10 @@
               readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'
             "
             (keyup)="resetCheck()"
-            placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
+            placeholder="{{ item }} ({{
+              readContract.properties[readContract.required[0]].properties[item].type ||
+                readContract.properties[readContract.required[0]].properties[item].$ref
+            }})" />
         </ng-container>
         <div class="w-100 mb-2 px-0">
           <button
