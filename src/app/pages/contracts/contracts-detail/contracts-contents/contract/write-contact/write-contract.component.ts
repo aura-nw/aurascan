@@ -133,7 +133,7 @@ export class WriteContractComponent implements OnInit {
           };
 
           try {
-            let result = await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+            await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
             contractTemp.properties[name].checkErr = null;
             this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
           } catch (error) {
