@@ -102,6 +102,10 @@
         &--secondary {
           background-color: var(--aura-light-gray);
         }
+
+        &--blue {
+          background-color: var(--aura-dark-blue);
+        }
       }
       li:last-child {
         border-top-right-radius: 4px;

@@ -86,3 +86,8 @@ export enum VOTING_SUBTITLE {
   REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50% of No votes.',
   REJECT_3 = 'This proposal is failed because it did not reach the quorum.',
 }
+
+export enum VOTING_QUORUM {
+  REACHED= 'Reached',
+  NOT_REACHED = 'Not Reached',
+}

@@ -130,9 +130,7 @@
             <li
               class="bg--info"
               [style.width]="proposalDetail.noWithVetoPercent + '%'"
-              matTooltip="No with veto {{
-                proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal
-              }}%"
+              matTooltip="No with veto {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--secondary"
@@ -246,7 +244,7 @@
           </ul>
         </div>
       </div>
-      <ng-container *ngIf="true">
+      <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row proposal__summary-total">
           <div class="col-12 col-lg-6 pr-lg-8 border-right">
             <div class="d-lg-flex justify-content-between">
@@ -254,7 +252,8 @@
                 Current Turnout: {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
               </div>
               <div class="body text--light-gray">
-                ({{ formatNumber(proposalDetail.pro_total_vote) || 0}} of {{ formatNumber(proposalDetail.total_bonded_token) }} has voted)
+                ({{ formatNumber(proposalDetail.pro_total_vote) || 0 }} of
+                {{ formatNumber(proposalDetail.total_bonded_token) }} has voted)
               </div>
             </div>
             <div class="mt-2 small-body text--white content--fixed-height">
@@ -263,13 +262,14 @@
             </div>
             <div class="vote-bar mt-20 mb-4">
               <ul>
-                <li class="bg--info" [style.width]="proposalDetail.pro_turnout + '%'"></li>
+                <li class="bg--blue" [style.width]="proposalDetail.pro_turnout + '%'"></li>
+                <li class="bg--info" [style.width]="proposalDetail.pro_total_vote + '%'"></li>
               </ul>
               <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
                 <span class="fw-semibold">
                   Quorum: {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
                 </span>
-                <span class="text--green ml-1" *ngIf="isNotReached">(Not Reached)</span>
+                <span class="text--green ml-1" *ngIf="isNotReached">{{ quorumStatus }}</span>
               </div>
             </div>
             <div class="row">
