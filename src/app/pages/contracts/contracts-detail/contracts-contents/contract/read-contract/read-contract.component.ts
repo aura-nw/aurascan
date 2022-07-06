@@ -75,26 +75,21 @@ export class ReadContractComponent implements OnInit {
           this.errorInput = true;
           return;
         }
+
+        let type = contractTemp.properties[name].properties[contract].type;
+        objReadContract[contract] = element?.value;
+        if (type !== 'string') {
+          objReadContract[contract] = Number(element?.value);
+        }
       });
 
       contractTemp.properties[name].checkErr = err;
       if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
         return;
       }
-
-      this.isLoading = true;
-      contractTemp.properties[name].required.forEach((contract) => {
-        let type = contractTemp.properties[name].properties[contract].type;
-        let element: HTMLInputElement = document.getElementsByClassName(
-          'form-check-input ' + name + ' ' + contract,
-        )[0] as HTMLInputElement;
-        objReadContract[contract] = element?.value;
-        if (type !== 'string') {
-          objReadContract[contract] = Number(element?.value);
-        }
-      });
     }
 
+    this.isLoading = true;
     queryData = {
       [name]: objReadContract,
     };

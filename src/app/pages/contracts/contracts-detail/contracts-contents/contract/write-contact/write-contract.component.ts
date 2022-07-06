@@ -84,6 +84,8 @@ export class WriteContractComponent implements OnInit {
     this.connectWallet();
     if (this.walletAccount) {
       let err = {};
+      let objWriteContract = {};
+      let msg = {};
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
       contractTemp.properties[name].required.forEach((contract) => {
         let element: HTMLInputElement = document.getElementsByClassName(
@@ -96,52 +98,41 @@ export class WriteContractComponent implements OnInit {
           this.currentFrom = currentFrom;
           return;
         }
+
+        let type = contractTemp.properties[name].properties[contract].type;
+        objWriteContract[contract] = element?.value;
+        if (type !== 'string') {
+          objWriteContract[contract] = Number(element?.value);
+        }
       });
+
       contractTemp.properties[name].checkErr = err;
+      if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
+        return;
+      }
 
-      if (Object.keys(contractTemp.properties[name]?.checkErr).length === 0) {
-        let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-        const client = await SigningCosmWasmClient.connectWithSigner(
-          ChainsInfo[this.walletService.chainId].rpc,
-          singer,
-        );
-        const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
-        if (contractTemp) {
-          let objWriteContract = {};
-          contractTemp.properties[name].required.forEach((contract) => {
-            let type = contractTemp.properties[name].properties[contract].type;
-            let element: HTMLInputElement = document.getElementsByClassName(
-              'form-check-input ' + name + ' ' + contract,
-            )[0] as HTMLInputElement;
-            objWriteContract[contract] = element?.value;
-            if (type !== 'string') {
-              objWriteContract[contract] = Number(element?.value);
-            }
-          });
-          const msg = {
-            [name]: objWriteContract,
-          };
-
-          const fee: any = {
-            amount: [
-              {
-                denom: AURA_DENOM,
-                amount: '1',
-              },
-            ],
-            gas: GAS_ESTIMATE,
-          };
-
-          try {
-            await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-            contractTemp.properties[name].checkErr = null;
-            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-          } catch (error) {
-            if (!error.toString().includes('Request rejected')) {
-              let msgError = error.toString() || 'Error';
-              this.toastr.error(msgError);
-            }
-          }
+      msg = {
+        [name]: objWriteContract,
+      };
+      let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
+      const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
+      const fee: any = {
+        amount: [
+          {
+            denom: AURA_DENOM,
+            amount: '1',
+          },
+        ],
+        gas: GAS_ESTIMATE,
+      };
+      try {
+        await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+        contractTemp.properties[name].checkErr = null;
+        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+      } catch (error) {
+        if (!error.toString().includes('Request rejected')) {
+          let msgError = error.toString() || 'Error';
+          this.toastr.error(msgError);
         }
       }
     }
