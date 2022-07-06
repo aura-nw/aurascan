@@ -119,25 +119,25 @@
           <ul>
             <li
               class="bg--primary"
-              [style.width]="proposalDetail.pro_vote_yes_bar + '%'"
-              matTooltip="Yes {{ proposalDetail.pro_vote_yes_bar | number: global.formatNumber2Decimal }}%"
+              [style.width]="proposalDetail.yesPercent + '%'"
+              matTooltip="Yes {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--danger"
-              [style.width]="proposalDetail.pro_vote_no_bar + '%'"
-              matTooltip="No {{ proposalDetail.pro_vote_no_bar | number: global.formatNumber2Decimal }}%"
+              [style.width]="proposalDetail.noPercent + '%'"
+              matTooltip="No {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--info"
-              [style.width]="proposalDetail.pro_vote_no_with_veto_bar + '%'"
+              [style.width]="proposalDetail.noWithVetoPercent + '%'"
               matTooltip="No with veto {{
-                proposalDetail.pro_vote_no_with_veto_bar | number: global.formatNumber2Decimal
+                proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal
               }}%"
               [matTooltipPosition]="'above'"></li>
             <li
               class="bg--secondary"
-              [style.width]="proposalDetail.pro_vote_abstain_bar + '%'"
-              matTooltip="Abstain {{ proposalDetail.pro_vote_abstain_bar | number: global.formatNumber2Decimal }}%"
+              [style.width]="proposalDetail.abstainPercent + '%'"
+              matTooltip="Abstain {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%"
               [matTooltipPosition]="'above'"></li>
           </ul>
         </div>
