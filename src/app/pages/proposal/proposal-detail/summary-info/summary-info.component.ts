@@ -70,17 +70,7 @@ export class SummaryInfoComponent implements OnInit {
       }),
     );
   }
-  /* 
-Phúc, 9:12 AM
-          this.commonService.status().subscribe((res) => {
-            
-          });
 
-          this.proposalDetail.voted_percent =
-            this.proposalDetail.yesPercent + this.proposalDetail.noPercent + this.proposalDetail.noWithVetoPercent;
-
-          this.proposalDetail.voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
-*/
   getProposalDetail(): void {
     this.proposalService
       .getProposalDetail(this.proposalId)
@@ -89,31 +79,33 @@ Phúc, 9:12 AM
           if (data) {
             this.proposalDetail = this.makeProposalDataDetail(data);
 
-            console.log('proposalDetail', this.proposalDetail);
-
             let { pro_status, pro_voting_end_time } = this.proposalDetail;
 
             if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
               const expiredTime = moment(pro_voting_end_time).diff(moment());
-              if (expiredTime < 0) {
-                return this.commonService.status().pipe(
-                  mergeMap((res) => {
-                    if (res?.data) {
-                      this.proposalDetail.total_bonded_token = this.formatNumber(balanceOf(res.data.bonded_tokens));
-                      this.proposalDetail.total_has_voted = this.formatNumber(this.proposalDetail.pro_total_vote) || 0;
-                    }
-                    return this.proposalService.getProposalDetailFromNode(this.proposalId).pipe(
-                      tap((_) => {}),
-                      mergeMap((res: IResponsesTemplates<any>) => {
-                        pro_status = res.data.status;
-                        return this.getProposalTally();
-                      }),
-                    );
-                  }),
-                );
-              }
-              this.votingBarLoading = true;
-              return this.getProposalTally();
+
+              return this.commonService.status().pipe(
+                mergeMap((res) => {
+                  if (res?.data) {
+                    this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+                    this.proposalDetail.total_has_voted = this.proposalDetail.pro_total_vote;
+                  }
+
+                  this.votingBarLoading = true;
+
+                  if (!(expiredTime < 0)) {
+                    return this.getProposalTally();
+                  }
+
+                  return this.proposalService.getProposalDetailFromNode(this.proposalId).pipe(
+                    tap((_) => {}),
+                    mergeMap((res: IResponsesTemplates<any>) => {
+                      pro_status = res.data.status;
+                      return this.getProposalTally();
+                    }),
+                  );
+                }),
+              );
             }
 
             this.proposalDetail.yesPercent =
@@ -153,7 +145,11 @@ Phúc, 9:12 AM
           }
         }),
       )
-      .subscribe();
+      .subscribe({
+        complete: () => {
+          this.votingBarLoading = false;
+        },
+      });
   }
 
   makeProposalDataDetail(data) {
@@ -163,8 +159,9 @@ Phúc, 9:12 AM
     const pro_votes_abstain = balanceOf(+data.pro_votes_abstain);
 
     return {
+      ...data,
       pro_voting_start_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
-      pro_voting_end_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
+      pro_voting_end_time: this.datePipe.transform(data.pro_voting_end_time, DATEFORMAT.DATETIME_UTC),
       pro_submit_time: this.datePipe.transform(data.pro_submit_time, DATEFORMAT.DATETIME_UTC),
       pro_deposit_end_time: this.datePipe.transform(data.pro_deposit_end_time, DATEFORMAT.DATETIME_UTC),
       initial_deposit: balanceOf(data.initial_deposit),
@@ -175,8 +172,6 @@ Phúc, 9:12 AM
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote: pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain,
-
-      ...data,
     };
   }
 
@@ -208,7 +203,7 @@ Phúc, 9:12 AM
     }
   }
 
-  getDetail(): void {
+  /*   getDetail(): void {
     this.proposalService.getProposalDetail(this.proposalId).subscribe((res: ResponseDto) => {
       if (res?.data) {
         console.log(res.data);
@@ -323,7 +318,7 @@ Phúc, 9:12 AM
         }
       }
     });
-  }
+  } */
 
   getStatus(key: string) {
     let resObj: { value: string; class: string; key: string } = null;
@@ -366,7 +361,8 @@ Phúc, 9:12 AM
         });
       }
     } else {
-      this.getDetail();
+      // this.getDetail();
+      this.getProposalDetail();
     }
   }
 
@@ -382,7 +378,8 @@ Phúc, 9:12 AM
           keyVote: this.voteConstant.find((s) => s.voteOption === result.keyVote)?.key,
         };
         this.proposalVotes = result.keyVote;
-        this.getVoteResult();
+        // this.getVoteResult();
+        this.getProposalTally();
         setTimeout(() => {
           window.location.reload();
         }, 4000);
@@ -451,7 +448,7 @@ Phúc, 9:12 AM
   }
 
   updateVoteResultFromNode(nodeData) {
-    if (!nodeData?.data?.tally) {
+    if (!nodeData?.proposalVoteTally?.tally) {
       return;
     }
 
@@ -470,6 +467,7 @@ Phúc, 9:12 AM
     } = this.calculatePercentVote(nodeData.proposalVoteTally);
 
     this.proposalDetail = {
+      ...this.proposalDetail,
       pro_votes_yes,
       pro_votes_no,
       pro_votes_no_with_veto,
@@ -481,64 +479,61 @@ Phúc, 9:12 AM
       abstainPercent,
       voted_percent,
       voted,
-      ...this.proposalDetail,
     };
-
-    this.votingBarLoading = false;
   }
 
-  getVoteResult() {
-    this.votingBarLoading = true;
-    this.proposalService.getProposalTally(this.proposalId).subscribe(
-      (res) => {
-        if (!res?.data?.data?.tally) {
-          return;
-        }
+  // getVoteResult() {
+  //   this.votingBarLoading = true;
+  //   this.proposalService.getProposalTally(this.proposalId).subscribe(
+  //     (res) => {
+  //       if (!res?.data?.data?.tally) {
+  //         return;
+  //       }
 
-        this.proposalDetail.pro_votes_yes = balanceOf(+res.data.proposalVoteTally.tally.yes);
-        this.proposalDetail.pro_votes_no = balanceOf(+res.data.proposalVoteTally.tally.no);
-        this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.proposalVoteTally.tally.no_with_veto);
-        this.proposalDetail.pro_votes_abstain = balanceOf(+res.data.proposalVoteTally.tally.abstain);
+  //       this.proposalDetail.pro_votes_yes = balanceOf(+res.data.proposalVoteTally.tally.yes);
+  //       this.proposalDetail.pro_votes_no = balanceOf(+res.data.proposalVoteTally.tally.no);
+  //       this.proposalDetail.pro_votes_no_with_veto = balanceOf(+res.data.proposalVoteTally.tally.no_with_veto);
+  //       this.proposalDetail.pro_votes_abstain = balanceOf(+res.data.proposalVoteTally.tally.abstain);
 
-        this.proposalDetail.pro_total_vote =
-          this.proposalDetail.pro_votes_yes +
-          this.proposalDetail.pro_votes_no +
-          this.proposalDetail.pro_votes_no_with_veto +
-          this.proposalDetail.pro_votes_abstain;
+  //       this.proposalDetail.pro_total_vote =
+  //         this.proposalDetail.pro_votes_yes +
+  //         this.proposalDetail.pro_votes_no +
+  //         this.proposalDetail.pro_votes_no_with_veto +
+  //         this.proposalDetail.pro_votes_abstain;
 
-        //vote bar data
-        this.proposalDetail.pro_vote_yes_bar =
-          (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
-        this.proposalDetail.pro_vote_no_bar =
-          (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
-        this.proposalDetail.pro_vote_no_with_veto_bar =
-          (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
-        this.proposalDetail.pro_vote_abstain_bar =
-          (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
+  //       //vote bar data
+  //       this.proposalDetail.pro_vote_yes_bar =
+  //         (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote;
+  //       this.proposalDetail.pro_vote_no_bar =
+  //         (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote;
+  //       this.proposalDetail.pro_vote_no_with_veto_bar =
+  //         (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote;
+  //       this.proposalDetail.pro_vote_abstain_bar =
+  //         (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote;
 
-        this.proposalDetail.yesPercent =
-          (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
-        this.proposalDetail.noPercent =
-          (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
-        this.proposalDetail.noWithVetoPercent =
-          (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
-        this.proposalDetail.abstainPercent =
-          (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
-        this.votingBarLoading = false;
+  //       this.proposalDetail.yesPercent =
+  //         (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
+  //       this.proposalDetail.noPercent =
+  //         (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
+  //       this.proposalDetail.noWithVetoPercent =
+  //         (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
+  //       this.proposalDetail.abstainPercent =
+  //         (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
+  //       this.votingBarLoading = false;
 
-        this.proposalDetail.voted_percent =
-          this.proposalDetail.yesPercent + this.proposalDetail.noPercent + this.proposalDetail.noWithVetoPercent;
+  //       this.proposalDetail.voted_percent =
+  //         this.proposalDetail.yesPercent + this.proposalDetail.noPercent + this.proposalDetail.noWithVetoPercent;
 
-        this.proposalDetail.voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
-      },
-      (e) => {
-        this.votingBarLoading = false;
-      },
-      () => {
-        this.votingBarLoading = false;
-      },
-    );
-  }
+  //       this.proposalDetail.voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+  //     },
+  //     (e) => {
+  //       this.votingBarLoading = false;
+  //     },
+  //     () => {
+  //       this.votingBarLoading = false;
+  //     },
+  //   );
+  // }
 
   formatNumber(number: number, args?: any): any {
     if (isNaN(number)) return null; // will only work value is a number

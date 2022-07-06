@@ -22,6 +22,8 @@ export class ProposalVoteComponent implements OnInit {
   keyVote = null;
   chainId = this.environmentService.apiUrl.value.chainId;
 
+  isLoading = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
     public dialogRef: MatDialogRef<ProposalVoteComponent>,
@@ -38,6 +40,7 @@ export class ProposalVoteComponent implements OnInit {
   ngOnInit(): void {}
 
   async proposalVote() {
+    this.isLoading = true;
     const { hash, error } = await createSignBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
@@ -51,6 +54,7 @@ export class ProposalVoteComponent implements OnInit {
     });
 
     if (hash) {
+      this.isLoading = false;
       this.dialogRef.close({ keyVote: this.keyVote });
       setTimeout(() => {
         this.checkDetailTx(hash, 'Error Voting');
