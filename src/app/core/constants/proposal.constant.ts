@@ -96,6 +96,6 @@ export enum VOTING_SUBTITLE {
 }
 
 export enum VOTING_QUORUM {
-  REACHED= 'Reached',
-  NOT_REACHED = 'Not Reached',
+  REACHED= '(Reached)',
+  NOT_REACHED = '(Not Reached)',
 }

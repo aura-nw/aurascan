@@ -243,8 +243,13 @@ export class SummaryInfoComponent implements OnInit {
         class: statusObj.class,
         key: statusObj.key,
       };
+      return resObj;
     }
-    return resObj;
+    return resObj = {
+      value: 'reject',
+      class: 'text--danger',
+      key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
+    };
   }
 
   openVoteDialog(proposalDetail) {
