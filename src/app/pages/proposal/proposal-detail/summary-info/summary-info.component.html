@@ -109,6 +109,15 @@
         class="proposal__summary-total"
         *ngIf="!votingBarLoading && proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row mb-3 small-body">
+          <div class="col-12 col-md-2 fw-semibold">Final Status:</div>
+          <div
+            class="col-12 col-md-10 mt-2 mt-lg-0 text--green"
+            [class.text--danger]="getCurrentStatus(proposalDetail.pro_status)?.value === 'reject'">
+            {{ getCurrentStatus(proposalDetail.pro_status)?.value | titlecase }}
+          </div>
+        </div>
+        <div class="mt-2 mb-3 small-body text--white">{{ finalSubTitle }}</div>
+        <div class="row mb-3 small-body">
           <div class="col-12 col-md-2 fw-semibold">Total:</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
@@ -263,7 +272,10 @@
             <div class="vote-bar mt-20 mb-4">
               <ul>
                 <li class="bg--blue" [style.width]="proposalDetail.pro_turnout + '%'"></li>
-                <li class="bg--info" [style.width]="proposalDetail.pro_total_vote + '%'"></li>
+                <li class="bg--secondary" [style.width]="proposalDetail.pro_total_vote + '%'"></li>
+                <li
+                  class="bg--gray"
+                  [style.width]="proposalDetail.total_bonded_token - proposalDetail.voted + '%'"></li>
               </ul>
               <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
                 <span class="fw-semibold">
@@ -273,14 +285,18 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-5 fw-semibold">Voted</div>
+              <div class="col-5 fw-semibold">
+                <span class="vote-status vote-status--info ml-8">Voted</span>
+              </div>
               <div class="col-3 fw-semibold">
                 {{ proposalDetail.voted_percent | number: global.formatNumber2Decimal }}%
               </div>
               <div class="col-4 text-end">{{ proposalDetail.voted | number: global.formatNumberToken }}</div>
             </div>
             <div class="row mt-2">
-              <div class="col-5 fw-semibold">Voted Abstain</div>
+              <div class="col-5 fw-semibold">
+                <span class="vote-status vote-status--secondary ml-8">Voted Abstain</span>
+              </div>
               <div class="col-3 fw-semibold">
                 {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
               </div>
@@ -289,22 +305,27 @@
               </div>
             </div>
             <div class="row mt-2">
-              <div class="col-5 fw-semibold">Did not vote</div>
+              <div class="col-5 fw-semibold">
+                <span class="vote-status vote-status--dark-gray ml-8">Did not vote</span>
+              </div>
               <div class="col-3 fw-semibold">{{ 100 - proposalDetail.pro_turnout }}%</div>
               <div class="col-4 text-end">{{ proposalDetail.total_bonded_token - proposalDetail.voted }}</div>
             </div>
           </div>
           <div class="col-12 col-lg-6 pl-lg-8">
-            <div class="title-small fw-semibold text--white">
-              Current Status:
-              <span class="text--green" [class.text--danger]="currentStatus === 'Reject'">{{ currentStatus }}</span>
+            <div class="title-small fw-semibold text--white d-flex justify-content-between align-items-center">
+              <div>Current Status:</div>
+              <!-- <span class="text--green" [class.text--danger]="currentStatus === 'Reject'">{{ currentStatus }}</span> -->
+              <div class="proposal-status proposal-status__{{ getCurrentStatus(proposalDetail?.pro_status)?.key }}">
+                <span>{{ getCurrentStatus(proposalDetail.pro_status)?.value }}</span>
+              </div>
             </div>
             <div class="mt-2 small-body text--white content--fixed-height">{{ this.currentSubTitle }}</div>
             <div class="vote-bar mt-20 mb-4">
               <ul>
                 <li class="bg--primary" [style.width]="proposalDetail.yesPercent + '%'"></li>
                 <li class="bg--danger" [style.width]="proposalDetail.noPercent + '%'"></li>
-                <li class="bg--secondary" [style.width]="proposalDetail.noWithVetoPercent + '%'"></li>
+                <li class="bg--info" [style.width]="proposalDetail.noWithVetoPercent + '%'"></li>
               </ul>
               <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
                 <span class="fw-semibold">
@@ -330,7 +351,7 @@
             </div>
             <div class="row mt-2">
               <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--secondary ml-8">NoWithVeto</span>
+                <span class="vote-status vote-status--info ml-8">NoWithVeto</span>
               </div>
               <div class="col-3 fw-semibold">
                 {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%

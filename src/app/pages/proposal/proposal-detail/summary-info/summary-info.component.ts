@@ -33,13 +33,14 @@ export class SummaryInfoComponent implements OnInit {
   @Input() proposalId: number;
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
+  currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: string } = null;
   chainId = this.environmentService.apiUrl.value.chainId;
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  currentStatus: VOTING_FINAL_STATUS | string = VOTING_FINAL_STATUS.REJECT;
+  currentStatus: VOTING_STATUS | string = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;;
   finalSubTitle: VOTING_SUBTITLE | string = VOTING_SUBTITLE.PASS;
   currentSubTitle = '';
   isNotReached = true;
@@ -196,7 +197,7 @@ export class SummaryInfoComponent implements OnInit {
       if (proposalDetail.yesPercent >= proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
-          this.currentStatus = VOTING_FINAL_STATUS.PASS;
+          this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.isNotReached = false;
           this.quorumStatus = VOTING_QUORUM.REACHED;
           this.currentSubTitle =
@@ -206,15 +207,15 @@ export class SummaryInfoComponent implements OnInit {
             proposalDetail.veto_threshold +
             ' of Yes votes.';
         } else {
-          this.currentStatus = VOTING_FINAL_STATUS.REJECT;
+          this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubTitle = 'The proportion of NoWithVeto votes is superior to ' + proposalDetail.veto_threshold;
         }
       } else {
-        this.currentStatus = VOTING_FINAL_STATUS.REJECT;
+        this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
         this.currentSubTitle = 'The proportion of Yes votes is inferior to ' + proposalDetail.veto_threshold;
       }
     } else {
-      this.currentStatus = VOTING_FINAL_STATUS.REJECT;
+      this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
         'Current quorum is less than ' + proposalDetail.quorum + ' and this proposal requires more participation';
     }
@@ -223,6 +224,19 @@ export class SummaryInfoComponent implements OnInit {
   getStatus(key: string) {
     let resObj: { value: string; class: string; key: string } = null;
     const statusObj = this.statusConstant.find((s) => s.key === key);
+    if (statusObj !== undefined) {
+      resObj = {
+        value: statusObj.value,
+        class: statusObj.class,
+        key: statusObj.key,
+      };
+    }
+    return resObj;
+  }
+
+  getCurrentStatus(key: string) {
+    let resObj: { value: string; class: string; key: string } = null;
+    const statusObj = this.currentStatusConstant.find((s) => s.key === key);
     if (statusObj !== undefined) {
       resObj = {
         value: statusObj.value,

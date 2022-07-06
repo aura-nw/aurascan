@@ -75,10 +75,18 @@ export enum MESSAGE_WARNING {
   LATE = 'LATE',
 }
 
-export enum VOTING_FINAL_STATUS {
-  REJECT = 'Reject',
-  PASS = 'Pass',
-}
+export const VOTING_FINAL_STATUS = [
+  {
+    key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
+    value: 'reject',
+    class: 'text--danger',
+  },
+  {
+    key: VOTING_STATUS.PROPOSAL_STATUS_PASSED,
+    value: 'pass',
+    class: 'text--primary',
+  },
+];
 
 export enum VOTING_SUBTITLE {
   PASS = 'The proposal is passed because it is above the threshold and receive more than 50% of Yes votes.',
