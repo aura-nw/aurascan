@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
@@ -75,11 +76,14 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   pageIndex = 0;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private validatorService: ValidatorService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {

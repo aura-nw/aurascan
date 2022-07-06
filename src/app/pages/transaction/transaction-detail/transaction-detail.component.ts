@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '../../../core/services/common.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT, NUMBER_CONVERT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import {
@@ -14,6 +14,7 @@ import { ResponseDto } from '../../../core/models/common.model';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Globals } from '../../../global/global';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -33,6 +34,8 @@ export class TransactionDetailComponent implements OnInit {
   eTransType = TRANSACTION_TYPE_ENUM;
   errorMessage = '';
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,6 +44,7 @@ export class TransactionDetailComponent implements OnInit {
     public global: Globals,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

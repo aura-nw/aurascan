@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { AURA_DENOM, NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
@@ -104,6 +105,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.pageYOffset = window.pageYOffset;
   }
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private validatorService: ValidatorService,
     public globals: Globals,
@@ -117,6 +120,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private router: Router,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

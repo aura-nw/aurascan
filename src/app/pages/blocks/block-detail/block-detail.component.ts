@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '../../../../app/core/services/common.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT, PAGE_SIZE_OPTIONS } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
@@ -11,6 +11,7 @@ import { BlockService } from '../../../../app/core/services/block.service';
 import { getAmount, Globals } from '../../../../app/global/global';
 import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonService } from 'src/app/core/services/common.service';
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',
@@ -45,6 +46,8 @@ export class BlockDetailComponent implements OnInit {
   isRawData = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -52,8 +55,8 @@ export class BlockDetailComponent implements OnInit {
     private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
-    private transactionService: TransactionService,
     private layout: BreakpointObserver,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

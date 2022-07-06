@@ -35,7 +35,7 @@ export class EnvironmentService {
       .toPromise()
       .then((config: any) => {
         const chainId = config['chainId'] || 'serenity-testnet-001';
-        const chain_info = config['chain_info']?.chainId || ChainsInfo[chainId];
+        const chain_info = config['chain_info']?.chainId ? config['chain_info'] : ChainsInfo[chainId];
 
         const data = {
           fabric: config['fabric'],
@@ -44,7 +44,7 @@ export class EnvironmentService {
           timeStaking: config['timeStaking'] || '1814400',
           urlSocket: config['urlSocket'],
           validator_s3: config['validator_s3'],
-          chain_info
+          chain_info,
         };
 
         this.apiUrl.next(data);

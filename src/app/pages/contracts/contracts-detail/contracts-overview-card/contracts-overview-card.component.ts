@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TYPE_ACCOUNT } from 'src/app/core/constants/account.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { Globals } from '../../../../global/global';
 
 @Component({
@@ -11,7 +12,10 @@ export class ContractsOverviewCardComponent implements OnInit {
   @Input() contractDetail: any;
   selectedToken = '$0.00';
   assetsType = TYPE_ACCOUNT;
-  constructor(public global: Globals) {}
+
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
+  constructor(public global: Globals, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {}
 }

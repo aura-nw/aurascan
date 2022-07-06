@@ -30,6 +30,8 @@ export class SummaryInfoComponent implements OnInit {
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private proposalService: ProposalService,
     private datePipe: DatePipe,
