@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
@@ -40,6 +41,8 @@ export class BlockDetailComponent implements OnInit {
   isRawData = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -47,8 +50,8 @@ export class BlockDetailComponent implements OnInit {
     private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
-    private transactionService: TransactionService,
     private layout: BreakpointObserver,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

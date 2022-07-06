@@ -6,6 +6,7 @@ import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -267,12 +268,14 @@ export class NFTDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   contractType = ContractVerifyType.Exact_Match;
   contractVerifyType = ContractVerifyType;
-  
+
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
-    private tokenService: TokenService,
     public commonService: CommonService,
     public global: Globals,
     public router: Router,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

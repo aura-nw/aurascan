@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -65,6 +66,8 @@ export class ValidatorsDetailComponent implements OnInit {
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -74,6 +77,7 @@ export class ValidatorsDetailComponent implements OnInit {
     public global: Globals,
     private layout: BreakpointObserver,
     private numberPipe: DecimalPipe,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

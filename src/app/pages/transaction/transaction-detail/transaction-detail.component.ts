@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT, NUMBER_CONVERT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
@@ -27,6 +28,8 @@ export class TransactionDetailComponent implements OnInit {
   jsonStr: string;
   errorMessage = '';
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -35,6 +38,7 @@ export class TransactionDetailComponent implements OnInit {
     public global: Globals,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

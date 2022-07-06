@@ -19,7 +19,7 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount
+  WalletAcount,
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -27,7 +27,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction
+  TypeTransaction,
 } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
@@ -173,6 +173,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
@@ -223,15 +225,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.currentAccountDetail = dataAccount;
         this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
-
-        // this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
-        // this.pageDataDelegation.length = dataAccount.delegations.length;
-
-        // this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
-        // this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
-
-        // this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
-        // this.pageDataRedelegation.length = dataAccount.redelegations.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
@@ -355,7 +348,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.currentAccountDetail.balances.forEach((token) => {
           token.price = 0;
-          if (token.name === this.global.stableToken) {
+          if (token.name === this.denom) {
             token.amount = this.currentAccountDetail.total;
           }
           token.total_value = token.price * Number(token.amount);
@@ -451,7 +444,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> AURA </span>'
+        `<span class=text--primary> ${this.denom} </span>`
       );
     }
   }

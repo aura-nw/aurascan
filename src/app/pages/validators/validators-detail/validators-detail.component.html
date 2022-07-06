@@ -3,7 +3,7 @@
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob">
       <div class="d-flex">
-        <div class="avatar-wrapper flex-shrink-0 mr-2 mr-lg-5"  *ngIf="!breakpoint.value.matches">
+        <div class="avatar-wrapper flex-shrink-0 mr-2 mr-lg-5" *ngIf="!breakpoint.value.matches">
           <!-- <div class="validator-avatar x-large" [class.x-large]="!breakpoint.value.matches"> -->
           <div class="validator-avatar x-large">
             <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
@@ -122,7 +122,7 @@
           {{ currentValidatorDetail?.percent_power }}% ({{
             currentValidatorDetail?.power | number: global.formatNumberToken
           }}
-          <span class="text--green">{{ global.stableToken }}</span
+          <span class="text--green">{{ denom }}</span
           >)
         </div>
       </div>
@@ -138,7 +138,7 @@
         </div>
         <div class="col-12 col-lg-6">
           {{ currentValidatorDetail?.self_bonded | number: global.formatNumberToken }}
-          <span class="text--green">{{ global.stableToken }}</span> ({{ currentValidatorDetail?.percent_self_bonded }})
+          <span class="text--green">{{ denom }}</span> ({{ currentValidatorDetail?.percent_self_bonded }})
         </div>
       </div>
       <div class="row mb-3">
@@ -316,7 +316,7 @@
                             </a>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                              <span class="text--green">{{ global.stableToken }}</span>
+                              <span class="text--green">{{ denom }}</span>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                           </ng-container>
@@ -341,7 +341,11 @@
                     [content]="[
                       {
                         label: 'Amount',
-                        info: (data.amount | number: global.formatNumberToken) + '<span class=text--green> AURA</span>'
+                        info:
+                          (data.amount | number: global.formatNumberToken) +
+                          '<span class=text--green> ' +
+                          denom +
+                          '</span>'
                       }
                     ]"></app-card-mob-simple>
                 </ng-container>

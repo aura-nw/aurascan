@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { DATEFORMAT, NUMBER_CONVERT, AURA_DENOM } from '../../../../core/constants/common.constant';
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -30,7 +31,13 @@ export class TransactionMessagesComponent implements OnInit {
   listAmountClaim = [];
   objMsgContract: any;
 
-  constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  constructor(
+    public global: Globals,
+    private datePipe: DatePipe,
+    private validatorService: ValidatorService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {

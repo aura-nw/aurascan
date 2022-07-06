@@ -11,7 +11,7 @@
                 <span [class.small-body]="breakpoint.value.matches">
                   {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
                 </span>
-                <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+                <span class="ml-2 text--green">{{ denom }}</span>
               </span>
             </div>
             <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
@@ -20,7 +20,7 @@
                 <span [class.small-body]="breakpoint.value.matches">
                   {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
                 </span>
-                <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+                <span class="ml-2 text--green">{{ denom }}</span>
               </span>
             </div>
           </div>
@@ -33,7 +33,7 @@
                 [disabled]="isDisableClaim || isHandleStake">
                 <span class="text-gradient small-body-mob"
                   >Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
-                  <span class="ml-1">{{ globals.stableToken }}</span>
+                  <span class="ml-1">{{ denom }}</span>
                 </span>
               </button>
             </div>
@@ -83,11 +83,11 @@
                       <ng-container [ngSwitch]="template.matColumnDef">
                         <div *ngSwitchCase="'amount_staked'">
                           {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                          <span class="text--green">{{ globals.stableToken }}</span>
+                          <span class="text--green">{{ denom }}</span>
                         </div>
                         <div *ngSwitchCase="'pending_reward'">
                           {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                          <span class="text--green">{{ globals.stableToken }}</span>
+                          <span class="text--green">{{ denom }}</span>
                         </div>
                         <div *ngSwitchCase="'action'" class="py-4">
                           <button
@@ -160,7 +160,7 @@
                       <div>
                         <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
                         <span *ngIf="template['headerCellDef']" class="ml-2 text--green">
-                          {{ globals.stableToken }}
+                          {{ denom }}
                         </span>
                       </div>
                     </div>
@@ -197,7 +197,7 @@
             </div>
             <div class="col-9 text--white body small-body-mob">
               {{ validator.balance | number: globals.formatNumberToken }}
-              <span class="text--green">{{ globals.stableToken }}</span
+              <span class="text--green">{{ denom }}</span
               ><br />
               <span class="text--neutrals-4 small-body">{{
                 commonService.getDateValue(validator.completion_time, false)[1]
@@ -220,7 +220,7 @@
                 <span>{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
                 <span>
                   {{ validator.balance | number: globals.formatNumberToken }}
-                  <span class="text--green">{{ globals.stableToken }}</span>
+                  <span class="text--green">{{ denom }}</span>
                 </span>
               </div>
             </div>
@@ -507,7 +507,7 @@
             <span>
               Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green ml-1">{{ globals.stableToken }}</span
+            <span class="text--green ml-1">{{ denom }}</span
             >)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
@@ -521,7 +521,7 @@
             <span class="ml-3">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green"> {{ globals.stableToken }} </span>
+            <span class="text--green"> {{ denom }} </span>
           </div>
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -538,7 +538,7 @@
                 MAX
               </button>
             </div>
-            <div class="input-group-append body small-body-mob fw-semibold">{{ globals.stableToken }}</div>
+            <div class="input-group-append body small-body-mob fw-semibold">{{ denom }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
@@ -552,7 +552,7 @@
                 MAX
               </button>
             </div>
-            <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
+            <div class="input-group-append fw-semibold">{{ denom }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
             Insufficient available balance for transaction fee
@@ -595,7 +595,7 @@
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
-              <span class="text--green"> {{ globals.stableToken }} </span>
+              <span class="text--green"> {{ denom }} </span>
             </div>
             <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
@@ -607,7 +607,7 @@
                   MAX
                 </button>
               </div>
-              <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
+              <div class="input-group-append fw-semibold">{{ denom }}</div>
             </div>
           </div>
         </div>
