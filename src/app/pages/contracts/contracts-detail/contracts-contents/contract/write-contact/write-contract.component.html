@@ -54,7 +54,8 @@
               currentFrom === i
             "
             placeholder="{{ item }} ({{
-              writeContract.properties[writeContract.required[0]].properties[item].type
+              writeContract.properties[writeContract.required[0]].properties[item].type ||
+                writeContract.properties[writeContract.required[0]].properties[item].$ref
             }})" />
         </ng-container>
         <div class="px-0">
