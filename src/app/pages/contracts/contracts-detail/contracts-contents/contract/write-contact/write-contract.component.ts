@@ -83,8 +83,8 @@ export class WriteContractComponent implements OnInit {
   async executeSmartContract(name: string, currentFrom: number) {
     this.connectWallet();
     if (this.walletAccount) {
-      const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
       let err = {};
+      const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
       contractTemp.properties[name].required.forEach((contract) => {
         let element: HTMLInputElement = document.getElementsByClassName(
           'form-check-input ' + name + ' ' + contract,
@@ -134,6 +134,7 @@ export class WriteContractComponent implements OnInit {
 
           try {
             let result = await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+            contractTemp.properties[name].checkErr = null;
             this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
           } catch (error) {
             if (!error.toString().includes('Request rejected')) {

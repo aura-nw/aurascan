@@ -27,19 +27,28 @@
             }})
           </p>
           <input
-            [class.error-null]="errorInput"
+            [class.error-null]="
+              readContract?.properties[readContract.required[0]].checkErr &&
+              readContract?.properties[readContract.required[0]].checkErr[item] &&
+              errorInput &&
+              currentFrom === i
+            "
             class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
             [type]="
               readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'
             "
             (keyup)="resetCheck()"
-            placeholder="{{ item }} ({{ readContract.properties[readContract.required[0]].properties[item].type }})" />
+            placeholder="{{ item }} ({{
+              readContract.properties[readContract.required[0]].properties[item].type ||
+                readContract.properties[readContract.required[0]].properties[item].$ref
+            }})" />
         </ng-container>
         <div class="w-100 mb-2 px-0">
           <button
             *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
             class="button button-chart button-outline button-outline__in-card body btn-contract"
             [disabled]="errorInput && currentFrom === i"
+            type="button"
             (click)="querySmartContract(readContract.required[0], i)">
             <img
               src="assets/icons/icons-svg/color/spinner.svg"
