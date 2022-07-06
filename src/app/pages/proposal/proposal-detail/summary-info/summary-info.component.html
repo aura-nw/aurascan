@@ -109,11 +109,11 @@
         class="proposal__summary-total"
         *ngIf="!votingBarLoading && proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Final Status:</div>
+          <div class="col-12 col-md-2 title-small fw-semibold">Final Status:</div>
           <div
-            class="col-12 col-md-10 mt-2 mt-lg-0 text--green"
-            [class.text--danger]="getCurrentStatus(proposalDetail.pro_status)?.value === 'reject'">
-            {{ getCurrentStatus(proposalDetail.pro_status)?.value | titlecase }}
+            class="col-12 col-md-10 mt-2 mt-lg-0 text--green title-small fw-semibold"
+            [class.text--danger]="getStatus(proposalDetail.pro_status)?.value === 'rejected'">
+            {{ getStatus(proposalDetail.pro_status)?.value | titlecase }}
           </div>
         </div>
         <div class="mt-2 mb-3 small-body text--white">{{ finalSubTitle }}</div>
