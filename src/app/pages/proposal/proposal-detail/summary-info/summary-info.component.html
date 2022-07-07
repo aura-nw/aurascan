@@ -125,7 +125,7 @@
           </div>
         </div>
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
-          <ul>
+          <ul class="vote-bar-ul">
             <li
               class="bg--primary"
               [style.width]="proposalDetail.yesPercent + '%'"
@@ -253,113 +253,20 @@
           </ul>
         </div>
       </div>
-      <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+      <ng-container *ngIf="true || proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row proposal__summary-total">
           <div class="col-12 col-lg-6 pr-lg-8 border-right">
-            <div class="d-lg-flex justify-content-between">
-              <div class="title-small fw-semibold text--white" style="min-height: 33px;">
-                Current Turnout: {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
-              </div>
-              <div class="body text--light-gray">
-                ({{ formatNumber(proposalDetail.pro_total_vote) || 0 }} of
-                {{ formatNumber(proposalDetail.total_bonded_token) }} has voted)
-              </div>
-            </div>
-            <div class="mt-2 small-body text--white content--fixed-height">
-              The result of governance will only be applied when quorum is more than
-              {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}% of the total votes.
-            </div>
-            <div class="vote-bar mt-20 mb-4">
-              <ul>
-                <li class="bg--blue" [style.width]="proposalDetail.pro_turnout + '%'"></li>
-                <li class="bg--secondary" [style.width]="proposalDetail.pro_total_vote + '%'"></li>
-                <li
-                  class="bg--gray"
-                  [style.width]="proposalDetail.total_bonded_token - proposalDetail.voted + '%'"></li>
-              </ul>
-              <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
-                <span class="fw-semibold">
-                  Quorum: {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
-                </span>
-                <span class="text--green ml-1" *ngIf="isNotReached">{{ quorumStatus }}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--info ml-8">Voted</span>
-              </div>
-              <div class="col-3 fw-semibold">
-                {{ proposalDetail.voted_percent | number: global.formatNumber2Decimal }}%
-              </div>
-              <div class="col-4 text-end">{{ proposalDetail.voted | number: global.formatNumberToken }}</div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--secondary ml-8">Voted Abstain</span>
-              </div>
-              <div class="col-3 fw-semibold">
-                {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
-              </div>
-              <div class="col-4 text-end">
-                {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--dark-gray ml-8">Did not vote</span>
-              </div>
-              <div class="col-3 fw-semibold">{{ 100 - proposalDetail.pro_turnout }}%</div>
-              <div class="col-4 text-end">{{ proposalDetail.total_bonded_token - proposalDetail.voted }}</div>
-            </div>
+            <app-current-turnout
+              [proposalDetail]="proposalDetail"
+              [isNotReached]="isNotReached"
+              [quorumStatus]="quorumStatus"></app-current-turnout>
           </div>
           <div class="col-12 col-lg-6 pl-lg-8">
-            <div class="title-small fw-semibold text--white d-flex justify-content-between align-items-center">
-              <div>Current Status:</div>
-              <!-- <span class="text--green" [class.text--danger]="currentStatus === 'Reject'">{{ currentStatus }}</span> -->
-              <div class="proposal-status proposal-status__{{ getCurrentStatus(proposalDetail?.pro_status)?.key }}">
-                <span>{{ getCurrentStatus(proposalDetail.pro_status)?.value }}</span>
-              </div>
-            </div>
-            <div class="mt-2 small-body text--white content--fixed-height">{{ this.currentSubTitle }}</div>
-            <div class="vote-bar mt-20 mb-4">
-              <ul>
-                <li class="bg--primary" [style.width]="proposalDetail.yesPercent + '%'"></li>
-                <li class="bg--danger" [style.width]="proposalDetail.noPercent + '%'"></li>
-                <li class="bg--info" [style.width]="proposalDetail.noWithVetoPercent + '%'"></li>
-              </ul>
-              <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
-                <span class="fw-semibold">
-                  Threshold: {{ proposalDetail.threshold | number: global.formatNumber2Decimal }}%
-                </span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--primary ml-8">Yes</span>
-              </div>
-              <div class="col-3 fw-semibold">
-                {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
-              </div>
-              <div class="col-4 text-end">{{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}</div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--danger ml-8">No</span>
-              </div>
-              <div class="col-3 fw-semibold">{{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%</div>
-              <div class="col-4 text-end">{{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}</div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-5 fw-semibold">
-                <span class="vote-status vote-status--info ml-8">NoWithVeto</span>
-              </div>
-              <div class="col-3 fw-semibold">
-                {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
-              </div>
-              <div class="col-4 text-end">
-                {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
-              </div>
-            </div>
+            <app-current-status
+              [proposalDetail]="proposalDetail"
+              [currentSubTitle]="currentSubTitle"
+              [currentStatus]="getCurrentStatus(proposalDetail.pro_status)">
+            </app-current-status>
           </div>
         </div>
       </ng-container>
