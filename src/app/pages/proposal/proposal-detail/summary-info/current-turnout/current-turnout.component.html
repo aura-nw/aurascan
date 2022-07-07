@@ -18,7 +18,6 @@
       <ul class="vote-bar-ul">
         <li class="bg--voted" [style.width]="proposalDetail.pro_turnout + '%'"></li>
         <li class="bg--secondary" [style.width]="proposalDetail.pro_total_vote + '%'"></li>
-        <li class="bg--gray" [style.width]="proposalDetail.total_bonded_token - proposalDetail.voted + '%'"></li>
       </ul>
       <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
         <span class="fw-semibold small-text">
