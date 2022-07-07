@@ -35,7 +35,7 @@ export class TokenInventoryComponent implements OnInit {
         name: 'The Picaroons',
         tokenID: '443432324234agbki443432324adw453443',
         link: '#',
-        img: 'assets/images/about.png'
+        img: null
       },
       {
         symbol: 'CW - 721',
