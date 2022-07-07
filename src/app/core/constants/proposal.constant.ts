@@ -74,3 +74,28 @@ export enum MESSAGE_WARNING {
   NOT_PARTICIPATE = 'NOT_PARTICIPATE',
   LATE = 'LATE',
 }
+
+export const VOTING_FINAL_STATUS = [
+  {
+    key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
+    value: 'reject',
+    class: 'text--danger',
+  },
+  {
+    key: VOTING_STATUS.PROPOSAL_STATUS_PASSED,
+    value: 'pass',
+    class: 'text--primary',
+  },
+];
+
+export enum VOTING_SUBTITLE {
+  PASS = 'The proposal is passed because it is above the threshold and receive more than 50% of Yes votes.',
+  REJECT_1 = 'This proposal is rejected because there are more than {{proposalDetail.noWithVetoPercent}} of No With Veto votes.',
+  REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50% of No votes.',
+  REJECT_3 = 'This proposal is failed because it did not reach the quorum.',
+}
+
+export enum VOTING_QUORUM {
+  REACHED= '(Reached)',
+  NOT_REACHED = '(Not Reached)',
+}
