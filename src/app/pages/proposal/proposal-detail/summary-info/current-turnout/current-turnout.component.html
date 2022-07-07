@@ -1,0 +1,66 @@
+<div class="h-100 d-flex justify-content-between flex-column">
+  <div class="">
+    <div class="d-lg-flex justify-content-between">
+      <div class="body fw-semibold text--white" style="min-height: 33px">Current Turnout</div>
+      <div class="body text--light-gray">
+        <span class="text--white mr-2"> {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}% </span>
+        ({{ formatNumber(proposalDetail.pro_total_vote) || 0 }} of
+        {{ formatNumber(proposalDetail.total_bonded_token) }} has voted)
+      </div>
+    </div>
+    <div class="mt-1 small-body text--light-gray content--fixed-height">
+      The result of governance will only be applied when quorum is more than
+      {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}% of the total votes.
+    </div>
+  </div>
+  <div class="mt-10">
+    <div class="vote-bar mb-4">
+      <ul class="vote-bar-ul">
+        <li class="bg--voted" [style.width]="proposalDetail.pro_turnout + '%'"></li>
+        <li class="bg--secondary" [style.width]="proposalDetail.pro_total_vote + '%'"></li>
+        <li class="bg--gray" [style.width]="proposalDetail.total_bonded_token - proposalDetail.voted + '%'"></li>
+      </ul>
+      <div class="vote-bar__info" [style.left]="proposalDetail.quorum + '%'">
+        <span class="fw-semibold small-text">
+          <span class="text--light-gray">Quorum:</span>
+          {{ proposalDetail.quorum | number: global.formatNumber2Decimal }}%
+        </span>
+        <span class="text--active ml-1" *ngIf="isNotReached">{{ quorumStatus }}</span>
+      </div>
+    </div>
+    <div class="d-flex align-items-center">
+      <div class="vote --w-0"></div>
+      <div class="row flex-grow-1 align-items-center">
+        <div class="col-5 fw-semibold">
+          <span class="vote-status">Voted</span>
+        </div>
+        <div class="col-3 fw-semibold">{{ proposalDetail.voted_percent | number: global.formatNumber2Decimal }}%</div>
+        <div class="col-4 text-end">{{ proposalDetail.voted | number: global.formatNumberToken }}</div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center mt-3">
+      <div class="vote --w-0"></div>
+      <div class="row flex-grow-1 align-items-center">
+        <div class="col-5 fw-semibold">
+          <span class="vote-status">Voted Abstain</span>
+        </div>
+        <div class="col-3 fw-semibold">{{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%</div>
+        <div class="col-4 text-end">
+          {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
+        </div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center mt-3">
+      <div class="vote --w-0"></div>
+      <div class="row flex-grow-1 align-items-center">
+        <div class="col-5 fw-semibold">
+          <span class="vote-status">Did not vote</span>
+        </div>
+        <div class="col-3 fw-semibold">{{ 100 - proposalDetail.pro_turnout }}%</div>
+        <div class="col-4 text-end">
+          {{ proposalDetail.total_bonded_token - proposalDetail.voted | number: global.formatNumberToken }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

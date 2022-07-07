@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
@@ -40,7 +40,7 @@ export class SummaryInfoComponent implements OnInit {
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  currentStatus: VOTING_STATUS | string = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;;
+  currentStatus: VOTING_STATUS | string = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
   finalSubTitle: VOTING_SUBTITLE | string = VOTING_SUBTITLE.PASS;
   currentSubTitle = '';
   isNotReached = true;
@@ -117,7 +117,6 @@ export class SummaryInfoComponent implements OnInit {
               pro_votes_abstain,
               pro_turnout,
               quorum,
-              voted,
             } = this.proposalDetail;
 
             const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
@@ -156,7 +155,6 @@ export class SummaryInfoComponent implements OnInit {
           if (e === null) {
           } else {
             this.updateVoteResultFromNode(e.data);
-
             this.parsingProposalStatus(this.proposalDetail);
           }
         }),
@@ -174,6 +172,8 @@ export class SummaryInfoComponent implements OnInit {
     const pro_votes_no_with_veto = balanceOf(+data.pro_votes_no_with_veto);
     const pro_votes_abstain = balanceOf(+data.pro_votes_abstain);
 
+    const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
+
     return {
       ...data,
       pro_voting_start_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
@@ -187,7 +187,7 @@ export class SummaryInfoComponent implements OnInit {
       pro_votes_no,
       pro_votes_no_with_veto,
       pro_votes_abstain,
-      pro_total_vote: pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain,
+      pro_total_vote,
     };
   }
 
@@ -244,11 +244,11 @@ export class SummaryInfoComponent implements OnInit {
       };
       return resObj;
     }
-    return resObj = {
+    return (resObj = {
       value: 'reject',
       class: 'text--danger',
       key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
-    };
+    });
   }
 
   openVoteDialog(proposalDetail) {
