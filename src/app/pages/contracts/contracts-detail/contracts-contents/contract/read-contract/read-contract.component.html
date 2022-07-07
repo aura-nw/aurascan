@@ -20,10 +20,13 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
-          <p class="px-0">
+          <p
+            class="px-0"
+            [class.input-require]="readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
             {{ item }} ({{
               readContract.properties[readContract.required[0]].properties[item].type ||
-                readContract.properties[readContract.required[0]].properties[item].$ref
+                readContract.properties[readContract.required[0]].properties[item].$ref ||
+                'any'
             }})
           </p>
           <input
@@ -33,14 +36,18 @@
               errorInput &&
               currentFrom === i
             "
+            [class.input-require]="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
             class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
             [type]="
-              readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'
+              readContract.properties[readContract.required[0]].properties[item].type === 'integer' || item == 'amount'
+                ? 'number'
+                : 'string'
             "
             (keyup)="resetCheck()"
             placeholder="{{ item }} ({{
               readContract.properties[readContract.required[0]].properties[item].type ||
-                readContract.properties[readContract.required[0]].properties[item].$ref
+                readContract.properties[readContract.required[0]].properties[item].$ref ||
+                'any'
             }})" />
         </ng-container>
         <div class="w-100 mb-2 px-0">

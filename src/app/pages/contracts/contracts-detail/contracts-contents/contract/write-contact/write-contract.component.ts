@@ -87,22 +87,24 @@ export class WriteContractComponent implements OnInit {
       let objWriteContract = {};
       let msg = {};
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
-      contractTemp.properties[name].required.forEach((contract) => {
+      Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
         let element: HTMLInputElement = document.getElementsByClassName(
-          'form-check-input ' + name + ' ' + contract,
+          'form-check-input ' + name + ' ' + key,
         )[0] as HTMLInputElement;
 
-        if (element?.value?.length === 0) {
-          err[contract.toString()] = true;
+        //check input null && require field
+        if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
+          err[key.toString()] = true;
           this.errorInput = true;
           this.currentFrom = currentFrom;
           return;
         }
 
-        let type = contractTemp.properties[name].properties[contract].type;
-        objWriteContract[contract] = element?.value;
-        if (type !== 'string') {
-          objWriteContract[contract] = Number(element?.value);
+        let type = contractTemp.properties[name].properties[key].type;
+        objWriteContract[key] = element?.value;
+        //convert number if integer field
+        if (type === 'integer' || key === 'amount') {
+          objWriteContract[key] = Number(element?.value);
         }
       });
 
@@ -140,5 +142,9 @@ export class WriteContractComponent implements OnInit {
 
   resetCheck() {
     this.errorInput = false;
+  }
+
+  objectKeys(obj) {
+    return obj ? Object.keys(obj) : [];
   }
 }
