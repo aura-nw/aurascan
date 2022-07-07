@@ -9,11 +9,33 @@
   }
 }
 
-.table-info .aura-basic-table tr td:not(:last-child) {
-  border-right: 1px solid var(--white);
-}
-
 .content-transfer {
   min-width: 170px;
   display: inline-block;
+}
+.nft-img__contain {
+  padding: 12px;
+  border: 1px solid var(--aura-dark-gray);
+  border-radius: 16px;
+}
+.object-fit--none {
+  object-fit: none;
+}
+.card__ntf-detail {
+  &-item {
+    display: flex;
+    padding: var(--spacer-4);
+    margin: 0;
+    border-top: 1px solid var(--aura-dark-gray);
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    font-weight: 400;
+    &:first-child {
+      font-weight: 600;
+      border-top: none;
+    }
+    .label-detail {
+      min-width: 160px;
+    }
+  }
 }
