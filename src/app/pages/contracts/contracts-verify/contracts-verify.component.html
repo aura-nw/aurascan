@@ -10,11 +10,7 @@
   <div class="card mt-6">
     <div class="card-body">
       <!-- Tabs -->
-      <ul
-        ngbNav
-        #customNav="ngbNav"
-        [activeId]="tabCurrent"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom">
+      <ul ngbNav #customNav="ngbNav" [activeId]="tabCurrent" class="aura-nav-tabs nav-tabs nav-tabs-custom">
         <ng-container *ngFor="let tab of TAB; index as index">
           <li [ngbNavItem]="index">
             <a ngbNavLink (click)="changeTab(tab.id)" class="fw-semibold">

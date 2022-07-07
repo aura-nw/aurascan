@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -123,19 +122,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  // socket(): void {
-  //   this.wSService.connect();
-  //   const wsData = { event: 'eventVerifyContract' };
-
-  //   this.wSService.on('register', wsData).subscribe((data: any) => {
-  //     if (this.contractAddress === data?.ContractAddress) {
-  //       this.isVerified = true;
-  //     }
-  //   });
-
-  //   this.dlgServiceOpen();
-  // }
 
   dlgServiceOpen(): void {
     this.dlgService.showDialog({
