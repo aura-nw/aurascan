@@ -113,7 +113,7 @@
 
             <!-- Price Column -->
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="">Price</th>
+              <th mat-header-cell *matHeaderCellDef class="">Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <div>
                   <!-- <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
@@ -126,7 +126,7 @@
 
             <!-- Change Column -->
             <ng-container matColumnDef="change">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="">Change (%)</th>
+              <th mat-header-cell *matHeaderCellDef class="">Change (%)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
                   <ng-container *ngIf="element.isValueUp">
@@ -143,7 +143,7 @@
 
             <!-- Volume Column -->
             <ng-container matColumnDef="volume">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="">Volume (24H)</th>
+              <th mat-header-cell *matHeaderCellDef class="">Volume (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <!-- ${{ element.volume | number: global.formatNumber2Decimal }} -->
                 -
@@ -152,7 +152,7 @@
 
             <!-- Circulating Market Cap Column -->
             <ng-container matColumnDef="circulatingMarketCap">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="">Circulating Market Cap</th>
+              <th mat-header-cell *matHeaderCellDef class="">Circulating Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <!-- ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }} -->
                 -

@@ -401,15 +401,15 @@ export class TokenCw20Component implements OnInit {
       return;
     }
 
+    const isAsc = sort.direction === 'asc';
     this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'price':
-          return this.compare(a.price, b.price, false);
+          return this.compare(a.price, b.price, isAsc);
         case 'volume':
-          return this.compare(a.volume, b.volume, false);
+          return this.compare(a.volume, b.volume, isAsc);
         case 'circulatingMarketCap':
-          return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, true);
+          return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, isAsc);
         default:
           return 0;
       }
@@ -418,10 +418,10 @@ export class TokenCw20Component implements OnInit {
     if (sort.active === 'change') {
       let lstUp = this.sortedData
         .filter((data) => data.isValueUp)
-        ?.sort((a, b) => this.compare(a.change, b.change, false));
+        ?.sort((a, b) => this.compare(a.change, b.change, isAsc));
       let lstDown = this.sortedData
         .filter((data) => !data.isValueUp)
-        .sort((a, b) => this.compare(a.change, b.change, true));
+        .sort((a, b) => this.compare(a.change, b.change, isAsc));
       this.sortedData = lstUp.concat(lstDown);
     }
 
