@@ -20,10 +20,13 @@
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
         <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
-          <p class="px-0">
+          <p
+            class="px-0"
+            [class.input-require]="readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
             {{ item }} ({{
               readContract.properties[readContract.required[0]].properties[item].type ||
-                readContract.properties[readContract.required[0]].properties[item].$ref
+                readContract.properties[readContract.required[0]].properties[item].$ref ||
+                'any'
             }})
           </p>
           <input
@@ -33,21 +36,25 @@
               errorInput &&
               currentFrom === i
             "
+            [class.input-require]="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
             class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
             [type]="
-              readContract.properties[readContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'
+              readContract.properties[readContract.required[0]].properties[item].type === 'integer' || item == 'amount'
+                ? 'number'
+                : 'string'
             "
             (keyup)="resetCheck()"
             placeholder="{{ item }} ({{
               readContract.properties[readContract.required[0]].properties[item].type ||
-                readContract.properties[readContract.required[0]].properties[item].$ref
+                readContract.properties[readContract.required[0]].properties[item].$ref ||
+                'any'
             }})" />
         </ng-container>
         <div class="w-100 mb-2 px-0">
           <button
             *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
             class="button button-chart button-outline button-outline__in-card body btn-contract"
-            [disabled]="errorInput && currentFrom === i"
+            [disabled]="currentFrom === i && (errorInput || isLoading)"
             type="button"
             (click)="querySmartContract(readContract.required[0], i)">
             <img
@@ -59,18 +66,37 @@
             <span class="ml-1 text-gradient">Query</span>
           </button>
         </div>
-        <div>
+        <div class="col-12">
           <ng-container *ngIf="!readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
-            {{ readContract.required }}
-            <span class="ml-1 font-italic text--light-gray small-body">{{
-              readContract.properties[readContract.required[0]].type
-            }}</span>
+            <div class="mb-2">
+              {{ readContract.required }}
+              <span class="ml-1 font-italic text--light-gray small-body">{{
+                readContract.properties[readContract.required[0]].type
+              }}</span>
+            </div>
+            <div class="d-flex" *ngIf="objQuery[readContract?.required]">
+              <div class="">Response:</div>
+              <div class="">
+                <pre
+                  id="json"
+                  class="raw-content text--white pl-2"
+                  [innerHtml]="objQuery[readContract?.required] | appJson"></pre>
+              </div>
+            </div>
           </ng-container>
           <ng-container *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
-            <p>{{ readContract.type }}</p>
+            <p>
+              {{ readContract.required }}
+              <span class="ml-1 font-italic text--light-gray small-body">{{ readContract.type }}</span>
+            </p>
           </ng-container>
           <ng-container *ngIf="dataResponse && currentFrom === i">
-            <pre class="small-body text--white txt-response">Response: {{ dataResponse }}</pre>
+            <div class="d-flex">
+              <div class="">Response:</div>
+              <div class="">
+                <pre id="json" class="raw-content text--white ml-2" [innerHtml]="dataResponse | appJson"></pre>
+              </div>
+            </div>
           </ng-container>
         </div>
       </div>
