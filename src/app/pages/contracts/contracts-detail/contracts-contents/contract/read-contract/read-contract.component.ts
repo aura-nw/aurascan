@@ -70,7 +70,8 @@ export class ReadContractComponent implements OnInit {
           'form-check-input ' + name + ' ' + contract,
         )[0] as HTMLInputElement;
 
-        if (element?.value?.length === 0) {
+        //check input null && require field
+        if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
           err[contract.toString()] = true;
           this.errorInput = true;
           return;
@@ -78,7 +79,9 @@ export class ReadContractComponent implements OnInit {
 
         let type = contractTemp.properties[name].properties[contract].type;
         objReadContract[contract] = element?.value;
-        if (type !== 'string') {
+
+        //convert number if integer field
+        if (type === 'integer' || contract === 'amount') {
           objReadContract[contract] = Number(element?.value);
         }
       });
