@@ -1,0 +1,229 @@
+<ng-container *ngIf="userAddress">
+  <div class="card" *ngIf="arrayDelegate?.length > 0">
+    <!-- heading -->
+    <div class="card-header title-small small-body-mob">
+      <div class="row justify-content-between">
+        <div class="col-12 col-lg-6">
+          <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
+            <span [class.fw-semibold]="breakpoint.value.matches">Available Balance: </span>
+            <span>
+              <span [class.small-body]="breakpoint.value.matches">
+                {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
+              </span>
+              <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+            </span>
+          </div>
+          <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
+            <span [class.fw-semibold]="breakpoint.value.matches">Total Staked: </span>
+            <span>
+              <span [class.small-body]="breakpoint.value.matches">
+                {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
+              </span>
+              <span class="ml-2 text--green">{{ globals.stableToken }}</span>
+            </span>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 mt-2">
+          <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
+            <button
+              class="button button-outline button-outline__claim-reward"
+              type="button"
+              [disabled]="isDisableClaim"
+              (click)="viewDialog(true)">
+              <span class="text-gradient small-body-mob"
+                >Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
+                <span class="ml-1">{{ globals.stableToken }}</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- table -->
+    <div class="card-body">
+      <ng-container *ngIf="!breakpoint.value.matches">
+        <div class="table-responsive">
+          <table
+            mat-table
+            matSort
+            [dataSource]="dataSourceWallet"
+            class="aura-table">
+            <ng-container *ngFor="let template of templatesWallet; index as i">
+              <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+                <ng-container *ngSwitchCase="'action'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+                </ng-container>
+                <ng-container *ngSwitchCase="'validator_name'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+                </ng-container>
+                <ng-container *ngSwitchCase="'amount_staked'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+                </ng-container>
+                <ng-container *ngSwitchCase="'pending_reward'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
+                </ng-container>
+
+                <td mat-cell *matCellDef="let data">
+                  <div>
+                    <ng-container [ngSwitch]="template.matColumnDef">
+                      <div *ngSwitchCase="'amount_staked'">
+                        {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                        <span class="text--green">{{ globals.stableToken }}</span>
+                      </div>
+                      <div *ngSwitchCase="'pending_reward'">
+                        {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                        <span class="text--green">{{ globals.stableToken }}</span>
+                      </div>
+                      <div *ngSwitchCase="'action'" class="py-4">
+                        <button
+                          type="button"
+                          class="button button-outline button-outline__in-card ml-auto"
+                          [disabled]="clicked"
+                          (click)="clicked=true; viewDialog(false, modalManage, data['validator_address'])">
+                          <span class="text-gradient">Manage</span>
+                        </button>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <a
+                          class="text--green cursor-pointer box-title-validator"
+                          [routerLink]="['/validators', data['validator_address']]">
+                          <div class="avatar-wrapper">
+                            <div class="validator-avatar">
+                              <app-loading-image [srcImg]="getValidatorAvatar(data['validator_address'])">
+                              </app-loading-image>
+                            </div>
+                          </div>
+                          <span>{{ data[template.matColumnDef] }}</span>
+                        </a>
+                      </div>
+                    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsWallet"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsWallet"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="breakpoint.value.matches">
+        <div class="table-mobile">
+          <ng-container *ngFor="let validator of dataSourceWallet.data; index as i">
+            <div class="table-mobile__item small-body body-mob">
+              <div class="table-header">
+                <div class="cursor-pointer table-header__title">
+                  <a class="title body-mob text--green" [routerLink]="['/validators', validator.validator_address]">
+                    <div class="avatar-wrapper">
+                      <span class="validator-avatar">
+                        <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])">
+                        </app-loading-image>
+                      </span>
+                    </div>
+                    <span class="fw-semibold"> {{ validator.validator_name }} </span>
+                  </a>
+                </div>
+                <div class="table-header__action">
+                  <button
+                    type="button"
+                    class="button button-outline button-outline__in-card"
+                    [disabled]="clicked"
+                    (click)="clicked = true; viewDialog(modalManage, validator['validator_address'])">
+                    <span class="text-gradient">Manage</span>
+                  </button>
+                </div>
+              </div>
+              <div class="table-body small-body-mob">
+                <ng-container *ngFor="let template of templatesWallet; index as idx">
+                  <div class="d-flex justify-content-between text--white mb-2" *ngIf="!template?.desktopOnly">
+                    <span>{{ template['headerCellDef'] }}</span>
+                    <div>
+                      <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
+                      <span *ngIf="template['headerCellDef']" class="ml-2 text--green">
+                        {{ globals.stableToken }}
+                      </span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
+    <div
+      class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white"
+      [class.fw-500]="breakpoint.value.matches">
+      Undelegating
+    </div>
+    <div class="card-body" *ngIf="!breakpoint.value.matches">
+      <ng-container *ngFor="let validator of lstUndelegate">
+        <div class="row col-12 mb-3 m-0 undelegate-item">
+          <div class="col-3 body title-name">
+            <a
+              [routerLink]="['/validators', validator.validator_address]"
+              class="text-clamp text--green box-title-validator">
+              <div class="avatar-wrapper">
+                <div class="validator-avatar">
+                  <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])">
+                  </app-loading-image>
+                </div>
+              </div>
+              {{ validator.validator_name }}</a
+            >
+          </div>
+          <div class="col-9 text--white body small-body-mob">
+            {{ validator.balance | number: globals.formatNumberToken }}
+            <span class="text--green">{{ globals.stableToken }}</span
+            ><br />
+            <span class="text--neutrals-4 small-body">{{
+              commonService.getDateValue(validator.completion_time, false)[1]
+            }}</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="card-body" *ngIf="breakpoint.value.matches">
+      <div class="table-mobile">
+        <ng-container *ngFor="let validator of lstUndelegate">
+          <div class="table-mobile__item undelegate-item">
+            <div class="body fw-semibold">
+              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
+                {{ validator.validator_name }}</a
+              >
+            </div>
+            <div class="d-flex align-items-center justify-content-between text--white small-body-mob">
+              <span>{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
+              <span>
+                {{ validator.balance | number: globals.formatNumberToken }}
+                <span class="text--green">{{ globals.stableToken }}</span>
+              </span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
