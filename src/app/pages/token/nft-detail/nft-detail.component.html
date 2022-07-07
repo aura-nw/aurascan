@@ -138,9 +138,15 @@
             <ng-container [ngSwitch]="template.matColumnDef">
               <ng-container *ngSwitchCase="'popover'">
                 <button mat-icon-button
-                        aria-label="Contract Transaction Detail">
+                        aria-label="Contract Transaction Detail"
+                        placement="right"
+                        [ngbPopover]="popContent"
+                        popoverClass="custom-popover">
                   <img src="assets/images/icons/token-detail.png" alt="" width="16" height="16" />
                 </button>
+                <ng-template #popContent class="popContent">
+                  <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
+                </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'tx_hash'">
                 <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">

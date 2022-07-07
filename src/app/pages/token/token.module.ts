@@ -28,6 +28,7 @@ import { TokenInventoryComponent } from './token-detail/token-content/token-cont
 import { TokenHoldingNftComponent } from './token-holding/token-holding-nft/token-holding-nft.component';
 import { TokenHoldingWalletComponent } from './token-holding/token-holding-wallet/token-holding-wallet.component';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
+import {ContractPopoverModule} from "src/app/shared/components/contract-popover/contract-popover.module";
 
 @NgModule({
   declarations: [
@@ -49,20 +50,21 @@ import { NFTDetailComponent } from './nft-detail/nft-detail.component';
     TokenInventoryComponent,
     NFTDetailComponent
   ],
-  imports: [
-    CommonModule,
-    TokenRoutingModule,
-    SharedModule,
-    NgbNavModule,
-    TranslateModule,
-    PaginatorModule,
-    TableNoDataModule,
-    MatTableModule,
-    MaterialModule,
-    FormsModule,
-    NgbPopoverModule,
-    CommonPipeModule,
-  ],
+    imports: [
+        CommonModule,
+        TokenRoutingModule,
+        SharedModule,
+        NgbNavModule,
+        TranslateModule,
+        PaginatorModule,
+        TableNoDataModule,
+        MatTableModule,
+        MaterialModule,
+        FormsModule,
+        NgbPopoverModule,
+        CommonPipeModule,
+        ContractPopoverModule,
+    ],
   providers: [TokenService],
 })
 export class TokenModule {}
