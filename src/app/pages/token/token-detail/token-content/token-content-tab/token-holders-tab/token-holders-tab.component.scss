@@ -1,3 +1,19 @@
+.percentage-bar {
+  width: 100%;
+  max-width: 350px;
+  height: 3px;
+  background-color: #DDDDDD;
+  position: relative;
+    &__process {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--aura-primary);
+      height: 100%;
+    }
+}
 @media (max-width: 991.99px) {
   .aura-table th.mat-header-cell:nth-child(1) {
     min-width: 80px;
