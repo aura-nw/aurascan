@@ -90,7 +90,6 @@ export class SummaryInfoComponent implements OnInit {
                 mergeMap((res) => {
                   if (res?.data) {
                     this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
-                    this.proposalDetail.total_has_voted = this.proposalDetail.pro_total_vote;
                   }
 
                   this.votingBarLoading = true;
@@ -135,8 +134,8 @@ export class SummaryInfoComponent implements OnInit {
             };
 
             if (pro_turnout >= quorum) {
-              if (pro_votes_yes >= voted / 2) {
-                if (pro_votes_no_with_veto < voted / 3) {
+              if (pro_votes_yes >= pro_total_vote / 2) {
+                if (pro_votes_no_with_veto < pro_total_vote / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
