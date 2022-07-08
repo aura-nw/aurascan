@@ -143,9 +143,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     let data = JSON.parse(retrievedObject);
     if (data) {
       this.dataDelegate = JSON.parse(data?.dataDelegate);
-
       //check wallet is staked
-      if (Number(this.dataDelegate?.stakingToken) > 0) {
+      if (Number(this.dataDelegate?.delegatedToken) > 0) {
         this.isDisableClaim = false;
         this.lstUndelegate = JSON.parse(data?.lstUndelegate);
         this.arrayDelegate = JSON.parse(data?.arrayDelegate);
