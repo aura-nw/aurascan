@@ -253,7 +253,7 @@
           </ul>
         </div>
       </div>
-      <ng-container *ngIf="true || proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
+      <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row proposal__summary-total">
           <div class="col-12 col-lg-6 pr-lg-8 border-right">
             <app-current-turnout
