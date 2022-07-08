@@ -49,12 +49,30 @@
           </label>
           <input formControlName="link" type="text" class="form-control" id="link" maxlength="200" />
           <ng-container *ngIf="formControls['link'].touched">
-            <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
+            <div class="error" *ngIf="formControls['link'].errors?.required">Required link github contract code</div>
             <div class="error" *ngIf="formControls['link'].errors?.maxlength">
               Link GitHub Source Code is not allowed more 200 characters!
             </div>
             <div class="error" *ngIf="formControls['link'].errors?.pattern && !formControls['link'].errors?.required">
               Invalid link Github Source Code
+            </div>
+          </ng-container>
+        </div>
+        <div class="form-group mb-6">
+          <label for="wasm_file" class="form-label"> Compiled wasm file name </label>
+          <input
+            formControlName="wasm_file"
+            type="text"
+            class="form-control"
+            id="wasm_file"
+            maxlength="200"
+            placeholder="xxx.wasm" />
+          <ng-container *ngIf="formControls['wasm_file'].touched">
+            <div class="error" *ngIf="formControls['wasm_file'].errors?.required">
+              Required name of compiled wasm file
+            </div>
+            <div class="error" *ngIf="formControls['wasm_file'].errors?.maxlength">
+              Compiled wasm file name is not allowed more 200 characters!
             </div>
           </ng-container>
         </div>
@@ -74,9 +92,10 @@
           </mat-select>
 
           <ng-container *ngIf="formControls['compiler_version'].touched">
-            <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
+            <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required compiler version</div>
           </ng-container>
         </div>
+
         <div class="d-flex justify-content-center align-items-center body">
           <button class="button text--white" type="button" (click)="handleReset()">Reset</button>
           <button class="button button-outline button-outline__in-card ml-4" type="submit">
