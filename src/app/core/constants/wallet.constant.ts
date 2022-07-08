@@ -6,8 +6,8 @@ export enum WALLET_PROVIDER {
 export const LAST_USED_PROVIDER = 'LAST_USED_PROVIDER';
 
 export const ChainsInfo: { [chainId: string]: any } = {
-  ['aura-devnet']: {
-    chainId: 'aura-devnet',
+  ['aura-testnet']: {
+    chainId: 'aura-testnet',
     chainName: 'aura devnet',
     rpc: 'https://rpc.dev.aura.network',
     rest: 'https://lcd.dev.aura.network',
@@ -24,23 +24,23 @@ export const ChainsInfo: { [chainId: string]: any } = {
     },
     currencies: [
       {
-        coinDenom: 'AURA',
-        coinMinimalDenom: 'uaura',
+        coinDenom: 'TAURA',
+        coinMinimalDenom: 'utaura',
         coinDecimals: 6,
         // coinGeckoId: "aura",
       },
     ],
     feeCurrencies: [
       {
-        coinDenom: 'AURA',
-        coinMinimalDenom: 'uaura',
+        coinDenom: 'TAURA',
+        coinMinimalDenom: 'utaura',
         coinDecimals: 6,
         // coinGeckoId: "uaura",
       },
     ],
     stakeCurrency: {
-      coinDenom: 'AURA',
-      coinMinimalDenom: 'uaura',
+      coinDenom: 'TAURA',
+      coinMinimalDenom: 'utaura',
       coinDecimals: 6,
       // coinGeckoId: "uaura",
     },
