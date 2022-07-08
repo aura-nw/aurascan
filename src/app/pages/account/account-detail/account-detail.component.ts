@@ -19,7 +19,7 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount
+  WalletAcount,
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -27,7 +27,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction
+  TypeTransaction,
 } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
@@ -60,7 +60,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   currentAccountDetail: IAccountDetail;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
@@ -299,7 +299,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
               trans.type = TypeTransaction.Received;
             }
-            trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
           });
           this.dataSource.data = res.data;
 
@@ -369,17 +368,17 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.lstBalanceAcount = this.currentAccountDetail?.balances;
         this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
-        this.pageDataToken.length = this.currentAccountDetail?.balances.length;
+        this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
 
         this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
-        this.pageDataDelegation.length = this.currentAccountDetail?.delegations.length;
+        this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
         this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
-        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations.length;
+        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
 
         this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
-        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
+        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
         if (this.currentAccountDetail?.vesting) {
           this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
           this.pageDataVesting.length = 1;
@@ -451,7 +450,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> AURA </span>'
+        '<span class=text--primary> ' +
+        this.global.stableToken +
+        '</span>'
       );
     }
   }

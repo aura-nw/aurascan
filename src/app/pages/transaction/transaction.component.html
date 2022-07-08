@@ -21,10 +21,10 @@
                         {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                       </div>
                       <a
-                        *ngSwitchCase="'tx_hash_format'"
+                        *ngSwitchCase="'tx_hash'"
                         class="text--green cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['tx_hash']]">
-                        {{ data[template.matColumnDef] }}
+                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                       <a
                         *ngSwitchCase="'height'"
@@ -88,7 +88,7 @@
             [link]="'/transaction/' + data.tx_hash"
             [title]="{
               size: 'md',
-              label: data.tx_hash_format,
+              label: data.tx_hash | cutStringPipe: 6:6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
               status: data.code
@@ -98,7 +98,10 @@
                 label: 'Amount',
                 info:
                   data.amount > 0
-                    ? (data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>'
+                    ? (data.amount | number: global.formatNumberToken) +
+                      '<span class=text--primary>' +
+                      global.stableToken +
+                      '</span>'
                     : checkAmountValue(data.amount, data.tx_hash)
               },
               { label: 'Fee', info: data.fee + '<span class=text--primary> ' + global.stableToken + '</span>' },

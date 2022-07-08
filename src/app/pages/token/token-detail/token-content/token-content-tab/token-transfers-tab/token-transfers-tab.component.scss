@@ -1,6 +1,9 @@
 .content-transfer {
   min-width: 170px;
   display: inline-block;
+  @media (max-width: 991.99px) {
+    min-width: 140px;
+  }
 }
 .box-token-transfer {
   justify-content: center;

@@ -3,7 +3,7 @@
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob">
       <div class="d-flex">
-        <div class="avatar-wrapper flex-shrink-0 mr-2 mr-lg-5"  *ngIf="!breakpoint.value.matches">
+        <div class="avatar-wrapper flex-shrink-0 mr-2 mr-lg-5" *ngIf="!breakpoint.value.matches">
           <!-- <div class="validator-avatar x-large" [class.x-large]="!breakpoint.value.matches"> -->
           <div class="validator-avatar x-large">
             <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
@@ -37,18 +37,13 @@
               [class.status-inactive]="currentValidatorDetail?.status !== statusValidator.Active"
               [class.status-jailed]="currentValidatorDetail?.jailed"
               [ngClass]="{ 'small-body': breakpoint.value.matches }">
-              <ng-container *ngIf="currentValidatorDetail?.jailed">
-                <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt="" /> -->
-                Jailed
-              </ng-container>
+              <ng-container *ngIf="currentValidatorDetail?.jailed"> Jailed </ng-container>
               <ng-container
                 *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status === statusValidator.Active">
-                <!-- <img class="img-valid" [src]="'assets/images/icons/success.svg'" alt="" /> -->
                 Active
               </ng-container>
               <ng-container
                 *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
-                <!-- <img class="img-valid" [src]="'assets/images/icons/fail.svg'" alt=""  /> -->
                 inActive
               </ng-container>
             </div>
@@ -180,10 +175,10 @@
                               {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <a
-                              *ngSwitchCase="'block_hash_format'"
+                              *ngSwitchCase="'block_hash'"
                               class="text--green cursor-pointer"
                               [routerLink]="['/blocks', data.height]">
-                              {{ data[template.matColumnDef] }}
+                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
@@ -290,7 +285,7 @@
             <span class="body">{{ lengthDelegator | number }}</span>
           </div>
         </div>
-        <div class="card-body article-1 px-0">
+        <div class="card-body article-1">
           <ngx-simplebar>
             <ng-container *ngIf="lengthDelegator > 0; else noValues">
               <div class="table-responsive aura-table-contain">
@@ -309,10 +304,10 @@
                         <div>
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <a
-                              *ngSwitchCase="'delegator_address_format'"
+                              *ngSwitchCase="'delegator_address'"
                               class="text--green cursor-pointer"
                               [routerLink]="['/account', data.delegator_address]">
-                              {{ data[template.matColumnDef] }}
+                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | number: global.formatNumberToken }}
@@ -337,7 +332,7 @@
                   <app-card-mob-simple
                     *ngFor="let data of dataSourceDelegator.data"
                     [link]="'/account/' + data.delegator_address"
-                    [title]="{ size: 'sm', label: data.delegator_address_format, subLabelContent: null }"
+                    [title]="{ size: 'sm', label: data.delegator_address | cutStringPipe: 6:6, subLabelContent: null }"
                     [content]="[
                       {
                         label: 'Amount',
@@ -358,9 +353,6 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <!-- <mat-paginator [length]="lengthDelegator" [pageIndex]="pageIndexDelegator" [pageSize]="pageSize"
-            (page)="changePage($event, 'delegator')" *ngIf="lengthDelegator">
-          </mat-paginator> -->
         </div>
       </div>
       <div class="card py-10" *ngIf="!lengthDelegator">
@@ -373,9 +365,8 @@
       <div class="card text--white pb-lg-1">
         <div class="card-header align-items-center d-flex header-mob">
           <div class="title-small fw-500">Power Events</div>
-          <!-- <button type="button" class="btn btn-link waves-effect btn-show-more" [routerLink]="'/transaction'">Show more</button> -->
         </div>
-        <div class="card-body article-1 px-0">
+        <div class="card-body article-1">
           <ngx-simplebar>
             <ng-container *ngIf="lengthPower > 0; else noValues">
               <div class="table-responsive aura-table-contain">
@@ -397,10 +388,10 @@
                               {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <a
-                              *ngSwitchCase="'tx_hash_format'"
+                              *ngSwitchCase="'tx_hash'"
                               class="text--green cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
-                              {{ data[template.matColumnDef] }}
+                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <div
                               *ngSwitchCase="'amount'"
@@ -436,7 +427,7 @@
                     [title]="{
                       size: 'sm',
                       label: data.height,
-                      subLabelContent: data.tx_hash_format,
+                      subLabelContent: data.tx_hash | cutStringPipe: 6:6,
                       subLabelClass: 'text--green fw-normal'
                     }"
                     [content]="[
@@ -458,9 +449,6 @@
               <app-table-no-data *ngIf="!lengthPowerLoading"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <!-- <mat-paginator [length]="lengthPower" [pageIndex]="pageIndexPower" [pageSize]="pageSize"
-            (page)="changePage($event, 'power')" *ngIf="lengthPower">
-          </mat-paginator> -->
         </div>
       </div>
     </div>

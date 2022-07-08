@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
@@ -7,6 +6,7 @@ import { ResponseDto, TableTemplate } from '../../../app/core/models/common.mode
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../app/global/global';
+
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
@@ -14,7 +14,7 @@ import { getAmount, Globals } from '../../../app/global/global';
 })
 export class TransactionComponent implements OnInit {
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
@@ -28,7 +28,6 @@ export class TransactionComponent implements OnInit {
 
   length: number;
   pageSize = 20;
-  pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
 
@@ -41,14 +40,9 @@ export class TransactionComponent implements OnInit {
   ngOnInit(): void {
     this.getList();
   }
-  changePage(page: PageEvent): void {
-    this.dataSource = null;
-    this.pageIndex = page.pageIndex;
-    this.getList();
-  }
 
   getList(): void {
-    this.transactionService.txs(this.pageSize, this.pageIndex * this.pageSize).subscribe((res: ResponseDto) => {
+    this.transactionService.txs(this.pageSize, 0).subscribe((res: ResponseDto) => {
       this.loading = true;
       if (res?.data?.length > 0) {
         res.data.forEach((trans) => {
@@ -60,7 +54,6 @@ export class TransactionComponent implements OnInit {
           if (trans.code === CodeTransaction.Success) {
             trans.status = StatusTransaction.Success;
           }
-          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
 
         this.dataSource = new MatTableDataSource(res.data);
