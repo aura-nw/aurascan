@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from "@angular/material/table";
+import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from '../../../app/app.module';
@@ -27,6 +27,8 @@ import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { TokenInventoryComponent } from './token-detail/token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
 import { TokenHoldingNftComponent } from './token-holding/token-holding-nft/token-holding-nft.component';
 import { TokenHoldingWalletComponent } from './token-holding/token-holding-wallet/token-holding-wallet.component';
+import { NFTDetailComponent } from './nft-detail/nft-detail.component';
+import {ContractPopoverModule} from "src/app/shared/components/contract-popover/contract-popover.module";
 
 @NgModule({
   declarations: [
@@ -45,22 +47,24 @@ import { TokenHoldingWalletComponent } from './token-holding/token-holding-walle
     TokenHoldingComponent,
     TokenHoldingWalletComponent,
     TokenHoldingNftComponent,
-    TokenInventoryComponent
+    TokenInventoryComponent,
+    NFTDetailComponent
   ],
-  imports: [
-    CommonModule,
-    TokenRoutingModule,
-    SharedModule,
-    NgbNavModule,
-    TranslateModule,
-    PaginatorModule,
-    TableNoDataModule,
-    MatTableModule,
-    MaterialModule,
-    FormsModule,
-    NgbPopoverModule,
-    CommonPipeModule
-  ],
+    imports: [
+        CommonModule,
+        TokenRoutingModule,
+        SharedModule,
+        NgbNavModule,
+        TranslateModule,
+        PaginatorModule,
+        TableNoDataModule,
+        MatTableModule,
+        MaterialModule,
+        FormsModule,
+        NgbPopoverModule,
+        CommonPipeModule,
+        ContractPopoverModule,
+    ],
   providers: [TokenService],
 })
-export class TokenModule { }
+export class TokenModule {}

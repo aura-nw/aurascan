@@ -17,3 +17,11 @@
 .break-word {
   word-break: break-word;
 }
+.social-group {
+  a {
+    color: var(--aura-light-gray) !important;
+    &:hover {
+      color: var(--aura-white) !important;
+    }
+  }
+}

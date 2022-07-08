@@ -37,7 +37,7 @@
     </div>
   </section>
 </ng-container>
-<section class="card main-tab mt-5 p-4">
+<section class="card main-tab mt-2 p-4">
   <div class="d-lg-flex justify-content-between align-items-end tab-wrapper tab-token">
     <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
       <ng-container *ngFor="let tab of TABS; index as index">
@@ -54,7 +54,7 @@
           <input
             type="text"
             class="form-control aura-form"
-            placeholder="Search for Token Name or Address"
+            placeholder="Filter Address/ TX Hash/ Token ID"
             [(ngModel)]="searchTemp"
             [maxLength]="maxLengthSearch"
             name="search"

@@ -3,34 +3,37 @@
     <div class="table-responsive">
       <table class="aura-basic-table w-100">
         <tr class="body">
-          <td class="">
+          <td colspan="2">
             <span class="fw-semibold">Overview </span>
-            <span class="text--light-gray">[CW-20]</span></td>
-          <td class="">
-            <div class="d-flex justify-content-end">
-              <button class="button button-chart button-outline button-outline__in-card -small">
-                <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
-                <span class="ml-2 small-text">Chart</span>
-              </button>
-            </div>
-          </td>
+            <span class="text--light-gray">
+              <ng-container *ngIf="tokenType !== tokenTypeConstant.NFT">[CW-20]</ng-container>
+              <ng-container *ngIf="tokenType === tokenTypeConstant.NFT">[CW-721]</ng-container>
+            </span></td>
+<!--          <td class="">-->
+<!--            <div class="d-flex justify-content-end">-->
+<!--              <button class="button button-chart button-outline button-outline__in-card -small">-->
+<!--                <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />-->
+<!--                <span class="ml-2 small-text">Chart</span>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </td>-->
         </tr>
 
         <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex">
               <div class="flex-item">
-                <div class="text--light-gray small-text">Price</div>
+                <div class="text--light-gray small-text">Min price</div>
                 <div>
-                  <span class="small-body">$0.17</span> <span class="small-text text--light-gray py-3 mr-2"> @0.217711 Aura</span>
+                  <span class="small-body mr-2">$0.17</span> <span class="small-text text--light-gray py-3 mr-2"> @0.217711 Aura</span>
                   <br class="d-lg-none"/>
                   <span class="text-danger small-body">(-0,87%)</span>
                 </div>
               </div>
-              <div class="pl-4">
-                <div class="text--light-gray small-text">CIRCULATING SUPPLY MARKET CAP</div>
-                <div class="small-body">$7,342,381,252.35</div>
-              </div>
+<!--              <div class="pl-4">-->
+<!--                <div class="text&#45;&#45;light-gray small-text">CIRCULATING SUPPLY MARKET CAP</div>-->
+<!--                <div class="small-body">$7,342,381,252.35</div>-->
+<!--              </div>-->
             </div>
           </td>
         </tr>
@@ -38,15 +41,20 @@
         <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex">
-              <div class="flex-item">
-                <div class="text--light-gray small-text">Max Total Supply</div>
-                <div class="small-body">1.000.000.000 AURA</div>
-              </div>
-              <div class="pl-4">
-                <div class="text--light-gray small-text">FULLY DILUTED MARKET CAP</div>
-                <div class="small-body">$27,342,381,252.35</div>
-              </div>
+              <div style="min-width: 120px">Max Total Supply:</div>
+              <div> 1.000.000.000 AURA </div>
             </div>
+
+<!--            <div class="d-flex">-->
+<!--              <div class="flex-item">-->
+<!--                <div class="text&#45;&#45;light-gray small-text">Max Total Supply</div>-->
+<!--                <div class="small-body">1.000.000.000 AURA</div>-->
+<!--              </div>-->
+<!--              <div class="pl-4">-->
+<!--                <div class="text&#45;&#45;light-gray small-text">FULLY DILUTED MARKET CAP</div>-->
+<!--                <div class="small-body">$27,342,381,252.35</div>-->
+<!--              </div>-->
+<!--            </div>-->
           </td>
         </tr>
 

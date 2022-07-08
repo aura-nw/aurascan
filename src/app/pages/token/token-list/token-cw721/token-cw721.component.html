@@ -75,7 +75,7 @@
         <div class="divider divider-horizontal d-lg-none mt-4"></div>
         <!-- Table -->
         <div class="table-responsive aura-table-contain mt-4 mt-lg-6">
-          <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)" [matSortStart]="'desc'">
+          <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
