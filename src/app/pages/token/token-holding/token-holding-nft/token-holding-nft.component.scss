@@ -16,11 +16,25 @@
 .nft-cards {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -31px;
+  justify-content: space-between;
+
+  @media (min-width: 992px) and (max-width: 1365.99px) {
+  }
+  @media (min-width: 1440px) {
+    margin: 0 -12px;
+  }
+  @media (min-width: 1500px) {
+    margin: 0 -31px;
+  }
   &__col {
-    padding: 0 31px;
     overflow: hidden;
     margin-bottom: var(--spacer-6);
+    @media (min-width: 1440px) {
+      padding: 0 12px;
+    }
+    @media (min-width: 1500px) {
+      padding: 0 31px;
+    }
   }
   &__item-border {
     display: block;
@@ -42,6 +56,11 @@
     background-color: var(--aura-black);
     width: 224px;
     height: 276px;
+
+    @media (min-width: 992px) and (max-width: 1300px) {
+      width: 200px;
+      height: 260px;
+    }
   }
   &__img {
     position: relative;
