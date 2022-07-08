@@ -35,7 +35,7 @@ export class EnvironmentService {
       .toPromise()
       .then((config: any) => {
         const chainId = config['chainId'] || 'serenity-testnet-001';
-        const chain_info = config['chain_info']?.chainId ? config['chain_info'] : ChainsInfo[chainId];
+        const chain_info = config['chain_info']?.chainId ? config['chain_info'] : ChainsInfo?.chainId;
 
         const data = {
           fabric: config['fabric'],
