@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
@@ -30,11 +31,13 @@ export class TransactionComponent implements OnInit {
   pageSize = 20;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
 
   constructor(
     private transactionService: TransactionService,
     public global: Globals,
     public commonService: CommonService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

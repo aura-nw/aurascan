@@ -2,15 +2,20 @@
   <div class="box-notice">
     <div class="warning-icon mr-3"></div>
     <div>
-      <div class="body fw-semibold">Staking will lock your funds for {{timeStaking}}+ day(s)</div>
-      <div class="small-body mt-2 text--greyscale-4">You will need to undelegate in order for your staked assets to be liquid again. This process will take {{timeStaking}} day(s) to complete.</div>
+      <div class="body fw-semibold">Staking will lock your funds for {{ timeStaking }}+ day(s)</div>
+      <div class="small-body mt-2 text--greyscale-4">
+        You will need to undelegate in order for your staked assets to be liquid again. This process will take
+        {{ timeStaking }} day(s) to complete.
+      </div>
     </div>
   </div>
   <div class="box-token mt-8 body small-body-mob">
     <div class="fw-500">My delegation</div>
-    <div class="mt-2 text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
+    <div class="mt-2 text--greyscale-4">
+      {{ data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken }} {{ denom }}
+    </div>
     <div class="mt-6 fw-500">Delegatable Balance</div>
-    <div class="mt-2 text--greyscale-4">{{availableToken || 0 | number: global.formatNumberToken}} {{global.stableToken}}</div>
+    <div class="mt-2 text--greyscale-4">{{ availableToken || 0 | number: global.formatNumberToken }} {{ denom }}</div>
     <div class="mt-6 fw-500">Amount to Delegate</div>
   </div>
 </ng-container>
@@ -20,26 +25,39 @@
     <div class="warning-icon mr-3"></div>
     <div class="text--greyscale-4">
       <div class="mb-2">You can <span class="fw-bold text--white">"Delegate"</span> more to this validator</div>
-      <div class="mb-2">Or use <span class="fw-bold text--white">"Redelagate"</span> to switch your assets to another validator.</div>
+      <div class="mb-2">
+        Or use <span class="fw-bold text--white">"Redelagate"</span> to switch your assets to another validator.
+      </div>
       <div>Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.</div>
     </div>
   </div>
   <div class="body small-body-mob">
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">My delegation</div>
-      <div class="text--greyscale-4">{{data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="text--greyscale-4">
+        {{ data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken }}
+        <span class="text--green"> {{ denom }}</span>
+      </div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Pending Reward</div>
-      <div class="text--greyscale-4">{{data?.validatorDetail?.pending_reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="text--greyscale-4">
+        {{ data?.validatorDetail?.pending_reward || 0 | number: global.formatNumberToken }}
+        <span class="text--green"> {{ denom }}</span>
+      </div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Total Reward</div>
-      <div class="text--greyscale-4">{{data?.validatorDetail?.reward || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="text--greyscale-4">
+        {{ data?.validatorDetail?.reward || 0 | number: global.formatNumberToken }}
+        <span class="text--green"> {{ denom }}</span>
+      </div>
     </div>
     <div class="d-lg-flex">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Delegatable Balance</div>
-      <div class="text--greyscale-4">{{availableToken || 0 | number: global.formatNumberToken}} <span class="text--green"> {{global.stableToken}}</span></div>
+      <div class="text--greyscale-4">
+        {{ availableToken || 0 | number: global.formatNumberToken }} <span class="text--green"> {{ denom }}</span>
+      </div>
     </div>
   </div>
 </ng-container>
@@ -51,7 +69,7 @@
       <div class="text--white">Once the unbonding period begins you will:</div>
       <div class="text--greyscale-4">- not receive staking rewards</div>
       <div class="text--greyscale-4">- not be able to cancel the unbonding</div>
-      <div class="text--greyscale-4">- need to wait {{timeStaking}} day(s) for the amount to be liquid</div>
+      <div class="text--greyscale-4">- need to wait {{ timeStaking }} day(s) for the amount to be liquid</div>
     </div>
   </div>
 
@@ -59,8 +77,9 @@
     <div class="warning-icon mr-3"></div>
     <div>
       <div class="text--white">Trying to switch validators?</div>
-      <div class="text--greyscale-4">Use the 'Redelegate' feature to instantly stake your assets to another validator.</div>
+      <div class="text--greyscale-4">
+        Use the 'Redelegate' feature to instantly stake your assets to another validator.
+      </div>
     </div>
   </div>
 </ng-container>
-

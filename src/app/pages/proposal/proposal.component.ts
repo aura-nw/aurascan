@@ -61,6 +61,7 @@ export class ProposalComponent implements OnInit {
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,

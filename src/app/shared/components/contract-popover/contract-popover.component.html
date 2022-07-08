@@ -31,7 +31,7 @@
         <a class="text--green" [routerLink]="['/account', popoverData?.from_address]">
           {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
         </a>
-        <br class="d-sm-none">
+        <br class="d-sm-none" />
         <span class="text--light-gray mr-1 ml-sm-1">To</span>
         <a class="text--green" [routerLink]="['/account', popoverData?.to_address]">
           {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
@@ -43,7 +43,7 @@
 
     <div class="d-flex flex-column gap-2 small-body">
       <div>Transaction Fee:</div>
-      <div class="text--contract">{{ popoverData.fee | number: FORMAT.PRICE_6 }} AURA ($0.00)</div>
+      <div class="text--contract">{{ popoverData.fee | number: FORMAT.PRICE_6 }} {{ denom }} ($0.00)</div>
     </div>
     <hr />
 

@@ -12,6 +12,7 @@ import { PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -52,12 +53,15 @@ export class DashboardComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
     private numberPipe: DecimalPipe,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -128,6 +132,7 @@ export class DashboardComponent implements OnInit {
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
       const data1 = res.data.map((i) => i.count);
       let categories = res.data.map((i) => i.timestamp);
+
       this.chartOptions.series = [
         {
           name: 'transactions',
@@ -165,9 +170,7 @@ export class DashboardComponent implements OnInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> ' +
-        this.global.stableToken +
-        '</span>'
+        `<span class=text--primary> ${this.denom} </span>`
       );
     }
   }

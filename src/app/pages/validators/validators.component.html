@@ -7,6 +7,7 @@
       [dataDelegate]="dataDelegate"
       [lstUndelegate]="lstUndelegate"
       [modalManage]="modalManage"
+      [denom]="denom"
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
   <div class="card box-validators">
@@ -275,7 +276,7 @@
             <span>
               Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green ml-1">{{ globals.stableToken }}</span
+            <span class="text--green ml-1">{{ denom }}</span
             >)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
@@ -289,7 +290,7 @@
             <span class="ml-3">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green"> {{ globals.stableToken }} </span>
+            <span class="text--green"> {{ denom }} </span>
           </div>
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -306,7 +307,7 @@
                 MAX
               </button>
             </div>
-            <div class="input-group-append body small-body-mob fw-semibold">{{ globals.stableToken }}</div>
+            <div class="input-group-append body small-body-mob fw-semibold">{{ denom }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
@@ -320,7 +321,7 @@
                 MAX
               </button>
             </div>
-            <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
+            <div class="input-group-append fw-semibold">{{ denom }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
             Insufficient available balance for transaction fee
@@ -363,7 +364,7 @@
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
-              <span class="text--green"> {{ globals.stableToken }} </span>
+              <span class="text--green"> {{ denom }} </span>
             </div>
             <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
@@ -375,7 +376,7 @@
                   MAX
                 </button>
               </div>
-              <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
+              <div class="input-group-append fw-semibold">{{ denom }}</div>
             </div>
           </div>
         </div>

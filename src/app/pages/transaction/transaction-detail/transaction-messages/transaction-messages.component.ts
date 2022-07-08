@@ -5,7 +5,8 @@ import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { ValidatorService } from '../../../../core/services/validator.service';
-import { getAmount, Globals } from '../../../../global/global';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getAmount, Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -30,7 +31,13 @@ export class TransactionMessagesComponent implements OnInit {
   listAmountClaim = [];
   objMsgContract: any;
 
-  constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  constructor(
+    public global: Globals,
+    private datePipe: DatePipe,
+    private validatorService: ValidatorService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {

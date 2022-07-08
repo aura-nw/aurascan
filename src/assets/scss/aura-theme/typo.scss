@@ -116,6 +116,7 @@ $textColors: (
   "contract",
   "active",
   "greyscale-1"
+  "greyscale-4"
 );
 @each $color in $textColors {
   .text--#{$color} {

@@ -46,6 +46,8 @@ export class SummaryInfoComponent implements OnInit {
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
 
+  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+
   constructor(
     private proposalService: ProposalService,
     private datePipe: DatePipe,
