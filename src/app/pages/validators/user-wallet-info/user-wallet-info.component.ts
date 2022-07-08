@@ -18,6 +18,7 @@ export class UserWalletInfoComponent implements OnInit {
   @Input() dataDelegate: DataDelegateDto;
   @Input() lstUndelegate: any[];
   @Input() modalManage: any;
+  @Input() denom: any;
   @Output() onViewDialog: EventEmitter<any> = new EventEmitter();
 
   dataSourceWallet: MatTableDataSource<any>;

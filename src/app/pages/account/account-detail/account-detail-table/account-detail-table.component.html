@@ -20,7 +20,7 @@
                     </a>
                     <div *ngSwitchCase="'amount'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span>
+                      <span class="text--green">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'token_amount'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
@@ -30,7 +30,7 @@
                     </div>
                     <div *ngSwitchCase="'reward'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span>
+                      <span class="text--green">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
                       {{ commonService.getDateValue(data[template.matColumnDef], false)[0] }}
@@ -95,10 +95,10 @@
                     </div>
                     <div class="txt-right">
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span
+                      <span class="text--green">{{ denom }}</span
                       ><br />
                       {{ item.reward | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span>
+                      <span class="text--green">{{ denom }}</span>
                     </div>
                   </div>
                 </div>
@@ -117,7 +117,7 @@
                     <div class="txt-right">
                       {{ commonService.getDateValue(item.completion_time, false)[1] }}<br />
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span
+                      <span class="text--green">{{ denom }}</span
                       ><br />
                       {{ commonService.getDateValue(item.completion_time, false)[0] }}
                     </div>
@@ -143,7 +143,7 @@
                       </a>
                       <br />
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span
+                      <span class="text--green">{{ denom }}</span
                       ><br />
                       {{ commonService.getDateValue(item.completion_time, false)[0] }} <br />
                     </div>
@@ -159,7 +159,7 @@
                     </div>
                     <div class="txt-right">
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ global.stableToken }}</span
+                      <span class="text--green">{{ denom }}</span
                       ><br />
                       {{ commonService.getDateValue(item.date_format, false)[1] }} <br />
                     </div>

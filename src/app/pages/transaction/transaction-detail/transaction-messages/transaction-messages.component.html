@@ -35,7 +35,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
@@ -118,7 +118,7 @@
           <div class="col-12 col-lg-9">
             <ng-container *ngIf="listAmountClaim[i] > 0">
               {{ listAmountClaim[i] | number: global.formatNumberToken }}
-              <span class="text--green">{{ global.stableToken }}</span>
+              <span class="text--green">{{ denom }}</span>
             </ng-container>
             <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
           </div>
@@ -147,15 +147,15 @@
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+            {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
       <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
-        <div class="col-12 col-lg-9">
-          {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+        <div class="col-12 col-lg-6">
+          {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </div>
       </div>
     </ng-container>
@@ -216,10 +216,10 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Initial Deposit</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0">
-          0.000000 <span class="text--green">{{ global.stableToken }}</span></ng-container
+          0.000000 <span class="text--green">{{ denom }}</span></ng-container
         >
       </div>
     </div>
@@ -282,15 +282,15 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
     </div>
     <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
-      <div class="col-12 col-lg-9">
-        {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+      <div class="col-12 col-lg-6">
+        {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
       </div>
     </div>
   </ng-container>
@@ -316,7 +316,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ global.stableToken }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>

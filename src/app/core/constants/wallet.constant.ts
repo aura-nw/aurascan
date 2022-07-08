@@ -6,53 +6,6 @@ export enum WALLET_PROVIDER {
 export const LAST_USED_PROVIDER = 'LAST_USED_PROVIDER';
 
 export const ChainsInfo: { [chainId: string]: any } = {
-  ['aura-testnet']: {
-    features: ['no-legacy-stdTx'],
-    chainId: 'aura-testnet',
-    chainName: 'aura testnet',
-    rpc: 'https://tendermint-testnet.aura.network',
-    rest: 'https://rpc-testnet.aura.network',
-    bip44: {
-      coinType: 118,
-    },
-    bech32Config: {
-      bech32PrefixAccAddr: 'aura',
-      bech32PrefixAccPub: 'aura' + 'pub',
-      bech32PrefixValAddr: 'aura' + 'valoper',
-      bech32PrefixValPub: 'aura' + 'valoperpub',
-      bech32PrefixConsAddr: 'aura' + 'valcons',
-      bech32PrefixConsPub: 'aura' + 'valconspub',
-    },
-    currencies: [
-      {
-        coinDenom: 'AURA',
-        coinMinimalDenom: 'uaura',
-        coinDecimals: 6,
-        // coinGeckoId: "aura",
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDenom: 'AURA',
-        coinMinimalDenom: 'uaura',
-        coinDecimals: 6,
-        // coinGeckoId: STABLE_UTOKEN,
-      },
-    ],
-    stakeCurrency: {
-      coinDenom: 'AURA',
-      coinMinimalDenom: 'uaura',
-      coinDecimals: 6,
-      // coinGeckoId: STABLE_UTOKEN,
-    },
-    coinType: 118,
-    gasPriceStep: {
-      low: 1,
-      average: 2.5,
-      high: 4,
-    },
-    walletUrlForStaking: 'https://aura.network',
-  },
   ['aura-devnet']: {
     chainId: 'aura-devnet',
     chainName: 'aura devnet',

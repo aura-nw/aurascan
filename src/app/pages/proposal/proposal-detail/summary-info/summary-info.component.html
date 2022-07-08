@@ -67,14 +67,14 @@
           <div class="col-12 col-md-2 fw-semibold">Initial Deposit</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
-            <span class="text--primary">{{ global.stableToken }}</span>
+            <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
         <div class="row mb-3 small-body">
           <div class="col-12 col-md-2 fw-semibold">Total Deposit</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
-            <span class="text--primary"> {{ global.stableToken }}</span>
+            <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
         <div class="row mb-3 small-body">
@@ -121,7 +121,7 @@
           <div class="col-12 col-md-2 fw-semibold">Total:</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
-            <span class="text--primary">{{ global.stableToken }}</span>
+            <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
         <div class="vote-bar" [class.vote-bar-mobile]="breakpoint.value.matches">
@@ -159,7 +159,7 @@
               </span>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="danger">
@@ -171,7 +171,7 @@
               </span>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="info">
@@ -183,7 +183,7 @@
               </span>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="secondary">
@@ -195,7 +195,7 @@
               </span>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
           </ul>
@@ -211,7 +211,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="danger">
@@ -223,7 +223,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="info">
@@ -235,7 +235,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
             <li data-style="secondary">
@@ -247,7 +247,7 @@
               </div>
               <p class="item item-amount">
                 <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                <span class="text--primary ml-1">{{ denom }}</span>
               </p>
             </li>
           </ul>

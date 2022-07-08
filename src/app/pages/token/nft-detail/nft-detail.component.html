@@ -177,7 +177,7 @@
                 </a>
               </ng-container>
               <ng-container *ngSwitchCase="'price'">
-                {{ data[template.matColumnDef] | number }} {{ global.stableToken }}
+                {{ data[template.matColumnDef] | number }} {{denom}}
               </ng-container>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
             </ng-container>

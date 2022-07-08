@@ -49,12 +49,12 @@
                         </div>
                       </div>
                       <div *ngSwitchCase="'fee'">
-                        {{ data[template.matColumnDef] }} <span class="text--primary">{{ global.stableToken }}</span>
+                        {{ data[template.matColumnDef] }} <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'amount'">
                         <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                           {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                          <span class="text--primary">{{ global.stableToken }}</span>
+                          <span class="text--primary">{{ denom }}</span>
                         </ng-container>
                         <ng-template #displayNonNumber>
                           <span *ngIf="data[template.matColumnDef] === 0"> - </span>
@@ -99,12 +99,12 @@
                 info:
                   data.amount > 0
                     ? (data.amount | number: global.formatNumberToken) +
-                      '<span class=text--primary>' +
-                      global.stableToken +
+                      '<span class=text--primary> ' +
+                      denom +
                       '</span>'
                     : checkAmountValue(data.amount, data.tx_hash)
               },
-              { label: 'Fee', info: data.fee + '<span class=text--primary> ' + global.stableToken + '</span>' },
+              { label: 'Fee', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
               { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
             ]"></app-card-mob-simple>
         </div>
