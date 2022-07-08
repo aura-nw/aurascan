@@ -68,12 +68,12 @@
                 <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
                   <ng-container *ngSwitchCase="'percent_power'">
                     <th mat-header-cell *matHeaderCellDef>
-                      <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
+                      <div class="fw-500" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'rank'">
                     <th mat-header-cell *matHeaderCellDef class="col-per-15">
-                      <div style="font-weight: 500" [innerHTML]="template.headerCellDef | translate"></div>
+                      <div class="fw-500" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'action'">
@@ -342,7 +342,7 @@
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain align-items-center">
-                  <div class="option-lable d-flex align-items-center" [ngClass]="{ active: item.isStaking }">
+                  <div class="option-label d-flex align-items-center" [ngClass]="{ active: item.isStaking }">
                     <div class="avatar-wrapper">
                       <div class="validator-avatar medium">
                         <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
@@ -350,7 +350,7 @@
                     </div>
                     <span>{{ item.title | translate }}</span>
                   </div>
-                  <div class="option-lable">
+                  <div class="option-label">
                     Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}
                   </div>
                 </div>
@@ -400,14 +400,17 @@
               </button>
               <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
+                  <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
                   <button type="button" class="button p-0">Undelegate</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
+                  <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
                   <button type="button" class="button p-0">Redelegate</button>
                 </li>
               </ul>
             </div>
             <button type="button" class="button body button-outline" (click)="changeTypePopup(dialogMode.Delegate)">
+              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -420,6 +423,7 @@
               class="button body button-outline"
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Undelegate</span>
             </button>
           </div>
@@ -443,6 +447,7 @@
               class="button body button-outline"
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -455,6 +460,7 @@
               class="button body button-outline"
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Redelegate</span>
             </button>
           </div>

@@ -10,7 +10,7 @@ import { shortenAddress } from '../../../../../../core/utils/common/shorten';
 import { TokenService } from '../../../../../../core/services/token.service';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
-import { ADDRESS_PREFIX } from '../../../../../../core/constants/common.constant';
+import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 
 interface CustomPageEvent {
   next: number;
@@ -35,8 +35,8 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
-    { matColumnDef: 'from_address_format', headerCellDef: 'From' },
-    { matColumnDef: 'to_address_format', headerCellDef: 'To' },
+    { matColumnDef: 'from_address', headerCellDef: 'From' },
+    { matColumnDef: 'to_address', headerCellDef: 'To' },
     { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
   ];
 
@@ -57,11 +57,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
   isSearchAddress = false;
 
-  constructor(
-    public global: Globals,
-    public commonService: CommonService,
-    private tokenService: TokenService,
-  ) {}
+  constructor(public global: Globals, public commonService: CommonService, private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.getDataTable();
@@ -72,7 +68,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.tokenDataList) {
       this.isSearchAddress = false;
-      
+
       const filterData = this.tokenDataList.filter(
         (data) =>
           data.tx_hash.includes(this.keyWord) ||

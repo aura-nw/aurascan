@@ -13,7 +13,7 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
-            <ng-container *ngSwitchCase="'tx_hash_format'">
+            <ng-container *ngSwitchCase="'tx_hash'">
               <th mat-header-cell *matHeaderCellDef class="col-per-17">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
@@ -23,7 +23,7 @@
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
-            <ng-container *ngSwitchCase="'from_address_format'">
+            <ng-container *ngSwitchCase="'from_address'">
               <th mat-header-cell *matHeaderCellDef class="col-per-25">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
@@ -69,7 +69,7 @@
                         {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'from_address_format'">
+                    <ng-container *ngSwitchCase="'from_address'">
                       <div class="d-flex align-items-center">
                         <a class="text--green txt-from-address content-transfer" [routerLink]="['/account', data.from_address]">
                           {{ data['from_address'] | cutStringPipe: 8:8 }}
@@ -93,7 +93,7 @@
                         </ng-container>
                       </div>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'to_address_format'">
+                    <ng-container *ngSwitchCase="'to_address'">
                       <a class="text--green" [routerLink]="['/account', data.to_address]">
                         {{ data['to_address'] | cutStringPipe: 8:8 }}
                       </a>
@@ -135,7 +135,7 @@
   </ng-container>
   <app-paginator
     [length]="dataSource?.data?.length"
-    [pageSize]="pageSize"
+    [pageSize]="pageData?.pageSize"
     (paginator)="paginatorEmit($event)"
     (pageEvent)="pageEvent($event)"></app-paginator>
   <ng-template #noValues>
@@ -164,12 +164,12 @@
     <div>
       <span class="text--light-gray mr-1">From</span>
       <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">
-        {{ tokenDetail?.from_address_format }}
+        {{ tokenDetail?.from_address }}
       </a>
       <br class="d-sm-none" />
       <span class="text--light-gray mr-1 ml-sm-1">To</span>
       <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">
-        {{ tokenDetail?.to_address_format }}
+        {{ tokenDetail?.to_address }}
       </a>
     </div>
     <hr />

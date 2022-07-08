@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { AURA_DENOM, NUMBER_CONVERT } from '../../../app/core/constants/common.constant';
+import { AURA_DENOM, NUMBER_CONVERT, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
@@ -76,6 +76,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
+  isLoading = false;
   _routerSubscription: Subscription;
 
   destroyed$ = new Subject();
@@ -142,8 +143,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     let data = JSON.parse(retrievedObject);
     if (data) {
       this.dataDelegate = JSON.parse(data?.dataDelegate);
+
       //check wallet is staked
-      if (Number(this.dataDelegate.delegatedToken) > 0) {
+      if (Number(this.dataDelegate?.stakingToken) > 0) {
         this.isDisableClaim = false;
         this.lstUndelegate = JSON.parse(data?.lstUndelegate);
         this.arrayDelegate = JSON.parse(data?.arrayDelegate);
@@ -253,8 +255,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
-    console.log(staticDataModal);
-
     this.currentValidatorDialog = address;
     const view = async () => {
       const account = this.walletService.getAccount();
@@ -310,7 +310,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   //Get data for wallet info and list staking
   getDataWallet() {
-    const halftime = 30000;
+    const halftime = 10000;
     const currentUrl = this.router.url;
     let dataInfoWallet = {};
     if (this.userAddress && currentUrl === '/validators') {
@@ -336,6 +336,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           dataInfoWallet['arrayDelegate'] = JSON.stringify({});
           if (res.dataListDelegator) {
             this.listStakingValidator = res.dataListDelegator?.data?.delegations;
+
             if (this.currentValidatorDialog) {
               this.dataDelegate.validatorDetail = this.listStakingValidator?.find(
                 (f) => f.validator_address === this.currentValidatorDialog,
@@ -428,6 +429,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
@@ -454,6 +456,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       const executeClaim = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
@@ -478,6 +481,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeUnStaking = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
@@ -504,6 +508,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeReStaking = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
@@ -586,6 +591,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }, 4000);
     }
     this.isHandleStake = false;
+    this.isLoading = false;
   }
 
   checkDetailTx(id, message) {
@@ -596,8 +602,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         message = this.mappingErrorService.checkMappingError(message, numberCode);
         if (numberCode !== undefined) {
           if (!!!numberCode && numberCode === CodeTransaction.Success) {
-            this.getList();
-            this.getDataWallet();
+            setTimeout(() => {
+              this.getList();
+              this.getDataWallet();
+            }, TIME_OUT_CALL_API);
             this.toastr.success(message);
           } else {
             this.toastr.error(message);

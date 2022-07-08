@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   dataBlock: any[];
 
   templatesTx: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -95,12 +95,6 @@ export class DashboardComponent implements OnInit {
   getListBlock(): void {
     this.blockService.blocks(this.PAGE_SIZE, 0).subscribe((res) => {
       if (res?.data?.length > 0) {
-        res.data.forEach((block) => {
-          block.block_hash_format = block.block_hash.replace(
-            block.block_hash.substring(6, block.block_hash.length - 6),
-            '...',
-          );
-        });
         this.dataSourceBlock = new MatTableDataSource(res.data);
         this.dataBlock = res.data;
       }
@@ -114,7 +108,6 @@ export class DashboardComponent implements OnInit {
           trans.typeOrigin = trans.type;
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
-          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.dataSourceTx = new MatTableDataSource(res.data);
         this.dataTx = res.data;
@@ -131,15 +124,6 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-  // getBlockAndTxs(type: string): void {
-  //   this.chart = type;
-  //   this.commonService.getBlockAndTxs(type)
-  //     .subscribe(res => {
-  //       const data0 = res[0].data.map(i => i.count);
-  //       const data1 = res[1].data.map(i => i.count);
-  //       let categories = res[0].data.map(i => i.timestamp);
-  //     });
-  // }
 
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
@@ -319,7 +303,9 @@ export class DashboardComponent implements OnInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> AURA </span>'
+        '<span class=text--primary> ' +
+        this.global.stableToken +
+        '</span>'
       );
     }
   }

@@ -39,9 +39,19 @@ export class UserWalletInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
-    if (Number(this.dataDelegate.delegatedToken) > 0) {
+    if (Number(this.dataDelegate?.stakingToken) > 0) {
       this.isDisableClaim = false;
     }
+
+    let lstUndelegateTemp = [];
+    const now = new Date();
+    this.lstUndelegate?.forEach((data) => {
+      let timeConvert = new Date(data.completion_time);
+      if (now < timeConvert) {
+        lstUndelegateTemp.push(data);
+      }
+    });
+    this.lstUndelegate = lstUndelegateTemp;
   }
 
   getValidatorAvatar(validatorAddress: string): string {

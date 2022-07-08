@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { getAmount, Globals } from '../../../../global/global';
 import { DatePipe } from '@angular/common';
-import { DATEFORMAT, NUMBER_CONVERT, AURA_DENOM } from '../../../../core/constants/common.constant';
-import { ValidatorService } from '../../../../core/services/validator.service';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { AURA_DENOM, DATEFORMAT, NUMBER_CONVERT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
+import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { ValidatorService } from '../../../../core/services/validator.service';
+import { getAmount, Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-transaction-messages',

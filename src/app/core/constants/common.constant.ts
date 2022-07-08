@@ -55,3 +55,5 @@ export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg';
 export const VALIDATOR_AVATAR_URL =
   'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/chihuahua/';
+
+export const TIME_OUT_CALL_API = 6000;
