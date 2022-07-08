@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from 'src/app/core/constants/transaction.enum';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
+import {IContractPopoverData} from "src/app/core/models/contract.model";
 
 @Component({
   selector: 'app-nft-detail',
@@ -252,6 +252,7 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
+    { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -269,7 +270,6 @@ export class NFTDetailComponent implements OnInit {
   contractVerifyType = ContractVerifyType;
   
   constructor(
-    private tokenService: TokenService,
     public commonService: CommonService,
     public global: Globals,
     public router: Router,
@@ -304,8 +304,8 @@ export class NFTDetailComponent implements OnInit {
     this.pageData = e;
   }
 
-  copyData(text: string): void {
-    var dummy = document.createElement('textarea');
+  copyData(text: string) {
+    const dummy = document.createElement('textarea');
     document.body.appendChild(dummy);
     dummy.value = text;
     dummy.select();
@@ -316,5 +316,23 @@ export class NFTDetailComponent implements OnInit {
     setTimeout(function () {
       document.getElementById('popupCopy').click();
     }, 800);
+  }
+
+  getPopoverData(data): IContractPopoverData {
+    return {
+      amount: data?.value || 0,
+      code: 0,
+      fee: data?.fee || 0,
+      from_address: data?.from || '-',
+      to_address: data?.to || '-',
+      price: 0,
+      status: 'Success',
+      symbol: 'AURA',
+      // tokenAddress: this.contractInfo?.contractsAddress,
+      tokenAddress: 'demo',
+      tx_hash: data?.txHash || '-',
+      gas_used: data.gas_used,
+      gas_wanted: data.gas_wanted,
+    };
   }
 }

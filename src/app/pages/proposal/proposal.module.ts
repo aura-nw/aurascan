@@ -35,6 +35,8 @@ import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { CurrentTurnoutComponent } from './proposal-detail/summary-info/current-turnout/current-turnout.component';
+import { CurrentStatusComponent } from './proposal-detail/summary-info/current-status/current-status.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
     ValidatorsVotesComponent,
     DepositorsComponent,
     ProposalTableComponent,
+    CurrentTurnoutComponent,
+    CurrentStatusComponent,
   ],
   imports: [
     CommonModule,

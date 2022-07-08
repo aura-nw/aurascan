@@ -27,10 +27,7 @@
           (keyup)="searchCode()"
           name="search"
           autocomplete="off" />
-        <button
-          type="submit"
-          class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
-          (click)="searchCode()">
+        <button type="submit" class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}" (click)="searchCode()">
           <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
         </button>
         <button
@@ -235,7 +232,11 @@
       </div>
       <div class="d-flex align-items-center justify-content-end w-100 mt-4">
         <button type="button" class="button body mr-2 text--white" (click)="closeDialog(modal)">Close</button>
-        <button type="button" class="button body button-outline" (click)="handleButtonContract(isEditMode)" [disabled]="(!isEditMode && isDisable) || isProcess">
+        <button
+          type="button"
+          class="button body button-outline"
+          (click)="handleButtonContract(isEditMode)"
+          [disabled]="(!isEditMode && isDisable) || isProcess">
           <span class="text-gradient">
             <ng-container *ngIf="isEditMode">Update</ng-container>
             <ng-container *ngIf="!isEditMode">Register</ng-container>

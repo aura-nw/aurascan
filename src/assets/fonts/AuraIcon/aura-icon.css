@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ico-aura';
-  src:  url('ico-aura.eot?28oy7s');
-  src:  url('ico-aura.eot?28oy7s#iefix') format('embedded-opentype'),
-  url('ico-aura.ttf?28oy7s') format('truetype'),
-  url('ico-aura.woff?28oy7s') format('woff'),
-  url('ico-aura.svg?28oy7s#ico-aura') format('svg');
+  src:  url('ico-aura.eot?von5h4');
+  src:  url('ico-aura.eot?von5h4#iefix') format('embedded-opentype'),
+  url('ico-aura.ttf?von5h4') format('truetype'),
+  url('ico-aura.woff?von5h4') format('woff'),
+  url('ico-aura.svg?von5h4#ico-aura') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,57 +25,69 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-minus-circle:before {
-  content: "\e90e";
-}
-.icon-plus-circle:before {
-  content: "\e910";
-}
-.icon-download:before {
-  content: "\e90d";
-}
-.icon-credit-card:before {
-  content: "\e909";
-}
-.icon-user:before {
-  content: "\e90b";
-}
-.icon-file-document:before {
-  content: "\e90f";
-}
-.icon-coin:before {
-  content: "\e911";
-}
-.icon-collab:before {
-  content: "\e90c";
-}
-.icon-archive:before {
+.icon-github:before {
   content: "\e900";
 }
-.icon-arrow-left:before {
+.icon-twitter:before {
   content: "\e901";
 }
-.icon-arrow-right:before {
+.icon-facebook:before {
   content: "\e902";
 }
-.icon-arrow-up:before {
+.icon-email:before {
   content: "\e903";
-}
-.icon-block:before {
-  content: "\e904";
-}
-.icon-burger:before {
-  content: "\e905";
-}
-.icon-chevron-down:before {
-  content: "\e906";
-}
-.icon-chevron-up:before {
-  content: "\e907";
 }
 .icon-close:before {
   content: "\e908";
 }
-.icon-grid:before {
+.icon-burger:before {
+  content: "\e905";
+}
+.icon-chevron-up:before {
+  content: "\e907";
+}
+.icon-chevron-down:before {
+  content: "\e906";
+}
+.icon-arrow-up:before {
+  content: "\e904";
+}
+.icon-arrow-right:before {
+  content: "\e909";
+}
+.icon-arrow-left:before {
   content: "\e90a";
+}
+.icon-block:before {
+  content: "\e90b";
+}
+.icon-grid:before {
+  content: "\e90c";
+}
+.icon-archive:before {
+  content: "\e90d";
+}
+.icon-file-document:before {
+  content: "\e90f";
+}
+.icon-collab:before {
+  content: "\e90e";
+}
+.icon-coin:before {
+  content: "\e911";
+}
+.icon-user:before {
+  content: "\e910";
+}
+.icon-credit-card:before {
+  content: "\e912";
+}
+.icon-download:before {
+  content: "\e913";
+}
+.icon-plus-circle:before {
+  content: "\e914";
+}
+.icon-minus-circle:before {
+  content: "\e915";
 }

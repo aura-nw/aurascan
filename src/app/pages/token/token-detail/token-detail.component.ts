@@ -16,7 +16,7 @@ export class TokenDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   textSearch: string = '';
   codeTransaction = CodeTransaction;
-  tokenName = 'Aura';
+  tokenName = 'AuraDiamon';
   tokenType: TokenType;
 
   constructor() {}
