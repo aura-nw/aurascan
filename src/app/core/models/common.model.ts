@@ -137,15 +137,15 @@ export class CommonDataDto {
   community_pool_format: number;
 }
 
-export class DataDelegateDto {
-  delegatedToken: string;
-  availableToken: string;
-  delegatableVesting: string;
-  stakingToken: string;
-  historyTotalReward: number;
-  stakingCurrentValidate: string;
-  dialogMode: string = '';
-  validatorDetail: any;
+export interface DataDelegateDto {
+  delegatedToken?: string;
+  availableToken?: string;
+  delegatableVesting?: string;
+  stakingToken?: string;
+  historyTotalReward?: number;
+  stakingCurrentValidate?: string;
+  dialogMode?: string;
+  validatorDetail?: any;
 }
 
 
