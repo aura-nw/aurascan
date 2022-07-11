@@ -1,4 +1,4 @@
-@import "../../../assets/scss/color.scss";
+@import '../../../assets/scss/color.scss';
 
 .validator-container {
   .cumulative-share_container {
@@ -18,28 +18,9 @@
       background: #c5f1de;
     }
   }
-  .box-undelegate, .box-validators {
-    .card-header {
-      @media (max-width: 991.99px) {
-        padding-bottom: 0;
-      }
-    }
-  }
 }
 
-.undelegate-item {
-  padding: var(--spacer-3) 0;
-  @media (min-width: 991.99px) {
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--aura-light-gray);
-    }
-  }
-  &.table-mobile__item {
-    padding: 12px;
-  }
-}
-
-form.search-form {
+form.search-form-validators {
   .input-group {
     background-color: var(--aura-bg-form);
     input.form-control {
@@ -77,7 +58,8 @@ form.search-form {
     padding: 0;
     background: transparent;
   }
-  .mat-select-placeholder, mat-select-trigger {
+  .mat-select-placeholder,
+  mat-select-trigger {
     position: relative;
     color: var(--aura-white);
     font-size: 1.4rem;
@@ -94,7 +76,7 @@ form.search-form {
       transform: translateY(-50%);
       width: 12px;
       height: 12px;
-      background: url("../../../assets/icons/icons-svg/white/triangle-down.svg");
+      background: url('../../../assets/icons/icons-svg/white/triangle-down.svg');
       background-size: cover;
     }
   }
@@ -107,11 +89,10 @@ form.search-form {
 }
 
 .mat-option {
-  background: #25252C;
+  background: #25252c;
   @media (max-width: 991.99px) {
     padding: var(--spacer-3) 0;
   }
-
   .option-contain {
     font-size: 1.4rem;
     line-height: 1.6rem;
@@ -119,7 +100,7 @@ form.search-form {
       font-size: 1.6rem;
       line-height: 2.4rem;
     }
-    .option-lable {
+    .option-label {
       &:first-child {
         width: 50%;
       }
@@ -135,7 +116,7 @@ form.search-form {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #5E84E6;
+            background-color: #5e84e6;
           }
         }
       }
@@ -144,7 +125,7 @@ form.search-form {
 }
 
 .commissionPanel {
-  background: #25252C;
+  background: #25252c;
   min-width: 100% !important;
   padding: var(--spacer-3) 0 !important;
   border-radius: 8px;
@@ -163,6 +144,7 @@ form.search-form {
       line-height: 1.6rem;
       font-weight: 500;
       border-radius: 4px;
+
       @media (min-width: 992px) {
         font-size: 1.6rem;
         line-height: 2rem;
@@ -171,15 +153,19 @@ form.search-form {
   }
 }
 
-.aura-table {
-  .button-outline__in-card {
-    box-shadow: 2px 1000px 1px #20262B inset;
+.box-undelegate,
+.box-validators {
+  .card-header {
+    @media (max-width: 991.99px) {
+      padding-bottom: 0;
+    }
   }
 }
 
 .button-outline__claim-reward {
   min-height: 40px;
   height: auto;
+
   @media (min-width: 992px) {
     height: 50px;
   }
@@ -192,14 +178,15 @@ form.search-form {
 .box-title-validator {
   position: relative;
   min-height: 35px;
-  align-items: center;
   overflow: visible;
-  display: inline-block;
+  display: flex;
+  align-items: center;
   .text-title {
     opacity: 0.5;
     min-width: 60px;
     display: block;
   }
+
   .label-jailed {
     text-align: center;
     transform: rotate(-15deg);
@@ -220,6 +207,7 @@ form.search-form {
       transform: translateX(-50%);
     }
   }
+
   @media (max-width: 991.99px) {
     .text-title {
       min-width: 30px;
@@ -233,7 +221,7 @@ form.search-form {
 @media (max-width: 991.99px) {
   .validator-container {
     .button-outline__in-card {
-      box-shadow: 2px 1000px 1px #38383D inset;
+      box-shadow: 2px 1000px 1px #38383d inset;
     }
   }
 }
@@ -253,6 +241,7 @@ form.search-form {
     .modal-dialog {
       margin: 0;
     }
+
     .modal-content {
       position: fixed;
       top: 0;

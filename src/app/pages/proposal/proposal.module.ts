@@ -33,6 +33,10 @@ import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalTableComponent } from './proposal-table/proposal-table.component';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
 import { ProposalComponent } from './proposal.component';
+import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { CurrentTurnoutComponent } from './proposal-detail/summary-info/current-turnout/current-turnout.component';
+import { CurrentStatusComponent } from './proposal-detail/summary-info/current-status/current-status.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +48,8 @@ import { ProposalComponent } from './proposal.component';
     ValidatorsVotesComponent,
     DepositorsComponent,
     ProposalTableComponent,
+    CurrentTurnoutComponent,
+    CurrentStatusComponent,
   ],
   imports: [
     CommonModule,
@@ -68,7 +74,8 @@ import { ProposalComponent } from './proposal.component';
     DateFnsModule,
     PaginatorModule,
     ClickOutsideModule,
+    LoadingImageModule
   ],
-  providers: [ProposalService, MappingErrorService, DecimalPipe],
+  providers: [ProposalService, MappingErrorService, DecimalPipe, ValidatorService],
 })
 export class ProposalModule {}

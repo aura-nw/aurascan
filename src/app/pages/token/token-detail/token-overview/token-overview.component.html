@@ -2,31 +2,61 @@
   <div class="">
     <div class="table-responsive">
       <table class="aura-basic-table w-100">
-        <tr>
-          <td class="fw-semibold">Overview <span class="text--light-gray fw-normal">[CW-20]</span></td>
+        <tr class="body">
           <td class="">
-            <div class="d-flex justify-content-end">
+            <span class="fw-semibold">Overview </span>
+            <span class="text--light-gray">
+              <ng-container *ngIf="!isNFTContract">[CW-20]</ng-container>
+              <ng-container *ngIf="isNFTContract">[CW-721]</ng-container>
+            </span>
+          </td>
+          <td class="">
+            <div class="d-flex justify-content-end" *ngIf="!isNFTContract">
               <button class="button button-chart button-outline button-outline__in-card -small">
                 <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
-                <span class="ml-2">Chart</span>
+                <span class="ml-2 small-text">Chart</span>
               </button>
             </div>
           </td>
         </tr>
 
         <tr>
-          <td colspan="2">
+          <td colspan="2" class="py-2">
             <div class="d-flex">
-              <div class="flex-item">
-                <div class="text--light-gray">Price</div>
+              <div [class.flex-item]="!isNFTContract">
+                <div class="text--light-gray small-text">
+                  <span *ngIf="isNFTContract">Min price</span>
+                  <span *ngIf="!isNFTContract">Price</span>
+                </div>
                 <div>
-                  $0.17 <span class="small-text text--light-gray py-3 mr-2"> @0.217711 Aura</span>
-                  <span class="text-danger">(-0,87%)</span>
+                  <span class="small-body">$0.17</span>
+                  <span class="small-text text--light-gray py-3 mx-2"> @0.217711 Aura</span>
+                  <br class="d-lg-none" />
+                  <span class="text-danger small-body" *ngIf="!isNFTContract">(-0,87%)</span>
                 </div>
               </div>
-              <div class="pl-4">
-                <div class="text--light-gray">CIRCULATING SUPPLY MARKET CAP</div>
-                <div>$7,342,381,252.35</div>
+              <div class="pl-4" *ngIf="!isNFTContract">
+                <div class="text--light-gray small-text">CIRCULATING SUPPLY MARKET CAP</div>
+                <div class="small-body">$7,342,381,252.35</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2" class="py-2">
+            <div class="d-flex align-item-center">
+              <div
+                [class.flex-item]="!isNFTContract"
+                [ngClass]="{ 'd-flex': isNFTContract, 'align-items-center': isNFTContract }">
+                <span class="small-text text--light-gray" *ngIf="!isNFTContract">Max Total Supply</span>
+                <span style="min-width: 120px" class="text--white" *ngIf="isNFTContract">Max Total Supply:</span>
+                <div class="small-body">1.000.000.000 AURA</div>
+              </div>
+
+              <div class="pl-4" *ngIf="!isNFTContract">
+                <div class="text--light-gray small-text">FULLY DILUTED MARKET CAP</div>
+                <div class="small-body">$27,342,381,252.35</div>
               </div>
             </div>
           </td>
@@ -35,33 +65,21 @@
         <tr>
           <td colspan="2">
             <div class="d-flex">
-              <div class="flex-item">
-                <div class="text--light-gray">Max Total Supply</div>
-                <div>1.000.000.000 AURA</div>
-              </div>
-              <div class="pl-4">
-                <div class="text--light-gray">FULLY DILUTED MARKET CAP</div>
-                <div>$27,342,381,252.35</div>
+              <div style="min-width: 120px">Holders:</div>
+              <div>
+                23,130 <span class="text-danger ml-1" *ngIf="!isNFTContract">(<img src="assets/images/icons/arrow-down.svg" />-0,02%)</span>
               </div>
             </div>
           </td>
         </tr>
 
         <tr>
-          <td>Holders:</td>
-          <td>
-            23,130
-            <span class="text-danger ml-1"
-              >(
-              <img src="assets/images/icons/arrow-down.svg" />
-              -0,02%)</span
-            >
+          <td colspan="2">
+            <div class="d-flex">
+              <div style="min-width: 120px">Transfers:</div>
+              <div>269,902</div>
+            </div>
           </td>
-        </tr>
-
-        <tr>
-          <td>Transfers:</td>
-          <td>269,902</td>
         </tr>
       </table>
     </div>

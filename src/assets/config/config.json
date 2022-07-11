@@ -1,7 +1,32 @@
 {
-    "fabric": "",
-    "cosmos": "https://explorer-api.dev.aura.network/api/v1",
-    "chainId": "aura-devnet",
-    "timeStaking": "1814400",
-    "urlSocket": "https://explorer-api.dev.aura.network"
+  "fabric": "",
+  "cosmos": "https://explorer-api.dev.aura.network/api/v1",
+  "chainId": "aura-testnet",
+  "timeStaking": "1814400",
+  "urlSocket": "https://explorer-api.dev.aura.network",
+  "validator_s3": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
+  "chain_info": {
+    "chainId": "aura-testnet",
+    "chainName": "aura testnet",
+    "rpc": "https://rpc.dev.aura.network",
+    "rest": "https://lcd.dev.aura.network",
+    "bip44": { "coinType": 118 },
+    "bech32Config": {
+      "bech32PrefixAccAddr": "aura",
+      "bech32PrefixAccPub": "aurapub",
+      "bech32PrefixValAddr": "auravaloper",
+      "bech32PrefixValPub": "auravaloperpub",
+      "bech32PrefixConsAddr": "auravalcons",
+      "bech32PrefixConsPub": "auravalconspub"
+    },
+    "currencies": [{ "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 }],
+    "feeCurrencies": [{ "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 }],
+    "stakeCurrency": { "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 },
+    "coinType": 118,
+    "gasPriceStep": { "low": 0.0001, "average": 0.00025, "high": 0.0004 },
+    "features": ["no-legacy-stdTx"],
+    "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
+    "logo": "https://i.imgur.com/zi0mTYb.png",
+    "explorer": "https://explorer.dev.aura.network/"
+  }
 }

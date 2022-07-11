@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
@@ -71,6 +69,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
           validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
           updateOn: 'submit',
         }),
+        wasm_file: new FormControl('', {
+          validators: [Validators.required, Validators.maxLength(200)],
+          updateOn: 'submit',
+        }),
         url: new FormControl(''),
         compiler_version: new FormControl('', { validators: [Validators.required], updateOn: 'submit' }),
         commit: new FormControl(''),
@@ -88,6 +90,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.formControls['link'].markAsTouched();
     this.formControls['compiler_version'].markAsTouched();
+    this.formControls['wasm_file'].markAsTouched();
 
     if (this.contractForm.valid) {
       // handle contract_address & commit
@@ -99,29 +102,32 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         url: this.contractForm.controls['url'].value,
         compiler_version: this.contractForm.controls['compiler_version'].value,
         commit: this.contractForm.controls['commit'].value,
+        wasm_file: this.contractForm.controls['wasm_file'].value,
       };
 
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
         if (res.data) {
           this.dlgServiceOpen();
-          this.wSService.subscribeVerifyContract(contractData.contract_address);
+          this.wSService.subscribeVerifyContract(
+            contractData.contract_address,
+            () => {
+              this.contractService.loadContractDetail(contractData.contract_address);
+            },
+            () => {
+              this.router.navigate(['contracts', this.contractAddress], {
+                queryParams: {
+                  tabId: 'contract',
+                },
+                state: {
+                  reload: true,
+                },
+              });
+            },
+          );
         }
       });
     }
   }
-
-  // socket(): void {
-  //   this.wSService.connect();
-  //   const wsData = { event: 'eventVerifyContract' };
-
-  //   this.wSService.on('register', wsData).subscribe((data: any) => {
-  //     if (this.contractAddress === data?.ContractAddress) {
-  //       this.isVerified = true;
-  //     }
-  //   });
-
-  //   this.dlgServiceOpen();
-  // }
 
   dlgServiceOpen(): void {
     this.dlgService.showDialog({

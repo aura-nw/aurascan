@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Keplr, Key } from '@keplr-wallet/types';
+import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -12,8 +12,10 @@ import { NgxToastrService } from './ngx-toastr.service';
   providedIn: 'root',
 })
 export class WalletService implements OnDestroy {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
+  chainId = this.environmentService.configValue.chainId;
+  chainInfo = this.environmentService.configValue.chain_info;
+
   wallet$: Observable<Key>;
   private _wallet$: BehaviorSubject<Key>;
 
@@ -67,9 +69,9 @@ export class WalletService implements OnDestroy {
         const coin98 = this.checkExistedCoin98();
 
         if (coin98) {
-          this.connectCoin98(chainId);
+          this.connectCoin98(this.chainInfo);
         } else {
-          this.connectKeplr(chainId);
+          this.connectKeplr(this.chainInfo);
         }
 
         return Promise.resolve(true);
@@ -80,7 +82,7 @@ export class WalletService implements OnDestroy {
         if (_coin98 === undefined) {
           return Promise.resolve(false);
         } else {
-          this.connectCoin98(chainId);
+          this.connectCoin98(this.chainInfo);
 
           return Promise.resolve(true);
         }
@@ -93,22 +95,22 @@ export class WalletService implements OnDestroy {
     session.removeItem(LAST_USED_PROVIDER);
   }
 
-  private async connectKeplr(chainId: string): Promise<void> {
+  private async connectKeplr(chainInfo: ChainInfo): Promise<void> {
     const checkWallet = async () => {
       try {
         const keplr = await getKeplr();
 
         if (keplr) {
-          await keplrSuggestChain(chainId);
-          await keplr.enable(chainId);
+          await keplrSuggestChain(chainInfo);
+          await keplr.enable(chainInfo.chainId);
 
-          const account = await keplr.getKey(chainId);
+          const account = await keplr.getKey(chainInfo.chainId);
 
           if (account) {
             this.setWallet(account);
             session.setItem<WalletStorage>(LAST_USED_PROVIDER, {
               provider: WALLET_PROVIDER.KEPLR,
-              chainId,
+              chainId: chainInfo.chainId,
             });
           }
         } else {
@@ -116,31 +118,31 @@ export class WalletService implements OnDestroy {
           window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
         }
       } catch (e: any) {
-        this.catchErrors(e, chainId);
+        this.catchErrors(e, chainInfo.chainId);
       }
     };
     checkWallet();
   }
 
-  private async connectCoin98(chainId: string): Promise<void> {
+  private async connectCoin98(chainInfo: ChainInfo): Promise<void> {
     const coin98 = await this.checkExistedCoin98();
 
     if (coin98) {
       try {
-        await keplrSuggestChain(chainId);
-        await coin98.enable(chainId);
+        await keplrSuggestChain(chainInfo);
+        await coin98.enable(chainInfo.chainId);
 
-        const account = await coin98.getKey(chainId);
+        const account = await coin98.getKey(chainInfo.chainId);
 
         if (account) {
           this.setWallet(account);
           session.setItem<WalletStorage>(LAST_USED_PROVIDER, {
             provider: WALLET_PROVIDER.KEPLR,
-            chainId,
+            chainId: chainInfo.chainId,
           });
         }
       } catch (e: any) {
-        this.catchErrors(e, chainId);
+        this.catchErrors(e, chainInfo.chainId);
         this.disconnect();
       }
     } else {

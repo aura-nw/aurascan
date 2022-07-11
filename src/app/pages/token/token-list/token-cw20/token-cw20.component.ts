@@ -167,7 +167,7 @@ export class TokenCw20Component implements OnInit {
       volume: 52379005541,
       circulatingMarketCap: 74276784332,
       onChainMarketCap: 39902766084.69,
-      holders: 4573079,
+      holders: 22222,
       hashCode: 'demo_abcdef',
       btc: 0.000033,
       eth: 0.000494,
@@ -181,7 +181,7 @@ export class TokenCw20Component implements OnInit {
       volume: 52379005541,
       circulatingMarketCap: 74276784332,
       onChainMarketCap: 39902766084.69,
-      holders: 4573079,
+      holders: 33333,
       hashCode: 'demo_abcdef',
       btc: 0.000033,
       eth: 0.000494,
@@ -195,7 +195,7 @@ export class TokenCw20Component implements OnInit {
       volume: 52379005541,
       circulatingMarketCap: 74276784332,
       onChainMarketCap: 39902766084.69,
-      holders: 4573079,
+      holders: 654645,
       hashCode: 'demo_abcdef',
       btc: 0.000033,
       eth: 0.000494,
@@ -209,7 +209,119 @@ export class TokenCw20Component implements OnInit {
       volume: 52379005541,
       circulatingMarketCap: 74276784332,
       onChainMarketCap: 39902766084.69,
-      holders: 4573079,
+      holders: 4324,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 15,
+      name: 'XRP (XPR)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 0.32,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 345,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 16,
+      name: 'Cardano (ADA)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 0.46,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 1234,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 17,
+      name: 'Solana (SOL)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 32.67,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 333332,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 18,
+      name: 'Dogecoin (DOGE)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 0.06,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 65654,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 19,
+      name: 'TRON (TRX)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 0.064,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 43543,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 20,
+      name: 'Polkadot (DOT)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 6.92,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 76575,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 21,
+      name: 'Litecoin (LTC)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 53,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 34533,
+      hashCode: 'demo_abcdef',
+      btc: 0.000033,
+      eth: 0.000494,
+    },
+    {
+      id: 22,
+      name: 'Chainlink (LINK)',
+      desc: 'A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.',
+      price: 6.12,
+      change: 0.04,
+      volume: 52379005541,
+      circulatingMarketCap: 74276784332,
+      onChainMarketCap: 39902766084.69,
+      holders: 1231235,
       hashCode: 'demo_abcdef',
       btc: 0.000033,
       eth: 0.000494,
@@ -232,6 +344,7 @@ export class TokenCw20Component implements OnInit {
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  pageSize = 20;
 
   constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
 
@@ -249,7 +362,7 @@ export class TokenCw20Component implements OnInit {
   getTokenData() {
     this.pageData = {
       length: this.mockData.length,
-      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
 
@@ -271,8 +384,8 @@ export class TokenCw20Component implements OnInit {
   }
 
   searchToken(): void {
-    this.filterSearchData = null;
-    if (this.textSearch.length > 0) {
+    this.filterSearchData = [];
+    if (this.textSearch && this.textSearch.length > 0) {
       this.filterData(this.textSearch);
     }
   }
@@ -288,15 +401,15 @@ export class TokenCw20Component implements OnInit {
       return;
     }
 
+    const isAsc = sort.direction === 'asc';
     this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'price':
-          return this.compare(a.price, b.price, false);
+          return this.compare(a.price, b.price, isAsc);
         case 'volume':
-          return this.compare(a.volume, b.volume, false);
+          return this.compare(a.volume, b.volume, isAsc);
         case 'circulatingMarketCap':
-          return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, true);
+          return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, isAsc);
         default:
           return 0;
       }
@@ -305,17 +418,17 @@ export class TokenCw20Component implements OnInit {
     if (sort.active === 'change') {
       let lstUp = this.sortedData
         .filter((data) => data.isValueUp)
-        ?.sort((a, b) => this.compare(a.change, b.change, false));
+        ?.sort((a, b) => this.compare(a.change, b.change, isAsc));
       let lstDown = this.sortedData
         .filter((data) => !data.isValueUp)
-        .sort((a, b) => this.compare(a.change, b.change, true));
+        .sort((a, b) => this.compare(a.change, b.change, isAsc));
       this.sortedData = lstUp.concat(lstDown);
     }
 
     let dataFilter = this.sortedData;
     this.pageData = {
       length: dataFilter.length,
-      pageSize: PAGE_EVENT.PAGE_SIZE,
+      pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
     this.dataSource = new MatTableDataSource<any>(dataFilter);
@@ -326,6 +439,10 @@ export class TokenCw20Component implements OnInit {
   }
 
   handleLink(): void {
-    this.router.navigate(['/token/token', this.filterSearchData[0]?.hashCode]);
+    this.router.navigate(['/tokens/token', this.filterSearchData[0]?.hashCode]);
+  }
+
+  handlePageEvent(e: any) {
+    this.pageData = e;
   }
 }

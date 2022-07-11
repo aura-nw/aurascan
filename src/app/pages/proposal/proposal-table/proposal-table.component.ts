@@ -12,6 +12,8 @@ import {
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { shortenAddress } from '../../../../app/core/utils/common/shorten';
@@ -52,6 +54,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       headerCellDef: 'Validator',
       isUrl: '/validators',
       paramField: 'operator_address',
+      prefix: 'operator_address',
     },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },
@@ -73,7 +76,15 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   pageIndex = 0;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(public global: Globals, public commonService: CommonService, private layout: BreakpointObserver) {}
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
+  constructor(
+    public global: Globals,
+    public commonService: CommonService,
+    private layout: BreakpointObserver,
+    private validatorService: ValidatorService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.tabId && !changes.tabId.firstChange && this.dataSource?.paginator) {
@@ -147,5 +158,9 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
     );
+  }
+
+  getValidatorAvatar(validatorAddress: string): string {
+    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }

@@ -1,13 +1,19 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {DatePipe, ViewportScroller} from '@angular/common';
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import { DatePipe, ViewportScroller } from '@angular/common';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { Globals } from '../../../app/global/global';
-import { DATEFORMAT, PAGE_EVENT } from '../../core/constants/common.constant';
-import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE } from '../../core/constants/proposal.constant';
+import { DATEFORMAT } from '../../core/constants/common.constant';
+import {
+  MESSAGE_WARNING,
+  PROPOSAL_STATUS,
+  PROPOSAL_VOTE,
+  VOTE_OPTION,
+  VOTING_STATUS,
+} from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
@@ -27,7 +33,7 @@ export class ProposalComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: number } = null;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  chainId = this.environmentService.configValue.chainId;
   // data table
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'ID' },
@@ -40,7 +46,6 @@ export class ProposalComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   length: number;
-  pageSize = PAGE_EVENT.PAGE_SIZE;
   pageIndex = 0;
   lastedList: IProposal[] = [];
 
@@ -53,9 +58,10 @@ export class ProposalComponent implements OnInit {
 
   pageYOffset = 0;
   scrolling = false;
-  @HostListener('window:scroll', ['$event']) onScroll(event){
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
@@ -65,7 +71,7 @@ export class ProposalComponent implements OnInit {
     private environmentService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
-    private scroll: ViewportScroller
+    private scroll: ViewportScroller,
   ) {}
 
   ngOnInit(): void {
@@ -92,8 +98,8 @@ export class ProposalComponent implements OnInit {
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
           if (
-            (index < 4 && pro?.pro_status !== 'PROPOSAL_STATUS_DEPOSIT_PERIOD') ||
-            pro?.pro_status === 'PROPOSAL_STATUS_VOTING_PERIOD'
+            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
+            pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
           ) {
             this.getVoteResult(pro.pro_id, index);
             const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
@@ -136,16 +142,16 @@ export class ProposalComponent implements OnInit {
 
     if (!highest || highest > 100) {
       highest = 0;
-      key = 'VOTE_OPTION_YES';
+      key = VOTE_OPTION.VOTE_OPTION_YES;
     } else {
       if (highest === yes) {
-        key = 'VOTE_OPTION_YES';
+        key = VOTE_OPTION.VOTE_OPTION_YES;
       } else if (highest === no) {
-        key = 'VOTE_OPTION_NO';
+        key = VOTE_OPTION.VOTE_OPTION_NO;
       } else if (highest === noWithVeto) {
-        key = 'VOTE_OPTION_NO_WITH_VETO';
+        key = VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO;
       } else {
-        key = 'VOTE_OPTION_ABSTAIN';
+        key = VOTE_OPTION.VOTE_OPTION_ABSTAIN;
       }
     }
 
@@ -179,7 +185,6 @@ export class ProposalComponent implements OnInit {
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
 
-
           this.openDialog({
             id,
             title,
@@ -204,18 +209,19 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getVoteResult(data.id, data.idx);
-        let votedValue = this.lastedList.find((s)=> s.pro_id === data.id);
+        let votedValue = this.lastedList.find((s) => s.pro_id === data.id);
         votedValue.vote_option = result.keyVote;
       }
       this.scrollToTop();
     });
   }
 
-
-  scrollToTop(){
+  scrollToTop() {
     this.scroll.scrollToPosition([0, 0]);
     this.scrolling = true;
-    setTimeout(() => {this.scrolling = !this.scrolling; }, 500);
+    setTimeout(() => {
+      this.scrolling = !this.scrolling;
+    }, 500);
   }
 
   parsingStatus(sts) {

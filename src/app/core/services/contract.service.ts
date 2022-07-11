@@ -15,7 +15,7 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
 
@@ -24,12 +24,6 @@ export class ContractService extends CommonService {
 
   getListContract(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
-  }
-
-  getListTransaction(token: string): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/proposals`);
-    return this.http.get('../../assets/mock-data/token-list-transfer.json');
   }
 
   getTransactions(payload: {
@@ -66,5 +60,20 @@ export class ContractService extends CommonService {
     this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`).subscribe((res) => {
       this.contract$.next(res);
     });
+  }
+
+  registerContractType(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contract-codes`, data);
+  }
+
+  getListTypeContract(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contract-codes/list`, data);
+  }
+
+  updateContractType(codeID: number, typeContract: string): Observable<any> {
+    const payload = {
+      type: typeContract
+    }
+    return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
   }
 }

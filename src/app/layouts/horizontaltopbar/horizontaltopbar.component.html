@@ -78,11 +78,15 @@
                                 <span class="ml-2 fw-500">{{ item.label | translate}}</span>
                             </a>
                             <a *ngIf="item.subItems" class="nav-link dropdown-toggle arrow-none d-flex align-items-center" (click)="onMenuClick($event)"
-                               [class.active]="router.url === '/' && item.link === '/dashboard'" href="javascript: void(0);" id="topnav-components" role="button">
+                               [class.active]="router.url === '/' && item.link === '/dashboard' ||
+                                               item.id === 6 && router.url.includes('/token')" href="javascript: void(0);" id="topnav-components" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>
                                 <span class="ml-2 fw-500">{{ item.label | translate}}</span>
                                 <span class="nav-link__panel">
-                                    <a [routerLink]="subMenu.link" *ngFor="let subMenu of item.subItems">{{ subMenu.label }}</a>
+                                    <a [routerLink]="subMenu.link"
+                                       *ngFor="let subMenu of item.subItems"
+                                       [class.active]="subMenu.id === 1 && router.url.includes('/tokens') && !router.url.includes('/tokens-nft') ||
+                                                       subMenu.id === 2 && router.url.includes('/tokens-nft')">{{ subMenu.label }}</a>
                                 </span>
                             </a>
                         </li>

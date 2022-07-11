@@ -1,45 +1,86 @@
-<div class="d-lg-flex justify-content-between">
-  <div>
-    <app-pagetitle title="CW-721 Tokens" [displayInfo]="false"></app-pagetitle>
-    <div class="body text--light-gray">A total of 530,908 Token Contracts found</div>
-  </div>
-  <form class="aura-form single-input-field search-form d-none d-lg-block">
-    <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search for Token Name or Address"
-        [(ngModel)]="textSearch"
-        (ngModelChange)="searchToken()"
-        name="search"
-        autocomplete="off" />
-      <button
-        type="submit"
-        class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-        (click)="searchToken()">
-        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
-      </button>
-      <button
-        type="reset"
-        class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-        (click)="textSearch = ''; searchToken()">
-        <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
-      </button>
-    </div>
-  </form>
-</div>
-
+<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
-    <div class="card mt-8">
+    <div class="card mt-5">
       <div class="card-body">
-        <div class="table-responsive aura-table-contain">
-          <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+        <!-- Title -->
+        <div class="d-lg-flex justify-content-between">
+          <div>
+            <div class="mb-3 mb-lg-0 d-flex justify-content-between d-lg-block">
+              <div class="title-medium sub-text-mob text--white fw-bold">Non-Fungible Tokens (NFT)</div>
+              <button
+                class="button d-lg-none p-0"
+                (click)="
+                  searchForm.classList.contains('show')
+                    ? searchForm.classList.remove('show')
+                    : searchForm.classList.add('show')
+                ">
+                <img src="assets/icons/icons-svg/white/search.svg" alt="" width="24px" height="24px" />
+              </button>
+            </div>
+            <div class="mall-body small-text-mob text--light-gray">
+              A total of {{ pageData?.length }} Token Contract{{ pageData?.length > 0 ? 's' : '' }} found
+            </div>
+          </div>
+          <form class="aura-form single-input-field search-form mt-2 mt-lg-0" #searchForm>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for Token Name or Address"
+                [maxLength]="maxLengthSearch"
+                [(ngModel)]="textSearch"
+                (ngModelChange)="searchToken()"
+                (keyup.enter)="handleLink()"
+                name="search"
+                autocomplete="off" />
+              <button
+                type="submit"
+                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                (click)="searchToken()">
+                <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+              </button>
+              <button
+                type="reset"
+                class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                (click)="textSearch = ''; searchToken()">
+                <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+              </button>
+            </div>
+            <ng-container *ngIf="textSearch?.length > 0">
+              <div class="box-search-data text-white">
+                <ng-container *ngIf="filterSearchData?.length === 0">
+                  <span> There are no matching NFT </span>
+                </ng-container>
+                <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+                  <div class="txt-title-search mb-3">Non-Fungible Tokens (NFT)</div>
+                  <ng-container *ngFor="let item of filterSearchData">
+                    <div
+                      class="d-flex p-3 cursor-pointer search-result"
+                      [routerLink]="['/tokens/token', item.tokenContract]">
+                      <img src="assets/images/icons/token-logo.png" class="logo-token" />
+                      <div class="px-2 d-flex align-items-center justify-content-between" style="flex: 0 0 95%">
+                        <span class="text-clamp small-body" style="max-width:60%; height: 18px">{{ item.name }}</span>
+                        <span class="text-clamp small-body text--green" style="height: 18px">{{
+                          item.tokenContract | cutStringPipe: 8:8
+                        }}</span>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </form>
+        </div>
+        <div class="divider divider-horizontal d-lg-none mt-4"></div>
+        <!-- Table -->
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-6">
+          <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
-              <td mat-cell *matCellDef="let element" class="position-relative">
-                <span class="token-id">{{ element.id }}</span>
+              <td mat-cell *matCellDef="let element; let i = index" class="vertical-align-top py-4">
+                <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
               </td>
             </ng-container>
 
@@ -47,60 +88,41 @@
             <ng-container matColumnDef="token">
               <th mat-header-cell *matHeaderCellDef style="width: 30%">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
-                <a [routerLink]="['/token/token', element.hashCode]" class="text-clamp">{{ element.name }}</a
-                ><br />
-                <div class="pr-5">{{ element.desc }}</div>
-              </td>
-            </ng-container>
+                <div class="d-flex">
+                  <img src="assets/images/icons/token-logo.png" width="18" height="18" />
+                  <div class="ml-3">
+                    <a [routerLink]="['/tokens/token', element.tokenContract]">{{ element.name }}</a
+                    ><br class="d-none d-lg-block" />
+                    <div class="pr-5 d-none d-lg-block">{{ element.desc }}</div>
+                  </div>
+                </div>
+              </td></ng-container
+            >
 
             <!-- Price Column -->
-            <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef style="width: 10%">Price</th>
-              <td mat-cell *matCellDef="let element">
-                <div>
-                  <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
-                  <div class="small-text text--light-gray">{{ element.btc }} Btc</div>
-                  <div class="small-text text--light-gray">{{ element.eth }} Eth</div>
-                </div>
+            <ng-container matColumnDef="tokenContract">
+              <th mat-header-cell *matHeaderCellDef style="width: 20%">Token Contract</th>
+              <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
+                <a [routerLink]="['/contracts/', element.tokenContract]" class="text-clamp">{{
+                  element.tokenContract | cutStringPipe: 8:8
+                }}</a>
               </td>
             </ng-container>
 
             <!-- Change Column -->
-            <ng-container matColumnDef="change">
-              <th mat-header-cell *matHeaderCellDef style="width: 10%">Change (%)</th>
-              <td mat-cell *matCellDef="let element">
-                <span [ngStyle]="{ color: element.change > 0 ? '#37cc6e' : '#ff2745' }">
-                  {{ element.change > 0 ? '+' : '' }}{{ element.change }}
-                </span>
+            <ng-container matColumnDef="transfer">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%">Transfers (24H)</th>
+              <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
+                {{ element.transfer | number }}
               </td>
             </ng-container>
 
             <!-- Volume Column -->
-            <ng-container matColumnDef="volume">
-              <th mat-header-cell *matHeaderCellDef>Volume (24H)</th>
-              <td mat-cell *matCellDef="let element">${{ element.volume | number: global.formatNumber2Decimal }}</td>
-            </ng-container>
-
-            <!-- Circulating Market Cap Column -->
-            <ng-container matColumnDef="circulatingMarketCap">
-              <th mat-header-cell *matHeaderCellDef>Circulating Market Cap</th>
-              <td mat-cell *matCellDef="let element">
-                ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }}
+            <ng-container matColumnDef="transfer3d">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%">Transfers (3D)</th>
+              <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
+                {{ element.transfer3d | number }}
               </td>
-            </ng-container>
-
-            <!-- On-Chain Market Cap Column -->
-            <ng-container matColumnDef="onChainMarketCap">
-              <th mat-header-cell *matHeaderCellDef>On-Chain Market Cap</th>
-              <td mat-cell *matCellDef="let element">
-                ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }}
-              </td>
-            </ng-container>
-
-            <!-- Holders Column -->
-            <ng-container matColumnDef="holders">
-              <th mat-header-cell *matHeaderCellDef style="width: 10%">Holders</th>
-              <td mat-cell *matCellDef="let element">{{ element.holders | number: global.formatNumberOnlyDecimal }}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -111,7 +133,11 @@
               </td>
             </tr>
           </table>
-          <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+          <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="handlePageEvent($event)">
           </app-paginator>
         </div>
       </div>

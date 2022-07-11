@@ -26,7 +26,7 @@
           <td>Balance:</td>
           <td>
             {{ contractDetail?.balance | number: global.formatNumberToken }}
-            {{ global.stableToken }}
+            {{ denom }}
           </td>
         </tr>
 
@@ -35,9 +35,7 @@
           <td>
             ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
             <span class="text--light-gray ml-1 small-text"
-              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{
-                global.stableToken | uppercase
-              }})</span
+              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})</span
             >
           </td>
         </tr>
@@ -64,7 +62,7 @@
                   </mat-option>
                 </mat-select>
                 <div class="box-wallet ml-3">
-                  <a [routerLink]="['/token/token-holding/', 'tokenID-123456789010']" class="d-flex">
+                  <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="d-flex">
                     <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
                   </a>
                 </div>
@@ -93,7 +91,7 @@
                 </mat-option>
               </mat-select>
               <div class="box-wallet">
-                <a [routerLink]="['/token/token-holding/', 'tokenID-123456789010']" class="d-flex">
+                <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="d-flex">
                   <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
                 </a>
               </div>

@@ -32,12 +32,12 @@ const routes: Routes = [
   // { path: 'chaincodes', component: LayoutComponent, loadChildren: () => import('./pages/chaincodes/chaincodes.module').then(m => m.ChaincodesModule) },
   // { path: 'chanels', component: LayoutComponent, loadChildren: () => import('./pages/chanels/chanels.module').then(m => m.ChanelsModule) },
   {
-    path: 'proposal',
+    path: 'votings',
     component: LayoutComponent,
     loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
   },
   {
-    path: 'token',
+    path: 'tokens',
     component: LayoutComponent,
     loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
   },
@@ -57,7 +57,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top', relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

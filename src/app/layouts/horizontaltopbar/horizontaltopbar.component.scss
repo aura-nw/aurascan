@@ -46,6 +46,7 @@
         padding: 0;
         font-size: 2rem;
         line-height: 2.3rem;
+        position: relative;
         @media (min-width: 1440px) {
           font-size: 2rem;
           line-height: 2.5rem;
@@ -55,6 +56,33 @@
             color: var(--aura-white) !important;
           }
         }
+        &.dropdown-toggle {
+          &:after {
+            content: '';
+            position: absolute;
+            right: -24px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+            background-size: auto;
+            transition: background .35s ease-in-out;
+          }
+          &.active {
+            &:after {
+              background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
+              background-size: auto;
+              transform: rotate(180deg);
+            }
+          }
+          &:hover {
+            &:after {
+              background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
+              background-size: auto;
+              transform: unset;
+            }
+          }
+        }
       }
     }
     i.icon {
@@ -62,12 +90,11 @@
     }
     .nav-link__panel {
       position: absolute;
-      bottom: -100%;
-      transform: translateY(80%);
+      bottom: -90%;
+      transform: translateY(98%);
       background-color: var(--aura-bg-form);
       border-radius: 25px;
       z-index: 1500;
-      border: none;
       overflow: hidden;
       max-height: 0;
       transition: max-height .35s ease-in-out;
@@ -79,23 +106,25 @@
         transition: all .35s ease-in-out;
         &:first-child {
           padding-top: 16px;
-          border-top-left-radius: 20px;
-          border-top-right-radius: 20px;
+          border-top-left-radius: 25px;
+          border-top-right-radius: 25px;
         }
         &:last-child {
           padding-bottom: 16px;
-          border-bottom-left-radius: 20px;
-          border-bottom-right-radius: 20px;
+          border-bottom-left-radius: 25px;
+          border-bottom-right-radius: 25px;
         }
         &:hover {
           color: var(--aura-white);
           background-color: var(--aura-dark-gray);
         }
+        &.active {
+          color: var(--aura-white);
+        }
       }
     }
     .nav-item.dropdown:hover {
         .nav-link__panel {
-          border: 2px solid var(--aura-dark-gray);
           max-height: 900px;
         }
       }

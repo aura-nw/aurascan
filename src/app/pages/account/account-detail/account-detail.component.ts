@@ -1,12 +1,19 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DecimalPipe } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
-import local from '../../../../app/core/utils/storage/local';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
+import { balanceOf } from '../../../../app/core/utils/common/parsing';
+import local from '../../../../app/core/utils/storage/local';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
@@ -29,13 +36,6 @@ import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { getAmount, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
-import { Subject } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { takeUntil } from 'rxjs/operators';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DecimalPipe } from '@angular/common';
-import { balanceOf } from '../../../../app/core/utils/common/parsing';
-import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-account-detail',
@@ -60,7 +60,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   currentAccountDetail: IAccountDetail;
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
@@ -110,7 +110,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   ];
   displayedColumnsVesting: string[] = this.templatesVesting.map((dta) => dta.matColumnDef);
   dataSourceVesting: MatTableDataSource<any>;
-  pageType = '';
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -155,9 +154,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   pageSize = 5;
   pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
-  statusTransaction = StatusTransaction;
   pageEventType = PageEventType;
-  imgGenerateQR: boolean;
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
   tokenPrice = 0;
@@ -174,13 +171,15 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
+  timeStaking = `${this.environmentService.configValue.timeStaking}`;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
     private route: ActivatedRoute,
-    private router: Router,
     private accountService: AccountService,
     public global: Globals,
     private walletService: WalletService,
@@ -227,15 +226,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.currentAccountDetail = dataAccount;
         this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
-
-        // this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
-        // this.pageDataDelegation.length = dataAccount.delegations.length;
-
-        // this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
-        // this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
-
-        // this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
-        // this.pageDataRedelegation.length = dataAccount.redelegations.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
@@ -293,7 +283,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           res.data.forEach((trans) => {
             //get amount of transaction
             trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
             const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
             trans.type = typeTrans?.value;
             trans.status = StatusTransaction.Fail;
@@ -303,7 +293,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
               trans.type = TypeTransaction.Received;
             }
-            trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
           });
           this.dataSource.data = res.data;
 
@@ -359,7 +348,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.currentAccountDetail.balances.forEach((token) => {
           token.price = 0;
-          if (token.name === this.global.stableToken) {
+          if (token.name === this.denom) {
             token.amount = this.currentAccountDetail.total;
           }
           token.total_value = token.price * Number(token.amount);
@@ -373,17 +362,17 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.lstBalanceAcount = this.currentAccountDetail?.balances;
         this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
-        this.pageDataToken.length = this.currentAccountDetail?.balances.length;
+        this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
 
         this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
-        this.pageDataDelegation.length = this.currentAccountDetail?.delegations.length;
+        this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
         this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
-        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations.length;
+        this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
 
         this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
-        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations.length;
+        this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
         if (this.currentAccountDetail?.vesting) {
           this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
           this.pageDataVesting.length = 1;
@@ -455,7 +444,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> AURA </span>'
+        `<span class=text--primary> ${this.denom} </span>`
       );
     }
   }

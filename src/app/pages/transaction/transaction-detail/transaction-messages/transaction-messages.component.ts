@@ -1,11 +1,12 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { getAmount, Globals } from '../../../../global/global';
 import { DatePipe } from '@angular/common';
-import { DATEFORMAT, NUMBER_CONVERT, STABLE_UTOKEN } from '../../../../core/constants/common.constant';
-import { ValidatorService } from '../../../../core/services/validator.service';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { DATEFORMAT, NUMBER_CONVERT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
+import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { ValidatorService } from '../../../../core/services/validator.service';
+import { getAmount, Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -24,13 +25,20 @@ export class TransactionMessagesComponent implements OnInit {
   amountClaim = 0;
   storeCodeId = 0;
   dateVesting: string;
-  isVestingDelay: boolean;
   validatorName = '';
   validatorNameDes = '';
   listValidator: any[];
   listAmountClaim = [];
+  objMsgContract: any;
 
-  constructor(public global: Globals, private datePipe: DatePipe, private validatorService: ValidatorService) {}
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  constructor(
+    public global: Globals,
+    private datePipe: DatePipe,
+    private validatorService: ValidatorService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
@@ -45,15 +53,20 @@ export class TransactionMessagesComponent implements OnInit {
     ) {
       this.getListValidator();
       this.checkGetReward();
-    }
-    if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
       this.checkStoreCode();
+    } else if (
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
+    ) {
+      this.displayMsgRaw();
     }
     //get amount of transaction
     this.amount = getAmount(
       this.transactionDetail?.messages,
       this.transactionDetail?.type,
       this.transactionDetail?.raw_log,
+      this.coinMinimalDenom
     );
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
@@ -110,17 +123,17 @@ export class TransactionMessagesComponent implements OnInit {
                   let arrayAmount = data.filter((k) => k.key === 'amount');
                   this.amountClaim = 0;
                   arrayAmount.forEach((element) => {
-                    this.amountClaim += Number(element.value.replace(STABLE_UTOKEN, '')) / NUMBER_CONVERT || 0;
+                    this.amountClaim += Number(element.value.replace(this.coinMinimalDenom, '')) / NUMBER_CONVERT || 0;
                   });
                 } else {
                   let amount = data.find((k) => k.key === 'amount').value;
-                  this.amountClaim = amount.replace(STABLE_UTOKEN, '') / NUMBER_CONVERT || 0;
+                  this.amountClaim = amount.replace(this.coinMinimalDenom, '') / NUMBER_CONVERT || 0;
                 }
               }
               this.transactionDetail?.messages.forEach((message) => {
                 const validator = data.find((trans) => trans.key === 'validator')?.value;
                 if (validator === message.validator_address) {
-                  let amount = data.find((k) => k.key === 'amount').value.replace(STABLE_UTOKEN, '');
+                  let amount = data.find((k) => k.key === 'amount').value.replace(this.coinMinimalDenom, '');
                   amount = amount / NUMBER_CONVERT || 0;
                   this.listAmountClaim.push(amount);
                 }
@@ -130,6 +143,16 @@ export class TransactionMessagesComponent implements OnInit {
         });
       }
     } catch (e) {}
+  }
+
+  displayMsgRaw(): void {
+    const obj = this.transactionDetail?.tx?.tx?.body?.messages[0];
+    this.objMsgContract = Object.keys(obj).reduce((newObj, key) => {
+      if (key === 'msg' || key === 'funds') {
+        newObj[key] = obj[key];
+      }
+      return newObj;
+    }, {});
   }
 
   checkStoreCode(): void {

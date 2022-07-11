@@ -20,13 +20,12 @@ import { PopupDelegateModule } from './popup-delegate/popup-delegate.module';
 import { PaginatorModule } from '../../shared/components/paginator/paginator.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { LayoutModule } from '@angular/cdk/layout';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.component';
 
 @NgModule({
-  declarations: [
-    ValidatorsComponent,
-    ValidatorsDetailComponent
-  ],
+  declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent],
   imports: [
     CommonModule,
     ValidatorsRoutingModule,
@@ -42,8 +41,17 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     PopupDelegateModule,
     PaginatorModule,
     LayoutModule,
-    MatTooltipModule
+    MatTooltipModule,
+    LoadingImageModule,
   ],
-  providers: [CommonService, ValidatorService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe]
+  providers: [
+    CommonService,
+    ValidatorService,
+    BlockService,
+    TransactionService,
+    AccountService,
+    MappingErrorService,
+    DecimalPipe,
+  ],
 })
-export class ValidatorsModule { }
+export class ValidatorsModule {}
