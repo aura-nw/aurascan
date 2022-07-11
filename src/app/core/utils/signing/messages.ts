@@ -1,15 +1,6 @@
 import { ChainInfo } from '@keplr-wallet/types';
-import BigNumber from 'bignumber.js';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
-
-export function Coin({ amount, denom }, coinLookup) {
-  const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom);
-  return {
-    amount: new BigNumber(amount).dividedBy(lookup.chainToViewConversionFactor).toFixed(),
-    denom: lookup.chainDenom,
-  };
-}
 
 // Staking
 export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
@@ -93,7 +84,7 @@ export function Redelegate(senderAddress, { src_address, to_address, amount }, n
     validatorDstAddress: to_address,
     amount: {
       amount: amount.amount + '',
-      denom: network.currencies[0].coinDenom,
+      denom: network.currencies[0].coinMinimalDenom,
     },
   });
   return {
