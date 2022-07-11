@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { CONTRACT_TABLE_TEMPLATES } from 'src/app/core/constants/contract.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IResponsesSuccess, TableTemplate } from 'src/app/core/models/common.model';
 import { IContractsResponse, ITableContract } from 'src/app/core/models/contract.model';
 import { ContractService } from 'src/app/core/services/contract.service';
@@ -69,7 +70,15 @@ export class ContractsTransactionsComponent implements OnInit {
     private contractService: ContractService,
     private activeRouter: ActivatedRoute,
     private layout: BreakpointObserver,
-  ) {}
+    private environmentService: EnvironmentService,
+  ) {
+    const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
+
+    valueColumn &&
+      ((v) => {
+        v.suffix = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+      })(valueColumn);
+  }
 
   ngOnInit(): void {}
 
