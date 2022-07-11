@@ -13,7 +13,7 @@ export class ContractsOverviewCardComponent implements OnInit {
   selectedToken = '$0.00';
   assetsType = TYPE_ACCOUNT;
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(public global: Globals, private environmentService: EnvironmentService) {}
 

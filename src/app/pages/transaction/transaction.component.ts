@@ -32,7 +32,7 @@ export class TransactionComponent implements OnInit {
   pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private transactionService: TransactionService,

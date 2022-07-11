@@ -15,7 +15,7 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
 

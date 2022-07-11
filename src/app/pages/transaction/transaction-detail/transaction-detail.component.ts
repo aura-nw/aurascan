@@ -28,7 +28,7 @@ export class TransactionDetailComponent implements OnInit {
   jsonStr: string;
   errorMessage = '';
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private route: ActivatedRoute,
