@@ -28,6 +28,7 @@ export class TokenContractWriteComponent implements OnInit {
   chainInfo = this.environmentService.configValue.chain_info;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     public walletService: WalletService,
@@ -129,7 +130,7 @@ export class TokenContractWriteComponent implements OnInit {
           const fee: any = {
             amount: [
               {
-                denom: this.denom,
+                denom: this.coinMinimalDenom,
                 amount: '1',
               },
             ],

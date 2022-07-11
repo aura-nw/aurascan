@@ -47,6 +47,7 @@ export class BlockDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     private route: ActivatedRoute,
@@ -82,7 +83,7 @@ export class BlockDetailComponent implements OnInit {
           return;
         }
         res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;

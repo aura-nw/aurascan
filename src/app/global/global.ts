@@ -13,7 +13,7 @@ export class Globals {
   maxNumberInput = 100000000000000;
 }
 
-export function getAmount(arrayMsg, type, rawRog = '', denom : string) {
+export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom : string) {
   let amount = 0;
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;
@@ -32,7 +32,7 @@ export function getAmount(arrayMsg, type, rawRog = '', denom : string) {
     //check error with rawlog
     try {
       const jsonData = JSON.parse(rawRog);
-      amount = jsonData[0].events[0].attributes[1].value.replace(denom,'');
+      amount = jsonData[0].events[0].attributes[1].value.replace(coinMinimalDenom,'');
     } catch {
     }
   }
