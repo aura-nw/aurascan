@@ -57,7 +57,7 @@
         </div>
         <div class="col-3 fw-semibold">{{ 100 - proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%</div>
         <div class="col-4 text-end">
-          {{ proposalDetail.total_bonded_token - proposalDetail.voted | number: global.formatNumberToken }}
+          {{ proposalDetail.total_bonded_token - proposalDetail.pro_total_vote | number: global.formatNumberToken }}
         </div>
       </div>
     </div>
