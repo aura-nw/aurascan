@@ -30,7 +30,7 @@ export async function createSignBroadcast(
     const fee: StdFee = {
       amount: [
         {
-          denom: network.currencies[0].coinDenom,
+          denom: network.currencies[0].coinMinimalDenom,
           amount: '1',
         },
       ],

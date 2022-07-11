@@ -90,6 +90,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -441,7 +442,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.denom,
+              denom: this.coinMinimalDenom,
             },
           },
           senderAddress: this.userAddress,
@@ -493,7 +494,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             from: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.denom,
+              denom: this.coinMinimalDenom,
             },
           },
           senderAddress: this.userAddress,
@@ -521,7 +522,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to_address: this.selectedValidator,
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.denom,
+              denom: this.coinMinimalDenom,
             },
           },
           senderAddress: this.userAddress,
