@@ -5,6 +5,12 @@ import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
+interface RedisResponse {
+  Code: string;
+  Message: string;
+  ContractAddress: string;
+  Verified: boolean;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -20,10 +26,7 @@ export class WSService {
 
   contractAddress = '';
 
-  constructor(
-    private environmentService: EnvironmentService,
-    private toastr: NgxToastrService,
-  ) {
+  constructor(private environmentService: EnvironmentService, private toastr: NgxToastrService) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();
   }
@@ -93,18 +96,32 @@ export class WSService {
     }
 
     register.subscribe((data: any) => {
-      const { Verified, ContractAddress } = (data && JSON.parse(data)) || { Verified: false, ContractAddress: '' };
-
-      if (ContractAddress === this.contractAddress) {
+      //const { Verified, ContractAddress } = (data && JSON.parse(data)) || { Verified: false, ContractAddress: '' };
+      const redisResponse: RedisResponse = (data && JSON.parse(data)) || {
+        Code: '',
+        Message: '',
+        Verified: false,
+        ContractAddress: '',
+      };
+      if (redisResponse.ContractAddress === this.contractAddress) {
         callBack && callBack();
-        if (Verified) {
+        if (redisResponse.Verified) {
           this.toastr
             .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
             .pipe(take(1))
             .subscribe((_) => {
               tabCallBack && tabCallBack();
             });
-        } else {
+        } else if (redisResponse.Code === 'E001') {
+          this.toastr
+            .errorWithTap(
+              `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
+            )
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
+        } else if (redisResponse.Code === 'E002') {
           this.toastr
             .errorWithTap(
               `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
