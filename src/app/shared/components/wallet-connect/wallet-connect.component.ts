@@ -20,7 +20,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
-  chainId = this.envService.apiUrl.value.chainId;
+  chainId = this.envService.configValue.chainId;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   destroy$ = new Subject();

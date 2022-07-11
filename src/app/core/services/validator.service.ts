@@ -7,7 +7,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 
 @Injectable()
 export class ValidatorService extends CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -51,6 +51,6 @@ export class ValidatorService extends CommonService {
   }
 
   getValidatorAvatar(validatorAddress: string): string {
-    return `${this.environmentService.apiUrl.getValue()?.validator_s3}/${validatorAddress}.png`;
+    return `${this.environmentService.configValue.validator_s3}/${validatorAddress}.png`;
   }
 }

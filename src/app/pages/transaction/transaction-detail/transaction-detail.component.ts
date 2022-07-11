@@ -34,7 +34,7 @@ export class TransactionDetailComponent implements OnInit {
   eTransType = TRANSACTION_TYPE_ENUM;
   errorMessage = '';
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private route: ActivatedRoute,

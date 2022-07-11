@@ -17,7 +17,7 @@ import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.com
 export class FooterComponent implements OnInit {
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
   @Input() label!: string;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  chainId = this.environmentService.configValue.chainId;
 
   dashboardURL = 'dashboard';
   blocksURL = 'blocks';

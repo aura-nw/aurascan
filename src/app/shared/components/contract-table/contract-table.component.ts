@@ -48,7 +48,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   pageData: PageEvent = null;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     public translate: TranslateService,

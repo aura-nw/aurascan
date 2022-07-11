@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { WalletService } from 'src/app/core/services/wallet.service';
-
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 @Component({
   selector: 'app-read-contract',
   templateUrl: './read-contract.component.html',
@@ -19,7 +18,9 @@ export class ReadContractComponent implements OnInit {
   currentFrom = null;
   objQuery = [];
 
-  constructor(public walletService: WalletService) {}
+  chainInfo = this.environmentService.configValue.chain_info;
+
+  constructor(public walletService: WalletService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     this.jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
@@ -100,7 +101,7 @@ export class ReadContractComponent implements OnInit {
   }
 
   async executeQuery(queryData, saveResponse = false) {
-    const client = await SigningCosmWasmClient.connect(ChainsInfo[this.walletService.chainId].rpc);
+    const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
     try {
       const config = await client.queryContractSmart(this.contractDetailData.contract_address, queryData);
       if (saveResponse) {

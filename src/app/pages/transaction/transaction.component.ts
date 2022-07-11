@@ -36,7 +36,7 @@ export class TransactionComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   statusTransaction = StatusTransaction;
   loading = true;
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private router: Router,
