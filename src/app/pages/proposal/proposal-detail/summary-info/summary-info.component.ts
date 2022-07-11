@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
@@ -133,8 +133,8 @@ export class SummaryInfoComponent implements OnInit {
             };
 
             if (pro_turnout >= quorum) {
-              if (pro_votes_yes >= pro_total_vote / 2) {
-                if (pro_votes_no_with_veto < pro_total_vote / 3) {
+              if (pro_votes_yes >= (pro_total_vote - pro_votes_abstain) / 2) {
+                if (pro_votes_no_with_veto < (pro_total_vote - pro_votes_abstain) / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
