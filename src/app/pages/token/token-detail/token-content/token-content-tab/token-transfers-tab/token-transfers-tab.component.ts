@@ -1,16 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { TableTemplate } from '../../../../../../core/models/common.model';
-import { MatTableDataSource } from '@angular/material/table';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { TokenTab } from '../../../../../../core/constants/token.enum';
-import { Globals } from '../../../../../../global/global';
-import { CommonService } from '../../../../../../core/services/common.service';
 import { PageEvent } from '@angular/material/paginator';
-import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { TokenService } from '../../../../../../core/services/token.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { TokenTab } from '../../../../../../core/constants/token.enum';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
-import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { TableTemplate } from '../../../../../../core/models/common.model';
+import { CommonService } from '../../../../../../core/services/common.service';
+import { TokenService } from '../../../../../../core/services/token.service';
+import { shortenAddress } from '../../../../../../core/utils/common/shorten';
+import { Globals } from '../../../../../../global/global';
 
 interface CustomPageEvent {
   next: number;
@@ -44,13 +43,14 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   template: Array<TableTemplate> = [];
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
-  typeTokenTab = TokenTab;
   loading = true;
   token: string = '';
   typeTransaction = TYPE_TRANSACTION;
-  pageData: PageEvent;
-  pageSize = 10;
-  pageIndex = 0;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 10,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
   tokenType = 'Aura';
@@ -76,11 +76,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
           data.to_address.includes(this.keyWord),
       );
       if (filterData.length > 0) {
-        this.pageData = {
-          length: filterData.length,
-          pageSize: 10,
-          pageIndex: 1,
-        };
+        this.pageData.length = filterData.length;
         if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
           this.isSearchAddress = true;
         }
@@ -106,11 +102,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
         });
 
         this.dataSource = new MatTableDataSource(this.tokenDataList);
-        this.pageData = {
-          length: res.length,
-          pageSize: 10,
-          pageIndex: 1,
-        };
+        this.pageData.length = res.length;
       }
       this.loading = false;
     });

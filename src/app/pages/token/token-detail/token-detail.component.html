@@ -6,12 +6,12 @@
 </div>
 <div class="row">
   <div class="col-12 col-lg-6">
-    <app-token-overview [tokenType]="tokenType" *ngIf="tokenType"></app-token-overview>
+    <app-token-overview [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-overview>
   </div>
 
   <div class="col-12 col-lg-6">
-    <app-token-summary></app-token-summary>
+    <app-token-summary [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-summary>
   </div>
 </div>
 
-<app-token-content [tokenType]="tokenType" *ngIf="tokenType"></app-token-content>
+<app-token-content [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-content>

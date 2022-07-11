@@ -20,7 +20,7 @@ import { Globals } from 'src/app/global/global';
 })
 export class ValidatorsDetailComponent implements OnInit {
   currentAddress: string;
-  currentValidatorDetail;
+  currentValidatorDetail: any;
 
   lengthBlock: number;
   lengthDelegator: number;

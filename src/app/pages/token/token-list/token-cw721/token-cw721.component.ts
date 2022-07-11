@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { TableTemplate } from '../../../../core/models/common.model';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Globals } from '../../../../global/global';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import {MatSort, MatSortable, Sort} from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw721',

@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
 
@@ -101,7 +102,11 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
     { matColumnDef: 'percentage', headerCellDef: 'percentage' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  pageData: PageEvent;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 10,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   constructor(public global: Globals) {}
@@ -116,22 +121,14 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
         (data) => data.address.includes(this.keyWord) || data.hashCode.includes(this.keyWord),
       );
       if (filterData.length > 0) {
-        this.pageData = {
-          length: filterData.length,
-          pageSize: 10,
-          pageIndex: 1,
-        };
+        this.pageData.length = filterData.length;
         this.dataSource = new MatTableDataSource<any>(filterData);
       }
     }
   }
 
   getTokenData() {
-    this.pageData = {
-      length: this.mockData.length,
-      pageSize: 10,
-      pageIndex: 1,
-    };
+    this.pageData.length = this.mockData.length;
     this.loading = true;
     this.dataSource = new MatTableDataSource<any>(this.mockData);
     this.loading = false;
