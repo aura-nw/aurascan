@@ -32,12 +32,13 @@
         <!-- Table -->
         <ng-container *ngIf="showedData?.length > 0; else noValues">
             <div>
-                <div class="nft-cards">
-                    <div class="nft-cards__col" *ngFor="let item of showedData">
+                <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
+                    <div class="nft-cards__col col" *ngFor="let item of showedData">
                         <div class="nft-cards__item-border">
                             <a href="{{item.link}}" class="nft-cards__item">
                                 <div class="nft-cards__img">
-                                    <img src="{{item.img}}" alt="">
+                                    <img *ngIf="item.img" src="{{ item.img }}" alt="" />
+                                    <img *ngIf="!item.img" src="assets/images/aura__ntf-dafault-img.png" alt="" />
                                     <div class="nft-cards__label"><span class="text-gradient">{{item.symbol}}</span></div>
                                 </div>
                                 <div class="mt-3">
