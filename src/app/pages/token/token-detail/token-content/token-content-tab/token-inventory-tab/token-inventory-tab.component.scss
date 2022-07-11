@@ -1,9 +1,5 @@
 .nft-cards {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -31px;
   &__col {
-    padding: 0 31px;
     overflow: hidden;
     margin-bottom: var(--spacer-6);
   }
@@ -25,8 +21,8 @@
     padding: var(--spacer-3);
     border-radius: var(--spacer-2);
     background-color: var(--aura-black);
-    width: 224px;
-    height: 276px;
+    width: 100%;
+    height: auto;
   }
   &__img {
     position: relative;
@@ -54,10 +50,5 @@
     background-color: var(--aura-dark-gray);
     padding: 0 var(--spacer-2);
     border-radius: var(--spacer-1);
-  }
-  .token-id {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
 }

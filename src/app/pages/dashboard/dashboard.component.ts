@@ -12,6 +12,7 @@ import { PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +41,7 @@ export class DashboardComponent implements OnInit {
   dataBlock: any[];
 
   templatesTx: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -52,12 +53,15 @@ export class DashboardComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
     private numberPipe: DecimalPipe,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -93,12 +97,6 @@ export class DashboardComponent implements OnInit {
   getListBlock(): void {
     this.blockService.blocks(this.PAGE_SIZE, 0).subscribe((res) => {
       if (res?.data?.length > 0) {
-        res.data.forEach((block) => {
-          block.block_hash_format = block.block_hash.replace(
-            block.block_hash.substring(6, block.block_hash.length - 6),
-            '...',
-          );
-        });
         this.dataSourceBlock = new MatTableDataSource(res.data);
         this.dataBlock = res.data;
       }
@@ -112,7 +110,6 @@ export class DashboardComponent implements OnInit {
           trans.typeOrigin = trans.type;
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
-          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.dataSourceTx = new MatTableDataSource(res.data);
         this.dataTx = res.data;
@@ -135,6 +132,7 @@ export class DashboardComponent implements OnInit {
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
       const data1 = res.data.map((i) => i.count);
       let categories = res.data.map((i) => i.timestamp);
+
       this.chartOptions.series = [
         {
           name: 'transactions',
@@ -172,7 +170,7 @@ export class DashboardComponent implements OnInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> AURA </span>'
+        `<span class=text--primary> ${this.denom} </span>`
       );
     }
   }

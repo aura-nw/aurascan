@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractTransactionType } from 'src/app/core/constants/contract.enum';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { DROPDOWN_ELEMENT, IContractPopoverData, ITableContract } from 'src/app/core/models/contract.model';
 import { balanceOf, parseLabel } from 'src/app/core/utils/common/parsing';
@@ -47,7 +48,13 @@ export class ContractTableComponent implements OnInit, OnChanges {
   pageData: PageEvent = null;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
-  constructor(public translate: TranslateService, public global: Globals) {}
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
+  constructor(
+    public translate: TranslateService,
+    public global: Globals,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnChanges(): void {
     this.getListContractTransaction();
@@ -95,7 +102,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       to_address: data?.to || '-',
       price: 0,
       status: 'Success',
-      symbol: 'AURA',
+      symbol: this.denom,
       tokenAddress: this.contractInfo?.contractsAddress,
       tx_hash: data?.txHash || '-',
       gas_used: data.gas_used,

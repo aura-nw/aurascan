@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
-import { TokenTab, TokenType } from '../../../../core/constants/token.enum';
+import { TokenTab } from '../../../../core/constants/token.enum';
 
 @Component({
   selector: 'app-token-content',
@@ -9,7 +9,7 @@ import { TokenTab, TokenType } from '../../../../core/constants/token.enum';
   styleUrls: ['./token-content.component.scss'],
 })
 export class TokenContentComponent implements OnInit {
-  @Input() tokenType: TokenType;
+  @Input() isNFTContract: boolean;
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = TOKEN_TAB.filter((vote) => this.tabToken.includes(vote.key)).map((vote) => ({
@@ -24,14 +24,14 @@ export class TokenContentComponent implements OnInit {
   isSearchAddress = false;
   resultSearch = 0;
   tokenTab = TokenTab;
-  tabsBackup;
+  tabsBackup: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor() {}
 
   ngOnInit(): void {
     this.TABS = TOKEN_TAB.filter((vote) =>
-      (this.tokenType === TokenType.NFT ? this.tabNFT : this.tabToken).includes(vote.key),
+      (this.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key),
     ).map((vote) => ({
       ...vote,
       value: vote.value,

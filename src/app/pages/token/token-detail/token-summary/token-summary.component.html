@@ -5,8 +5,8 @@
         <tr>
           <td colspan="2">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="">
-                <span class="fw-semibold">Profile Summary </span>
+              <div class="body">
+                <span class="fw-semibold text--white">Profile Summary </span>
                 <a class="text--green" href="javascript:void(0)">[Edit]</a>
               </div>
               <div>
@@ -32,19 +32,19 @@
           </td>
         </tr>
 
-<!--        <tr>-->
-<!--          <td colspan="2">-->
-<!--            <div class="d-flex align-items-center py-2">-->
-<!--              <div class="first-col">Decimals:</div>-->
-<!--              <div>6</div>-->
-<!--            </div>-->
-<!--          </td>-->
-<!--        </tr>-->
+        <tr *ngIf="!isNFTContract">
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col">Decimals:</div>
+              <div>6</div>
+            </div>
+          </td>
+        </tr>
 
         <tr>
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
-              <div class="first-col">Offcial Site:</div>
+              <div class="first-col">Official Site:</div>
               <div><a class="text--green" href="https://aura.network">https://aura.network</a></div>
             </div>
           </td>
@@ -90,7 +90,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr *ngIf="isNFTContract">
           <td colspan="2"></td>
         </tr>
       </table>

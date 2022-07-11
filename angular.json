@@ -26,11 +26,8 @@
                         "allowedCommonJsDependencies": [
                             "rxjs", 
                             "core-js",
-                            "chart.js",
-                            "chartist",
                             "qrcode",
                             "@cosmjs/stargate",
-                            "ngx-lightbox",
                             "simplebar",
                             "simplebar-angular",
                             "@cosmjs/cosmwasm-stargate"
@@ -75,7 +72,7 @@
                                 {
                                     "type": "anyComponentStyle",
                                     "maximumWarning": "4kb",
-                                    "maximumError": "5kb"
+                                    "maximumError": "6kb"
                                 }
                             ],
                             "fileReplacements": [{

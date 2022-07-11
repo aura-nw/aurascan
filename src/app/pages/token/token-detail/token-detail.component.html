@@ -1,17 +1,17 @@
 <div class="d-flex">
   <img src="assets/icons/icons-svg/color/aura.svg" alt="" width="32px" height="32px">
-  <h1 class="title-medium title-small-mob mb-0 text--white ml-2">
+  <h1 class="sub-text title-small-mob mb-0 text--white ml-2 fw-500">
     Token <span class="text--light-gray">{{ tokenName }}</span>
   </h1>
 </div>
 <div class="row">
   <div class="col-12 col-lg-6">
-    <app-token-overview [tokenType]="tokenType" *ngIf="tokenType"></app-token-overview>
+    <app-token-overview [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-overview>
   </div>
 
   <div class="col-12 col-lg-6">
-    <app-token-summary></app-token-summary>
+    <app-token-summary [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-summary>
   </div>
 </div>
 
-<app-token-content [tokenType]="tokenType" *ngIf="tokenType"></app-token-content>
+<app-token-content [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-content>

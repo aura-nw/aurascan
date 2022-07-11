@@ -7,6 +7,7 @@ import { TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-account-table',
@@ -26,11 +27,14 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   currentPage = 0;
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {}

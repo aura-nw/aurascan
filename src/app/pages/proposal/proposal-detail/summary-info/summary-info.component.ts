@@ -36,15 +36,17 @@ export class SummaryInfoComponent implements OnInit {
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: string } = null;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  chainId = this.environmentService.configValue.chainId;
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  currentStatus: VOTING_STATUS | string = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;;
+  currentStatus: VOTING_STATUS | string = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
   finalSubTitle: VOTING_SUBTITLE | string = VOTING_SUBTITLE.PASS;
   currentSubTitle = '';
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private proposalService: ProposalService,
@@ -117,7 +119,6 @@ export class SummaryInfoComponent implements OnInit {
               pro_votes_abstain,
               pro_turnout,
               quorum,
-              voted,
             } = this.proposalDetail;
 
             const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
@@ -134,8 +135,8 @@ export class SummaryInfoComponent implements OnInit {
             };
 
             if (pro_turnout >= quorum) {
-              if (pro_votes_yes >= pro_total_vote / 2) {
-                if (pro_votes_no_with_veto < pro_total_vote / 3) {
+              if (pro_votes_yes >= (pro_total_vote - pro_votes_abstain) / 2) {
+                if (pro_votes_no_with_veto < (pro_total_vote - pro_votes_abstain) / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
@@ -156,7 +157,6 @@ export class SummaryInfoComponent implements OnInit {
           if (e === null) {
           } else {
             this.updateVoteResultFromNode(e.data);
-
             this.parsingProposalStatus(this.proposalDetail);
           }
         }),
@@ -174,6 +174,8 @@ export class SummaryInfoComponent implements OnInit {
     const pro_votes_no_with_veto = balanceOf(+data.pro_votes_no_with_veto);
     const pro_votes_abstain = balanceOf(+data.pro_votes_abstain);
 
+    const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
+
     return {
       ...data,
       pro_voting_start_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
@@ -187,7 +189,7 @@ export class SummaryInfoComponent implements OnInit {
       pro_votes_no,
       pro_votes_no_with_veto,
       pro_votes_abstain,
-      pro_total_vote: pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain,
+      pro_total_vote,
     };
   }
 
@@ -244,11 +246,11 @@ export class SummaryInfoComponent implements OnInit {
       };
       return resObj;
     }
-    return resObj = {
+    return (resObj = {
       value: 'reject',
       class: 'text--danger',
       key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
-    };
+    });
   }
 
   openVoteDialog(proposalDetail) {
@@ -322,17 +324,14 @@ export class SummaryInfoComponent implements OnInit {
     const pro_votes_no = balanceOf(+data.tally.no);
     const pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
     const pro_votes_abstain = balanceOf(+data.tally.abstain);
-
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
 
     const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
     const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
     const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
-    const abstainPercent = (pro_votes_abstain * 100) / pro_total_vote || 0;
-
-    const voted_percent = yesPercent + noPercent + noWithVetoPercent;
-
+    const abstainPercent = (pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
     const voted = pro_total_vote - pro_votes_abstain;
+    const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
 
     return {
       pro_votes_yes,

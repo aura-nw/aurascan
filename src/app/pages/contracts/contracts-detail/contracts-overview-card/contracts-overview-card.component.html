@@ -26,7 +26,7 @@
           <td>Balance:</td>
           <td>
             {{ contractDetail?.balance | number: global.formatNumberToken }}
-            {{ global.stableToken }}
+            {{ denom }}
           </td>
         </tr>
 
@@ -35,9 +35,7 @@
           <td>
             ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
             <span class="text--light-gray ml-1 small-text"
-              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{
-                global.stableToken | uppercase
-              }})</span
+              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})</span
             >
           </td>
         </tr>

@@ -243,7 +243,7 @@
             <th mat-header-cell *matHeaderCellDef>Total Deposit</th>
             <td mat-cell *matCellDef="let element">
               {{ element.pro_total_deposits | number: global.formatNumberToken }}
-              <span class="text--primary">{{ global.stableToken }}</span>
+              <span class="text--primary">{{ denom }}</span>
             </td>
           </ng-container>
 

@@ -25,7 +25,7 @@ export class CompilerOutputComponent implements OnInit {
     this.logError = !this.logError;
   }
 
-  switchStageEmmit() {
+  switchStageEmit() {
     this.switchStage.emit();
   }
 

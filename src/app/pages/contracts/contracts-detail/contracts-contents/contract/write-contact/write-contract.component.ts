@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
-import { GAS_ESTIMATE, AURA_DENOM } from 'src/app/core/constants/common.constant';
-import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
@@ -23,10 +23,16 @@ export class WriteContractComponent implements OnInit {
   currentFrom = 0;
   walletAccount: any;
 
+  chainInfo = this.environmentService.configValue.chain_info;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+
   constructor(
     public walletService: WalletService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +113,7 @@ export class WriteContractComponent implements OnInit {
           objWriteContract[key] = Number(element?.value);
         }
       });
+      contractTemp.properties[name].checkErr = err;
 
       contractTemp.properties[name].checkErr = err;
       if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
@@ -117,11 +124,11 @@ export class WriteContractComponent implements OnInit {
         [name]: objWriteContract,
       };
       let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-      const client = await SigningCosmWasmClient.connectWithSigner(ChainsInfo[this.walletService.chainId].rpc, singer);
+      const client = await SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer);
       const fee: any = {
         amount: [
           {
-            denom: AURA_DENOM,
+            denom: this.coinMinimalDenom,
             amount: '1',
           },
         ],

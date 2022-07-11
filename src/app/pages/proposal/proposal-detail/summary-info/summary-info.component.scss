@@ -1,43 +1,11 @@
 .card {
-  &__header {
-    border-bottom: 1px solid var(--bs-light);
-  }
-
   .button-outline {
     &__in-card {
       box-shadow: 2px 1000px 1px #20262B inset !important;
     }
   }
 
-  &__title {
-    font-size: 2.4rem;
-    line-height: 3.2rem;
-    font-weight: 500;
-    color: var(--aura-white);
-
-    a {
-      text-decoration: none;
-    }
-  }
-
-  &__title-mobile {
-    font-size: 2rem;
-    line-height: 2.3rem;
-    font-weight: 500;
-    color: var(--aura-white);
-    align-self: flex-end;
-  }
-
   &__status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    .button-mobile {
-      height: 40px;
-      padding: 8px 18px;
-    }
-
     .proposal-status-mobile {
       border-radius: 8px;
       text-transform: capitalize;
@@ -46,36 +14,11 @@
       align-items: center;
       justify-content: center;
       padding: 0 var(--spacer-4);
-
-      .title-small-mobile {
-        font-size: 14px;
-        font-weight: 600;
-      }
     }
   }
-
-  &__info {
-    color: var(--aura-white);
-
-    .body-bold {
-      font-weight: 600;
-    }
-
-  }
 }
 
-.message {
-  color: var(--aura-greyscale-4);
-}
-
-.editorial-container {
-  max-height: 360px;
-  overflow-y: scroll;
-  padding: 16px;
-  border: 1px var(--aura-light-gray);
-}
-
-.proposal__summary-total {
+::ng-deep.proposal__summary-total {
   color: var(--aura-white);
 
   .vote-bar {
@@ -84,9 +27,10 @@
     border-radius: 4px;
     position: relative;
 
-    ul {
+    ul.vote-bar-ul {
       background-color: #e3e3e3;
       border-radius: 4px;
+      overflow: hidden;
 
       li.bg {
         &--primary {
@@ -107,6 +51,10 @@
 
         &--blue {
           background-color: var(--aura-dark-blue);
+        }
+
+        &--voted {
+          background-color: var(--aura-voted);
         }
 
       }
@@ -131,18 +79,20 @@
         content: '';
         position: absolute;
         left: 50%;
-        top: 101%;
+        top: 90%;
         transform: translateX(-50%);
-        height: 98%;
+        height: 120%;
         width: 4px;
         background-color: var(--aura-white);
+
+        border-radius: 2px;
       }
 
       &:after {
         content: '';
         position: absolute;
         left: 50%;
-        bottom: 8px;
+        bottom: 10px;
         transform: translateX(-50%);
 
         width: 0;
@@ -254,45 +204,31 @@
 
   .vote-status {
     position: relative;
+    height: 24px;
+  }
 
-    &:before {
-      position: absolute;
-      content: '';
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      left: -32px;
-      top: 0;
+  .vote {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 8px;
+
+    border-radius: 50%;
+
+    &.--w-0 {
+      width: 0px;
     }
 
-    &--primary {
-      &:before {
-        background-color: var(--aura-primary);
-      }
+    &.status--primary {
+      background-color: var(--aura-primary);
     }
 
-    &--danger {
-      &:before {
-        background-color: var(--aura-danger);
-      }
+    &.status--danger {
+      background-color: var(--aura-danger);
     }
 
-    &--info {
-      &:before {
-        background-color: var(--aura-info);
-      }
-    }
-
-    &--secondary {
-      &:before {
-        background-color: var(--aura-light-gray);
-      }
-    }
-
-    &--dark-gray {
-      &:before {
-        background-color: var(--aura-dark-gray);
-      }
+    &.status--info {
+      background-color: var(--aura-info);
     }
   }
 }
