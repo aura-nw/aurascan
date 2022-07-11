@@ -31,7 +31,9 @@ export class TransactionComponent implements OnInit {
   pageSize = 20;
   typeTransaction = TYPE_TRANSACTION;
   loading = true;
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     private transactionService: TransactionService,
@@ -50,7 +52,7 @@ export class TransactionComponent implements OnInit {
       if (res?.data?.length > 0) {
         res.data.forEach((trans) => {
           //get amount of transaction
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;

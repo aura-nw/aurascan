@@ -19,7 +19,7 @@ export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
     validatorAddress: to[0],
     amount: {
       amount: amount.amount + '',
-      denom: network.currencies[0].coinDenom,
+      denom: network.currencies[0].coinMinimalDenom,
     },
   });
   return {
@@ -37,7 +37,7 @@ export function Undelegate(senderAddress, { from, amount }, network: ChainInfo) 
       validatorAddress: from[0],
       amount: {
         amount: amount.amount + '',
-        denom: network.currencies[0].coinDenom,
+        denom: network.currencies[0].coinMinimalDenom,
       },
     }),
   };
