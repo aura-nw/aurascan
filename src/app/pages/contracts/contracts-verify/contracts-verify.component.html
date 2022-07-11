@@ -49,7 +49,7 @@
           </label>
           <input formControlName="link" type="text" class="form-control" id="link" maxlength="200" />
           <ng-container *ngIf="formControls['link'].touched">
-            <div class="error" *ngIf="formControls['link'].errors?.required">Required link github contract code</div>
+            <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
             <div class="error" *ngIf="formControls['link'].errors?.maxlength">
               Link GitHub Source Code is not allowed more 200 characters!
             </div>
@@ -68,9 +68,7 @@
             maxlength="200"
             placeholder="xxx.wasm" />
           <ng-container *ngIf="formControls['wasm_file'].touched">
-            <div class="error" *ngIf="formControls['wasm_file'].errors?.required">
-              Required name of compiled wasm file
-            </div>
+            <div class="error" *ngIf="formControls['wasm_file'].errors?.required">Required</div>
             <div class="error" *ngIf="formControls['wasm_file'].errors?.maxlength">
               Compiled wasm file name is not allowed more 200 characters!
             </div>
@@ -92,7 +90,7 @@
           </mat-select>
 
           <ng-container *ngIf="formControls['compiler_version'].touched">
-            <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required compiler version</div>
+            <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
           </ng-container>
         </div>
 
