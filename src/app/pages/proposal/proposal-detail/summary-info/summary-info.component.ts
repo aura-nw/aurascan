@@ -322,7 +322,6 @@ export class SummaryInfoComponent implements OnInit {
     const pro_votes_no = balanceOf(+data.tally.no);
     const pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
     const pro_votes_abstain = balanceOf(+data.tally.abstain);
-
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
 
     const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
