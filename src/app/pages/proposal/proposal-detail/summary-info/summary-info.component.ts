@@ -329,11 +329,9 @@ export class SummaryInfoComponent implements OnInit {
     const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
     const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
     const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
-    const abstainPercent = (pro_votes_abstain * 100) / pro_total_vote || 0;
-
-    const voted_percent = yesPercent + noPercent + noWithVetoPercent;
-
+    const abstainPercent = (pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
     const voted = pro_total_vote - pro_votes_abstain;
+    const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
 
     return {
       pro_votes_yes,
