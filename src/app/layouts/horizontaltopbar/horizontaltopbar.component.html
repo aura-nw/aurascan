@@ -4,10 +4,10 @@
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <a routerLink="/" class="logo logo-dark">
-                    <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
+                    <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100">
                 </a>
                 <a routerLink="/" class="logo logo-light">
-                    <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
+                    <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100">
                 </a>
             </div>
             <div class="divider divider-vertical mx-12 d-none d-lg-block"></div>
@@ -26,11 +26,11 @@
                             />
                             <button type="submit" class="btn-search {{searchValue && searchValue.length > 0 ? 'd-none' : ''}}"
                                     (click)="handleSearch()">
-                                <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                                <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                             </button>
                             <button type="reset" class="btn-reset {{(!searchValue || searchValue && searchValue.length === 0) ? 'd-none' : ''}}"
                                     (click)="searchValue = null">
-                                <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+                                <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
                             </button>
                         </div>
                     </form>
@@ -55,11 +55,11 @@
                 />
                 <button type="submit" class="btn-search {{searchValue && searchValue.length > 0 ? 'd-none' : ''}}"
                         (click)="handleSearch()">
-                    <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                    <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button type="reset" class="btn-reset {{(!searchValue || searchValue && searchValue.length === 0) ? 'd-none' : ''}}"
                         (click)="searchValue = null">
-                    <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+                    <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
             </div>
         </form>

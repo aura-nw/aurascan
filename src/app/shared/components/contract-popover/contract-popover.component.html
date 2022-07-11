@@ -12,8 +12,8 @@
         alt="{{ popoverData.code }}"
         [src]="
           popoverData?.code == codeTransaction.Success
-            ? 'assets/icons/icons-svg/color/check-circle-2.svg'
-            : 'assets/icons/icons-svg/color/fail.svg'
+            ? ('assets/icons/icons-svg/color/check-circle-2.svg' | imageS3)
+            : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
         " />
       {{ popoverData?.status }}
     </div>

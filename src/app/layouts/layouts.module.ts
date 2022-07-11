@@ -8,6 +8,7 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { CommonPipeModule } from '../core/pipes/common-pipe.module';
 import { CommonService } from '../core/services/common.service';
 import { LanguageService } from '../core/services/language.service';
 import { TransactionService } from '../core/services/transaction.service';
@@ -41,7 +42,8 @@ import { VerticalComponent } from './vertical/vertical.component';
     ClickOutsideModule,
     FormsModule,
     WalletConnectModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    CommonPipeModule
   ],
   providers: [LanguageService, CommonService , TransactionService],
   exports: [VerticalComponent]

@@ -25,13 +25,13 @@
         type="submit"
         class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
         (click)="searchToken()">
-        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+        <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
       </button>
       <button
         type="reset"
         class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="textSearch = ''; searchToken()">
-        <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+        <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
     </div>
     <ng-container *ngIf="textSearch?.length > 0">
@@ -43,7 +43,7 @@
           <div class="txt-title-search">Contracts</div>
           <ng-container *ngFor="let item of filterSearchData">
             <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
-              <img src="assets/images/icons/token-logo.png" class="logo-token" />
+              <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
               <div class="ml-3">
                 <div class="d-flex align-items-center">
                   <span class="text-clamp">{{ item.contract_name }}</span>
@@ -75,7 +75,7 @@
                       <div class="mr-2" [style.width]="'16px'">
                         <img
                           *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
-                          src="assets/icons/icons-svg/color/check-circle.svg"
+                          [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="contract_verification"
                           width="16px"
                           height="16px" />

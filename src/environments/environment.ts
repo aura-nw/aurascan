@@ -14,7 +14,8 @@ export const environment = {
     messagingSenderId: '',
     appId: '',
     measurementId: ''
-  }
+  },
+  s3Url: 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/assets/',
 };
 
 /*
