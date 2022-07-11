@@ -9,7 +9,7 @@ import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { AURA_DENOM, NUMBER_CONVERT } from '../../../app/core/constants/common.constant';
+import { NUMBER_CONVERT } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
@@ -446,7 +446,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: AURA_DENOM,
+              denom: this.denom,
             },
           },
           senderAddress: this.userAddress,
@@ -496,7 +496,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             from: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: AURA_DENOM,
+              denom: this.denom,
             },
           },
           senderAddress: this.userAddress,
@@ -523,7 +523,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to_address: this.selectedValidator,
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: AURA_DENOM,
+              denom: this.denom,
             },
           },
           senderAddress: this.userAddress,

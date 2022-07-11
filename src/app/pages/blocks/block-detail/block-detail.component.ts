@@ -77,7 +77,7 @@ export class BlockDetailComponent implements OnInit {
           return;
         }
         res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
@@ -109,7 +109,7 @@ export class BlockDetailComponent implements OnInit {
         }
 
         res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;

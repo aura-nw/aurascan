@@ -56,7 +56,7 @@ export class TransactionComponent implements OnInit {
       if (res?.data?.length > 0) {
         res.data.forEach((trans) => {
           //get amount of transaction
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;

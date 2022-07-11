@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
-import { AURA_DENOM, GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
+import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -24,6 +24,8 @@ export class TokenContractWriteComponent implements OnInit {
   walletAccount: any;
 
   chainInfo = this.environmentService.configValue.chain_info;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     public walletService: WalletService,
@@ -125,7 +127,7 @@ export class TokenContractWriteComponent implements OnInit {
           const fee: any = {
             amount: [
               {
-                denom: AURA_DENOM,
+                denom: this.denom,
                 amount: '1',
               },
             ],

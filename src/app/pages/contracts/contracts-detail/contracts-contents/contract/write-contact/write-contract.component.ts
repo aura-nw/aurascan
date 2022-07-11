@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
-import { GAS_ESTIMATE, AURA_DENOM } from 'src/app/core/constants/common.constant';
+import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -25,11 +25,13 @@ export class WriteContractComponent implements OnInit {
 
   chainInfo = this.environmentService.configValue.chain_info;
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
   constructor(
     public walletService: WalletService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -104,10 +106,7 @@ export class WriteContractComponent implements OnInit {
 
       if (Object.keys(contractTemp.properties[name]?.checkErr).length === 0) {
         let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-        const client = await SigningCosmWasmClient.connectWithSigner(
-          this.chainInfo.rpc,
-          singer,
-        );
+        const client = await SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer);
         const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
         if (contractTemp) {
           let objWriteContract = {};
@@ -128,7 +127,7 @@ export class WriteContractComponent implements OnInit {
           const fee: any = {
             amount: [
               {
-                denom: AURA_DENOM,
+                denom: this.denom,
                 amount: '1',
               },
             ],
