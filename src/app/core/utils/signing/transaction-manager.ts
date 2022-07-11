@@ -1,12 +1,19 @@
 import { DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
-import { AURA_DENOM } from '../../constants/common.constant';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
 import { getFee } from './fee';
+import { ChainInfo } from '@keplr-wallet/types';
 
 export async function createSignBroadcast(
-  { messageType, message, senderAddress, network, signingType, chainId },
+  {
+    messageType,
+    message,
+    senderAddress,
+    network,
+    signingType,
+    chainId,
+  }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; signingType: any; chainId: any },
   validatorsCount?: number,
 ): Promise<any> {
   let error: KEPLR_ERRORS;
@@ -23,7 +30,7 @@ export async function createSignBroadcast(
     const fee: StdFee = {
       amount: [
         {
-          denom: AURA_DENOM,
+          denom: network.currencies[0].coinDenom,
           amount: '1',
         },
       ],
