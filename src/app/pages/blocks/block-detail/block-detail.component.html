@@ -112,7 +112,10 @@
                       [routerLink]="['/transaction', data['tx_hash']]">
                       {{ data[template.matColumnDef] }}
                     </a>
-                    <a *ngSwitchCase="'height'" class="text--green cursor-pointer block-link" [routerLink]="['/blocks', data['height']]">
+                    <a
+                      *ngSwitchCase="'height'"
+                      class="text--green cursor-pointer block-link"
+                      [routerLink]="['/blocks', data['height']]">
                       {{ data[template.matColumnDef] }}
                     </a>
                     <div *ngSwitchCase="'type'" class="g-type">
@@ -132,12 +135,12 @@
                       </div>
                     </div>
                     <div *ngSwitchCase="'fee'">
-                      {{ data[template.matColumnDef] }} <span class="text--green">{{ global.stableToken }}</span>
+                      {{ data[template.matColumnDef] }} <span class="text--green">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                         {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                        <span class="text--primary">{{ global.stableToken }}</span>
+                        <span class="text--primary">{{ denom }}</span>
                       </ng-container>
                       <ng-template #displayNonNumber>
                         <span *ngIf="data[template.matColumnDef] === 0"> - </span>
@@ -181,7 +184,7 @@
               label: 'Amount',
               info:
                 data.amount > 0
-                  ? (data.amount | number: global.formatNumberToken) + '<span class=text--primary> AURA</span>'
+                  ? (data.amount | number: global.formatNumberToken) + '<span class=text--primary> ' + denom + '</span>'
                   : checkAmountValue(data.amount, data.tx_hash)
             },
             { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }

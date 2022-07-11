@@ -42,7 +42,7 @@
                           ? shortenAddress(data[template.matColumnDef])
                           : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
                       }}
-                      <span class="text--primary">{{ global.stableToken }}</span>
+                      <span class="text--primary">{{ denom }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
@@ -224,7 +224,7 @@
                             ? shortenAddress(data[template.matColumnDef])
                             : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
                         }}
-                        <span class="text--primary ml-1">{{ global.stableToken }}</span>
+                        <span class="text--primary ml-1">{{ denom }}</span>
                       </div>
                     </ng-container>
                   </div>

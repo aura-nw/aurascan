@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MY_FORMATS } from 'src/app/core/constants/common.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 
 @Component({
@@ -17,7 +18,9 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
 
   codeTransaction = CodeTransaction;
 
-  constructor() {}
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
+  constructor(private environmentService: EnvironmentService) {}
 
   ngOnChanges(): void {
     if (this.popoverData) {

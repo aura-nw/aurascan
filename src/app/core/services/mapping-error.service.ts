@@ -8,8 +8,8 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class MappingErrorService extends CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
-  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
+  timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
   constructor(
     private http: HttpClient,

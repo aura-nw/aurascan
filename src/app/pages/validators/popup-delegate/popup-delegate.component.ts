@@ -16,8 +16,9 @@ export class PopupDelegateComponent implements OnInit {
   amountFormat: string | number;
   availableToken = 0;
   dialogMode = DIALOG_STAKE_MODE;
-  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
+  timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     public translate: TranslateService,
     public global: Globals,

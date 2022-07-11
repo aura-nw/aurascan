@@ -1,5 +1,5 @@
 import { Keplr } from '@keplr-wallet/types';
-import { ChainsInfo, KEPLR_ERRORS } from '../constants/wallet.constant';
+import { KEPLR_ERRORS } from '../constants/wallet.constant';
 
 export async function getKeplr(): Promise<Keplr | undefined> {
   if ((window as any).keplr) {
@@ -22,9 +22,19 @@ export async function getKeplr(): Promise<Keplr | undefined> {
   });
 }
 
-export async function keplrSuggestChain(chainId: string): Promise<any> {
-  if (ChainsInfo[chainId]) {
-    return (await getKeplr()).experimentalSuggestChain(ChainsInfo[chainId]).catch((e: Error) => {
+// export async function keplrSuggestChain(chainId: string): Promise<any> {
+//   if (ChainsInfo[chainId]) {
+//     return (await getKeplr()).experimentalSuggestChain(ChainsInfo[chainId]).catch((e: Error) => {
+//       throw e;
+//     });
+//   }
+
+//   return KEPLR_ERRORS.NoChainInfo;
+// }
+
+export async function keplrSuggestChain(chainInfo): Promise<any> {
+  if (chainInfo) {
+    return (await getKeplr()).experimentalSuggestChain(chainInfo).catch((e: Error) => {
       throw e;
     });
   }

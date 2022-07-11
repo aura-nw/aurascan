@@ -26,38 +26,61 @@
 
 <div class="box-content text--white mt-3">
   <ng-container *ngFor="let writeContract of jsonWriteContract.oneOf; index as i">
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header class="content-contract">
-        <mat-panel-title class="item-content"> {{ i + 1 }}. {{ writeContract.required }} </mat-panel-title>
-        <mat-panel-description> </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div class="d-flex row p-3">
-        <ng-container *ngFor="let item of writeContract?.properties[writeContract.required[0]].required; index as idx">
-          <p class="px-0 text--greyscale-1">
-            {{ item }} ({{ writeContract.properties[writeContract.required[0]].properties[item].type }})
-          </p>
-          <input
-            class="form-check-input {{ writeContract.required }} {{ item }} col-12 mb-4"
-            [type]="writeContract.properties[writeContract.required[0]].properties[item].type === 'string' ? 'string' : 'number'"
-            (keyup)="resetCheck()"
-            [class.error-null]="
-              writeContract?.properties[writeContract.required[0]].checkErr &&
-              writeContract?.properties[writeContract.required[0]].checkErr[item] &&
-              errorInput
-            "
-            placeholder="{{ item }} ({{
-              writeContract.properties[writeContract.required[0]].properties[item].type
-            }})" />
-        </ng-container>
-        <div class="px-0">
-          <button
-            class="button button-chart button-outline button-outline__in-card body btn-contract"
-            [disabled]="errorInput && currentFrom === i"
-            (click)="excuteSmartContract(writeContract.required[0], i)">
-            <span class="ml-1 text-gradient">Write</span>
-          </button>
+    <!-- Check exit properties element in object -->
+    <ng-container *ngIf="writeContract?.properties[writeContract.required[0]].hasOwnProperty('properties')">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header class="content-contract">
+          <mat-panel-title class="item-content"> {{ i + 1 }}. {{ writeContract.required }} </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="d-flex row p-3">
+          <ng-container
+            *ngFor="
+              let item of objectKeys(writeContract?.properties[writeContract.required[0]].properties);
+              index as idx
+            ">
+            <p
+              class="px-0 text--greyscale-1"
+              [class.input-require]="writeContract?.properties[writeContract.required[0]].hasOwnProperty('required')">
+              {{ item }} ({{
+                writeContract?.properties[writeContract.required[0]].properties[item].type ||
+                  writeContract.properties[writeContract.required[0]].properties[item].$ref ||
+                  'any'
+              }})
+            </p>
+            <input
+              class="form-check-input {{ writeContract.required }} {{ item }} col-12 mb-4"
+              [class.input-require]="writeContract?.properties[writeContract.required[0]].hasOwnProperty('required')"
+              [type]="
+                writeContract.properties[writeContract.required[0]].properties[item].type === 'integer' ||
+                item == 'amount'
+                  ? 'number'
+                  : 'string'
+              "
+              (keyup)="resetCheck()"
+              [class.error-null]="
+                writeContract?.properties[writeContract.required[0]].checkErr &&
+                writeContract?.properties[writeContract.required[0]].checkErr[item] &&
+                errorInput &&
+                currentFrom === i
+              "
+              placeholder="{{ item }} ({{
+                writeContract.properties[writeContract.required[0]].properties[item].type ||
+                  writeContract.properties[writeContract.required[0]].properties[item].$ref ||
+                  'any'
+              }})" />
+          </ng-container>
+          <div class="px-0">
+            <button
+              class="button button-chart button-outline button-outline__in-card body btn-contract"
+              [disabled]="errorInput && currentFrom === i"
+              type="button"
+              (click)="executeSmartContract(writeContract.required[0], i)">
+              <span class="ml-1 text-gradient">Write</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </mat-expansion-panel>
+      </mat-expansion-panel>
+    </ng-container>
   </ng-container>
 </div>
