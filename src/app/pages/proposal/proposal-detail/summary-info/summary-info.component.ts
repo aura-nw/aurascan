@@ -69,7 +69,6 @@ export class SummaryInfoComponent implements OnInit {
     return this.proposalService.getProposalTally(this.proposalId).pipe(
       tap((tallRes: IResponsesTemplates<any>) => {
         this.updateVoteResultFromNode(tallRes.data);
-
         this.parsingProposalStatus(this.proposalDetail);
       }),
     );
@@ -195,12 +194,12 @@ export class SummaryInfoComponent implements OnInit {
 
   parsingProposalStatus(proposalDetail): void {
     if (proposalDetail.pro_turnout >= proposalDetail.quorum) {
+      this.isNotReached = false;
+      this.quorumStatus = VOTING_QUORUM.REACHED;
       if (proposalDetail.yesPercent >= proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
-          this.isNotReached = false;
-          this.quorumStatus = VOTING_QUORUM.REACHED;
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
             proposalDetail.quorum +
