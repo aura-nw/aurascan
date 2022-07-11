@@ -70,8 +70,10 @@ export class ContractsListComponent implements OnInit {
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          if (item.type === CONTRACT_RESULT.INCORRECT || !item.type) {
+          if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
             item.type = '-';
+          } else if (item.result === CONTRACT_RESULT.TBD) {
+            item.type = CONTRACT_RESULT.TBD;
           }
         });
         this.dataSource = res.data;
