@@ -36,7 +36,7 @@ export class SummaryInfoComponent implements OnInit {
   currentStatusConstant = VOTING_FINAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: string } = null;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  chainId = this.environmentService.configValue.chainId;
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -46,7 +46,7 @@ export class SummaryInfoComponent implements OnInit {
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private proposalService: ProposalService,

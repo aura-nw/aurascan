@@ -1,12 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { AURA_DENOM, DATEFORMAT, NUMBER_CONVERT } from '../../../../core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { DATEFORMAT, NUMBER_CONVERT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { ValidatorService } from '../../../../core/services/validator.service';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { getAmount, Globals } from 'src/app/global/global';
+import { getAmount, Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -31,7 +31,7 @@ export class TransactionMessagesComponent implements OnInit {
   listAmountClaim = [];
   objMsgContract: any;
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     public global: Globals,
     private datePipe: DatePipe,
@@ -65,6 +65,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.messages,
       this.transactionDetail?.type,
       this.transactionDetail?.raw_log,
+      this.denom
     );
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
@@ -121,17 +122,17 @@ export class TransactionMessagesComponent implements OnInit {
                   let arrayAmount = data.filter((k) => k.key === 'amount');
                   this.amountClaim = 0;
                   arrayAmount.forEach((element) => {
-                    this.amountClaim += Number(element.value.replace(AURA_DENOM, '')) / NUMBER_CONVERT || 0;
+                    this.amountClaim += Number(element.value.replace(this.denom, '')) / NUMBER_CONVERT || 0;
                   });
                 } else {
                   let amount = data.find((k) => k.key === 'amount').value;
-                  this.amountClaim = amount.replace(AURA_DENOM, '') / NUMBER_CONVERT || 0;
+                  this.amountClaim = amount.replace(this.denom, '') / NUMBER_CONVERT || 0;
                 }
               }
               this.transactionDetail?.messages.forEach((message) => {
                 const validator = data.find((trans) => trans.key === 'validator')?.value;
                 if (validator === message.validator_address) {
-                  let amount = data.find((k) => k.key === 'amount').value.replace(AURA_DENOM, '');
+                  let amount = data.find((k) => k.key === 'amount').value.replace(this.denom, '');
                   amount = amount / NUMBER_CONVERT || 0;
                   this.listAmountClaim.push(amount);
                 }

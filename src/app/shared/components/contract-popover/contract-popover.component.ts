@@ -18,7 +18,7 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
 
   codeTransaction = CodeTransaction;
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(private environmentService: EnvironmentService) {}
 

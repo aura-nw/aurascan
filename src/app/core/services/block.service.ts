@@ -6,7 +6,7 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class BlockService extends CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -41,8 +41,8 @@ export class BlockService extends CommonService {
     this.setURL();
     // return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
     //let character = this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    //let characterHomeWorld = 
-    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);;
+    //let characterHomeWorld =
+    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
   }
 
   getLastBlock(validator_address): Observable<any> {

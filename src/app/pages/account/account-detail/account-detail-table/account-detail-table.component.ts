@@ -27,7 +27,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   currentPage = 0;
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     public translate: TranslateService,

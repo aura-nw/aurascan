@@ -6,7 +6,7 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class TransactionService extends CommonService {
-  apiUrl = `${this.environmentService.apiUrl.value.cosmos}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

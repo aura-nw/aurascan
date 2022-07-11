@@ -171,9 +171,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
+  timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private transactionService: TransactionService,
@@ -282,7 +282,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           res.data.forEach((trans) => {
             //get amount of transaction
             trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
             const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
             trans.type = typeTrans?.value;
             trans.status = StatusTransaction.Fail;

@@ -9,10 +9,10 @@ import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { AURA_DENOM, NUMBER_CONVERT, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
+import { NUMBER_CONVERT, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
-import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
+import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
 import { DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -89,7 +89,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.pageYOffset = window.pageYOffset;
   }
 
-  denom = this.environmentService.apiUrl.value.chain_info.currencies[0].coinDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
+  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
     private validatorService: ValidatorService,
@@ -439,11 +441,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: AURA_DENOM,
+              denom: this.denom,
             },
           },
           senderAddress: this.userAddress,
-          network: ChainsInfo[this.walletService.chainId],
+          network: this.chainInfo,
           signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
@@ -467,7 +469,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               from: this.listStakingValidator,
             },
             senderAddress: this.userAddress,
-            network: ChainsInfo[this.walletService.chainId],
+            network: this.chainInfo,
             signingType: ESigningType.Keplr,
             chainId: this.walletService.chainId,
           },
@@ -491,11 +493,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             from: [this.dataModal.operator_address],
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: AURA_DENOM,
+              denom: this.denom,
             },
           },
           senderAddress: this.userAddress,
-          network: ChainsInfo[this.walletService.chainId],
+          network: this.chainInfo,
           signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
@@ -519,11 +521,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             to_address: this.selectedValidator,
             amount: {
               amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: AURA_DENOM,
+              denom: this.denom,
             },
           },
           senderAddress: this.userAddress,
-          network: ChainsInfo[this.walletService.chainId],
+          network: this.chainInfo,
           signingType: ESigningType.Keplr,
           chainId: this.walletService.chainId,
         });
@@ -563,8 +565,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       let amountCheck = (
         Number(this.dataDelegate.availableToken) +
         Number(this.dataDelegate.delegatableVesting) -
-        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * ChainsInfo[this.walletService.chainId].gasPriceStep.high) /
-          NUMBER_CONVERT
+        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
