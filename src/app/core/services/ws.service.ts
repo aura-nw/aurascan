@@ -112,24 +112,39 @@ export class WSService {
             .subscribe((_) => {
               tabCallBack && tabCallBack();
             });
-        } else if (redisResponse.Code === 'E001') {
-          this.toastr
-            .errorWithTap(
-              `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-            )
-            .pipe(take(1))
-            .subscribe((_) => {
-              tabCallBack && tabCallBack();
-            });
-        } else if (redisResponse.Code === 'E002') {
-          this.toastr
-            .errorWithTap(
-              `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-            )
-            .pipe(take(1))
-            .subscribe((_) => {
-              tabCallBack && tabCallBack();
-            });
+        } else {
+          switch (redisResponse.Code) {
+            case 'E001':
+              this.toastr
+                .errorWithTap(
+                  `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
+                )
+                .pipe(take(1))
+                .subscribe((_) => {
+                  tabCallBack && tabCallBack();
+                });
+              break;
+            case 'E002':
+              this.toastr
+                .errorWithTap(
+                  `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
+                )
+                .pipe(take(1))
+                .subscribe((_) => {
+                  tabCallBack && tabCallBack();
+                });
+              break;
+            case 'E003':
+              this.toastr
+                .errorWithTap(
+                  `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
+                )
+                .pipe(take(1))
+                .subscribe((_) => {
+                  tabCallBack && tabCallBack();
+                });
+              break;
+          }
         }
       }
     });
