@@ -11,7 +11,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
   providedIn: 'root',
 })
 export class WSService {
-  socketUrl = `${this.environmentService.apiUrl.value.urlSocket}`;
+  socketUrl = `${this.environmentService.configValue.urlSocket}`;
 
   public wsData: BehaviorSubject<any>;
   public data$: Observable<any>;

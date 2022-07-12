@@ -212,7 +212,7 @@
             </div>
             <div>
               <div class="d-flex justify-content-between align-items-center mb-5">
-                <span class="text--green fw-500 title-small">{{ global.stableToken }}</span>
+                <span class="text--green fw-500 title-small">{{ denom }}</span>
                 <span class="body">{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
               <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -294,12 +294,12 @@
                               </div>
                               <div *ngSwitchCase="'fee'">
                                 {{ data[template.matColumnDef] }}
-                                <span class="text--green">{{ global.stableToken }}</span>
+                                <span class="text--green">{{ denom }}</span>
                               </div>
                               <div *ngSwitchCase="'amount'">
                                 <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                                   {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                                  <span class="text--green">{{ global.stableToken }}</span>
+                                  <span class="text--green">{{ denom }}</span>
                                 </ng-container>
                                 <ng-template #displayNonNumber>
                                   <span *ngIf="data[template.matColumnDef] === 0"> - </span>

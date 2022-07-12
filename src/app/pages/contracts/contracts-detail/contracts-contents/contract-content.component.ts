@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { isContract } from 'src/app/core/utils/common/validation';
@@ -48,7 +49,19 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject();
 
-  constructor(private contractService: ContractService, private router: Router, private aRoute: ActivatedRoute) {}
+  constructor(
+    private contractService: ContractService,
+    private router: Router,
+    private aRoute: ActivatedRoute,
+    private environmentService: EnvironmentService,
+  ) {
+    const valueColumn = this.templates.find((item) => item.matColumnDef === 'value');
+
+    valueColumn &&
+      ((v) => {
+        v.suffix = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+      })(valueColumn);
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next(true);

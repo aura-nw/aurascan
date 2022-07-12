@@ -25,10 +25,12 @@ export class SummaryInfoComponent implements OnInit {
   statusConstant = PROPOSAL_STATUS;
   voteConstant = PROPOSAL_VOTE;
   voteValue: { keyVote: string } = null;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  chainId = this.environmentService.configValue.chainId;
   proposalVotes: string;
   votingBarLoading = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
     private proposalService: ProposalService,
