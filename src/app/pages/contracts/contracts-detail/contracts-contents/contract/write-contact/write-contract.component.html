@@ -52,8 +52,7 @@
               class="form-check-input {{ writeContract?.required }} {{ item }} col-12 mb-4"
               [class.input-require]="writeContract?.properties[writeContract?.required[0]]?.hasOwnProperty('required')"
               [type]="
-                writeContract?.properties[writeContract?.required[0]]?.properties[item]?.type === 'integer' ||
-                item == 'amount'
+                writeContract?.properties[writeContract?.required[0]]?.properties[item]?.type === 'integer'
                   ? 'number'
                   : 'string'
               "

@@ -39,7 +39,7 @@
             [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')"
             class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
             [type]="
-              readContract?.properties[readContract?.required[0]]?.properties[item]?.type === 'integer' || item == 'amount'
+              readContract?.properties[readContract?.required[0]]?.properties[item]?.type === 'integer'
                 ? 'number'
                 : 'string'
             "
