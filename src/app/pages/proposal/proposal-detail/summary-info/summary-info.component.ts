@@ -140,7 +140,7 @@ export class SummaryInfoComponent implements OnInit {
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    noWithVetoPercent.toString(),
+                    this.numberPipe.transform(noWithVetoPercent, this.global.formatNumber2Decimal).toString(),
                   );
                 }
               } else {
@@ -208,11 +208,12 @@ export class SummaryInfoComponent implements OnInit {
             ' of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-          this.currentSubTitle = 'The proportion of NoWithVeto votes is superior to ' + proposalDetail.veto_threshold;
+          this.currentSubTitle =
+            'The proportion of NoWithVeto votes is superior to ' + proposalDetail.veto_threshold + '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-        this.currentSubTitle = 'The proportion of Yes votes is inferior to ' + proposalDetail.veto_threshold;
+        this.currentSubTitle = 'The proportion of Yes votes is inferior to ' + proposalDetail.threshold + '%';
       }
     } else {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
