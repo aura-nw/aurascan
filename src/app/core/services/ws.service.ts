@@ -96,7 +96,7 @@ export class WSService {
     }
 
     register.subscribe((data: any) => {
-      //const { Verified, ContractAddress } = (data && JSON.parse(data)) || { Verified: false, ContractAddress: '' };
+      let resMessages = '';
       const redisResponse: RedisResponse = (data && JSON.parse(data)) || {
         Code: '',
         Message: '',
@@ -106,47 +106,29 @@ export class WSService {
       if (redisResponse.ContractAddress === this.contractAddress) {
         callBack && callBack();
         if (redisResponse.Verified) {
-          this.toastr
-            .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
-            .pipe(take(1))
-            .subscribe((_) => {
-              tabCallBack && tabCallBack();
-            });
+          resMessages = 'Contract Source Code Verification is successful! Click here to view detail';
         } else {
           switch (redisResponse.Code) {
             case 'E001':
-              this.toastr
-                .errorWithTap(
-                  `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-                )
-                .pipe(take(1))
-                .subscribe((_) => {
-                  tabCallBack && tabCallBack();
-                });
+              resMessages = 'Contract Source Code Verification is successful! Click here to view detail';
               break;
             case 'E002':
-              this.toastr
-                .errorWithTap(
-                  `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-                )
-                .pipe(take(1))
-                .subscribe((_) => {
-                  tabCallBack && tabCallBack();
-                });
+              resMessages = 'Provided wasm file is incorrect';
               break;
             case 'E003':
-              this.toastr
-                .errorWithTap(
-                  `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-                )
-                .pipe(take(1))
-                .subscribe((_) => {
-                  tabCallBack && tabCallBack();
-                });
+              resMessages = 'Internal errorl';
               break;
+            default:
+              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`
           }
         }
       }
+      this.toastr
+        .errorWithTap(resMessages)
+        .pipe(take(1))
+        .subscribe((_) => {
+          tabCallBack && tabCallBack();
+        });
     });
   }
 }
