@@ -5,6 +5,7 @@ import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import parseSchema from "parse-cosmwasm-schema";
 
 @Component({
   selector: 'app-write-contract',
@@ -45,6 +46,14 @@ export class WriteContractComponent implements OnInit {
     });
 
     this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
+    console.log(this.jsonWriteContract);
+    
+    // parseSchema(this.jsonWriteContract.definitions).then(parseTree => {
+    //   // the resultant parse tree is JSON
+    //   console.log(parseTree);
+      
+    //   console.log(JSON.stringify(parseTree, null, 2));
+    // })
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.isConnectedWallet = true;
@@ -152,6 +161,16 @@ export class WriteContractComponent implements OnInit {
   }
 
   objectKeys(obj) {
+    return obj ? Object.keys(obj) : [];
+  }
+
+  objectRef(ref, contractDetail) {
+    console.log(ref);
+    let objectTemp = ref.replace('#/','')?.split('/');
+    let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]]?.properties;
+    console.log(obj);
+    console.log(Object.keys(obj));
+    
     return obj ? Object.keys(obj) : [];
   }
 }
