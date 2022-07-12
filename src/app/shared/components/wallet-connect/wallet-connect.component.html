@@ -21,9 +21,8 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title text-gradient">{{
-          ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name
-        }}</span>
+        <span class="button__title text-gradient d-lg-none">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 5) : ng.wallet?.name}}</span>
+        <span class="button__title text-gradient d-none d-lg-block">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
         <img
           class="flex-shrink-0"
           src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
