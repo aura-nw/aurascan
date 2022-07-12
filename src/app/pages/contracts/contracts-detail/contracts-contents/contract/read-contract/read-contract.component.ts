@@ -82,7 +82,7 @@ export class ReadContractComponent implements OnInit {
         objReadContract[contract] = element?.value;
 
         //convert number if integer field
-        if (type === 'integer' || contract === 'amount') {
+        if (type === 'integer') {
           objReadContract[contract] = Number(element?.value);
         }
       });
