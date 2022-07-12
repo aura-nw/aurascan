@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between">
   <div>
-    <img src="assets/images/icons/token-contract.svg" alt="" width="14" height="17" />
+    <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="14" height="17" />
     <span class="small-text text--white ml-2">Read Contract Information</span>
   </div>
   <div class="small-text">
@@ -58,7 +58,7 @@
             type="button"
             (click)="querySmartContract(readContract.required[0], i)">
             <img
-              src="assets/icons/icons-svg/color/spinner.svg"
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
               alt=""
               width="20"
               height="20"

@@ -26,7 +26,7 @@
                 >$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span
               >
               <img
-                src="../../../../assets/images/icons/address-popup.png"
+                [src]="'../../../../assets/images/icons/address-popup.png' | imageS3"
                 alt=""
                 width="24"
                 height="24"
@@ -367,7 +367,7 @@
       <div class="box-address">
         <div class="txt-right mb-4">
           <img
-            src="../../../../assets/images/icons/close-popup.png"
+            [src]="'../../../../assets/images/icons/close-popup.png' | imageS3"
             alt=""
             width="14"
             height="14"

@@ -4,13 +4,13 @@
       <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
         <!-- !important:
         Default image if this ntf-detail has not image -->
-        <img *ngIf="true" src="assets/images/aura__ntf-dafault-img.png" width="100%" height="auto" />
+        <img *ngIf="true" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" width="100%" height="auto" />
       </div>
     </div>
     <div class="col-8 pl-7">
       <p class="fw-semibold sub-text">AuraDiamond #1289</p>
       <p class="mb-6">
-        <img src="assets/images/icons/token-logo.png" width="24px" height="24px" class="mr-1 object-fit--none" />
+        <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="24px" height="24px" class="mr-1 object-fit--none" />
         <span class="text--green body">AuraDiamond</span>
       </p>
       <div class="card py-3 px-6">
@@ -52,7 +52,7 @@
           <div class="d-flex align-items-center">
             <a class="text--green" [routerLink]="['/account', 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e']">
               aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e</a>
-            <img  src="assets/icons/icons-svg/basic/copy.svg"
+            <img  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer" width="16px" height="16px"
                   alt=""
                   matTooltip="Copied!"
@@ -65,8 +65,8 @@
         <div class="card__ntf-detail-item">
           <div class="label-detail">Contract Address:</div>
           <div class="d-flex align-items-center">
-            <img  *ngIf="contractType !== contractVerifyType.Unverifed"
-                  src="assets/icons/icons-svg/color/check-circle.svg"
+            <img *ngIf="contractType !== contractVerifyType.Unverifed"
+                  [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                   class="mr-2"
                   alt="contract_verification"
                   width="16px"
@@ -74,7 +74,7 @@
             <a class="text--green"
                 [routerLink]="['/contracts', 'aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw']">
               aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw</a>
-            <img src="assets/icons/icons-svg/basic/copy.svg"
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                   class="ml-2 cursor-pointer" width="16px" height="16px"
                   alt=""
                   matTooltip="Copied!"
@@ -88,7 +88,7 @@
           <div class="label-detail">Creator:</div>
           <div class="d-flex align-items-center">
             <span class="text--green">Aura: Deployer</span>
-            <img src="assets/icons/icons-svg/basic/copy.svg"
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                  class="ml-2 cursor-pointer" width="16px" height="16px"
                   alt=""
                   matTooltip="Copied!"
@@ -102,7 +102,7 @@
           <div class="label-detail">Token ID:</div>
           <div class="d-flex align-items-center">
             <span>1289</span>
-            <img src="assets/icons/icons-svg/basic/copy.svg"
+            <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                  class="ml-2 cursor-pointer" width="16px" height="16px"
                  alt=""
                  matTooltip="Copied!"
@@ -142,7 +142,7 @@
                         placement="right"
                         [ngbPopover]="popContent"
                         popoverClass="custom-popover">
-                  <img src="assets/images/icons/token-detail.png" alt="" width="16" height="16" />
+                  <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
                 </button>
                 <ng-template #popContent class="popContent">
                   <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
@@ -166,7 +166,7 @@
                   {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                 </a>
                 <img
-                  src="../../../../../../../assets/images/icons/arrow-right.png"
+                  [src]="'../../../../../../../assets/images/icons/arrow-right.png' | imageS3"
                   width="14"
                   height="9"
                   class="ml-10 ml-lg-15" />

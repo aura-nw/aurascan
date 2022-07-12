@@ -13,7 +13,7 @@
           <td class="">
             <div class="d-flex justify-content-end" *ngIf="!isNFTContract">
               <button class="button button-chart button-outline button-outline__in-card -small">
-                <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+                <img [src]="'assets/images/icons/token-chart.svg' | imageS3" alt="" width="16px" />
                 <span class="ml-2 small-text">Chart</span>
               </button>
             </div>
@@ -67,7 +67,7 @@
             <div class="d-flex">
               <div style="min-width: 120px">Holders:</div>
               <div>
-                23,130 <span class="text-danger ml-1" *ngIf="!isNFTContract">(<img src="assets/images/icons/arrow-down.svg" />-0,02%)</span>
+                23,130 <span class="text-danger ml-1" *ngIf="!isNFTContract">(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span>
               </div>
             </div>
           </td>

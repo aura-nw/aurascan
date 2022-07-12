@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="p-4 card main-tab">
       <p class="small-text d-flex align-item-center">
-        <img src="../../../../../../../assets/images/icons/token-tx.png" class="mr-2" alt="" width="15" height="15" />
+        <img [src]="'../../../../../../../assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="15" height="15" />
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
@@ -14,7 +14,7 @@
             <td>
               <div class="small-text d-flex align-item-center mb-1">
                 <img
-                  src="../../../../../../../assets/images/icons/token-holder.png"
+                  [src]="'../../../../../../../assets/images/icons/token-holder.png' | imageS3"
                   class="mr-2"
                   alt=""
                   width="15"

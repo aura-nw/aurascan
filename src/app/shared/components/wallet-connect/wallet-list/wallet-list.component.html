@@ -6,8 +6,8 @@
       class="icon-close"
       [src]="
         disabled
-          ? '../../../../../assets/icons/icons-svg/white/arrow-left.svg'
-          : '../../../../../assets/icons/icons-svg/basic/close.svg'
+          ? ('../../../../../assets/icons/icons-svg/white/arrow-left.svg' | imageS3)
+          : ('../../../../../assets/icons/icons-svg/basic/close.svg' | imageS3)
       "
       alt=""
       (click)="dismiss()" />

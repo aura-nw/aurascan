@@ -16,7 +16,7 @@
             <span class="tab-title">{{ tab.value }}</span>
             <img
               *ngIf="tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed"
-              src="assets/icons/icons-svg/color/check-circle.svg"
+              [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"
               height="16px" />

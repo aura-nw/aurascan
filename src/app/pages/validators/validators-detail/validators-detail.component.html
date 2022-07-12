@@ -281,7 +281,7 @@
         <div class="card-header d-flex align-items-center justify-content-between header-mob">
           <div class="title-small fw-500">Delegators</div>
           <div class="box-info d-flex align-items-center">
-            <img src="/assets/icons/icons-svg/white/user.svg" class="img-valid" />
+            <img [src]="'/assets/icons/icons-svg/white/user.svg' | imageS3" class="img-valid" />
             <span class="body">{{ lengthDelegator | number }}</span>
           </div>
         </div>

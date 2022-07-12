@@ -58,7 +58,7 @@
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
                       [routerLink]="['/tokens/token', item.hashCode]">
-                      <img src="assets/images/icons/token-logo.png" class="logo-token" />
+                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="ml-2" style="flex: 0 0 95%">
                         <div class="d-flex align-items-center justify-content-between">
                           <div class="d-flex">
@@ -70,7 +70,7 @@
                             </div>
                           </div>
                           <img
-                            src="assets/icons/icons-svg/color/check-circle.svg"
+                            [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                             alt="icon"
                             class="icon ml-4 mr-2"
                             width="16px" />
@@ -101,7 +101,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img src="assets/images/icons/token-logo.png" width="18" height="18" />
+                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token', element.hashCode]">{{ element.name }}</a
                     ><br class="d-none d-lg-block" />
@@ -175,10 +175,10 @@
                 {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
                 <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
                   <ng-container *ngIf="element.isValueUp">
-                    <img src="assets/images/icons/arrow-up.svg" />
+                    <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
                   <ng-container *ngIf="!element.isValueUp">
-                    <img src="assets/images/icons/arrow-down.svg" />
+                    <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
                   <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
                 </span>
