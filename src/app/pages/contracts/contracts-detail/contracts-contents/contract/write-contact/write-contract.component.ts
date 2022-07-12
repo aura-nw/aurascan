@@ -109,7 +109,7 @@ export class WriteContractComponent implements OnInit {
         let type = contractTemp.properties[name].properties[key].type;
         objWriteContract[key] = element?.value;
         //convert number if integer field
-        if (type === 'integer' || key === 'amount') {
+        if (type === 'integer') {
           objWriteContract[key] = Number(element?.value);
         }
       });
