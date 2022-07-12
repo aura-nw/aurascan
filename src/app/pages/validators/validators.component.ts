@@ -74,6 +74,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstUndelegate = [];
   numberCode = 0;
 
+
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
@@ -114,12 +115,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
-        this.userAddress = wallet.bech32Address;
-
         this.arrayDelegate = null;
         this.dataDelegate = null;
         this.lstUndelegate = null;
-
+        this.userAddress = wallet.bech32Address;
         this.getDataWallet();
       } else {
         this.userAddress = null;
@@ -363,10 +362,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
                 f.pending_reward = f.pending_reward / NUMBER_CONVERT;
                 f.reward = f.reward / NUMBER_CONVERT;
               });
-
               //check amount staked > 0
               this.arrayDelegate = listDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
               dataInfoWallet['arrayDelegate'] = JSON.stringify(this.arrayDelegate);
+            } else {
+              this.arrayDelegate = null;
+              this.lstUndelegate = null;
             }
           }
 
@@ -394,7 +395,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           dataInfoWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
           dataInfoWallet['lstUndelegate'] = JSON.stringify(this.lstUndelegate);
           local.setItem('dataInfoWallet', dataInfoWallet);
-
           setTimeout(() => {
             this.getDataWallet();
             this.getList();
@@ -633,4 +633,5 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }
+
 }
