@@ -110,7 +110,7 @@ export class WSService {
         } else {
           switch (redisResponse.Code) {
             case 'E001':
-              resMessages = 'Contract Source Code Verification is successful! Click here to view detail';
+              resMessages = 'Smart contract source code or compiler version is incorrect';
               break;
             case 'E002':
               resMessages = 'Provided wasm file is incorrect';
@@ -119,16 +119,17 @@ export class WSService {
               resMessages = 'Internal errorl';
               break;
             default:
-              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`
+              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`;
+              break;
           }
         }
+        this.toastr
+          .errorWithTap(resMessages)
+          .pipe(take(1))
+          .subscribe((_) => {
+            tabCallBack && tabCallBack();
+          });
       }
-      this.toastr
-        .errorWithTap(resMessages)
-        .pipe(take(1))
-        .subscribe((_) => {
-          tabCallBack && tabCallBack();
-        });
     });
   }
 }
