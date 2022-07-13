@@ -73,31 +73,29 @@
           </ng-container>
         </ng-container>
         <ng-container *ngIf="writeContract?.properties[writeContract?.required[0]]?.hasOwnProperty('$ref')">
-          <span>{{ objectRef(writeContract?.properties[writeContract?.required[0]]?.$ref, writeContract) }}</span>
           <ng-container
             *ngFor="
               let item of objectRef(writeContract?.properties[writeContract?.required[0]]?.$ref, writeContract);
               index as idx
             ">
-            <p
-              class="px-0 text--greyscale-1"
-              [class.input-require]="
-                jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].required?.hasOwnProperty('required')
-              ">
+            <p class="px-0 text--greyscale-1" [class.input-require]="checkRequire(item, objDefine[writeContract?.required])">
               {{ item }} ({{
-                jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].properties[item]?.type ||
-                  jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].properties[item]?.$ref ||
+                jsonWriteContract[objDefine[writeContract?.required]?.key[0]][
+                  objDefine[writeContract?.required]?.key[1]
+                ].properties[item]?.type ||
+                  jsonWriteContract[objDefine[writeContract?.required]?.key[0]][
+                    objDefine[writeContract?.required]?.key[1]
+                  ].properties[item]?.$ref ||
                   'any'
               }})
             </p>
             <input
               class="form-check-input {{ writeContract?.required }} {{ item }} col-12 mb-4"
-              [class.input-require]="
-                jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].hasOwnProperty('required')
-              "
+              [class.input-require]="true"
               [type]="
-                jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].properties[item]?.type === 'integer' ||
-                item == 'amount'
+                jsonWriteContract[objDefine[writeContract?.required]?.key[0]][
+                  objDefine[writeContract?.required]?.key[1]
+                ].properties[item]?.type === 'integer'
                   ? 'number'
                   : 'string'
               "
@@ -109,8 +107,12 @@
                 currentFrom === i
               "
               placeholder="{{ item }} ({{
-                jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].properties[item]?.type ||
-                  jsonWriteContract['definitions']['MintMsg_for_Nullable_Empty'].properties[item]?.$ref ||
+                jsonWriteContract[objDefine[writeContract?.required]?.key[0]][
+                  objDefine[writeContract?.required]?.key[1]
+                ].properties[item]?.type ||
+                  jsonWriteContract[objDefine[writeContract?.required]?.key[0]][
+                    objDefine[writeContract?.required]?.key[1]
+                  ].properties[item]?.$ref ||
                   'any'
               }})" />
           </ng-container>

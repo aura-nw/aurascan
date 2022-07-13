@@ -5,7 +5,6 @@ import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import parseSchema from "parse-cosmwasm-schema";
 
 @Component({
   selector: 'app-write-contract',
@@ -23,6 +22,7 @@ export class WriteContractComponent implements OnInit {
   errorInput = false;
   currentFrom = 0;
   walletAccount: any;
+  objDefine = {};
 
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -47,13 +47,7 @@ export class WriteContractComponent implements OnInit {
 
     this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
     console.log(this.jsonWriteContract);
-    
-    // parseSchema(this.jsonWriteContract.definitions).then(parseTree => {
-    //   // the resultant parse tree is JSON
-    //   console.log(parseTree);
-      
-    //   console.log(JSON.stringify(parseTree, null, 2));
-    // })
+
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.isConnectedWallet = true;
@@ -102,29 +96,64 @@ export class WriteContractComponent implements OnInit {
       let objWriteContract = {};
       let msg = {};
       const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
-      Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
-        let element: HTMLInputElement = document.getElementsByClassName(
-          'form-check-input ' + name + ' ' + key,
-        )[0] as HTMLInputElement;
+      if (contractTemp.properties[name].hasOwnProperty('properties')) {
+        Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
+          let element: HTMLInputElement = document.getElementsByClassName(
+            'form-check-input ' + name + ' ' + key,
+          )[0] as HTMLInputElement;
 
-        //check input null && require field
-        if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
-          err[key.toString()] = true;
-          this.errorInput = true;
-          this.currentFrom = currentFrom;
-          return;
-        }
+          //check input null && require field
+          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
+            err[key.toString()] = true;
+            this.errorInput = true;
+            this.currentFrom = currentFrom;
+            return;
+          }
 
-        let type = contractTemp.properties[name].properties[key].type;
-        objWriteContract[key] = element?.value;
-        //convert number if integer field
-        if (type === 'integer' || key === 'amount') {
-          objWriteContract[key] = Number(element?.value);
-        }
-      });
+          let type = contractTemp.properties[name].properties[key].type;
+          objWriteContract[key] = element?.value;
+          //convert number if integer field
+          if (type === 'integer') {
+            objWriteContract[key] = Number(element?.value);
+          }
+        });
+      } else if (contractTemp.properties[name].hasOwnProperty('$ref')) {
+        console.log('tessssssssssssssss');
+        console.log('contract: ', contractTemp);
+
+        console.log('ref:', contractTemp.properties[name]);
+        console.log('objDefine:', this.objDefine);
+        let objectTemp = contractTemp.properties[name].$ref.replace('#/', '')?.split('/');
+        // objectTemp[1]
+        // const objTemp = this.objectRef(contractTemp.properties[name].$ref);
+        console.log('objTemp', objectTemp[1]);
+        
+
+        // let objTemp = this.objectRef();
+
+        Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
+          let element: HTMLInputElement = document.getElementsByClassName(
+            'form-check-input ' + name + ' ' + key,
+          )[0] as HTMLInputElement;
+
+          //check input null && require field
+          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
+            err[key.toString()] = true;
+            this.errorInput = true;
+            this.currentFrom = currentFrom;
+            return;
+          }
+
+          let type = contractTemp.properties[name].properties[key].type;
+          objWriteContract[key] = element?.value;
+          //convert number if integer field
+          if (type === 'integer') {
+            objWriteContract[key] = Number(element?.value);
+          }
+        });
+      }
       contractTemp.properties[name].checkErr = err;
 
-      contractTemp.properties[name].checkErr = err;
       if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
         return;
       }
@@ -164,13 +193,21 @@ export class WriteContractComponent implements OnInit {
     return obj ? Object.keys(obj) : [];
   }
 
-  objectRef(ref, contractDetail) {
-    console.log(ref);
-    let objectTemp = ref.replace('#/','')?.split('/');
-    let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]]?.properties;
-    console.log(obj);
-    console.log(Object.keys(obj));
-    
-    return obj ? Object.keys(obj) : [];
+  objectRef(ref, contractDetail = null) {
+    let objectTemp = ref.replace('#/', '')?.split('/');
+    let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
+    let data = {};
+    if (obj) {
+      data = { key: objectTemp, value: obj };
+    }
+    if (contractDetail) {
+      this.objDefine[Object.keys(contractDetail.properties)[0]] = data;
+    }
+    return obj ? Object.keys(obj?.properties) : [];
+  }
+
+  checkRequire(item, objDefine) {
+    // console.log('item', item);
+    // console.log('contract:', objDefine);
   }
 }
