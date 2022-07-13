@@ -136,17 +136,14 @@ export class WalletService implements OnDestroy {
       })
       .then((response) => {
         const { result } = response as any;
-        const handleGetKeyCosmos = async () => {
-          try {
-            const result = await (window as any).coin98.cosmos.request({
-              method: 'cosmos_getKey',
-              params: [chainId],
-            });
-            return result || {};
-          } catch (err) {
-            console.log({ err });
-          }
-        };
+
+        if (result) {
+          return (window as any).coin98.cosmos.request({
+            method: 'cosmos_getKey',
+            params: [chainId],
+          });
+        }
+        return response;
       });
   }
 

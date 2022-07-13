@@ -57,8 +57,9 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     try {
       const connect = async () => {
         if (mobile) {
+          this.coin98Res  = { status: 'connecting' }
           const r = await this.walletService.connectCoin98Mobile(this.chainId);
-          this.coin98Res  = { r }
+          this.coin98Res  = { status: 'connected' , r }
         } else {
           const connect = await this.walletService.connect(provider, this.chainId);
           if (!connect && provider === WALLET_PROVIDER.COIN98) {
