@@ -24,6 +24,8 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   destroy$ = new Subject();
+
+  coin98Res : any;
   constructor(
     private walletService: WalletService,
     private envService: EnvironmentService,
@@ -51,17 +53,22 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  connectWallet(provider: WALLET_PROVIDER): void {
+  connectWallet({ provider, mobile }: { provider: WALLET_PROVIDER; mobile: boolean }): void {
     try {
       const connect = async () => {
-        const connect = await this.walletService.connect(provider, this.chainId);
-        if (!connect && provider === WALLET_PROVIDER.COIN98) {
-          this.dlgService.showDialog({
-            title: '',
-            content: 'Please set up override Keplr in settings of Coin98 wallet',
-          });
+        if (mobile) {
+          const r = await this.walletService.connectCoin98Mobile(this.chainId);
+          this.coin98Res  = { r }
+        } else {
+          const connect = await this.walletService.connect(provider, this.chainId);
+          if (!connect && provider === WALLET_PROVIDER.COIN98) {
+            this.dlgService.showDialog({
+              title: '',
+              content: 'Please set up override Keplr in settings of Coin98 wallet',
+            });
+          }
+          this.buttonDismiss.nativeElement.click();
         }
-        this.buttonDismiss.nativeElement.click();
       };
 
       connect();

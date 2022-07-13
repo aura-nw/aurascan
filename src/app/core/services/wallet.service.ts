@@ -7,6 +7,7 @@ import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
 import session from '../utils/storage/session';
 import { NgxToastrService } from './ngx-toastr.service';
+import { Client, Chain } from '@coin98-com/connect-sdk';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,8 @@ export class WalletService implements OnDestroy {
 
   wallet$: Observable<Key>;
   private _wallet$: BehaviorSubject<Key>;
+
+  coin98Client = new Client();
 
   get wallet(): Key {
     return this._wallet$.getValue();
@@ -63,7 +66,7 @@ export class WalletService implements OnDestroy {
     window.removeAllListeners('keplr_keystorechange');
   }
 
-  connect(provider: WALLET_PROVIDER, chainId: string): Promise<boolean> {
+  connect(provider: WALLET_PROVIDER, chainId: string, mobile: boolean = false): Promise<boolean> {
     switch (provider) {
       case WALLET_PROVIDER.KEPLR:
         const coin98 = this.checkExistedCoin98();
@@ -82,7 +85,7 @@ export class WalletService implements OnDestroy {
         if (_coin98 === undefined) {
           return Promise.resolve(false);
         } else {
-          this.connectCoin98(this.chainInfo);
+          this.connectCoin98(this.chainInfo, mobile);
 
           return Promise.resolve(true);
         }
@@ -124,7 +127,30 @@ export class WalletService implements OnDestroy {
     checkWallet();
   }
 
-  private async connectCoin98(chainInfo: ChainInfo): Promise<void> {
+  connectCoin98Mobile(chainId: string): Promise<unknown> {
+    return this.coin98Client
+      .connect(Chain.cosmos, {
+        logo: 'https://i.imgur.com/zi0mTYb.png',
+        name: 'AuraScan',
+        url: 'https://explorer.dev.aura.network/',
+      })
+      .then((response) => {
+        const { result } = response as any;
+        const handleGetKeyCosmos = async () => {
+          try {
+            const result = await (window as any).coin98.cosmos.request({
+              method: 'cosmos_getKey',
+              params: [chainId],
+            });
+            return result || {};
+          } catch (err) {
+            console.log({ err });
+          }
+        };
+      });
+  }
+
+  private async connectCoin98(chainInfo: ChainInfo, mobile = false): Promise<void> {
     const coin98 = await this.checkExistedCoin98();
 
     if (coin98) {
