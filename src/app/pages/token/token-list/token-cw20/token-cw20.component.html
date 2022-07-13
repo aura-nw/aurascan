@@ -49,7 +49,7 @@
             </div>
             <ng-container *ngIf="textSearch?.length > 0">
               <div class="box-search-data text-white">
-                <ng-container *ngIf="filterSearchData?.length === 0">
+                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
                   <span> There are no matching tokens </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
