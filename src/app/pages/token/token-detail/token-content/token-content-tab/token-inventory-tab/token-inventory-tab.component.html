@@ -1,6 +1,4 @@
-<span class="small-body text--light-gray"
-  >A total of {{ nftData.length }} token{{ nftData.length > 1 ? 's' : '' }} found</span
->
+<span class="small-body text--light-gray">A total of {{ nftData.length }} token{{ nftData.length > 1 ? 's' : '' }} found</span>
 
 <div *ngIf="loading" class="m-auto mt-10">
   <app-loading-sprint></app-loading-sprint>
@@ -23,7 +21,8 @@
             </div>
             <div class="mt-1">
               <span class="small-text mr-1 text--white">Owner:</span>
-              <span class="small-text text--green">{{ item.name | cutStringPipe: 8:8 }}</span>
+              <span class="small-text text--green d-lg-none">{{ item.name | cutStringPipe: 6:6 }}</span>
+              <span class="small-text text--green d-none d-lg-block">{{ item.name | cutStringPipe: 8:8 }}</span>
             </div>
           </a>
         </div>
