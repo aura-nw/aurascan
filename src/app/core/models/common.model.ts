@@ -135,6 +135,7 @@ export class CommonDataDto {
   total_validator_num: number;
   bonded_tokens_format: number;
   community_pool_format: number;
+  supply: number;
 }
 
 export interface DataDelegateDto {

@@ -74,10 +74,20 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'rank'">
                     <th mat-header-cell *matHeaderCellDef class="col-per-5">
-                      <div class="fw-500" [innerHTML]="template.headerCellDef | translate"></div>
+                      <div class="fw-500 text-center" [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'title'">
+                    <th mat-header-cell *matHeaderCellDef class="pl-5 col-per-25">
+                      <div class="pl-5" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
                     <th mat-header-cell *matHeaderCellDef>
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
@@ -103,7 +113,7 @@
                         <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'up_time'">
+                        <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
                             {{ data[template.matColumnDef] }}
                           </ng-container>
@@ -111,9 +121,9 @@
                         </div>
                         <a
                           *ngSwitchCase="'title'"
-                          class="text--green cursor-pointer text-clamp box-title-validator"
+                          class="text--green cursor-pointer text-clamp box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
-                          <div class="avatar-wrapper">
+                          <div class="avatar-wrapper pl-5">
                             <div class="validator-avatar">
                               <app-loading-image
                                 [appClass]="data?.jailed ? 'validator-jailed' : ''"
@@ -146,7 +156,7 @@
                             <span class="text-gradient">Delegate</span>
                           </button>
                         </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
                       </ng-container>
                     </div>
                   </td>
