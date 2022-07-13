@@ -7,7 +7,7 @@ import { IWalletInfo } from '../../../../core/models/wallet';
   styleUrls: ['./wallet-list.component.scss'],
 })
 export class WalletListComponent {
-  @Input() isMobile: boolean;
+  @Input() disabled: boolean;
   @Input() walletList: IWalletInfo[] = [
     {
       name: WALLET_PROVIDER.COIN98,
@@ -20,14 +20,12 @@ export class WalletListComponent {
     },
   ];
 
-  @Output() onConnect = new EventEmitter<{ provider: WALLET_PROVIDER; mobile: boolean }>();
+  @Output() onConnect = new EventEmitter<WALLET_PROVIDER>();
   @Output() onDismiss = new EventEmitter();
 
+
   connect(wallet: IWalletInfo): void {
-    this.onConnect.emit({
-      provider: wallet.name,
-      mobile: this.isMobile,
-    });
+    this.onConnect.emit(wallet.name);
   }
 
   dismiss(): void {
