@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
@@ -11,7 +11,7 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './user-wallet-info.component.html',
   styleUrls: ['./user-wallet-info.component.scss'],
 })
-export class UserWalletInfoComponent implements OnInit {
+export class UserWalletInfoComponent implements OnInit, OnChanges {
   @Input() breakpoint: any;
   @Input() userAddress: string;
   @Input() arrayDelegate: any[];
@@ -38,22 +38,31 @@ export class UserWalletInfoComponent implements OnInit {
     private validatorService: ValidatorService,
   ) {}
 
-  ngOnInit(): void {
-    this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
-    if (Number(this.dataDelegate?.stakingToken) > 0) {
-      this.isDisableClaim = false;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.arrayDelegate) {
+      this.dataSourceWallet = new MatTableDataSource(this.arrayDelegate);
     }
 
-    let lstUndelegateTemp = [];
-    const now = new Date();
-    this.lstUndelegate?.forEach((data) => {
-      let timeConvert = new Date(data.completion_time);
-      if (now < timeConvert) {
-        lstUndelegateTemp.push(data);
+    if (changes.dataDelegate) {
+      if (Number(this.dataDelegate?.stakingToken) > 0) {
+        this.isDisableClaim = false;
       }
-    });
-    this.lstUndelegate = lstUndelegateTemp;
+    }
+
+    if (changes.lstUndelegate) {
+      let lstUndelegateTemp = [];
+      const now = new Date();
+      this.lstUndelegate?.forEach((data) => {
+        let timeConvert = new Date(data.completion_time);
+        if (now < timeConvert) {
+          lstUndelegateTemp.push(data);
+        }
+      });
+      this.lstUndelegate = lstUndelegateTemp;
+    }
   }
+
+  ngOnInit(): void {}
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
