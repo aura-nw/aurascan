@@ -35,6 +35,11 @@
   }
 
   .walletMenu {
+    .button__title {
+      @media (min-width: 576px) {
+        min-width: 100px;
+      }
+    }
 
     li {
       cursor: pointer;
