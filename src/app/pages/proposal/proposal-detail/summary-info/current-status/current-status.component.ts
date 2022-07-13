@@ -21,7 +21,7 @@ export class CurrentStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentTotal = this.proposalDetail.pro_votes_no + this.proposalDetail.pro_votes_no + this.proposalDetail.pro_votes_no_with_veto;
-    this.currentYesPercent = this.proposalDetail.pro_votes_no * 100 / this.currentTotal || 0;
+    this.currentYesPercent = this.proposalDetail.pro_votes_yes * 100 / this.currentTotal || 0;
     this.currentNoPercent = this.proposalDetail.pro_votes_no * 100 / this.currentTotal || 0;
     this.currentNoWithVetoPercent = this.proposalDetail.pro_votes_no_with_veto * 100 / this.currentTotal || 0;
   }
