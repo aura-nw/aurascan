@@ -2,10 +2,11 @@ import { NUMBER_CONVERT } from '../../constants/common.constant';
 
 export function getInfo(globals: any, data: any): void {
   globals.dataHeader = data;
-  globals.dataHeader.bonded_tokens = globals.dataHeader.bonded_tokens / NUMBER_CONVERT;
-  globals.dataHeader.supply = formatNumber(globals.dataHeader.supply / NUMBER_CONVERT);
-  globals.dataHeader.bonded_tokens_format = formatNumber(globals.dataHeader.bonded_tokens);
-  globals.dataHeader.community_pool_format = formatNumber(globals.dataHeader.community_pool);
+  globals.dataHeader.bonded_tokens = globals?.dataHeader?.bonded_tokens / NUMBER_CONVERT;
+  globals.dataHeader.supply = formatNumber(globals?.dataHeader?.supply / NUMBER_CONVERT);
+  globals.dataHeader.bonded_tokens_format = formatNumber(globals?.dataHeader?.bonded_tokens);
+  globals.dataHeader.community_pool = Math.round(globals?.dataHeader?.community_pool / NUMBER_CONVERT);
+  globals.dataHeader.community_pool_format = formatNumber(globals?.dataHeader?.community_pool);
 }
 
 export function formatNumber(number: number, args?: any): any {
