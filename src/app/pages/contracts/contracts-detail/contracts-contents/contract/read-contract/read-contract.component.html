@@ -12,47 +12,47 @@
   </div>
 </div>
 <div class="box-content text--white mt-3">
-  <ng-container *ngFor="let readContract of jsonReadContract.oneOf; index as i">
+  <ng-container *ngFor="let readContract of jsonReadContract?.oneOf; index as i">
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header class="content-contract">
-        <mat-panel-title class="item-content"> {{ i + 1 }}. {{ readContract.required }} </mat-panel-title>
+        <mat-panel-title class="item-content"> {{ i + 1 }}. {{ readContract?.required }} </mat-panel-title>
         <mat-panel-description> </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="d-flex row p-3">
-        <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]].required; index as idx">
+        <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]]?.required; index as idx">
           <p
             class="px-0"
-            [class.input-require]="readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
+            [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
             {{ item }} ({{
-              readContract.properties[readContract.required[0]].properties[item].type ||
-                readContract.properties[readContract.required[0]].properties[item].$ref ||
+              readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
+                readContract?.properties[readContract?.required[0]]?.properties[item]?.$ref ||
                 'any'
             }})
           </p>
           <input
             [class.error-null]="
-              readContract?.properties[readContract.required[0]].checkErr &&
-              readContract?.properties[readContract.required[0]].checkErr[item] &&
+              readContract?.properties[readContract?.required[0]]?.checkErr &&
+              readContract?.properties[readContract?.required[0]]?.checkErr[item] &&
               errorInput &&
               currentFrom === i
             "
-            [class.input-require]="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
+            [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')"
             class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
             [type]="
-              readContract.properties[readContract.required[0]].properties[item].type === 'integer' || item == 'amount'
+              readContract?.properties[readContract?.required[0]]?.properties[item]?.type === 'integer'
                 ? 'number'
                 : 'string'
             "
             (keyup)="resetCheck()"
             placeholder="{{ item }} ({{
-              readContract.properties[readContract.required[0]].properties[item].type ||
-                readContract.properties[readContract.required[0]].properties[item].$ref ||
+              readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
+                readContract?.properties[readContract?.required[0]]?.properties[item]?.$ref ||
                 'any'
             }})" />
         </ng-container>
         <div class="w-100 mb-2 px-0">
           <button
-            *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')"
+            *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')"
             class="button button-chart button-outline button-outline__in-card body btn-contract"
             [disabled]="currentFrom === i && (errorInput || isLoading)"
             type="button"
@@ -67,11 +67,11 @@
           </button>
         </div>
         <div class="col-12">
-          <ng-container *ngIf="!readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
+          <ng-container *ngIf="!readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
             <div class="mb-2">
               {{ readContract.required }}
               <span class="ml-1 font-italic text--light-gray small-body">{{
-                readContract.properties[readContract.required[0]].type
+                readContract?.properties[readContract?.required[0]]?.type
               }}</span>
             </div>
             <div class="d-flex" *ngIf="objQuery[readContract?.required]">
@@ -84,10 +84,10 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="readContract?.properties[readContract.required[0]].hasOwnProperty('required')">
+          <ng-container *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
             <p>
-              {{ readContract.required }}
-              <span class="ml-1 font-italic text--light-gray small-body">{{ readContract.type }}</span>
+              {{ readContract?.required }}
+              <span class="ml-1 font-italic text--light-gray small-body">{{ readContract?.type }}</span>
             </p>
           </ng-container>
           <ng-container *ngIf="dataResponse && currentFrom === i">
