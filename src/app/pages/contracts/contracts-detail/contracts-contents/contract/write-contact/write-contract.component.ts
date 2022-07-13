@@ -117,21 +117,12 @@ export class WriteContractComponent implements OnInit {
             objWriteContract[key] = Number(element?.value);
           }
         });
-      } else if (contractTemp.properties[name].hasOwnProperty('$ref')) {
-        console.log('tessssssssssssssss');
-        console.log('contract: ', contractTemp);
-
-        console.log('ref:', contractTemp.properties[name]);
-        console.log('objDefine:', this.objDefine);
+      }
+      //check exit ref define
+      else if (contractTemp.properties[name].hasOwnProperty('$ref')) {
         let objectTemp = contractTemp.properties[name].$ref.replace('#/', '')?.split('/');
-        // objectTemp[1]
-        // const objTemp = this.objectRef(contractTemp.properties[name].$ref);
-        console.log('objTemp', objectTemp[1]);
-        
-
-        // let objTemp = this.objectRef();
-
-        Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
+        const contractRef = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
+        Object.entries(contractRef.properties).forEach(([key, value]) => {
           let element: HTMLInputElement = document.getElementsByClassName(
             'form-check-input ' + name + ' ' + key,
           )[0] as HTMLInputElement;
@@ -144,8 +135,10 @@ export class WriteContractComponent implements OnInit {
             return;
           }
 
-          let type = contractTemp.properties[name].properties[key].type;
-          objWriteContract[key] = element?.value;
+          let type = contractRef.properties[key].type || 'string';
+          if (element?.value) {
+            objWriteContract[key] = element?.value;
+          }
           //convert number if integer field
           if (type === 'integer') {
             objWriteContract[key] = Number(element?.value);
@@ -193,7 +186,11 @@ export class WriteContractComponent implements OnInit {
     return obj ? Object.keys(obj) : [];
   }
 
-  objectRef(ref, contractDetail = null) {
+  objectRef(ref, getType = false, contractDetail = null) {
+    if (!ref) {
+      return 'any';
+    }
+    
     let objectTemp = ref.replace('#/', '')?.split('/');
     let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
     let data = {};
@@ -203,11 +200,17 @@ export class WriteContractComponent implements OnInit {
     if (contractDetail) {
       this.objDefine[Object.keys(contractDetail.properties)[0]] = data;
     }
-    return obj ? Object.keys(obj?.properties) : [];
+    if (getType) {
+      return obj.type || 'string';
+    } else {
+      return obj?.properties ? Object.keys(obj?.properties) : [];
+    }
   }
 
-  checkRequire(item, objDefine) {
-    // console.log('item', item);
-    // console.log('contract:', objDefine);
+  checkRequire(item, objDefine): boolean {
+    if (objDefine.value.required.includes(item)) {
+      return true;
+    }
+    return false;
   }
 }
