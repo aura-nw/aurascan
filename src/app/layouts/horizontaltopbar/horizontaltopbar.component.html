@@ -2,14 +2,19 @@
     <div class="navbar-header">
         <div class="d-flex align-items-center">
             <!-- LOGO -->
-            <div class="navbar-brand-box">
-                <a routerLink="/" class="logo logo-dark">
-                    <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
-                </a>
-                <a routerLink="/" class="logo logo-light">
-                    <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
-                </a>
+            <div class="d-flex align-items-center">
+                <div class="navbar-brand-box">
+                    <a routerLink="/" class="logo logo-dark">
+                        <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
+                    </a>
+                    <a routerLink="/" class="logo logo-light">
+                        <img src="assets/images/logo/aura-explorer-logo.png" alt="Aura Logo" class="w-100">
+                    </a>
+                </div>
+                <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
+
             </div>
+
             <div class="divider divider-vertical mx-12 d-none d-lg-block"></div>
             <!-- App Search desktop-->
             <div class="app-search d-none d-lg-block">
