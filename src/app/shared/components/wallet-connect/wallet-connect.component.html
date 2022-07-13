@@ -7,7 +7,8 @@
       class="button account-button button-outline d-flex align-items-center d-lg-inline-block fw-semibold"
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWallet"
-      aria-controls="offcanvasWallet">
+      aria-controls="offcanvasWallet"
+    >
       <span class="d-lg-none text-gradient">Connect</span>
       <span class="d-none d-lg-block text-gradient">CONNECT WALLET</span>
     </button>
@@ -18,19 +19,17 @@
         type="button"
         id="walletMenu"
         data-bs-toggle="dropdown"
-        aria-expanded="false">
-        <span class="button__title text-gradient d-lg-none">{{
-          ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 5) : ng.wallet?.name
-        }}</span>
-        <span class="button__title text-gradient d-none d-lg-block">{{
-          ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name
-        }}</span>
+        aria-expanded="false"
+      >
+        <span class="button__title text-gradient d-lg-none">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 5) : ng.wallet?.name}}</span>
+        <span class="button__title text-gradient d-none d-lg-block">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
         <img
           class="flex-shrink-0"
           src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
           alt="wallet-avatar"
           height="24px"
-          width="24px" />
+          width="24px"
+        />
       </button>
       <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
         <li class="dropdown-item" [routerLink]="['/account', ng.wallet?.bech32Address]">
@@ -49,16 +48,13 @@
       tabindex="-1"
       id="offcanvasWallet"
       #offcanvasWallet
-      aria-labelledby="offcanvasWalletLabel">
+      aria-labelledby="offcanvasWalletLabel"
+    >
       <div class="offcanvas-body p-0">
         <div class="wallet-container">
           <div class="card border-0">
-            <div class="card-body" *ngIf="{ b: breakpoint$ | async } as breakpoint">
-              {{ coin98Res | json }}
-              <app-wallet-list
-                [isMobile]="breakpoint.b.matches"
-                (onConnect)="connectWallet($event)"
-                (onDismiss)="dismiss()"></app-wallet-list>
+            <div class="card-body" *ngIf="{ b: breakpoint$ | async} as breakpoint">
+              <app-wallet-list [disabled]="breakpoint.b.matches" (onConnect)="connectWallet($event)" (onDismiss)="dismiss()"></app-wallet-list>
             </div>
           </div>
         </div>
