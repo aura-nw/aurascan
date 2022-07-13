@@ -92,7 +92,7 @@ export class ContractsListComponent implements OnInit {
         }
       });
       let keyWord = this.textSearch.toLowerCase();
-      this.filterSearchData = this.dataSearch.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
+      this.filterSearchData = this.dataSearch?.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
     }
   }
 
