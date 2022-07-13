@@ -188,6 +188,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           }
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
+          val.up_time = Number(val.up_time.replace('%',''));
         });
 
         let dataFilter = res.data.filter((event) =>
