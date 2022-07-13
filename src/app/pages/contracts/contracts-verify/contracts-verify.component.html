@@ -59,6 +59,22 @@
           </ng-container>
         </div>
         <div class="form-group mb-6">
+          <label for="wasm_file" class="form-label"> Compiled wasm file name </label>
+          <input
+            formControlName="wasm_file"
+            type="text"
+            class="form-control"
+            id="wasm_file"
+            maxlength="200"
+            placeholder="xxx.wasm" />
+          <ng-container *ngIf="formControls['wasm_file'].touched">
+            <div class="error" *ngIf="formControls['wasm_file'].errors?.required">Required</div>
+            <div class="error" *ngIf="formControls['wasm_file'].errors?.maxlength">
+              Compiled wasm file name is not allowed more 200 characters!
+            </div>
+          </ng-container>
+        </div>
+        <div class="form-group mb-6">
           <label for="version" class="form-label">Compiler Version</label>
           <mat-select
             #version
@@ -77,6 +93,7 @@
             <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
           </ng-container>
         </div>
+
         <div class="d-flex justify-content-center align-items-center body">
           <button class="button text--white" type="button" (click)="handleReset()">Reset</button>
           <button class="button button-outline button-outline__in-card ml-4" type="submit">

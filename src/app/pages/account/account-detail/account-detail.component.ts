@@ -171,7 +171,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
-  timeStaking = `${this.environmentService.apiUrl.value.timeStaking}`;
+  timeStaking = `${this.environmentService.configValue.timeStaking}`;
+
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     private transactionService: TransactionService,
@@ -223,15 +226,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.currentAccountDetail = dataAccount;
         this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
-
-        // this.dataSourceDelegation = new MatTableDataSource(dataAccount.delegations);
-        // this.pageDataDelegation.length = dataAccount.delegations.length;
-
-        // this.dataSourceUnBonding = new MatTableDataSource(dataAccount.unbonding_delegations);
-        // this.pageDataUnbonding.length = dataAccount.unbonding_delegations.length;
-
-        // this.dataSourceReDelegation = new MatTableDataSource(dataAccount.redelegations);
-        // this.pageDataRedelegation.length = dataAccount.redelegations.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
@@ -289,7 +283,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           res.data.forEach((trans) => {
             //get amount of transaction
             trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
             const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
             trans.type = typeTrans?.value;
             trans.status = StatusTransaction.Fail;
@@ -354,7 +348,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.currentAccountDetail.balances.forEach((token) => {
           token.price = 0;
-          if (token.name === this.global.stableToken) {
+          if (token.name === this.denom) {
             token.amount = this.currentAccountDetail.total;
           }
           token.total_value = token.price * Number(token.amount);
@@ -450,9 +444,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        '<span class=text--primary> ' +
-        this.global.stableToken +
-        '</span>'
+        `<span class=text--primary> ${this.denom} </span>`
       );
     }
   }

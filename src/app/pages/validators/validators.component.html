@@ -7,6 +7,7 @@
       [dataDelegate]="dataDelegate"
       [lstUndelegate]="lstUndelegate"
       [modalManage]="modalManage"
+      [denom]="denom"
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
   <div class="card box-validators">
@@ -72,8 +73,13 @@
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'rank'">
-                    <th mat-header-cell *matHeaderCellDef class="col-per-15">
-                      <div class="fw-500" [innerHTML]="template.headerCellDef | translate"></div>
+                    <th mat-header-cell *matHeaderCellDef class="col-per-5">
+                      <div class="fw-500 text-center" [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'title'">
+                    <th mat-header-cell *matHeaderCellDef class="pl-5 col-per-25">
+                      <div class="pl-5" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'action'">
@@ -81,8 +87,13 @@
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
+                  <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
                   <ng-container *ngSwitchDefault>
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-per-13">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-per-25">
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
@@ -102,7 +113,7 @@
                         <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'up_time'">
+                        <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
                             {{ data[template.matColumnDef] }}
                           </ng-container>
@@ -110,9 +121,9 @@
                         </div>
                         <a
                           *ngSwitchCase="'title'"
-                          class="text--green cursor-pointer text-clamp box-title-validator"
+                          class="text--green cursor-pointer text-clamp box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
-                          <div class="avatar-wrapper">
+                          <div class="avatar-wrapper pl-5">
                             <div class="validator-avatar">
                               <app-loading-image
                                 [appClass]="data?.jailed ? 'validator-jailed' : ''"
@@ -145,7 +156,7 @@
                             <span class="text-gradient">Delegate</span>
                           </button>
                         </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
                       </ng-container>
                     </div>
                   </td>
@@ -275,7 +286,7 @@
             <span>
               Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green ml-1">{{ globals.stableToken }}</span
+            <span class="text--green ml-1">{{ denom }}</span
             >)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
@@ -289,7 +300,7 @@
             <span class="ml-3">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green"> {{ globals.stableToken }} </span>
+            <span class="text--green"> {{ denom }} </span>
           </div>
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -306,7 +317,7 @@
                 MAX
               </button>
             </div>
-            <div class="input-group-append body small-body-mob fw-semibold">{{ globals.stableToken }}</div>
+            <div class="input-group-append body small-body-mob fw-semibold">{{ denom }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
@@ -320,7 +331,7 @@
                 MAX
               </button>
             </div>
-            <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
+            <div class="input-group-append fw-semibold">{{ denom }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
             Insufficient available balance for transaction fee
@@ -363,7 +374,7 @@
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
-              <span class="text--green"> {{ globals.stableToken }} </span>
+              <span class="text--green"> {{ denom }} </span>
             </div>
             <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
@@ -375,7 +386,7 @@
                   MAX
                 </button>
               </div>
-              <div class="input-group-append fw-semibold">{{ globals.stableToken }}</div>
+              <div class="input-group-append fw-semibold">{{ denom }}</div>
             </div>
           </div>
         </div>

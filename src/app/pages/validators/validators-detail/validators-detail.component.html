@@ -117,7 +117,7 @@
           {{ currentValidatorDetail?.percent_power }}% ({{
             currentValidatorDetail?.power | number: global.formatNumberToken
           }}
-          <span class="text--green">{{ global.stableToken }}</span
+          <span class="text--green">{{ denom }}</span
           >)
         </div>
       </div>
@@ -133,7 +133,7 @@
         </div>
         <div class="col-12 col-lg-6">
           {{ currentValidatorDetail?.self_bonded | number: global.formatNumberToken }}
-          <span class="text--green">{{ global.stableToken }}</span> ({{ currentValidatorDetail?.percent_self_bonded }})
+          <span class="text--green">{{ denom }}</span> ({{ currentValidatorDetail?.percent_self_bonded }})
         </div>
       </div>
       <div class="row mb-3">
@@ -277,10 +277,10 @@
 
   <div class="row">
     <div class="col-xl-6">
-      <div class="card text--white" *ngIf="lengthDelegator">
+      <div class="card text--white">
         <div class="card-header d-flex align-items-center justify-content-between header-mob">
           <div class="title-small fw-500">Delegators</div>
-          <div class="box-info d-flex align-items-center">
+          <div class="box-info d-flex align-items-center" *ngIf="lengthDelegator">
             <img src="/assets/icons/icons-svg/white/user.svg" class="img-valid" />
             <span class="body">{{ lengthDelegator | number }}</span>
           </div>
@@ -311,7 +311,7 @@
                             </a>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                              <span class="text--green">{{ global.stableToken }}</span>
+                              <span class="text--green">{{ denom }}</span>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                           </ng-container>
@@ -319,7 +319,6 @@
                       </td>
                     </ng-container>
                   </ng-container>
-
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsDelegator"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsDelegator"></tr>
                   <tr class="mat-row" *matNoDataRow>
@@ -336,7 +335,11 @@
                     [content]="[
                       {
                         label: 'Amount',
-                        info: (data.amount | number: global.formatNumberToken) + '<span class=text--green> AURA</span>'
+                        info:
+                          (data.amount | number: global.formatNumberToken) +
+                          '<span class=text--green> ' +
+                          denom +
+                          '</span>'
                       }
                     ]"></app-card-mob-simple>
                 </ng-container>
@@ -353,11 +356,6 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-        </div>
-      </div>
-      <div class="card py-10" *ngIf="!lengthDelegator">
-        <div class="card-body article-1">
-          <app-loading-sprint></app-loading-sprint>
         </div>
       </div>
     </div>

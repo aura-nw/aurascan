@@ -2,20 +2,20 @@
   .flex-item {
     width: 50%;
     flex-shrink: 0;
-    //position: relative;
+    position: relative;
     padding-right: 20px;
-    //&:after {
-    //  content: '';
-    //  position: absolute;
-    //  top: 0;
-    //  bottom: 0;
-    //  right: 0;
-    //  width: 1px;
-    //  background-color: var(--aura-dark-gray);
-    //}
+    &:after {
+     content: '';
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     right: 0;
+     width: 1px;
+     background-color: var(--aura-dark-gray);
+    }
   }
   table.aura-basic-table {
-    min-height: 224px;
+    min-height: 280px;
     tr,
     td {
       color: var(--aura-contract);

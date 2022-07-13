@@ -1,6 +1,6 @@
 .box-token-info {
   table.aura-basic-table {
-    min-height: 224px;
+    min-height: 280px;
 
     tr,
     td {
@@ -11,7 +11,10 @@
   }
 }
 .first-col {
-  min-width: 150px;
+  min-width: 120px;
+  @media (min-width: 992px) {
+    min-width: 150px;
+  }
 }
 
 .break-word {
@@ -24,4 +27,7 @@
       color: var(--aura-white) !important;
     }
   }
+}
+.g-ellipsis {
+  width: 160px;
 }

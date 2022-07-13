@@ -1,25 +1,16 @@
-import BigNumber from 'bignumber.js';
+import { ChainInfo } from '@keplr-wallet/types';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
-import { AURA_DENOM } from '../../constants/common.constant';
-
-export function Coin({ amount, denom }, coinLookup) {
-  const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom);
-  return {
-    amount: new BigNumber(amount).dividedBy(lookup.chainToViewConversionFactor).toFixed(),
-    denom: lookup.chainDenom,
-  };
-}
 
 // Staking
-export function Delegate(senderAddress, { to, amount }, network) {
+export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
   /* istanbul ignore next */
   const msg = MsgDelegate.fromPartial({
     delegatorAddress: senderAddress,
     validatorAddress: to[0],
     amount: {
       amount: amount.amount + '',
-      denom: AURA_DENOM,
+      denom: network.currencies[0].coinMinimalDenom,
     },
   });
   return {
@@ -28,7 +19,7 @@ export function Delegate(senderAddress, { to, amount }, network) {
   };
 }
 
-export function Undelegate(senderAddress, { from, amount }, network) {
+export function Undelegate(senderAddress, { from, amount }, network: ChainInfo) {
   /* istanbul ignore next */
   return {
     typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
@@ -37,7 +28,7 @@ export function Undelegate(senderAddress, { from, amount }, network) {
       validatorAddress: from[0],
       amount: {
         amount: amount.amount + '',
-        denom: AURA_DENOM,
+        denom: network.currencies[0].coinMinimalDenom,
       },
     }),
   };
@@ -93,7 +84,7 @@ export function Redelegate(senderAddress, { src_address, to_address, amount }, n
     validatorDstAddress: to_address,
     amount: {
       amount: amount.amount + '',
-      denom: AURA_DENOM,
+      denom: network.currencies[0].coinMinimalDenom,
     },
   });
   return {

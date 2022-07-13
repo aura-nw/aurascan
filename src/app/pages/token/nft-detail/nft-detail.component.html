@@ -1,20 +1,45 @@
 <div class="text--white">
-  <div class="d-flex p-3">
-    <div class="col-4 nft-img__contain">
+  <div class="row p-xl-3">
+    <!-- Desktop nft-image -->
+    <div class="col-4 nft-img__contain d-none d-xl-block">
       <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
         <!-- !important:
         Default image if this ntf-detail has not image -->
-        <img *ngIf="true" src="assets/images/aura__ntf-dafault-img.png" width="100%" height="auto" />
+        <img *ngIf="true" src="assets/images/aura__ntf-dafault-img.png"/>
       </div>
     </div>
-    <div class="col-8 pl-7">
-      <p class="fw-semibold sub-text">AuraDiamond #1289</p>
-      <p class="mb-6">
-        <img src="assets/images/icons/token-logo.png" width="24px" height="24px" class="mr-1 object-fit--none" />
-        <span class="text--green body">AuraDiamond</span>
-      </p>
-      <div class="card py-3 px-6">
-        <div class="row">
+    <!-- Mobile nft-image -->
+    <div class="col-12 d-xl-none mb-4">
+      <div class="d-flex">
+        <div class="nft-img__contain ">
+          <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
+            <!-- !important:
+            Default image if this ntf-detail has not image -->
+            <img *ngIf="true" src="assets/images/aura__ntf-dafault-img.png"/>
+          </div>
+        </div>
+        <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center">
+          <h1 class="fw-semibold title-small mb-0 text--white">AuraDiamond #1289</h1>
+          <div class="mb-0">
+            <img src="assets/images/icons/token-logo.png" width="24px" height="24px" class="mr-1 object-fit--none" />
+            <h2 class="text--green body mb-0 fw-normal">AuraDiamond</h2>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- End nft-image -->
+    <div class="col-12 col-xl-8 pl-xl-7">
+      <div class="d-none d-xl-block">
+        <h1 class="fw-semibold sub-text text--white mb-0">AuraDiamond #1289</h1>
+        <div class="mb-6">
+          <img src="assets/images/icons/token-logo.png" width="24px" height="24px" class="mr-1 object-fit--none" />
+          <h2 class="text--green body mb-0 fw-normal">AuraDiamond</h2>
+        </div>
+      </div>
+      <!-- Desktop card info -->
+      <div class="d-none d-lg-block card py-3 px-6">
+        <div class="d-flex">
           <div class="flex-shrink-0 flex-grow-1 w-auto">
             <div class="body text--light-gray mb-1">Min. Price</div>
             <div class="title-small">
@@ -44,16 +69,40 @@
           </div>
         </div>
       </div>
-
+      <!-- Mobile card info -->
+      <div class="d-lg-none">
+        <div class="card px-6 py-3 mb-4">
+          <div class="body text--light-gray mb-1">Min. Price</div>
+          <div class="title-small">
+            <span class="fw-500">0.0297 AURA</span>
+            <span class="text--light-gray ml-2">($32.42)</span>
+          </div>
+        </div>
+        <div class="card px-6 py-3 mb-4">
+          <div class="body text--light-gray mb-1">Last Sale (Item)</div>
+          <div class="title-small">
+            <span class="fw-500">N/A</span>
+            <!--              <span class="text&#45;&#45;light-gray ml-2">($32.42)</span>-->
+          </div>
+        </div>
+        <div class="card px-6 py-3 mb-4">
+          <div class="body text--light-gray mb-1">Last Sale (Contract)</div>
+          <div class="title-small">
+            <span class="fw-500">0.304 AURA</span>
+            <span class="text--light-gray ml-2">($331.56)</span>
+          </div>
+        </div>
+      </div>
+      <!-- End card info -->
       <div class="card card__ntf-detail mb-0">
         <div class="body card__ntf-detail-item" id="popupCopy">Details</div>
         <div class="card__ntf-detail-item">
           <div class="label-detail">Owner: </div>
-          <div class="d-flex align-items-center">
-            <a class="text--green" [routerLink]="['/account', 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e']">
+          <div class="d-flex align-items-center position-relative">
+            <a class="text--green g-ellipsis" [routerLink]="['/account', 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e']">
               aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e</a>
             <img  src="assets/icons/icons-svg/basic/copy.svg"
-                  class="ml-2 cursor-pointer" width="16px" height="16px"
+                  class="ml-2 cursor-pointer btn-copy" width="16px" height="16px"
                   alt=""
                   matTooltip="Copied!"
                   #owner="matTooltip"
@@ -64,18 +113,18 @@
         </div>
         <div class="card__ntf-detail-item">
           <div class="label-detail">Contract Address:</div>
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center position-relative">
             <img  *ngIf="contractType !== contractVerifyType.Unverifed"
                   src="assets/icons/icons-svg/color/check-circle.svg"
                   class="mr-2"
                   alt="contract_verification"
                   width="16px"
                   height="16px" />
-            <a class="text--green"
+            <a class="text--green g-ellipsis"
                 [routerLink]="['/contracts', 'aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw']">
               aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw</a>
             <img src="assets/icons/icons-svg/basic/copy.svg"
-                  class="ml-2 cursor-pointer" width="16px" height="16px"
+                  class="ml-2 cursor-pointer btn-copy" width="16px" height="16px"
                   alt=""
                   matTooltip="Copied!"
                   #address="matTooltip"
@@ -113,7 +162,7 @@
           </div>
         </div>
         <div class="card__ntf-detail-item">
-          <div class="label-detail">Token Standard</div>
+          <div class="label-detail">Token Standard:</div>
           <div>W-721</div>
         </div>
       </div>
@@ -121,7 +170,7 @@
   </div>
 </div>
 
-<div class="card card-body">
+<div class="card card-body mt-4 mt-lg-3">
   <span class="body text--white mb-2">Item Activity</span>
   <div class="divider divider-horizontal"></div>
   <div class="text--light-gray small-body mt-3">
@@ -157,7 +206,7 @@
                 {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
               </ng-container>
               <ng-container *ngSwitchCase="'type'">
-                <div class="aura-status text-uppercase">
+                <div class="aura-status text-capitalize">
                   <span class="status">{{ data[template.matColumnDef] }}</span>
                 </div>
               </ng-container>
@@ -177,7 +226,7 @@
                 </a>
               </ng-container>
               <ng-container *ngSwitchCase="'price'">
-                {{ data[template.matColumnDef] | number }} {{ global.stableToken }}
+                {{ data[template.matColumnDef] | number }} {{denom}}
               </ng-container>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
             </ng-container>

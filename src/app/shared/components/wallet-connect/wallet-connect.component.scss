@@ -36,7 +36,9 @@
 
   .walletMenu {
     .button__title {
-      min-width: 100px;
+      @media (min-width: 576px) {
+        min-width: 100px;
+      }
     }
 
     li {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
-import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { TokenType } from 'src/app/core/constants/token.enum';
+import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
+import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
 
 @Component({
   selector: 'app-token-detail',
@@ -17,14 +17,18 @@ export class TokenDetailComponent implements OnInit {
   textSearch: string = '';
   codeTransaction = CodeTransaction;
   tokenName = 'AuraDiamon';
-  tokenType: TokenType;
+  isNFTContract = false;
+
+  //change type of Token
+  tokenType = TokenType.NFT;
 
   constructor() {}
 
   ngOnInit(): void {
-    //change type of Token
-    this.tokenType = TokenType.NFT;
+    if (this.tokenType === TokenType.NFT) {
+      this.isNFTContract = true;
+    }
   }
-  
+
   searchTokenTable(): void {}
 }

@@ -18,6 +18,7 @@ export class CodeContractComponent implements OnInit {
   constructor(public router: Router, private layout: BreakpointObserver) {}
 
   ngOnInit(): void {
+    console.log(this.contractDetailData.s3_location)
   }
 
   expandMenu(): void {

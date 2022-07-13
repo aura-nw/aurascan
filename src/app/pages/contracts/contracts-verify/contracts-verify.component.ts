@@ -69,6 +69,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
           validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
           updateOn: 'submit',
         }),
+        wasm_file: new FormControl('', {
+          validators: [Validators.required, Validators.maxLength(200)],
+          updateOn: 'submit',
+        }),
         url: new FormControl(''),
         compiler_version: new FormControl('', { validators: [Validators.required], updateOn: 'submit' }),
         commit: new FormControl(''),
@@ -86,6 +90,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.formControls['link'].markAsTouched();
     this.formControls['compiler_version'].markAsTouched();
+    this.formControls['wasm_file'].markAsTouched();
 
     if (this.contractForm.valid) {
       // handle contract_address & commit
@@ -97,6 +102,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         url: this.contractForm.controls['url'].value,
         compiler_version: this.contractForm.controls['compiler_version'].value,
         commit: this.contractForm.controls['commit'].value,
+        wasm_file: this.contractForm.controls['wasm_file'].value,
       };
 
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {

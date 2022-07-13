@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
@@ -40,6 +41,9 @@ export class BlockDetailComponent implements OnInit {
   isRawData = false;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -48,6 +52,7 @@ export class BlockDetailComponent implements OnInit {
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +78,7 @@ export class BlockDetailComponent implements OnInit {
           return;
         }
         res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;
@@ -104,7 +109,7 @@ export class BlockDetailComponent implements OnInit {
         }
 
         res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log);
+          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
           trans.status = StatusTransaction.Fail;

@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MESSAGE_WARNING } from 'src/app/core/constants/proposal.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
-import { ChainsInfo, ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import {  ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { IVotingDialog } from 'src/app/core/models/proposal.model';
@@ -20,7 +20,9 @@ import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-mana
 })
 export class ProposalVoteComponent implements OnInit {
   keyVote = null;
-  chainId = this.environmentService.apiUrl.value.chainId;
+  chainId = this.environmentService.configValue.chainId;
+
+  chainInfo = this.environmentService.configValue.chain_info;
 
   isLoading = false;
 
@@ -48,7 +50,7 @@ export class ProposalVoteComponent implements OnInit {
         proposalId: this.data.id + '',
       },
       senderAddress: this.walletService.wallet.bech32Address,
-      network: ChainsInfo[this.chainId],
+      network: this.chainInfo,
       signingType: ESigningType.Keplr,
       chainId: this.chainId,
     });
