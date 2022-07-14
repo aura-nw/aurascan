@@ -192,22 +192,15 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   parsingProposalStatus(proposalDetail): void {
+    const currentTotal =
+      proposalDetail.pro_votes_yes + proposalDetail.pro_votes_no + proposalDetail.pro_votes_no_with_veto || 0;
+    const currentYesPercent = (proposalDetail.pro_votes_yes * 100) / currentTotal || 0;
+    const currentNoPercent = (proposalDetail.pro_votes_no * 100) / currentTotal || 0;
+    const currentNoWithVetoPercent = (proposalDetail.pro_votes_no_with_veto * 100) / currentTotal || 0;
+
     if (proposalDetail.pro_turnout >= proposalDetail.quorum) {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
-      const currentTotal =
-        proposalDetail.pro_votes_yes + proposalDetail.pro_votes_no + proposalDetail.pro_votes_no_with_veto || 0;
-      const currentYesPercent = (proposalDetail.pro_votes_yes * 100) / currentTotal || 0;
-      const currentNoPercent = (proposalDetail.pro_votes_no * 100) / currentTotal || 0;
-      const currentNoWithVetoPercent = (proposalDetail.pro_votes_no_with_veto * 100) / currentTotal || 0;
-
-      this.proposalDetail = {
-        ...this.proposalDetail,
-        currentTotal,
-        currentYesPercent,
-        currentNoPercent,
-        currentNoWithVetoPercent,
-      };
 
       if (proposalDetail.currentYesPercent >= proposalDetail.threshold) {
         if (proposalDetail.currentNoWithVetoPercent < proposalDetail.veto_threshold) {
@@ -240,6 +233,13 @@ export class SummaryInfoComponent implements OnInit {
         this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
         '% and this proposal requires more participation';
     }
+    this.proposalDetail = {
+      ...this.proposalDetail,
+      currentTotal,
+      currentYesPercent,
+      currentNoPercent,
+      currentNoWithVetoPercent,
+    };
   }
 
   getStatus(key: string) {
