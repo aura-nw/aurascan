@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -14,6 +14,8 @@ import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
 import { MENU } from './menu';
 import { MenuItem } from './menu.model';
+import {EnvironmentService} from "src/app/core/data-services/environment.service";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -38,6 +40,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
   currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
+  env = null;
+  pageTitle = null;
+  innerWidth;
 
   /**
    * Language Listing
@@ -52,7 +57,11 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+    this.checkEnv();
+  }
   constructor(
     public router: Router,
     public translate: TranslateService,
@@ -63,6 +72,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private commonService: CommonService,
     private walletService: WalletService,
     private transactionService: TransactionService,
+    private environmentService: EnvironmentService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -105,6 +115,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.element = document.documentElement;
     this.layoutMode = LAYOUT_MODE;
     this.initialize();
+    this.checkEnv();
     /***
      * Language value cookies wise set
      */
@@ -126,6 +137,25 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   initialize(): void {
     // this.menuItems = MENU;
     // this.getList();
+  }
+
+  checkEnv() {
+    this.env = this.environmentService.configValue.env;
+    this.innerWidth = window.innerWidth;
+    switch (this.env) {
+      case 'serenity' :
+        this.pageTitle = (this.innerWidth > 992) ? 'Serenity Testnet Network' : 'Serenity Testnet';
+        break;
+      case 'halo' :
+        this.pageTitle = (this.innerWidth > 992) ? 'Aura Halo TestNet' : 'Aura Halo';
+        break;
+      case 'euphoria' :
+        this.pageTitle = (this.innerWidth > 992) ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
+        break;
+      default :
+        this.pageTitle = null;
+        break;
+    }
   }
 
   getList(): void {
