@@ -196,29 +196,50 @@ export class SummaryInfoComponent implements OnInit {
     if (proposalDetail.pro_turnout >= proposalDetail.quorum) {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
-      if (proposalDetail.yesPercent >= proposalDetail.threshold) {
-        if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
+      const currentTotal =
+        proposalDetail.pro_votes_yes + proposalDetail.pro_votes_no + proposalDetail.pro_votes_no_with_veto || 0;
+      const currentYesPercent = (proposalDetail.pro_votes_yes * 100) / currentTotal || 0;
+      const currentNoPercent = (proposalDetail.pro_votes_no * 100) / currentTotal || 0;
+      const currentNoWithVetoPercent = (proposalDetail.pro_votes_no_with_veto * 100) / currentTotal || 0;
+
+      this.proposalDetail = {
+        ...this.proposalDetail,
+        currentTotal,
+        currentYesPercent,
+        currentNoPercent,
+        currentNoWithVetoPercent,
+      };
+
+      if (proposalDetail.currentYesPercent >= proposalDetail.threshold) {
+        if (proposalDetail.currentNoWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
-            proposalDetail.quorum +
+            this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
             '% and there are more than ' +
-            proposalDetail.veto_threshold +
-            ' of Yes votes.';
+            this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+            '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubTitle =
-            'The proportion of NoWithVeto votes is superior to ' + proposalDetail.veto_threshold + '%';
+            'The proportion of NoWithVeto votes is superior to ' +
+            this.numberPipe.transform(proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString() +
+            '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-        this.currentSubTitle = 'The proportion of Yes votes is inferior to ' + proposalDetail.threshold + '%';
+        this.currentSubTitle =
+          'The proportion of Yes votes is inferior to ' +
+          this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+          '%';
       }
     } else {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
-        'Current quorum is less than ' + proposalDetail.quorum + '% and this proposal requires more participation';
+        'Current quorum is less than ' +
+        this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
+        '% and this proposal requires more participation';
     }
   }
 
