@@ -25,7 +25,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
 
   destroy$ = new Subject();
 
-  coin98Res : any;
+  coin98Res: any;
   constructor(
     private walletService: WalletService,
     private envService: EnvironmentService,
@@ -53,13 +53,36 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  connectWallet({ provider, mobile }: { provider: WALLET_PROVIDER; mobile: boolean }): void {
+  connectWallet({ provider, mobile, type }: { provider: WALLET_PROVIDER; mobile: boolean; type?: any }): void {
     try {
       const connect = async () => {
-        if (mobile) {
-          this.coin98Res  = { status: 'connecting' }
+        if (type) {
+          switch (type) {
+            case 'key':
+              const handleGetKeyCosmos = async () => {
+                const chainId = 'cosmos';
+
+                try {
+                  const result = await (window as any).coin98.cosmos.request({
+                    method: 'cosmos_getKey',
+                    params: [chainId],
+                  });
+                  return result || {};
+                } catch (err) {
+                  console.log({ err });
+                }
+              };
+              this.coin98Res = handleGetKeyCosmos();
+              break;
+
+            case 'sign':
+              
+              break;
+          }
+        } else if (mobile) {
+          this.coin98Res = { status: 'connecting' };
           const r = await this.walletService.connectCoin98Mobile(this.chainId);
-          this.coin98Res  = { status: 'connected' , r }
+          this.coin98Res = { status: 'connected', r };
         } else {
           const connect = await this.walletService.connect(provider, this.chainId);
           if (!connect && provider === WALLET_PROVIDER.COIN98) {
