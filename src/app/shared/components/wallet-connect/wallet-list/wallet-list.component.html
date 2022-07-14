@@ -29,6 +29,18 @@
           <span class="title-small">{{ wallet.name | titlecase }}</span>
         </div>
       </li>
+      <li class="wallet-item">
+        <div class="d-flex align-items-center gap-3" (click)="action('key')">
+          <img class="wallet-icon" [src]="COIN98.icon" />
+          <span class="title-small">{{ 'getKey' | titlecase }}</span>
+        </div>
+      </li>
+      <li class="wallet-item">
+        <div class="d-flex align-items-center gap-3" (click)="action('sign')">
+          <img class="wallet-icon" [src]="COIN98.icon" />
+          <span class="title-small">{{ 'sign' | titlecase }}</span>
+        </div>
+      </li>
     </ul>
   </div>
 </div>

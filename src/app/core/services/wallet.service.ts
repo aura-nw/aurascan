@@ -128,23 +128,22 @@ export class WalletService implements OnDestroy {
   }
 
   connectCoin98Mobile(chainId: string): Promise<unknown> {
-    return this.coin98Client
-      .connect(Chain.cosmos, {
-        logo: 'https://i.imgur.com/zi0mTYb.png',
-        name: 'AuraScan',
-        url: 'https://explorer.dev.aura.network/',
-      })
-      .then((response) => {
-        const { result } = response as any;
+    return this.coin98Client.connect(Chain.cosmos, {
+      logo: this.chainInfo.logo,
+      name: 'AuraScan',
+      url: this.chainInfo.explorer,
+    });
+    // .then((response) => {
+    //   const { result } = response as any;
 
-        if (result) {
-          return (window as any).coin98.cosmos.request({
-            method: 'cosmos_getKey',
-            params: [chainId],
-          });
-        }
-        return response;
-      });
+    //   if (result) {
+    //     return (window as any).coin98.cosmos.request({
+    //       method: 'cosmos_getKey',
+    //       params: [chainId],
+    //     });
+    //   }
+    //   return response;
+    // });
   }
 
   private async connectCoin98(chainInfo: ChainInfo, mobile = false): Promise<void> {

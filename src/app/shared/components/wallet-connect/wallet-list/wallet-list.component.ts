@@ -20,13 +20,26 @@ export class WalletListComponent {
     },
   ];
 
-  @Output() onConnect = new EventEmitter<{ provider: WALLET_PROVIDER; mobile: boolean }>();
+  @Output() onConnect = new EventEmitter<{ provider: WALLET_PROVIDER; mobile: boolean; type?: any }>();
   @Output() onDismiss = new EventEmitter();
+
+  COIN98 = {
+    name: WALLET_PROVIDER.COIN98,
+    icon: '../../../../../../assets/images/icon-coin98.svg',
+  };
 
   connect(wallet: IWalletInfo): void {
     this.onConnect.emit({
       provider: wallet.name,
       mobile: this.isMobile,
+    });
+  }
+
+  action(type: string) {
+    this.onConnect.emit({
+      provider: WALLET_PROVIDER.COIN98,
+      mobile: this.isMobile,
+      type,
     });
   }
 

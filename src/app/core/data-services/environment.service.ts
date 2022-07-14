@@ -3,6 +3,12 @@ import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import { BehaviorSubject } from 'rxjs';
 import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+
+interface ChainInfoEx  extends ChainInfo {
+  logo?: string, 
+  explorer?: string
+}
+
 export interface IConfiguration {
   fabric: string;
   beUri: string;
@@ -10,7 +16,7 @@ export interface IConfiguration {
   timeStaking: string;
   urlSocket: string;
   validator_s3: string;
-  chain_info: ChainInfo | null;
+  chain_info: ChainInfoEx;
 }
 
 @Injectable()
