@@ -62,6 +62,7 @@ export class ValidatorsDetailComponent implements OnInit {
 
   lengthBlockLoading = true;
   lengthPowerLoading = true;
+  lastBlockLoading = true;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
@@ -126,9 +127,11 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getListUpTime(): void {
     this.blockService.getLastBlock(this.currentAddress).subscribe((res) => {
+      this.lastBlockLoading = true;
       if (res?.data?.length > 0) {
         this.arrayUpTime = res.data;
       }
+      this.lastBlockLoading = false;
     });
   }
 
