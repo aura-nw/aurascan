@@ -8,6 +8,8 @@ import { Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import {ValidatorService} from "src/app/core/services/validator.service";
+import {STATUS_VALIDATOR} from "src/app/core/constants/validator.enum";
 
 @Component({
   selector: 'app-account-table',
@@ -26,6 +28,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   pageType = PageEventType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   currentPage = 0;
+  statusValidator = STATUS_VALIDATOR;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
@@ -35,6 +38,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
+    private validatorService: ValidatorService,
   ) {}
 
   ngOnInit(): void {}
@@ -75,5 +79,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   showPageEvent(event): void {
     this.currentPage = event?.target.innerText - 1;
+  }
+
+  getValidatorAvatar(validatorAddress: string): string {
+    return this.validatorService.getValidatorAvatar(validatorAddress);
   }
 }

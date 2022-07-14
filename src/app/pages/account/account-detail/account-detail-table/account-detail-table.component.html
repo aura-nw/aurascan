@@ -12,11 +12,22 @@
               <td mat-cell *matCellDef="let data" style="max-width: 200px">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                    <a
-                      *ngSwitchCase="'validator_name'"
-                      class="text--green cursor-pointer text-clamp"
-                      [routerLink]="['/validators', data['validator_address']]">
-                      {{ data[template.matColumnDef] }}
+                    <a  *ngSwitchCase="'validator_name'"
+                        class="text--green cursor-pointer text-clamp box-title-validator"
+                        [routerLink]="['/validators', data['validator_address']]">
+                      <div class="avatar-wrapper">
+                        <div class="validator-avatar">
+                          <app-loading-image
+                                  [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                                  [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
+                        </div>
+                        <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
+                          <img src="assets/icons/icons-svg/color/jailed.svg" alt="" />
+                        </div>
+                      </div>
+                      <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
+                            {{ data[template.matColumnDef] }}
+                          </span>
                     </a>
                     <div *ngSwitchCase="'amount'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
