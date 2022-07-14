@@ -11,9 +11,9 @@
   <div class="mt-10">
     <div class="vote-bar mt-10 mb-4">
       <ul class="vote-bar-ul">
-        <li class="bg--primary" [style.width]="currentYesPercent + '%'"></li>
-        <li class="bg--danger" [style.width]="currentNoPercent + '%'"></li>
-        <li class="bg--info" [style.width]="currentNoWithVetoPercent + '%'"></li>
+        <li class="bg--primary" [style.width]="proposalDetail.currentYesPercent + '%'"></li>
+        <li class="bg--danger" [style.width]="proposalDetail.currentNoPercent + '%'"></li>
+        <li class="bg--info" [style.width]="proposalDetail.currentNoWithVetoPercent + '%'"></li>
       </ul>
       <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
         <span class="small-text fw-semibold">
@@ -28,7 +28,7 @@
         <div class="col-5 fw-semibold">
           <span class="vote-status"> Yes </span>
         </div>
-        <div class="col-3 fw-semibold">{{ currentYesPercent | number: global.formatNumber2Decimal }}%</div>
+        <div class="col-3 fw-semibold">{{ proposalDetail.currentYesPercent | number: global.formatNumber2Decimal }}%</div>
         <div class="col-4 text-end">{{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}</div>
       </div>
     </div>
@@ -38,7 +38,7 @@
         <div class="col-5 fw-semibold">
           <span class="vote-status"> No </span>
         </div>
-        <div class="col-3 fw-semibold">{{ currentNoPercent | number: global.formatNumber2Decimal }}%</div>
+        <div class="col-3 fw-semibold">{{ proposalDetail.currentNoPercent | number: global.formatNumber2Decimal }}%</div>
         <div class="col-4 text-end">{{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}</div>
       </div>
     </div>
@@ -49,7 +49,7 @@
           <span class="vote-status"> NoWithVeto</span>
         </div>
         <div class="col-3 fw-semibold">
-          {{ currentNoWithVetoPercent | number: global.formatNumber2Decimal }}%
+          {{ proposalDetail.currentNoWithVetoPercent | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-4 text-end">
           {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
