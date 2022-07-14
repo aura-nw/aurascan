@@ -139,7 +139,7 @@ export class SummaryInfoComponent implements OnInit {
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe.transform(noWithVetoPercent, this.global.formatNumber2Decimal).toString(),
+                    this.numberPipe.transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString(),
                   );
                 }
               } else {
