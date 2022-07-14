@@ -123,7 +123,7 @@
                           *ngSwitchCase="'title'"
                           class="text--green cursor-pointer text-clamp box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
-                          <div class="avatar-wrapper pl-5">
+                          <div class="avatar-wrapper validator-avatar-wrapper pl-5">
                             <div class="validator-avatar">
                               <app-loading-image
                                 [appClass]="data?.jailed ? 'validator-jailed' : ''"
@@ -265,8 +265,8 @@
         width="24px"
         height="24px"
         (click)="closeDialog(modal)" />
-      <div class="d-lg-flex align-items-end mb-4 mb-xl-8">
-        <div class="mr-lg-10 mb-4 mb-lg-0 d-flex align-items-center">
+      <div class="mb-4 mb-xl-8">
+        <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
               <app-loading-image [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
@@ -283,9 +283,8 @@
         </div>
         <div class="body small-body-mob text--greyscale-3">
           <div class="mb-1">
-            <span>
-              Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}
-            </span>
+            <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
+            <span>({{ dataModal?.power | number: globals.formatNumberToken }}</span>
             <span class="text--green ml-1">{{ denom }}</span
             >)
           </div>

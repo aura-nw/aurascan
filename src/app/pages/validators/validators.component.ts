@@ -293,6 +293,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
         this.clicked = false;
         this.isExceedAmount = false;
+        this.errorExceedAmount = false;
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,

@@ -21,8 +21,8 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title text-gradient d-lg-none">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) : ng.wallet?.name}}</span>
-        <span class="button__title text-gradient d-none d-lg-block">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
+        <span class="button__title text-gradient d-lg-none small-text">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) : ng.wallet?.name}}</span>
+        <span class="button__title text-gradient d-none d-lg-block body">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
         <img
           class="flex-shrink-0"
           src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
@@ -32,13 +32,13 @@
         />
       </button>
       <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
-        <li class="dropdown-item" [routerLink]="['/account', ng.wallet?.bech32Address]">
+        <li class="dropdown-item small-text-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">
           <a>Account Details</a>
         </li>
-        <li class="dropdown-item" [routerLink]="['/contracts/register']">
+        <li class="dropdown-item small-text-mob" [routerLink]="['/contracts/register']">
           <a>Register Account</a>
         </li>
-        <li class="dropdown-item" (click)="disconnect()">
+        <li class="dropdown-item small-text-mob" (click)="disconnect()">
           <button type="button" class="button p-0">Log out</button>
         </li>
       </ul>

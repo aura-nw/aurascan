@@ -31,7 +31,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   statusValidator = STATUS_VALIDATOR;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-
   constructor(
     public translate: TranslateService,
     public global: Globals,
