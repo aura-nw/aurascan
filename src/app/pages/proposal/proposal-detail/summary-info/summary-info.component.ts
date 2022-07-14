@@ -203,7 +203,7 @@ export class SummaryInfoComponent implements OnInit {
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
             proposalDetail.quorum +
-            ' and there are more than ' +
+            '% and there are more than ' +
             proposalDetail.veto_threshold +
             ' of Yes votes.';
         } else {
@@ -218,7 +218,7 @@ export class SummaryInfoComponent implements OnInit {
     } else {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
-        'Current quorum is less than ' + proposalDetail.quorum + ' and this proposal requires more participation';
+        'Current quorum is less than ' + proposalDetail.quorum + '% and this proposal requires more participation';
     }
   }
 

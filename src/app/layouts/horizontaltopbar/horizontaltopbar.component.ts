@@ -40,7 +40,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
   currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
-  chainInfo = null;
+  env = null;
   pageTitle = null;
   innerWidth;
 
@@ -140,16 +140,16 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   checkEnv() {
-    this.chainInfo = this.environmentService.configValue.chain_info;
+    this.env = this.environmentService.configValue.env;
     this.innerWidth = window.innerWidth;
-    switch (this.chainInfo.chainId) {
-      case 'serenity-testnet-001' :
+    switch (this.env) {
+      case 'serenity' :
         this.pageTitle = (this.innerWidth > 992) ? 'Serenity Testnet Network' : 'Serenity Testnet';
         break;
-      case 'halo-testnet-001' :
+      case 'halo' :
         this.pageTitle = (this.innerWidth > 992) ? 'Aura Halo TestNet' : 'Aura Halo';
         break;
-      case 'euphoria-testnet-001' :
+      case 'euphoria' :
         this.pageTitle = (this.innerWidth > 992) ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
         break;
       default :

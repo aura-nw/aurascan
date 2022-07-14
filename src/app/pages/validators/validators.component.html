@@ -88,7 +88,7 @@
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
@@ -115,7 +115,7 @@
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ data[template.matColumnDef] }}
+                            {{ data[template.matColumnDef] + '%'}}
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
                         </div>

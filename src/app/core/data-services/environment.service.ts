@@ -11,6 +11,7 @@ export interface IConfiguration {
   urlSocket: string;
   validator_s3: string;
   chain_info: ChainInfo | null;
+  env: string;
 }
 
 @Injectable()
@@ -23,6 +24,7 @@ export class EnvironmentService {
     urlSocket: '',
     validator_s3: '',
     chain_info: null,
+    env: '',
   });
 
   get configValue(): IConfiguration {
@@ -61,6 +63,7 @@ export class EnvironmentService {
           urlSocket: config['urlSocket'],
           validator_s3: config['validator_s3'],
           chain_info,
+          env: config['env']
         };
 
         this.config.next(data);
