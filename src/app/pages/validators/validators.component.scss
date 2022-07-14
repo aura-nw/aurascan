@@ -263,6 +263,9 @@ form.search-form-validators {
   }
 }
 
+.avatar-wrapper.validator-avatar-wrapper .jailed {
+  left: unset;
+}
 @media (max-width: 991.99px) {
   .validator-container {
     .button-outline__in-card {
