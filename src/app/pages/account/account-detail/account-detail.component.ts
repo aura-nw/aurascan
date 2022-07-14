@@ -370,7 +370,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
         this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-
         this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
         if (this.currentAccountDetail?.vesting) {
