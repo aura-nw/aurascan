@@ -106,7 +106,12 @@ export class WSService {
       if (redisResponse.ContractAddress === this.contractAddress) {
         callBack && callBack();
         if (redisResponse.Verified) {
-          resMessages = 'Contract Source Code Verification is successful! Click here to view detail';
+          this.toastr
+            .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
         } else {
           switch (redisResponse.Code) {
             case 'E001':
@@ -122,13 +127,13 @@ export class WSService {
               resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`;
               break;
           }
+          this.toastr
+            .errorWithTap(resMessages)
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
         }
-        this.toastr
-          .errorWithTap(resMessages)
-          .pipe(take(1))
-          .subscribe((_) => {
-            tabCallBack && tabCallBack();
-          });
       }
     });
   }
