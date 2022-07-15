@@ -261,13 +261,14 @@
       </div>
       <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row proposal__summary-total">
-          <div class="col-12 col-lg-6 pr-lg-8 border-right">
+          <div class="col-12 col-lg-6 pr-lg-8" [class.border-right]="!breakpoint.value.matches">
             <app-current-turnout
               [proposalDetail]="proposalDetail"
               [isNotReached]="isNotReached"
               [quorumStatus]="quorumStatus"></app-current-turnout>
           </div>
-          <div class="col-12 col-lg-6 pl-lg-8">
+          <div *ngIf="breakpoint.value.matches" class="divider divider-horizontal mt-4 mt-lg-5"></div>
+          <div class="col-12 col-lg-6 pl-lg-8 mt-3 mt-lg-0">
             <app-current-status
               [proposalDetail]="proposalDetail"
               [currentSubTitle]="currentSubTitle"
