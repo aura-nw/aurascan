@@ -85,7 +85,7 @@ export class WSService {
   subscribeVerifyContract(contractAdr: string, callBack?: () => void, tabCallBack?: () => void) {
     this.connect();
 
-    this.contractAddress = contractAdr;
+    this.contractAddress = `${contractAdr}`;
 
     const wsData = { event: 'eventVerifyContract' };
 
@@ -101,9 +101,9 @@ export class WSService {
         Code: '',
         Message: '',
         Verified: false,
-        ContractAddress: '',
+        ContractAddress: null,
       };
-      if (redisResponse.ContractAddress === this.contractAddress) {
+      if (redisResponse.ContractAddress === this.contractAddress && this.contractAddress) {
         callBack && callBack();
         if (redisResponse.Verified) {
           this.toastr
@@ -134,6 +134,7 @@ export class WSService {
               tabCallBack && tabCallBack();
             });
         }
+        this.contractAddress = null;
       }
     });
   }
