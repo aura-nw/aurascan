@@ -139,11 +139,20 @@ export class SummaryInfoComponent implements OnInit {
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe.transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString(),
+                    this.numberPipe
+                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                      .toString(),
                   );
                 }
-              } else {
+              } else if (pro_votes_no_with_veto < (pro_total_vote - pro_votes_abstain) / 3) {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
+              } else {
+                this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                  '{{proposalDetail.noWithVetoPercent}}',
+                  this.numberPipe
+                    .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                    .toString(),
+                );
               }
             } else {
               this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
