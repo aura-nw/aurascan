@@ -201,7 +201,6 @@
           <input
             (keyup)="validateCurrentCodeID($event)"
             class="form-check-input col-12 mb-4"
-            [type]="'number'"
             oninput="javascript: if (this.value.length > 50) this.value = this.value.slice(0, 50);"
             [(ngModel)]="currentCodeID"
             (ngModelChange)="checkInput()"
