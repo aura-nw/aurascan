@@ -89,9 +89,9 @@ export const VOTING_FINAL_STATUS = [
 ];
 
 export enum VOTING_SUBTITLE {
-  PASS = 'The proposal is passed because it is above the threshold and receive more than 50% of Yes votes, excluding Abstain votes.',
-  REJECT_1 = 'This proposal is rejected because there are more than {{proposalDetail.noWithVetoPercent}}% of No With Veto votes, excluding Abstain votes.',
-  REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50% of No votes.',
+  PASS = 'The proposal is passed because it is above the threshold and receive more than 50.00% of Yes votes, excluding Abstain votes.',
+  REJECT_1 = 'This proposal is rejected because there are more than {{proposalDetail.noWithVetoPercent}}% of No With Veto votes.',
+  REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50.00% of No votes.',
   REJECT_3 = 'This proposal is failed because it did not reach the quorum.',
 }
 
