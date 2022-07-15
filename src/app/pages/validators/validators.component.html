@@ -110,12 +110,12 @@
                           {{ data[template.matColumnDef] | number }}<br />
                           <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                         </div>
-                        <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
+                        <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ data[template.matColumnDef] + '%'}}
+                            {{ data[template.matColumnDef] | number: globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
                         </div>

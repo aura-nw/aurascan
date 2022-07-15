@@ -107,7 +107,7 @@
         <div class="col-12 col-lg-3">
           <div class="card-text fw-semibold">Uptime</div>
         </div>
-        <div class="col-12 col-lg-6">{{ currentValidatorDetail?.up_time }}</div>
+        <div class="col-12 col-lg-6">{{ currentValidatorDetail?.up_time | number: global.formatNumber2Decimal }}%</div>
       </div>
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
@@ -260,7 +260,7 @@
                   class="block-uptime tool-tip"
                   [ngStyle]="{
                     'background-color':
-                      itemBlock?.isSync || currentValidatorDetail?.status !== statusValidator.Active
+                      itemBlock?.isMissed || currentValidatorDetail?.status !== statusValidator.Active
                         ? 'none'
                         : '#5EE6D0'
                   }"
