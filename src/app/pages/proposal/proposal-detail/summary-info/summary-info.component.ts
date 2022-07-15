@@ -133,7 +133,7 @@ export class SummaryInfoComponent implements OnInit {
             };
 
             if (pro_turnout >= quorum) {
-              if (pro_votes_yes >= (pro_total_vote - pro_votes_abstain) / 2) {
+              if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
                 if (pro_votes_no_with_veto < (pro_total_vote - pro_votes_abstain) / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
@@ -211,7 +211,7 @@ export class SummaryInfoComponent implements OnInit {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if (proposalDetail.currentYesPercent >= proposalDetail.threshold) {
+      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
         if (proposalDetail.currentNoWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
