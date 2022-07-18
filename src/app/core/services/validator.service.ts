@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
@@ -52,8 +52,40 @@ export class ValidatorService extends CommonService {
     // return this.http.get<any>(
     //   `${this.apiUrl}/validators/${address}/delegator-by-validator-addr?limit=${limit}&offset=${offset}`,
     // );
-    return this.http.get<any>(
+    const headerDict = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'cf-cache-status': 'DYNAMIC',
+      'content-encoding': 'br',
+      'expect-ct': 'max-age=604800,report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+      'nel': '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}',
+      'server': 'cloudflare',
+      'x-server-time': '1658109165',
+      'customer-header': 'custom'
+    };
+
+    const requestOptions = {
+      headers: new Headers(headerDict),
+    };
+
+    console.log(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.offset=${offset}&pagination.limit=${limit}&pagination.reverse=true`,
+    );
+
+    // return this.http.get<any>(
+    //   `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.offset=${offset}&pagination.limit=${limit}&pagination.reverse=true`,
+    //   requestOptions,
+    // );
+
+    let url = 'https://lcd.dev.aura.network/cosmos/staking/v1beta1/validators/auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh/delegations';
+
+    return this.http.get(
+      url,
+      { headers: new HttpHeaders(headerDict) },
     );
   }
 
