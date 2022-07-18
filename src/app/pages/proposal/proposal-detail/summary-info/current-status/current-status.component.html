@@ -1,0 +1,60 @@
+<div class="h-100 d-flex flex-column justify-content-between">
+  <div class="">
+    <div class="body fw-semibold text--white d-flex justify-content-between align-items-center">
+      <div>Current Status:</div>
+      <div class="proposal-status proposal-status__{{ currentStatus?.key }}">
+        <span>{{ currentStatus?.value }}</span>
+      </div>
+    </div>
+    <div class="mt-2 small-body text--light-gray content--fixed-height">{{ currentSubTitle }}</div>
+  </div>
+  <div class="mt-10">
+    <div class="vote-bar mt-10 mb-4">
+      <ul class="vote-bar-ul">
+        <li class="bg--primary" [style.width]="proposalDetail.currentYesPercent + '%'"></li>
+        <li class="bg--danger" [style.width]="proposalDetail.currentNoPercent + '%'"></li>
+        <li class="bg--info" [style.width]="proposalDetail.currentNoWithVetoPercent + '%'"></li>
+      </ul>
+      <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
+        <span class="small-text fw-semibold">
+          <span class="text--light-gray">Threshold:</span>
+          {{ proposalDetail.threshold | number: global.formatNumber2Decimal }}%
+        </span>
+      </div>
+    </div>
+    <div class="d-flex align-items-center">
+      <div class="vote status--primary"></div>
+      <div class="row align-items-center flex-grow-1">
+        <div class="col col-lg-5 fw-semibold">
+          <span class="vote-status"> Yes </span>
+        </div>
+        <div class="col col-lg-3 flex-shrink-0 fw-semibold">{{ proposalDetail.currentYesPercent | number: global.formatNumber2Decimal }}%</div>
+        <div class="col col-lg-4 text-end">{{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}</div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center mt-3">
+      <div class="vote status--danger flex-grow-0"></div>
+      <div class="row align-items-center flex-grow-1">
+        <div class="col col-lg-5 fw-semibold">
+          <span class="vote-status"> No </span>
+        </div>
+        <div class="col col-lg-3 fw-semibold">{{ proposalDetail.currentNoPercent | number: global.formatNumber2Decimal }}%</div>
+        <div class="col col-lg-4 flex-shrink-0 text-end">{{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}</div>
+      </div>
+    </div>
+    <div class="d-flex mt-3 align-items-center">
+      <div class="vote status--info"></div>
+      <div class="row align-items-center flex-grow-1">
+        <div class="col col-lg-5 fw-semibold">
+          <span class="vote-status"> NoWithVeto</span>
+        </div>
+        <div class="col col-lg-3 fw-semibold">
+          {{ proposalDetail.currentNoWithVetoPercent | number: global.formatNumber2Decimal }}%
+        </div>
+        <div class="col col-lg-4 flex-shrink-0 text-end">
+          {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -113,6 +113,7 @@ export class WriteContractComponent implements OnInit {
           objWriteContract[key] = Number(element?.value);
         }
       });
+      contractTemp.properties[name].checkErr = err;
 
       contractTemp.properties[name].checkErr = err;
       if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
@@ -127,7 +128,7 @@ export class WriteContractComponent implements OnInit {
       const fee: any = {
         amount: [
           {
-            denom: this.denom,
+            denom: this.coinMinimalDenom,
             amount: '1',
           },
         ],

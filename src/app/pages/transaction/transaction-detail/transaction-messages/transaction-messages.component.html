@@ -17,7 +17,7 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
@@ -25,7 +25,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
@@ -33,7 +33,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
@@ -45,7 +45,7 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Contract</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/contracts', transactionDetail?.messages[0]?.contract]">
           {{ transactionDetail?.messages[0]?.contract }}
         </a>
@@ -53,7 +53,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
@@ -61,7 +61,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
       </div>
     </div>
@@ -70,11 +70,11 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Label</div>
-      <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.label }}</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.label }}</div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
@@ -98,7 +98,7 @@
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
-          <div class="col-12 col-lg-6">
+          <div class="col-12 col-lg-9">
             <a class="text--green" [routerLink]="['/account', item.delegator_address]">
               {{ item.delegator_address }}
             </a>
@@ -106,7 +106,7 @@
         </div>
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
-          <div class="col-12 col-lg-6">
+          <div class="col-12 col-lg-9">
             <a class="text--green" [routerLink]="['/validators', item.validator_address]">
               {{ item.validator_address }}<br />
               <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
@@ -115,7 +115,7 @@
         </div>
         <div class="row mb-5 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-          <div class="col-12 col-lg-6">
+          <div class="col-12 col-lg-9">
             <ng-container *ngIf="listAmountClaim[i] > 0">
               {{ listAmountClaim[i] | number: global.formatNumberToken }}
               <span class="text--green">{{ denom }}</span>
@@ -128,7 +128,7 @@
     <ng-container *ngIf="transactionDetail?.messages.length === 1">
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-9">
           <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
             {{ transactionDetail?.messages[0]?.delegator_address }}
           </a>
@@ -136,7 +136,7 @@
       </div>
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-9">
           <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
             <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
@@ -145,7 +145,7 @@
       </div>
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
           </ng-container>
@@ -164,15 +164,15 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
-      <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
+      <div class="col-12 col-lg-9">
+        <a class="text--green" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Voter</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
           {{ transactionDetail?.messages[0]?.voter }}
         </a>
@@ -180,7 +180,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Option</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
       </div>
     </div>
@@ -189,7 +189,7 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
@@ -197,7 +197,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
@@ -205,7 +205,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Vesting Schedule</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ dateVesting }}
       </div>
     </div>
@@ -214,7 +214,7 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Initial Deposit</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
@@ -225,7 +225,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposer</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
           {{ transactionDetail?.messages[0]?.proposer }}
         </a>
@@ -233,19 +233,19 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}
       </div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Type</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}
       </div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Title</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}
       </div>
     </div>
@@ -254,7 +254,7 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegate Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
@@ -262,7 +262,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Source Validator Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
           {{ transactionDetail?.messages[0]?.validator_src_address }}
           <ng-container *ngIf="validatorName"><br />({{ validatorName }})</ng-container>
@@ -271,7 +271,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Destination Validator Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
           {{ transactionDetail?.messages[0]?.validator_dst_address }}
           <ng-container *ngIf="validatorNameDes"><br />({{ validatorNameDes }})</ng-container>
@@ -280,7 +280,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
@@ -298,15 +298,15 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
-      <div class="col-12 col-lg-6">
-        <a class="text--green" [routerLink]="['/proposal', transactionDetail?.messages[0]?.proposal_id]">
+      <div class="col-12 col-lg-9">
+        <a class="text--green" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Depositor</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
           {{ transactionDetail?.messages[0]?.depositor }}
         </a>
@@ -314,7 +314,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </ng-container>
@@ -326,11 +326,11 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
-      <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}
         </a>
@@ -341,12 +341,12 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
-      <div class="col-12 col-lg-6">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <a
-        class="col-12 col-lg-6 text--green"
+        class="col-12 col-lg-9 text--green"
         [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
         {{ transactionDetail?.messages[0]?.validator_address }}
       </a>
@@ -356,7 +356,7 @@
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
@@ -364,7 +364,7 @@
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Code Id</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ storeCodeId }}
       </div>
     </div>
