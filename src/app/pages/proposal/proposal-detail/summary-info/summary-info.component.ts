@@ -135,17 +135,26 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
             };
 
             if (pro_turnout >= quorum) {
-              if (pro_votes_yes >= (pro_total_vote - pro_votes_abstain) / 2) {
-                if (pro_votes_no_with_veto < (pro_total_vote - pro_votes_abstain) / 3) {
+              if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
+                if (pro_votes_no_with_veto < (pro_total_vote) / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe.transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString(),
+                    this.numberPipe
+                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                      .toString(),
                   );
                 }
-              } else {
+              } else if (pro_votes_no_with_veto < (pro_total_vote) / 3) {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
+              } else {
+                this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                  '{{proposalDetail.noWithVetoPercent}}',
+                  this.numberPipe
+                    .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                    .toString(),
+                );
               }
             } else {
               this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
@@ -204,8 +213,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
 
-      if (proposalDetail.currentYesPercent >= proposalDetail.threshold) {
-        if (proposalDetail.currentNoWithVetoPercent < proposalDetail.veto_threshold) {
+      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
+        if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubTitle =

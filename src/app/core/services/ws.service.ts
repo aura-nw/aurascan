@@ -85,7 +85,7 @@ export class WSService {
   subscribeVerifyContract(contractAdr: string, callBack?: () => void, tabCallBack?: () => void) {
     this.connect();
 
-    this.contractAddress = contractAdr;
+    this.contractAddress = `${contractAdr}`;
 
     const wsData = { event: 'eventVerifyContract' };
 
@@ -101,12 +101,17 @@ export class WSService {
         Code: '',
         Message: '',
         Verified: false,
-        ContractAddress: '',
+        ContractAddress: null,
       };
-      if (redisResponse.ContractAddress === this.contractAddress) {
+      if (redisResponse.ContractAddress === this.contractAddress && this.contractAddress) {
         callBack && callBack();
         if (redisResponse.Verified) {
-          resMessages = 'Contract Source Code Verification is successful! Click here to view detail';
+          this.toastr
+            .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
         } else {
           switch (redisResponse.Code) {
             case 'E001':
@@ -122,13 +127,14 @@ export class WSService {
               resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`;
               break;
           }
+          this.toastr
+            .errorWithTap(resMessages)
+            .pipe(take(1))
+            .subscribe((_) => {
+              tabCallBack && tabCallBack();
+            });
         }
-        this.toastr
-          .errorWithTap(resMessages)
-          .pipe(take(1))
-          .subscribe((_) => {
-            tabCallBack && tabCallBack();
-          });
+        this.contractAddress = null;
       }
     });
   }
