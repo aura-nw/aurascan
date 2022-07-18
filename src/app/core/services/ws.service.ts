@@ -5,6 +5,12 @@ import io, { Socket } from 'socket.io-client';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
+interface RedisResponse {
+  Code: string;
+  Message: string;
+  ContractAddress: string;
+  Verified: boolean;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -20,10 +26,7 @@ export class WSService {
 
   contractAddress = '';
 
-  constructor(
-    private environmentService: EnvironmentService,
-    private toastr: NgxToastrService,
-  ) {
+  constructor(private environmentService: EnvironmentService, private toastr: NgxToastrService) {
     this.wsData = new BehaviorSubject<any>(null);
     this.data$ = this.wsData.asObservable();
   }
@@ -82,7 +85,7 @@ export class WSService {
   subscribeVerifyContract(contractAdr: string, callBack?: () => void, tabCallBack?: () => void) {
     this.connect();
 
-    this.contractAddress = contractAdr;
+    this.contractAddress = `${contractAdr}`;
 
     const wsData = { event: 'eventVerifyContract' };
 
@@ -93,11 +96,16 @@ export class WSService {
     }
 
     register.subscribe((data: any) => {
-      const { Verified, ContractAddress } = (data && JSON.parse(data)) || { Verified: false, ContractAddress: '' };
-
-      if (ContractAddress === this.contractAddress) {
+      let resMessages = '';
+      const redisResponse: RedisResponse = (data && JSON.parse(data)) || {
+        Code: '',
+        Message: '',
+        Verified: false,
+        ContractAddress: null,
+      };
+      if (redisResponse.ContractAddress === this.contractAddress && this.contractAddress) {
         callBack && callBack();
-        if (Verified) {
+        if (redisResponse.Verified) {
           this.toastr
             .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
             .pipe(take(1))
@@ -105,15 +113,28 @@ export class WSService {
               tabCallBack && tabCallBack();
             });
         } else {
+          switch (redisResponse.Code) {
+            case 'E001':
+              resMessages = 'Smart contract source code or compiler version is incorrect';
+              break;
+            case 'E002':
+              resMessages = 'Provided wasm file is incorrect';
+              break;
+            case 'E003':
+              resMessages = 'Internal errorl';
+              break;
+            default:
+              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`;
+              break;
+          }
           this.toastr
-            .errorWithTap(
-              `Error! Unable to generate Contract Creation Code and Schema for Contract ${this.contractAddress}'`,
-            )
+            .errorWithTap(resMessages)
             .pipe(take(1))
             .subscribe((_) => {
               tabCallBack && tabCallBack();
             });
         }
+        this.contractAddress = null;
       }
     });
   }

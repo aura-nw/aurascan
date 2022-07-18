@@ -36,7 +36,9 @@
 
   .walletMenu {
     .button__title {
-      min-width: 100px;
+      @media (min-width: 576px) {
+        min-width: 100px;
+      }
     }
 
     li {
@@ -45,9 +47,12 @@
   }
 
   #walletMenu {
+    @media (min-width: 992px) {
+      font-weight: 600;
+    }
     @media (max-width: 414px) {
-      padding: 10px;
-      height: 40px;
+      padding: 8px 12px;
+      height: 30px;
     }
   }
 

@@ -5,6 +5,7 @@ import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
@@ -34,6 +35,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     private router: Router,
     private wSService: WSService,
     private dlgService: DialogService,
+    private toastr: NgxToastrService,
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
@@ -106,24 +108,32 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       };
 
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
-        if (res.data) {
-          this.dlgServiceOpen();
-          this.wSService.subscribeVerifyContract(
-            contractData.contract_address,
-            () => {
-              this.contractService.loadContractDetail(contractData.contract_address);
-            },
-            () => {
-              this.router.navigate(['contracts', this.contractAddress], {
-                queryParams: {
-                  tabId: 'contract',
+        const data = res?.data;
+        if (data) {
+          switch (data?.Code) {
+            case 'SUCCESSFUL':
+              this.dlgServiceOpen();
+              this.wSService.subscribeVerifyContract(
+                contractData.contract_address,
+                () => {
+                  this.contractService.loadContractDetail(contractData.contract_address);
                 },
-                state: {
-                  reload: true,
+                () => {
+                  this.router.navigate(['contracts', this.contractAddress], {
+                    queryParams: {
+                      tabId: 'contract',
+                    },
+                    state: {
+                      reload: true,
+                    },
+                  });
                 },
-              });
-            },
-          );
+              );
+              break;
+            default:
+              this.toastr.error(data?.Message);
+              break;
+          }
         }
       });
     }

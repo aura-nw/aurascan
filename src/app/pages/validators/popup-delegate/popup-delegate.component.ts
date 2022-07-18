@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DATE_TIME_WITH_MILLISECOND } from '../../../core/constants/common.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
@@ -10,7 +10,7 @@ import { Globals } from '../../../global/global';
   templateUrl: './popup-delegate.component.html',
   styleUrls: ['./popup-delegate.component.scss'],
 })
-export class PopupDelegateComponent implements OnInit {
+export class PopupDelegateComponent implements OnInit, OnChanges {
   @Input() data: any;
 
   availableToken = 0;
@@ -27,5 +27,8 @@ export class PopupDelegateComponent implements OnInit {
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.availableToken = +this.data?.availableToken + +this.data?.delegatableVesting;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
   }
 }

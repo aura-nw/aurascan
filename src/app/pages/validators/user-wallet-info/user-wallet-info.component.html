@@ -3,27 +3,27 @@
     <!-- heading -->
     <div class="card-header title-small small-body-mob">
       <div class="row justify-content-between">
-        <div class="col-12 col-lg-6">
-          <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
+        <div class="col-12 col-lg-4">
+          <div class="mb-3 d-flex justify-content-between text--white">
             <span [class.fw-semibold]="breakpoint.value.matches">Available Balance: </span>
             <span>
               <span [class.small-body]="breakpoint.value.matches">
                 {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
               </span>
-              <span class="ml-2 text--green">{{ denom }}</span>
+              <span class="ml-1 text--green">{{ denom }}</span>
             </span>
           </div>
-          <div class="mb-3 d-flex justify-content-between d-lg-block text--white">
+          <div class="mb-3 d-flex justify-content-between text--white">
             <span [class.fw-semibold]="breakpoint.value.matches">Total Staked: </span>
             <span>
               <span [class.small-body]="breakpoint.value.matches">
                 {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
               </span>
-              <span class="ml-2 text--green">{{ denom }}</span>
+              <span class="ml-1 text--green">{{ denom }}</span>
             </span>
           </div>
         </div>
-        <div class="col-12 col-lg-6 mt-2">
+        <div class="col-12 col-lg-8 mt-2">
           <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
             <button
               class="button button-outline button-outline__claim-reward"
@@ -51,22 +51,22 @@
             <ng-container *ngFor="let template of templatesWallet; index as i">
               <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'action'">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef class="col-per-25">
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchCase="'validator_name'">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef class="col-per-25">
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchCase="'amount_staked'">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                    <div class="pl-lg-3" [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
                 <ng-container *ngSwitchCase="'pending_reward'">
-                  <th mat-header-cell *matHeaderCellDef>
+                  <th mat-header-cell *matHeaderCellDef class="col-per-25">
                     <div [innerHTML]="template.headerCellDef | translate"></div>
                   </th>
                 </ng-container>
@@ -79,7 +79,7 @@
                 <td mat-cell *matCellDef="let data">
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
-                      <div *ngSwitchCase="'amount_staked'">
+                      <div *ngSwitchCase="'amount_staked'" class="pl-lg-3">
                         {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
                         <span class="text--green">{{ denom }}</span>
                       </div>
@@ -193,11 +193,11 @@
               {{ validator.validator_name }}</a
             >
           </div>
-          <div class="col-9 text--white body small-body-mob">
+          <div class="col-9 text--white small-body">
             {{ validator.balance | number: globals.formatNumberToken }}
             <span class="text--green">{{ denom }}</span
             ><br />
-            <span class="text--neutrals-4 small-body">{{
+            <span class="text--neutrals-4">{{
               commonService.getDateValue(validator.completion_time, false)[1]
             }}</span>
           </div>

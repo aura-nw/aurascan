@@ -12,6 +12,5 @@ export class CurrentStatusComponent {
   currentSubTitle: string;
   @Input()
   currentStatus: { value: string; class: string; key: string };
-
   constructor(public global: Globals) {}
 }

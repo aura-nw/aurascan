@@ -8,7 +8,6 @@ import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
@@ -31,6 +30,6 @@ import { TransactionComponent } from './transaction.component';
     NgxJsonViewerModule,
     TableNoDataModule,
   ],
-  providers: [TransactionService, ValidatorService, MappingErrorService],
+  providers: [TransactionService, MappingErrorService],
 })
 export class TransactionModule {}
