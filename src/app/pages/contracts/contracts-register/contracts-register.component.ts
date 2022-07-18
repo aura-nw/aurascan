@@ -46,7 +46,7 @@ export class ContractsRegisterComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   modalReference: any;
-  currentCodeID: undefined;
+  currentCodeID: number;
   isEditMode = false;
   selectedTypeContract: string;
   lstTypeContract = REGISTER_CONTRACT;
@@ -259,14 +259,20 @@ export class ContractsRegisterComponent implements OnInit {
     modal.close('Close click');
   }
 
-  validateCurrentCodeID(s: any) {
-    this.currentCodeID = s.target.value.replace(/[-]/g, '');
-  }
-
   checkInput(): void {
     this.isDisable = true;
-    if (this.currentCodeID && this.selectedTypeContract) {
+    if ((this.currentCodeID && this.currentCodeID > 0) && this.selectedTypeContract) {
       this.isDisable = false;
     }
+  }
+
+  validateCurrentCodeID(event: any) {
+    const regex = new RegExp(/[0-9]/g);
+    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+      event.preventDefault();
+      return;
+    }
+    this.currentCodeID = event.target.value;
   }
 }
