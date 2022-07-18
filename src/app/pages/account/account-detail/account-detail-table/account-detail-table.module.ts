@@ -12,23 +12,25 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { RouterModule } from '@angular/router';
 import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
+import {LoadingImageModule} from "src/app/shared/components/loading-image/loading-image.module";
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatSortModule,
-    MatIconModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    TranslateModule,
-    CommonPipeModule,
-    SimplebarAngularModule,
-    RouterModule,
-    TableNoDataModule,
-    PaginatorModule
-  ],
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatSortModule,
+        MatIconModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        TranslateModule,
+        CommonPipeModule,
+        SimplebarAngularModule,
+        RouterModule,
+        TableNoDataModule,
+        PaginatorModule,
+        LoadingImageModule
+    ],
   exports: [AccountDetailTableComponent]
 })
 export class AccountDetailTableModule { }

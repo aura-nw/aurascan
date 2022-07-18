@@ -1,10 +1,10 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { Subscription, timer } from 'rxjs';
-import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
+import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -13,7 +13,6 @@ import { PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,7 +41,7 @@ export class DashboardComponent implements OnInit {
   dataBlock: any[];
 
   templatesTx: Array<TableTemplate> = [
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'Tx Hash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'height', headerCellDef: 'Height' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -58,7 +57,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     public commonService: CommonService,
-    private router: Router,
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
@@ -97,14 +95,8 @@ export class DashboardComponent implements OnInit {
   }
 
   getListBlock(): void {
-    this.blockService.blocks(this.PAGE_SIZE, 0).subscribe((res) => {
+    this.blockService.blocksLastest(this.PAGE_SIZE).subscribe((res) => {
       if (res?.data?.length > 0) {
-        res.data.forEach((block) => {
-          block.block_hash_format = block.block_hash.replace(
-            block.block_hash.substring(6, block.block_hash.length - 6),
-            '...',
-          );
-        });
         this.dataSourceBlock = new MatTableDataSource(res.data);
         this.dataBlock = res.data;
       }
@@ -118,7 +110,6 @@ export class DashboardComponent implements OnInit {
           trans.typeOrigin = trans.type;
           const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
           trans.type = typeTrans?.value;
-          trans.tx_hash_format = trans.tx_hash.replace(trans.tx_hash.substring(6, trans.tx_hash.length - 6), '...');
         });
         this.dataSourceTx = new MatTableDataSource(res.data);
         this.dataTx = res.data;
@@ -139,7 +130,6 @@ export class DashboardComponent implements OnInit {
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
-      // const data0 = res[0].data.map((i) => i.count);
       const data1 = res.data.map((i) => i.count);
       let categories = res.data.map((i) => i.timestamp);
 
@@ -163,7 +153,6 @@ export class DashboardComponent implements OnInit {
           color: '#FFA741',
         },
       };
-      // }
     });
   }
 

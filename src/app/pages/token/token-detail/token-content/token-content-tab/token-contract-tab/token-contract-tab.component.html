@@ -2,27 +2,31 @@
   <div class="d-flex mb-3">
     <button
       class="btn-contract"
+      [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.ReadContract }"
       [class.active]="countCurrent === contractType.ReadContract"
       (click)="changeTab(contractType.ReadContract)">
-      Read Contract
+      <span [class.text-gradient]="countCurrent === contractType.ReadContract"> Read Contract </span>
     </button>
     <button
       class="btn-contract"
+      [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.WriteContract }"
       [class.active]="countCurrent === contractType.WriteContract"
       (click)="changeTab(contractType.WriteContract)">
-      Write Contract
+      <span [class.text-gradient]="countCurrent === contractType.WriteContract"> Write Contract </span>
     </button>
     <button
       class="btn-contract"
+      [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.ReadProxy }"
       [class.active]="countCurrent === contractType.ReadProxy"
       (click)="changeTab(contractType.ReadProxy)">
-      Read as Proxy
+      <span [class.text-gradient]="countCurrent === contractType.ReadProxy"> Read as Proxy </span>
     </button>
     <button
       class="btn-contract"
+      [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.WriteProxy }"
       [class.active]="countCurrent === contractType.WriteProxy"
       (click)="changeTab(contractType.WriteProxy)">
-      Write as Proxy
+      <span [class.text-gradient]="countCurrent === contractType.WriteProxy"> Write as Proxy </span>
     </button>
   </div>
   <div class="mt-3">

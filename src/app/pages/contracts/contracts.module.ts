@@ -26,8 +26,11 @@ import { WriteContractComponent } from './contracts-detail/contracts-contents/co
 import { Cw20TokenComponent } from './contracts-detail/contracts-contents/cw20-token/cw20-token.component';
 import { ContractsDetailComponent } from './contracts-detail/contracts-detail.component';
 import { ContractsOverviewCardComponent } from './contracts-detail/contracts-overview-card/contracts-overview-card.component';
+import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,7 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     CodeContractComponent,
     ContractsVerifyComponent,
     CompilerOutputComponent,
+    ContractsRegisterComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +67,8 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ContractTableModule,
     ReactiveFormsModule,
     QrModule,
+    SharedModule,
+    ClickOutsideModule,
   ],
   providers: [ContractService],
 })

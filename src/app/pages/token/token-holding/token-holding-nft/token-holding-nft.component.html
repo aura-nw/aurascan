@@ -1,0 +1,65 @@
+<h1 class="title-small d-inline mr-2 text--white fw-500">NFT Assets (3)</h1>
+<div class="card mt-3">
+    <div class="card-body">
+        <div *ngIf="loading" class="m-auto mt-10">
+            <app-loading-sprint></app-loading-sprint>
+        </div>
+        <!-- Filter -->
+        <div class="mb-6 d-flex align-items-center justify-content-between">
+            <div class="title-small text--white fw-500">$32.41</div>
+            <form class="aura-form single-input-field">
+                <div class="input-group">
+                    <input  type="text"
+                            class="form-control"
+                            placeholder="Search Token Name or Address"
+                            [(ngModel)]="searchValue"
+                            (keyup.enter)="handleSearch()"
+                            [ngModelOptions]="{standalone: true}"
+                            name="inputEmail"
+                            autocomplete="off"
+                    />
+                    <button type="submit" class="btn-search {{searchValue && searchValue.length > 0 ? 'd-none' : ''}}"
+                            (click)="handleSearch()">
+                        <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                    </button>
+                    <button type="reset" class="btn-reset {{(!searchValue || searchValue && searchValue.length === 0) ? 'd-none' : ''}}"
+                            (click)="searchValue = null">
+                        <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- Table -->
+        <ng-container *ngIf="showedData?.length > 0; else noValues">
+            <div>
+                <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
+                    <div class="nft-cards__col col" *ngFor="let item of showedData">
+                        <div class="nft-cards__item-border">
+                            <a href="{{item.link}}" class="nft-cards__item">
+                                <div class="nft-cards__img">
+                                    <img *ngIf="item.img" src="{{ item.img }}" alt="" />
+                                    <img *ngIf="!item.img" src="assets/images/aura__ntf-dafault-img.png" alt="" />
+                                    <div class="nft-cards__label"><span class="text-gradient">{{item.symbol}}</span></div>
+                                </div>
+                                <div class="mt-3">
+                                    <span class="small-text mr-1 text--white">Token:</span>
+                                    <span class="small-text text--green">{{item.name}}</span>
+                                </div>
+                                <div class="mt-1 token-id">
+                                    <span class="small-text mr-1 text--white">Token ID:</span>
+                                    <span class="small-text text--green">{{item.tokenID}}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize"
+                               (pageEvent)="paginatorEmit($event)">
+                </app-paginator>
+            </div>
+        </ng-container>
+        <ng-template #noValues>
+            <app-table-no-data></app-table-no-data>
+        </ng-template>
+    </div>
+</div>

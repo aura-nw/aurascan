@@ -50,7 +50,6 @@ import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/timeout.interceptor';
 import { CommonService } from './core/services/common.service';
-import { ExtrapagesModule } from './extrapages/extrapages.module';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import {BlankModule} from "./pages/blank/blank.module";
@@ -126,7 +125,6 @@ export class MaterialModule {}
     NgbTooltipModule,
     NgbPopoverModule,
     NgbNavModule,
-    ExtrapagesModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
