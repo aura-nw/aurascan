@@ -4,8 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT, VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -13,6 +11,7 @@ import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
+import { balanceOf } from '../../../core/utils/common/parsing';
 
 @Component({
   selector: 'app-validators-detail',
@@ -20,30 +19,25 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
-  breadCrumbItems = [{ label: 'Validators' }, { label: 'List', active: false }, { label: 'Detail', active: true }];
-
   currentAddress: string;
-  currentValidatorDetail;
+  currentValidatorDetail: any;
 
   lengthBlock: number;
   lengthDelegator: number;
   lengthPower: number;
 
   pageSize = 5;
-
   pageIndexBlock = 0;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
 
-  typeTransaction = TYPE_TRANSACTION;
   arrayUpTime = new Array(100);
-  isUptimeMiss = true;
   statusValidator = STATUS_VALIDATOR;
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'block_hash_format', headerCellDef: 'Block Hash' },
+    { matColumnDef: 'block_hash', headerCellDef: 'Block Hash' },
     { matColumnDef: 'num_txs', headerCellDef: 'Txs' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
@@ -52,7 +46,7 @@ export class ValidatorsDetailComponent implements OnInit {
 
   dataSourceDelegator: MatTableDataSource<any> = new MatTableDataSource();
   templatesDelegator: Array<TableTemplate> = [
-    { matColumnDef: 'delegator_address_format', headerCellDef: 'Delegator Address' },
+    { matColumnDef: 'delegator_address', headerCellDef: 'Delegator Address' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
   ];
   displayedColumnsDelegator: string[] = this.templatesDelegator.map((dta) => dta.matColumnDef);
@@ -60,7 +54,7 @@ export class ValidatorsDetailComponent implements OnInit {
   dataSourcePower: MatTableDataSource<any> = new MatTableDataSource();
   templatesPower: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
-    { matColumnDef: 'tx_hash_format', headerCellDef: 'TxHash' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash' },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
@@ -90,7 +84,6 @@ export class ValidatorsDetailComponent implements OnInit {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.getDetail();
     this.getListBlockWithOperator();
-    this.getListUpTime();
     this.getListDelegator();
     this.getListPower();
   }
@@ -102,13 +95,14 @@ export class ValidatorsDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
-        this.currentValidatorDetail = res.data;
-        this.currentValidatorDetail.self_bonded = this.currentValidatorDetail.self_bonded / NUMBER_CONVERT;
-        this.currentValidatorDetail.power = this.currentValidatorDetail.power / NUMBER_CONVERT;
-        this.currentValidatorDetail.up_time =
-          this.currentValidatorDetail.status === this.statusValidator.Active
-            ? this.currentValidatorDetail.up_time
-            : '0%';
+
+        this.currentValidatorDetail = {
+          ...res.data,
+          self_bonded: balanceOf(res.data.self_bonded),
+          power: balanceOf(res.data.power),
+          up_time: 0,
+        };
+        this.getListUpTime();
       },
       (error) => {
         this.router.navigate(['/']);
@@ -122,12 +116,6 @@ export class ValidatorsDetailComponent implements OnInit {
       .subscribe((res) => {
         this.lengthBlockLoading = true;
         if (res?.data?.length > 0 && res?.meta) {
-          res.data.forEach((block) => {
-            block.block_hash_format = block.block_hash.replace(
-              block.block_hash.substring(6, block.block_hash.length - 6),
-              '...',
-            );
-          });
           this.lengthBlock = res.meta?.count;
           this.dataSourceBlock.data = res.data;
         }
@@ -140,6 +128,15 @@ export class ValidatorsDetailComponent implements OnInit {
       this.lastBlockLoading = true;
       if (res?.data?.length > 0) {
         this.arrayUpTime = res.data;
+        let errorBlockLength = 0;
+        this.arrayUpTime.forEach(k => {
+          if (k.isMissed) {
+            errorBlockLength += 1;
+          }
+        });
+
+        //calculator uptime last 100 blocks
+        this.currentValidatorDetail['up_time'] = 100 - Number(errorBlockLength);
       }
       this.lastBlockLoading = false;
     });
@@ -148,12 +145,6 @@ export class ValidatorsDetailComponent implements OnInit {
   getListDelegator(): void {
     this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress).subscribe((res) => {
       if (res?.data?.length > 0 && res?.total) {
-        res.data.forEach((delegator) => {
-          delegator.delegator_address_format = delegator.delegator_address.replace(
-            delegator.delegator_address.substring(6, delegator.delegator_address.length - 6),
-            '...',
-          );
-        });
         this.lengthDelegator = res.total;
         this.dataSourceDelegator = res;
       }
@@ -170,11 +161,11 @@ export class ValidatorsDetailComponent implements OnInit {
             power.isStakeMode = false;
             if (
               power.type === 'delegate' ||
-              (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress)
+              (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress) ||
+              power.type === 'create_validator'
             ) {
               power.isStakeMode = true;
             }
-            power.tx_hash_format = power.tx_hash.replace(power.tx_hash.substring(6, power.tx_hash.length - 6), '...');
           });
           this.dataSourcePower = res;
           this.lengthPower = res.meta?.count;

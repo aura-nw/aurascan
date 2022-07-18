@@ -4,6 +4,7 @@ export enum TokenTab {
   Info = 'info',
   Contract = 'contract',
   Analytics = 'analytics',
+  Inventory = 'inventory'
 }
 
 export enum TokenContractType {
@@ -17,4 +18,9 @@ export enum ContractType {
   Code = 'code',
   ReadContract = 'read',
   WriteContract = 'write',
+}
+
+export enum TokenType {
+  Token = 'Token',
+  NFT = 'NFT'
 }

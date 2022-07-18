@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-12">
     <button class="button button-outline button-outline__in-card">
-      <img src="assets/icons/icons-svg/color/chart-pie-right.svg" alt="" width="16px" />
-      <span class="text-gradient ml-1">Token Holders Chart</span>
+      <img src="assets/icons/icons-svg/white/chart-line-up.svg" alt="" width="16px" />
+      <span class="ml-1">Token Holders Chart</span>
     </button>
   </div>
   <div class="col-12 mt-3">
@@ -17,48 +17,37 @@
     </div>
     <ng-container *ngIf="pageData?.length > 0; else noValues">
       <div class="table-responsive aura-table-contain">
-        <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
+        <table mat-table [dataSource]="dataSource" class="aura-table">
           <!-- Rank Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef style="min-width: 50px">Rank</th>
+            <th mat-header-cell *matHeaderCellDef>Rank</th>
             <td mat-cell *matCellDef="let element">
               <span class="token-id">{{ element.id }}</span>
             </td>
           </ng-container>
 
           <!-- Address Column -->
-          <ng-container matColumnDef="name">
+          <ng-container matColumnDef="address">
             <th mat-header-cell *matHeaderCellDef>Address</th>
             <td mat-cell *matCellDef="let element" class="title-cell py-4">
-              <a [routerLink]="['/token/token', element.hashCode]" class="text-clamp">{{ element.name }}</a>
+              <a [routerLink]="['/tokens/token', element.hashCode]" class="text-clamp">{{ element.address }}</a>
             </td>
           </ng-container>
 
-          <!-- Amount Column -->
-          <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef>Amount</th>
-            <td mat-cell *matCellDef="let element">${{ element.amount | number: global.formatNumberOnlyDecimal }}</td>
+          <!-- quantity Column -->
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+            <td mat-cell *matCellDef="let element">{{ element.quantity}}</td>
           </ng-container>
 
           <!-- Percentage Column -->
           <ng-container matColumnDef="percentage">
             <th mat-header-cell *matHeaderCellDef>Percentage</th>
-            <td mat-cell *matCellDef="let element">{{ element.percentage }}%</td>
-          </ng-container>
-
-          <!-- Value Column -->
-          <ng-container matColumnDef="value">
-            <th mat-header-cell *matHeaderCellDef>Value</th>
-            <td mat-cell *matCellDef="let element">${{ element.value | number: global.formatNumberOnlyDecimal }}</td>
-          </ng-container>
-
-          <!-- Analytics -->
-          <ng-container matColumnDef="hashCode">
-            <th mat-header-cell *matHeaderCellDef>Analytics</th>
             <td mat-cell *matCellDef="let element">
-              <a [routerLink]="['/token/token', element.hashCode]">
-                <img src="assets/images/icons/chart-line.svg" alt="" />
-              </a>
+              <div>{{ element.percentage }}%</div>
+              <div class="percentage-bar mt-4">
+                <div class="percentage-bar__process" [style.width]="element.percentage + '%'"></div>
+              </div>
             </td>
           </ng-container>
 

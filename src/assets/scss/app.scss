@@ -25,14 +25,14 @@ File: Main Css File
 @import "custom/components/forms";
 // Plugins
 @import "custom/plugins/apexcharts";
-@import "custom/plugins/echarts";
+// @import "custom/plugins/echarts";
 // Pages
-@import "custom/pages/authentication";
-@import "custom/pages/email";
-@import "custom/pages/chat";
-@import "custom/pages/coming-soon";
-@import "custom/pages/timeline";
-@import "custom/pages/extras-pages";
+// @import "custom/pages/authentication";
+// @import "custom/pages/email";
+// @import "custom/pages/chat";
+// @import "custom/pages/coming-soon";
+// @import "custom/pages/timeline";
+// @import "custom/pages/extras-pages";
 // Custom Scss
 @import "./custom.scss";
 @import "./spacer.scss";

@@ -10,10 +10,12 @@
 
             <td mat-cell *matCellDef="let data">
               <div [classList]="[template.cssClass]" ngClass="d-flex align-items-center">
-                <span *ngIf="template.prefix">
+                <span *ngIf="template.prefix" class="cursor-pointer">
                   <ng-container *ngIf="template.prefix === 'operator_address'">
                     <div class="avatar-wrapper">
-                      <span class="validator-avatar d-inline-flex">
+                      <span
+                        class="validator-avatar d-inline-flex"
+                        [routerLink]="[template.isUrl, data['operator_address']]">
                         <app-loading-image [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
                       </span>
                     </div>
@@ -42,7 +44,7 @@
                           ? shortenAddress(data[template.matColumnDef])
                           : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
                       }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}

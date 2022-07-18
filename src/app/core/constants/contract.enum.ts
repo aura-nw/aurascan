@@ -17,3 +17,9 @@ export enum ContractTransactionType {
   CREATION = 'CREATION',
   OUT = 'OUT'
 }
+
+
+export enum ContractRegisterType {
+  CW20 = 'CW20',
+  CW721 = 'CW721'
+}

@@ -1,267 +1,267 @@
 import { Component, OnInit } from '@angular/core';
-import {TableTemplate} from "../../../../core/models/common.model";
-import {PageEvent} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
-import {TranslateService} from "@ngx-translate/core";
-import {Globals} from "../../../../global/global";
+import { PageEvent } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-token-cw721',
   templateUrl: './token-cw721.component.html',
-  styleUrls: ['./token-cw721.component.scss']
+  styleUrls: ['./token-cw721.component.scss'],
 })
 export class TokenCw721Component implements OnInit {
   textSearch = '';
+  filterSearchData = [];
   // data table
   mockData = [
     {
-      "id": 1,
-      "name": "Tether USD (USDT)",
-      "desc": "Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.",
-      "price": 1.002,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 1,
+      name: 'Tether USD (USDT)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 12379005541,
+      transfer3d: 34276784332,
     },
     {
-      "id": 2,
-      "name": "BNB (BNB)",
-      "desc": "Binance aims to build a world-class crypto exchange, powering the future of crypto finance.",
-      "price": 30157,
-      "change": -0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 2,
+      name: 'BNB (BNB)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 22379005541,
+      transfer3d: 54276784332,
     },
     {
-      "id": 3,
-      "name": "USD Coin (USDC)",
-      "desc": "USDC is a fully collateralized US Dollar stablecoin developed by CENTRE, the open source project with Circle being the first of several forthcoming issuers.",
-      "price": 30157,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 3,
+      name: 'USD Coin (USDC)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 32379005541,
+      transfer3d: 54276784332,
     },
     {
-      "id": 4,
-      "name": "HEX (HEX)",
-      "desc": "HEX.com averages 25% APY interest recently. HEX virtually lends value from stakers to non-stakers as staking reduces supply. The launch ends Nov. 19th, 2020 when HEX stakers get credited ~200B HEX. HEX's total supply is now ~350B. Audited 3 times, 2 security, and 1 economics.",
-      "price": 1.002,
-      "change": -0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 4,
+      name: 'HEX (HEX)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 7379005541,
+      transfer3d: 44276784332,
     },
     {
-      "id": 5,
-      "name": "Binance USD (BUSD)",
-      "desc": "Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.",
-      "price": 30157,
-      "change": -0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 5,
+      name: 'Binance USD (BUSD)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 1379005541,
+      transfer3d: 2276784332,
     },
     {
-      "id": 6,
-      "name": "Wrapped BTC (WBTC)",
-      "desc": "Wrapped Bitcoin (WBTC) is an ERC20 token backed 1:1 with Bitcoin. Completely transparent. 100% verifiable. Community led.",
-      "price": 1.002,
-      "change": -0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 6,
+      name: 'stETH (stETH)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 879005541,
+      transfer3d: 422276784332,
     },
     {
-      "id": 7,
-      "name": "stETH (stETH)",
-      "desc": "stETH is a token that represents staked ether in Lido, combining the value of initial deposit + staking rewards. stETH tokens are pegged 1:1 to the ETH staked with Lido and can be used as one would use ether, allowing users to earn Eth2 staking rewards whilst benefiting from Defi yields.",
-      "price": 30157,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 7,
+      name: 'Wrapped liquid staked Ether 2.0 (wstETH)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 2379005541,
+      transfer3d: 4276784332,
     },
     {
-      "id": 8,
-      "name": "Wrapped liquid staked Ether 2.0 (wstETH)",
-      "desc": "wstETH is a wrapped version of stETH. As some DeFi protocols require a constant balance mechanism for tokens, wstETH keeps your balance of stETH fixed and uses an underlying share system to reflect your earned staking rewards.",
-      "price": 1.002,
-      "change": -0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 8,
+      name: 'FTX Token (FTT)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 1179005541,
+      transfer3d: 4276784332,
     },
     {
-      "id": 9,
-      "name": "SHIBA INU (SHIB)",
-      "desc": "SHIBA INU is a 100% decentralized community experiment with it claims that 1/2 the tokens have been sent to Vitalik and the other half were locked to a Uniswap pool and the keys burned.",
-      "price": 30157,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 9,
+      name: 'SHIBA INU (SHIB)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 2279005541,
+      transfer3d: 4276784332,
     },
     {
-      "id": 10,
-      "name": "Dai Stablecoin (DAI)",
-      "desc": "Multi-Collateral Dai, brings a lot of new and exciting features, such as support for new CDP collateral types and Dai Savings Rate.",
-      "price": 1.002,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 10,
+      name: 'Dai Stablecoin (DAI)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 1779005541,
+      transfer3d: 2276784332,
     },
     {
-      "id": 11,
-      "name": "Matic Token (MATIC)",
-      "desc": "Matic Network brings massive scale to Ethereum using an adapted version of Plasma with PoS based side chains. Polygon is a well-structured, easy-to-use platform for Ethereum scaling and infrastructure development.",
-      "price": 1.002,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 11,
+      name: 'Matic Token (MATIC)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 179005541,
+      transfer3d: 5276784332,
     },
     {
-      "id": 12,
-      "name": "Theta Token (THETA)",
-      "desc": "A decentralized peer-to-peer network that aims to offer improved video delivery at lower costs.",
-      "price": 30157,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 12,
+      name: 'Theta Token (THETA)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 679005541,
+      transfer3d: 2276784332,
     },
     {
-      "id": 13,
-      "name": "Cronos Coin (CRO)",
-      "desc": "Pay and be paid in crypto anywhere, with any crypto, for free.",
-      "price": 1.002,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 13,
+      name: 'Cronos Coin (CRO)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 879005541,
+      transfer3d: 3276784332,
     },
     {
-      "id": 14,
-      "name": "Bitfinex LEO Token (LEO)",
-      "desc": "A utility token designed to empower the Bitfinex community and provide utility for those seeking to maximize the output and capabilities of the Bitfinex trading platform.",
-      "price": 30157,
-      "change": 0.04,
-      "volume": 52379005541,
-      "circulatingMarketCap": 74276784332,
-      "onChainMarketCap": 39902766084.69,
-      "holders": 	4573079,
-      "hashCode": "demo_abcdef",
-      "btc": 0.000033,
-      "eth": 0.000494,
+      id: 14,
+      name: 'Bitfinex LEO Token (LEO)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 2879005541,
+      transfer3d: 3276784332,
     },
-  ]
+    {
+      id: 15,
+      name: 'XRP (XPR)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 2579005541,
+      transfer3d: 2176784332,
+    },
+    {
+      id: 16,
+      name: 'Cardano (ADA)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 3479005541,
+      transfer3d: 7876784332,
+    },
+    {
+      id: 17,
+      name: 'Solana (SOL)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 2379005541,
+      transfer3d: 4276784332,
+    },
+    {
+      id: 18,
+      name: 'Dogecoin (DOGE)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 1379005541,
+      transfer3d: 8276784332,
+    },
+    {
+      id: 19,
+      name: 'TRON (TRX)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 3379005541,
+      transfer3d: 9276784332,
+    },
+    {
+      id: 20,
+      name: 'Polkadot (DOT)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 3379005541,
+      transfer3d: 7276784332,
+    },
+    {
+      id: 21,
+      name: 'Litecoin (LTC)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 3379005541,
+      transfer3d: 9276784332,
+    },
+    {
+      id: 22,
+      name: 'Chainlink (LINK)',
+      tokenContract: 'aura1s6rnsf93ka5g3swv858svh45da54sw7fc3nz682wm0plpl8llnksr4lqg3',
+      transfer: 3379005541,
+      transfer3d: 7276784332,
+    },
+  ];
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
-    { matColumnDef: 'price', headerCellDef: 'price' },
-    { matColumnDef: 'change', headerCellDef: 'change' },
-    { matColumnDef: 'volume', headerCellDef: 'volume' },
-    { matColumnDef: 'circulatingMarketCap', headerCellDef: 'circulatingMarketCap' },
-    { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
-    { matColumnDef: 'holders', headerCellDef: 'holders' },
+    { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
+    { matColumnDef: 'transfer', headerCellDef: 'transfer' },
+    { matColumnDef: 'transfer3d', headerCellDef: 'transfer3d' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  pageSize = 20;
+  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  sortedData: any;
+  sort: MatSort;
+
   constructor(
       public translate: TranslateService,
       public global: Globals,
-      ) { }
+      private router: Router) {}
 
   ngOnInit(): void {
     this.getTokenData();
-
   }
 
   filterData(keyWord: string) {
-    const filterData = this.mockData.filter(data => data.name.includes(keyWord) || data.hashCode.includes(keyWord));
-    this.pageData = {
-      length: filterData.length,
-      pageSize: 10,
-      pageIndex: 1
-    };
-    this.dataSource = new MatTableDataSource<any>(filterData);
+    keyWord = keyWord.toLowerCase();
+    this.filterSearchData = this.mockData.filter(
+      (data) => data.name.toLowerCase().includes(keyWord) || data.tokenContract.toLowerCase().includes(keyWord),
+    );
   }
 
   getTokenData() {
     this.pageData = {
       length: this.mockData.length,
-      pageSize: 10,
-      pageIndex: 1
+      pageSize: this.pageSize,
+      pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
     this.dataSource = new MatTableDataSource<any>(this.mockData);
   }
 
   searchToken(): void {
-    if (this.textSearch.length > 0) {
+    this.filterSearchData = [];
+    if (this.textSearch && this.textSearch.length > 0) {
       this.filterData(this.textSearch);
-    } else {
-      this.getTokenData();
     }
   }
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  handlePageEvent(e: any) {
+    this.pageData = e;
+  }
+
+  handleLink(): void {
+    this.router.navigate(['/tokens/token/', this.filterSearchData[0]?.tokenContract]);
+  }
+
+  sortData(sort: Sort) {
+    let data = this.mockData.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+
+    this.sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'transfer':
+          return this.compare(a.transfer, b.transfer, isAsc);
+        case 'transfer3d':
+          return this.compare(a.transfer3d, b.transfer3d, isAsc);
+        default:
+          return 0;
+      }
+    });
+
+    let dataFilter = this.sortedData;
+    this.pageData = {
+      length: dataFilter.length,
+      pageSize: this.pageSize,
+      pageIndex: PAGE_EVENT.PAGE_INDEX,
+    };
+    this.dataSource = new MatTableDataSource<any>(dataFilter);
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }
