@@ -23,7 +23,7 @@ export const MENU: MenuItem[] = [
     id: 4,
     label: 'MENUITEMS.PROPOSAL.TEXT',
     icon: 'archive',
-    link: '/proposal',
+    link: '/votings',
   },
   {
     id: 5,
@@ -34,18 +34,18 @@ export const MENU: MenuItem[] = [
   // {
   //     id: 6,
   //     label: 'MENUITEMS.TOKEN.TEXT',
-  //     icon: 'user',
-  //     link: '/token',
+  //     icon: 'coin',
+  //     link: '/tokens',
   //     subItems: [
   //         {
   //             id: 1,
   //             label: 'CW-20 Top Tokens',
-  //             link: '/token',
+  //             link: '/tokens',
   //         },
   //         {
   //             id: 2,
   //             label: 'CW-721 Top Tokens',
-  //             link: '/token/tokens-nft',
+  //             link: '/tokens/tokens-nft',
   //         }
   //     ]
   // },

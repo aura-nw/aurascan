@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
@@ -9,9 +9,10 @@ import { TokenTab } from '../../../../core/constants/token.enum';
   styleUrls: ['./token-content.component.scss'],
 })
 export class TokenContentComponent implements OnInit {
-  TABS = TOKEN_TAB.filter((vote) =>
-    [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics].includes(vote.key),
-  ).map((vote) => ({
+  @Input() isNFTContract: boolean;
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
+  tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
+  TABS = TOKEN_TAB.filter((vote) => this.tabToken.includes(vote.key)).map((vote) => ({
     ...vote,
     value: vote.value,
     key: vote.key === TokenTab.Transfers ? '' : vote.key,
@@ -20,15 +21,24 @@ export class TokenContentComponent implements OnInit {
   textSearch: string = '';
   searchTemp: string = '';
   isSearchTx = false;
-  isSearchAddres = false;
+  isSearchAddress = false;
   resultSearch = 0;
-  tabsBackup = this.TABS;
   tokenTab = TokenTab;
+  tabsBackup: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.TABS = TOKEN_TAB.filter((vote) =>
+      (this.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key),
+    ).map((vote) => ({
+      ...vote,
+      value: vote.value,
+      key: vote.key === TokenTab.Transfers ? '' : vote.key,
+    }));
+    this.tabsBackup = this.TABS;
+  }
 
   changeTab(tabId): void {
     this.countCurrent = tabId;
@@ -53,16 +63,15 @@ export class TokenContentComponent implements OnInit {
             this.isSearchTx = true;
             tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
           } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(ADDRESS_PREFIX)) {
-            this.isSearchAddres = true;
+            this.isSearchAddress = true;
             tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders);
           }
           this.TABS = tempTabs || this.tabsBackup;
-        }
-        else {
+        } else {
           this.textSearch = '';
         }
       }, 500);
-    } 
+    }
   }
 
   getLength(result: string) {
@@ -72,7 +81,7 @@ export class TokenContentComponent implements OnInit {
   resetSearch() {
     this.searchTemp = null;
     this.textSearch = null;
-    this.isSearchAddres = false;
+    this.isSearchAddress = false;
     this.isSearchTx = false;
     this.handleSearch();
   }

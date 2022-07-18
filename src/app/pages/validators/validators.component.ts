@@ -9,12 +9,11 @@ import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { NUMBER_CONVERT, PAGE_SIZE_OPTIONS } from '../../../app/core/constants/common.constant';
+import { NUMBER_CONVERT, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
-import { TYPE_STAKING } from '../../../app/core/constants/validator.constant';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
-import { CommonDataDto, DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
+import { DataDelegateDto, ResponseDto, TableTemplate } from '../../../app/core/models/common.model';
 import { AccountService } from '../../../app/core/services/account.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { MappingErrorService } from '../../../app/core/services/mapping-error.service';
@@ -48,40 +47,24 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
   dataSourceBk: MatTableDataSource<any>;
 
-  pageIndex = 0;
-
-  templatesWallet: Array<TableTemplate> = [
-    { matColumnDef: 'validator_name', headerCellDef: 'Name', desktopOnly: true },
-    { matColumnDef: 'amount_staked', headerCellDef: 'Amount Staked' },
-    { matColumnDef: 'pending_reward', headerCellDef: 'Pending Reward' },
-    { matColumnDef: 'action', headerCellDef: '' },
-  ];
-  displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);
-  dataSourceWallet: MatTableDataSource<any>;
-  lengthWallet = 0;
-
-  pageSizeOptions = PAGE_SIZE_OPTIONS;
-  isActive = true;
+  arrayDelegate = [];
   textSearch = '';
   rawData: any[];
   sortedData: any;
-  dataHeader = new CommonDataDto();
   dataModal: any;
   clicked = false;
   totalDelegator = 0;
-  claimReward = 0;
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
   validatorAddress = [];
   selectedValidator: string;
-  listTypeStake = TYPE_STAKING;
   searchNullData = false;
   listStakingValidator = [];
   validatorDetail = '';
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
-  dataDelegate = new DataDelegateDto();
+  dataDelegate: DataDelegateDto;
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
   modalReference: any;
@@ -90,10 +73,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
-  isDisableClaim = true;
+
+
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
+  isLoading = false;
   _routerSubscription: Subscription;
 
   destroyed$ = new Subject();
@@ -105,10 +90,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.pageYOffset = window.pageYOffset;
   }
 
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-
   chainInfo = this.environmentService.configValue.chain_info;
+  denom = this.chainInfo.currencies[0].coinDenom;
+  coinMinimalDenom = this.chainInfo.currencies[0].coinMinimalDenom;
 
   constructor(
     private validatorService: ValidatorService,
@@ -127,10 +111,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadDataTemp();
+    // this.loadDataTemp();
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
+        this.arrayDelegate = null;
+        this.dataDelegate = null;
+        this.lstUndelegate = null;
         this.userAddress = wallet.bech32Address;
         this.getDataWallet();
       } else {
@@ -160,22 +147,19 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit(): void {}
 
-  loadDataTemp(): void {
-    //get data from client for wallet info
-    let retrievedObject = localStorage.getItem('dataInfoWallet');
-    let data = JSON.parse(retrievedObject);
-    if (data) {
-      this.dataDelegate = JSON.parse(data?.dataDelegate);
-      //check wallet is staked
-      if (Number(this.dataDelegate.delegatedToken) > 0) {
-        this.isDisableClaim = false;
-        this.lstUndelegate = JSON.parse(data?.lstUndelegate);
-        let arrayDelegate = JSON.parse(data?.arrayDelegate);
-        this.dataSourceWallet = new MatTableDataSource(arrayDelegate);
-        this.lengthWallet = arrayDelegate?.length;
-      }
-    }
-  }
+  // loadDataTemp(): void {
+  //   //get data from client for wallet info
+  //   let retrievedObject = localStorage.getItem('dataInfoWallet');
+  //   let data = JSON.parse(retrievedObject);
+  //   if (data) {
+  //     this.dataDelegate = JSON.parse(data?.dataDelegate);
+  //     //check wallet is staked
+  //     if (Number(this.dataDelegate?.delegatedToken) > 0) {
+  //       this.lstUndelegate = JSON.parse(data?.lstUndelegate);
+  //       this.arrayDelegate = JSON.parse(data?.arrayDelegate);
+  //     }
+  //   }
+  // }
 
   getList(): void {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
@@ -183,9 +167,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.rawData = res.data;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
-          if (val.target_count > 0 && val.vote_count / val.target_count <= 0.5) {
-            val.isPartiDown = true;
-          }
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
           val.up_time = Number(val.up_time.replace('%',''));
@@ -271,12 +252,18 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
+  handleViewPopup(data) {
+    if (data.isClaimMode) {
+      this.handleClaim();
+    } else {
+      this.viewPopupDetail(data.modal, data.address, this.dialogMode.Manage);
+    }
+  }
+
   viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
     this.currentValidatorDialog = address;
     const view = async () => {
-      // this.walletService.connectKeplr(this.walletService.chainId);
       const account = this.walletService.getAccount();
-
       if (account && account.bech32Address) {
         this.clicked = true;
         this.amountFormat = null;
@@ -303,6 +290,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
         this.clicked = false;
         this.isExceedAmount = false;
+        this.errorExceedAmount = false;
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,
@@ -329,57 +317,63 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   //Get data for wallet info and list staking
   getDataWallet() {
-    const halftime = 30000;
+    const halftime = 10000;
     const currentUrl = this.router.url;
-    let dataInforWallet = {};
+    let dataInfoWallet = {};
     if (this.userAddress && currentUrl === '/validators') {
       forkJoin({
         dataWallet: this.accountService.getAccountDetail(this.userAddress),
-        dataListDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
-        dataListUndelegator: this.validatorService.validatorsListUndelegateWallet(this.userAddress),
+        listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
+        listUnDelegator: this.validatorService.validatorsListUndelegateWallet(this.userAddress),
       }).subscribe(
-        (res) => {
-          if (res.dataWallet) {
-            this.dataDelegate.delegatableVesting = res?.dataWallet?.data?.delegatable_vesting;
-            this.dataDelegate.delegatedToken = res?.dataWallet?.data?.delegated;
-            this.dataDelegate.availableToken = res?.dataWallet?.data?.available;
-            this.dataDelegate.stakingToken = res?.dataWallet?.data?.stake_reward;
-            this.dataDelegate.historyTotalReward = res?.dataListDelegator?.data?.claim_reward / NUMBER_CONVERT || 0;
+        ({ dataWallet, listDelegator, listUnDelegator }) => {
+          if (dataWallet) {
+            this.dataDelegate = {
+              ...this.dataDelegate,
+              delegatableVesting: dataWallet?.data?.delegatable_vesting,
+              delegatedToken: dataWallet?.data?.delegated,
+              availableToken: dataWallet?.data?.available,
+              stakingToken: dataWallet?.data?.stake_reward,
+              historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
+            };
+
+            // this.dataDelegate.delegatableVesting = dataWallet?.data?.delegatable_vesting;
+            // this.dataDelegate.delegatedToken = dataWallet?.data?.delegated;
+            // this.dataDelegate.availableToken = dataWallet?.data?.available;
+            // this.dataDelegate.stakingToken = dataWallet?.data?.stake_reward;
+            // this.dataDelegate.historyTotalReward = listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0;
           }
 
-          this.isDisableClaim = false;
-          if (Number(this.dataDelegate.stakingToken) === 0) {
-            this.isDisableClaim = true;
-          }
+          dataInfoWallet['arrayDelegate'] = JSON.stringify({});
 
-          dataInforWallet['arrayDelegate'] = JSON.stringify({});
-          if (res.dataListDelegator) {
-            this.listStakingValidator = res.dataListDelegator?.data?.delegations;
+          if (listDelegator) {
+            this.listStakingValidator = listDelegator?.data?.delegations;
+
             if (this.currentValidatorDialog) {
               this.dataDelegate.validatorDetail = this.listStakingValidator?.find(
                 (f) => f.validator_address === this.currentValidatorDialog,
               );
             }
-            this.lengthWallet = 0;
-            if (res?.dataListDelegator?.data?.delegations.length > 0) {
-              res?.dataListDelegator?.data?.delegations.forEach((f) => {
+
+            if (listDelegator?.data?.delegations.length > 0) {
+              listDelegator?.data?.delegations.forEach((f) => {
                 f.amount_staked = f.amount_staked / NUMBER_CONVERT;
                 f.pending_reward = f.pending_reward / NUMBER_CONVERT;
                 f.reward = f.reward / NUMBER_CONVERT;
               });
-
               //check amount staked > 0
-              let arrayDelegate = res?.dataListDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
-              this.dataSourceWallet = new MatTableDataSource(arrayDelegate);
-              this.lengthWallet = arrayDelegate?.length;
-              dataInforWallet['arrayDelegate'] = JSON.stringify(arrayDelegate);
+              this.arrayDelegate = listDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
+              dataInfoWallet['arrayDelegate'] = JSON.stringify(this.arrayDelegate);
+            } else {
+              this.arrayDelegate = null;
+              this.lstUndelegate = null;
             }
           }
 
-          if (res.dataListUndelegator) {
+          if (listUnDelegator) {
             this.lstUndelegate = [];
             const now = new Date();
-            res.dataListUndelegator.data.forEach((data) => {
+            listUnDelegator.data.forEach((data) => {
               data.entries.forEach((f) => {
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
@@ -396,11 +390,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             });
           }
 
-          //store data wallet info
-          dataInforWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
-          dataInforWallet['lstUndelegate'] = JSON.stringify(this.lstUndelegate);
-          local.setItem('dataInfoWallet', dataInforWallet);
-
+          // store data wallet info
+          dataInfoWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
+          dataInfoWallet['lstUndelegate'] = JSON.stringify(this.lstUndelegate);
+          local.setItem('dataInfoWallet', dataInfoWallet);
           setTimeout(() => {
             this.getDataWallet();
             this.getList();
@@ -449,7 +442,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleStaking() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const excuteStaking = async () => {
+      const executeStaking = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
@@ -469,13 +463,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.checkStatusExecuteBlock(hash, error, '');
       };
 
-      excuteStaking();
+      executeStaking();
     }
   }
 
   handleClaim() {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       const executeClaim = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
@@ -499,7 +494,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   handleUndelegate() {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
-      const excuteUnStaking = async () => {
+      const executeUnStaking = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
@@ -518,7 +514,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
-      excuteUnStaking();
+      executeUnStaking();
     }
   }
 
@@ -526,6 +522,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.checkAmountStaking();
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeReStaking = async () => {
+        this.isLoading = true;
         const { hash, error } = await createSignBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
@@ -607,6 +604,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       }, 4000);
     }
     this.isHandleStake = false;
+    this.isLoading = false;
   }
 
   checkDetailTx(id, message) {
@@ -617,8 +615,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         message = this.mappingErrorService.checkMappingError(message, numberCode);
         if (numberCode !== undefined) {
           if (!!!numberCode && numberCode === CodeTransaction.Success) {
-            this.getList();
-            this.getDataWallet();
+            setTimeout(() => {
+              this.getList();
+              this.getDataWallet();
+            }, TIME_OUT_CALL_API);
             this.toastr.success(message);
           } else {
             this.toastr.error(message);
@@ -632,4 +632,5 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }
+
 }

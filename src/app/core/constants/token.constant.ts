@@ -10,6 +10,10 @@ export const TOKEN_TAB = [
     value: 'Holders',
   },
   {
+    key: TokenTab.Inventory,
+    value: 'Inventory',
+  },
+  {
     key: TokenTab.Info,
     value: 'Info',
   },

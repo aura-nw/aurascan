@@ -10,10 +10,10 @@
 * lightbox
 */
 
-@import "~ngx-lightbox/lightbox.css";
+// @import "~ngx-lightbox/lightbox.css";
 
 // Select2
-@import "~@ng-select/ng-select/themes/default.theme.css";
+// @import "~@ng-select/ng-select/themes/default.theme.css";
 
 // Custome css
 .border_none {
@@ -32,15 +32,15 @@ body[data-layout-mode="dark"] {
     }
 
     // Advance Form
-    .ng-select .ng-select-container {
-        background-color: lighten($gray-dark-200, 2%);
-        color: $gray-dark-500;
-        border-color: $gray-dark-300;
+    // .ng-select .ng-select-container {
+    //     background-color: lighten($gray-dark-200, 2%);
+    //     color: $gray-dark-500;
+    //     border-color: $gray-dark-300;
 
-        .ng-value-container .ng-input>input {
-            color: $gray-dark-500;
-        }
-    }
+    //     .ng-value-container .ng-input>input {
+    //         color: $gray-dark-500;
+    //     }
+    // }
 
     .ng-dropdown-panel {
         background-color: lighten($gray-dark-200, 2%) !important;
@@ -366,6 +366,16 @@ body {
     .popover-body {
         padding: 16px;
         min-width: 230px;
+    }
+
+    &.token-popover .arrow::before {
+        top: 227px;
+        @media (min-width: 576px) {
+            top: 217px;
+        }
+        @media (min-width: 992px) {
+            top: 223px;
+        }
     }
 }
 

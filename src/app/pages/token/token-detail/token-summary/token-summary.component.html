@@ -3,57 +3,95 @@
     <div class="table-responsive">
       <table class="aura-basic-table w-100">
         <tr>
-          <td colspan="2">Profile Summary <a class="text--green" href="javascript:void(0)">[Edit]</a></td>
-          <td class="">
-            <div class="d-flex justify-content-end">
-              <button class="button button-chart button-outline button-outline__in-card -small">
-                <img src="assets/images/icons/arrow-move-down.svg" alt="" width="24px" />
-                <span class="ml-2">More</span>
-              </button>
+          <td colspan="2">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="body">
+                <span class="fw-semibold text--white">Profile Summary </span>
+                <a class="text--green" href="javascript:void(0)">[Edit]</a>
+              </div>
+              <div>
+                <button class="button button-chart button-outline button-outline__in-card -small">
+                  <span class="mr-2 small-text">More</span>
+                  <img src="assets/images/icons/arrow-move-down.svg" alt="" width="24px" />
+                </button>
+              </div>
             </div>
           </td>
         </tr>
 
         <tr>
-          <td>Contract:</td>
           <td colspan="2">
-            <a class="text--green" routerLink="/blocks/id/0xB8c77482e45F1F44dE1745F52C74426C631bDD52"
-              >0xB8c77482e45F1F44dE1745F52C74426C631bDD52</a
-            >
-          </td>
-        </tr>
-
-        <tr>
-          <td>Decimals:</td>
-          <td colspan="2">6</td>
-        </tr>
-
-        <tr>
-          <td>Offcial Site:</td>
-          <td colspan="2"><a class="text--green" href="https://aura.network">https://aura.network</a></td>
-        </tr>
-
-        <tr>
-          <td>Social Profiles:</td>
-          <td colspan="2">
-            <div class="d-flex">
-              <a href="https://github.com/aura-nw" target="_blank">
-                <i class="mr-3 aura-icon icon--switch-stage icon-github"></i>
-              </a>
-              <a href="https://twitter.com/AuraNetworkHQ" target="_blank">
-                <i class="mx-3 aura-icon icon--switch-stage icon-twitter"></i>
-              </a>
-              <a href="https://www.facebook.com/AuraNetworkHQ/" target="_blank">
-                <i class="mx-3 aura-icon icon--switch-stage icon-fb-circle"></i>
-              </a>
-              <a href="https://t.me/auranw" target="_blank">
-                <i class="mx-3 aura-icon icon--switch-stage icon-telegram"></i>
-              </a>
-              <a href="https://www.linkedin.com/company/auranetwork/about/" target="_blank">
-                <i class="ml-3 aura-icon icon--switch-stage icon-linkedIn"></i>
-              </a>
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col">Contract:</div>
+              <div class="break-word">
+                <a class="text--green g-ellipsis" routerLink="/blocks/id/0xB8c77482e45F1F44dE1745F52C74426C631bDD52"
+                  >0xB8c77482e45F1F44dE1745F52C74426C631bDD52</a
+                >
+              </div>
             </div>
           </td>
+        </tr>
+
+        <tr *ngIf="!isNFTContract">
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col">Decimals:</div>
+              <div>6</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col">Official Site:</div>
+              <div><a class="text--green" href="https://aura.network">https://aura.network</a></div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2" class="border_none">
+            <div class="d-flex align-items-center py-2">
+              <div class="first-col">Social Profiles:</div>
+              <div class="d-flex social-group">
+                <a
+                  href="https://github.com/aura-nw"
+                  target="_blank"
+                  class="d-flex align-items-center justify-content-center body">
+                  <i class="mr-3 icon icon-github"></i>
+                </a>
+                <a
+                  href="https://twitter.com/AuraNetworkHQ"
+                  target="_blank"
+                  class="d-flex align-items-center justify-content-center body">
+                  <i class="mx-3 icon icon-twitter"></i>
+                </a>
+                <a
+                  href="https://www.facebook.com/AuraNetworkHQ/"
+                  target="_blank"
+                  class="d-flex align-items-center justify-content-center body">
+                  <i class="mx-3 icon icon-facebook"></i>
+                </a>
+                <a
+                  href="https://t.me/auranw"
+                  target="_blank"
+                  class="d-flex align-items-center justify-content-center body">
+                  <i class="mx-3 icon icon-file-document"></i>
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/auranetwork/about/"
+                  target="_blank"
+                  class="d-flex align-items-center justify-content-center body">
+                  <i class="ml-3 icon icon-email"></i>
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="isNFTContract">
+          <td colspan="2"></td>
         </tr>
       </table>
     </div>
