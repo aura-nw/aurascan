@@ -21,7 +21,7 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title text-gradient d-lg-none small-text">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) : ng.wallet?.name}}</span>
+        <span class="button__title text-gradient d-lg-none small-text">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name}}</span>
         <span class="button__title text-gradient d-none d-lg-block body">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
         <img
           class="flex-shrink-0"
