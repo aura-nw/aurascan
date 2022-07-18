@@ -1,75 +1,78 @@
 .button {
-    &-primary {
-        padding: var(--spacer-2) var(--spacer-3);
-        @media (min-width: 992px) {
-            padding: 8px 20px;
-        }
+  &-primary {
+    padding: var(--spacer-2) var(--spacer-3);
+    @media (min-width: 992px) {
+      padding: 8px 20px;
     }
+  }
 }
 
 .aura-table th:not(:last-child) {
-    width: 23%;
+  width: 23%;
 }
 
-.aura-table.transaction { 
-    th:not(:last-child) {
-        width: 16%;
-    }
-    .width-type {
-        width: 30% !important;
-    }
-    .label__status {
-        display: inline-block;
-        max-width: 165px;
-        white-space: nowrap;
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-    }
+.aura-table.transaction {
+  th:not(:last-child) {
+    width: 16%;
+  }
+  .width-type {
+    width: 30% !important;
+  }
+  .width-txhash {
+    width: 33% !important;
+  }
+  .label__status {
+    display: inline-block;
+    max-width: 165px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
 }
 
 .card-highlight {
-    .card-highlight__label {
-        font-weight: 500;
-        @media (min-width: 992px) {
-            font-weight: 400;
-        }
+  .card-highlight__label {
+    font-weight: 500;
+    @media (min-width: 992px) {
+      font-weight: 400;
     }
-    .card-highlight__content {
-        font-weight: 500;
-    }
+  }
+  .card-highlight__content {
+    font-weight: 500;
+  }
 }
 
 :host::ng-deep {
-    apx-chart {
-        .apexcharts-text tspan {
-            font-size: 1.2rem;
-            line-height: 1.6rem;
-            @media (min-width: 992px) {
-                font-size: 1.6rem;
-                line-height: 2.4rem;
-            }
-        }
-        .apexcharts-toolbar {
-            top: -15px !important;
-            @media (max-width: 992px) {
-                top: -33px !important;
-            }
-            .apexcharts-zoomin-icon,
-            .apexcharts-zoomout-icon,
-            .apexcharts-menu-icon {
-                display: flex;
-                align-items: center;
-                margin-right: 12px;
-                width: auto;
-                height: auto;
-            }
-            i.icon {
-                font-size: 2.86rem;
-                transition: color .35s ease-in-out;
-                &:hover {
-                    color: var(--aura-green);
-                }
-            }
-        }
+  apx-chart {
+    .apexcharts-text tspan {
+      font-size: 1.2rem;
+      line-height: 1.6rem;
+      @media (min-width: 992px) {
+        font-size: 1.6rem;
+        line-height: 2.4rem;
+      }
     }
+    .apexcharts-toolbar {
+      top: -15px !important;
+      @media (max-width: 992px) {
+        top: -33px !important;
+      }
+      .apexcharts-zoomin-icon,
+      .apexcharts-zoomout-icon,
+      .apexcharts-menu-icon {
+        display: flex;
+        align-items: center;
+        margin-right: 12px;
+        width: auto;
+        height: auto;
+      }
+      i.icon {
+        font-size: 2.86rem;
+        transition: color 0.35s ease-in-out;
+        &:hover {
+          color: var(--aura-green);
+        }
+      }
+    }
+  }
 }

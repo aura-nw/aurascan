@@ -54,7 +54,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       headerCellDef: 'Validator',
       isUrl: '/validators',
       paramField: 'operator_address',
-      prefix: 'operator_address'
+      prefix: 'operator_address',
     },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
     { matColumnDef: 'option', headerCellDef: 'Answer' },

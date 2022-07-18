@@ -7,53 +7,25 @@
     display: flex;
     width: 100%;
     height: 48px;
-
     .cumulative-share_cum {
       height: 100%;
       background: #ecf8f4;
     }
-
     .cumulative-share_fill {
       height: 100%;
       background: #c5f1de;
     }
-  }
-
-  .box-undelegate,
-  .box-validators {
-    .card-header {
-      @media (max-width: 991.99px) {
-        padding-bottom: 0;
-      }
-    }
-  }
-}
-
-.undelegate-item {
-  padding: var(--spacer-3) 0;
-
-  @media (min-width: 991.99px) {
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--aura-dark-gray);
-    }
-  }
-
-  &.table-mobile__item {
-    padding: 12px;
   }
 }
 
 form.search-form-validators {
   .input-group {
     background-color: var(--aura-bg-form);
-
     input.form-control {
       width: 100%;
-
       @media (min-width: 992px) {
         width: 300px;
       }
-
       @media (min-width: 1200px) {
         width: 500px;
       }
@@ -69,34 +41,28 @@ form.search-form-validators {
   justify-content: center;
   align-items: center;
   min-height: 48px;
-
   @media (min-width: 992px) {
     min-height: 60px;
   }
-
   .mat-form-field-wrapper {
     width: 100%;
     text-align: center;
     padding: 0;
   }
-
   .mat-form-field-flex {
     padding: 0;
     background: transparent;
   }
-
   .mat-select-placeholder,
   mat-select-trigger {
     position: relative;
     color: var(--aura-white);
     font-size: 1.4rem;
     line-height: 1.6rem;
-
     @media (min-width: 992px) {
       font-size: 1.6rem;
       line-height: 1.9rem;
     }
-
     &:after {
       content: '';
       position: absolute;
@@ -105,45 +71,37 @@ form.search-form-validators {
       transform: translateY(-50%);
       width: 12px;
       height: 12px;
-      background: url("../../../assets/icons/icons-svg/white/triangle-down.svg");
+      background: url('../../../assets/icons/icons-svg/white/triangle-down.svg');
       background-size: cover;
     }
   }
-
   .mat-select-arrow {
     border: none;
   }
-
   .mat-form-field-underline {
     display: none;
   }
 }
 
 .mat-option {
-  background: #25252C;
-
+  background: #25252c;
   @media (max-width: 991.99px) {
     padding: var(--spacer-3) 0;
   }
-
   .option-contain {
     font-size: 1.4rem;
     line-height: 1.6rem;
-
     @media (min-width: 992px) {
       font-size: 1.6rem;
       line-height: 2.4rem;
     }
-
-    .option-lable {
+    .option-label {
       &:first-child {
         width: 50%;
       }
-
       &.active {
         span {
           position: relative;
-
           &:after {
             content: '';
             position: absolute;
@@ -153,7 +111,7 @@ form.search-form-validators {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #5E84E6;
+            background-color: #5e84e6;
           }
         }
       }
@@ -162,12 +120,11 @@ form.search-form-validators {
 }
 
 .commissionPanel {
-  background: #25252C;
+  background: #25252c;
   min-width: 100% !important;
   padding: var(--spacer-3) 0 !important;
   border-radius: 8px;
   transform: translate3D(16px, 40px, 0) !important;
-
   @media (min-width: 992px) {
     padding: var(--spacer-4) 0 !important;
     transform: translate3D(16px, 45px, 0) !important;
@@ -191,9 +148,12 @@ form.search-form-validators {
   }
 }
 
-.aura-table {
-  .button-outline__in-card {
-    box-shadow: 2px 1000px 1px #20262B inset;
+.box-undelegate,
+.box-validators {
+  .card-header {
+    @media (max-width: 991.99px) {
+      padding-bottom: 0;
+    }
   }
 }
 
@@ -210,20 +170,12 @@ form.search-form-validators {
   opacity: 0.5;
 }
 
-
-
 .box-title-validator {
   position: relative;
   min-height: 35px;
-  align-items: center;
   overflow: visible;
-  display: inline-block;
-
   display: flex;
   align-items: center;
-
-
-
   .text-title {
     opacity: 0.5;
     min-width: 60px;
@@ -233,7 +185,6 @@ form.search-form-validators {
   .label-jailed {
     text-align: center;
     transform: rotate(-15deg);
-
     span {
       position: absolute;
       font-weight: 700;
@@ -256,20 +207,19 @@ form.search-form-validators {
     .text-title {
       min-width: 30px;
     }
-
     .label-jailed span {
       margin-left: 10px;
     }
   }
 }
-
 .avatar-wrapper.validator-avatar-wrapper .jailed {
   left: unset;
 }
+
 @media (max-width: 991.99px) {
   .validator-container {
     .button-outline__in-card {
-      box-shadow: 2px 1000px 1px #38383D inset;
+      box-shadow: 2px 1000px 1px #38383d inset;
     }
   }
 }
@@ -279,7 +229,6 @@ form.search-form-validators {
   height: 32px;
   display: flex;
   align-items: center;
-
   @media (min-width: 992px) {
     height: 34px;
   }

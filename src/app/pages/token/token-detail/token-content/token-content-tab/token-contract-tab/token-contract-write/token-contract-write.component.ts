@@ -3,8 +3,6 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
 import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { GAS_ESTIMATE, STABLE_UTOKEN } from 'src/app/core/constants/common.constant';
-import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 

@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
-import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
+import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 
 export interface IValidatorVotes {
@@ -22,7 +22,7 @@ export interface IValidatorVotes {
 export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;
   PROPOSAL_VOTE_EXT = PROPOSAL_VOTE.concat({
-    key: 'null',
+    key: VOTE_OPTION.VOTE_OPTION_NULL,
     value: 'Did not vote',
     class: '',
     voteOption: '',
@@ -30,29 +30,24 @@ export class ValidatorsVotesComponent implements OnInit {
 
   TABS = this.PROPOSAL_VOTE_EXT.filter((vote) =>
     [
-      'VOTE_OPTION_UNSPECIFIED',
-      'VOTE_OPTION_YES',
-      'VOTE_OPTION_ABSTAIN',
-      'VOTE_OPTION_NO',
-      'VOTE_OPTION_NO_WITH_VETO',
-      'null',
+      VOTE_OPTION.VOTE_OPTION_UNSPECIFIED,
+      VOTE_OPTION.VOTE_OPTION_YES,
+      VOTE_OPTION.VOTE_OPTION_ABSTAIN,
+      VOTE_OPTION.VOTE_OPTION_NO,
+      VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO,
+      VOTE_OPTION.VOTE_OPTION_NULL,
     ].includes(vote.key),
   ).map((vote) => ({
     ...vote,
     value: vote.value.toUpperCase(),
-    key: vote.key === 'VOTE_OPTION_UNSPECIFIED' ? '' : vote.key,
+    key: vote.key === VOTE_OPTION.VOTE_OPTION_UNSPECIFIED ? '' : vote.key,
   }));
 
   voteDataList: IValidatorVotes[] = [];
   voteDataListLoading = true;
-
-  _voteList: IValidatorVotes[] = [];
-
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
-
   LIMIT_DEFAULT = 10000;
-
   query = [];
 
   voteData = {
@@ -98,10 +93,10 @@ export class ValidatorsVotesComponent implements OnInit {
           this.voteDataList = [...this.voteData.all.proposalVotes];
 
           this.countVote.set('', this.voteData.all.countTotal);
-          this.countVote.set('VOTE_OPTION_YES', this.voteData.all.countYes);
-          this.countVote.set('VOTE_OPTION_ABSTAIN', this.voteData.all.countAbstain);
-          this.countVote.set('VOTE_OPTION_NO', this.voteData.all.countNo);
-          this.countVote.set('VOTE_OPTION_NO_WITH_VETO', this.voteData.all.countNoWithVeto);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
+          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.all.countNoWithVeto);
           this.countVote.set('null', this.voteData.all.countDidNotVote);
         }
         this.voteDataListLoading = false;
@@ -115,16 +110,16 @@ export class ValidatorsVotesComponent implements OnInit {
       case '':
         this.voteDataList = this.voteData.all.proposalVotes;
         break;
-      case 'VOTE_OPTION_YES':
+      case VOTE_OPTION.VOTE_OPTION_YES:
         this.voteDataList = this.voteData.yes.proposalVotes;
         break;
-      case 'VOTE_OPTION_ABSTAIN':
+      case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
         this.voteDataList = this.voteData.abstain.proposalVotes;
         break;
-      case 'VOTE_OPTION_NO':
+      case VOTE_OPTION.VOTE_OPTION_NO:
         this.voteDataList = this.voteData.no.proposalVotes;
         break;
-      case 'VOTE_OPTION_NO_WITH_VETO':
+      case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
         this.voteDataList = this.voteData.noWithVeto.proposalVotes;
         break;
       default:

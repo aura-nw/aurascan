@@ -92,7 +92,7 @@
 <!-- Cards -->
 <section>
   <div class="row">
-    <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.block_height">
+    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.block_height">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -113,7 +113,7 @@
       </div>
       <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.total_txs_num">
+    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.total_txs_num">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -134,7 +134,7 @@
       </div>
       <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6" *ngIf="global && global.dataHeader && global.dataHeader.bonded_tokens">
+    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.bonded_tokens">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -147,6 +147,7 @@
           <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="sub-text text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.bonded_tokens | number: global.formatNumberOnlyDecimal }}
+              {{ global?.dataHeader?.supply ? ('/ ' + global?.dataHeader?.supply) : ''  }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
@@ -157,12 +158,7 @@
     </div>
     <div
       class="col-xl-3 col-md-6"
-      *ngIf="
-        global &&
-        global.dataHeader &&
-        global.dataHeader.total_validator_active_num &&
-        global.dataHeader.total_validator_num
-      ">
+      *ngIf="global?.dataHeader?.total_validator_active_num && global?.dataHeader?.total_validator_num">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -174,8 +170,8 @@
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="sub-text text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.total_validator_active_num }} /
-              {{ global?.dataHeader?.total_validator_num }}
+              {{ global?.dataHeader?.total_validator_active_num }}
+              {{ global?.dataHeader?.total_validator_num ? ('/ ' + global?.dataHeader?.total_validator_num) : '' }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
@@ -296,6 +292,7 @@
                       <th
                         mat-header-cell
                         *matHeaderCellDef
+                        [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                         [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
@@ -306,10 +303,10 @@
                               {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                             </div>
                             <a
-                              *ngSwitchCase="'tx_hash_format'"
+                              *ngSwitchCase="'tx_hash'"
                               class="text--green cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
-                              {{ data[template.matColumnDef] }}
+                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
@@ -342,7 +339,7 @@
                   [link]="'/transaction/' + data.tx_hash"
                   [title]="{
                     size: 'md',
-                    label: data.tx_hash_format,
+                    label: data.tx_hash | cutStringPipe: 6:6,
                     subLabelContent: data.type,
                     subLabelClass: 'label__status',
                     status: data.code
