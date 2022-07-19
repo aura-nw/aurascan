@@ -140,7 +140,6 @@ export class ValidatorsDetailComponent implements OnInit {
     this.validatorService
       .delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress)
       .subscribe((res) => {
-        console.log(res);
         if (Number(res?.pagination?.total) > 0 && res?.delegation_responses) {
           this.lengthDelegator = Number(res?.pagination?.total);
           let data = [];
