@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import { WidgetModule } from '../../../app/shared/widget/widget.module';
-import { CountToModule } from 'angular-count-to';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SimplebarAngularModule } from 'simplebar-angular';
@@ -12,7 +10,6 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { LightboxModule } from 'ngx-lightbox';
 import { MaterialModule } from '../../../app/app.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -29,8 +26,6 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    WidgetModule,
-    CountToModule,
     SharedModule,
     NgApexchartsModule,
     SimplebarAngularModule,
@@ -39,7 +34,6 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
     RouterModule,
     NgbDropdownModule,
     NgbNavModule,
-    LightboxModule,
     MaterialModule,
     NgxMaskModule,
     CommonPipeModule,

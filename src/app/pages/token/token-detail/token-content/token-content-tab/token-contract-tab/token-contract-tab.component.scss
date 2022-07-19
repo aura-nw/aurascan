@@ -6,14 +6,12 @@
     margin-right: 1rem;
     color: var(--aura-light-gray);
     background-color: var(--aura-bg-contract);
-    border: 1px solid var(--aura-light-gray);
-    &.active {
-      color: var(--aura-white);
+    border: 1.5px solid var(--aura-light-gray);
+    &.button-outline {
       border: solid 1.5px transparent;
-      background-image: linear-gradient(var(--aura-bg-contract), var(--aura-bg-contract)),
-        linear-gradient(108deg, #5ee6d0 12.51%, #bfc6ff 51.13%, #ffba69 87.49%);
-      background-clip: content-box, border-box;
-      box-shadow: 2px 1000px 1px var(--aura-black) inset;
     }
+  }
+  .content-contract {
+    word-break: break-word;
   }
 }

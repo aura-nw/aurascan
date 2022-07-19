@@ -20,6 +20,7 @@
                 <button class="btn button-inline body mr-3" (click)="closeVoteForm()" color="primary">Cancel</button>
                 <button class="button button-outline body" color="primary" (click)="onSubmitVoteForm()"
                     [disabled]="keyVote === null">
+                    <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
                     <span class="text-gradient">Confirm</span>
                 </button>
             </div>

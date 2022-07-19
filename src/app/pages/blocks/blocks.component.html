@@ -21,10 +21,10 @@
                         {{ data[template.matColumnDef] }}
                       </a>
                       <a
-                        *ngSwitchCase="'block_hash_format'"
+                        *ngSwitchCase="'block_hash'"
                         class="text--green cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
-                        {{ data[template.matColumnDef] }}
+                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                       <a
                         *ngSwitchCase="'proposer'"

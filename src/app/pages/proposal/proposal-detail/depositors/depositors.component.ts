@@ -19,7 +19,6 @@ export interface IDepositor {
 export class DepositorsComponent implements OnInit {
   @Input() proposalId: number;
   voteDataList: IDepositor[] = [];
-  _voteList: IDepositor[] = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
