@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
+  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -47,8 +48,11 @@ export class ValidatorService extends CommonService {
 
   delegators(limit: string | number, offset: string | number, address: string): Observable<any> {
     this.setURL();
+    // return this.http.get<any>(
+    //   `${this.apiUrl}/validators/${address}/delegator-by-validator-addr?limit=${limit}&offset=${offset}`,
+    // );
     return this.http.get<any>(
-      `${this.apiUrl}/validators/${address}/delegator-by-validator-addr?limit=${limit}&offset=${offset}`,
+      `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.offset=${offset}&pagination.limit=${limit}&pagination.countTotal=true&pagination.reverse=true`,
     );
   }
 

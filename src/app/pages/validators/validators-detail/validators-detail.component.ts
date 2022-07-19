@@ -10,6 +10,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 
@@ -143,12 +144,18 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getListDelegator(): void {
-    this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress).subscribe((res) => {
-      if (res?.data?.length > 0 && res?.total) {
-        this.lengthDelegator = res.total;
-        this.dataSourceDelegator = res;
-      }
-    });
+    this.validatorService
+      .delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress)
+      .subscribe((res) => {
+        if (Number(res?.pagination?.total) > 0 && res?.delegation_responses) {
+          this.lengthDelegator = Number(res?.pagination?.total);
+          let data = [];
+          res.delegation_responses.forEach((k) => {
+            data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
+          });
+          this.dataSourceDelegator = new MatTableDataSource(data);
+        }
+      });
   }
 
   getListPower(): void {
