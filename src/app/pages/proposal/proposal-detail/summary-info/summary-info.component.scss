@@ -13,11 +13,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 var(--spacer-4);
+      padding: 0 var(--spacer-3);
     }
   }
 }
 
+.editorial-container {
+  max-height: 360px;
+  overflow-y: scroll;
+  background-color: var(--bs-gray-700);
+  border-radius: 4px;
+  ::ng-deep {
+    & * {
+      color: var(--aura-white) !important;
+    }
+    a {
+      color: var(--aura-green) !important;
+    }
+  }
+}
 ::ng-deep.proposal__summary-total {
   color: var(--aura-white);
 

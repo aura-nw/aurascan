@@ -66,7 +66,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.messages,
       this.transactionDetail?.type,
       this.transactionDetail?.raw_log,
-      this.coinMinimalDenom
+      this.coinMinimalDenom,
     );
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
@@ -123,17 +123,20 @@ export class TransactionMessagesComponent implements OnInit {
                   let arrayAmount = data.filter((k) => k.key === 'amount');
                   this.amountClaim = 0;
                   arrayAmount.forEach((element) => {
-                    this.amountClaim += Number(element.value.replace(this.coinMinimalDenom, '')) / NUMBER_CONVERT || 0;
+                    this.amountClaim += Number(element.value?.replace(this.coinMinimalDenom, '')) / NUMBER_CONVERT || 0;
                   });
                 } else {
-                  let amount = data.find((k) => k.key === 'amount').value;
-                  this.amountClaim = amount.replace(this.coinMinimalDenom, '') / NUMBER_CONVERT || 0;
+                  let amount = data.find((k) => k.key === 'amount')?.value;
+                  let recipient = data.find((k) => k.key === 'recipient')?.value || '';
+                  if (recipient === this.transactionDetail?.messages[0]?.delegator_address) {
+                    this.amountClaim = amount?.replace(this.coinMinimalDenom, '') / NUMBER_CONVERT || 0;
+                  }
                 }
               }
               this.transactionDetail?.messages.forEach((message) => {
                 const validator = data.find((trans) => trans.key === 'validator')?.value;
                 if (validator === message.validator_address) {
-                  let amount = data.find((k) => k.key === 'amount').value.replace(this.coinMinimalDenom, '');
+                  let amount = data.find((k) => k.key === 'amount')?.value?.replace(this.coinMinimalDenom, '');
                   amount = amount / NUMBER_CONVERT || 0;
                   this.listAmountClaim.push(amount);
                 }

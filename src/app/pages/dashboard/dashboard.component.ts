@@ -2,6 +2,7 @@ import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, timer } from 'rxjs';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -12,7 +13,6 @@ import { PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getListBlock(): void {
-    this.blockService.blocks(this.PAGE_SIZE, 0).subscribe((res) => {
+    this.blockService.blocksLastest(this.PAGE_SIZE).subscribe((res) => {
       if (res?.data?.length > 0) {
         this.dataSourceBlock = new MatTableDataSource(res.data);
         this.dataBlock = res.data;

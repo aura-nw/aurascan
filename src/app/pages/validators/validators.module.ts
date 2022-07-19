@@ -46,7 +46,6 @@ import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.com
   ],
   providers: [
     CommonService,
-    ValidatorService,
     BlockService,
     TransactionService,
     AccountService,

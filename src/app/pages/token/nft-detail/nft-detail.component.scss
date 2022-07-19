@@ -14,9 +14,19 @@
   display: inline-block;
 }
 .nft-img__contain {
-  padding: 12px;
+  padding: var(--spacer-2);
+  @media (min-width: 1200px) {
+    padding: var(--spacer-3);
+  }
   border: 1px solid var(--aura-dark-gray);
   border-radius: 16px;
+  img {
+    width: 108px;
+    height: auto;
+    @media (min-width: 1200px) {
+      width: 100%;
+    }
+  }
 }
 .object-fit--none {
   object-fit: none;
@@ -38,5 +48,33 @@
       color: var(--aura-greyscale-1);
       min-width: 160px;
     }
+    .g-ellipsis {
+      width: unset;
+      max-width: 100px;
+      @media (min-width: 414px) {
+        max-width: 150px;
+      }
+      @media (min-width: 576px) {
+        max-width: 300px;
+      }
+      @media (min-width: 768px) {
+        max-width: 450px;
+      }
+      @media (min-width: 1360px) {
+        max-width: 500px;
+      }
+    }
+  }
+}
+
+@media (max-width: 991.99px) {
+  .aura-table th.mat-header-cell:nth-child(1) {
+    min-width: 80px;
+  }
+  .aura-table th.mat-header-cell:not(:nth-child(1)) {
+    min-width: 200px;
+  }
+  .aura-table th.mat-header-cell:nth-child(5) {
+    min-width: 300px;
   }
 }

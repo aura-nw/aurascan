@@ -129,7 +129,8 @@ export class WalletService implements OnDestroy {
 
     if (coin98) {
       try {
-        await keplrSuggestChain(chainInfo);
+        // await keplrSuggestChain(chainInfo);
+        await coin98.experimentalSuggestChain(chainInfo)
         await coin98.enable(chainInfo.chainId);
 
         const account = await coin98.getKey(chainInfo.chainId);

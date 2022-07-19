@@ -98,8 +98,12 @@
           <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_deposit_end_time }}</div>
         </div>
         <div class="row small-body">
-          <div class="col-12 col-md-2 fw-semibold">Details</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_description }}</div>
+          <div class="col-12 col-md-2 fw-semibold d-lg-flex align-items-center">Details</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">
+            <div class="editorial-container p-4 py-lg-8 px-lg-4">
+              <div id="marked"></div>
+            </div>
+          </div>
         </div>
         <div class="divider divider-horizontal mt-4 mt-lg-5"></div>
       </div>
@@ -108,7 +112,7 @@
       <div
         class="proposal__summary-total"
         *ngIf="!votingBarLoading && proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
-        <div class="row mb-3 small-body">
+        <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
           <div class="col-12 col-md-2 title-small fw-semibold">Final Status:</div>
           <div
             class="col-12 col-md-10 mt-2 mt-lg-0 text--green title-small fw-semibold"
@@ -116,7 +120,11 @@
             {{ getStatus(proposalDetail.pro_status)?.value | titlecase }}
           </div>
         </div>
-        <div class="mt-2 mb-3 small-body text--white">{{ finalSubTitle }}</div>
+        <div
+          class="mt-2 mb-3 small-body text--white"
+          *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+          {{ finalSubTitle }}
+        </div>
         <div class="row mb-3 small-body">
           <div class="col-12 col-md-2 fw-semibold">Total:</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
@@ -255,17 +263,18 @@
       </div>
       <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
         <div class="row proposal__summary-total">
-          <div class="col-12 col-lg-6 pr-lg-8 border-right">
+          <div class="col-12 col-lg-6 pr-lg-8" [class.border-right]="!breakpoint.value.matches">
             <app-current-turnout
               [proposalDetail]="proposalDetail"
               [isNotReached]="isNotReached"
               [quorumStatus]="quorumStatus"></app-current-turnout>
           </div>
-          <div class="col-12 col-lg-6 pl-lg-8">
+          <div *ngIf="breakpoint.value.matches" class="divider divider-horizontal mt-4 mt-lg-5"></div>
+          <div class="col-12 col-lg-6 pl-lg-8 mt-3 mt-lg-0">
             <app-current-status
               [proposalDetail]="proposalDetail"
               [currentSubTitle]="currentSubTitle"
-              [currentStatus]="getCurrentStatus(proposalDetail.pro_status)">
+              [currentStatus]="getCurrentStatus(currentStatus)">
             </app-current-status>
           </div>
         </div>
@@ -277,3 +286,8 @@
     </div>
   </div>
 </ng-container>
+<script>
+  $( document ).ready(function() {
+    document.getElementById('marked').innerHTML =  marked.parse('# Marked in the browser\n\nRendered by **marked**.');
+  });
+</script>

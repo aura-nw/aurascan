@@ -5,7 +5,9 @@ import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
 

@@ -174,7 +174,7 @@ $theme-colors: (
     "dark":       $dark
 );
 // scss-docs-end theme-colors-map
-$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+// $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
@@ -347,7 +347,7 @@ $spacers: (
     5: ($spacer * 3)
 );
 
-$negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
+// $negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
 // scss-docs-end spacer-variables-maps
 
 // Position
@@ -412,7 +412,7 @@ $grid-breakpoints: (
 
 
 @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
-@include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
+// @include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
 
 
 // Grid containers
@@ -1273,7 +1273,7 @@ $popover-border-radius:             $border-radius-lg;
 $popover-inner-border-radius:       subtract($popover-border-radius, $popover-border-width);
 $popover-box-shadow:                0 .25rem .5rem rgba($black, .2);
 
-$popover-header-bg:                 shade-color($popover-bg, 4%);
+// $popover-header-bg:                 shade-color($popover-bg, 4%);
 $popover-header-color:              $headings-color;
 $popover-header-padding-y:          .5rem;
 $popover-header-padding-x:          $spacer;
