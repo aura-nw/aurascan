@@ -17,7 +17,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   tabCurrent = 0;
   contractAddress = '';
   contractTxHash = '';
-  contractName = '';
   isVerified = false;
 
   TAB = [
@@ -39,12 +38,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
-    this.contractName = this.route.snapshot.paramMap.get('contractName');
 
     if (
       this.contractAddress.trim().length === 0 ||
-      this.contractTxHash.trim().length === 0 ||
-      this.contractName.trim().length === 0
+      this.contractTxHash.trim().length === 0
     ) {
       this.router.navigate(['contracts']);
     }
