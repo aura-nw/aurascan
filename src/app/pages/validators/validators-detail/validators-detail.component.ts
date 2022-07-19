@@ -11,6 +11,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -136,89 +137,19 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getListDelegator(): void {
-    const res = {
-      delegation_responses: [
-        {
-          delegation: {
-            delegator_address: 'aura1xydnzs2s9pjh4cksc2ejv3t002d7pwedld2lp8',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '11201255.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '11201255' },
-        },
-        {
-          delegation: {
-            delegator_address: 'aura1gghut5gf39ys4tu34qm8e6rjcutgnw0kgaww9s',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '50000000.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '50000000' },
-        },
-        {
-          delegation: {
-            delegator_address: 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '64000000.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '64000000' },
-        },
-        {
-          delegation: {
-            delegator_address: 'aura1srvkelaryqj34qfktc6sq0zvhf6tq60kjpc5re',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '15000000.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '15000000' },
-        },
-        {
-          delegation: {
-            delegator_address: 'aura1edw4lwcz3esnlgzcw60ra8m38k3zygz2aewzcf',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '100000000.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '100000000' },
-        },
-        {
-          delegation: {
-            delegator_address: 'aura1me70qgn5clsrwzq3wy6gxtv3y0mjzrqwejslqg',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '18000000.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '18000000' },
-        },
-        {
-          delegation: {
-            delegator_address: 'aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx',
-            validator_address: 'auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh',
-            shares: '42000000.000000000000000000',
-          },
-          balance: { denom: 'utaura', amount: '42000000' },
-        },
-      ],
-      pagination: {
-        next_key: null,
-        total: '7',
-      },
-    };
-    console.log(res);
-    if (Number(res?.pagination?.total) > 0 && res?.delegation_responses) {
-      this.lengthDelegator = Number(res?.pagination?.total);
-      let data = [];
-      res.delegation_responses.forEach((k) => {
-        data.push({delegator_address: k.delegation.delegator_address, amount: k.balance.amount});
+    this.validatorService
+      .delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress)
+      .subscribe((res) => {
+        console.log(res);
+        if (Number(res?.pagination?.total) > 0 && res?.delegation_responses) {
+          this.lengthDelegator = Number(res?.pagination?.total);
+          let data = [];
+          res.delegation_responses.forEach((k) => {
+            data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
+          });
+          this.dataSourceDelegator = new MatTableDataSource(data);
+        }
       });
-      console.log(data);
-      this.dataSourceDelegator = new MatTableDataSource(data);
-    }
-
-    this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress).subscribe((res) => {
-      console.log(res);
-
-      // if (res?.data?.length > 0 && res?.total) {
-      //   this.lengthDelegator = res.total;
-      //   this.dataSourceDelegator = res;
-      // }
-    });
   }
 
   getListPower(): void {
