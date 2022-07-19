@@ -182,27 +182,6 @@ form.search-form-validators {
     display: block;
   }
 
-  .label-jailed {
-    text-align: center;
-    transform: rotate(-15deg);
-    span {
-      position: absolute;
-      font-weight: 700;
-      font-size: 12px;
-      line-height: 14px;
-      align-items: center;
-      letter-spacing: 0.05em;
-      color: var(--aura-danger);
-      transform: rotate(-15deg);
-      border: 1px solid var(--aura-danger);
-      padding: 2px 7px;
-      left: 50%;
-      min-width: 50px;
-      top: -19px;
-      transform: translateX(-50%);
-    }
-  }
-
   @media (max-width: 991.99px) {
     .text-title {
       min-width: 30px;

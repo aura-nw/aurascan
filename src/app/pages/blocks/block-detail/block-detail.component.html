@@ -9,7 +9,7 @@
 </div>
 
 <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="card-body header-mob" [ngClass]="breakpoint.value.matches ? 'card-body' : 'card-header'">
+  <div class="card-body header-mob px-4 py-4 px-lg-6 py-lg-6" [ngClass]="breakpoint.value.matches ? 'card-body' : 'card-header'">
     <div class="title-small d-none d-lg-flex fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
     <div class="d-flex justify-content-between align-items-center d-lg-none">
       <div class="title-small fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
