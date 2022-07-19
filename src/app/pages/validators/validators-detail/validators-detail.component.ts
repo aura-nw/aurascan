@@ -12,7 +12,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
-import { balanceOf } from '../../../core/utils/common/parsing';
 
 @Component({
   selector: 'app-validators-detail',
