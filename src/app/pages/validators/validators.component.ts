@@ -601,7 +601,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
-      }, 4000);
+      }, TIME_OUT_CALL_API);
     }
     this.isHandleStake = false;
     this.isLoading = false;
