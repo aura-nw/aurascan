@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {AfterViewChecked, Component, Input, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
@@ -23,13 +23,15 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
+// import * as  marked  from 'marked'
+const marked = require('marked')
 
 @Component({
   selector: 'app-summary-info',
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
 })
-export class SummaryInfoComponent implements OnInit {
+export class SummaryInfoComponent implements OnInit, AfterViewChecked{
   @Input() proposalId: number;
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
@@ -45,7 +47,6 @@ export class SummaryInfoComponent implements OnInit {
   currentSubTitle = '';
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
@@ -134,17 +135,26 @@ export class SummaryInfoComponent implements OnInit {
             };
 
             if (pro_turnout >= quorum) {
-              if (pro_votes_yes >= (pro_total_vote - pro_votes_abstain) / 2) {
-                if (pro_votes_no_with_veto < (pro_total_vote - pro_votes_abstain) / 3) {
+              if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
+                if (pro_votes_no_with_veto < (pro_total_vote) / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                     '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe.transform(noWithVetoPercent, this.global.formatNumber2Decimal).toString(),
+                    this.numberPipe
+                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                      .toString(),
                   );
                 }
-              } else {
+              } else if (pro_votes_no_with_veto < (pro_total_vote) / 3) {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
+              } else {
+                this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                  '{{proposalDetail.noWithVetoPercent}}',
+                  this.numberPipe
+                    .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                    .toString(),
+                );
               }
             } else {
               this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
@@ -193,33 +203,54 @@ export class SummaryInfoComponent implements OnInit {
   }
 
   parsingProposalStatus(proposalDetail): void {
+    const currentTotal =
+      proposalDetail.pro_votes_yes + proposalDetail.pro_votes_no + proposalDetail.pro_votes_no_with_veto || 0;
+    const currentYesPercent = (proposalDetail.pro_votes_yes * 100) / currentTotal || 0;
+    const currentNoPercent = (proposalDetail.pro_votes_no * 100) / currentTotal || 0;
+    const currentNoWithVetoPercent = (proposalDetail.pro_votes_no_with_veto * 100) / currentTotal || 0;
+
     if (proposalDetail.pro_turnout >= proposalDetail.quorum) {
       this.isNotReached = false;
       this.quorumStatus = VOTING_QUORUM.REACHED;
-      if (proposalDetail.yesPercent >= proposalDetail.threshold) {
+
+      if (proposalDetail.currentYesPercent > proposalDetail.threshold) {
         if (proposalDetail.noWithVetoPercent < proposalDetail.veto_threshold) {
           // case pass
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_PASSED;
           this.currentSubTitle =
             'This proposal may pass when the voting period is over because current quorum is more than ' +
-            proposalDetail.quorum +
+            this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
             '% and there are more than ' +
-            proposalDetail.veto_threshold +
-            ' of Yes votes.';
+            this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+            '% of Yes votes.';
         } else {
           this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
           this.currentSubTitle =
-            'The proportion of NoWithVeto votes is superior to ' + proposalDetail.veto_threshold + '%';
+            'The proportion of NoWithVeto votes is superior to ' +
+            this.numberPipe.transform(proposalDetail.veto_threshold, this.global.formatNumber2Decimal).toString() +
+            '%';
         }
       } else {
         this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
-        this.currentSubTitle = 'The proportion of Yes votes is inferior to ' + proposalDetail.threshold + '%';
+        this.currentSubTitle =
+          'The proportion of Yes votes is inferior to ' +
+          this.numberPipe.transform(proposalDetail.threshold, this.global.formatNumber2Decimal).toString() +
+          '%';
       }
     } else {
       this.currentStatus = VOTING_STATUS.PROPOSAL_STATUS_REJECTED;
       this.currentSubTitle =
-        'Current quorum is less than ' + proposalDetail.quorum + '% and this proposal requires more participation';
+        'Current quorum is less than ' +
+        this.numberPipe.transform(proposalDetail.quorum, this.global.formatNumber2Decimal).toString() +
+        '% and this proposal requires more participation';
     }
+    this.proposalDetail = {
+      ...this.proposalDetail,
+      currentTotal,
+      currentYesPercent,
+      currentNoPercent,
+      currentNoWithVetoPercent,
+    };
   }
 
   getStatus(key: string) {
@@ -416,5 +447,13 @@ export class SummaryInfoComponent implements OnInit {
       return (isNegative ? '-' : '') + numberVote + key;
     }
     return (isNegative ? '-' : '') + abs + key;
+  }
+
+  ngAfterViewChecked(): void {
+    const editor = document.getElementById('marked');
+    if(editor) {
+      editor.innerHTML = marked.parse(this.proposalDetail.pro_description);
+      return;
+    }
   }
 }

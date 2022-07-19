@@ -14,7 +14,7 @@
         Before a user wants to register a type contract for a Code ID, the user has to claim ownership of the Code ID
         successfully
       </div>
-      <div class="small-body text--light-gray mt-1">{{ pageData?.length }} contract registered</div>
+      <div class="small-body text--light-gray mt-1">{{ pageData?.length }} contract{{ pageData?.length > 1 ? 's' : ''}} registered</div>
     </div>
     <form class="aura-form single-input-field search-form mt-4">
       <div class="input-group small-input" [class.textbox_search]="breakpoint.value.matches">
@@ -198,17 +198,16 @@
       <div class="box-body-register col-12">
         <p class="body-small" [class.input-require]="!isEditMode">Code ID</p>
         <div class="box-input">
-          <input
-            (keyup)="validateCurrentCodeID($event)"
+          <input type="text"
             class="form-check-input col-12 mb-4"
-            [type]="'number'"
-            oninput="javascript: if (this.value.length > 50) this.value = this.value.slice(0, 50);"
+            [maxlength]="50"
             [(ngModel)]="currentCodeID"
-            (ngModelChange)="checkInput()"
             [disabled]="isEditMode"
+                 (keypress)="validateCurrentCodeID($event)"
+                 (keyup)="checkInput()"
             placeholder="Enter a Code ID" />
         </div>
-        <p class="small-text text--neutrals-4">Enter a Code ID that you owned/ created.</p>
+        <p class="small-text text--neutrals-4">Enter a Code ID that you owned/ created (ID must be greater than 0).</p>
         <p class="body-small input-require">Type Contract</p>
         <div class="box-input">
           <mat-form-field appearance="fill" contract>
@@ -216,7 +215,7 @@
               class="list-token"
               placeholder="Select a type contract"
               panelClass="contractPanel"
-              (selectionChange)="checkInput()"
+              (selectionChange)="checkInput();"
               [(value)]="selectedTypeContract"
               [disableOptionCentering]="true">
               <mat-option *ngFor="let item of lstTypeContract" [value]="item.value">
@@ -236,7 +235,7 @@
           type="button"
           class="button body button-outline"
           (click)="handleButtonContract(isEditMode)"
-          [disabled]="(!isEditMode && isDisable) || isProcess">
+          [disabled]="isDisable || isProcess">
           <span class="text-gradient">
             <ng-container *ngIf="isEditMode">Update</ng-container>
             <ng-container *ngIf="!isEditMode">Register</ng-container>

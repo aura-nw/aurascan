@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { getInfo } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
@@ -36,13 +34,13 @@ export class BlocksComponent implements OnInit {
   }
 
   getList(): void {
-    this.blockService.blocks(this.pageSize, 0).subscribe((res) => {
+    this.blockService.blocksLastest(this.pageSize).subscribe((res) => {
       this.loading = true;
       this.getInfoCommon();
       if (res?.data?.length > 0) {
         this.dataSource = new MatTableDataSource(res.data);
         this.dataBlock = res.data;
-        this.length = res.meta.count;
+        this.length = res?.data?.length;
       }
       this.loading = false;
     });

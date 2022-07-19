@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NUMBER_CONVERT } from 'src/app/core/constants/common.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -13,6 +12,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
+import { balanceOf } from '../../../core/utils/common/parsing';
 
 @Component({
   selector: 'app-validators-detail',
@@ -85,7 +85,6 @@ export class ValidatorsDetailComponent implements OnInit {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.getDetail();
     this.getListBlockWithOperator();
-    this.getListUpTime();
     this.getListDelegator();
     this.getListPower();
   }
@@ -97,15 +96,14 @@ export class ValidatorsDetailComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
-        this.currentValidatorDetail = res.data;
-        this.currentValidatorDetail = Object.assign(res.data, {
-          self_bonded: this.currentValidatorDetail.self_bonded / NUMBER_CONVERT,
-          power: this.currentValidatorDetail.power / NUMBER_CONVERT,
-          up_time:
-            this.currentValidatorDetail.status === this.statusValidator.Active
-              ? this.currentValidatorDetail.up_time
-              : '0%',
-        });
+
+        this.currentValidatorDetail = {
+          ...res.data,
+          self_bonded: balanceOf(res.data.self_bonded),
+          power: balanceOf(res.data.power),
+          up_time: 0,
+        };
+        this.getListUpTime();
       },
       (error) => {
         this.router.navigate(['/']);
@@ -131,6 +129,15 @@ export class ValidatorsDetailComponent implements OnInit {
       this.lastBlockLoading = true;
       if (res?.data?.length > 0) {
         this.arrayUpTime = res.data;
+        let errorBlockLength = 0;
+        this.arrayUpTime.forEach(k => {
+          if (k.isMissed) {
+            errorBlockLength += 1;
+          }
+        });
+
+        //calculator uptime last 100 blocks
+        this.currentValidatorDetail['up_time'] = 100 - Number(errorBlockLength);
       }
       this.lastBlockLoading = false;
     });

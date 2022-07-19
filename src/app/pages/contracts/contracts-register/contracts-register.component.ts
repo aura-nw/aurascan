@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { from } from 'rxjs';
+import {from, Subscription} from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
@@ -46,7 +46,7 @@ export class ContractsRegisterComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   modalReference: any;
-  currentCodeID: undefined;
+  currentCodeID: number;
   isEditMode = false;
   selectedTypeContract: string;
   lstTypeContract = REGISTER_CONTRACT;
@@ -57,6 +57,7 @@ export class ContractsRegisterComponent implements OnInit {
   isDisable = true;
   pageLength = 0;
   isProcess = false;
+  currentType = '';
 
   constructor(
     public translate: TranslateService,
@@ -179,6 +180,7 @@ export class ContractsRegisterComponent implements OnInit {
   }
 
   viewPopupDetail(staticDataModal: any, data: any) {
+    this.isDisable = true;
     this.isEditMode = false;
     this.currentCodeID = undefined;
     this.selectedTypeContract = undefined;
@@ -188,6 +190,9 @@ export class ContractsRegisterComponent implements OnInit {
       this.isEditMode = true;
     }
     this.isProcess = false;
+    if(this.isEditMode) {
+      this.currentType = this.selectedTypeContract;
+    }
 
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
@@ -254,19 +259,30 @@ export class ContractsRegisterComponent implements OnInit {
     }
   }
 
-  closeDialog(modal) {
+  closeDialog(modal: any) {
     this.selectedTypeContract = '';
+    this.currentCodeID = null;
+    this.isDisable = true;
     modal.close('Close click');
-  }
-
-  validateCurrentCodeID(s: any) {
-    this.currentCodeID = s.target.value.replace(/[-]/g, '');
   }
 
   checkInput(): void {
     this.isDisable = true;
-    if (this.currentCodeID && this.selectedTypeContract) {
+    if ((this.currentCodeID && this.currentCodeID > 0) && this.selectedTypeContract) {
       this.isDisable = false;
     }
+    if(this.isEditMode && this.currentType === this.selectedTypeContract) {
+      this.isDisable = true;
+    }
+  }
+
+  validateCurrentCodeID(event: any) {
+    const regex = new RegExp(/[0-9]/g);
+    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+      event.preventDefault();
+      return;
+    }
+    this.currentCodeID = event.target.value;
   }
 }

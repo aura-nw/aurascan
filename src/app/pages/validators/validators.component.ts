@@ -167,9 +167,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.rawData = res.data;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
-          if (val.target_count > 0 && val.vote_count / val.target_count <= 0.5) {
-            val.isPartiDown = true;
-          }
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
           val.up_time = Number(val.up_time.replace('%',''));
@@ -293,6 +290,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
         this.clicked = false;
         this.isExceedAmount = false;
+        this.errorExceedAmount = false;
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,
