@@ -73,8 +73,13 @@
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'rank'">
-                    <th mat-header-cell *matHeaderCellDef class="col-per-15">
-                      <div class="fw-500" [innerHTML]="template.headerCellDef | translate"></div>
+                    <th mat-header-cell *matHeaderCellDef class="col-per-5">
+                      <div class="fw-500 text-center" [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'title'">
+                    <th mat-header-cell *matHeaderCellDef class="pl-5 col-per-25">
+                      <div class="pl-5" [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchCase="'action'">
@@ -82,8 +87,13 @@
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
+                  <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                    </th>
+                  </ng-container>
                   <ng-container *ngSwitchDefault>
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-per-13">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-per-25">
                       <div [innerHTML]="template.headerCellDef | translate"></div>
                     </th>
                   </ng-container>
@@ -100,20 +110,20 @@
                           {{ data[template.matColumnDef] | number }}<br />
                           <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
                         </div>
-                        <div *ngSwitchCase="'participation'" [ngClass]="{ 'parti-down': data['isPartiDown'] }">
+                        <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'up_time'">
+                        <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ data[template.matColumnDef] }}
+                            {{ data[template.matColumnDef] | number: globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
                         </div>
                         <a
                           *ngSwitchCase="'title'"
-                          class="text--green cursor-pointer text-clamp box-title-validator"
+                          class="text--green cursor-pointer text-clamp box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
-                          <div class="avatar-wrapper">
+                          <div class="avatar-wrapper validator-avatar-wrapper pl-5">
                             <div class="validator-avatar">
                               <app-loading-image
                                 [appClass]="data?.jailed ? 'validator-jailed' : ''"
@@ -146,7 +156,7 @@
                             <span class="text-gradient">Delegate</span>
                           </button>
                         </div>
-                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
                       </ng-container>
                     </div>
                   </td>
@@ -255,8 +265,8 @@
         width="24px"
         height="24px"
         (click)="closeDialog(modal)" />
-      <div class="d-lg-flex align-items-end mb-4 mb-xl-8">
-        <div class="mr-lg-10 mb-4 mb-lg-0 d-flex align-items-center">
+      <div class="mb-4 mb-xl-8">
+        <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
               <app-loading-image [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
@@ -273,9 +283,8 @@
         </div>
         <div class="body small-body-mob text--greyscale-3">
           <div class="mb-1">
-            <span>
-              Voting power - {{ dataModal?.percent_power }}% ({{ dataModal?.power | number: globals.formatNumberToken }}
-            </span>
+            <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
+            <span>({{ dataModal?.power | number: globals.formatNumberToken }}</span>
             <span class="text--green ml-1">{{ denom }}</span
             >)
           </div>
