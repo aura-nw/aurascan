@@ -25,7 +25,7 @@
         (click)="!(disabled && wallet.disableMobile) && connect(wallet)"
         [class.disabled-connect]="disabled && wallet.disableMobile">
         <div class="d-flex align-items-center gap-3">
-          <img class="wallet-icon" [src]="wallet.icon" />
+          <img class="wallet-icon" [src]="wallet.icon | imageS3" />
           <span class="title-small">{{ wallet.name | titlecase }}</span>
         </div>
       </li>
