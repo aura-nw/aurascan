@@ -1,11 +1,11 @@
 <app-pagetitle title="Account Details"></app-pagetitle>
-<section class="account-detail" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="row">
     <div class="col-lg-3 col-12">
       <div class="card card-h-100">
-        <div class="box-account article-1">
+        <div class="box-account article-1 px-6 py-6 d-flex flex-column justify-content-between w-100">
           <div>
-            <div class="mb-8 qr-code d-none d-lg-block">
+            <div class="mb-8 qr-code d-none d-lg-block d-lg-flex align-items-center justify-content-center">
               <!-- <canvas id="canvas" #canvas></canvas> -->
               <app-qr [address]="currentAddress || ''"> </app-qr>
             </div>
@@ -107,7 +107,7 @@
                       <div class="sub-text-mob text--green col-4 fw-500">
                         {{ item.name }}
                       </div>
-                      <div class="col-8 box-amount">
+                      <div class="col-8 text-end">
                         {{ item.amount | number: global.formatNumberToken }}<br />
                         <span class="mob-price small-body-mob"
                           >$ {{ item.total_value | number: global.formatNumber2Decimal }}</span
@@ -186,7 +186,7 @@
       <div class="card card-h-100">
         <div class="article-2 py-4 py-lg-6 px-4 px-lg-6 d-flex flex-column justify-content-between">
           <ng-container *ngIf="!chartLoading">
-            <div id="walletChart" class="chart-token">
+            <div id="walletChart" class="my-0 mx-auto">
               <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
                 <apx-chart
                   [series]="chartOptions.series"
@@ -204,7 +204,7 @@
               </ng-container>
               <ng-template #chartNoValue>
                 <div class="d-flex flex-column justify-content-center align-items-center">
-                  <div class="box-chart">
+                  <div class="box-chart d-flex align-items-center justify-content-center">
                     <div></div>
                   </div>
                 </div>
@@ -216,9 +216,9 @@
                 <span class="body">{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
               <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-                <div class="d-flex justify-content-between align-items-center small-body chart-legend-item">
+                <div class="d-flex justify-content-between align-items-center small-body chart-legend-item py-3 px-0">
                   <div class="d-flex align-items-center">
-                    <div class="item-color-balance" [ngStyle]="{ 'background-color': item.color }"></div>
+                    <div class="item-color-balance fw-500" [ngStyle]="{ 'background-color': item.color }"></div>
                     <span>{{ item.name }}</span>
                   </div>
                   <span>{{ item.amount | number: global.formatNumberToken }}</span>

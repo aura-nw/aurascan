@@ -13,7 +13,7 @@
             [class.verify-contract]="
               tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed
             ">
-            <span class="tab-title">{{ tab.value }}</span>
+            <span class="tab-title mr-2">{{ tab.value }}</span>
             <img
               *ngIf="tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed"
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
