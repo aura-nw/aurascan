@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { LCD_COSMOS } from '../constants/url.constant';
+import axios from "axios";
 
 @Injectable({
   providedIn: 'root',
@@ -46,12 +47,8 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/${operatorAddress}/${delegatorAddress}/delegators`);
   }
 
-  delegators(limit: string | number, offset: string | number, address: string): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(
-    //   `${this.apiUrl}/validators/${address}/delegator-by-validator-addr?limit=${limit}&offset=${offset}`,
-    // );
-    return this.http.get<any>(
+  delegators(limit: string | number, offset: string | number, address: string) {
+    return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.STAKING}/validators/${address}/delegations?pagination.offset=${offset}&pagination.limit=${limit}&pagination.countTotal=true&pagination.reverse=true`,
     );
   }
