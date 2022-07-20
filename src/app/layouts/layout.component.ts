@@ -1,7 +1,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import { EventService } from '../core/services/event.service';
 import {
-  LAYOUT_VERTICAL, LAYOUT_HORIZONTAL, LAYOUT_MODE, LAYOUT_WIDTH,
+  LAYOUT_HORIZONTAL, LAYOUT_MODE, LAYOUT_WIDTH,
   LAYOUT_POSITION, SIDEBAR_SIZE, SIDEBAR_COLOR, TOPBAR
 } from './layouts.model';
 import {ViewportScroller} from "@angular/common";
@@ -93,13 +93,6 @@ export class LayoutComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-  }
-
-  /**
-   * Check if the vertical layout is requested
-   */
-  isVerticalLayoutRequested() {
-    return this.layoutType === LAYOUT_VERTICAL;
   }
 
   /**
