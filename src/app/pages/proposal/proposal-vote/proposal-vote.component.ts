@@ -12,6 +12,8 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
+import {TIME_OUT_CALL_API} from "src/app/core/constants/common.constant";
+
 
 @Component({
   selector: 'app-proposal-vote',
@@ -60,7 +62,7 @@ export class ProposalVoteComponent implements OnInit {
       this.dialogRef.close({ keyVote: this.keyVote });
       setTimeout(() => {
         this.checkDetailTx(hash, 'Error Voting');
-      }, 4000);
+      }, TIME_OUT_CALL_API);
     } else if (error) {
       this.toastr.error(error);
       this.closeVoteForm();
