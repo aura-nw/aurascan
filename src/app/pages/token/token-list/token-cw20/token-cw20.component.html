@@ -130,10 +130,10 @@
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
                   <ng-container *ngIf="element.isValueUp">
-                    <img src="assets/images/icons/arrow-up.svg" />
+                    <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
                   <ng-container *ngIf="!element.isValueUp">
-                    <img src="assets/images/icons/arrow-down.svg" />
+                    <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
                   <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
                 </span> -->

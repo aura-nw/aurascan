@@ -20,7 +20,7 @@
         <div class="icon-wrapper d-inline">
           <img
             *ngIf="element?.image"
-            [src]="element.key == currentLabel ? element?.imageActive : element?.image"
+            [src]="element.key == currentLabel ? (element?.imageActive | imageS3) : (element?.image | imageS3)"
             alt="icon"
             class="icon" />
           <!-- <img *ngIf="element?.image" [src]="element?.image" alt="icon" class="icon" /> -->

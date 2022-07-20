@@ -18,14 +18,9 @@ import { FooterComponent } from './footer/footer.component';
 import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
-import { TopbarComponent } from './topbar/topbar.component';
-import { VerticalComponent } from './vertical/vertical.component';
-
 
 @NgModule({
   declarations: [
-    VerticalComponent,
-    TopbarComponent,
     LayoutComponent,
     FooterComponent,
     HorizontalComponent,
@@ -46,6 +41,6 @@ import { VerticalComponent } from './vertical/vertical.component';
     CommonPipeModule
   ],
   providers: [LanguageService, CommonService , TransactionService],
-  exports: [VerticalComponent]
+  exports: []
 })
 export class LayoutsModule { }

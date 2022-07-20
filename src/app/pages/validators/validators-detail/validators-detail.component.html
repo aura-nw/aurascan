@@ -57,7 +57,7 @@
                     <div class="img-wrap">
                       <img
                         class="img-question ml-1"
-                        [src]="'assets/images/icons/questionmark-icon.svg'"
+                        [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                         alt=""
                         matTooltip="Validator operator address at which token
                                          holders delegate their voting powers to."
@@ -242,7 +242,7 @@
             <div class="img-wrap">
               <img
                 class="img-question ml-1"
-                [src]="'assets/images/icons/questionmark-icon.svg'"
+                [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 matTooltip="Missed Blocks are displayed with an X"
                 [matTooltipPosition]="'above'"
@@ -269,7 +269,7 @@
                   matTooltip="{{ itemBlock?.height || 0 }}"
                   [matTooltipPosition]="'above'">
                   <div class="d-flex">
-                    <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="" />
+                    <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
                   </div>
                 </a>
               </ng-container>
