@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { VALIDATOR_AVATAR_DF } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import axios from "axios";
 
 @Injectable({
   providedIn: 'root'
@@ -45,11 +46,8 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/${operatorAddress}/${delegatorAddress}/delegators`);
   }
 
-  delegators(limit: string | number, offset: string | number, address: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(
-      `${this.apiUrl}/validators/${address}/delegator-by-validator-addr?limit=${limit}&offset=${offset}`,
-    );
+  delegators(limit: string | number, offset: string | number, address: string) {
+    return axios.get('https://lcd.dev.aura.network/cosmos/staking/v1beta1/validators/auravaloper1edw4lwcz3esnlgzcw60ra8m38k3zygz2xtl2qh/delegations?pagination.offset=0&pagination.limit=5&pagination.countTotal=true&pagination.reverse=true');
   }
 
   getValidatorAvatar(validatorAddress: string): string {
