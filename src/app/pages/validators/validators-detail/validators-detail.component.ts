@@ -143,12 +143,6 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   async getListDelegator() {
-    // this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress).subscribe((res) => {
-    //   if (res?.data?.length > 0 && res?.total) {
-    //     this.lengthDelegator = res.total;
-    //     this.dataSourceDelegator = res;
-    //   }
-    // });
     const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress);
     if(res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
       this.lengthDelegator = Number(res?.data?.pagination?.total);
