@@ -20,13 +20,7 @@ import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.c
 import { LayoutComponent } from './layout.component';
 
 @NgModule({
-  declarations: [
-    LayoutComponent,
-    FooterComponent,
-    HorizontalComponent,
-    HorizontaltopbarComponent,
-    DialogComponent
-  ],
+  declarations: [LayoutComponent, FooterComponent, HorizontalComponent, HorizontaltopbarComponent, DialogComponent],
   imports: [
     CommonModule,
     TranslateModule,
@@ -38,9 +32,9 @@ import { LayoutComponent } from './layout.component';
     FormsModule,
     WalletConnectModule,
     NgbPopoverModule,
-    CommonPipeModule
+    CommonPipeModule,
   ],
-  providers: [LanguageService, CommonService , TransactionService],
-  exports: []
+  providers: [LanguageService, CommonService, TransactionService],
+  exports: [],
 })
-export class LayoutsModule { }
+export class LayoutsModule {}

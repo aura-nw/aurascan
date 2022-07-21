@@ -10,8 +10,8 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
+import { balanceOf } from '../../../core/utils/common/parsing';
 
 @Component({
   selector: 'app-validators-detail',
@@ -142,19 +142,17 @@ export class ValidatorsDetailComponent implements OnInit {
     });
   }
 
-  getListDelegator(): void {
-    this.validatorService
-      .delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress)
-      .subscribe((res) => {
-        if (Number(res?.pagination?.total) > 0 && res?.delegation_responses) {
-          this.lengthDelegator = Number(res?.pagination?.total);
-          let data = [];
-          res.delegation_responses.forEach((k) => {
-            data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
-          });
-          this.dataSourceDelegator = new MatTableDataSource(data);
-        }
+  async getListDelegator() {
+    const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress);
+    if(res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
+      this.lengthDelegator = Number(res?.data?.pagination?.total);
+
+      let data = [];
+      res.data?.delegation_responses.forEach((k) => {
+        data.push({delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount)});
+        this.dataSourceDelegator = new MatTableDataSource(data);
       });
+    }
   }
 
   getListPower(): void {
