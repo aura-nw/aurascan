@@ -121,7 +121,13 @@ export class WSService {
               resMessages = 'Provided wasm file is incorrect';
               break;
             case 'E003':
-              resMessages = 'Internal errorl';
+              resMessages = 'Internal error';
+              break;
+            case 'E008':
+              resMessages = 'Contract git URL not found';
+              break;
+            case 'E009':
+              resMessages = 'Commit not found';
               break;
             default:
               resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`;
