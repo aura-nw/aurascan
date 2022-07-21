@@ -409,9 +409,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async getListDelegators(address) {
-    const res = await this.validatorService.delegators(5, 0, address);
-    this.totalDelegator = res?.data?.pagination?.total;
+  getListDelegators(address): void {
+    //get total delegator
+    this.validatorService.delegators(5, 0, address).subscribe((res) => {
+      this.totalDelegator = res?.total;
+    });
   }
 
   checkAmountStaking(): void {
