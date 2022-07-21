@@ -215,7 +215,7 @@
               class="list-token"
               placeholder="Select a type contract"
               panelClass="contractPanel"
-              (selectionChange)="checkInput()"
+              (selectionChange)="checkInput();"
               [(value)]="selectedTypeContract"
               [disableOptionCentering]="true">
               <mat-option *ngFor="let item of lstTypeContract" [value]="item.value">
@@ -235,7 +235,7 @@
           type="button"
           class="button body button-outline"
           (click)="handleButtonContract(isEditMode)"
-          [disabled]="(!isEditMode && isDisable) || isProcess">
+          [disabled]="isDisable || isProcess">
           <span class="text-gradient">
             <ng-container *ngIf="isEditMode">Update</ng-container>
             <ng-container *ngIf="!isEditMode">Register</ng-container>

@@ -1,28 +1,8 @@
-@import "../../../../assets/scss/color.scss";
 section.account-detail {
-  color: var(--aura-white);
   .box-account {
-    width: 100%;
-    padding: var(--spacer-6);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     .qr-code {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       border-radius: var(--spacer-2);
       overflow: hidden;
-    }
-    .txt-copied {
-      height: 0;
-      opacity: 0;
-      -webkit-transition: all 0.3s linear;
-      transition: all 0.3s linear;
-      &.show {
-        opacity: 1;
-        height: 24px;
-      }
     }
   }
   form.search-form {
@@ -70,9 +50,6 @@ section.account-detail {
     height: 180px;
     border: 1px solid #d3d3d3;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     div {
       width: 100px;
       height: 100px;
@@ -94,7 +71,6 @@ section.account-detail {
 }
 .chart-legend-item {
   border-bottom: 1px solid var(--aura-dark-gray);
-  padding: 12px 0px;
   &:last-of-type {
     border-bottom: none;
   }
@@ -104,12 +80,7 @@ section.account-detail {
     height: 24px;
     border-radius: 50%;
     margin: 0.2rem 1rem 0 0;
-    font-weight: 500;
   }
-}
-
-.chart-token {
-  margin: 0 auto;
 }
 
 @media (max-width: 991.98px) {
@@ -126,11 +97,6 @@ section.account-detail {
         min-width: 300px;
         margin: 0 auto;
       }
-    }
-  }
-  .box-mob-table {
-    .box-amount {
-      text-align: right;
     }
   }
   .header-mob {
