@@ -31,30 +31,6 @@
   }
 }
 
-.box-search-data {
-  position: absolute;
-  padding: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 1;
-  background-color: var(--aura-bg-form);
-  width: 350px;
-  margin-top: 5px;
-  border-radius: 10px;
-
-  .logo-token {
-    margin-top: 2px;
-    max-width: 18px;
-    max-height: 18px;
-  }
-
-  .txt-title-search {
-    background-color: var(--aura-dark-gray);
-    border-radius: 48px;
-    padding: 4px 12px;
-    font-weight: 600;
-  }
-}
 
 .aura-form {
   .box-input {
