@@ -490,3 +490,62 @@ body {
         }
     }
 }
+
+.label-jailed {
+    text-align: center;
+    transform: rotate(-15deg);
+    span {
+        position: absolute;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 14px;
+        align-items: center;
+        letter-spacing: 0.05em;
+        color: var(--aura-danger);
+        transform: rotate(-15deg);
+        border: 1px solid var(--aura-danger);
+        padding: 2px 7px;
+        left: 50%;
+        min-width: 50px;
+        top: -19px;
+        transform: translateX(-50%);
+    }
+}
+.box-search-data {
+    position: absolute;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1;
+    background-color: var(--aura-bg-form);
+    width: 350px;
+    margin-top: 5px;
+    border-radius: 10px;
+
+    .logo-token {
+        margin-top: 2px;
+        max-width: 18px;
+        max-height: 18px;
+    }
+
+    .txt-title-search {
+        background-color: var(--aura-dark-gray);
+        border-radius: 48px;
+        padding: 4px 12px;
+        font-weight: 600;
+    }
+}
+.txt-copied {
+    height: 0;
+    opacity: 0;
+    -webkit-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+    padding: 0 8px;
+    &.show {
+        opacity: 1;
+        height: 24px;
+    }
+}
+.break-word {
+    word-break: break-word;
+}

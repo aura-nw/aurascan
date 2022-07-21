@@ -1,15 +1,5 @@
-.single-input-field {
-  min-width: 420px;
-}
-
 .aura-basic-table tr td:not(:last-child) {
   border-right: 1px solid var(--aura-dark-gray);
-}
-
-.input-group {
-  background-color: var(--aura-bg-form);
-  height: auto !important;
-  padding: var(--spacer-1) var(--spacer-4) !important;
 }
 
 .aura-nav-tabs.nav-tabs .nav-link {
@@ -21,10 +11,6 @@
 }
 
 a.verify-contract {
-  .tab-title {
-    margin-right: 8px;
-  }
-
   img {
     position: absolute;
     top: 2px;
@@ -35,7 +21,6 @@ a.verify-contract {
   width: 100%;
   ul.aura-nav-tabs {
     flex-wrap: nowrap;
-    overflow: auto;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     overflow: hidden;

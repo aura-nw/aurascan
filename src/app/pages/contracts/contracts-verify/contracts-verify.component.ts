@@ -17,7 +17,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   tabCurrent = 0;
   contractAddress = '';
   contractTxHash = '';
-  contractName = '';
   isVerified = false;
 
   TAB = [

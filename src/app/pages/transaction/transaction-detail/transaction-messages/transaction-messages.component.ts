@@ -66,7 +66,7 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.messages,
       this.transactionDetail?.type,
       this.transactionDetail?.raw_log,
-      this.coinMinimalDenom
+      this.coinMinimalDenom,
     );
     const typeTrans = this.typeTransaction.find(
       (f) => f.label.toLowerCase() === this.transactionDetail?.type.toLowerCase(),
@@ -127,7 +127,10 @@ export class TransactionMessagesComponent implements OnInit {
                   });
                 } else {
                   let amount = data.find((k) => k.key === 'amount')?.value;
-                  this.amountClaim = amount?.replace(this.coinMinimalDenom, '') / NUMBER_CONVERT || 0;
+                  let recipient = data.find((k) => k.key === 'recipient')?.value || '';
+                  if (recipient === this.transactionDetail?.messages[0]?.delegator_address) {
+                    this.amountClaim = amount?.replace(this.coinMinimalDenom, '') / NUMBER_CONVERT || 0;
+                  }
                 }
               }
               this.transactionDetail?.messages.forEach((message) => {
