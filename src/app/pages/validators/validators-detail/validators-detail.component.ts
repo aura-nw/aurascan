@@ -142,13 +142,17 @@ export class ValidatorsDetailComponent implements OnInit {
     });
   }
 
-  getListDelegator(): void {
-    this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress).subscribe((res) => {
-      if (res?.data?.length > 0 && res?.total) {
-        this.lengthDelegator = res.total;
-        this.dataSourceDelegator = res;
-      }
-    });
+  async getListDelegator() {
+    const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress);
+    if(res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
+      this.lengthDelegator = Number(res?.data?.pagination?.total);
+
+      let data = [];
+      res.data?.delegation_responses.forEach((k) => {
+        data.push({delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount)});
+        this.dataSourceDelegator = new MatTableDataSource(data);
+      });
+    }
   }
 
   getListPower(): void {
