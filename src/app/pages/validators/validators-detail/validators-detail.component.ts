@@ -12,6 +12,9 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
+import {log} from "util";
 
 @Component({
   selector: 'app-validators-detail',
@@ -19,6 +22,7 @@ import { balanceOf } from '../../../core/utils/common/parsing';
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
+  rankNum:any = null;
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -67,7 +71,7 @@ export class ValidatorsDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-
+  state$: Observable<object>;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -80,8 +84,9 @@ export class ValidatorsDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
+    this.rankNum = this.route.snapshot.paramMap.get('rank');
     this.getDetail();
     this.getListBlockWithOperator();
     this.getListDelegator();
