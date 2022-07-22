@@ -58,4 +58,4 @@ export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.am
 export const VALIDATOR_AVATAR_URL =
   'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/chihuahua/';
 
-export const TIME_OUT_CALL_API = 8000;
+export const TIME_OUT_CALL_API = 5000;

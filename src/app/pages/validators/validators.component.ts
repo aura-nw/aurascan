@@ -74,7 +74,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstUndelegate = [];
   numberCode = 0;
 
-
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
@@ -169,7 +168,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           val.vote_count = val.vote_count || 0;
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
-          val.up_time = Number(val.up_time.replace('%',''));
+          val.up_time = Number(val.up_time.replace('%', ''));
         });
 
         let dataFilter = res.data.filter((event) =>
@@ -605,30 +604,25 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 
-  checkDetailTx(id, message) {
-    this.transactionService.txsDetail(id).subscribe(
-      (res: ResponseDto) => {
-        let numberCode = res?.data?.code;
-        message = res?.data?.raw_log || message;
-        message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (numberCode !== undefined) {
-          if (!!!numberCode && numberCode === CodeTransaction.Success) {
-            setTimeout(() => {
-              this.getList();
-              this.getDataWallet();
-            }, TIME_OUT_CALL_API);
-            this.toastr.success(message);
-          } else {
-            this.toastr.error(message);
-          }
-        }
-      },
-      (error) => {},
-    );
+  async checkDetailTx(id, message) {
+    const res = await this.transactionService.txsDetailLcd(id);
+    let numberCode = res?.data?.tx_response?.code;
+    message = res?.data?.tx_response?.raw_log || message;
+    message = this.mappingErrorService.checkMappingError(message, numberCode);
+    if (numberCode !== undefined) {
+      if (!!!numberCode && numberCode === CodeTransaction.Success) {
+        setTimeout(() => {
+          this.getList();
+          this.getDataWallet();
+        }, TIME_OUT_CALL_API);
+        this.toastr.success(message);
+      } else {
+        this.toastr.error(message);
+      }
+    }
   }
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }
-
 }

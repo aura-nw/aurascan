@@ -3,10 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import axios from 'axios';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable()
 export class TransactionService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
+  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -20,6 +23,10 @@ export class TransactionService extends CommonService {
   txsDetail(txhash: string): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/transactions/${txhash}`);
+  }
+
+  txsDetailLcd(txhash: string) {
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
   }
 
   getTxsPer(type: string): Observable<any> {

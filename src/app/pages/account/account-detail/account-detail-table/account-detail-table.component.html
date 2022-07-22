@@ -19,7 +19,7 @@
                         <div class="validator-avatar">
                           <app-loading-image
                                   [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                                  [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
+                                  [srcImg]="getValidatorAvatar(data.validator_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
                           <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
@@ -58,13 +58,13 @@
                       $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </div>
                     <a  *ngSwitchCase="'validator_src_name'"
-                        class="text--green cursor-pointer text-clamp box-title-validator"
+                        class="text--green cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
                         [routerLink]="['/validators', data['validator_src_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
                                   [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                                  [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
+                                  [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
                           <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
@@ -77,13 +77,13 @@
 
                     <a
                       *ngSwitchCase="'validator_dst_name'"
-                      class="text--green cursor-pointer text-clamp box-title-validator"
+                      class="text--green cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
                       [routerLink]="['/validators', data['validator_dst_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
                                   [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                                  [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
+                                  [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
                           <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
