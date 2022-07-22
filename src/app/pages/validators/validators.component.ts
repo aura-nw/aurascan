@@ -354,7 +354,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
                 (f) => f.validator_address === this.currentValidatorDialog,
               );
             }
-
             if (listDelegator?.data?.delegations.length > 0) {
               listDelegator?.data?.delegations.forEach((f) => {
                 f.amount_staked = f.amount_staked / NUMBER_CONVERT;

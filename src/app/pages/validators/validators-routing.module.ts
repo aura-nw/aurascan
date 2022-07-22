@@ -9,7 +9,7 @@ const routes: Routes = [
     component: ValidatorsComponent
   },
   {
-    path: ':id/:rank',
+    path: ':id',
     component: ValidatorsDetailComponent
   }
 ];

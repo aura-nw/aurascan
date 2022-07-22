@@ -9,9 +9,9 @@
             <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
             </app-loading-image>
           </div>
-          <div class="rank-wrapper" [class._small]="breakpoint.value.matches" *ngIf="rankNum">
+          <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
             <div class="box-rank _fill" [class._small]="breakpoint.value.matches">
-              <span> {{ rankNum }} </span>
+              <span> {{ currentValidatorDetail?.rank }} </span>
             </div>
           </div>
         </div>
@@ -24,9 +24,9 @@
                   <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
                   </app-loading-image>
                 </div>
-                <div class="rank-wrapper" [class._small]="breakpoint.value.matches" *ngIf="rankNum">
+                <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
                   <div class="box-rank _fill" [class._small]="breakpoint.value.matches">
-                    <span> {{ rankNum }} </span>
+                    <span> {{ currentValidatorDetail?.rank }} </span>
                   </div>
                 </div>
               </div>
@@ -348,7 +348,7 @@
                       }
                     ]"></app-card-mob-simple>
                 </ng-container>
-                <app-paginator
+                <app-paginator *ngIf="lengthDelegator > 0"
                   [length]="lengthDelegator"
                   [pageSize]="pageSize"
                   [id]="'delegator'"

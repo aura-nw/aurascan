@@ -71,7 +71,6 @@ export class ValidatorsDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  state$: Observable<object>;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -86,7 +85,6 @@ export class ValidatorsDetailComponent implements OnInit {
 
   ngOnInit() {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.rankNum = this.route.snapshot.paramMap.get('rank');
     this.getDetail();
     this.getListBlockWithOperator();
     this.getListDelegator();
@@ -148,15 +146,15 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   async getListDelegator() {
-    const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress);
+    const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress);
     if(res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
       this.lengthDelegator = Number(res?.data?.pagination?.total);
 
       let data = [];
       res.data?.delegation_responses.forEach((k) => {
         data.push({delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount)});
-        this.dataSourceDelegator = new MatTableDataSource(data);
       });
+      this.dataSourceDelegator = new MatTableDataSource(data);
     }
   }
 
