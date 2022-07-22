@@ -9,7 +9,7 @@ import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import { NUMBER_CONVERT, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
+import {NUM_BLOCK, NUMBER_CONVERT, TIME_OUT_CALL_API} from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
@@ -85,6 +85,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   pageYOffset = 0;
   scrolling = false;
+  numBlock = NUM_BLOCK;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }

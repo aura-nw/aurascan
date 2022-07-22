@@ -89,7 +89,10 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"
+                           matTooltipPosition="above"
+                           matTooltip="Signed Blocks Window for the last {{numBlock}} Blocks"
+                           #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>

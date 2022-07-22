@@ -59,3 +59,5 @@ export const VALIDATOR_AVATAR_URL =
   'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/chihuahua/';
 
 export const TIME_OUT_CALL_API = 5000;
+
+export const NUM_BLOCK = '10.000';
