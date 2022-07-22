@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IMAGE_S3 } from '../constants/common.constant';
+import { EnvironmentService } from '../data-services/environment.service';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -39,11 +39,13 @@ export class PipeCutString implements PipeTransform {
 
 @Pipe({ name: 'imageS3' })
 export class ImageURL implements PipeTransform {
+  constructor(private environmentService: EnvironmentService) {
+  }
   transform(value: string): string {
     const replacePath = /\..\//gi;
     value = value.replace(replacePath, '');
     const replaceLink = /assets\//gi;
-    value = value.replace(replaceLink, IMAGE_S3);
+    value = value.replace(replaceLink, this.environmentService.configValue.image_s3);
     return value;
   }
 }
