@@ -2,7 +2,7 @@
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed && contractDetail && !isVerifying">
     <div class="d-flex fw-normal content-contract">
       <img
-        src="../../../../../../../assets/icons/icons-svg/color/info-circle.svg"
+        [src]="'../../../../../../../assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
         width="16"
         height="16"
@@ -22,7 +22,7 @@
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed && contractDetail && isVerifying">
     <div class="d-flex fw-normal content-contract">
       <img
-        src="../../../../../../../assets/icons/icons-svg/color/info-circle.svg"
+        [src]="'../../../../../../../assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
         width="16"
         height="16"

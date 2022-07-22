@@ -9,7 +9,7 @@
       <div class="sub-text" *ngIf="state.dialog?.title">{{ state.dialog.title }}</div>
 
       <div class="d-flex justify-content-center" *ngIf="!state.dialog?.title">
-        <img src="../../../../assets/icons/icons-svg/color/info.svg" alt="" />
+        <img [src]="'../../../../assets/icons/icons-svg/color/info.svg' | imageS3" alt="" />
       </div>
     </div>
     <div class="app-dialog__body">

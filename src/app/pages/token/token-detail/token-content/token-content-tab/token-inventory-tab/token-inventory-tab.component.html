@@ -12,7 +12,7 @@
           <a href="{{ item.link }}" class="nft-cards__item">
             <div class="nft-cards__img">
               <img *ngIf="item.img" src="{{ item.img }}" alt="" />
-              <img *ngIf="!item.img" src="assets/images/aura__ntf-dafault-img.png" alt="" />
+              <img *ngIf="!item.img" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
               <!--                            <div class="nft-cards__label"><span class="text-gradient">{{item.symbol}}</span></div>-->
             </div>
             <div class="mt-3 token-id">

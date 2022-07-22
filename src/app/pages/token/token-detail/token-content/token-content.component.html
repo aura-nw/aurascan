@@ -2,7 +2,7 @@
   <section class="text--white">
     <div *ngIf="isSearchTx" class="p-4 card main-tab">
       <p class="small-text d-flex align-item-center">
-        <img src="../../../../../../../assets/images/icons/token-tx.png" class="mr-2" alt="" width="15" height="15" />
+        <img [src]="'../../../../../../../assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="15" height="15" />
         FILTER BY TOKEN TXN HASH
       </p>
       <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
@@ -14,7 +14,7 @@
             <td>
               <div class="small-text d-flex align-item-center mb-1">
                 <img
-                  src="../../../../../../../assets/images/icons/token-holder.png"
+                  [src]="'../../../../../../../assets/images/icons/token-holder.png' | imageS3"
                   class="mr-2"
                   alt=""
                   width="15"
@@ -61,13 +61,13 @@
             (keyup.enter)="handleSearch()"
             autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
-            <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+            <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
             class="cursor-pointer btn-reset {{ !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : '' }}"
             (click)="resetSearch()">
-            <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+            <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
       </form>

@@ -4,7 +4,7 @@
   <!-- Compiler debug log Success -->
   <div *ngIf="!logError">
     <div class="d-flex fw-normal text-break mt-3">
-      <img src="assets/icons/icons-svg/color/info.svg" alt="" width="16px" height="16px" />
+      <img [src]="'assets/icons/icons-svg/color/info.svg' | imageS3" alt="" width="16px" height="16px" />
       <div class="ml-2">
         <span>Note: Contract was created at TxHash</span>
         <span class="text--green ml-1">{{ contractTxHash | cutStringPipe: 20 }}</span>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="d-flex fw-normal text-break mt-3">
-      <img src="assets/icons/icons-svg/color/check-circle.svg" alt="" width="16px" height="16px" />
+      <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
       <div class="ml-2">
         <span class="mr-1">Successfully generated Creation Code and Schema for Contract Address</span>
         <a class="text--green d-block d-lg-inline-block" [routerLink]="['/contracts', contractAddress]">
@@ -24,7 +24,7 @@
   <!-- Compiler debug log Error -->
   <div *ngIf="logError">
     <div class="d-flex fw-normal text-break mt-3">
-      <img src="assets/icons/icons-svg/color/block.svg" alt="" width="16px" height="16px" />
+      <img [src]="'assets/icons/icons-svg/color/block.svg' | imageS3" alt="" width="16px" height="16px" />
       <div class="ml-2">Error! Unable to generate Contract Creation Code and Schema</div>
     </div>
   </div>

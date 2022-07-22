@@ -29,6 +29,7 @@ import { TransactionComponent } from './transaction.component';
     SharedModule,
     NgxJsonViewerModule,
     TableNoDataModule,
+    CommonPipeModule
   ],
   providers: [TransactionService, MappingErrorService],
 })

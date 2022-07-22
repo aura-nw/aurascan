@@ -57,7 +57,7 @@
                     <div class="img-wrap">
                       <img
                         class="img-question ml-1"
-                        [src]="'assets/images/icons/questionmark-icon.svg'"
+                        [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                         alt=""
                         matTooltip="Validator operator address at which token
                                          holders delegate their voting powers to."
@@ -164,7 +164,7 @@
                 <table mat-table [dataSource]="dataSourceBlock" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesBlock; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-25 {{i===2 ? 'pl-5' : ''}}">
+                      <th mat-header-cell *matHeaderCellDef class="col-per-25 {{ i === 2 ? 'pl-5' : '' }}">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 
@@ -242,7 +242,7 @@
             <div class="img-wrap">
               <img
                 class="img-question ml-1"
-                [src]="'assets/images/icons/questionmark-icon.svg'"
+                [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
                 alt=""
                 matTooltip="Missed Blocks are displayed with an X"
                 [matTooltipPosition]="'above'"
@@ -269,7 +269,7 @@
                   matTooltip="{{ itemBlock?.height || 0 }}"
                   [matTooltipPosition]="'above'">
                   <div class="d-flex">
-                    <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg'" alt="" />
+                    <img class="img-uptime-miss" [src]="'assets/images/icons/uptime-fail.svg' | imageS3" alt="" />
                   </div>
                 </a>
               </ng-container>
@@ -286,7 +286,7 @@
         <div class="card-header d-flex align-items-center justify-content-between header-mob">
           <div class="title-small fw-500">Delegators</div>
           <div class="box-info d-flex align-items-center" *ngIf="lengthDelegator">
-            <img src="/assets/icons/icons-svg/white/user.svg" class="img-valid" />
+            <img [src]="'assets/icons/icons-svg/white/user.svg' | imageS3" class="img-valid" />
             <span class="body">{{ lengthDelegator | number }}</span>
           </div>
         </div>
@@ -380,7 +380,7 @@
                   *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesPower; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="{{i===0 ? 'col-per-20' : 'col-per-25'}}">
+                      <th mat-header-cell *matHeaderCellDef class="{{ i === 0 ? 'col-per-20' : 'col-per-25' }}">
                         <div [innerHTML]="template.headerCellDef | translate"></div>
                       </th>
 
