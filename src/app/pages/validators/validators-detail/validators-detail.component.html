@@ -348,7 +348,7 @@
                       }
                     ]"></app-card-mob-simple>
                 </ng-container>
-                <app-paginator
+                <app-paginator *ngIf="lengthDelegator > 0"
                   [length]="lengthDelegator"
                   [pageSize]="pageSize"
                   [id]="'delegator'"

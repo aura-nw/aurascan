@@ -15,11 +15,4 @@ export class AccountService extends CommonService {
   getAccountDetail(account_id: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
   }
-
-  getWalletDetail(address: string): Observable<IResponsesTemplates<IWalletDetail>> {
-    if (!address) {
-      return of(null);
-    }
-    return this.http.get<any>(`${this.apiUrl}/wallets/${address}`);
-  }
 }

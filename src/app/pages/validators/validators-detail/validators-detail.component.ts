@@ -13,6 +13,9 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { log } from 'util';
 
 @Component({
   selector: 'app-validators-detail',
@@ -20,6 +23,7 @@ import { balanceOf } from '../../../core/utils/common/parsing';
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
+  rankNum: any = null;
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -72,7 +76,6 @@ export class ValidatorsDetailComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -109,6 +112,8 @@ export class ValidatorsDetailComponent implements OnInit {
   getDetail(): void {
     this.validatorService.validatorsDetail(this.currentAddress).subscribe(
       (res) => {
+        console.log(res);
+        
         if (res.status === 404) {
           this.router.navigate(['/']);
           return;
@@ -142,10 +147,10 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getListUpTime(): void {
     console.log(this.arrBlocksMiss);
-    
+
     this.blockService.getLastBlock(this.currentAddress).subscribe((res) => {
       console.log(res);
-      
+
       this.lastBlockLoading = true;
       if (res?.data?.length > 0) {
         this.arrayUpTime = res.data;
@@ -179,15 +184,19 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   async getListDelegator() {
-    const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator, this.currentAddress);
+    const res = await this.validatorService.delegators(
+      this.pageSize,
+      this.pageIndexDelegator * this.pageSize,
+      this.currentAddress,
+    );
     if (res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
       this.lengthDelegator = Number(res?.data?.pagination?.total);
 
       let data = [];
       res.data?.delegation_responses.forEach((k) => {
         data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
-        this.dataSourceDelegator = new MatTableDataSource(data);
       });
+      this.dataSourceDelegator = new MatTableDataSource(data);
     }
   }
 

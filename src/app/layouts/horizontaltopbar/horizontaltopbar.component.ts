@@ -35,7 +35,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   countryName: any;
   valueset: any;
   networks = NETWORK;
-  listChannel;
   currentNetwork = JSON.parse(localStorage.getItem('currentNetwork')) || NETWORK[1];
   currentChanel = JSON.parse(localStorage.getItem('currentChanel')) || null;
   searchValue = null;
@@ -155,20 +154,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.pageTitle = null;
         break;
     }
-  }
-
-  getList(): void {
-    this.commonService.channels(1000, 0).subscribe((res) => {
-      this.listChannel = res.data;
-      if (!this.currentChanel) {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser) {
-          this.currentChanel = this.listChannel.find(
-            (i) => i.channel_genesis_hash === currentUser.data.channel_genesis_hash,
-          );
-        }
-      }
-    });
   }
 
   /**
@@ -314,34 +299,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         }
       }
     }
-  }
-
-  /**
-   * Logout the user
-   */
-  logout() {
-    this.authService.logout();
-  }
-
-  onSelectNetwork(item) {
-    this.currentNetwork = item;
-    localStorage.setItem('currentNetwork', JSON.stringify(item));
-    this.commonService.setNetwork = item.value;
-    window.location.reload();
-  }
-
-  onSelectChanel(item) {
-    this.currentChanel = item;
-    localStorage.setItem('currentChanel', JSON.stringify(item));
-    this.authService
-      .change({ channel_genesis_hash: this.currentChanel.channel_genesis_hash })
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          window.location.reload();
-        },
-        (error) => {},
-      );
   }
 
   handleSearch() {

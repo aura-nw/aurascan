@@ -130,7 +130,7 @@ export class DashboardComponent implements OnInit {
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
-      const data1 = res.data.map((i) => i.count);
+      const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => i.timestamp);
 
       this.chartOptions.series = [
