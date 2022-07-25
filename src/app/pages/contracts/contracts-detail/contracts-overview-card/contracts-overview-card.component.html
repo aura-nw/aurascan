@@ -10,7 +10,7 @@
                 <div class="d-flex justify-content-end">
                   <ng-container *ngIf="contractDetail?.token_tracker">
                     <button class="button button-chart button-outline button-outline__in-card">
-                      <img src="assets/images/icons/token-chart.svg" alt="" width="16px" />
+                      <img [src]="'assets/images/icons/token-chart.svg' | imageS3" alt="" width="16px" />
                       <span class="ml-2 small-text">
                         {{ contractDetail?.token_tracker?.symbol }}: {{ contractDetail?.token_tracker?.name }}
                       </span>
@@ -64,7 +64,7 @@
                 <div class="box-wallet ml-3">
                   <!-- <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="d-flex"> -->
                   <a class="d-flex">
-                    <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
+                    <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="16" height="16" />
                   </a>
                 </div>
               </div>
@@ -94,7 +94,7 @@
               <div class="box-wallet">
                 <!-- <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="d-flex"> -->
                 <a class="d-flex">
-                  <img src="assets/icons/icons-svg/color/wallet.svg" alt="" width="16" height="16" />
+                  <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="16" height="16" />
                 </a>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MESSAGE_WARNING } from 'src/app/core/constants/proposal.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
-import {  ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { IVotingDialog } from 'src/app/core/models/proposal.model';
@@ -12,8 +12,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
-import {TIME_OUT_CALL_API} from "src/app/core/constants/common.constant";
-
+import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -69,22 +68,21 @@ export class ProposalVoteComponent implements OnInit {
     }
   }
 
-  checkDetailTx(id, message) {
-    this.transactionService.txsDetail(id).subscribe(
-      (res: ResponseDto) => {
-        let numberCode = res?.data?.code;
-        message = res?.data?.raw_log || message;
-        message = this.mappingErrorService.checkMappingError(message, numberCode);
-        if (numberCode !== undefined) {
-          if (numberCode === CodeTransaction.Success) {
-            this.toastr.success(message);
-          } else {
-            this.toastr.error(message);
-          }
-        }
-      },
-      (error) => {},
-    );
+  async checkDetailTx(id, message) {
+    const res = await this.transactionService.txsDetailLcd(id);
+    let numberCode = res?.data?.tx_response?.code;
+    message = res?.data?.tx_response?.raw_log || message;
+    message = this.mappingErrorService.checkMappingError(message, numberCode);
+    if (numberCode !== undefined) {
+      if (numberCode === CodeTransaction.Success) {
+        this.toastr.success(message);
+      } else {
+        this.toastr.error(message);
+      }
+    }
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
 
   onSubmitVoteForm() {

@@ -3,7 +3,7 @@
   <div class="d-flex align-items-center ml-2">
     <span class="d-none d-lg-block text--light-gray body fw-normal ml-1">{{ contractAddress }}</span>
     <img
-      src="assets/icons/icons-svg/basic/copy.svg"
+      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
       class="ml-2 cursor-pointer"
       alt=""
       width="16"
@@ -14,7 +14,7 @@
       (mouseleave)="$event.stopImmediatePropagation()"
       (click)="copyData(); tooltip.toggle()" />
     <img
-      src="assets/icons/icons-svg/basic/qrcode-scan.svg"
+      [src]="'assets/icons/icons-svg/basic/qrcode-scan.svg' | imageS3"
       class="ml-2 cursor-pointer"
       alt=""
       width="16"
@@ -45,7 +45,7 @@
     <div class="box-address">
       <div class="txt-right mb-4 cursor-pointer">
         <img
-          src="../../../../assets/images/icons/close-popup.png"
+          [src]="'../../../../assets/images/icons/close-popup.png' | imageS3"
           alt=""
           width="16"
           height="16"

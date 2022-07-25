@@ -15,7 +15,7 @@
                     ? searchForm.classList.remove('show')
                     : searchForm.classList.add('show')
                 ">
-                <img src="assets/icons/icons-svg/white/search.svg" alt="" width="24px" height="24px" />
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24px" height="24px" />
               </button>
             </div>
             <div class="mall-body small-text-mob text--light-gray">
@@ -38,13 +38,13 @@
                 type="submit"
                 class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
                 (click)="searchToken()">
-                <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+                <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
                 type="reset"
                 class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
                 (click)="textSearch = ''; searchToken()">
-                <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+                <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
             <ng-container *ngIf="textSearch?.length > 0">
@@ -58,7 +58,7 @@
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
                       [routerLink]="['/tokens/token', item.tokenContract]">
-                      <img src="assets/images/icons/token-logo.png" class="logo-token" />
+                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="px-2 d-flex align-items-center justify-content-between" style="flex: 0 0 95%">
                         <span class="text-clamp small-body" style="max-width:60%; height: 18px">{{ item.name }}</span>
                         <span class="text-clamp small-body text--green" style="height: 18px">{{
@@ -89,7 +89,7 @@
               <th mat-header-cell *matHeaderCellDef style="width: 30%">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img src="assets/images/icons/token-logo.png" width="18" height="18" />
+                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token', element.tokenContract]" [queryParams]="{ tokenType: 'NFT' }">{{ element.name }}</a
                     ><br class="d-none d-lg-block" />

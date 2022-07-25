@@ -7,6 +7,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { FeatherModule } from "angular-feather";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ClickOutsideModule } from "ng-click-outside";
+import { CommonPipeModule } from "src/app/core/pipes/common-pipe.module";
 import { QrModule } from "../qr/qr.module";
 import { WalletConnectComponent } from "./wallet-connect.component";
 import { WalletListComponent } from "./wallet-list/wallet-list.component";
@@ -25,7 +26,8 @@ import { WalletListComponent } from "./wallet-list/wallet-list.component";
     ClickOutsideModule,
     QrModule,
     TranslateModule,
-    MatDialogModule
+    MatDialogModule,
+    CommonPipeModule
   ],
   exports: [WalletConnectComponent],
 })

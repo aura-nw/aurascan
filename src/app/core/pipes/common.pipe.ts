@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { EnvironmentService } from '../data-services/environment.service';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -22,7 +23,7 @@ export class pipeCalDate implements PipeTransform {
 
 @Pipe({ name: 'cutStringPipe' })
 export class PipeCutString implements PipeTransform {
-    transform(value: string, start: number, end?: number): string {
+  transform(value: string, start: number, end?: number): string {
     if (value && value.length > start) {
       if (end) {
         const middleText = value.substring(start, value.length - end);
@@ -32,6 +33,19 @@ export class PipeCutString implements PipeTransform {
         value = middleText + '...';
       }
     }
+    return value;
+  }
+}
+
+@Pipe({ name: 'imageS3' })
+export class ImageURL implements PipeTransform {
+  constructor(private environmentService: EnvironmentService) {
+  }
+  transform(value: string): string {
+    const replacePath = /\..\//gi;
+    value = value.replace(replacePath, '');
+    const replaceLink = /assets\//gi;
+    value = value.replace(replaceLink, this.environmentService.configValue.image_s3);
     return value;
   }
 }
