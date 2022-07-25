@@ -4,10 +4,12 @@ import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulatio
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { fromBech32, toHex } from '@cosmjs/encoding';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { BlockService } from 'src/app/core/services/block.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { NUMBER_CONVERT, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
@@ -73,6 +75,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
+  arrBlocksMiss = [];
 
   timerUnSub: Subscription;
   errorExceedAmount = false;
@@ -107,10 +110,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
+    private blockService: BlockService,
   ) {}
 
   ngOnInit(): void {
     // this.loadDataTemp();
+    this.getBlocksMiss();
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -162,12 +167,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   getList(): void {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
+      console.log(res);
+
       if (res?.data?.length > 0) {
         this.rawData = res.data;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
+          val.cons_address = '06556d4e6b39978c25d1bb5c0103589fa5f79286';
           val.up_time = Number(val.up_time.replace('%', ''));
         });
 
@@ -182,6 +190,30 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.searchValidator();
       }
     });
+  }
+
+  async getBlocksMiss() {
+    const res = await this.blockService.getBlockMiss(10000);
+    this.arrBlocksMiss = res.data?.info;
+    this.arrBlocksMiss.forEach((block) => {
+      block.hex_address = toHex(fromBech32(block?.address).data);
+      console.log(toHex(fromBech32(block?.address).data));
+    });
+    console.log(this.arrBlocksMiss);
+  }
+
+  calculatorUpTime(address) {
+    let percentTemp = 100;
+    let percent: string;
+    if (address && this.arrBlocksMiss) {
+      const data = this.arrBlocksMiss?.filter((k) => k.hex_address === address);
+      if (data) {
+        percentTemp = 100 - data.length / 10000;
+        console.log(percentTemp);
+        percent = percentTemp.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+      }
+    }
+    return percent;
   }
 
   changeType(type): void {
@@ -335,12 +367,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               stakingToken: dataWallet?.data?.stake_reward,
               historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
             };
-
-            // this.dataDelegate.delegatableVesting = dataWallet?.data?.delegatable_vesting;
-            // this.dataDelegate.delegatedToken = dataWallet?.data?.delegated;
-            // this.dataDelegate.availableToken = dataWallet?.data?.available;
-            // this.dataDelegate.stakingToken = dataWallet?.data?.stake_reward;
-            // this.dataDelegate.historyTotalReward = listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0;
           }
 
           dataInfoWallet['arrayDelegate'] = JSON.stringify({});
