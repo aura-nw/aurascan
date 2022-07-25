@@ -3,7 +3,7 @@
     <h1 class="title-small d-inline mr-2 text--white fw-500">Token Holdings</h1>
     <div class="d-inline-flex align-items-center">
         <a href="#" class="text--green body">{{ tokenId }}</a>
-        <img src="assets/icons/icons-svg/basic/copy.svg"
+        <img [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
              class="ml-2 cursor-pointer"
              alt=""  width="16" height="16"
              matTooltip="Copied!" #tooltip="matTooltip"
@@ -24,7 +24,7 @@
         <div class="overview-col">
             <div class="overview__label">Net Worth in AURA</div>
             <div class="overview__content">
-                <img src="assets/images/logo/auraTitleLogo.png" alt="" width="24px" height="24px" class="mr-1">
+                <img [src]="'assets/images/logo/auraTitleLogo.png' | imageS3" alt="" width="24px" height="24px" class="mr-1">
                 <span>12.25</span>
             </div>
         </div>

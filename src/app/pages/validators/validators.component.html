@@ -28,13 +28,13 @@
               type="submit"
               class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
               (click)="searchValidator()">
-              <img src="../../../assets/icons/icons-svg/basic/search.svg" alt="" width="24" height="24" />
+              <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
               class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
               (click)="textSearch = ''; searchValidator()">
-              <img src="../../../assets/icons/icons-svg/basic/close-circle.svg" alt="" width="24" height="24" />
+              <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -89,7 +89,10 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                      <div [innerHTML]="template.headerCellDef | translate"
+                           matTooltipPosition="above"
+                           matTooltip="Signed Blocks Window for the last {{numBlock}} Blocks"
+                           #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
@@ -130,7 +133,7 @@
                                 [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
                             </div>
                             <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                              <img src="assets/icons/icons-svg/color/jailed.svg" alt="" />
+                              <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                             </div>
                           </div>
                           <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
@@ -192,7 +195,7 @@
                           <div
                             *ngIf="validator?.jailed && validator['status'] !== statusValidator.Active"
                             class="jailed">
-                            <img src="assets/icons/icons-svg/color/jailed.svg" alt="" />
+                            <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                           </div>
                           <div
                             class="rank-wrapper _small"
@@ -259,7 +262,7 @@
   <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
     <div class="box-staking aura-form">
       <img
-        src="assets/icons/icons-svg/white/arrow-left.svg"
+        [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3"
         alt=""
         class="d-lg-none mb-6"
         width="24px"
@@ -403,24 +406,24 @@
                 <span class="text-gradient">Select Action</span>
                 <img
                   class="flex-shrink-0"
-                  src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+                  [src]="'../../../../assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
                   alt="wallet-avatar"
                   height="24px"
                   width="24px" />
               </button>
               <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
-                  <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+                  <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
                   <button type="button" class="button p-0">Undelegate</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
-                  <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+                  <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
                   <button type="button" class="button p-0">Redelegate</button>
                 </li>
               </ul>
             </div>
             <button type="button" class="button body button-outline" (click)="changeTypePopup(dialogMode.Delegate)">
-              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -433,7 +436,7 @@
               class="button body button-outline"
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Undelegate</span>
             </button>
           </div>
@@ -457,7 +460,7 @@
               class="button body button-outline"
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -470,7 +473,7 @@
               class="button body button-outline"
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient">Redelegate</span>
             </button>
           </div>

@@ -46,7 +46,6 @@ export class WriteContractComponent implements OnInit {
     });
 
     this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
-    console.log(this.jsonWriteContract);
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {

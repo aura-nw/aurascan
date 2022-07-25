@@ -28,5 +28,6 @@
     "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
     "logo": "https://i.imgur.com/zi0mTYb.png",
     "explorer": "https://explorer.dev.aura.network/"
-  }
+  },
+  "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/"
 }
