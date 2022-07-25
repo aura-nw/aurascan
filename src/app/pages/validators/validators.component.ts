@@ -78,6 +78,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   errorExceedAmount = false;
   isHandleStake = false;
   isLoading = false;
+  isClaimRewardLoading = false;
   _routerSubscription: Subscription;
 
   destroyed$ = new Subject();
@@ -262,6 +263,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
     this.currentValidatorDialog = address;
+    this.isClaimRewardLoading = true;
     const view = async () => {
       const account = this.walletService.getAccount();
       if (account && account.bech32Address) {
@@ -275,6 +277,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     view();
     this.isOpenStaking = isOpenStaking;
     this.dataDelegate.dialogMode = dialogMode;
+    this.isClaimRewardLoading = false;
   }
 
   getValidatorDetail(address, modal): void {
@@ -468,6 +471,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       const executeClaim = async () => {
         this.isLoading = true;
+        this.isClaimRewardLoading = true;
         const { hash, error } = await createSignBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
@@ -602,6 +606,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
     this.isHandleStake = false;
     this.isLoading = false;
+    this.isClaimRewardLoading = false;
   }
 
   async checkDetailTx(id, message) {
