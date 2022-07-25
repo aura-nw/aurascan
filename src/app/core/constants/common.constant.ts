@@ -60,4 +60,4 @@ export const VALIDATOR_AVATAR_URL =
 
 export const TIME_OUT_CALL_API = 5000;
 
-export const NUM_BLOCK = '10.000';
+export const NUM_BLOCK = 10000;
