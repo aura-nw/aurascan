@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { FeatherModule } from 'angular-feather';
-import { allIcons } from 'angular-feather/icons';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonPipeModule } from '../core/pipes/common-pipe.module';
@@ -25,7 +23,6 @@ import { LayoutComponent } from './layout.component';
     CommonModule,
     TranslateModule,
     RouterModule,
-    FeatherModule.pick(allIcons),
     NgbDropdownModule,
     SimplebarAngularModule,
     ClickOutsideModule,

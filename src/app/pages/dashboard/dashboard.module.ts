@@ -6,8 +6,6 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { FeatherModule } from 'angular-feather';
-import { allIcons } from 'angular-feather/icons';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialModule } from '../../../app/app.module';
@@ -30,7 +28,6 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
     NgApexchartsModule,
     SimplebarAngularModule,
     CarouselModule,
-    FeatherModule.pick(allIcons),
     RouterModule,
     NgbDropdownModule,
     NgbNavModule,

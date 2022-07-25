@@ -37,11 +37,6 @@ export class BlockService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/blocks/${operator_address}/validator?limit=${limit}&offset=${offset}`);
   }
 
-  getBlocksPer(type: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-  }
-
   getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
     // return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
