@@ -307,6 +307,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       this.chartLoading = true;
       this.accDetailLoading = true;
       if (res?.data) {
+        console.log(res.data)
         this.currentAccountDetail = res.data;
         this.chartOptions.series = [];
         if (+this.currentAccountDetail.commission > 0) {
