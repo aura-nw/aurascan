@@ -80,9 +80,11 @@ export class ProposalVoteComponent implements OnInit {
         this.toastr.error(message);
       }
     }
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    if(this.route.url !== '/votings') {
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    }
   }
 
   onSubmitVoteForm() {
