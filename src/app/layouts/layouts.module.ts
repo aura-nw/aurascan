@@ -8,6 +8,7 @@ import { FeatherModule } from 'angular-feather';
 import { allIcons } from 'angular-feather/icons';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { CommonPipeModule } from '../core/pipes/common-pipe.module';
 import { CommonService } from '../core/services/common.service';
 import { LanguageService } from '../core/services/language.service';
 import { TransactionService } from '../core/services/transaction.service';
@@ -18,15 +19,8 @@ import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
 
-
 @NgModule({
-  declarations: [
-    LayoutComponent,
-    FooterComponent,
-    HorizontalComponent,
-    HorizontaltopbarComponent,
-    DialogComponent
-  ],
+  declarations: [LayoutComponent, FooterComponent, HorizontalComponent, HorizontaltopbarComponent, DialogComponent],
   imports: [
     CommonModule,
     TranslateModule,
@@ -37,8 +31,10 @@ import { LayoutComponent } from './layout.component';
     ClickOutsideModule,
     FormsModule,
     WalletConnectModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    CommonPipeModule,
   ],
-  providers: [LanguageService, CommonService , TransactionService],
+  providers: [LanguageService, CommonService, TransactionService],
+  exports: [],
 })
-export class LayoutsModule { }
+export class LayoutsModule {}

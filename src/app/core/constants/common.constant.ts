@@ -1,3 +1,5 @@
+import { environment } from "src/environments/environment";
+
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -56,4 +58,6 @@ export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.am
 export const VALIDATOR_AVATAR_URL =
   'https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/moniker/chihuahua/';
 
-export const TIME_OUT_CALL_API = 8000;
+export const TIME_OUT_CALL_API = 5000;
+
+export const NUM_BLOCK = 10000;

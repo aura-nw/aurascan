@@ -328,10 +328,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
           keyVote: this.voteConstant.find((s) => s.voteOption === result.keyVote)?.key,
         };
         this.proposalVotes = result.keyVote;
-        this.getProposalTally();
-        setTimeout(() => {
-          window.location.reload();
-        }, 4000);
+        this.getProposalTally();        
       }
     });
   }

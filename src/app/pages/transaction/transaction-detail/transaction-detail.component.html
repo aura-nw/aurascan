@@ -37,8 +37,8 @@
           <img
             [src]="
               transaction?.code == codeTransaction.Success
-                ? 'assets/icons/icons-svg/color/success.svg'
-                : 'assets/icons/icons-svg/color/fail.svg'
+                ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
+                : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
             "
             alt="" />
           <span>{{ transaction?.status }}</span>

@@ -1,7 +1,7 @@
 <div (clickOutside)="closeVoteForm()">
     <ng-container *ngIf="!data.warning">
         <div class="d-flex">
-            <img src="assets/icons/icons-svg/white/arrow-left.svg" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
+            <img [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
             <div class="sub-text sub-text-mob fw-500 ml-3 ml-lg-0">Your vote</div>
         </div>
         <div class="mt-4 small-body">#{{data.id}} {{data.title}}</div>
@@ -20,7 +20,7 @@
                 <button class="btn button-inline body mr-3" (click)="closeVoteForm()" color="primary">Cancel</button>
                 <button class="button button-outline body" color="primary" (click)="onSubmitVoteForm()"
                     [disabled]="keyVote === null">
-                    <img src="assets/icons/icons-svg/color/spinner.svg" alt="" width="20" height="20" *ngIf="isLoading" />
+                    <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
                     <span class="text-gradient">Confirm</span>
                 </button>
             </div>
@@ -30,7 +30,7 @@
     <ng-container *ngIf="data.warning">
         <div class="mx-auto mt-5">
             <div class="d-flex justify-content-center">
-                <img src="../../../../assets/icons/icons-svg/color/info.svg" alt="">
+                <img [src]="'../../../../assets/icons/icons-svg/color/info.svg' | imageS3" alt="">
             </div>
             <div class="body small-body-mob mb-5 mt-3 warning-content">
                 {{
