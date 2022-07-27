@@ -26,7 +26,7 @@
                 >$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span
               >
               <img
-                [src]="'../../../../assets/images/icons/address-popup.png' | imageS3"
+                [src]="'assets/images/icons/address-popup.png' | imageS3"
                 alt=""
                 width="24"
                 height="24"
@@ -57,13 +57,13 @@
                     type="submit"
                     class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
                     (click)="searchToken()">
-                    <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                    <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                   </button>
                   <button
                     type="reset"
                     class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
                     (click)="textSearch = ''; searchToken()">
-                    <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                    <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
                   </button>
                 </div>
               </form>
@@ -367,7 +367,7 @@
       <div class="box-address">
         <div class="txt-right mb-4">
           <img
-            [src]="'../../../../assets/images/icons/close-popup.png' | imageS3"
+            [src]="'assets/images/icons/close-popup.png' | imageS3"
             alt=""
             width="14"
             height="14"
