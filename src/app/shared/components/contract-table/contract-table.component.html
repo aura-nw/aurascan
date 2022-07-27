@@ -34,7 +34,7 @@
                     placement="right"
                     [ngbPopover]="popContent"
                     popoverClass="custom-popover">
-                    <img src="assets/images/icons/token-detail.png" alt="" width="16" height="16" />
+                    <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
                   </button>
                   <ng-template #popContent class="popContent">
                     <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>

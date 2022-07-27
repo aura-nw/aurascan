@@ -3,13 +3,13 @@
   class="code-contract justify-content-between text--white mt-5"
   *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
-    <img src="assets/images/icons/contract-verify.svg" alt="" width="16" height="16" />
+    <img [src]="'assets/images/icons/contract-verify.svg' | imageS3" alt="" width="16" height="16" />
     <span class="ml-2 mr-1 fw-semibold">Contract Source Code Verified</span
     ><span class="text--light-gray">(Exact Match)</span>
   </ng-container>
 
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Similar_Match">
-    <img src="assets/images/icons/contract-simimar.svg" alt="" width="16" height="16" />
+    <img [src]="'assets/images/icons/contract-simimar.svg' | imageS3" alt="" width="16" height="16" />
     <span class="ml-2 mr-1 fw-semibold">Similar Match Source Code</span>
     <div class="text--light-gray mt-4 mb-2 box-note">
       <span>Note: This contract matches the deployed ByteCode of the Source Code for Contract</span>
@@ -50,7 +50,7 @@
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <!-- Link Contract Source Code -->
     <div class="mt-3 mb-3">
-      <img src="assets/images/icons/token-contract.svg" alt="" width="14" height="17" />
+      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="14" height="17" />
       <span class="text--white ml-2 fw-semibold">Link Contract Source Code</span>
     </div>
     <div class="d-flex justify-content-between align-items-center">
@@ -72,7 +72,7 @@
     <!-- File Contract Source Code -->
     <div *ngIf="contractDetailData.s3_location">
       <div class="mt-3 mb-3">
-        <img src="assets/images/icons/token-contract.svg" alt="" width="14" height="17" />
+        <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="14" height="17" />
         <span class="text--white ml-2 fw-semibold">File Contract Source Code</span>
       </div>
       <div class="d-flex justify-content-between align-items-center">
@@ -81,7 +81,7 @@
         </div>
         <a href="{{contractDetailData?.s3_location}}"
            class="button button-chart button-outline button-outline__in-card d-flex flex-shrink-0">
-          <img src="assets/icons/icons-svg/white/download.svg" alt="" width="16px" height="16px" class="d-none d-lg-block">
+          <img [src]="'assets/icons/icons-svg/white/download.svg' | imageS3" alt="" width="16px" height="16px" class="d-none d-lg-block">
           <span class="ml-2 text-white">{{ breakpoint.value.matches ? 'Download' : 'Download ZIP'}}</span>
         </a>
       </div>
@@ -89,7 +89,7 @@
     <!-- Contract Schema -->
     <div class="d-flex justify-content-between align-items-center my-4 mt-lg-6 mb-lg-5">
       <div>
-        <img src="../../../assets/icons/icons-svg/basic/menu.svg" alt="" width="16" height="16" />
+        <img [src]="'../../../assets/icons/icons-svg/basic/menu.svg' | imageS3" alt="" width="16" height="16" />
         <span class="text--white ml-2 fw-semibold">Contract Schema</span>
       </div>
     </div>
@@ -110,7 +110,7 @@
             aria-expanded="false">
             <img
               class="flex-shrink-0"
-              src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+              [src]="'../../../../assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
               alt="wallet-avatar"
               height="24px"
               width="24px" />
@@ -130,7 +130,7 @@
           </ul>
         </div>
         <img
-          src="assets/icons/icons-svg/basic/copy.svg"
+          [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
           class="mx-6 cursor-pointer icon-contract"
           alt=""
           matTooltip="Copied!"
@@ -139,7 +139,7 @@
           (mouseleave)="$event.stopImmediatePropagation()"
           (click)="copyData(contractDetailData?.execute_msg_schema); tooltip2.toggle()" />
         <img
-          src="assets/images/icons/address-popup.png"
+          [src]="'assets/images/icons/address-popup.png' | imageS3"
           alt=""
           class="cursor-pointer icon-contract"
           (click)="pre1.className.includes('show') ? pre1.classList.remove('show') : pre1.classList.add('show')" />
@@ -161,7 +161,7 @@
             aria-expanded="false">
             <img
               class="flex-shrink-0 icon-contract"
-              src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+              [src]="'../../../../assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
               alt="wallet-avatar" />
             <span class="">Export Schema</span>
           </button>
@@ -179,7 +179,7 @@
           </ul>
         </div>
         <img
-          src="assets/icons/icons-svg/basic/copy.svg"
+          [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
           class="mx-6 cursor-pointer icon-contract"
           alt=""
           matTooltip="Copied!"
@@ -188,7 +188,7 @@
           (mouseleave)="$event.stopImmediatePropagation()"
           (click)="copyData(contractDetailData?.instantiate_msg_schema); tooltip3.toggle()" />
         <img
-          src="assets/images/icons/address-popup.png"
+          [src]="'assets/images/icons/address-popup.png' | imageS3"
           alt=""
           class="cursor-pointer icon-contract"
           (click)="pre2.className.includes('show') ? pre2.classList.remove('show') : pre2.classList.add('show')" />
@@ -210,7 +210,7 @@
             aria-expanded="false">
             <img
               class="flex-shrink-0"
-              src="../../../../assets/icons/icons-svg/color/chevron-down.svg"
+              [src]="'../../../../assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
               alt="wallet-avatar"
               height="24px"
               width="24px" />
@@ -230,7 +230,7 @@
           </ul>
         </div>
         <img
-          src="assets/icons/icons-svg/basic/copy.svg"
+          [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
           class="mx-6 cursor-pointer icon-contract"
           alt=""
           matTooltip="Copied!"
@@ -239,7 +239,7 @@
           (mouseleave)="$event.stopImmediatePropagation()"
           (click)="copyData(contractDetailData?.query_msg_schema); tooltip4.toggle()" />
         <img
-          src="assets/images/icons/address-popup.png"
+          [src]="'assets/images/icons/address-popup.png' | imageS3"
           alt=""
           class="cursor-pointer icon-contract"
           (click)="pre3.className.includes('show') ? pre3.classList.remove('show') : pre3.classList.add('show')" />
@@ -250,7 +250,7 @@
 
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="mt-2">
-      <img src="../../../assets/icons/icons-svg/basic/code.svg" alt="" width="16" height="16" />
+      <img [src]="'../../../assets/icons/icons-svg/basic/code.svg' | imageS3" alt="" width="16" height="16" />
       <span class="text--white ml-2 fw-semibold">Contract Creation Code</span>
     </div>
 

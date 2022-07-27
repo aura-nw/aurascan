@@ -22,7 +22,7 @@
                                   [srcImg]="getValidatorAvatar(data.validator_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                          <img src="assets/icons/icons-svg/color/jailed.svg" alt="" />
+                          <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                         </div>
                       </div>
                       <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
@@ -67,7 +67,7 @@
                                   [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                          <img src="assets/icons/icons-svg/color/jailed.svg" alt="" />
+                          <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                         </div>
                       </div>
                       <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
@@ -86,7 +86,7 @@
                                   [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                          <img src="assets/icons/icons-svg/color/jailed.svg" alt="" />
+                          <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                         </div>
                       </div>
                       <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
