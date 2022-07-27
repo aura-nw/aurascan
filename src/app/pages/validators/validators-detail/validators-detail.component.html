@@ -260,7 +260,7 @@
                   class="block-uptime tool-tip"
                   [ngStyle]="{
                     'background-color':
-                      checkMissed(itemBlock?.height) || currentValidatorDetail?.status !== statusValidator.Active
+                      (checkMissed(itemBlock?.height) && arrBlocksMiss?.length > 0) || currentValidatorDetail?.status !== statusValidator.Active
                         ? 'none'
                         : '#5EE6D0'
                   }"

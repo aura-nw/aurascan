@@ -13,9 +13,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { log } from 'util';
 
 @Component({
   selector: 'app-validators-detail',
@@ -112,8 +109,6 @@ export class ValidatorsDetailComponent implements OnInit {
   getDetail(): void {
     this.validatorService.validatorsDetail(this.currentAddress).subscribe(
       (res) => {
-        console.log(res);
-        
         if (res.status === 404) {
           this.router.navigate(['/']);
           return;
@@ -146,39 +141,32 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   getListUpTime(): void {
-    console.log(this.arrBlocksMiss);
-
     this.blockService.getLastBlock(this.currentAddress).subscribe((res) => {
-      console.log(res);
-
       this.lastBlockLoading = true;
       if (res?.data?.length > 0) {
         this.arrayUpTime = res.data;
       }
-
       this.lastBlockLoading = false;
     });
   }
 
   async getBlocksMiss() {
     const res = await this.blockService.getBlockMiss(this.numberLastBlock);
-    this.arrBlocksMiss = res.data?.info;
-    this.arrBlocksMiss.forEach((block) => {
-      block.hex_address = toHex(fromBech32(block?.address).data);
-      console.log(toHex(fromBech32(block?.address).data));
-    });
-    console.log(this.arrBlocksMiss);
+    let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
+    if (arrTemp?.length > 0) {
+      arrTemp.forEach((block) => {
+        block.hex_address = toHex(fromBech32(block?.address).data);
+      });
+      this.arrBlocksMiss = arrTemp?.filter(
+        (k) => k.hex_address?.toLowerCase() === this.currentValidatorDetail?.cons_address?.toLowerCase(),
+      );
+    }
   }
 
   checkMissed(height) {
-    // console.log(height);
-    // k.index_offset = 5526457;
-    if (this.arrBlocksMiss) {
-      // this.arrBlocksMiss[0].index_offset = 5527449;
-      const data = this.arrBlocksMiss?.find((k) => Number(k.index_offset) === Number(height));
-      if (data) {
-        return true;
-      }
+    const data = this.arrBlocksMiss?.find((k) => Number(k.index_offset) === Number(height));
+    if (data) {
+      return true;
     }
     return false;
   }

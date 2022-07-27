@@ -50,7 +50,7 @@ export class BlockService extends CommonService {
 
   getBlockMiss(limit: number) {
     return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos?pagination.limit=${limit}`,
+      `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos?pagination.limit=${limit}&pagination.reverse=true`,
     );
   }
 }

@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { BlockService } from 'src/app/core/services/block.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import {NUM_BLOCK, NUMBER_CONVERT, TIME_OUT_CALL_API} from '../../../app/core/constants/common.constant';
+import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
@@ -88,7 +88,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   pageYOffset = 0;
   scrolling = false;
-  numBlock = NUM_BLOCK.toLocaleString('en-US', {minimumFractionDigits: 0});
+  numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
@@ -169,14 +169,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getList(): void {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
       console.log(res);
-
+      
       if (res?.data?.length > 0) {
         this.rawData = res.data;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
           val.participation = val.vote_count + '/ ' + val.target_count;
           val.power = val.power / NUMBER_CONVERT;
-          val.cons_address = '06556d4e6b39978c25d1bb5c0103589fa5f79286';
           val.up_time = Number(val.up_time.replace('%', ''));
         });
 
@@ -194,24 +193,26 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   async getBlocksMiss() {
-    const res = await this.blockService.getBlockMiss(10000);
-    this.arrBlocksMiss = res.data?.info;
-    this.arrBlocksMiss.forEach((block) => {
-      block.hex_address = toHex(fromBech32(block?.address).data);
-      console.log(toHex(fromBech32(block?.address).data));
-    });
-    console.log(this.arrBlocksMiss);
+    const res = await this.blockService.getBlockMiss(NUM_BLOCK);
+    let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
+    if (arrTemp?.length > 0) {
+      arrTemp.forEach((block) => {
+        block['hex_address'] = toHex(fromBech32(block?.address).data);
+      });
+      this.arrBlocksMiss = arrTemp;
+    }
   }
 
   calculatorUpTime(address) {
-    let percentTemp = 100;
-    let percent: string;
+    let percent = '100.00';
     if (address && this.arrBlocksMiss) {
-      const data = this.arrBlocksMiss?.filter((k) => k.hex_address === address);
+      const data = this.arrBlocksMiss?.filter((k) => k.hex_address.toLowerCase() === address.toLowerCase());
       if (data) {
-        percentTemp = 100 - data.length / 10000;
-        console.log(percentTemp);
-        percent = percentTemp.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+        let total = 0;
+        data.forEach((h) => {
+          total += Number(h.missed_blocks_counter);
+        });
+        percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0] || '100.00';
       }
     }
     return percent;
