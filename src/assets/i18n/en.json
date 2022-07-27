@@ -110,10 +110,6 @@
             "TEXT": "Votings",
             "BADGE": "04"
         },
-        "CHAINCODE": {
-            "TEXT": "Chaincodes",
-            "BADGE": "04"
-        },
         "CHANEL": {
             "TEXT": "Chanels",
             "BADGE": "04"

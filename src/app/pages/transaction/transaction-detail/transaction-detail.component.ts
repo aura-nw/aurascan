@@ -25,7 +25,6 @@ export class TransactionDetailComponent implements OnInit {
   dateFormat: string;
   amount: string | number;
   isRawData = false;
-  jsonStr: string;
   errorMessage = '';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -62,9 +61,6 @@ export class TransactionDetailComponent implements OnInit {
             this.errorMessage = this.transaction.raw_log;
             this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
           }
-
-          //convert json for display raw data
-          // this.jsonStr = JSON.stringify(this.transaction.tx, null, 2).replace(/\\/g, '');
           this.dateFormat = this.datePipe.transform(this.transaction?.timestamp, DATEFORMAT.DATETIME_UTC);
           //check exit amount of transaction
           if (this.transaction.messages && this.transaction.messages[0]?.amount) {

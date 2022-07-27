@@ -4,7 +4,6 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from "@angular/material/menu";
 import { RouterModule } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
-import { FeatherModule } from "angular-feather";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CommonPipeModule } from "src/app/core/pipes/common-pipe.module";
@@ -21,7 +20,6 @@ import { WalletListComponent } from "./wallet-list/wallet-list.component";
     CommonModule,
     NgApexchartsModule,
     MatMenuModule,
-    FeatherModule,
     RouterModule,
     ClickOutsideModule,
     QrModule,

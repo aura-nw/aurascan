@@ -11,7 +11,6 @@ import { CodeTransaction } from '../../../../app/core/constants/transaction.enum
 })
 export class TokenDetailComponent implements OnInit {
   countCurrent: string = '';
-  tokenTransferList: any[];
   token: string = '';
   loading = true;
   typeTransaction = TYPE_TRANSACTION;

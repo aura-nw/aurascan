@@ -73,7 +73,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
     };
 
     if (this.dataSource) {
-      // this.dataSource.paginator = event;
       this.dataSource.data = this.transactionTableData;
     } else {
       this.dataSource = new MatTableDataSource<any>(this.transactionTableData);

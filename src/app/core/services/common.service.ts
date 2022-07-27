@@ -32,21 +32,6 @@ export class CommonService {
     return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
-  channels(limit, offset): Observable<any> {
-    this.setURL();
-    return this._http.get<any>(`${this.apiUrl}/channels?limit=${limit}&offset=${offset}`);
-  }
-
-  chaincodes(limit, offset): Observable<any> {
-    this.setURL();
-    return this._http.get<any>(`${this.apiUrl}/chaincodes?limit=${limit}&offset=${offset}`);
-  }
-
-  peers(limit, offset): Observable<any> {
-    this.setURL();
-    return this._http.get<any>(`${this.apiUrl}/peers?limit=${limit}&offset=${offset}`);
-  }
-
   setURL() {
     if (this.networkQuerySubject.value === 1) {
       this.apiUrl = `${this._environmentService.configValue.fabric}`;
