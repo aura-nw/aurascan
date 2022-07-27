@@ -35,14 +35,10 @@ export class BlocksComponent implements OnInit {
 
   getList(): void {
     this.blockService.blocksLastest(this.pageSize).subscribe((res) => {
-      console.log(res);
-      
       this.loading = true;
       this.getInfoCommon();
       if (res?.data?.length > 0) {
         this.dataSource = new MatTableDataSource(res.data);
-        console.log(this.dataSource);
-        
         this.dataBlock = res.data;
         this.length = res?.data?.length;
       }

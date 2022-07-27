@@ -169,8 +169,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   getList(): void {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
-      console.log(res);
-      
       if (res?.data?.length > 0) {
         this.rawData = res.data;
         res.data.forEach((val) => {
