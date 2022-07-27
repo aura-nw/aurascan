@@ -159,7 +159,7 @@
         <div class="card-header d-flex align-items-center justify-content-between header-mob">
           <div class="title-small fw-500">Proposed Blocks</div>
           <div class="small-body-mob">
-            <span class="fw-bold mr-2">Total :</span><span>{{ lengthBlock | number }} blocks </span>
+            <span class="fw-bold mr-2">Total :</span><span>{{ lengthBlock || 0 | number }} blocks </span>
           </div>
         </div>
         <div class="card-body article-1">
