@@ -17,7 +17,6 @@ export class TokenContractTabComponent implements OnInit {
   constructor(private tokenService: TokenService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // this.tokenAddress = this.route.snapshot.paramMap.get('tokenId');
     this.getContractDetail();
   }
 
