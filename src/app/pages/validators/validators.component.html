@@ -90,10 +90,11 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                      <div [innerHTML]="template.headerCellDef | translate"
-                           matTooltipPosition="above"
-                           matTooltip="Signed Blocks Window for the last {{numBlock}} Blocks"
-                           #tooltip="matTooltip"></div>
+                      <div
+                        [innerHTML]="template.headerCellDef | translate"
+                        matTooltipPosition="above"
+                        matTooltip="Signed Blocks Window for the last {{ numBlock }} Blocks"
+                        #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
@@ -119,10 +120,9 @@
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            <!-- {{ data[template.matColumnDef] | number: globals.formatNumber2Decimal }} -->
-                            {{ calculatorUpTime(data['cons_address']) }}%
+                            {{ calculatorUpTime(data['cons_address']) | number: globals.formatNumber2Decimal }}%
                           </ng-container>
-                          <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
+                          <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
                         <a
                           *ngSwitchCase="'title'"
@@ -237,13 +237,20 @@
                       class="table-body__item d-flex justify-content-between text--white mb-3"
                       *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
+
                       <span class="">
-                        <ng-container *ngIf="template['headerCellDef'] === 'Commission'; else defaultData">
-                          {{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                        <ng-container [ngSwitch]="template['headerCellDef']">
+                          <ng-container *ngSwitchCase="'Commission'">
+                            {{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'Uptime'">
+                            <ng-container *ngIf="validator['status'] === statusValidator.Active">
+                              {{ calculatorUpTime(validator['cons_address']) }}%
+                            </ng-container>
+                            <ng-container *ngIf="validator['status'] !== statusValidator.Active"> 0.00% </ng-container>
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>{{ validator[template.matColumnDef] }}</ng-container>
                         </ng-container>
-                        <ng-template #defaultData>
-                          {{ validator[template.matColumnDef] }}
-                        </ng-template>
                       </span>
                     </div>
                   </ng-container>
@@ -415,17 +422,32 @@
               </button>
               <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
-                  <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
+                  <img
+                    [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                    alt=""
+                    width="20"
+                    height="20"
+                    *ngIf="isLoading" />
                   <button type="button" class="button p-0">Undelegate</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
-                  <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
+                  <img
+                    [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                    alt=""
+                    width="20"
+                    height="20"
+                    *ngIf="isLoading" />
                   <button type="button" class="button p-0">Redelegate</button>
                 </li>
               </ul>
             </div>
             <button type="button" class="button body button-outline" (click)="changeTypePopup(dialogMode.Delegate)">
-              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -438,7 +460,12 @@
               class="button body button-outline"
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span class="text-gradient">Undelegate</span>
             </button>
           </div>
@@ -462,7 +489,12 @@
               class="button body button-outline"
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span class="text-gradient">Delegate</span>
             </button>
           </div>
@@ -475,7 +507,12 @@
               class="button body button-outline"
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span class="text-gradient">Redelegate</span>
             </button>
           </div>

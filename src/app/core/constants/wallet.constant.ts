@@ -120,6 +120,7 @@ export const SIGNING_MESSAGE_TYPES = {
   VOTE: `Vote`,
   DEPOSIT: `DepositTx`,
   CLAIM_REWARDS: `GetReward`,
+  WRITE_CONTRACT: `WriteContract`,
   UNKNOWN: `UnknownTx`,
 };
 
