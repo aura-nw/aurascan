@@ -77,8 +77,4 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   disconnect(): void {
     this.walletService.disconnect();
   }
-
-  shortenWallet(address: string): string {
-    return address ? `${new String(address).slice(0, 6)}...${address.slice(address.length - 6)}` : '';
-  }
 }

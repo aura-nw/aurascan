@@ -346,7 +346,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           this.chartOptions.series.push(Number(f.amount));
         });
 
-        this.currentAccountDetail.balances.forEach((token) => {
+        this.currentAccountDetail?.balances?.forEach((token) => {
           token.price = 0;
           if (token.name === this.denom) {
             token.amount = this.currentAccountDetail.total;
@@ -355,7 +355,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         });
         this.tokenPrice = 0;
 
-        this.currentAccountDetail?.balances.forEach((f) => {
+        this.currentAccountDetail?.balances?.forEach((f) => {
           f.token_amount = f.amount;
           f.token_name = f.name;
         });

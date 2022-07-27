@@ -8,6 +8,7 @@
       [lstUndelegate]="lstUndelegate"
       [modalManage]="modalManage"
       [denom]="denom"
+      [isLoading]="isClaimRewardLoading"
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
   <div class="card box-validators">
@@ -28,13 +29,13 @@
               type="submit"
               class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
               (click)="searchValidator()">
-              <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
               class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
               (click)="textSearch = ''; searchValidator()">
-              <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -118,7 +119,8 @@
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ data[template.matColumnDef] | number: globals.formatNumber2Decimal }}%
+                            <!-- {{ data[template.matColumnDef] | number: globals.formatNumber2Decimal }} -->
+                            {{ calculatorUpTime(data['cons_address']) }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0% </ng-container>
                         </div>
@@ -406,7 +408,7 @@
                 <span class="text-gradient">Select Action</span>
                 <img
                   class="flex-shrink-0"
-                  [src]="'../../../../assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
+                  [src]="'assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
                   alt="wallet-avatar"
                   height="24px"
                   width="24px" />
