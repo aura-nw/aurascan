@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { fromBech32, toHex } from '@cosmjs/encoding';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -12,9 +13,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {log} from "util";
 
 @Component({
   selector: 'app-validators-detail',
@@ -22,7 +20,7 @@ import {log} from "util";
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
-  rankNum:any = null;
+  rankNum: any = null;
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -67,6 +65,10 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthBlockLoading = true;
   lengthPowerLoading = true;
   lastBlockLoading = true;
+  arrBlocksMiss = [];
+  numberLastBlock = 100;
+  timerGetUpTime: any;
+  timerGetBlockMiss: any;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
@@ -83,12 +85,25 @@ export class ValidatorsDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.getBlocksMiss();
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.getDetail();
     this.getListBlockWithOperator();
     this.getListDelegator();
     this.getListPower();
+    this.getListUpTime();
+    this.timerGetUpTime = setInterval(() => {
+      this.getListUpTime();
+    }, 30000);
+    this.timerGetBlockMiss = setInterval(() => {
+      this.getBlocksMiss();
+    }, 10000);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.timerGetUpTime);
+    clearInterval(this.timerGetBlockMiss);
   }
 
   getDetail(): void {
@@ -105,7 +120,6 @@ export class ValidatorsDetailComponent implements OnInit {
           power: balanceOf(res.data.power),
           up_time: 0,
         };
-        this.getListUpTime();
       },
       (error) => {
         this.router.navigate(['/']);
@@ -131,28 +145,44 @@ export class ValidatorsDetailComponent implements OnInit {
       this.lastBlockLoading = true;
       if (res?.data?.length > 0) {
         this.arrayUpTime = res.data;
-        let errorBlockLength = 0;
-        this.arrayUpTime.forEach(k => {
-          if (k.isMissed) {
-            errorBlockLength += 1;
-          }
-        });
-
-        //calculator uptime last 100 blocks
-        this.currentValidatorDetail['up_time'] = 100 - Number(errorBlockLength);
       }
       this.lastBlockLoading = false;
     });
   }
 
+  async getBlocksMiss() {
+    const res = await this.blockService.getBlockMiss(this.numberLastBlock);
+    let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
+    if (arrTemp?.length > 0) {
+      arrTemp.forEach((block) => {
+        block.hex_address = toHex(fromBech32(block?.address).data);
+      });
+      this.arrBlocksMiss = arrTemp?.filter(
+        (k) => k.hex_address?.toLowerCase() === this.currentValidatorDetail?.cons_address?.toLowerCase(),
+      );
+    }
+  }
+
+  checkMissed(height) {
+    const data = this.arrBlocksMiss?.find((k) => Number(k.index_offset) === Number(height));
+    if (data) {
+      return true;
+    }
+    return false;
+  }
+
   async getListDelegator() {
-    const res = await this.validatorService.delegators(this.pageSize, this.pageIndexDelegator * this.pageSize, this.currentAddress);
-    if(res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
+    const res = await this.validatorService.delegators(
+      this.pageSize,
+      this.pageIndexDelegator * this.pageSize,
+      this.currentAddress,
+    );
+    if (res?.data?.delegation_responses?.length > 0 && res?.data?.pagination?.total) {
       this.lengthDelegator = Number(res?.data?.pagination?.total);
 
       let data = [];
       res.data?.delegation_responses.forEach((k) => {
-        data.push({delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount)});
+        data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
       });
       this.dataSourceDelegator = new MatTableDataSource(data);
     }
@@ -215,6 +245,7 @@ export class ValidatorsDetailComponent implements OnInit {
         break;
     }
   }
+
   pageEvent(page: PageEvent, type: 'block' | 'delegator' | 'power'): void {
     switch (type) {
       case 'block':
@@ -233,6 +264,7 @@ export class ValidatorsDetailComponent implements OnInit {
         break;
     }
   }
+
   checkAmountStaking(amount, isStakeMode) {
     if (isStakeMode) {
       return (
