@@ -10,7 +10,6 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { ValidatorsComponent } from './validators.component';
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
-import { ValidatorService } from '../../../app/core/services/validator.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';

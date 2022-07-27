@@ -53,7 +53,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
 
   copyData(): void {
     let text = this.contractAddress.toString();
-    var dummy = document.createElement('textarea');
+    const dummy = document.createElement('textarea');
     document.body.appendChild(dummy);
     dummy.value = text;
     dummy.select();

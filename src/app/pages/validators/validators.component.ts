@@ -59,7 +59,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
-  validatorAddress = [];
   selectedValidator: string;
   searchNullData = false;
   listStakingValidator = [];
@@ -150,9 +149,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.timerUnSub.unsubscribe();
     }
   }
-
-  ngAfterViewInit(): void {}
-
   // loadDataTemp(): void {
   //   //get data from client for wallet info
   //   let retrievedObject = localStorage.getItem('dataInfoWallet');

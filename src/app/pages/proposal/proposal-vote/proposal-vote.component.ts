@@ -5,7 +5,6 @@ import { MESSAGE_WARNING } from 'src/app/core/constants/proposal.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ResponseDto } from 'src/app/core/models/common.model';
 import { IVotingDialog } from 'src/app/core/models/proposal.model';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -22,9 +21,7 @@ import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 export class ProposalVoteComponent implements OnInit {
   keyVote = null;
   chainId = this.environmentService.configValue.chainId;
-
   chainInfo = this.environmentService.configValue.chain_info;
-
   isLoading = false;
 
   constructor(

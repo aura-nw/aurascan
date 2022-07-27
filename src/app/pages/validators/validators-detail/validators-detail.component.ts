@@ -20,7 +20,6 @@ import { balanceOf } from '../../../core/utils/common/parsing';
   styleUrls: ['./validators-detail.component.scss'],
 })
 export class ValidatorsDetailComponent implements OnInit {
-  rankNum: any = null;
   currentAddress: string;
   currentValidatorDetail: any;
 

@@ -31,7 +31,6 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
   ];
   displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);
   clicked = false;
-  dialogMode = DIALOG_STAKE_MODE;
   isDisableClaim = true;
   constructor(
     public globals: Globals,
