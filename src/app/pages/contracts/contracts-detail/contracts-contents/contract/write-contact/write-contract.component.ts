@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
-import { GAS_ESTIMATE } from 'src/app/core/constants/common.constant';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { getFee } from 'src/app/core/utils/signing/fee';
 
 @Component({
   selector: 'app-write-contract',
@@ -162,7 +163,7 @@ export class WriteContractComponent implements OnInit {
             amount: '1',
           },
         ],
-        gas: GAS_ESTIMATE,
+        gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
       };
       try {
         await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);

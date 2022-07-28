@@ -5,6 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fromBech32, toHex } from '@cosmjs/encoding';
+import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -117,8 +118,9 @@ export class ValidatorsDetailComponent implements OnInit {
           ...res.data,
           self_bonded: balanceOf(res.data.self_bonded),
           power: balanceOf(res.data.power),
-          up_time: 0,
+          up_time: 100,
         };
+        this.calculatorUpTime(this.currentValidatorDetail.cons_address);
       },
       (error) => {
         this.router.navigate(['/']);
@@ -160,6 +162,23 @@ export class ValidatorsDetailComponent implements OnInit {
         (k) => k.hex_address?.toLowerCase() === this.currentValidatorDetail?.cons_address?.toLowerCase(),
       );
     }
+  }
+
+  calculatorUpTime(address) {
+    let percent = '100.00';
+    if (address && this.arrBlocksMiss) {
+      const data = this.arrBlocksMiss?.filter((k) => k.hex_address.toLowerCase() === address.toLowerCase());
+      if (data) {
+        let total = 0;
+        data.forEach((h) => {
+          total += Number(h.missed_blocks_counter);
+        });
+        if (total > 0) {
+          percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+        }
+      }
+    }
+    this.currentValidatorDetail.up_time = percent;
   }
 
   checkMissed(height) {

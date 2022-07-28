@@ -92,7 +92,12 @@ export class TransactionMessagesComponent implements OnInit {
                 (f) => f.operator_address === messages[0]?.validator_dst_address,
               );
               this.validatorNameDes = validatorDstAddress?.title || '';
-            } else if (messages?.length > 0) {
+            } else {
+              this.validatorName =
+                this.listValidator.find((f) => f.operator_address === messages[0]?.validator_address)?.title || '';
+            }
+
+            if (messages?.length > 1) {
               messages.forEach((message) => {
                 message.validatorName =
                   this.listValidator.find((f) => f.operator_address === message?.validator_address)?.title || '';

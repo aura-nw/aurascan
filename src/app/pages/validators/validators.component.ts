@@ -207,7 +207,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         data.forEach((h) => {
           total += Number(h.missed_blocks_counter);
         });
-        percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0] || '100.00';
+        if (total > 0) {
+          percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+        }
       }
     }
     return percent;

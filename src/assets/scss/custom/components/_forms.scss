@@ -221,3 +221,19 @@ body[data-layout-mode="dark"] {
     }
   }
 }
+
+
+.form-check-input {
+  margin-left: 0;
+  background-color: var(--aura-dark-gray) !important;
+  color: var(--aura-white);
+  width: 100%;
+  height: 40px;
+  border-radius: var(--spacer-1);
+  border: none;
+  cursor: text !important;
+  padding: 0 10px;
+  &::placeholder {
+    color: var(--aura-light-gray);
+  }
+}
