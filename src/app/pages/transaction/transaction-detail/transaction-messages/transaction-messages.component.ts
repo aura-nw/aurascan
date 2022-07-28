@@ -42,7 +42,6 @@ export class TransactionMessagesComponent implements OnInit {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-
   constructor(
     public global: Globals,
     private datePipe: DatePipe,
@@ -59,7 +58,8 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Undelegate ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.CreateValidator
     ) {
       this.getListValidator();
       this.checkGetReward();
