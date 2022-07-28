@@ -171,7 +171,7 @@
           </div>
         </div>
       </div>
-  
+
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
         <div class="col-12 col-lg-9">
@@ -181,7 +181,7 @@
           </a>
         </div>
       </div>
-  
+
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
         <div class="col-12 col-lg-9">
@@ -403,6 +403,86 @@
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.messages[0]?.wasm_byte_code }}
       </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.CreateValidator">
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Min Self Delegation</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
+          {{ transactionDetail?.messages[0]?.delegator_address }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+          {{ transactionDetail?.messages[0]?.validator_address }}<br />
+          <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
+      <div class="col-12 col-lg-9">
+        <ng-container *ngIf="amount > 0">
+          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+        </ng-container>
+        <ng-container *ngIf="amount == 0"> - </ng-container>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Details</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.details || '-' }}</div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Moniker</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Website</div>
+      <div class="col-12 col-lg-9">
+        <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length > 0">
+          <a class="text--green" [href]="transactionDetail?.messages[0]?.description?.website">
+            {{ transactionDetail?.messages[0]?.description?.website }}
+          </a>
+        </ng-container>
+        <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length === 0">-</ng-container>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Identity</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.identity || '-' }}</div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Commission Rate</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent: global.formatNumber2Decimal }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Commission Max Rate</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent: global.formatNumber2Decimal }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Commission Max Change Rate</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Public Key</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.pubkey?.key }}</div>
     </div>
   </ng-container>
 </div>
