@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromBech32, toHex } from '@cosmjs/encoding';
+import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -65,14 +65,16 @@ export class ValidatorsDetailComponent implements OnInit {
   lengthBlockLoading = true;
   lengthPowerLoading = true;
   lastBlockLoading = true;
-  arrBlocksMiss = [];
+  blocksMissDetail: any;
   numberLastBlock = 100;
   timerGetUpTime: any;
   timerGetBlockMiss: any;
+  consAddress: string;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -91,12 +93,11 @@ export class ValidatorsDetailComponent implements OnInit {
     this.getListBlockWithOperator();
     this.getListDelegator();
     this.getListPower();
-    this.getListUpTime();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
     }, 30000);
     this.timerGetBlockMiss = setInterval(() => {
-      this.getBlocksMiss();
+      this.getBlocksMiss(this.consAddress);
     }, 10000);
   }
 
@@ -120,7 +121,11 @@ export class ValidatorsDetailComponent implements OnInit {
           up_time: 100,
         };
 
-        this.getBlocksMiss();
+        //convert to consAddress LCD and find block miss
+        if (this.currentValidatorDetail?.cons_address) {
+          this.consAddress = toBech32(this.prefixConsAdd, fromHex(this.currentValidatorDetail?.cons_address));
+          this.getBlocksMiss(this.consAddress);
+        }
       },
       (error) => {
         this.router.navigate(['/']);
@@ -151,44 +156,29 @@ export class ValidatorsDetailComponent implements OnInit {
     });
   }
 
-  async getBlocksMiss() {
-    const res = await this.blockService.getBlockMiss(NUM_BLOCK);
-    let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
-    if (arrTemp?.length > 0) {
-      arrTemp.forEach((block) => {
-        block.hex_address = toHex(fromBech32(block?.address).data);
-      });
-      this.arrBlocksMiss = arrTemp?.filter(
-        (k) => k.hex_address?.toLowerCase() === this.currentValidatorDetail?.cons_address?.toLowerCase(),
-      );
-    }
+  async getBlocksMiss(consAddress) {
+    const res = await this.blockService.getBlockMissByConsAddress(consAddress);
 
     //cal percent if exit arr block miss
-    if (this.arrBlocksMiss?.length > 0) {
-      this.calculatorUpTime(this.currentValidatorDetail?.cons_address);
+    if (Number(res.data?.val_signing_info?.missed_blocks_counter) > 0) {
+      this.blocksMissDetail = res.data?.val_signing_info;
+      this.calculatorUpTime();
     }
+    this.getListUpTime();
   }
 
-  calculatorUpTime(address) {
+  calculatorUpTime() {
     let percent = '100.00';
-    if (address && this.arrBlocksMiss) {
-      const data = this.arrBlocksMiss?.filter((k) => k.hex_address.toLowerCase() === address.toLowerCase());
-      if (data) {
-        let total = 0;
-        data.forEach((h) => {
-          total += Number(h.missed_blocks_counter);
-        });
-        if (total > 0) {
-          percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
-        }
-      }
+    if (this.blocksMissDetail) {
+      percent = (100 - Number(this.blocksMissDetail['missed_blocks_counter']) / NUM_BLOCK)
+        ?.toString()
+        .match(/^-?\d+(?:\.\d{0,2})?/)[0];
     }
     this.currentValidatorDetail.up_time = percent;
   }
 
   checkMissed(height) {
-    const data = this.arrBlocksMiss?.find((k) => Number(k.index_offset) === Number(height));
-    if (data) {
+    if (Number(this.blocksMissDetail?.index_offset) === Number(height)) {
       return true;
     }
     return false;
