@@ -7,6 +7,13 @@
   }
 }
 
+.box-dashboard {
+  min-height: 200px;
+  @media (min-width: 992px) {
+    min-height: 320px;
+  }
+}
+
 .aura-table th:not(:last-child) {
   width: 23%;
 }
