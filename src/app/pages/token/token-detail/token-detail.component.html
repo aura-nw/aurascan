@@ -14,4 +14,7 @@
   </div>
 </div>
 
-<app-token-content [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-content>
+<app-token-content *ngIf="tokenType"
+                   [isNFTContract]="isNFTContract"
+                   [tokenID]="tokenID"
+></app-token-content>

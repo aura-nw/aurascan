@@ -12,7 +12,7 @@ import { Globals } from '../../../../../../global/global';
 
 interface CustomPageEvent {
   next: number;
-  type: string;
+  isNFTContract: boolean;
 }
 
 @Component({
@@ -21,14 +21,15 @@ interface CustomPageEvent {
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
 export class TokenTransfersTabComponent implements OnInit, OnChanges {
-  @Input() type: 'TABLE_TOKEN' | 'TABLE_ADDRESS';
+  @Input() isNFTContract: boolean;
+  @Input() tokenID: string;
   @Input() keyWord = '';
   tokenDataList: any[];
   length: number;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() resultLength = new EventEmitter<any>();
 
-  tokenTransferTemplates: Array<TableTemplate> = [
+  noneNFTTemplates: Array<TableTemplate> = [
     { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
@@ -36,6 +37,17 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
     { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
+  ];
+
+  NFTTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'action', headerCellDef: '' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'from_address', headerCellDef: 'From' },
+    { matColumnDef: 'to_address', headerCellDef: 'To' },
+    { matColumnDef: 'token_id', headerCellDef: 'TokenID'},
+    { matColumnDef: 'details', headerCellDef: 'Details'},
   ];
 
   displayedColumns: string[];
@@ -60,19 +72,19 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.getDataTable();
-    this.template = this.getTemplate(this.type);
-    this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
+    this.template = this.getTemplate();
+    this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.tokenDataList) {
       this.isSearchAddress = false;
-
       const filterData = this.tokenDataList.filter(
         (data) =>
           data.tx_hash.includes(this.keyWord) ||
           data.from_address.includes(this.keyWord) ||
-          data.to_address.includes(this.keyWord),
+          data.to_address.includes(this.keyWord) ||
+          data.token_id.includes(this.keyWord)
       );
       if (filterData.length > 0) {
         this.pageData.length = filterData.length;
@@ -86,36 +98,51 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   getDataTable(): void {
-    this.tokenService.getListTokenTransfer(this.token).subscribe((res) => {
-      this.loading = true;
-      if (res && res.length > 0) {
-        this.tokenDataList = [...res];
-        this.tokenDataList.forEach((token) => {
-          token.status = StatusTransaction.Fail;
-          if (token?.code == CodeTransaction.Success) {
-            token.status = StatusTransaction.Success;
-          }
-          token.price = token.amount * 1;
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
-          token.type = typeTrans?.value;
-        });
+    if(this.isNFTContract) {
+      this.tokenService.getListTokenNFT(this.token).subscribe((res) => {
+        this.loading = true;
+        if (res && res.length > 0) {
+          this.tokenDataList = [...res];
+          this.tokenDataList.forEach((token) => {
+            token.status = StatusTransaction.Fail;
+            if (token?.code == CodeTransaction.Success) {
+              token.status = StatusTransaction.Success;
+            }
+            token.price = token.amount * 1;
+            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
+            token.type = typeTrans?.value;
+          });
 
-        this.dataSource = new MatTableDataSource(this.tokenDataList);
-        this.pageData.length = res.length;
-      }
-      this.loading = false;
-    });
+          this.dataSource = new MatTableDataSource(this.tokenDataList);
+          this.pageData.length = res.length;
+        }
+        this.loading = false;
+      });
+    } else {
+      this.tokenService.getListTokenTransfer(this.token).subscribe((res) => {
+        this.loading = true;
+        if (res && res.length > 0) {
+          this.tokenDataList = [...res];
+          this.tokenDataList.forEach((token) => {
+            token.status = StatusTransaction.Fail;
+            if (token?.code == CodeTransaction.Success) {
+              token.status = StatusTransaction.Success;
+            }
+            token.price = token.amount * 1;
+            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
+            token.type = typeTrans?.value;
+          });
+
+          this.dataSource = new MatTableDataSource(this.tokenDataList);
+          this.pageData.length = res.length;
+        }
+        this.loading = false;
+      });
+    }
   }
 
-  getTemplate(type: 'TABLE_TOKEN' | 'TABLE_ADDRESS'): Array<TableTemplate> {
-    switch (type) {
-      case 'TABLE_TOKEN':
-        return this.tokenTransferTemplates;
-      case 'TABLE_ADDRESS':
-      // return this.depositorsTemplates;
-      default:
-        return [];
-    }
+  getTemplate(): Array<TableTemplate> {
+    return this.isNFTContract ? this.NFTTemplates : this.noneNFTTemplates;
   }
 
   shortenAddress(address: string): string {
@@ -132,7 +159,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     if (next) {
       this.loadMore.emit({
         next: 1,
-        type: this.type,
+        isNFTContract: this.isNFTContract,
       });
     }
   }

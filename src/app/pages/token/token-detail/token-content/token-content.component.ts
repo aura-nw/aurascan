@@ -10,6 +10,7 @@ import { TokenTab } from '../../../../core/constants/token.enum';
 })
 export class TokenContentComponent implements OnInit {
   @Input() isNFTContract: boolean;
+  @Input() tokenID: string;
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = TOKEN_TAB.filter((vote) => this.tabToken.includes(vote.key)).map((vote) => ({
@@ -52,10 +53,8 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
-
     if (regexRule.test(this.searchTemp)) {
       this.textSearch = this.searchTemp;
-
       setTimeout(() => {
         if (this.resultSearch > 0) {
           let tempTabs;
@@ -67,10 +66,10 @@ export class TokenContentComponent implements OnInit {
             tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders);
           }
           this.TABS = tempTabs || this.tabsBackup;
-        } else {
-          this.textSearch = '';
         }
       }, 500);
+    } else {
+      this.textSearch = '';
     }
   }
 

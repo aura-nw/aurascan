@@ -17,7 +17,8 @@ export class TokenDetailComponent implements OnInit {
   textSearch: string = '';
   codeTransaction = CodeTransaction;
   tokenName = 'AuraDiamon';
-  isNFTContract = false;
+  tokenID = '';
+  isNFTContract: boolean;
   //change type of Token
   tokenType = TokenType.Token;
 
@@ -28,7 +29,7 @@ export class TokenDetailComponent implements OnInit {
     this.router.queryParams.subscribe((params) => {
       this.tokenType = params?.tokenType || TokenType.Token;
     });
-
+    this.tokenID = this.router.snapshot.paramMap.get('tokenId');
     if (this.tokenType === TokenType.NFT) {
       this.isNFTContract = true;
     }
