@@ -86,7 +86,6 @@ export class ValidatorsDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getBlocksMiss();
     this.currentAddress = this.route.snapshot.paramMap.get('id');
     this.getDetail();
     this.getListBlockWithOperator();
@@ -120,7 +119,8 @@ export class ValidatorsDetailComponent implements OnInit {
           power: balanceOf(res.data.power),
           up_time: 100,
         };
-        this.calculatorUpTime(this.currentValidatorDetail.cons_address);
+
+        this.getBlocksMiss();
       },
       (error) => {
         this.router.navigate(['/']);
@@ -152,7 +152,7 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   async getBlocksMiss() {
-    const res = await this.blockService.getBlockMiss(this.numberLastBlock);
+    const res = await this.blockService.getBlockMiss(NUM_BLOCK);
     let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
     if (arrTemp?.length > 0) {
       arrTemp.forEach((block) => {
@@ -161,6 +161,11 @@ export class ValidatorsDetailComponent implements OnInit {
       this.arrBlocksMiss = arrTemp?.filter(
         (k) => k.hex_address?.toLowerCase() === this.currentValidatorDetail?.cons_address?.toLowerCase(),
       );
+    }
+
+    //cal percent if exit arr block miss
+    if (this.arrBlocksMiss?.length > 0) {
+      this.calculatorUpTime(this.currentValidatorDetail?.cons_address);
     }
   }
 
