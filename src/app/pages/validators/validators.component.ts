@@ -4,12 +4,14 @@ import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulatio
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { fromBech32, toHex } from '@cosmjs/encoding';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { BlockService } from 'src/app/core/services/block.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
-import {NUM_BLOCK, NUMBER_CONVERT, TIME_OUT_CALL_API} from '../../../app/core/constants/common.constant';
+import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
 import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from '../../../app/core/constants/validator.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from '../../../app/core/constants/wallet.constant';
@@ -57,7 +59,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   amountFormat = undefined;
   isExceedAmount = false;
   userAddress = '';
-  validatorAddress = [];
   selectedValidator: string;
   searchNullData = false;
   listStakingValidator = [];
@@ -73,11 +74,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstValidator = [];
   lstUndelegate = [];
   numberCode = 0;
+  arrBlocksMiss = [];
 
   timerUnSub: Subscription;
   errorExceedAmount = false;
   isHandleStake = false;
   isLoading = false;
+  isClaimRewardLoading = false;
   _routerSubscription: Subscription;
 
   destroyed$ = new Subject();
@@ -85,7 +88,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   pageYOffset = 0;
   scrolling = false;
-  numBlock = NUM_BLOCK.toLocaleString('en-US', {minimumFractionDigits: 0});
+  numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
@@ -108,10 +111,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
+    private blockService: BlockService,
   ) {}
 
   ngOnInit(): void {
     // this.loadDataTemp();
+    this.getBlocksMiss();
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -144,9 +149,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.timerUnSub.unsubscribe();
     }
   }
-
-  ngAfterViewInit(): void {}
-
   // loadDataTemp(): void {
   //   //get data from client for wallet info
   //   let retrievedObject = localStorage.getItem('dataInfoWallet');
@@ -183,6 +185,34 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.searchValidator();
       }
     });
+  }
+
+  async getBlocksMiss() {
+    const res = await this.blockService.getBlockMiss(NUM_BLOCK);
+    let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
+    if (arrTemp?.length > 0) {
+      arrTemp.forEach((block) => {
+        block['hex_address'] = toHex(fromBech32(block?.address).data);
+      });
+      this.arrBlocksMiss = arrTemp;
+    }
+  }
+
+  calculatorUpTime(address) {
+    let percent = '100.00';
+    if (address && this.arrBlocksMiss) {
+      const data = this.arrBlocksMiss?.filter((k) => k.hex_address.toLowerCase() === address.toLowerCase());
+      if (data) {
+        let total = 0;
+        data.forEach((h) => {
+          total += Number(h.missed_blocks_counter);
+        });
+        if (total > 0) {
+          percent = (100 - total / NUM_BLOCK)?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
+        }
+      }
+    }
+    return percent;
   }
 
   changeType(type): void {
@@ -262,6 +292,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
     this.currentValidatorDialog = address;
+    this.isClaimRewardLoading = true;
     const view = async () => {
       const account = this.walletService.getAccount();
       if (account && account.bech32Address) {
@@ -275,6 +306,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     view();
     this.isOpenStaking = isOpenStaking;
     this.dataDelegate.dialogMode = dialogMode;
+    this.isClaimRewardLoading = false;
   }
 
   getValidatorDetail(address, modal): void {
@@ -336,12 +368,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               stakingToken: dataWallet?.data?.stake_reward,
               historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
             };
-
-            // this.dataDelegate.delegatableVesting = dataWallet?.data?.delegatable_vesting;
-            // this.dataDelegate.delegatedToken = dataWallet?.data?.delegated;
-            // this.dataDelegate.availableToken = dataWallet?.data?.available;
-            // this.dataDelegate.stakingToken = dataWallet?.data?.stake_reward;
-            // this.dataDelegate.historyTotalReward = listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0;
           }
 
           dataInfoWallet['arrayDelegate'] = JSON.stringify({});
@@ -468,6 +494,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (Number(this.dataDelegate.stakingToken) > 0) {
       const executeClaim = async () => {
         this.isLoading = true;
+        this.isClaimRewardLoading = true;
         const { hash, error } = await createSignBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
@@ -602,6 +629,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
     this.isHandleStake = false;
     this.isLoading = false;
+    this.isClaimRewardLoading = false;
   }
 
   async checkDetailTx(id, message) {

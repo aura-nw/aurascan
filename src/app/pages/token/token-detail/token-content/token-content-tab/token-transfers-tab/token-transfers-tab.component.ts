@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
-import { TokenTab } from '../../../../../../core/constants/token.enum';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';

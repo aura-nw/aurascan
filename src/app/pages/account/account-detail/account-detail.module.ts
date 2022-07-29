@@ -2,7 +2,6 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { FeatherModule } from 'angular-feather';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { MaterialModule } from '../../../app.module';
@@ -30,7 +29,6 @@ import { AccountDetailComponent } from './account-detail.component';
     SimplebarAngularModule,
     TranslateModule,
     NgApexchartsModule,
-    FeatherModule,
     AccountDetailTableModule,
     TableNoDataModule,
     PaginatorModule,

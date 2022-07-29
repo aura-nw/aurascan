@@ -26,10 +26,11 @@
         <div class="col-12 col-lg-8 mt-2">
           <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
             <button
-              class="button button-outline button-outline__claim-reward"
+              class="button button-outline button-outline__claim-reward d-flex"
               type="button"
-              [disabled]="isDisableClaim"
+              [disabled]="isDisableClaim || isLoading"
               (click)="viewDialog(true)">
+              <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
               <span class="text-gradient small-body-mob"
                 >Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
                 <span class="ml-1">{{ denom }}</span>

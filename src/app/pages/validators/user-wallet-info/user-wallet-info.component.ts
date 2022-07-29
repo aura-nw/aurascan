@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DIALOG_STAKE_MODE } from 'src/app/core/constants/validator.enum';
 import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
@@ -20,6 +19,7 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
   @Input() modalManage: any;
   @Input() denom: any;
   @Output() onViewDialog: EventEmitter<any> = new EventEmitter();
+  @Input() isLoading: boolean;
 
   dataSourceWallet: MatTableDataSource<any>;
   templatesWallet: Array<TableTemplate> = [
@@ -30,7 +30,6 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
   ];
   displayedColumnsWallet: string[] = this.templatesWallet.map((dta) => dta.matColumnDef);
   clicked = false;
-  dialogMode = DIALOG_STAKE_MODE;
   isDisableClaim = true;
   constructor(
     public globals: Globals,

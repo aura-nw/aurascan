@@ -29,11 +29,6 @@ export class TransactionService extends CommonService {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
   }
 
-  getTxsPer(type: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
-  }
-
   txsWithAddress(limit: string | number, offset: string | number, address: string): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/account/${address}/transaction?limit=${limit}&offset=${offset}`);
