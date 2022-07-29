@@ -10,7 +10,6 @@ import { CodeTransaction, StatusTransaction } from '../../../../app/core/constan
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { TransactionService } from '../../../../app/core/services/transaction.service';
 import { getAmount, Globals } from '../../../../app/global/global';
 @Component({
   selector: 'app-block-detail',

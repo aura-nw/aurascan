@@ -20,11 +20,11 @@
                     />
                     <button type="submit" class="btn-search {{searchValue && searchValue.length > 0 ? 'd-none' : ''}}"
                             (click)="handleSearch()">
-                        <img [src]="'../../../assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                        <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                     </button>
                     <button type="reset" class="btn-reset {{(!searchValue || searchValue && searchValue.length === 0) ? 'd-none' : ''}}"
                             (click)="searchValue = null">
-                        <img [src]="'../../../assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                        <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
                     </button>
                 </div>
             </form>

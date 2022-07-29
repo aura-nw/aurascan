@@ -29,8 +29,6 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/transaction/transaction.module').then((m) => m.TransactionModule),
   },
-  // { path: 'chaincodes', component: LayoutComponent, loadChildren: () => import('./pages/chaincodes/chaincodes.module').then(m => m.ChaincodesModule) },
-  // { path: 'chanels', component: LayoutComponent, loadChildren: () => import('./pages/chanels/chanels.module').then(m => m.ChanelsModule) },
   {
     path: 'votings',
     component: LayoutComponent,

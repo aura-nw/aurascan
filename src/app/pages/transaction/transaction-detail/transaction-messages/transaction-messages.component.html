@@ -9,7 +9,8 @@
   <div class="row mb-3 d-none d-lg-flex body small-body-mob">
     <div class="col-12 col-lg-3">
       <div class="card-text header-title">
-        <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" /> {{ transactionDetailType }}
+        <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+        {{ transactionDetailType }}
       </div>
     </div>
   </div>
@@ -94,7 +95,8 @@
       transactionDetail?.type === eTransType.Delegate ||
       transactionDetail?.type === this.eTransType.Undelegate
     ">
-    <ng-container *ngIf="transactionDetail?.type === eTransType.GetReward && transactionDetail?.messages.length > 1">
+    <ng-container
+      *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
@@ -125,7 +127,7 @@
         </div>
       </ng-container>
     </ng-container>
-    <ng-container *ngIf="transactionDetail?.messages.length === 1">
+    <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
         <div class="col-12 col-lg-9">
@@ -146,16 +148,44 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
         <div class="col-12 col-lg-9">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
+            {{ amountCommission || amount | number: global.formatNumberToken }}
+            <span class="text--green">{{ denom }}</span>
           </ng-container>
-          <ng-container *ngIf="amount == 0"> - </ng-container>
+          <ng-template #noValues> - </ng-template>
         </div>
       </div>
       <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-9">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="commissionAutoClaim > 0">
+      <div class="row mb-3 mt-5 d-none d-lg-flex body small-body-mob">
+        <div class="col-12 col-lg-3">
+          <div class="card-text header-title">
+            <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+            Get Commission
+          </div>
+        </div>
+      </div>
+  
+      <div class="row mb-3 small-body">
+        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+        <div class="col-12 col-lg-9">
+          <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+            {{ transactionDetail?.messages[0]?.validator_address }}<br />
+            <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
+          </a>
+        </div>
+      </div>
+  
+      <div class="row mb-3 small-body">
+        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
+        <div class="col-12 col-lg-9">
+          {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
         </div>
       </div>
     </ng-container>
@@ -289,7 +319,7 @@
     </div>
     <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-lg-9">
         {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
       </div>
     </div>

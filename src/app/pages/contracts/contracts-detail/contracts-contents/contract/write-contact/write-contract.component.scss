@@ -27,24 +27,6 @@ mat-expansion-panel {
     background-color: #20262b;
     padding: var(--spacer-3) var(--spacer-4);
   }
-
-  .form-check-input {
-    margin-left: 0px;
-    background-color: var(--aura-dark-gray);
-    color: var(--aura-white);
-    width: 100%;
-    height: 40px;
-    border-radius: var(--spacer-1);
-    border: none;
-    cursor: text !important;
-    @media (max-width: 414px) {
-      height: 34px;
-    }
-
-    &::placeholder {
-      color: var(--aura-light-gray);
-    }
-  }
 }
 
 .icon-connect {

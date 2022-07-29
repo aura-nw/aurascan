@@ -63,6 +63,7 @@ export enum TRANSACTION_TYPE_ENUM {
   Vesting = '/cosmos.vesting.v1beta1.MsgCreateVestingAccount',
   Deposit = '/cosmos.gov.v1beta1.MsgDeposit',
   SubmitProposalTx = '/cosmos.gov.v1beta1.MsgSubmitProposal',
+  GetRewardCommission = '/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission',
   Fail = 'FAILED'
 }
 
