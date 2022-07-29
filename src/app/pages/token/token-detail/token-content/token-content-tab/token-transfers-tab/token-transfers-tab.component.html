@@ -24,7 +24,12 @@
               </th>
             </ng-container>
             <ng-container *ngSwitchCase="'from_address'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-25">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+            </ng-container>
+            <ng-container *ngSwitchCase="'details'">
+              <th mat-header-cell *matHeaderCellDef class="col-per-15">
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
             </ng-container>
@@ -79,7 +84,7 @@
                             [src]="'assets/images/icons/arrow-right.png' | imageS3"
                             width="14"
                             height="9"
-                            class="ml-8 ml-lg-15" />
+                            class="ml-4 ml-lg-0" />
                         </ng-container>
                         <ng-container *ngIf="isSearchAddress">
                           <div class="box-token-transfer">
@@ -96,6 +101,11 @@
                     <ng-container *ngSwitchCase="'to_address'">
                       <a class="text--green" [routerLink]="['/account', data.to_address]">
                         {{ data['to_address'] | cutStringPipe: 8:8 }}
+                      </a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'details'">
+                      <a class="button button-chart button-outline button-outline__in-card px-2 button-view-nft" [routerLink]="['/tokens/token', tokenID, data.token_id]">
+                        <span class="text-gradient">View NFT</span>
                       </a>
                     </ng-container>
                     <div *ngSwitchCase="'action'">

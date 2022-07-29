@@ -1,6 +1,6 @@
 <div class="card box-token-info">
   <div class="">
-    <div class="table-responsive">
+    <div class="">
       <table class="aura-basic-table w-100">
         <tr>
           <td colspan="2">
@@ -9,11 +9,33 @@
                 <span class="fw-semibold text--white">Profile Summary </span>
                 <a class="text--green" href="javascript:void(0)">[Edit]</a>
               </div>
-              <div>
-                <button class="button button-chart button-outline button-outline__in-card -small">
-                  <span class="mr-2 small-text">More</span>
+              <div class="dropdown aura-dropdown">
+                <button
+                        class="button button-chart button-outline button-outline__in-card -small"
+                        type="button"
+                        id="token-summary-more"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                  <span class="text-white small-text mr-4">More</span>
                   <img [src]="'assets/images/icons/arrow-move-down.svg' | imageS3" alt="" width="24px" />
                 </button>
+                <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="!isNFTContract"
+                    aria-labelledby="token-summary-more">
+                  <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+                  <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+<!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+<!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+<!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                </ul>
+                <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="isNFTContract"
+                    aria-labelledby="token-summary-more">
+                  <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+                  <li class="dropdown-item cursor-pointer">Update Token Info</li>
+                  <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+<!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+<!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+<!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                </ul>
               </div>
             </div>
           </td>

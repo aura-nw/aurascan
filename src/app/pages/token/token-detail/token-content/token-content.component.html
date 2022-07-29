@@ -54,7 +54,7 @@
           <input
             type="text"
             class="form-control aura-form"
-            placeholder="Filter Address/ TX Hash/ Token ID"
+            placeholder="{{ isNFTContract ? 'Filter Address/ TX Hash/ Token ID' : 'Search for Token Name or Address'}}"
             [(ngModel)]="searchTemp"
             [maxLength]="maxLengthSearch"
             name="search"
@@ -76,8 +76,8 @@
   <div class="mt-4 mt-lg-3">
     <app-token-transfers-tab
       *ngIf="countCurrent === ''"
-      [type]="'TABLE_TOKEN'"
-      [keyWord]="textSearch"
+      [isNFTContract]="isNFTContract"
+      [keyWord]="textSearch" [tokenID]="tokenID"
       (resultLength)="getLength($event)"></app-token-transfers-tab>
     <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch"></app-token-holders-tab>
     <app-token-inventory-tab *ngIf="countCurrent === tokenTab.Inventory"></app-token-inventory-tab>
