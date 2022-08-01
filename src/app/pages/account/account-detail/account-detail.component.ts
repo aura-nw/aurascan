@@ -277,10 +277,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+      .txsWithAddressTemp(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((trans) => {
+        console.log(res);
+        
+        if (res?.data?.transactions?.length > 0) {
+          res.data.transactions.forEach((trans) => {
             //get amount of transaction
             trans.typeOrigin = trans.type;
             trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
@@ -295,8 +297,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             }
           });
           this.dataSource.data = res.data;
-
-          this.length = res.meta.count;
           this.pageData.length = res.meta.count;
         }
       });

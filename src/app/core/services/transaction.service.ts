@@ -33,4 +33,8 @@ export class TransactionService extends CommonService {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/account/${address}/transaction?limit=${limit}&offset=${offset}`);
   }
+
+  txsWithAddressTemp(limit: string | number, offset: string | number, address: string): Observable<any> {
+    return this.http.get<any>(`https://indexer.dev.aurascan.io:/api/v1/transaction?chainid=aura-testnet&address=${address}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=true`);
+  }
 }
