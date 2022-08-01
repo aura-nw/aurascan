@@ -12,29 +12,29 @@
                   <button
                     type="button"
                     class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '60m'"
-                    (click)="updateBlockAndTxs('60m')">
+                    [class.active]="chartRange === chartRangeData.M_60"
+                    (click)="updateBlockAndTxs(chartRangeData.M_60)">
                     60m
                   </button>
                   <button
                     type="button"
                     class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '24h'"
-                    (click)="updateBlockAndTxs('24h')">
+                    [class.active]="chartRange === chartRangeData.H_24"
+                    (click)="updateBlockAndTxs(chartRangeData.H_24)">
                     24h
                   </button>
                   <button
                     type="button"
                     class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '30d'"
-                    (click)="updateBlockAndTxs('30d')">
+                    [class.active]="chartRange === chartRangeData.D_30"
+                    (click)="updateBlockAndTxs(chartRangeData.D_30)">
                     30d
                   </button>
                   <button
                     type="button"
                     class="button button-primary body-small"
-                    [class.active]="chartRange === '12M'"
-                    (click)="updateBlockAndTxs('12M')">
+                    [class.active]="chartRange === chartRangeData.MONTH_12"
+                    (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
                     12M
                   </button>
                 </div>
@@ -57,29 +57,29 @@
               <button
                 type="button"
                 class="button button-primary body-small mr-6"
-                [class.active]="chartRange === '60m'"
-                (click)="updateBlockAndTxs('60m')">
+                [class.active]="chartRange === chartRangeData.M_60"
+                (click)="updateBlockAndTxs(chartRangeData.M_60)">
                 60m
               </button>
               <button
                 type="button"
                 class="button button-primary body-small mr-6"
-                [class.active]="chartRange === '24h'"
-                (click)="updateBlockAndTxs('24h')">
+                [class.active]="chartRange === chartRangeData.H_24"
+                (click)="updateBlockAndTxs(chartRangeData.H_24)">
                 24h
               </button>
               <button
                 type="button"
                 class="button button-primary body-small mr-6"
-                [class.active]="chartRange === '30d'"
-                (click)="updateBlockAndTxs('30d')">
+                [class.active]="chartRange === chartRangeData.D_30"
+                (click)="updateBlockAndTxs(chartRangeData.D_30)">
                 30d
               </button>
               <button
                 type="button"
                 class="button button-primary body-small"
-                [class.active]="chartRange === '12M'"
-                (click)="updateBlockAndTxs('12M')">
+                [class.active]="chartRange === chartRangeData.MONTH_12"
+                (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
                 12M
               </button>
             </div>
