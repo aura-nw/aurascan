@@ -277,27 +277,38 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txsWithAddressTemp(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        console.log(res);
-        
         if (res?.data?.transactions?.length > 0) {
           res.data.transactions.forEach((trans) => {
+            let typeOrigin = trans.tx_response?.tx?.body?.messages[0]['@type'];
+            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
+            trans.tx_hash = trans.tx_response?.txhash;
+
             //get amount of transaction
-            trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
+            trans.amount = getAmount(
+              trans.tx_response?.tx?.body?.messages,
+              typeOrigin,
+              trans.tx_response?.raw_log,
+              this.coinMinimalDenom,
+            );
+
             trans.type = typeTrans?.value;
+            trans.height = trans.tx_response?.height;
+            trans.timestamp = trans.tx_response?.timestamp;
             trans.status = StatusTransaction.Fail;
-            if (trans.code === CodeTransaction.Success) {
+            if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
               trans.status = StatusTransaction.Success;
             }
-            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
+            if (
+              trans.type === TypeTransaction.Send &&
+              trans?.tx_response?.tx?.body?.messages[0]?.from_address !== this.currentAddress
+            ) {
               trans.type = TypeTransaction.Received;
             }
+            this.dataSource.data = res.data.transactions;
+            this.pageData.length = res.data.count;
           });
-          this.dataSource.data = res.data;
-          this.pageData.length = res.meta.count;
         }
       });
   }

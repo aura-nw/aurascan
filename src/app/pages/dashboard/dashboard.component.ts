@@ -129,16 +129,10 @@ export class DashboardComponent implements OnInit {
 
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
-    // const date = new Date();
-    // const offset = date.getTimezoneOffset();
-    // console.log(offset);
-    
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
       const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => String(i.timestamp).replace('Z', ''));
-      console.log(categories);
-      console.log(res.data);
-      
+
       this.chartOptions.series = [
         {
           name: 'transactions',
