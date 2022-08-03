@@ -1,5 +1,3 @@
-import { environment } from "src/environments/environment";
-
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -61,3 +59,10 @@ export const TIME_OUT_CALL_API = 5000;
 export const NUM_BLOCK = 10000;
 
 export const INDEXER_URL = "https://indexer.dev.aurascan.io:/api/v1";
+
+export const CHART_RANGE = {
+  M_60: '60m',
+  H_24: '24h',
+  D_30: '30d',
+  MONTH_12: '12M',
+};
