@@ -11,30 +11,34 @@
               </div>
               <div class="dropdown aura-dropdown">
                 <button
-                        class="button button-chart button-outline button-outline__in-card -small"
-                        type="button"
-                        id="token-summary-more"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                  class="button button-chart button-outline button-outline__in-card -small"
+                  type="button"
+                  id="token-summary-more"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
                   <span class="text-white small-text mr-4">More</span>
                   <img [src]="'assets/images/icons/arrow-move-down.svg' | imageS3" alt="" width="24px" />
                 </button>
-                <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="!isNFTContract"
-                    aria-labelledby="token-summary-more">
+                <ul
+                  class="dropdown-menu aura-dropdown-menu token-summary-more"
+                  *ngIf="!isNFTContract"
+                  aria-labelledby="token-summary-more">
                   <li class="dropdown-item cursor-pointer">Add token to Web3</li>
                   <li class="dropdown-item cursor-pointer">Update Name Tag</li>
-<!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
-<!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
-<!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
                 </ul>
-                <ul class="dropdown-menu aura-dropdown-menu token-summary-more" *ngIf="isNFTContract"
-                    aria-labelledby="token-summary-more">
+                <ul
+                  class="dropdown-menu aura-dropdown-menu token-summary-more"
+                  *ngIf="isNFTContract"
+                  aria-labelledby="token-summary-more">
                   <li class="dropdown-item cursor-pointer">Add token to Web3</li>
                   <li class="dropdown-item cursor-pointer">Update Token Info</li>
                   <li class="dropdown-item cursor-pointer">Update Name Tag</li>
-<!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
-<!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
-<!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
                 </ul>
               </div>
             </div>
@@ -46,9 +50,9 @@
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Contract:</div>
               <div class="break-word">
-                <a class="text--green" routerLink="/blocks/id/0xB8c77482e45F1F44dE1745F52C74426C631bDD52"
-                  >0xB8c77482e45F1F44dE1745F52C74426C631bDD52</a
-                >
+                <a class="text--green" [routerLink]="['/contracts', tokenDetail.contract_address]">{{
+                  tokenDetail.contract_address
+                }}</a>
               </div>
             </div>
           </td>
@@ -58,7 +62,7 @@
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Decimals:</div>
-              <div>6</div>
+              <div>{{ tokenDetail.decimals }}</div>
             </div>
           </td>
         </tr>

@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
@@ -8,7 +11,7 @@ import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { Globals } from '../../../../../../global/global';
+import { getAddress, getAmount, Globals } from '../../../../../../global/global';
 
 interface CustomPageEvent {
   next: number;
@@ -46,8 +49,8 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'token_id', headerCellDef: 'TokenID'},
-    { matColumnDef: 'details', headerCellDef: 'Details'},
+    { matColumnDef: 'token_id', headerCellDef: 'TokenID' },
+    { matColumnDef: 'details', headerCellDef: 'Details' },
   ];
 
   displayedColumns: string[];
@@ -55,20 +58,26 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   loading = true;
-  token: string = '';
   typeTransaction = TYPE_TRANSACTION;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
   tokenType = 'Aura';
-  tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
   isSearchAddress = false;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  dataSearch: any;
 
-  constructor(public global: Globals, public commonService: CommonService, private tokenService: TokenService) {}
+  constructor(
+    public global: Globals,
+    public commonService: CommonService,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.getDataTable();
@@ -77,68 +86,89 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.tokenDataList) {
-      this.isSearchAddress = false;
-      const filterData = this.tokenDataList.filter(
-        (data) =>
-          data.tx_hash.includes(this.keyWord) ||
-          data.from_address.includes(this.keyWord) ||
-          data.to_address.includes(this.keyWord) ||
-          data.token_id.includes(this.keyWord)
-      );
-      if (filterData.length > 0) {
-        this.pageData.length = filterData.length;
-        if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
-          this.isSearchAddress = true;
-        }
-        this.dataSource = new MatTableDataSource<any>(filterData);
+    console.log(this.keyWord);
+
+    // if (this.tokenDataList) {
+      console.log('before:', this.dataSource.data);
+    this.getDataToken(this.keyWord);
+    console.log('after: ', this.dataSource.data);
+    
+    this.isSearchAddress = false;
+    const filterData = this.tokenDataList.filter(
+      (data) =>
+        data.tx_hash.includes(this.keyWord) ||
+        data.from_address.includes(this.keyWord) ||
+        data.to_address.includes(this.keyWord) ||
+        data.token_id.includes(this.keyWord),
+    );
+    if (filterData.length > 0) {
+      this.pageData.length = filterData.length;
+      if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
+        this.isSearchAddress = true;
       }
-      this.resultLength.emit(filterData.length);
+      this.dataSource = new MatTableDataSource<any>(filterData);
     }
+    this.resultLength.emit(filterData.length);
+    // }
   }
 
   getDataTable(): void {
-    if(this.isNFTContract) {
-      this.tokenService.getListTokenNFT(this.token).subscribe((res) => {
-        this.loading = true;
-        if (res && res.length > 0) {
-          this.tokenDataList = [...res];
-          this.tokenDataList.forEach((token) => {
-            token.status = StatusTransaction.Fail;
-            if (token?.code == CodeTransaction.Success) {
-              token.status = StatusTransaction.Success;
-            }
-            token.price = token.amount * 1;
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
-            token.type = typeTrans?.value;
-          });
+    this.loading = true;
+    if (this.isNFTContract) {
+      this.tokenService.getListTokenNFT(this.tokenID).subscribe(
+        (res) => {
+          if (res && res.data.count > 0) {
+            this.tokenDataList = [...res];
+            this.tokenDataList.forEach((token) => {
+              token.status = StatusTransaction.Fail;
+              if (token?.code == CodeTransaction.Success) {
+                token.status = StatusTransaction.Success;
+              }
+              token.price = token.amount * 1;
+              const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
+              token.type = typeTrans?.value;
+            });
 
-          this.dataSource = new MatTableDataSource(this.tokenDataList);
-          this.pageData.length = res.length;
-        }
-        this.loading = false;
-      });
+            this.dataSource = new MatTableDataSource(this.tokenDataList);
+            this.pageData.length = res.length;
+          }
+        },
+        () => {
+          this.loading = false;
+        },
+      );
     } else {
-      this.tokenService.getListTokenTransfer(this.token).subscribe((res) => {
-        this.loading = true;
-        if (res && res.length > 0) {
-          this.tokenDataList = [...res];
-          this.tokenDataList.forEach((token) => {
-            token.status = StatusTransaction.Fail;
-            if (token?.code == CodeTransaction.Success) {
-              token.status = StatusTransaction.Success;
-            }
-            token.price = token.amount * 1;
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
-            token.type = typeTrans?.value;
-          });
-
-          this.dataSource = new MatTableDataSource(this.tokenDataList);
-          this.pageData.length = res.length;
-        }
-        this.loading = false;
-      });
+      this.getDataToken();
     }
+  }
+
+  getDataToken(filterData = '') {
+    this.tokenService
+      .getListTokenTransferTemp(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.tokenID,
+        filterData,
+      )
+      .subscribe(
+        (res) => {
+          console.log(res);
+          if (res && res.data.transactions.length > 0) {
+            res.data.transactions.forEach((trans) => {
+              trans = parseDataTransaction(trans, this.coinMinimalDenom, this.tokenID);
+
+              this.dataSource.data = res.data.transactions;
+              this.pageData.length = res.data.transactions.length;
+            });
+            console.log(this.tokenDataList);
+          }
+          this.loading = false;
+          this.dataSearch = res;
+        },
+        // () => {
+        //   this.loading = false;
+        // },
+      );
   }
 
   getTemplate(): Array<TableTemplate> {
@@ -179,6 +209,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   getTokenDetail(data: any): void {
+    console.log(data);
     this.tokenDetail = data;
   }
 }

@@ -1,4 +1,8 @@
+import { getAddress, getAmount } from 'src/app/global/global';
 import { NUMBER_CONVERT } from '../../constants/common.constant';
+import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
+import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
+import { balanceOf } from './parsing';
 
 export function getInfo(globals: any, data: any): void {
   globals.dataHeader = data;
@@ -35,11 +39,35 @@ export function formatNumber(number: number, args?: any): any {
       break;
     }
   }
-  
+
   if (key === '') {
     let numberVote: string;
     numberVote = Math.round(+abs).toString();
     return (isNegative ? '-' : '') + numberVote + key;
   }
   return (isNegative ? '-' : '') + abs + key;
+}
+
+export function parseDataTransaction(trans: any, coinMinimalDenom: string, tokenID = ''): void {
+  let typeOrigin = trans.tx_response?.tx?.body?.messages[0]['@type'];
+  const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
+  trans.tx_hash = trans.tx_response?.txhash;
+  //get amount of transaction
+  trans.amount = getAmount(
+    trans.tx_response?.tx?.body?.messages,
+    typeOrigin,
+    trans.tx_response?.raw_log,
+    coinMinimalDenom,
+  );
+  trans.fee = balanceOf(trans?.tx?.auth_info?.fee?.amount[0]?.amount);
+  trans.gas_limit = balanceOf(trans?.tx?.auth_info?.fee?.gas_limit);
+  trans.type = typeTrans?.value;
+  trans.height = trans.tx_response?.height;
+  trans.timestamp = trans.tx_response?.timestamp;
+  trans.status = StatusTransaction.Fail;
+  if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
+    trans.status = StatusTransaction.Success;
+  }
+  [trans.from_address, trans.to_address] = getAddress(trans.tx_response?.tx?.body?.messages, tokenID);
+  return trans;
 }

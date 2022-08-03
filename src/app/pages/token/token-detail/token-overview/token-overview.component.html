@@ -51,7 +51,7 @@
                 [ngClass]="{ 'd-flex': isNFTContract, 'align-items-center': isNFTContract }">
                 <span class="small-text text--light-gray" *ngIf="!isNFTContract">Max Total Supply</span>
                 <span style="min-width: 120px" class="text--white" *ngIf="isNFTContract">Max Total Supply:</span>
-                <div class="small-body">1.000.000.000 AURA</div>
+                <div class="small-body">{{ tokenDetail.total_supply | number: global.formatNumberToken }} AURA</div>
               </div>
 
               <div class="pl-4" *ngIf="!isNFTContract">
@@ -67,7 +67,10 @@
             <div class="d-flex">
               <div style="min-width: 120px">Holders:</div>
               <div>
-                23,130 <span class="text-danger ml-1" *ngIf="!isNFTContract">(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span>
+                23,130
+                <span class="text-danger ml-1" *ngIf="!isNFTContract"
+                  >(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span
+                >
               </div>
             </div>
           </td>

@@ -25,7 +25,7 @@ export class TokenContractTabComponent implements OnInit {
   }
 
   getContractDetail() {
-    this.tokenService.getTokenDetail(this.tokenAddress).subscribe((res: ResponseDto) => {
+    this.tokenService.getContractDetail(this.tokenAddress).subscribe((res: ResponseDto) => {
       this.tokenDetail = res?.data;
     });
   }

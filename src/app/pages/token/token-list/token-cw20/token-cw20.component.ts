@@ -4,9 +4,10 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { TokenService } from 'src/app/core/services/token.service';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
-import { TableTemplate } from '../../../../core/models/common.model';
+import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
 @Component({
@@ -338,7 +339,13 @@ export class TokenCw20Component implements OnInit {
     { matColumnDef: 'holders', headerCellDef: 'holders' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  pageData: PageEvent;
+
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
@@ -346,47 +353,77 @@ export class TokenCw20Component implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   pageSize = 20;
 
-  constructor(public translate: TranslateService, public global: Globals, private router: Router) {}
+  constructor(
+    public translate: TranslateService,
+    public global: Globals,
+    private router: Router,
+    public tokenService: TokenService,
+  ) {}
 
   ngOnInit(): void {
     this.getTokenData();
   }
 
-  filterData(keyWord: string) {
-    keyWord = keyWord.toLowerCase();
-    this.filterSearchData = this.mockData.filter(
-      (data) => data.name.toLowerCase().includes(keyWord) || data.hashCode.toLowerCase().includes(keyWord),
-    );
-  }
+  // filterData(keyWord: string) {
+  //   keyWord = keyWord.toLowerCase();
+  //   this.filterSearchData = this.mockData.filter(
+  //     (data) => data.name.toLowerCase().includes(keyWord) || data.hashCode.toLowerCase().includes(keyWord),
+  //   );
+  // }
 
   getTokenData() {
-    this.pageData = {
-      length: this.mockData.length,
-      pageSize: this.pageSize,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
+    const payload = {
+      limit: 20,
+      offset: 0,
+      keyword: '',
     };
+    this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
+      res.data.forEach((data) => {
+        data['isValueUp'] = true;
+        if (data.change < 0) {
+          data['isValueUp'] = false;
+          data.change = Number(data.change.toString().substring(1));
+        }
+      });
 
-    this.mockData.forEach((data) => {
-      data['isValueUp'] = true;
-      if (data.change < 0) {
-        data['isValueUp'] = false;
-        data.change = Number(data.change.toString().substring(1));
-      }
+      this.dataSource = new MatTableDataSource<any>(res.data);
+      this.pageData.length = res.meta.count;
+
+      // this.mockData.forEach((data) => {
+      //   data['isValueUp'] = true;
+      //   if (data.change < 0) {
+      //     data['isValueUp'] = false;
+      //     data.change = Number(data.change.toString().substring(1));
+      //   }
+      // });
+      // let data = this.mockData.slice();
+
+      // this.sortedData = data.sort((a, b) => {
+      //   return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, false);
+      // });
+
+      // this.mockData = this.sortedData;
+      // this.dataSource = new MatTableDataSource<any>(this.mockData);
     });
-    let data = this.mockData.slice();
-
-    this.sortedData = data.sort((a, b) => {
-      return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, false);
-    });
-
-    this.mockData = this.sortedData;
-    this.dataSource = new MatTableDataSource<any>(this.mockData);
   }
 
   searchToken(): void {
-    this.filterSearchData = [];
-    if (this.textSearch && this.textSearch.length > 0) {
-      this.filterData(this.textSearch);
+    this.filterSearchData = null;
+    if (this.textSearch.length > 0) {
+      const payload = {
+        limit: 20,
+        offset: 0,
+        keyword: this.textSearch,
+      };
+
+      this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
+        if (res?.data?.length > 0) {
+          let keyWord = this.textSearch.toLowerCase();
+          this.filterSearchData = res.data?.filter(
+            (data) => data.name.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
+          );
+        }
+      });
     }
   }
 

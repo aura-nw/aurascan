@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-overview',
@@ -7,9 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TokenOverviewComponent implements OnInit {
   @Input() isNFTContract: boolean;
-  constructor() { }
+  @Input() tokenDetail: any;
+  constructor(public global: Globals) { }
 
   ngOnInit(): void {
   }
-
 }

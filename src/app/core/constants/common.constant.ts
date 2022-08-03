@@ -64,3 +64,5 @@ export const CHART_RANGE = {
   D_30: '30d',
   MONTH_12: '12M',
 };
+
+export const INDEXER_URL = "https://indexer.dev.aurascan.io:/api/v1";

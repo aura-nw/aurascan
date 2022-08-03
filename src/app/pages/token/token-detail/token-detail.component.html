@@ -1,20 +1,26 @@
-<div class="d-flex mb-4 mb-lg-5">
-  <img [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="" width="32px" height="32px" />
-  <h1 class="sub-text title-small-mob mb-0 text--white ml-2 fw-500">
-    Token <span class="text--light-gray">{{ tokenName }}</span>
-  </h1>
-</div>
-<div class="row">
-  <div class="col-12 col-lg-6">
-    <app-token-overview [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-overview>
+<app-loading-sprint *ngIf="loading"></app-loading-sprint>
+<ng-container *ngIf="!loading">
+  <div class="d-flex mb-4 mb-lg-5">
+    <img [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="" width="32px" height="32px" />
+    <h1 class="sub-text title-small-mob mb-0 text--white ml-2 fw-500">
+      Token <span class="text--light-gray">{{ tokenName }}</span>
+    </h1>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <app-token-overview
+        [isNFTContract]="isNFTContract"
+        *ngIf="tokenDetail && tokenType"
+        [tokenDetail]="tokenDetail"></app-token-overview>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <app-token-summary
+        [isNFTContract]="isNFTContract"
+        *ngIf="tokenDetail && tokenType"
+        [tokenDetail]="tokenDetail"></app-token-summary>
+    </div>
   </div>
 
-  <div class="col-12 col-lg-6">
-    <app-token-summary [isNFTContract]="isNFTContract" *ngIf="tokenType"></app-token-summary>
-  </div>
-</div>
-
-<app-token-content *ngIf="tokenType"
-                   [isNFTContract]="isNFTContract"
-                   [tokenID]="tokenID"
-></app-token-content>
+  <app-token-content *ngIf="tokenType" [isNFTContract]="isNFTContract" [tokenID]="tokenID"></app-token-content>
+</ng-container>
