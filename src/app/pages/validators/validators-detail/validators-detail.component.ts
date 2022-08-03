@@ -157,13 +157,17 @@ export class ValidatorsDetailComponent implements OnInit {
   }
 
   async getBlocksMiss(consAddress) {
-    const res = await this.blockService.getBlockMissByConsAddress(consAddress);
+    //check is active validator
+    if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
+      const res = await this.blockService.getBlockMissByConsAddress(consAddress);
 
-    //cal percent if exit arr block miss
-    if (Number(res.data?.val_signing_info?.missed_blocks_counter) > 0) {
-      this.blocksMissDetail = res.data?.val_signing_info;
-      this.calculatorUpTime();
+      //cal percent if exit arr block miss
+      if (Number(res.data?.val_signing_info?.missed_blocks_counter) > 0) {
+        this.blocksMissDetail = res.data?.val_signing_info;
+        this.calculatorUpTime();
+      }
     }
+
     this.getListUpTime();
   }
 
