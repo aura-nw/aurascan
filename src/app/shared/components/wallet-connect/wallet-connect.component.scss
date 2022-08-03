@@ -24,11 +24,6 @@
 
   .account-button {
     white-space: nowrap;
-
-    @media (max-width: 991.99px) {
-      height: 40px;
-    }
-
     @media (min-width: 992px) {
       width: 192px;
     }
@@ -43,16 +38,6 @@
 
     li {
       cursor: pointer;
-    }
-  }
-
-  #walletMenu {
-    @media (min-width: 992px) {
-      font-weight: 600;
-    }
-    @media (max-width: 414px) {
-      padding: 8px 12px;
-      height: 30px;
     }
   }
 

@@ -7,12 +7,10 @@
           <div class="card mb-0 h-100">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start">
-                <div class="card__title title-small text--green">
-                  #{{ lastedItem.pro_id }} <br />
-                  <a [routerLink]="[lastedItem.pro_id]" class="card__title text--green text-clamp">
-                    {{ lastedItem.pro_title }}
-                  </a>
-                </div>
+                <a [routerLink]="[lastedItem.pro_id]" class="fw-semibold ">
+                  <div class="text--gray-3 h2 d-block mb-0">#{{ lastedItem.pro_id }}</div>
+                  <div class="text--white h2 d-block mb-0 pr-3">{{ lastedItem.pro_title }}</div>
+                </a>
                 <div
                   *ngIf="getStatus(lastedItem.pro_status)"
                   class="proposal-status flex-shrink-0 proposal-status__{{ getStatus(lastedItem.pro_status).key }}">
@@ -23,21 +21,25 @@
                 <div>
                   <div class="d-flex mb-2">
                     <div class="content-body">Proposer</div>
-                    <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--green content-body">
+                    <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--primary h6 mb-0">
                       {{
                         lastedItem.pro_proposer
                           ? lastedItem.pro_proposer
                           : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
-                      }}</a
-                    >
+                      }}</a>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body">Voting Start</div>
-                    <div class="content-body">{{ lastedItem.pro_voting_start_time | mask: '0000-00-00 00:00:00' }}</div>
+                    <div class="text--white body-02 d-flex align-items-center">
+                      <span>{{ lastedItem.pro_voting_start_time | mask: '0000-00-00' }}</span>
+                      <div class="divider divider-vertical mx-2"></div>
+                      <span>{{ lastedItem.pro_voting_start_time | mask: '00:00:00' }}</span>
+
+                    </div>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body">Voting End</div>
-                    <div class="content-body">{{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}</div>
+                    <div class="text--white body-02">{{ lastedItem.pro_voting_end_time | mask: '0000-00-00 00:00:00' }}</div>
                   </div>
                 </div>
               </div>
@@ -72,7 +74,7 @@
                   </ul>
                 </div>
                 <div class="most-vote flex-shrink-0">
-                  <div class="small-body mb-2">Most voted on</div>
+                  <div class="body-02 mb-1 text--gray-5">Most voted on</div>
                   <div
                     class="value {{
                       getHighestVote(
@@ -108,14 +110,14 @@
                   <div class="message mr-5" *ngIf="lastedItem.vote_option">
                     You voted "{{ lastedItem.vote_option }}" for this proposal
                   </div>
-                  <button class="btn button-inline body text--green mr-3" [routerLink]="[lastedItem.pro_id]">
-                    Details
+                  <button class="button button--sm button-pill button-outline body mr-3" [routerLink]="[lastedItem.pro_id]">
+                    <span>Details</span>
                   </button>
                   <button
                     [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                     (click)="openVoteDialog(lastedItem, idx)"
-                    class="button button-outline button-outline__in-card body">
-                    <span class="text-gradient">
+                    class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
+                    <span>
                       {{
                         lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                         lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
@@ -135,7 +137,7 @@
           <div class="card mb-0 h-100">
             <div class="card-body">
               <div class="justify-content-between align-items-start border-bottom-mobile">
-                <div class="card__title-mobile mb-3 text--green text-clamp" [routerLink]="[lastedItem.pro_id]">
+                <div class="card__title-mobile mb-3 text--primary text-clamp" [routerLink]="[lastedItem.pro_id]">
                   #{{ lastedItem.pro_id }} {{ lastedItem.pro_title }}
                 </div>
                 <div class="message mb-3 text-end" *ngIf="lastedItem.vote_option">
@@ -170,7 +172,7 @@
               </div>
             </div>
             <div class="card-footer card-footer-mobile d-flex justify-content-around">
-              <button class="btn button-inline body text--green col-6" [routerLink]="[lastedItem.pro_id]">
+              <button class="btn button-inline body text--primary col-6" [routerLink]="[lastedItem.pro_id]">
                 Details
               </button>
               <button

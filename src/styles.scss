@@ -37,7 +37,7 @@ $minia-theme: mat.define-dark-theme((
 // Custom Aura Theme
 @import "assets/fonts/AuraIcon/aura-icon.css";
 @import "assets/fonts/Redig/Redig.css";
-@import "assets/fonts/SfProDisplay/SfProDisplay.css";
+@import "assets/fonts/SfPro/SfPro.css";
 @import "assets/scss/aura-theme/variables";
 @import "assets/scss/aura-theme/reboot";
 //@import "assets/scss/aura-theme/spacer";
@@ -52,8 +52,9 @@ $minia-theme: mat.define-dark-theme((
 @import "assets/scss/aura-theme/nav";
 @import "assets/scss/aura-theme/popup";
 @import "assets/scss/aura-theme/editorial";
+@import "assets/scss/aura-theme/cards";
 
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: "SFProDisplay", sans-serif; }
+body { margin: 0; font-family: "SFPro", sans-serif; }

@@ -1,11 +1,14 @@
 mat-expansion-panel {
-  border: 1px solid var(--aura-light-gray);
+  border: 1px solid var(--aura-gray-9);
   margin-bottom: var(--spacer-5);
 
   mat-expansion-panel-header {
-    background-color: var(--aura-dark-gray);
-    border-color: var(--aura-light-gray);
+    background-color: var(--aura-gray-9);
+    border-color: var(--aura-gray-9);
     padding: 10px var(--spacer-4);
+    &:hover, &:focus {
+      background-color: var(--aura-gray-9);
+    }
 
     &::after {
       font-family: 'Font Awesome 5 Free';
@@ -19,12 +22,12 @@ mat-expansion-panel {
     }
 
     &[aria-expanded='true'] {
-      border-bottom: 1px solid var(--aura-light-gray);
+      border-bottom: 1px solid var(--aura-gray-9);
     }
   }
 
   ::ng-deep .mat-expansion-panel-body {
-    background-color: #20262b;
+    background-color: var(--aura-gray-10);
     padding: var(--spacer-3) var(--spacer-4);
   }
 }
@@ -37,14 +40,7 @@ mat-expansion-panel {
   background-color: var(--aura-danger);
 
   &.connected {
-    background-color: var(--aura-active);
-  }
-}
-
-.btn-unconnect {
-  border: 1.5px solid var(--aura-light-gray);
-  @media (max-width: 991.99px) {
-    height: 30px;
+    background-color: var(--aura-green-3);
   }
 }
 
@@ -55,14 +51,7 @@ mat-expansion-panel {
     height: 48px;
   }
 }
-
-.error-null {
-  border: 2px solid red !important;
-}
-
-@media (max-width: 414px) {
-  .btn-contract {
-    height: 34px;
-    padding: 0 var(--spacer-5);
-  }
+.divider.divider-vertical {
+  min-height: 16px;
+  margin: 0 16px;
 }

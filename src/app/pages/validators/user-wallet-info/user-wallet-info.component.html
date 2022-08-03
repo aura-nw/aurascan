@@ -10,7 +10,7 @@
               <span [class.small-body]="breakpoint.value.matches">
                 {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
               </span>
-              <span class="ml-1 text--green">{{ denom }}</span>
+              <span class="ml-1 text--primary">{{ denom }}</span>
             </span>
           </div>
           <div class="mb-3 d-flex justify-content-between text--white">
@@ -19,22 +19,20 @@
               <span [class.small-body]="breakpoint.value.matches">
                 {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
               </span>
-              <span class="ml-1 text--green">{{ denom }}</span>
+              <span class="ml-1 text--primary">{{ denom }}</span>
             </span>
           </div>
         </div>
         <div class="col-12 col-lg-8 mt-2">
           <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
             <button
-              class="button button-outline button-outline__claim-reward d-flex"
+              class="button button-outline button--lg button-pill button-flat d-flex text--black"
               type="button"
               [disabled]="isDisableClaim || isLoading"
               (click)="viewDialog(true)">
               <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
-              <span class="text-gradient small-body-mob"
-                >Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}
-                <span class="ml-1">{{ denom }}</span>
-              </span>
+              <span class="body text--black">Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}</span>
+              <span class="ml-1 text--black">{{ denom }}</span>
             </button>
           </div>
         </div>
@@ -82,24 +80,24 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'amount_staked'" class="pl-lg-1">
                         {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                        <span class="text--green">{{ denom }}</span>
+                        <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'pending_reward'">
                         {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
-                        <span class="text--green">{{ denom }}</span>
+                        <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'action'" class="py-4">
                         <button
                           type="button"
-                          class="button button-outline button-outline__in-card ml-auto"
+                          class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                           [disabled]="clicked"
                           (click)="clicked=true; viewDialog(false, modalManage, data['validator_address'])">
-                          <span class="text-gradient">Manage</span>
+                          <span class="fw-500 body-02 text--gray-1">Manage</span>
                         </button>
                       </div>
                       <div *ngSwitchDefault>
                         <a
-                          class="text--green cursor-pointer box-title-validator"
+                          class="text--primary cursor-pointer box-title-validator"
                           [routerLink]="['/validators', data['validator_address']]">
                           <div class="avatar-wrapper">
                             <div class="validator-avatar">
@@ -132,7 +130,7 @@
             <div class="table-mobile__item small-body body-mob">
               <div class="table-header">
                 <div class="cursor-pointer table-header__title">
-                  <a class="title body-mob text--green" [routerLink]="['/validators', validator.validator_address]">
+                  <a class="title body-mob text--primary" [routerLink]="['/validators', validator.validator_address]">
                     <div class="avatar-wrapper">
                       <span class="validator-avatar">
                         <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])">
@@ -145,10 +143,10 @@
                 <div class="table-header__action">
                   <button
                     type="button"
-                    class="button button-outline button-outline__in-card"
+                    class="button button--sm button-pill button-outline button-outline__in-card"
                     [disabled]="clicked"
                     (click)="clicked = true; viewDialog(false, modalManage, validator['validator_address'])">
-                    <span class="text-gradient">Manage</span>
+                    <span class="fw-500 body-02 text--gray-1">Manage</span>
                   </button>
                 </div>
               </div>
@@ -158,7 +156,7 @@
                     <span>{{ template['headerCellDef'] }}</span>
                     <div>
                       <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
-                      <span *ngIf="template['headerCellDef']" class="ml-2 text--green">
+                      <span *ngIf="template['headerCellDef']" class="ml-2 text--primary">
                         {{ denom }}
                       </span>
                     </div>
@@ -184,7 +182,7 @@
           <div class="col-3 body title-name">
             <a
               [routerLink]="['/validators', validator.validator_address]"
-              class="text-clamp text--green box-title-validator small-body">
+              class="text-clamp text--primary box-title-validator small-body">
               <div class="avatar-wrapper">
                 <div class="validator-avatar">
                   <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])">
@@ -196,7 +194,7 @@
           </div>
           <div class="col-9 text--white small-body pl-0 pl-lg-1">
             {{ validator.balance | number: globals.formatNumberToken }}
-            <span class="text--green">{{ denom }}</span
+            <span class="text--primary">{{ denom }}</span
             ><br />
             <span class="text--neutrals-4">{{
               commonService.getDateValue(validator.completion_time, false)[1]
@@ -211,7 +209,7 @@
         <ng-container *ngFor="let validator of lstUndelegate">
           <div class="table-mobile__item undelegate-item">
             <div class="body fw-semibold">
-              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--green">
+              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--primary">
                 {{ validator.validator_name }}</a
               >
             </div>
@@ -219,7 +217,7 @@
               <span>{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
               <span>
                 {{ validator.balance | number: globals.formatNumberToken }}
-                <span class="text--green">{{ denom }}</span>
+                <span class="text--primary">{{ denom }}</span>
               </span>
             </div>
           </div>

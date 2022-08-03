@@ -4,11 +4,11 @@
     <span class="small-text text--white ml-2">Read Contract Information</span>
   </div>
   <div class="small-text">
-    <span class="cursor-pointer text--green mr-6" (click)="expandMenu()">
+    <span class="cursor-pointer text--primary mr-6" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse all</ng-container>
     </span>
-    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
+    <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
   </div>
 </div>
 <div class="box-content text--white mt-3">
@@ -31,7 +31,7 @@
         </ng-container>
         <div class="w-100 mb-2 px-0">
           <button
-            class="button button-chart button-outline button-outline__in-card body"
+            class="button  button-outline button-outline__in-card body"
             [disabled]="errorInput"
             (click)="querySmartContract(readContract.required)">
             <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />

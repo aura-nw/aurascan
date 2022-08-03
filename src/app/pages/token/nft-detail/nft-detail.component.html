@@ -26,7 +26,7 @@
               width="24px"
               height="24px"
               class="mr-1 object-fit--none" />
-            <h2 class="text--green body mb-0 fw-normal">AuraDiamond</h2>
+            <h2 class="text--primary body mb-0 fw-normal">AuraDiamond</h2>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@
             width="24px"
             height="24px"
             class="mr-1 object-fit--none" />
-          <h2 class="text--green body mb-0 fw-normal">AuraDiamond</h2>
+          <h2 class="text--primary body mb-0 fw-normal">AuraDiamond</h2>
         </div>
       </div>
       <!-- Desktop card info -->
@@ -107,7 +107,7 @@
           <div class="label-detail">Owner:</div>
           <div class="d-flex align-items-center position-relative">
             <a
-              class="text--green g-ellipsis"
+              class="text--primary g-ellipsis"
               [routerLink]="['/account', 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e']">
               aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e</a
             >
@@ -135,7 +135,7 @@
               width="16px"
               height="16px" />
             <a
-              class="text--green g-ellipsis"
+              class="text--primary g-ellipsis"
               [routerLink]="['/contracts', 'aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw']">
               aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw</a
             >
@@ -155,7 +155,7 @@
         <div class="card__ntf-detail-item">
           <div class="label-detail">Creator:</div>
           <div class="d-flex align-items-center">
-            <span class="text--green">Aura: Deployer</span>
+            <span class="text--primary">Aura: Deployer</span>
             <img
               [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
               class="ml-2 cursor-pointer"
@@ -198,7 +198,7 @@
 <div class="card card-body mt-4 mt-lg-3">
   <span class="body text--white mb-2">Item Activity</span>
   <div class="divider divider-horizontal"></div>
-  <div class="text--light-gray small-body mt-3">
+  <div class="text--gray-5 mt-3">
     A total of {{ dataSource?.data?.length }} record{{ dataSource?.data?.length > 1 ? 's' : '' }} found
   </div>
   <div class="table-responsive aura-table-contain">
@@ -225,7 +225,7 @@
                 </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'tx_hash'">
-                <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                   {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                 </a>
               </ng-container>
@@ -238,7 +238,7 @@
                 </div>
               </ng-container>
               <ng-container *ngSwitchCase="'from_address'">
-                <a class="text--green content-transfer" [routerLink]="['/account', data[template.matColumnDef]]">
+                <a class="text--primary content-transfer" [routerLink]="['/account', data[template.matColumnDef]]">
                   {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                 </a>
                 <img
@@ -248,7 +248,7 @@
                   class="ml-10 ml-lg-15" />
               </ng-container>
               <ng-container *ngSwitchCase="'to_address'">
-                <a class="text--green" [routerLink]="['/account', data[template.matColumnDef]]">
+                <a class="text--primary" [routerLink]="['/account', data[template.matColumnDef]]">
                   {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                 </a>
               </ng-container>

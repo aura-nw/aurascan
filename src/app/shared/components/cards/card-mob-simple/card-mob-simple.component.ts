@@ -12,6 +12,7 @@ export interface CardMobSimpleTitle {
 }
 export interface CardMobSimpleContent {
   label: string,
+  class?: string,
   info: any,
 }
 

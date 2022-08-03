@@ -3,16 +3,13 @@
         <div class="d-flex align-items-center">
             <!-- LOGO -->
             <div class="d-flex align-items-center">
-                <div class="navbar-brand-box">
-                    <a routerLink="/" class="logo logo-dark">
-                        <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100">
-                    </a>
-                    <a routerLink="/" class="logo logo-light">
-                        <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100">
+                <div class="navbar-brand-box d-flex align-items-center">
+                    <a routerLink="/" class="logo">
+                        <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo">
+<!--                        <img [src]="'assets/images/logo/aura-explorer-logo-mob.png' | imageS3" alt="Aura Logo" class="d-lg-none">-->
                     </a>
                 </div>
-                <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
-
+                <div class="page-title ml-1 ml-lg-2 fw-500 d-flex align-items-center" *ngIf="pageTitle">{{ pageTitle }}</div>
             </div>
 
             <div class="divider divider-vertical mx-12 d-none d-lg-block"></div>
@@ -48,7 +45,7 @@
     <!-- App Search mobile-->
     <div class="app-search d-lg-none px-4 mt-4 pb-3">
         <form class="aura-form single-input-field">
-            <div class="input-group">
+            <div class="input-group header__input-group">
                 <input  type="text"
                         class="form-control"
                         placeholder="{{'HEADER.SEARCH' | translate}}"
@@ -70,19 +67,19 @@
         </form>
     </div>
 </header>
-<div class="topnav">
+<div class="topnav d-none d-lg-flex align-items-center">
     <div class="container-fluid">
         <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
             <div class="collapse navbar-collapse active" id="topnav-menu-content">
                 <ul class="navbar-nav">
                     <ng-container *ngFor="let item of menuItems">
                         <li class="nav-item dropdown">
-                            <a class="nav-link d-flex align-items-center" *ngIf="!item.subItems && item.link" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
+                            <a class="nav-link d-flex align-items-center h4" *ngIf="!item.subItems && item.link" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
                                [routerLink]="item.link" routerLinkActive="active" [class.active]="router.url === '/' && item.link === '/dashboard'" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>
                                 <span class="ml-2 fw-500">{{ item.label | translate}}</span>
                             </a>
-                            <a *ngIf="item.subItems" class="nav-link dropdown-toggle arrow-none d-flex align-items-center" (click)="onMenuClick($event)"
+                            <a *ngIf="item.subItems" class="nav-link dropdown-toggle arrow-none d-flex align-items-center h4" (click)="onMenuClick($event)"
                                [class.active]="router.url === '/' && item.link === '/dashboard' ||
                                                item.id === 6 && router.url.includes('/token')" href="javascript: void(0);" id="topnav-components" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>

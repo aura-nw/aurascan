@@ -4,7 +4,7 @@
 
     tr,
     td {
-      color: var(--aura-contract);
+      color: var(--aura-gray-1);
       height: 56px;
       padding: 0 var(--spacer-4);
     }
@@ -32,35 +32,15 @@
       align-items: center;
     }
   }
-
-  .box-wallet {
-    background-color: var(--aura-bg-form);
-    border-radius: 30px;
-    width: 60px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--aura-dark-gray);
-
-    @media (max-width: 414px) {
-      height: 30px;
-    }
-  }
-
-  .button-chart {
-    height: 30px;
-    padding: 0 var(--spacer-4);
-  }
 }
 
 .selected-token__label {
   margin-left: var(--spacer-2);
-  background: var(--aura-gradient-simple);
-  height: 22px;
-  color: var(--aura-select-label);
+  background: var(--aura-gradient-general);
+  color: var(--aura-black);
+  height: 20px;
   font-size: 1.2rem;
-  line-height: 1.8rem;
+  line-height: 1.6rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -77,6 +57,6 @@
   }
 
   .mat-select-value {
-    color: var(--aura-contract);
+    color: var(--aura-gray-1);
   }
 }

@@ -47,7 +47,7 @@
       <div class="row mb-3">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Height</div>
         <div class="col-12 col-lg-6">
-          <a class="text--green" routerLink="/blocks/id/{{ transaction?.blockId }}">
+          <a class="text--primary" routerLink="/blocks/id/{{ transaction?.blockId }}">
             {{ transaction?.height | number }}
           </a>
         </div>
@@ -61,7 +61,7 @@
       <div class="row mb-3">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Fee</div>
         <div class="col-12 col-lg-6">
-          {{ transaction?.fee }} <span class="text--green">{{ denom }}</span>
+          {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
       <div class="row mb-3">

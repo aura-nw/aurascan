@@ -19,7 +19,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
@@ -27,7 +27,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
       </div>
@@ -36,7 +36,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
@@ -47,7 +47,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Contract</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/contracts', transactionDetail?.messages[0]?.contract]">
+        <a class="text--primary" [routerLink]="['/contracts', transactionDetail?.messages[0]?.contract]">
           {{ transactionDetail?.messages[0]?.contract }}
         </a>
       </div>
@@ -55,7 +55,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
@@ -76,7 +76,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
@@ -101,7 +101,7 @@
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
           <div class="col-12 col-lg-9">
-            <a class="text--green" [routerLink]="['/account', item.delegator_address]">
+            <a class="text--primary" [routerLink]="['/account', item.delegator_address]">
               {{ item.delegator_address }}
             </a>
           </div>
@@ -109,7 +109,7 @@
         <div class="row mb-3 small-body">
           <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
           <div class="col-12 col-lg-9">
-            <a class="text--green" [routerLink]="['/validators', item.validator_address]">
+            <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
               {{ item.validator_address }}<br />
               <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
             </a>
@@ -120,7 +120,7 @@
           <div class="col-12 col-lg-9">
             <ng-container *ngIf="listAmountClaim[i] > 0">
               {{ listAmountClaim[i] | number: global.formatNumberToken }}
-              <span class="text--green">{{ denom }}</span>
+              <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
           </div>
@@ -131,7 +131,7 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
         <div class="col-12 col-lg-9">
-          <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
+          <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
             {{ transactionDetail?.messages[0]?.delegator_address }}
           </a>
         </div>
@@ -139,7 +139,7 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
         <div class="col-12 col-lg-9">
-          <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+          <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
             <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
           </a>
@@ -150,7 +150,7 @@
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
             {{ amountCommission || amount | number: global.formatNumberToken }}
-            <span class="text--green">{{ denom }}</span>
+            <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-template #noValues> - </ng-template>
         </div>
@@ -158,7 +158,7 @@
       <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
         <div class="col-12 col-lg-9">
-          {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
     </ng-container>
@@ -175,7 +175,7 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
         <div class="col-12 col-lg-9">
-          <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+          <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
             <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
           </a>
@@ -185,7 +185,7 @@
       <div class="row mb-3 small-body">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
         <div class="col-12 col-lg-9">
-          {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
     </ng-container>
@@ -195,7 +195,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
+        <a class="text--primary" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
@@ -203,7 +203,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Voter</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
           {{ transactionDetail?.messages[0]?.voter }}
         </a>
       </div>
@@ -220,7 +220,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
@@ -228,7 +228,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
       </div>
@@ -246,17 +246,17 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Initial Deposit</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0">
-          0.000000 <span class="text--green">{{ denom }}</span></ng-container
+          0.000000 <span class="text--primary">{{ denom }}</span></ng-container
         >
       </div>
     </div>
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposer</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
           {{ transactionDetail?.messages[0]?.proposer }}
         </a>
       </div>
@@ -285,7 +285,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegate Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
       </div>
@@ -293,7 +293,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Source Validator Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
+        <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
           {{ transactionDetail?.messages[0]?.validator_src_address }}
           <ng-container *ngIf="validatorName"><br />({{ validatorName }})</ng-container>
         </a>
@@ -302,7 +302,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Destination Validator Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
+        <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
           {{ transactionDetail?.messages[0]?.validator_dst_address }}
           <ng-container *ngIf="validatorNameDes"><br />({{ validatorNameDes }})</ng-container>
         </a>
@@ -312,7 +312,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
@@ -320,7 +320,7 @@
     <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
       <div class="col-12 col-lg-9">
-        {{ amountClaim | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+        {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
   </ng-container>
@@ -329,7 +329,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
+        <a class="text--primary" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
@@ -337,7 +337,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Depositor</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
           {{ transactionDetail?.messages[0]?.depositor }}
         </a>
       </div>
@@ -346,7 +346,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
@@ -361,7 +361,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}
         </a>
       </div>
@@ -376,7 +376,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <a
-        class="col-12 col-lg-9 text--green"
+        class="col-12 col-lg-9 text--primary"
         [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
         {{ transactionDetail?.messages[0]?.validator_address }}
       </a>
@@ -387,7 +387,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
@@ -416,7 +416,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
       </div>
@@ -424,7 +424,7 @@
     <div class="row mb-3 small-body">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
       <div class="col-12 col-lg-9">
-        <a class="text--green" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
+        <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}<br />
           <ng-container *ngIf="validatorName">({{ validatorName }})</ng-container>
         </a>
@@ -434,7 +434,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
-          {{ amount | number: global.formatNumberToken }} <span class="text--green">{{ denom }}</span>
+          {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
@@ -451,7 +451,7 @@
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Website</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length > 0">
-          <a class="text--green" [href]="transactionDetail?.messages[0]?.description?.website">
+          <a class="text--primary" [href]="transactionDetail?.messages[0]?.description?.website">
             {{ transactionDetail?.messages[0]?.description?.website }}
           </a>
         </ng-container>

@@ -8,11 +8,15 @@
         </div>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--greyscale-4" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
+          <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
+            <span>{{ getStatus(proposalDetail.pro_status)?.value }}</span>
+          </div>
+          <div class="divider divider-vertical mx-6"></div>
           <button
             [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
             (click)="openVoteDialog(proposalDetail)"
-            class="button button-outline button-outline__in-card body flex-shrink-0 ml-3">
-            <span class="text-gradient">
+            class="button button--sm button-outline button-outline--gradient button-pill button-outline__in-card body flex-shrink-0">
+            <span>
               {{
                 proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                 proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
@@ -21,9 +25,6 @@
               }}
             </span>
           </button>
-          <div class="ml-3 proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
-            <span>{{ getStatus(proposalDetail.pro_status)?.value }}</span>
-          </div>
         </div>
       </div>
     </div>
@@ -115,7 +116,7 @@
         <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
           <div class="col-12 col-md-2 title-small fw-semibold">Final Status:</div>
           <div
-            class="col-12 col-md-10 mt-2 mt-lg-0 text--green title-small fw-semibold"
+            class="col-12 col-md-10 mt-2 mt-lg-0 text--primary title-small fw-semibold"
             [class.text--danger]="getStatus(proposalDetail.pro_status)?.value === 'rejected'">
             {{ getStatus(proposalDetail.pro_status)?.value | titlecase }}
           </div>

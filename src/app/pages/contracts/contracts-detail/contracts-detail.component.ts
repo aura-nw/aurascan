@@ -37,7 +37,9 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     this.subscription = this.contractService.contractObservable.subscribe((res: ResponseDto) => {
       if (res) {
         this.contractDetail = res?.data;
-        this.contractDetail.balance = balanceOf(this.contractDetail.balance);
+        if (this.contractDetail.balance) {
+          this.contractDetail.balance = balanceOf(this.contractDetail.balance);
+        }
         this.contractDetail.price = this.contractDetail.balance * this.priceToken || 0;
       }
     });

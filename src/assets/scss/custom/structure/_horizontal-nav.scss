@@ -203,19 +203,6 @@
 }
 
 @include media-breakpoint-down(lg) {
-
-    .navbar-brand-box{
-        .logo-dark {
-            display: $display-block;
-            span.logo-sm{
-                display: $display-block;
-            }
-        }
-    
-        .logo-light {
-            display: $display-none;
-        }
-    }
     
     .topnav {
         max-height: 360px;
@@ -269,14 +256,6 @@ body[data-layout="horizontal"][data-topbar="colored"] {
     #page-topbar{
         background-color: $primary;
         box-shadow: none;
-    }
-
-    .logo-dark {
-        display: none;
-    }
-
-    .logo-light {
-        display: flex;
     }
 
     .app-search {
@@ -344,7 +323,7 @@ body[data-layout="horizontal"][data-topbar="colored"] {
 
 body[data-layout-mode="dark"] {
     .topnav {
-        background-color: var(--aura-dark-gray);
+        background-color: var(--aura-gray-10);
 
         .navbar-nav{
             .nav-link{

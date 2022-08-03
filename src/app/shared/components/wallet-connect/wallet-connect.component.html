@@ -4,32 +4,25 @@
       #connectButton
       *ngIf="!ng.wallet"
       type="button"
-      class="button account-button button-outline d-flex align-items-center d-lg-inline-block fw-semibold"
+      class="button button--lg button--sm-mob button-pill button-outline button-outline--gradient body-01"
       data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet"
     >
-      <span class="d-lg-none text-gradient">Connect</span>
-      <span class="d-none d-lg-block text-gradient">CONNECT WALLET</span>
+      <span class="d-lg-none body-mob fw-semibold">Connect</span>
+      <span class="d-none d-lg-block fw-semibold">Connect Wallet</span>
     </button>
 
     <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
       <button
-        class="button button-outline d-flex align-items-center fw-semibold"
+        class="button button--lg button--sm-mob button-pill button-outline button-outline--gradient button-dropdown body-01 fw-semibold"
         type="button"
         id="walletMenu"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title text-gradient d-lg-none small-text">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name}}</span>
-        <span class="button__title text-gradient d-none d-lg-block body">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
-        <img
-          class="flex-shrink-0"
-          [src]="'assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
-          alt="wallet-avatar"
-          height="24px"
-          width="24px"
-        />
+        <span class="button__title d-lg-none body-mob fw-semibold">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name}}</span>
+        <span class="button__title d-none d-lg-block body-mob fw-semibold">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
       </button>
       <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
         <li class="dropdown-item small-text-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">

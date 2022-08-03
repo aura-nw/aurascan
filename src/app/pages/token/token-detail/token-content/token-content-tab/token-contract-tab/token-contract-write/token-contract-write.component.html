@@ -2,25 +2,25 @@
   <div class="my-3 small-text">
     <button
       (click)="connectWallet()"
-      class="button button-chart button-outline button-outline__in-card btn-unconnect"
+      class="button  button-outline button-outline__in-card btn-unconnect"
       *ngIf="!isConnectedWallet">
       <div class="icon-connect"></div>
       <span class="">Connect to Web3</span>
     </button>
     <button
       [routerLink]="['/account/', walletAddress]"
-      class="button button-chart button-outline button-outline__in-card"
+      class="button  button-outline button-outline__in-card"
       *ngIf="isConnectedWallet">
       <div class="icon-connect connected"></div>
       <span class="">Connected to Web3</span>
     </button>
   </div>
   <div class="small-text">
-    <span class="cursor-pointer text--green mr-6" (click)="expandMenu()">
+    <span class="cursor-pointer text--primary mr-6" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse all</ng-container>
     </span>
-    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
+    <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
   </div>
 </div>
 
@@ -51,7 +51,7 @@
         </ng-container>
         <div class="px-0">
           <button
-            class="button button-chart button-outline button-outline__in-card body"
+            class="button  button-outline button-outline__in-card body"
             [disabled]="errorInput && currentFrom === i"
             (click)="excuteSmartContract(writeContract.required[0], i)">
             <span class="ml-1 text-gradient">Write</span>

@@ -1,8 +1,8 @@
-@mixin mono-font-size($font-size, $line-height, $letter-spacing, $font: "SFProDisplay") {
+@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "SFPro") {
   font-size: #{$font-size}rem !important;
   line-height: #{$line-height}rem !important;
+  font-weight: $font-weight !important;
   font-family: $font !important;
-  letter-spacing: #{$letter-spacing}em !important;
 }
 html,
 body {
@@ -10,113 +10,87 @@ body {
 }
 h1,
 .h1 {
-  @include mono-font-size(9.6, 12, 0.01, "Redig");
+  @include mono-font-size(2.4, 2.6, 600);
   display: inline-block;
-  letter-spacing: 0.13rem !important;
 }
 h2,
 .h2 {
-  @include mono-font-size(6.4, 8, 0.02, "Redig");
+  @include mono-font-size(2.2, 2.6, 600);
   display: inline-block;
-  letter-spacing: 0.13rem !important;
 }
 h3,
 .h3 {
-  @include mono-font-size(4.8, 5.6, 0.02, "Redig");
-  letter-spacing: 0.13rem !important;
+  @include mono-font-size(2, 2.6, 500);
 }
 h4,
 .h4 {
-  @include mono-font-size(3.2, 3.8, 0.02, "Redig");
-  letter-spacing: 0.13rem !important;
+  @include mono-font-size(1.6, 2, 600);
 }
 h5,
 .h5 {
-  @include mono-font-size(2.4, auto, 0.02, "Redig");
-  letter-spacing: 0.13rem !important;
+  @include mono-font-size(1.6, 1.9, 600);
 }
-.title {
-  @include mono-font-size(3.2, 4, -0.01, "SFProDisplay");
-}
-.title-medium {
-  @include mono-font-size(2.6, 3.2, -0.01, "SFProDisplay");
-}
-.title-small {
-  @include mono-font-size(2, 2.3, -0.01, "SFProDisplay");
-}
-.sub-text {
-  @include mono-font-size(2.4, 4, 0.02, "SFProDisplay");
+h6,
+.h6 {
+  @include mono-font-size(1.6, 2.4, 500);
 }
 .body {
-  @include mono-font-size(1.6, 2.4, 0.05, "SFProDisplay");
+  @include mono-font-size(1.4, 1.6, 400);
 }
-.body-bold {
-  @include mono-font-size(1.6, 2.4, 0.02, "SFProDisplay");
-  font-weight: bold;
+.body-01 {
+  @include mono-font-size(1.6, 2, 400);
 }
-.small-body {
-  @include mono-font-size(1.4, 1.6, 0, "SFProDisplay");
+.body-02 {
+  @include mono-font-size(1.4, 1.6, 500);
 }
-.small-text {
-  @include mono-font-size(1.2, 1.6, 0, "SFProDisplay");
+.body-03 {
+  @include mono-font-size(1.2, 1.6, 600);
 }
 
 @media (max-width: 991.98px) {
   .h1-mob {
-    @include mono-font-size(9.6, 12, 0.01, "Redig");
+    @include mono-font-size(2.4, 2.6, 600);
     display: inline-block;
   }
   .h2-mob {
-    @include mono-font-size(6.4, 8, 0.02, "Redig");
+    @include mono-font-size(2.2, 2.6, 600);
     display: inline-block;
   }
   .h3-mob {
-    @include mono-font-size(4.8, 5.6, 0.02, "Redig");
+    @include mono-font-size(2, 2.6, 500);
   }
-  .h4-mob {
-    @include mono-font-size(3.2, 3.8, 0.02, "Redig");
+  .h-mob {
+    @include mono-font-size(1.6, 2, 600);
   }
-  .title-mob {
-    @include mono-font-size(3.2, 4, -0.01, "SFProDisplay");
+  .h5-mob {
+    @include mono-font-size(1.6, 1.9, 600);
   }
-  .title-medium-mob {
-    @include mono-font-size(2.6, 3.2, -0.01, "SFProDisplay");
-  }
-  .title-small-mob {
-    @include mono-font-size(2.4, 3.2, -0.01, "SFProDisplay");
-  }
-  .sub-text-mob {
-    @include mono-font-size(2, 2.5, 0.02, "SFProDisplay");
+  .h6-mob {
+    @include mono-font-size(1.6, 2.4, 500);
   }
   .body-mob {
-    @include mono-font-size(1.6, 2.4, 0.05, "SFProDisplay");
+    @include mono-font-size(1.4, 1.6, 400);
   }
-  .small-text-mob {
-    @include mono-font-size(1.2, 1.6, 0, "SFProDisplay");
+  .body-01-mob {
+    @include mono-font-size(1.6, 2, 400);
+  }
+  .body-02-mob {
+    @include mono-font-size(1.4, 1.6, 500);
+  }
+  .body-03-mob {
+    @include mono-font-size(1.2, 1.6, 600);
   }
 
-  .small-body-mob {
-    @include mono-font-size(1.4, 1.8, 0, "SFProDisplay");
-  }
 }
 $textColors: (
+  "primary",
   "white",
-  "white-2",
-  "light-gray",
-  "dark-gray",
   "black",
-  "black-1",
-  "green",
-  "primary-4",
-  "neutrals-2",
-  "neutrals-3",
-  "neutrals-4",
-  "neutrals-6",
-  "neutrals-8",
-  "contract",
-  "active",
-  "greyscale-1"
-  "greyscale-4"
+  "gray-1",
+  "gray-3",
+  "gray-4",
+  "gray-5",
+  "gray-6"
 );
 @each $color in $textColors {
   .text--#{$color} {
@@ -132,29 +106,7 @@ $textColors: (
 }
 
 .text-gradient {
-  background: var(--aura-gradient-simple);
+  background: var(--aura-gradient-general);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-.text--greyscale-3 {
-  color: #98989B;
-}
-
-.text--greyscale-4 {
-  color: #9CA3AF;
-}
-
-$textColorsStatus: (
-  "primary"  : '#5EE6D0',
-  "danger"   : '#E65E5E',
-  "info"     : '#5E84E6',
-  "warning"  : '#E3E65E',
-  "secondary": '#E3E65E',
-);
-
-@each $status, $color in $textColorsStatus {
-  .text--#{$status} {
-    color: #{$color} !important;
-  }
 }

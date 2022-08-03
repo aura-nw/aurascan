@@ -16,7 +16,7 @@
                 (click)="copyMessage(currentAddress)">
                 {{ currentAddress }}
               </p>
-              <p class="body txt-copied text--green" [class.show]="isCopy">copied!</p>
+              <p class="body txt-copied text--primary" [class.show]="isCopy">copied!</p>
             </div>
           </div>
           <div>
@@ -104,7 +104,7 @@
                 <div class="table-mobile">
                   <ng-container *ngFor="let item of lstBalanceAcount">
                     <div class="row box-mob-table justify-content-between col-12">
-                      <div class="sub-text-mob text--green col-4 fw-500">
+                      <div class="sub-text-mob text--primary col-4 fw-500">
                         {{ item.name }}
                       </div>
                       <div class="col-8 text-end">
@@ -212,7 +212,7 @@
             </div>
             <div>
               <div class="d-flex justify-content-between align-items-center mb-5">
-                <span class="text--green fw-500 title-small">{{ denom }}</span>
+                <span class="text--primary fw-500 title-small">{{ denom }}</span>
                 <span class="body">{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
               </div>
               <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -266,13 +266,13 @@
                               </div>
                               <a
                                 *ngSwitchCase="'tx_hash'"
-                                class="text--green cursor-pointer hash-link"
+                                class="text--primary cursor-pointer hash-link"
                                 [routerLink]="['/transaction', data['tx_hash']]">
                                 {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                               </a>
                               <a
                                 *ngSwitchCase="'height'"
-                                class="text--green cursor-pointer block-link"
+                                class="text--primary cursor-pointer block-link"
                                 [routerLink]="['/blocks/id', data['blockId']]">
                                 {{ data[template.matColumnDef] }}
                               </a>
@@ -294,12 +294,12 @@
                               </div>
                               <div *ngSwitchCase="'fee'">
                                 {{ data[template.matColumnDef] }}
-                                <span class="text--green">{{ denom }}</span>
+                                <span class="text--primary">{{ denom }}</span>
                               </div>
                               <div *ngSwitchCase="'amount'">
                                 <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                                   {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                                  <span class="text--green">{{ denom }}</span>
+                                  <span class="text--primary">{{ denom }}</span>
                                 </ng-container>
                                 <ng-template #displayNonNumber>
                                   <span *ngIf="data[template.matColumnDef] === 0"> - </span>

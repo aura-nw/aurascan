@@ -4,11 +4,11 @@
     <span class="small-text text--white ml-2">Read Contract Information</span>
   </div>
   <div class="small-text">
-    <span class="cursor-pointer text--green mr-6" (click)="expandMenu()">
+    <span class="cursor-pointer text--primary mr-6" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse all</ng-container>
     </span>
-    <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
+    <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
   </div>
 </div>
 <div class="box-content text--white mt-3">
@@ -23,7 +23,7 @@
         <div class="d-flex row p-3">
           <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]]?.required; index as idx">
             <p
-              class="px-0"
+              class="px-0 mb-2"
               [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
               {{ item }} ({{
                 readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
@@ -55,17 +55,18 @@
           <div class="w-100 mb-2 px-0">
             <button
               *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')"
-              class="button button-chart button-outline button-outline__in-card body btn-contract"
+              class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
               [disabled]="currentFrom === i && (errorInput || isLoading)"
               type="button"
               (click)="querySmartContract(readContract.required[0], i)">
               <img
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
+                class="mr-2"
                 width="20"
                 height="20"
                 *ngIf="isLoading && currentFrom === i" />
-              <span class="ml-1 text-gradient">Query</span>
+              <span>Query</span>
             </button>
           </div>
           <div class="col-12">

@@ -1,7 +1,7 @@
 <div *ngIf="link" class="card-mob-simple">
     <a href="{{link}}">
         <div *ngIf="title" class="d-flex justify-content-between align-items-center">
-            <div *ngIf="title.label" class="text--green body {{title.size ? ('title-'+title.size) : ''}}">
+            <div *ngIf="title.label" class="text--primary body {{title.size ? ('title-'+title.size) : ''}}">
                 <span *ngIf="title.rankNum" class="mr-2">{{title.rankNum}}</span>
                 <span>{{title.label}}</span>
             </div>
@@ -12,10 +12,11 @@
                 <div *ngIf="title.subLabelContent" class="sub-label body {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
             </div>
         </div>
+        <span class="divider divider-horizontal d-block my-3" *ngIf="title"></span>
         <div *ngIf="content && content.length > 0">
-            <div *ngFor="let data of content" class="mt-2 d-flex justify-content-between align-items-center small-body">
-                <div *ngIf="data.label">{{data.label}}</div>
-                <div *ngIf="data.info" [innerHTML]="data.info"></div>
+            <div *ngFor="let data of content, let i = index" class="{{ i > 0 ? 'mt-3' : ''}} d-flex justify-content-between align-items-center small-body">
+                <div class="body-01 text--gray-4" *ngIf="data.label">{{data.label}}</div>
+                <h6 *ngIf="data.info" class="{{data.class ? data.class : 'text--gray-1'}} mb-0" [innerHTML]="data.info"></h6>
             </div>
         </div>
     </a>

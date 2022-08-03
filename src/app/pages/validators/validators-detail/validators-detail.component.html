@@ -72,7 +72,7 @@
                 <div class="mt-3">
                   <div class="header-title fw-semibold">Address</div>
                   <a
-                    class="text--green cursor-pointer fw-normal"
+                    class="text--primary cursor-pointer fw-normal"
                     [routerLink]="['/account', currentValidatorDetail?.acc_address]">
                     {{ currentValidatorDetail?.acc_address }}
                   </a>
@@ -90,7 +90,7 @@
           <div class="card-text fw-semibold">Website</div>
         </div>
         <div class="col-12 col-lg-6">
-          <a class="text--green cursor-pointer" href="{{ currentValidatorDetail?.website }}">{{
+          <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}">{{
             currentValidatorDetail?.website
           }}</a>
         </div>
@@ -122,7 +122,7 @@
           {{ currentValidatorDetail?.percent_power }}% ({{
             currentValidatorDetail?.power | number: global.formatNumberToken
           }}
-          <span class="text--green">{{ denom }}</span
+          <span class="text--primary">{{ denom }}</span
           >)
         </div>
       </div>
@@ -138,7 +138,7 @@
         </div>
         <div class="col-12 col-lg-6">
           {{ currentValidatorDetail?.self_bonded | number: global.formatNumberToken }}
-          <span class="text--green">{{ denom }}</span> ({{ currentValidatorDetail?.percent_self_bonded }})
+          <span class="text--primary">{{ denom }}</span> ({{ currentValidatorDetail?.percent_self_bonded }})
         </div>
       </div>
       <div class="row mb-3">
@@ -181,13 +181,13 @@
                             </div>
                             <a
                               *ngSwitchCase="'block_hash'"
-                              class="text--green cursor-pointer"
+                              class="text--primary cursor-pointer"
                               [routerLink]="['/blocks', data.height]">
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
-                              class="text--green cursor-pointer"
+                              class="text--primary cursor-pointer"
                               [routerLink]="['/blocks', data.height]">
                               {{ data[template.matColumnDef] }}
                             </a>
@@ -315,13 +315,13 @@
                           <ng-container [ngSwitch]="template.matColumnDef">
                             <a
                               *ngSwitchCase="'delegator_address'"
-                              class="text--green cursor-pointer"
+                              class="text--primary cursor-pointer"
                               [routerLink]="['/account', data.delegator_address]">
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
                               {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                              <span class="text--green">{{ denom }}</span>
+                              <span class="text--primary">{{ denom }}</span>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                           </ng-container>
@@ -347,7 +347,7 @@
                         label: 'Amount',
                         info:
                           (data.amount | number: global.formatNumberToken) +
-                          '<span class=text--green> ' +
+                          '<span class=text--primary> ' +
                           denom +
                           '</span>'
                       }
@@ -397,7 +397,7 @@
                             </div>
                             <a
                               *ngSwitchCase="'tx_hash'"
-                              class="text--green cursor-pointer hash-link"
+                              class="text--primary cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
@@ -409,7 +409,7 @@
                             </div>
                             <a
                               *ngSwitchCase="'height'"
-                              class="text--green cursor-pointer block-link"
+                              class="text--primary cursor-pointer block-link"
                               [routerLink]="['/blocks', data[template.matColumnDef]]">
                               {{ data[template.matColumnDef] }}
                             </a>
@@ -436,7 +436,7 @@
                       size: 'sm',
                       label: data.height,
                       subLabelContent: data.tx_hash | cutStringPipe: 6:6,
-                      subLabelClass: 'text--green fw-normal'
+                      subLabelClass: 'text--primary fw-normal'
                     }"
                     [content]="[
                       { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },

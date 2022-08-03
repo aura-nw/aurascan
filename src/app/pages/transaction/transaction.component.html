@@ -22,17 +22,17 @@
                       </div>
                       <a
                         *ngSwitchCase="'tx_hash'"
-                        class="text--green cursor-pointer hash-link"
+                        class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['tx_hash']]">
                         {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                       <a
                         *ngSwitchCase="'height'"
-                        class="text--green cursor-pointer block-link"
+                        class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks/id', data['blockId']]">
                         {{ data[template.matColumnDef] }}
                       </a>
-                      <div *ngSwitchCase="'type'" class="text--green">
+                      <div *ngSwitchCase="'type'" class="text--primary">
                         {{ data[template.matColumnDef] }}
                       </div>
                       <div *ngSwitchCase="'status'">

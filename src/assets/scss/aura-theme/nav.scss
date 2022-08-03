@@ -16,7 +16,7 @@
 body[data-layout-mode="dark"] {
     .aura-nav-tabs.nav-tabs {
         .nav-link {
-            color: var(--aura-green-disabled);
+            color: var(--aura-gray-4);
             font-family: "SF Pro Display";
             font-style: normal;
             font-weight: 500;
@@ -26,7 +26,7 @@ body[data-layout-mode="dark"] {
 
             &.active {
                 background-color: transparent;
-                border-color: var(--aura-white);
+                border-color: var(--aura-gray-6);
                 color: var(--aura-white);
             }
         }

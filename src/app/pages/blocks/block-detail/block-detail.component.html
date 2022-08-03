@@ -69,7 +69,7 @@
           <p class="card-text fw-semibold">Proposer</p>
         </div>
         <div class="col-12 col-lg-6">
-          <a class="text--green" routerLink="/validators/{{ item?.operator_address }}">
+          <a class="text--primary" routerLink="/validators/{{ item?.operator_address }}">
             {{ item?.proposer }}
           </a>
         </div>
@@ -108,13 +108,13 @@
                     </div>
                     <a
                       *ngSwitchCase="'tx_hash'"
-                      class="text--green cursor-pointer hash-link"
+                      class="text--primary cursor-pointer hash-link"
                       [routerLink]="['/transaction', data['tx_hash']]">
                       {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                     </a>
                     <a
                       *ngSwitchCase="'height'"
-                      class="text--green cursor-pointer block-link"
+                      class="text--primary cursor-pointer block-link"
                       [routerLink]="['/blocks', data['height']]">
                       {{ data[template.matColumnDef] }}
                     </a>
@@ -135,7 +135,7 @@
                       </div>
                     </div>
                     <div *ngSwitchCase="'fee'">
-                      {{ data[template.matColumnDef] }} <span class="text--green">{{ denom }}</span>
+                      {{ data[template.matColumnDef] }} <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">

@@ -1,10 +1,7 @@
 .card {
-  .button-outline {
-    &__in-card {
-      box-shadow: 2px 1000px 1px #20262B inset !important;
-    }
+  .divider.divider-vertical {
+    max-height: 32px;
   }
-
   &__status {
     .proposal-status-mobile {
       border-radius: 8px;
@@ -42,7 +39,7 @@
     position: relative;
 
     ul.vote-bar-ul {
-      background-color: var(--aura-white-3);
+      background-color: var(--aura-gray-8);
       border-radius: 4px;
       overflow: hidden;
 
@@ -60,17 +57,8 @@
         }
 
         &--secondary {
-          background-color: var(--aura-light-gray);
+          background-color: var(--aura-gray-8);
         }
-
-        &--blue {
-          background-color: var(--aura-dark-blue);
-        }
-
-        &--voted {
-          background-color: var(--aura-voted);
-        }
-
       }
 
       li:last-child {

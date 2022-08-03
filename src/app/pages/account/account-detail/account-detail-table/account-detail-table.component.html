@@ -13,7 +13,7 @@
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
                     <a  *ngSwitchCase="'validator_name'"
-                        class="text--green cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                        class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
                         [routerLink]="['/validators', data['validator_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -31,17 +31,17 @@
                     </a>
                     <div *ngSwitchCase="'amount'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span>
+                      <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'token_amount'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                     </div>
-                    <div *ngSwitchCase="'token_name'" class="fw-normal text--green">
+                    <div *ngSwitchCase="'token_name'" class="fw-normal text--primary">
                       {{ data[template.matColumnDef] }}
                     </div>
                     <div *ngSwitchCase="'reward'" class="fw-normal">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span>
+                      <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
                       {{ commonService.getDateValue(data[template.matColumnDef], false)[0] }}
@@ -58,7 +58,7 @@
                       $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </div>
                     <a  *ngSwitchCase="'validator_src_name'"
-                        class="text--green cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                        class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
                         [routerLink]="['/validators', data['validator_src_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -77,7 +77,7 @@
 
                     <a
                       *ngSwitchCase="'validator_dst_name'"
-                      class="text--green cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
                       [routerLink]="['/validators', data['validator_dst_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
@@ -118,7 +118,7 @@
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
                   <a
-                    class="fw-normal text--green body-mob"
+                    class="fw-normal text--primary body-mob"
                     [routerLink]="['/validators', item['validator_address']]">
                     {{ item.validator_name }}
                   </a>
@@ -130,10 +130,10 @@
                     </div>
                     <div class="txt-right">
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span
+                      <span class="text--primary">{{ denom }}</span
                       ><br />
                       {{ item.reward | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span>
+                      <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                 </div>
@@ -141,7 +141,7 @@
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
                       <a
-                        class="fw-normal text--green body-mob"
+                        class="fw-normal text--primary body-mob"
                         [routerLink]="['/validators', item['validator_address']]">
                         {{ item.validator_name }}
                       </a>
@@ -152,7 +152,7 @@
                     <div class="txt-right">
                       {{ commonService.getDateValue(item.completion_time, false)[1] }}<br />
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span
+                      <span class="text--primary">{{ denom }}</span
                       ><br />
                       {{ commonService.getDateValue(item.completion_time, false)[0] }}
                     </div>
@@ -162,7 +162,7 @@
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
                       <a
-                        class="fw-normal text--green body-mob"
+                        class="fw-normal text--primary body-mob"
                         [routerLink]="['/validators', item['validator_address']]">
                         {{ item.validator_src_name }}
                       </a>
@@ -172,20 +172,20 @@
                     </div>
                     <div class="txt-right">
                       <a
-                        class="fw-normal text--green body-mob"
+                        class="fw-normal text--primary body-mob"
                         [routerLink]="['/validators', item['validator_address']]">
                         {{ item.validator_dst_name }}
                       </a>
                       <br />
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span
+                      <span class="text--primary">{{ denom }}</span
                       ><br />
                       {{ commonService.getDateValue(item.completion_time, false)[0] }} <br />
                     </div>
                   </div>
                 </div>
                 <div *ngSwitchCase="pageType.Vestings">
-                  <span class="fw-normal text--green body-mob">{{ item.type_format }}</span
+                  <span class="fw-normal text--primary body-mob">{{ item.type_format }}</span
                   ><br />
                   <div class="d-flex justify-content-between">
                     <div class="fw-normal">
@@ -194,7 +194,7 @@
                     </div>
                     <div class="txt-right">
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--green">{{ denom }}</span
+                      <span class="text--primary">{{ denom }}</span
                       ><br />
                       {{ commonService.getDateValue(item.date_format, false)[1] }} <br />
                     </div>

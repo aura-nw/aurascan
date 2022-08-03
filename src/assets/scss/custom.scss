@@ -88,7 +88,7 @@ body {
 
 .vote-bar {
     width: 100%;
-
+    max-height: 36px;
     ul {
         padding: 0;
         margin: 0;
@@ -117,35 +117,48 @@ body {
 }
 
 .proposal-status {
-    border-radius: 8px;
+    border-radius: 4px;
     text-transform: capitalize;
-    height: 33px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 var(--spacer-4);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     line-height: 1.6rem;
     font-weight: 600;
 
     &__PROPOSAL_STATUS_DEPOSIT_PERIOD {
-        background: rgba(227, 230, 94, 0.2);
-        color: #e3e65e;
+        background: rgba(231, 187, 65, 0.2);
+        color: var(--aura-yellow-2);
     }
 
     &__PROPOSAL_STATUS_VOTING_PERIOD {
-        background: rgba(94, 132, 230, 0.2);
-        color: #5e84e6;
+        background: rgba(91, 200, 255, 0.2);
+        color: var(--aura-blue-2);
     }
 
     &__PROPOSAL_STATUS_REJECTED {
-        background: rgba(230, 94, 94, 0.2);
-        color: #e65e5e;
+        background: rgba(220, 56, 63, 0.2);
+        color: var(--aura-red-2);
     }
 
     &__PROPOSAL_STATUS_PASSED {
-        background: rgba(94, 230, 208, 0.2);
-        color: #5ee6d0;
+        background: rgba(84, 206, 140, 0.2);
+        color: var(--aura-green-2);
+    }
+}
+
+.aura-status {
+    .status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 34px;
+        padding: 0 16px;
+        border-radius: 4px;
+        background-color: var(--aura-gray-9);
+        color: var(--aura-gray-light);
     }
 }
 
@@ -313,7 +326,7 @@ body {
 }
 
 .box-mob-table {
-    background-color: var(--aura-dark-gray);
+    background-color: var(--aura-gray-10);
     border-radius: 8px;
     padding: 12px;
     width: 100%;
@@ -523,7 +536,7 @@ body {
     }
 
     .txt-title-search {
-        background-color: var(--aura-dark-gray);
+        background-color: var(--aura-gray-10);
         border-radius: 48px;
         padding: 4px 12px;
         font-weight: 600;

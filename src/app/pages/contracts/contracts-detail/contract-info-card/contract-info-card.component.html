@@ -6,10 +6,11 @@
           <td colspan="2" class="body fw-semibold">More Info</td>
           <td>
             <div class="d-flex justify-content-end">
-              <img [src]="'assets/icons/icons-svg/basic/icon-love.svg' | imageS3" alt="" width="16px" />
-              <button class="ml-3 button button-chart button-outline button-outline__in-card -small">
-                <span class="ml-2 small-text">More</span>
-                <img [src]="'assets/images/icons/arrow-move-down.svg' | imageS3" alt="" width="24px" />
+              <button class="button button--sm button-circle">
+                <img [src]="'assets/icons/icons-svg/basic/icon-love.svg' | imageS3" alt="" width="16px" />
+              </button>
+              <button class="ml-3 button button--sm button-pill button-outline button-outline__in-card button-dropdown">
+                <span>More</span>
               </button>
             </div>
           </td>
@@ -17,18 +18,18 @@
 
         <tr>
           <td>My Name Tag:</td>
-          <td colspan="2">Not Available, <span class="text--green ml-1">Update?</span></td>
+          <td colspan="2">Not Available, <span class="text--primary ml-1">Update?</span></td>
         </tr>
 
         <tr class="d-lg-none">
           <td colspan="3">
             <div>Contract Creator:</div>
             <div>
-              <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+              <a class="text--primary mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
                 {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
               </a>
               at txn
-              <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+              <a class="text--primary ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
                 {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
               </a>
             </div>
@@ -38,11 +39,11 @@
         <tr class="d-none d-lg-table-row">
           <td>Contract Creator:</td>
           <td colspan="2">
-            <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+            <a class="text--primary mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
               {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
             </a>
             at txn
-            <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+            <a class="text--primary ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
               {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
             </a>
           </td>
@@ -52,7 +53,7 @@
           <td>Token Tracker:</td>
           <td colspan="2">
             <ng-container *ngIf="contractDetail?.token_tracker">
-              <a class="text--green" [routerLink]="['/token', contractDetail?.contract_address]">
+              <a class="text--primary" [routerLink]="['/token', contractDetail?.contract_address]">
                 {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
               </a>
               <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->

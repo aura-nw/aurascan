@@ -6,34 +6,34 @@
         <div class="card-body">
           <div class="align-items-center mb-3">
             <div class="d-flex flex-wrap align-items-center mb-lg-6">
-              <h5 class="sub-text sub-text-mob text--white">Transactions</h5>
+              <h2 class="text--white mb-0">Transactions</h2>
               <div class="ms-auto">
                 <div class="d-none d-lg-block">
                   <button
                     type="button"
-                    class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '60m'"
+                    class="button button--sm button-pill button-flat px-3 body mr-2"
+                    [class.button-flat--inactive]="chartRange !== '60m'"
                     (click)="updateBlockAndTxs('60m')">
                     60m
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '24h'"
+                    class="button button--sm button-pill button-flat px-3 body mr-2"
+                    [class.button-flat--inactive]="chartRange !== '24h'"
                     (click)="updateBlockAndTxs('24h')">
                     24h
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '30d'"
+                    class="button button--sm button-pill button-flat px-3 body mr-2"
+                    [class.button-flat--inactive]="chartRange !== '30d'"
                     (click)="updateBlockAndTxs('30d')">
                     30d
                   </button>
                   <button
                     type="button"
-                    class="button button-primary body-small"
-                    [class.active]="chartRange === '12M'"
+                    class="button button--sm button-pill button-flat px-3 body"
+                    [class.button-flat--inactive]="chartRange !== '12M'"
                     (click)="updateBlockAndTxs('12M')">
                     12M
                   </button>
@@ -56,28 +56,28 @@
             <div class="d-lg-none text-center">
               <button
                 type="button"
-                class="button button-primary body-small mr-6"
+                class="button button--sm button-pill button-flat px-3 body mr-6"
                 [class.active]="chartRange === '60m'"
                 (click)="updateBlockAndTxs('60m')">
                 60m
               </button>
               <button
                 type="button"
-                class="button button-primary body-small mr-6"
+                class="button button--sm button-pill button-flat px-3 body mr-6"
                 [class.active]="chartRange === '24h'"
                 (click)="updateBlockAndTxs('24h')">
                 24h
               </button>
               <button
                 type="button"
-                class="button button-primary body-small mr-6"
+                class="button button--sm button-pill button-flat px-3 body mr-6"
                 [class.active]="chartRange === '30d'"
                 (click)="updateBlockAndTxs('30d')">
                 30d
               </button>
               <button
                 type="button"
-                class="button button-primary body-small"
+                class="button button--sm button-pill button-flat px-3 body"
                 [class.active]="chartRange === '12M'"
                 (click)="updateBlockAndTxs('12M')">
                 12M
@@ -94,18 +94,18 @@
   <div class="row">
     <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.block_height > 0">
       <!-- card -->
-      <div class="card card-h-100 text--white card-highlight">
+      <div class="card text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-2 mb-lg-9">
+          <div class="row mb-2">
             <div class="col-12">
-              <span class="sub-text sub-text-mob card-highlight__label">Height</span>
+              <span class="h3 text--white ">Height</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="sub-text text-gradient card-highlight__content mb-0">
+            <div class="h1 text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.block_height || 0 | number }}
-            </h4>
+            </div>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -118,15 +118,15 @@
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-2 mb-lg-9">
+          <div class="row mb-2">
             <div class="col-12">
-              <span class="sub-text sub-text-mob card-highlight__label">Transactions</span>
+              <span class="h3 text--white ">Transactions</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="sub-text text-gradient card-highlight__content mb-0">
+            <div class="h1 text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.total_txs_num | number }}
-            </h4>
+            </div>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -139,15 +139,15 @@
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-2 mb-lg-9">
+          <div class="row mb-2">
             <div class="col-12">
-              <span class="sub-text sub-text-mob card-highlight__label">Bonded Tokens</span>
+              <span class="h3 text--white ">Bonded Tokens</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="sub-text text-gradient card-highlight__content mb-0">
+            <div class="h1 text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
-            </h4>
+            </div>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -162,16 +162,16 @@
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
         <div class="card-body">
-          <div class="row mb-2 mb-lg-9">
+          <div class="row mb-2">
             <div class="col-12">
-              <span class="sub-text sub-text-mob card-highlight__label">Validators</span>
+              <span class="h3 text--white ">Validators</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h4 class="sub-text text-gradient card-highlight__content mb-0">
+            <div class="h1 text-gradient card-highlight__content mb-0">
               {{ global?.dataHeader?.total_validator_active_num || 0 }}
               {{ global?.dataHeader?.total_validator_num >= 0 ? '/ ' + global?.dataHeader?.total_validator_num : 0 }}
-            </h4>
+            </div>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
@@ -187,17 +187,17 @@
     <!-- Block -->
     <div class="col-xl-6">
       <div class="card">
-        <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-6">
-          <div class="sub-text sub-text-mob text--white mb-2 mb-lg-0">Blocks</div>
+        <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
+          <h2 class="text--white mb-0">Blocks</h2>
           <button
             type="button"
-            class="button button-outline button-outline__in-card d-none d-lg-block body"
+            class="button button-pill button--sm button-outline button-outline__in-card d-none d-lg-block body"
             [routerLink]="'/blocks'"
             *ngIf="dataSourceBlock">
-            <span class="text-gradient">View more</span>
+            <span>View more</span>
           </button>
         </div>
-        <div class="card-body pt-0 box-dashboard">
+        <div class="card-body pt-4 pt-lg-2 box-dashboard">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceBlock; else noValues">
               <div class="table-responsive d-none d-lg-block">
@@ -215,13 +215,13 @@
                             </div>
                             <a
                               *ngSwitchCase="'proposer'"
-                              class="text--green cursor-pointer"
+                              class="text--primary cursor-pointer"
                               [routerLink]="['/validators', data.operator_address]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
-                              class="text--green cursor-pointer"
+                              class="text--primary cursor-pointer"
                               [routerLink]="['/blocks', data.height]">
                               {{ data[template.matColumnDef] }}
                             </a>
@@ -245,12 +245,9 @@
                 <app-card-mob-simple
                   *ngFor="let data of dataBlock"
                   [link]="'/blocks/' + data.height"
-                  [title]="{
-                    size: 'md',
-                    label: data.height,
-                    subLabelContent: commonService.getDateValue(data.timestamp)[0]
-                  }"
                   [content]="[
+                    { label: 'Height', class: 'text--primary', info: data.height },
+                    { label: 'Proposer', class: 'text--primary', info: data.proposer },
                     { label: 'Txs', info: data.num_txs.toString() },
                     { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
                   ]"></app-card-mob-simple>
@@ -262,10 +259,10 @@
           </ngx-simplebar>
           <button
             type="button"
-            class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2"
+            class="button button-pill button--md button-outline button-outline__in-card body d-lg-none w-100 mt-2"
             [routerLink]="'/blocks'"
             *ngIf="dataSourceBlock">
-            <span class="text-gradient">View more</span>
+            <span>View more</span>
           </button>
         </div>
       </div>
@@ -274,17 +271,17 @@
     <!-- Transaction -->
     <div class="col-xl-6">
       <div class="card">
-        <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-6">
-          <div class="sub-text sub-text-mob text--white mb-2 mb-lg-0">Transactions</div>
+        <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
+          <h2 class="text--white mb-0">Transactions</h2>
           <button
             type="button"
-            class="button button-outline button-outline__in-card body d-none d-lg-block"
+            class="button button-pill button--sm button-outline button-outline__in-card d-none d-lg-block body"
             [routerLink]="'/transaction'"
             *ngIf="dataSourceTx">
-            <span class="text-gradient">View more</span>
+            <span>View more</span>
           </button>
         </div>
-        <div class="card-body pt-0 box-dashboard">
+        <div class="card-body pt-4 pt-lg-2 box-dashboard">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceTx; else noValues">
               <div class="table-responsive d-none d-lg-block">
@@ -306,13 +303,13 @@
                             </div>
                             <a
                               *ngSwitchCase="'tx_hash'"
-                              class="text--green cursor-pointer hash-link"
+                              class="text--primary cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
-                              class="text--green cursor-pointer block-link"
+                              class="text--primary cursor-pointer block-link"
                               [routerLink]="['/blocks/id', data['blockId']]">
                               {{ data[template.matColumnDef] }}
                             </a>
@@ -347,7 +344,7 @@
                     status: data.code
                   }"
                   [content]="[
-                    { label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash, data.typeOrigin) },
+                    { label: 'Height', class: 'text--primary', info: data.height},
                     { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
                   ]"></app-card-mob-simple>
               </div>
@@ -358,7 +355,7 @@
           </ngx-simplebar>
           <button
             type="button"
-            class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2"
+            class="button button-pill button--md button-outline button-outline__in-card body d-lg-none w-100 mt-2"
             [routerLink]="'/transaction'"
             *ngIf="dataSourceTx">
             <span class="text-gradient">View more</span>

@@ -36,27 +36,27 @@
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">My delegation</div>
       <div class="text--greyscale-4">
         {{ data?.validatorDetail?.amount_staked || 0 | number: global.formatNumberToken }}
-        <span class="text--green"> {{ denom }}</span>
+        <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Pending Reward</div>
       <div class="text--greyscale-4">
         {{ data?.validatorDetail?.pending_reward || 0 | number: global.formatNumberToken }}
-        <span class="text--green"> {{ denom }}</span>
+        <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
     <div class="d-lg-flex mb-3 mb-xl-6">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Total Reward</div>
       <div class="text--greyscale-4">
         {{ data?.validatorDetail?.reward || 0 | number: global.formatNumberToken }}
-        <span class="text--green"> {{ denom }}</span>
+        <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
     <div class="d-lg-flex">
       <div class="dialog-title mr-10 mb-1 mb-lg-0 fw-500">Delegatable Balance</div>
       <div class="text--greyscale-4">
-        {{ availableToken || 0 | number: global.formatNumberToken }} <span class="text--green"> {{ denom }}</span>
+        {{ availableToken || 0 | number: global.formatNumberToken }} <span class="text--primary"> {{ denom }}</span>
       </div>
     </div>
   </div>

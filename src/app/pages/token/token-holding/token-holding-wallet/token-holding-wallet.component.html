@@ -39,7 +39,7 @@
                         <td mat-cell *matCellDef="let element">
                             <div class="d-flex align-items-center">
                                 <img [src]="element.asset.img" alt="" width="24px" height="24px">
-                                <span class="ml-2 text--green">{{ element.asset.name }}</span>
+                                <span class="ml-2 text--primary">{{ element.asset.name }}</span>
                             </div>
                         </td>
                     </ng-container>
@@ -118,14 +118,12 @@
                         <td mat-cell *matCellDef="let element" style="min-width: 180px">
                             <div class="dropdown aura-dropdown">
                                 <button
-                                        class="button button-outline button-outline__in-card d-flex align-items-center"
+                                        class="button button-pill button--sm button-outline button-outline__in-card button-dropdown"
                                         type="button"
                                         id="walletMenu"
                                         data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                    <span class="text-white small-text mr-4">More</span>
-                                    <img class="flex-shrink-0" [src]="'assets/icons/icons-svg/white/chevron-down.svg' | imageS3"
-                                         alt="wallet-avatar" height="16px" width="16px"/>
+                                    <span>More</span>
                                 </button>
                                 <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
                                     <li class="dropdown-item cursor-pointer">Add to Token Ignore List</li>

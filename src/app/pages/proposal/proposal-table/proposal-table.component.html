@@ -94,7 +94,7 @@
               <div class="table-header mb-2">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <a class="text--green body" [routerLink]="['/account', data['voter'] || data['voter']]">
+                    <a class="text--primary body" [routerLink]="['/account', data['voter'] || data['voter']]">
                       {{ shortenAddress(data['voter']) || '-' }}
                     </a>
                   </div>
@@ -114,7 +114,7 @@
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                       <a
-                        class="text--green small-body"
+                        class="text--primary small-body"
                         [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                         {{
                           (template.isShort
@@ -135,7 +135,7 @@
                   <div class="d-flex">
                     <div class="">
                       <a
-                        class="text--green body fw-semibold"
+                        class="text--primary body fw-semibold"
                         [routerLink]="['/validators', data['operator_address'] || data['validator_name']]">
                         <!-- <span class="text--white mr-1">{{ data['rank'] }}</span>  -->
                         <div class="g-flex-start-center">
@@ -192,7 +192,7 @@
               <div class="table-header mb-2">
                 <div class="d-flex justify-content-between">
                   <a
-                    class="text--green body fw-500"
+                    class="text--primary body fw-500"
                     [routerLink]="['/account', data['depositor'] || data['depositor']]">
                     {{ shortenAddress(data['depositor']) }}
                   </a>
@@ -209,7 +209,7 @@
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                       <a
-                        class="text--green small-body"
+                        class="text--primary small-body"
                         [class.disabled-link]="!data[template.matColumnDef]"
                         [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                         {{

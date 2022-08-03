@@ -1,5 +1,5 @@
 <div class="col-12 mb-4 mb-lg-3">
-  <span class="small-body text--light-gray">A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : ''  }} found</span>
+  <span class="text--gray-5">A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : ''  }} found</span>
 </div>
 
 <div class="transfer-table-container aura-table-contain table-responsive">
@@ -70,13 +70,13 @@
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'">
-                      <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                      <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                         {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'from_address'">
                       <div class="d-flex align-items-center">
-                        <a class="text--green txt-from-address content-transfer" [routerLink]="['/account', data.from_address]">
+                        <a class="text--primary txt-from-address content-transfer" [routerLink]="['/account', data.from_address]">
                           {{ data['from_address'] | cutStringPipe: 8:8 }}
                         </a>
                         <ng-container *ngIf="!isSearchAddress">
@@ -99,12 +99,12 @@
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'to_address'">
-                      <a class="text--green" [routerLink]="['/account', data.to_address]">
+                      <a class="text--primary" [routerLink]="['/account', data.to_address]">
                         {{ data['to_address'] | cutStringPipe: 8:8 }}
                       </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'details'">
-                      <a class="button button-chart button-outline button-outline__in-card px-2 button-view-nft" [routerLink]="['/tokens/token', tokenID, data.token_id]">
+                      <a class="button  button-outline button-outline__in-card px-2 button-view-nft" [routerLink]="['/tokens/token', tokenID, data.token_id]">
                         <span class="text-gradient">View NFT</span>
                       </a>
                     </ng-container>
@@ -169,16 +169,16 @@
     Token Transfer:<br />
     {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
       tokenDetail?.price | number: global.formatNumber2Decimal
-    }}) <a class="text--green" [routerLink]="['/tokens/token', tokenAddress]">{{ tokenType }}</a
+    }}) <a class="text--primary" [routerLink]="['/tokens/token', tokenAddress]">{{ tokenType }}</a
     ><br />
     <div>
       <span class="text--light-gray mr-1">From</span>
-      <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">
+      <a class="text--primary" [routerLink]="['/account', tokenDetail?.from_address]">
         {{ tokenDetail?.from_address }}
       </a>
       <br class="d-sm-none" />
       <span class="text--light-gray mr-1 ml-sm-1">To</span>
-      <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">
+      <a class="text--primary" [routerLink]="['/account', tokenDetail?.to_address]">
         {{ tokenDetail?.to_address }}
       </a>
     </div>
@@ -194,6 +194,6 @@
       Nonce:<br />
       29 (in the position 92)
     </div>
-    <a class="fw-normal text--green body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
+    <a class="fw-normal text--primary body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
   </div>
 </ng-template>
