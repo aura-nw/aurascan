@@ -53,4 +53,10 @@ export class BlockService extends CommonService {
       `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos?pagination.limit=${limit}&pagination.reverse=true`,
     );
   }
+
+  getBlockMissByConsAddress(cons_address: string) {
+    return axios.get(
+      `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos/${cons_address}`,
+    );
+  }
 }
