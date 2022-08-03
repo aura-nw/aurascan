@@ -4,6 +4,7 @@ import { CodeTransaction } from '../../../../core/constants/transaction.enum';
 export interface CardMobSimpleTitle {
   size: 'sm' | 'md' | 'lg',
   label: string,
+  titleClass?: string,
   subLabelContent: string,
   subLabelClass?: string,
   rankNum?: number,

@@ -41,9 +41,12 @@ h6,
   @include mono-font-size(1.6, 2, 400);
 }
 .body-02 {
-  @include mono-font-size(1.4, 1.6, 500);
+  @include mono-font-size(1.4, 1.8, 500);
 }
 .body-03 {
+  @include mono-font-size(1.4, 1.6, 400);
+}
+.caption {
   @include mono-font-size(1.2, 1.6, 600);
 }
 
@@ -59,7 +62,7 @@ h6,
   .h3-mob {
     @include mono-font-size(2, 2.6, 500);
   }
-  .h-mob {
+  .h4-mob {
     @include mono-font-size(1.6, 2, 600);
   }
   .h5-mob {
@@ -78,12 +81,18 @@ h6,
     @include mono-font-size(1.4, 1.6, 500);
   }
   .body-03-mob {
+    @include mono-font-size(1.4, 1.6, 400);
+  }
+  .caption-mob {
     @include mono-font-size(1.2, 1.6, 600);
   }
 
 }
 $textColors: (
   "primary",
+  "danger",
+  "info",
+  "warning",
   "white",
   "black",
   "gray-1",

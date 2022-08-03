@@ -23,6 +23,7 @@ import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
+import {CommonService} from "src/app/core/services/common.service";
 
 @Component({
   selector: 'app-proposal',
@@ -45,6 +46,7 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  proposalData: any[];
   length: number;
   pageIndex = 0;
   lastedList: IProposal[] = [];
@@ -72,6 +74,7 @@ export class ProposalComponent implements OnInit {
     private dlgService: DialogService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +91,8 @@ export class ProposalComponent implements OnInit {
     const addr = this.walletService.wallet?.bech32Address || null;
     this.proposalService.getProposalList(addr).subscribe((res) => {
       if (res?.data) {
+        this.proposalData = res.data;
+        console.log(this.proposalData)
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
         this.lastedList = [...res.data];

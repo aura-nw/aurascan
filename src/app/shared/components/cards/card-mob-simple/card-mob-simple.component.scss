@@ -24,4 +24,24 @@
   .fw-normal {
     font-weight: normal;
   }
+  .divider.divider-horizontal {
+    background-color: var(--aura-gray-8);
+  }
+}
+
+::ng-deep.card__date {
+  span:first-child {
+    margin-right: 16px;
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -8px;
+      width: 1px;
+      height: 10px;
+      background-color: var(--aura-gray-8);
+    }
+  }
 }

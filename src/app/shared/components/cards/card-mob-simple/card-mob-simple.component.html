@@ -2,8 +2,8 @@
     <a href="{{link}}">
         <div *ngIf="title" class="d-flex justify-content-between align-items-center">
             <div *ngIf="title.label" class="text--primary body {{title.size ? ('title-'+title.size) : ''}}">
-                <span *ngIf="title.rankNum" class="mr-2">{{title.rankNum}}</span>
-                <span>{{title.label}}</span>
+                <span *ngIf="title.rankNum" class="mr-2 {{title.titleClass ? title.titleClass : ''}}">{{title.rankNum}}</span>
+                <span class="{{title.titleClass ? title.titleClass : ''}}">{{title.label}}</span>
             </div>
             <div class="d-flex align-items-center">
                 <div *ngIf="title.status && title.status !== statusTransaction.Success " class="mr-2">
