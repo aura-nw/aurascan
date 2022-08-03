@@ -81,10 +81,7 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--green txt-from-address content-transfer"
-                            [routerLink]="[
-                              '/tokens/token/aura1kg6luzakllku0d86dlk8dylrfs8xlf5a9csac6hyq8tnhh3xsyxqgmhnct?a=',
-                              tokenDetail?.from_address
-                            ]">
+                            href="/tokens/token/{{ tokenID }}?a={{ data['from_address'] }}">
                             {{ data['from_address'] | cutStringPipe: 8:8 }}
                           </a>
                           <ng-container *ngIf="!isSearchAddress">
@@ -107,12 +104,7 @@
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to_address'">
-                        <a
-                          class="text--green"
-                          [routerLink]="[
-                            '/tokens/token/aura1kg6luzakllku0d86dlk8dylrfs8xlf5a9csac6hyq8tnhh3xsyxqgmhnct?a=',
-                            tokenDetail?.to_address
-                          ]">
+                        <a class="text--green" href="/tokens/token/{{ tokenID }}?a={{ data['to_address'] }}">
                           {{ data['to_address'] | cutStringPipe: 8:8 }}
                         </a>
                       </ng-container>
@@ -189,22 +181,13 @@
     ><br />
     <div>
       <span class="text--light-gray mr-1">From</span>
-      <a
-        class="text--green"
-        [routerLink]="[
-          '/tokens/token/aura1kg6luzakllku0d86dlk8dylrfs8xlf5a9csac6hyq8tnhh3xsyxqgmhnct?a=',
-          tokenDetail?.from_address
-        ]">
+      <a class="text--green" href="/tokens/token/{{ tokenID }}?a={{ tokenDetail['from_address'] }}">
         {{ tokenDetail?.from_address || '-' | cutStringPipe: 8:8 }}
       </a>
       <br class="d-sm-none" />
       <span class="text--light-gray mr-1 ml-sm-1">To</span>
-      <a
-        class="text--green"
-        [routerLink]="[
-          '/tokens/token/aura1kg6luzakllku0d86dlk8dylrfs8xlf5a9csac6hyq8tnhh3xsyxqgmhnct?a=',
-          tokenDetail?.to_address
-        ]">
+      <a class="text--green" href="/tokens/token/{{ tokenID }}?a={{ tokenDetail['to_address'] }}"
+        >
         {{ tokenDetail?.to_address || '-' | cutStringPipe: 8:8 }}
       </a>
     </div>

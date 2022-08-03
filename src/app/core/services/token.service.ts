@@ -30,7 +30,7 @@ export class TokenService extends CommonService {
 
   getListTokenTransferTemp(limit: string | number, offset: string | number, contractAddress: string, filterData = ''): Observable<any> {
     return this.http.get<any>(
-      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`,
+      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&address=${filterData}`,
     );
   }
 

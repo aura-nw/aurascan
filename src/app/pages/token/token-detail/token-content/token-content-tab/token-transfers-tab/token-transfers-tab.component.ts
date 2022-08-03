@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -71,15 +72,23 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   dataSearch: any;
+  params = '';
 
   constructor(
     public global: Globals,
     public commonService: CommonService,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.params = params?.a || '';
+      this.keyWord = this.params;
+    });
+    console.log(this.params);
+
     this.getDataTable();
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
@@ -87,29 +96,30 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.keyWord);
-
-    // if (this.tokenDataList) {
+    if (this.keyWord.length > 0) {
+      // if (this.tokenDataList) {
       console.log('before:', this.dataSource.data);
-    this.getDataToken(this.keyWord);
-    console.log('after: ', this.dataSource.data);
-    
-    this.isSearchAddress = false;
-    const filterData = this.tokenDataList.filter(
-      (data) =>
-        data.tx_hash.includes(this.keyWord) ||
-        data.from_address.includes(this.keyWord) ||
-        data.to_address.includes(this.keyWord) ||
-        data.token_id.includes(this.keyWord),
-    );
-    if (filterData.length > 0) {
-      this.pageData.length = filterData.length;
-      if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
-        this.isSearchAddress = true;
-      }
-      this.dataSource = new MatTableDataSource<any>(filterData);
+      this.getDataToken(this.keyWord);
+      console.log('after: ', this.dataSource.data);
+
+      // this.isSearchAddress = false;
+      // const filterData = this.tokenDataList.filter(
+      //   (data) =>
+      //     data.tx_hash.includes(this.keyWord) ||
+      //     data.from_address.includes(this.keyWord) ||
+      //     data.to_address.includes(this.keyWord) ||
+      //     data.token_id.includes(this.keyWord),
+      // );
+      // if (filterData.length > 0) {
+      //   this.pageData.length = filterData.length;
+      //   if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
+      //     this.isSearchAddress = true;
+      //   }
+      //   this.dataSource = new MatTableDataSource<any>(filterData);
+      // }
+      // this.resultLength.emit(filterData.length);
+      // }
     }
-    this.resultLength.emit(filterData.length);
-    // }
   }
 
   getDataTable(): void {
@@ -143,6 +153,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   getDataToken(filterData = '') {
+    filterData = this.params;
     this.tokenService
       .getListTokenTransferTemp(
         this.pageData.pageSize,
@@ -164,6 +175,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
           }
           this.loading = false;
           this.dataSearch = res;
+          console.log(this.dataSearch);
         },
         // () => {
         //   this.loading = false;

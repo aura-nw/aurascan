@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
@@ -28,16 +29,20 @@ export class TokenContentComponent implements OnInit {
   tabsBackup: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
-  constructor() {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    this.TABS = TOKEN_TAB.filter((vote) =>
-      (this.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key),
-    ).map((vote) => ({
-      ...vote,
-      value: vote.value,
-      key: vote.key === TokenTab.Transfers ? '' : vote.key,
-    }));
+    this.route.queryParams.subscribe((params) => {
+      this.searchTemp = params?.a || '';
+    });
+
+    this.TABS = TOKEN_TAB.filter((vote) => (this.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key)).map(
+      (vote) => ({
+        ...vote,
+        value: vote.value,
+        key: vote.key === TokenTab.Transfers ? '' : vote.key,
+      }),
+    );
     this.tabsBackup = this.TABS;
   }
 
@@ -78,10 +83,20 @@ export class TokenContentComponent implements OnInit {
   }
 
   resetSearch() {
-    this.searchTemp = null;
-    this.textSearch = null;
-    this.isSearchAddress = false;
-    this.isSearchTx = false;
-    this.handleSearch();
+    const params = { ...this.route.snapshot.params };
+    console.log(params);
+    this.router.navigate([`tokens/token`, params]);
+
+    // delete params.esid;
+    // this.route.navigate([], { queryParams: params });
+
+    // this.searchTemp = null;
+    // this.textSearch = null;
+    // this.isSearchAddress = false;
+    // this.isSearchTx = false;
+    // const params = { ...this.route.snapshot.queryParams };
+    //     delete params.esid;
+    //     this.router.navigate([], { queryParams: params });
+    // this.handleSearch();
   }
 }
