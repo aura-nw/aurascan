@@ -1,15 +1,17 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
-import { balanceOf } from '../../../../core/utils/common/parsing';
 
 export interface IDepositor {
-  depositors: string;
+  depositor: string;
   txHash: string;
   amount: number;
-  created_at: string;
+  timestamp: string;
 }
 @Component({
   selector: 'app-depositors',
@@ -21,21 +23,27 @@ export class DepositorsComponent implements OnInit {
   voteDataList: IDepositor[] = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     private proposalService: ProposalService,
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
     this.proposalService.getDepositors(this.proposalId).subscribe((res) => {
       this.loading = true;
-      if (res?.data) {
-        this.voteDataList = [...res.data.result];
+      if (res?.data?.transactions?.length > 0) {
+        res.data.transactions.forEach((trans) => {
+          trans = parseDataTransaction(trans, this.coinMinimalDenom);
+        });
+        this.voteDataList = res.data.transactions.filter(
+          (transaction) => transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit,
+        );
         this.voteDataList.forEach((item) => {
-          item.amount = balanceOf(item.amount);
-          item.created_at = this.datePipe.transform(item.created_at, DATEFORMAT.DATETIME_UTC);
+          item.timestamp = this.datePipe.transform(item.timestamp, DATEFORMAT.DATETIME_UTC);
         });
       }
       this.loading = false;

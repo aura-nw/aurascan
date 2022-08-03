@@ -74,8 +74,6 @@ export function getAddress(arrayMsg, addressContract) {
       toAddress = addressContract;
       break;
     case eTransType.ExecuteContract:
-      console.log(itemMessage);
-      
       fromAddress = itemMessage.sender;
       toAddress = itemMessage.contract;
       break;
