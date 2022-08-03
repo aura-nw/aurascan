@@ -31,7 +31,7 @@ export class DepositorsComponent implements OnInit {
   ngOnInit(): void {
     this.proposalService.getDepositors(this.proposalId).subscribe((res) => {
       this.loading = true;
-      if (res?.data?.result) {
+      if (res?.data) {
         this.voteDataList = [...res.data.result];
         this.voteDataList.forEach((item) => {
           item.amount = balanceOf(item.amount);

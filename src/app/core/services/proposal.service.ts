@@ -40,7 +40,10 @@ export class ProposalService extends CommonService {
   }
 
   getDepositors(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
+    //return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
+    return this.http.get<any>(
+      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchType=proposal_deposit&searchKey=proposal_id&searchValue=${proposalId}&countTotal=true&reverse=false`,
+    );
   }
 
   getListVote(payload: IListVoteQuery): Observable<IResponsesTemplates<IListVotesRes>> {
