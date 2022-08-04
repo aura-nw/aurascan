@@ -55,6 +55,8 @@ export function getAddress(arrayMsg, addressContract) {
   let itemMessage = arrayMsg[0];
   let fromAddress = '',
     toAddress = '';
+  let method = '';
+  let value = 0;
   let eTransType = TRANSACTION_TYPE_ENUM;
   switch (itemMessage['@type']) {
     case eTransType.InstantiateContract:
@@ -78,8 +80,10 @@ export function getAddress(arrayMsg, addressContract) {
       toAddress = addressContract;
       break;
     case eTransType.ExecuteContract:
+      method = Object.keys(itemMessage.msg)[0];
+      value = +itemMessage.funds[0]?.amount;
       fromAddress = itemMessage.sender;
-      // toAddress = itemMessage.contract;
+      toAddress = addressContract;
       break;
     case eTransType.Deposit:
       fromAddress = itemMessage.depositor;
@@ -102,9 +106,12 @@ export function getAddress(arrayMsg, addressContract) {
       toAddress = itemMessage.delegator_address;
       break;
     default:
+      method = Object.keys(itemMessage.msg)[0];
       fromAddress = itemMessage.from_address;
       toAddress = itemMessage.to_address;
       break;
   }
-  return [fromAddress, toAddress];
+  console.log(method);
+  
+  return [fromAddress, toAddress, method];
 }

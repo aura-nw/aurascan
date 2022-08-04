@@ -21,15 +21,11 @@ export class TokenService extends CommonService {
   }
 
   getTokenCW20Detail(address): Observable<any> {
-    return this.http.get<any>(
-      `${this.apiUrl}/cw20-tokens/${address}`,
-    );
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/${address}`);
   }
 
   getTokenCW721Detail(address): Observable<any> {
-    return this.http.get<any>(
-      `${this.apiUrl}/cw721-tokens/${address}`,
-    );
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
   }
 
   getListTokenTransfer(
@@ -38,7 +34,7 @@ export class TokenService extends CommonService {
     contractAddress: string,
     filterData = '',
   ): Observable<any> {
-    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchType=execute&searchKey=_contract_address&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
     if (filterData) {
       if (filterData.length > 60) {
         url += `&txHash=${filterData}`;
