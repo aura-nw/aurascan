@@ -7,12 +7,6 @@ import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 
-export interface IDepositor {
-  depositor: string;
-  txHash: string;
-  amount: number;
-  timestamp: string;
-}
 @Component({
   selector: 'app-depositors',
   templateUrl: './depositors.component.html',
@@ -20,7 +14,7 @@ export interface IDepositor {
 })
 export class DepositorsComponent implements OnInit {
   @Input() proposalId: number;
-  voteDataList: IDepositor[] = [];
+  voteDataList: any[] = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -40,10 +34,19 @@ export class DepositorsComponent implements OnInit {
           trans = parseDataTransaction(trans, this.coinMinimalDenom);
         });
         this.voteDataList = res.data.transactions.filter(
-          (transaction) => transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit,
+          (transaction) =>
+            transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
+            (transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
+              transaction?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
         );
+        console.log(this.voteDataList);
+        
         this.voteDataList.forEach((item) => {
           item.timestamp = this.datePipe.transform(item.timestamp, DATEFORMAT.DATETIME_UTC);
+          if(item.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx)
+          {
+            item.depositors = item.tx?.body?.messages[0]?.proposer;
+          }
         });
       }
       this.loading = false;
