@@ -57,6 +57,7 @@ export function getAddress(arrayMsg, addressContract) {
     toAddress = '';
   let method = '';
   let value = 0;
+  let isBurnWallet = false;
   let eTransType = TRANSACTION_TYPE_ENUM;
   switch (itemMessage['@type']) {
     case eTransType.InstantiateContract:
@@ -81,9 +82,14 @@ export function getAddress(arrayMsg, addressContract) {
       break;
     case eTransType.ExecuteContract:
       method = Object.keys(itemMessage.msg)[0];
-      value = +itemMessage.funds[0]?.amount;
+      value = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.amount || 0;
       fromAddress = itemMessage.sender;
-      toAddress = addressContract;
+      if (itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient) {
+        toAddress = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient;
+      } else {
+        toAddress = '0x00000000';
+        isBurnWallet = true;
+      }
       break;
     case eTransType.Deposit:
       fromAddress = itemMessage.depositor;
@@ -111,7 +117,5 @@ export function getAddress(arrayMsg, addressContract) {
       toAddress = itemMessage.to_address;
       break;
   }
-  console.log(method);
-  
-  return [fromAddress, toAddress, method];
+  return [fromAddress, toAddress, value, method, isBurnWallet];
 }

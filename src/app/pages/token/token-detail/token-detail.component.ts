@@ -11,7 +11,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 })
 export class TokenDetailComponent implements OnInit {
   loading = true;
-  tokenID = '';
+  contractAddress = '';
   isNFTContract: boolean;
   tokenDetail: any;
   //change type of Token
@@ -24,7 +24,7 @@ export class TokenDetailComponent implements OnInit {
     this.router.queryParams.subscribe((params) => {
       this.tokenType = params?.tokenType || TokenType.Token;
     });
-    this.tokenID = this.router.snapshot.paramMap.get('tokenId');
+    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     if (this.tokenType === TokenType.NFT) {
       this.isNFTContract = true;
     }
@@ -36,11 +36,11 @@ export class TokenDetailComponent implements OnInit {
   getTokenDetail(): void {
     this.loading = true;
     if (this.isNFTContract) {
-      this.tokenService.getTokenCW721Detail(this.tokenID).subscribe((res: ResponseDto) => {
+      this.tokenService.getTokenCW721Detail(this.contractAddress).subscribe((res: ResponseDto) => {
         this.tokenDetail = res.data;
       });
     } else {
-      this.tokenService.getTokenCW20Detail(this.tokenID).subscribe((res: ResponseDto) => {
+      this.tokenService.getTokenCW20Detail(this.contractAddress).subscribe((res: ResponseDto) => {
         this.tokenDetail = res.data;
       });
     }

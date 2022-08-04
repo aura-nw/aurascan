@@ -25,8 +25,9 @@ interface CustomPageEvent {
 })
 export class TokenTransfersTabComponent implements OnInit, OnChanges {
   @Input() isNFTContract: boolean;
-  @Input() tokenID: string;
+  @Input() contractAddress: string;
   @Input() keyWord = '';
+  @Input() isSearchAddress: boolean;
   tokenDataList: any[];
   length: number;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
@@ -39,7 +40,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
+    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true },
   ];
 
   NFTTemplates: Array<TableTemplate> = [
@@ -66,8 +67,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   };
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
-  tokenType = 'Aura';
-  isSearchAddress = false;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   dataSearch: any;
@@ -107,14 +106,14 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
       .getListTokenTransfer(
         this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize,
-        this.tokenID,
+        this.contractAddress,
         filterData,
       )
       .subscribe(
         (res) => {
           if (res && res.data?.transactions?.length > 0) {
             res.data.transactions.forEach((trans) => {
-              trans = parseDataTransaction(trans, this.coinMinimalDenom, this.tokenID);
+              trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
               this.dataSource.data = res.data.transactions;
               this.pageData.length = res.data?.transactions?.length;
             });

@@ -12,12 +12,12 @@ export class TokenInventoryComponent implements OnInit {
   pageData: PageEvent;
   nftData = [];
   showedData = [];
-  tokenId = 'abc';
+  contractAddress = 'abc';
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.tokenId = params?.tokenId || 'abc';
+      this.contractAddress = params?.contractAddress || 'abc';
       this.getNftData();
       this.showedData = this.nftData.slice(0, 10);
     });
@@ -31,133 +31,133 @@ export class TokenInventoryComponent implements OnInit {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: null,
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
       {
         symbol: 'CW - 721',
         name: '443432324234agbki443432324adw453443',
         tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
+        link: '/tokens/token/' + this.contractAddress + '/1',
         img: 'assets/images/about.png',
       },
     ];

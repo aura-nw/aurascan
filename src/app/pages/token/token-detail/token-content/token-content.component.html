@@ -85,11 +85,12 @@
       *ngIf="countCurrent === ''"
       [isNFTContract]="isNFTContract"
       [keyWord]="textSearch"
-      [tokenID]="tokenID"
+      [contractAddress]="contractAddress"
+      [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"></app-token-transfers-tab>
     <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch"></app-token-holders-tab>
     <app-token-inventory-tab *ngIf="countCurrent === tokenTab.Inventory"></app-token-inventory-tab>
     <app-token-info-tab *ngIf="countCurrent === tokenTab.Info"></app-token-info-tab>
-    <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract"></app-token-contract-tab>
+    <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract" [contractAddress]="contractAddress"></app-token-contract-tab>
   </div>
 </section>

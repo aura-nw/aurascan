@@ -67,7 +67,10 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
     trans.status = StatusTransaction.Success;
   }
-  [trans.from_address, trans.to_address, trans.method] = getAddress(trans.tx_response?.tx?.body?.messages, tokenID);
+  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.isBurnWallet] = getAddress(
+    trans.tx_response?.tx?.body?.messages,
+    tokenID,
+  );
   trans.type = trans.method || typeTrans?.value;
   trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
   return trans;

@@ -39,8 +39,6 @@ export class DepositorsComponent implements OnInit {
             (transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
               transaction?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
         );
-        console.log(this.voteDataList);
-        
         this.voteDataList.forEach((item) => {
           item.timestamp = this.datePipe.transform(item.timestamp, DATEFORMAT.DATETIME_UTC);
           if(item.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx)

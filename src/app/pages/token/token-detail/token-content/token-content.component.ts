@@ -14,7 +14,7 @@ import { TokenTab } from '../../../../core/constants/token.enum';
 })
 export class TokenContentComponent implements OnInit {
   @Input() isNFTContract: boolean;
-  @Input() tokenID: string;
+  @Input() contractAddress: string;
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = TOKEN_TAB.filter((vote) => this.tabToken.includes(vote.key)).map((vote) => ({
@@ -99,7 +99,7 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      window.location.href = `/tokens/token/${params.tokenId}`;
+      window.location.href = `/tokens/token/${params.contractAddress}`;
     }
   }
 

@@ -61,7 +61,7 @@
                   </ng-container>
                   <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                     <ng-container [ngSwitch]="template.matColumnDef">
-                      <ng-container *ngSwitchCase="'amount'">
+                      <ng-container *ngSwitchCase="'amountToken'">
                         {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       </ng-container>
                       <ng-container *ngSwitchCase="'timestamp'">
@@ -81,7 +81,7 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--green txt-from-address content-transfer"
-                            href="/tokens/token/{{ tokenID }}?a={{ data['from_address'] }}">
+                            href="/tokens/token/{{ contractAddress }}?a={{ data['from_address'] }}">
                             {{ data['from_address'] | cutStringPipe: 8:8 }}
                           </a>
                           <ng-container *ngIf="!isSearchAddress">
@@ -94,7 +94,7 @@
                           <ng-container *ngIf="isSearchAddress">
                             <div class="box-token-transfer">
                               <span
-                                class="ml-5 token-transfer-status d-flex"
+                                class="token-transfer-status d-flex"
                                 [ngClass]="{ 'status-out': data.from_address === keyWord }">
                                 <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
                                 <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
@@ -104,14 +104,20 @@
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to_address'">
-                        <a class="text--green" href="/tokens/token/{{ tokenID }}?a={{ data['to_address'] }}">
+                        <a
+                          class="text--green"
+                          href="/tokens/token/{{ contractAddress }}?a={{ data['to_address'] }}"
+                          *ngIf="!data.isBurnWallet">
                           {{ data['to_address'] | cutStringPipe: 8:8 }}
                         </a>
+                        <span *ngIf="data.isBurnWallet"
+                          >Null Address: {{ data['to_address'] | cutStringPipe: 8:8 }}</span
+                        >
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
                         <a
                           class="button button-chart button-outline button-outline__in-card px-2 button-view-nft"
-                          [routerLink]="['/tokens/token', tokenID, data.token_id]">
+                          [routerLink]="['/tokens/token', contractAddress, data.token_id]">
                           <span class="text-gradient">View NFT</span>
                         </a>
                       </ng-container>
@@ -165,29 +171,33 @@
   <div class="text--white">
     <span class="sub-text sub-text-mob">Additional info</span><br />
     Status:<br />
-    <img
-      [src]="
-        tokenDetail.tx_response?.code == codeTransaction.Success
-          ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
-          : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-      "
-      alt="" />
-    {{ tokenDetail?.status }} (504 Block Confirmations)
+    <div
+      [class.text--active]="tokenDetail.tx_response?.code == codeTransaction.Success"
+      [class.text--danger]="tokenDetail.tx_response?.code != codeTransaction.Success">
+      <img
+        width="16px"
+        alt="{{ tokenDetail.tx_response?.code }}"
+        [src]="
+          tokenDetail.tx_response?.code == codeTransaction.Success
+            ? ('assets/icons/icons-svg/color/check-circle-2.svg' | imageS3)
+            : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
+        " />
+      {{ tokenDetail?.status }}
+    </div>
     <hr />
     Token Transfer:<br />
     {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
       tokenDetail?.price | number: global.formatNumber2Decimal
-    }}) <a class="text--green" [routerLink]="['/tokens/token', tokenID]">{{ denom }}</a
+    }}) <a class="text--green" [routerLink]="['/tokens/token', contractAddress]">{{ denom }}</a
     ><br />
     <div>
       <span class="text--light-gray mr-1">From</span>
-      <a class="text--green" href="/tokens/token/{{ tokenID }}?a={{ tokenDetail['from_address'] }}">
+      <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ tokenDetail['from_address'] }}">
         {{ tokenDetail?.from_address || '-' | cutStringPipe: 8:8 }}
       </a>
       <br class="d-sm-none" />
       <span class="text--light-gray mr-1 ml-sm-1">To</span>
-      <a class="text--green" href="/tokens/token/{{ tokenID }}?a={{ tokenDetail['to_address'] }}"
-        >
+      <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ tokenDetail['to_address'] }}">
         {{ tokenDetail?.to_address || '-' | cutStringPipe: 8:8 }}
       </a>
     </div>
@@ -199,12 +209,10 @@
       Gas info:<br />
       {{ tokenDetail?.tx_response?.gas_used | mask: 'separator' }} Gas Used From
       {{ tokenDetail?.tx_response?.gas_wanted | mask: 'separator' }} <br class="d-sm-none" />Gas Limit @<br />
-      {{ tokenDetail?.gas_limit }}
+      {{ tokenDetail?.fee * tokenDetail?.tx_response?.gas_used }}
       <br class="d-sm-none" />
       {{ denom }} (15.807219472 Gwei)
       <hr />
-      <!-- Nonce:<br />
-      29 (in the position 92) -->
     </div>
     <a
       class="small-text text--green cursor-pointer d-flex align-items-center gap-2"
