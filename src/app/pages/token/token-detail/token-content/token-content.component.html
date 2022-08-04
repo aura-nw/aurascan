@@ -25,11 +25,11 @@
             </td>
             <td>
               <div class="small-text txt-light mb-1">BALANCE</div>
-              0.004999999999999999 stETH
+              {{ infoSearch?.balances[0]?.amount || 0 | number: global.formatNumberToken }} {{ denom }}
             </td>
             <td>
               <div class="small-text txt-light mb-1">VALUE</div>
-              $10.14 ( ~0.00490867635170134 Eth)
+              $0.00 ( ~0 {{ denom }})
             </td>
           </tr>
         </table>
@@ -63,7 +63,7 @@
             [maxLength]="maxLengthSearch"
             name="search"
             (keyup.enter)="handleSearch()"
-            [disabled]="searchTemp && searchTemp?.length > 0"
+            [disabled]="paramQuery?.length > 0"
             autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />

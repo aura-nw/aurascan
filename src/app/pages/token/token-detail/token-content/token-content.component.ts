@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { AccountService } from 'src/app/core/services/account.service';
+import { Globals } from 'src/app/global/global';
 import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
@@ -20,6 +23,7 @@ export class TokenContentComponent implements OnInit {
     key: vote.key === TokenTab.Transfers ? '' : vote.key,
   }));
   countCurrent: string = '';
+  paramQuery = '';
   textSearch: string = '';
   searchTemp: string = '';
   isSearchTx = false;
@@ -27,15 +31,18 @@ export class TokenContentComponent implements OnInit {
   resultSearch = 0;
   tokenTab = TokenTab;
   tabsBackup: any;
+  infoSearch: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private accountService: AccountService,
+    private environmentService: EnvironmentService,
+    public global: Globals,
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.searchTemp = params?.a || '';
-    });
-
     this.TABS = TOKEN_TAB.filter((vote) => (this.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key)).map(
       (vote) => ({
         ...vote,
@@ -44,6 +51,12 @@ export class TokenContentComponent implements OnInit {
       }),
     );
     this.tabsBackup = this.TABS;
+
+    this.route.queryParams.subscribe((params) => {
+      this.paramQuery = params?.a || '';
+      this.searchTemp = this.paramQuery;
+      this.handleSearch();
+    });
   }
 
   changeTab(tabId): void {
@@ -58,21 +71,21 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
+
     if (regexRule.test(this.searchTemp)) {
       this.textSearch = this.searchTemp;
-      setTimeout(() => {
-        if (this.resultSearch > 0) {
-          let tempTabs;
-          if (this.textSearch.length > 60) {
-            this.isSearchTx = true;
-            tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-          } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(ADDRESS_PREFIX)) {
-            this.isSearchAddress = true;
-            tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders);
-          }
-          this.TABS = tempTabs || this.tabsBackup;
-        }
-      }, 500);
+      let tempTabs;
+      if (this.textSearch.length > 60) {
+        this.paramQuery = this.searchTemp;
+        this.isSearchTx = true;
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
+      } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(ADDRESS_PREFIX)) {
+        this.paramQuery = this.searchTemp;
+        this.isSearchAddress = true;
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
+        this.getInfoAddress(this.paramQuery);
+      }
+      this.TABS = tempTabs || this.tabsBackup;
     } else {
       this.textSearch = '';
     }
@@ -83,20 +96,16 @@ export class TokenContentComponent implements OnInit {
   }
 
   resetSearch() {
-    const params = { ...this.route.snapshot.params };
-    console.log(params);
-    this.router.navigate([`tokens/token`, params]);
+    this.searchTemp = '';
+    if (this.paramQuery) {
+      const params = { ...this.route.snapshot.params };
+      window.location.href = `/tokens/token/${params.tokenId}`;
+    }
+  }
 
-    // delete params.esid;
-    // this.route.navigate([], { queryParams: params });
-
-    // this.searchTemp = null;
-    // this.textSearch = null;
-    // this.isSearchAddress = false;
-    // this.isSearchTx = false;
-    // const params = { ...this.route.snapshot.queryParams };
-    //     delete params.esid;
-    //     this.router.navigate([], { queryParams: params });
-    // this.handleSearch();
+  getInfoAddress(address: string) {
+    this.accountService.getAccountDetail(address).subscribe((res) => {
+      this.infoSearch = res.data;
+    });
   }
 }

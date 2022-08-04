@@ -18,20 +18,25 @@ export class TokenService extends CommonService {
 
   getTokenDetail(address): Observable<any> {
     return this.http.get<any>(
-      `${this.apiUrl}/cw20-tokens/aura1kg6luzakllku0d86dlk8dylrfs8xlf5a9csac6hyq8tnhh3xsyxqgmhnct`,
+      `${this.apiUrl}/cw20-tokens/${address}`,
     );
   }
 
-  getListTokenTransfer(token: string): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/proposals`);
-    return this.http.get('../../assets/mock-data/token-list-transfer.json');
-  }
-
-  getListTokenTransferTemp(limit: string | number, offset: string | number, contractAddress: string, filterData = ''): Observable<any> {
-    return this.http.get<any>(
-      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&address=${filterData}`,
-    );
+  getListTokenTransfer(
+    limit: string | number,
+    offset: string | number,
+    contractAddress: string,
+    filterData = '',
+  ): Observable<any> {
+    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    if (filterData) {
+      if (filterData.length > 60) {
+        url += `&txHash=${filterData}`;
+      } else {
+        url += `&address=${filterData}`;
+      }
+    }
+    return this.http.get<any>(url);
   }
 
   getListTokenNFT(token: string): Observable<any> {

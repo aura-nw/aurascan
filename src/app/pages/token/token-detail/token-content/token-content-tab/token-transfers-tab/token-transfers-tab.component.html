@@ -62,7 +62,7 @@
                   <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchCase="'amount'">
-                        {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
+                        {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       </ng-container>
                       <ng-container *ngSwitchCase="'timestamp'">
                         {{ commonService.getDateValue(data[template.matColumnDef])[0] }}

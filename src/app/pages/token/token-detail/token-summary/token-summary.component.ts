@@ -11,6 +11,5 @@ export class TokenSummaryComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('test: ', this.tokenDetail);
   }
 }

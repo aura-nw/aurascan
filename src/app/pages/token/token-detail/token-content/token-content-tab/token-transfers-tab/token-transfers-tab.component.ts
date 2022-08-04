@@ -72,22 +72,19 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   dataSearch: any;
-  params = '';
 
   constructor(
     public global: Globals,
     public commonService: CommonService,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.params = params?.a || '';
-      this.keyWord = this.params;
+      this.keyWord = params?.a || '';
     });
-    console.log(this.params);
 
     this.getDataTable();
     this.template = this.getTemplate();
@@ -95,30 +92,8 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.keyWord);
     if (this.keyWord.length > 0) {
-      // if (this.tokenDataList) {
-      console.log('before:', this.dataSource.data);
       this.getDataToken(this.keyWord);
-      console.log('after: ', this.dataSource.data);
-
-      // this.isSearchAddress = false;
-      // const filterData = this.tokenDataList.filter(
-      //   (data) =>
-      //     data.tx_hash.includes(this.keyWord) ||
-      //     data.from_address.includes(this.keyWord) ||
-      //     data.to_address.includes(this.keyWord) ||
-      //     data.token_id.includes(this.keyWord),
-      // );
-      // if (filterData.length > 0) {
-      //   this.pageData.length = filterData.length;
-      //   if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
-      //     this.isSearchAddress = true;
-      //   }
-      //   this.dataSource = new MatTableDataSource<any>(filterData);
-      // }
-      // this.resultLength.emit(filterData.length);
-      // }
     }
   }
 
@@ -153,9 +128,9 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   getDataToken(filterData = '') {
-    filterData = this.params;
+    filterData = this.keyWord || filterData;
     this.tokenService
-      .getListTokenTransferTemp(
+      .getListTokenTransfer(
         this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize,
         this.tokenID,
@@ -163,19 +138,15 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
       )
       .subscribe(
         (res) => {
-          console.log(res);
-          if (res && res.data.transactions.length > 0) {
+          if (res && res.data?.transactions?.length > 0) {
             res.data.transactions.forEach((trans) => {
               trans = parseDataTransaction(trans, this.coinMinimalDenom, this.tokenID);
-
               this.dataSource.data = res.data.transactions;
-              this.pageData.length = res.data.transactions.length;
+              this.pageData.length = res.data?.transactions?.length;
             });
-            console.log(this.tokenDataList);
           }
           this.loading = false;
           this.dataSearch = res;
-          console.log(this.dataSearch);
         },
         // () => {
         //   this.loading = false;
@@ -221,7 +192,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   getTokenDetail(data: any): void {
-    console.log(data);
     this.tokenDetail = data;
   }
 }

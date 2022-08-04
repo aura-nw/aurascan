@@ -11,7 +11,6 @@ import { TokenService } from 'src/app/core/services/token.service';
 })
 export class TokenDetailComponent implements OnInit {
   loading = true;
-  tokenName = 'AuraDiamon';
   tokenID = '';
   isNFTContract: boolean;
   tokenDetail: any;
@@ -38,8 +37,6 @@ export class TokenDetailComponent implements OnInit {
     this.loading = true;
     this.tokenService.getTokenDetail(this.tokenID).subscribe((res: ResponseDto) => {
       this.tokenDetail = res.data;
-      console.log(this.tokenDetail);
-      
     });
     this.loading = false;
   }
