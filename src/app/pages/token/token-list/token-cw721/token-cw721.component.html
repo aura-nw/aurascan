@@ -103,8 +103,8 @@
             <ng-container matColumnDef="tokenContract">
               <th mat-header-cell *matHeaderCellDef style="width: 20%">Token Contract</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <a [routerLink]="['/contracts/', element.tokenContract]" class="text-clamp">{{
-                  element.tokenContract | cutStringPipe: 8:8
+                <a [routerLink]="['/contracts/', element.contract_address]" class="text-clamp">{{
+                  element.contract_address | cutStringPipe: 8:8
                 }}</a>
               </td>
             </ng-container>

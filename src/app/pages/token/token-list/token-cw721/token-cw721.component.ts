@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TableTemplate } from '../../../../core/models/common.model';
+import { TokenService } from 'src/app/core/services/token.service';
+import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
 @Component({
@@ -182,7 +183,11 @@ export class TokenCw721Component implements OnInit {
     { matColumnDef: 'transfer3d', headerCellDef: 'transfer3d' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  pageData: PageEvent;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   pageSize = 20;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -190,9 +195,11 @@ export class TokenCw721Component implements OnInit {
   sort: MatSort;
 
   constructor(
-      public translate: TranslateService,
-      public global: Globals,
-      private router: Router) {}
+    public translate: TranslateService,
+    public global: Globals,
+    private router: Router,
+    public tokenService: TokenService,
+  ) {}
 
   ngOnInit(): void {
     this.getTokenData();
@@ -206,12 +213,23 @@ export class TokenCw721Component implements OnInit {
   }
 
   getTokenData() {
-    this.pageData = {
-      length: this.mockData.length,
-      pageSize: this.pageSize,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
+    const payload = {
+      limit: 20,
+      offset: 0,
+      keyword: '',
     };
-    this.dataSource = new MatTableDataSource<any>(this.mockData);
+    this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
+      res.data.forEach((data) => {
+        data['isValueUp'] = true;
+        if (data.change < 0) {
+          data['isValueUp'] = false;
+          data.change = Number(data.change.toString().substring(1));
+        }
+      });
+
+      this.dataSource = new MatTableDataSource<any>(res.data);
+      this.pageData.length = res.meta.count;
+    });
   }
 
   searchToken(): void {
