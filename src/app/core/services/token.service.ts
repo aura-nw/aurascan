@@ -45,10 +45,8 @@ export class TokenService extends CommonService {
     return this.http.get<any>(url);
   }
 
-  getListTokenNFT(token: string): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/proposals`);
-    return this.http.get('../../assets/mock-data/token-list-nft.json');
+  getListTokenNFT(contractAddress: string, payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nfts`, payload);
   }
 
   getListTokenHolder(token: string): Observable<any> {
