@@ -37,8 +37,9 @@ export class BlockService extends CommonService {
 
   getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
+    const date = new Date();
     return this.http.get<any>(
-      `${this.apiUrl}/metrics/transactions?range=${type}&timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+      `${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`,
     );
   }
 
