@@ -1,18 +1,17 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
-import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
+import { CodeTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { getAddress, getAmount, Globals } from '../../../../../../global/global';
+import { Globals } from '../../../../../../global/global';
 
 interface CustomPageEvent {
   next: number;
@@ -99,32 +98,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   getDataTable(): void {
     this.loading = true;
-    if (this.isNFTContract) {
-      this.tokenService.getListTokenNFT(this.tokenID).subscribe(
-        (res) => {
-          if (res && res.data.count > 0) {
-            this.tokenDataList = [...res];
-            this.tokenDataList.forEach((token) => {
-              token.status = StatusTransaction.Fail;
-              if (token?.code == CodeTransaction.Success) {
-                token.status = StatusTransaction.Success;
-              }
-              token.price = token.amount * 1;
-              const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
-              token.type = typeTrans?.value;
-            });
-
-            this.dataSource = new MatTableDataSource(this.tokenDataList);
-            this.pageData.length = res.length;
-          }
-        },
-        () => {
-          this.loading = false;
-        },
-      );
-    } else {
-      this.getDataToken();
-    }
+    this.getDataToken();
   }
 
   getDataToken(filterData = '') {
