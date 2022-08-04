@@ -49,10 +49,14 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nfts`, payload);
   }
 
-  getListTokenHolder(token: string): Observable<any> {
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/proposals`);
-    return this.http.get('../../assets/mock-data/token-list-transfer.json');
+  getListTokenHolder(
+    limit: string | number,
+    offset: string | number,
+    contractType: string,
+    contractAddress: string,
+  ): Observable<any> {
+    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    return this.http.get<any>(url);
   }
 
   getContractDetail(tokenAddress): Observable<any> {

@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
 
@@ -12,6 +14,7 @@ import { Globals } from '../../../../../../global/global';
 })
 export class TokenHoldersTabComponent implements OnInit, OnChanges {
   @Input() keyWord = '';
+  @Input() contractAddress: string;
   loading = true;
   mockData = [
     {
@@ -109,7 +112,7 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
-  constructor(public global: Globals) {}
+  constructor(public global: Globals, private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.getTokenData();
@@ -128,6 +131,30 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
   }
 
   getTokenData() {
+    this.tokenService
+      .getListTokenHolder(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        ContractRegisterType.CW721,
+        this.contractAddress,
+      )
+      .subscribe(
+        (res) => {
+          if (res && res.data?.transactions?.length > 0) {
+            // res.data.transactions.forEach((trans) => {
+            //   trans = parseDataTransaction(trans, this.coinMinimalDenom, this.tokenID);
+            //   this.dataSource.data = res.data.transactions;
+            //   this.pageData.length = res.data?.transactions?.length;
+            // });
+          }
+          this.loading = false;
+          //this.dataSearch = res;
+        },
+        // () => {
+        //   this.loading = false;
+        // },
+      );
+
     this.pageData.length = this.mockData.length;
     this.loading = true;
     this.dataSource = new MatTableDataSource<any>(this.mockData);

@@ -18,7 +18,7 @@ export class TokenInventoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.contractAddress = params?.tokenId;
+      this.contractAddress = params?.contractAddress;
       this.getNftData();
     });
   }
