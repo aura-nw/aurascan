@@ -48,7 +48,7 @@ export function formatNumber(number: number, args?: any): any {
   return (isNegative ? '-' : '') + abs + key;
 }
 
-export function parseDataTransaction(trans: any, coinMinimalDenom: string, tokenID = ''): void {
+export function parseDataTransaction(trans: any, coinMinimalDenom: string, tokenID = '') {
   let typeOrigin = trans.tx_response?.tx?.body?.messages[0]['@type'];
   const typeTrans = TYPE_TRANSACTION.find((f) => f.label.toLowerCase() === typeOrigin?.toLowerCase());
   trans.tx_hash = trans.tx_response?.txhash;
