@@ -69,5 +69,6 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
     trans.status = StatusTransaction.Success;
   }
   [trans.from_address, trans.to_address] = getAddress(trans.tx_response?.tx?.body?.messages, tokenID);
+  trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
   return trans;
 }
