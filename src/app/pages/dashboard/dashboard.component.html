@@ -12,29 +12,29 @@
                   <button
                     type="button"
                     class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '60m'"
-                    (click)="updateBlockAndTxs('60m')">
+                    [class.active]="chartRange === chartRangeData.M_60"
+                    (click)="updateBlockAndTxs(chartRangeData.M_60)">
                     60m
                   </button>
                   <button
                     type="button"
                     class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '24h'"
-                    (click)="updateBlockAndTxs('24h')">
+                    [class.active]="chartRange === chartRangeData.H_24"
+                    (click)="updateBlockAndTxs(chartRangeData.H_24)">
                     24h
                   </button>
                   <button
                     type="button"
                     class="button button-primary body-small mr-2"
-                    [class.active]="chartRange === '30d'"
-                    (click)="updateBlockAndTxs('30d')">
+                    [class.active]="chartRange === chartRangeData.D_30"
+                    (click)="updateBlockAndTxs(chartRangeData.D_30)">
                     30d
                   </button>
                   <button
                     type="button"
                     class="button button-primary body-small"
-                    [class.active]="chartRange === '12M'"
-                    (click)="updateBlockAndTxs('12M')">
+                    [class.active]="chartRange === chartRangeData.MONTH_12"
+                    (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
                     12M
                   </button>
                 </div>
@@ -57,29 +57,29 @@
               <button
                 type="button"
                 class="button button-primary body-small mr-6"
-                [class.active]="chartRange === '60m'"
-                (click)="updateBlockAndTxs('60m')">
+                [class.active]="chartRange === chartRangeData.M_60"
+                (click)="updateBlockAndTxs(chartRangeData.M_60)">
                 60m
               </button>
               <button
                 type="button"
                 class="button button-primary body-small mr-6"
-                [class.active]="chartRange === '24h'"
-                (click)="updateBlockAndTxs('24h')">
+                [class.active]="chartRange === chartRangeData.H_24"
+                (click)="updateBlockAndTxs(chartRangeData.H_24)">
                 24h
               </button>
               <button
                 type="button"
                 class="button button-primary body-small mr-6"
-                [class.active]="chartRange === '30d'"
-                (click)="updateBlockAndTxs('30d')">
+                [class.active]="chartRange === chartRangeData.D_30"
+                (click)="updateBlockAndTxs(chartRangeData.D_30)">
                 30d
               </button>
               <button
                 type="button"
                 class="button button-primary body-small"
-                [class.active]="chartRange === '12M'"
-                (click)="updateBlockAndTxs('12M')">
+                [class.active]="chartRange === chartRangeData.MONTH_12"
+                (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
                 12M
               </button>
             </div>
@@ -92,7 +92,7 @@
 <!-- Cards -->
 <section>
   <div class="row">
-    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.block_height">
+    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.block_height > 0">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -104,7 +104,7 @@
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="sub-text text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.block_height | number }}
+              {{ global?.dataHeader?.block_height || 0 | number }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
@@ -113,7 +113,7 @@
       </div>
       <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.total_txs_num">
+    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.total_txs_num >= 0">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -146,7 +146,7 @@
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="sub-text text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.bonded_tokens }} / {{ global?.dataHeader?.supply }}
+              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
@@ -157,7 +157,7 @@
     </div>
     <div
       class="col-xl-3 col-md-6"
-      *ngIf="global?.dataHeader?.total_validator_active_num && global?.dataHeader?.total_validator_num">
+      *ngIf="global?.dataHeader?.total_validator_active_num >= 0 && global?.dataHeader?.total_validator_num >= 0">
       <!-- card -->
       <div class="card card-h-100 text--white card-highlight">
         <!-- card body -->
@@ -169,8 +169,8 @@
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
             <h4 class="sub-text text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.total_validator_active_num }}
-              {{ global?.dataHeader?.total_validator_num ? '/ ' + global?.dataHeader?.total_validator_num : '' }}
+              {{ global?.dataHeader?.total_validator_active_num || 0 }}
+              {{ global?.dataHeader?.total_validator_num >= 0 ? '/ ' + global?.dataHeader?.total_validator_num : 0 }}
             </h4>
             <!-- <div class="body">Update 5s ago</div> -->
           </div>
@@ -192,11 +192,12 @@
           <button
             type="button"
             class="button button-outline button-outline__in-card d-none d-lg-block body"
-            [routerLink]="'/blocks'">
+            [routerLink]="'/blocks'"
+            *ngIf="dataSourceBlock">
             <span class="text-gradient">View more</span>
           </button>
         </div>
-        <div class="card-body pt-0">
+        <div class="card-body pt-0 box-dashboard">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceBlock; else noValues">
               <div class="table-responsive d-none d-lg-block">
@@ -262,7 +263,8 @@
           <button
             type="button"
             class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2"
-            [routerLink]="'/blocks'">
+            [routerLink]="'/blocks'"
+            *ngIf="dataSourceBlock">
             <span class="text-gradient">View more</span>
           </button>
         </div>
@@ -277,11 +279,12 @@
           <button
             type="button"
             class="button button-outline button-outline__in-card body d-none d-lg-block"
-            [routerLink]="'/transaction'">
+            [routerLink]="'/transaction'"
+            *ngIf="dataSourceTx">
             <span class="text-gradient">View more</span>
           </button>
         </div>
-        <div class="card-body pt-0">
+        <div class="card-body pt-0 box-dashboard">
           <ngx-simplebar>
             <ng-container *ngIf="dataSourceTx; else noValues">
               <div class="table-responsive d-none d-lg-block">
@@ -356,7 +359,8 @@
           <button
             type="button"
             class="button button-outline button-outline__in-card body d-lg-none w-100 mt-2"
-            [routerLink]="'/transaction'">
+            [routerLink]="'/transaction'"
+            *ngIf="dataSourceTx">
             <span class="text-gradient">View more</span>
           </button>
         </div>

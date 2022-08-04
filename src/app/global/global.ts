@@ -28,7 +28,9 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom : string
     amount = itemMessage?.funds[0].amount;
   } else if (type === eTransType.SubmitProposalTx){
     amount = itemMessage?.initial_deposit[0]?.amount || 0;
-  } else if (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg.length === 1) {
+  } else if (type === eTransType.CreateValidator){
+    amount = itemMessage?.value?.amount || 0;
+  } else if (type === eTransType.GetReward && arrayMsg.length === 1) {
     //check error with rawlog
     try {
       const jsonData = JSON.parse(rawRog);

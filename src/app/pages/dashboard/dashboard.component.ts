@@ -3,13 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, timer } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getInfo } from 'src/app/core/utils/common/info-common';
 import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { PAGE_EVENT } from '../../core/constants/common.constant';
+import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
@@ -20,11 +21,8 @@ import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  block_height: number;
-  total_txs_num: number;
-  total_validator_num: number;
-
-  chartRange = '30d';
+  chartRange = CHART_RANGE.D_30;
+  chartRangeData = CHART_RANGE;
 
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
 
@@ -65,24 +63,18 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getInfo();
-    this.getListBlock();
-    this.getListTransaction();
-
-    setTimeout(() => {
-      this.updateBlockAndTxs(this.chartRange);
-    }, 1000);
-
+    this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
   }
 
   //get all data for dashboard
   getInfoData() {
-    this.getInfo();
     this.getListBlock();
     this.getListTransaction();
-    this.updateBlockAndTxs(this.chartRange);
+    setTimeout(() => {
+      this.updateBlockAndTxs(this.chartRange);
+    }, 1000);
   }
 
   /**
@@ -117,19 +109,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getInfo(): void {
-    this.commonService.status().subscribe((res) => {
-      if (res?.data) {
-        this.block_height = res.data.block_height;
-        this.total_txs_num = res.data.total_txs_num;
-        this.total_validator_num = res.data.total_validator_num;
-      }
-    });
-  }
-
   updateBlockAndTxs(type: string): void {
     this.chartRange = type;
     this.blockService.getBlockAndTxs(type).subscribe((res) => {
+      //update data common
+      this.getInfoCommon();
       const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => i.timestamp);
 
@@ -153,6 +137,12 @@ export class DashboardComponent implements OnInit {
           color: '#FFA741',
         },
       };
+    });
+  }
+
+  getInfoCommon(): void {
+    this.commonService.status().subscribe((res) => {
+      getInfo(this.global, res.data);
     });
   }
 
