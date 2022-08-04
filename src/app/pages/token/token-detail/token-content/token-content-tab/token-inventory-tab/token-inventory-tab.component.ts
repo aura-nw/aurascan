@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-inventory-tab',
@@ -12,160 +13,36 @@ export class TokenInventoryComponent implements OnInit {
   pageData: PageEvent;
   nftData = [];
   showedData = [];
-  tokenId = 'abc';
-  constructor(private route: ActivatedRoute) {}
+  tokenId = '';
+  constructor(private route: ActivatedRoute, private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.tokenId = params?.tokenId || 'abc';
+      this.tokenId = params?.tokenId;
       this.getNftData();
-      this.showedData = this.nftData.slice(0, 10);
     });
   }
 
   getNftData() {
     this.loading = true;
-    // call API get nft data -> import data to showedData
-    this.nftData = [
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: null,
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-    ];
-    this.pageData = {
-      length: this.nftData.length,
-      pageSize: 10,
-      pageIndex: 1,
+    let payload = {
+      limit: 20,
+      offset: 0,
+      token_id: '',
+      owner: '',
     };
+    this.tokenService.getListTokenNFT(this.tokenId, payload).subscribe((res) => {
+      if (res && res.data?.length > 0) {
+        this.nftData = res.data;
+        this.showedData = this.nftData.slice(0, 20);
+        this.pageData = {
+          length: res.data?.length,
+          pageSize: 20,
+          pageIndex: 1,
+        };
+      }
+      this.loading = false;
+    });
     this.loading = false;
   }
 
