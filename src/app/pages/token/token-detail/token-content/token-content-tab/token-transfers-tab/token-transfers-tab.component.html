@@ -121,6 +121,11 @@
                           <span class="text-gradient">View NFT</span>
                         </a>
                       </ng-container>
+                      <ng-container *ngSwitchCase="'token_id'">
+                        <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}">
+                          {{ data[template.matColumnDef] }}
+                        </a>
+                      </ng-container>
                       <div *ngSwitchCase="'action'">
                         <button
                           mat-icon-button
