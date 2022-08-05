@@ -51,12 +51,13 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom: string)
   return amountFormat;
 }
 
-export function getAddress(arrayMsg, addressContract) {
+export function getDataInfo(arrayMsg, addressContract) {
   let itemMessage = arrayMsg[0];
   let fromAddress = '',
     toAddress = '';
   let method = '';
   let value = 0;
+  let tokenId = '';
   let isBurnWallet = false;
   let eTransType = TRANSACTION_TYPE_ENUM;
   switch (itemMessage['@type']) {
@@ -84,9 +85,11 @@ export function getAddress(arrayMsg, addressContract) {
       method = Object.keys(itemMessage.msg)[0];
       value = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.amount || 0;
       fromAddress = itemMessage.sender;
-      if (itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient) {
-        toAddress = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient;
-      } else {
+      toAddress =
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner;
+      tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
+      if (method === 'burn') {
         toAddress = '0x00000000';
         isBurnWallet = true;
       }
@@ -117,5 +120,5 @@ export function getAddress(arrayMsg, addressContract) {
       toAddress = itemMessage.to_address;
       break;
   }
-  return [fromAddress, toAddress, value, method, isBurnWallet];
+  return [fromAddress, toAddress, value, method, tokenId, isBurnWallet];
 }

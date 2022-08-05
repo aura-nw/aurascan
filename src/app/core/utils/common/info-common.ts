@@ -1,4 +1,4 @@
-import { getAddress, getAmount } from 'src/app/global/global';
+import { getDataInfo, getAmount } from 'src/app/global/global';
 import { NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
@@ -67,7 +67,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
     trans.status = StatusTransaction.Success;
   }
-  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.isBurnWallet] = getAddress(
+  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.isBurnWallet] = getDataInfo(
     trans.tx_response?.tx?.body?.messages,
     tokenID,
   );
