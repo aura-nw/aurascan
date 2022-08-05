@@ -42,12 +42,6 @@ export const PAGE_EVENT = {
 
 export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
-export const VALIDATOR_ADDRESS_PREFIX = 'auravaloper';
-
-export const ADDRESS_PREFIX = 'aura';
-
-// export const AURA_DENOM = 'utaura';
-
 export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 
 export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg';

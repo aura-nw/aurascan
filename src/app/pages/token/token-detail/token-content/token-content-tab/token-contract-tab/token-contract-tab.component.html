@@ -14,7 +14,7 @@
       (click)="changeTab(contractType.WriteContract)">
       <span [class.text-gradient]="countCurrent === contractType.WriteContract"> Write Contract </span>
     </button>
-    <button
+    <!-- <button
       class="btn-contract"
       [ngClass]="{ 'button-outline button-outline__in-card': countCurrent === contractType.ReadProxy }"
       [class.active]="countCurrent === contractType.ReadProxy"
@@ -27,7 +27,7 @@
       [class.active]="countCurrent === contractType.WriteProxy"
       (click)="changeTab(contractType.WriteProxy)">
       <span [class.text-gradient]="countCurrent === contractType.WriteProxy"> Write as Proxy </span>
-    </button>
+    </button> -->
   </div>
   <div class="mt-3">
     <ng-container *ngIf="tokenDetail">

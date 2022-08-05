@@ -40,7 +40,6 @@ export class TokenCw20Component implements OnInit {
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  pageSize = 20;
 
   constructor(
     public translate: TranslateService,
@@ -55,7 +54,7 @@ export class TokenCw20Component implements OnInit {
 
   getListToken() {
     const payload = {
-      limit: 20,
+      limit: this.pageData.pageSize,
       offset: 0,
       keyword: '',
     };
@@ -77,7 +76,7 @@ export class TokenCw20Component implements OnInit {
     this.filterSearchData = null;
     if (this.textSearch.length > 0) {
       const payload = {
-        limit: 20,
+        limit: this.pageData.pageSize,
         offset: 0,
         keyword: this.textSearch,
       };
@@ -131,7 +130,7 @@ export class TokenCw20Component implements OnInit {
     let dataFilter = this.sortedData;
     this.pageData = {
       length: dataFilter.length,
-      pageSize: this.pageSize,
+      pageSize: this.pageData.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
     this.dataSource = new MatTableDataSource<any>(dataFilter);

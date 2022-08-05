@@ -8,6 +8,7 @@ import { CommonService } from './common.service';
 @Injectable()
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
@@ -34,12 +35,15 @@ export class TokenService extends CommonService {
     contractAddress: string,
     filterData = '',
   ): Observable<any> {
-    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchType=execute&searchKey=_contract_address&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&query=execute._contract_address%3D'${contractAddress}'`;
     if (filterData) {
+      console.log(filterData);
       if (filterData.length > 60) {
         url += `&txHash=${filterData}`;
-      } else {
+      } else if (filterData?.length >= 43 && filterData?.startsWith(this.prefixAdd)) {
         url += `&address=${filterData}`;
+      } else {
+        url += `%2C%20wasm.token_id%3D'${filterData}'`;
       }
     }
     return this.http.get<any>(url);

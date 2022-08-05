@@ -43,7 +43,7 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -61,15 +61,6 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-  //   if (this.mockData) {
-  //     const filterData = this.mockData.filter(
-  //       (data) => data.address.includes(this.keyWord) || data.hashCode.includes(this.keyWord),
-  //     );
-  //     if (filterData.length > 0) {
-  //       this.pageData.length = filterData.length;
-  //       this.dataSource = new MatTableDataSource<any>(filterData);
-  //     }
-  //   }
   }
 
   getListTokenHolder(tokenType: string) {

@@ -33,7 +33,6 @@ export class TokenCw721Component implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  pageSize = 20;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   sortedData: any;
   sort: MatSort;
@@ -51,7 +50,7 @@ export class TokenCw721Component implements OnInit {
 
   getTokenData() {
     const payload = {
-      limit: 20,
+      limit: this.pageData.pageSize,
       offset: 0,
       keyword: '',
     };
@@ -75,7 +74,7 @@ export class TokenCw721Component implements OnInit {
     this.filterSearchData = null;
     if (this.textSearch.length > 0) {
       let payload = {
-        limit: 20,
+        limit: this.pageData.pageSize,
         offset: 0,
         keyword: this.textSearch,
       };

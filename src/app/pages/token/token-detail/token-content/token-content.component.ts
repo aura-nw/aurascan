@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
 import { Globals } from 'src/app/global/global';
-import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
 
@@ -34,6 +33,7 @@ export class TokenContentComponent implements OnInit {
   infoSearch: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,7 +79,7 @@ export class TokenContentComponent implements OnInit {
         this.paramQuery = this.searchTemp;
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-      } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(ADDRESS_PREFIX)) {
+      } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(this.prefixAdd)) {
         this.paramQuery = this.searchTemp;
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
