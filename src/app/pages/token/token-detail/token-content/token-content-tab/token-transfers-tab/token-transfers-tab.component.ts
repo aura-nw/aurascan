@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction } from '../../../../../../core/constants/transaction.enum';
@@ -166,5 +167,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   getTokenDetail(data: any): void {
     this.tokenDetail = data;
+    this.tokenDetail.gasPrice = this.tokenDetail?.fee / this.tokenDetail?.tx_response?.gas_used;
+    this.tokenDetail.gasPriceU = this.tokenDetail.gasPrice * Math.pow(10, 6);
   }
 }

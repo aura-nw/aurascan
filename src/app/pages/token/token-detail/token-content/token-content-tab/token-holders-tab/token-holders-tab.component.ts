@@ -15,6 +15,7 @@ import { Globals } from '../../../../../../global/global';
 export class TokenHoldersTabComponent implements OnInit, OnChanges {
   @Input() keyWord = '';
   @Input() contractAddress: string;
+  @Input() isNFTContract: boolean;
   loading = true;
   mockData = [
     {
@@ -100,9 +101,9 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
   ];
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'address', headerCellDef: 'address' },
-    { matColumnDef: 'quantity', headerCellDef: 'quantity' },
-    { matColumnDef: 'percentage', headerCellDef: 'percentage' },
+    { matColumnDef: 'owner', headerCellDef: 'address' },
+    { matColumnDef: 'balance', headerCellDef: 'quantity' },
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -115,7 +116,11 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
   constructor(public global: Globals, private tokenService: TokenService) {}
 
   ngOnInit(): void {
-    this.getTokenData();
+    let tokenType = ContractRegisterType.CW20;
+    if (this.isNFTContract) {
+      tokenType = ContractRegisterType.CW721;
+    }
+    this.getListTokenHolder(tokenType);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -130,35 +135,30 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
     }
   }
 
-  getTokenData() {
+  getListTokenHolder(tokenType: string) {
     this.tokenService
       .getListTokenHolder(
         this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize,
-        ContractRegisterType.CW721,
+        tokenType,
         this.contractAddress,
       )
       .subscribe(
         (res) => {
-          if (res && res.data?.transactions?.length > 0) {
-            // res.data.transactions.forEach((trans) => {
-            //   trans = parseDataTransaction(trans, this.coinMinimalDenom, this.tokenID);
-            //   this.dataSource.data = res.data.transactions;
-            //   this.pageData.length = res.data?.transactions?.length;
-            // });
+          console.log(res);
+          this.loading = true;
+          if (res && res.data?.resultAsset?.length > 0) {
+            this.pageData.length = res.data?.resultCount;
+            this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
           }
           this.loading = false;
-          //this.dataSearch = res;
         },
         // () => {
         //   this.loading = false;
         // },
       );
 
-    this.pageData.length = this.mockData.length;
-    this.loading = true;
-    this.dataSource = new MatTableDataSource<any>(this.mockData);
-    this.loading = false;
+  
   }
 
   paginatorEmit(event): void {

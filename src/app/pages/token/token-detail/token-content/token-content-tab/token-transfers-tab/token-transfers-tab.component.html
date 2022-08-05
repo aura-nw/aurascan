@@ -209,9 +209,7 @@
       Gas info:<br />
       {{ tokenDetail?.tx_response?.gas_used | mask: 'separator' }} Gas Used From
       {{ tokenDetail?.tx_response?.gas_wanted | mask: 'separator' }} <br class="d-sm-none" />Gas Limit @<br />
-      {{ tokenDetail?.fee * tokenDetail?.tx_response?.gas_used }}
-      <br class="d-sm-none" />
-      {{ denom }} (15.807219472 Gwei)
+      {{ tokenDetail?.gasPrice }} {{ denom }} ({{ tokenDetail?.gasPriceU }} {{ coinMinimalDenom }})
       <hr />
     </div>
     <a
