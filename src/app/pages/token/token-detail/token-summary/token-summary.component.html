@@ -21,7 +21,7 @@
                 </button>
                 <ul
                   class="dropdown-menu aura-dropdown-menu token-summary-more"
-                  *ngIf="!isNFTContract"
+                  *ngIf="!tokenDetail.isNFTContract"
                   aria-labelledby="token-summary-more">
                   <li class="dropdown-item cursor-pointer">Add token to Web3</li>
                   <li class="dropdown-item cursor-pointer">Update Name Tag</li>
@@ -31,7 +31,7 @@
                 </ul>
                 <ul
                   class="dropdown-menu aura-dropdown-menu token-summary-more"
-                  *ngIf="isNFTContract"
+                  *ngIf="tokenDetail.isNFTContract"
                   aria-labelledby="token-summary-more">
                   <li class="dropdown-item cursor-pointer">Add token to Web3</li>
                   <li class="dropdown-item cursor-pointer">Update Token Info</li>
@@ -58,7 +58,7 @@
           </td>
         </tr>
 
-        <tr *ngIf="!isNFTContract">
+        <tr *ngIf="!tokenDetail.isNFTContract">
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Decimals:</div>
@@ -116,7 +116,7 @@
           </td>
         </tr>
 
-        <tr *ngIf="isNFTContract">
+        <tr *ngIf="tokenDetail.isNFTContract">
           <td colspan="2"></td>
         </tr>
       </table>

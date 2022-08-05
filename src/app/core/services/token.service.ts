@@ -55,11 +55,15 @@ export class TokenService extends CommonService {
     contractType: string,
     contractAddress: string,
   ): Observable<any> {
-    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&searchValue=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true`;
     return this.http.get<any>(url);
   }
 
   getContractDetail(tokenAddress): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${tokenAddress}`);
+  }
+
+  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
   }
 }

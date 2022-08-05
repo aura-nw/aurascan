@@ -91,7 +91,7 @@
                 <div class="d-flex">
                   <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
                   <div class="ml-3">
-                    <a [routerLink]="['/tokens/token', element.contract_address]" [queryParams]="{ tokenType: 'NFT' }">{{ element.name }}</a
+                    <a [routerLink]="['/tokens/token', element.contract_address]">{{ element.name }}</a
                     ><br class="d-none d-lg-block" />
                     <div class="pr-5 d-none d-lg-block">{{ element.desc }}</div>
                   </div>
@@ -113,7 +113,8 @@
             <ng-container matColumnDef="transfer">
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%">Transfers (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                {{ element.transfer | number }}
+                <!-- {{ element.transfer | number }} -->
+                -
               </td>
             </ng-container>
 
@@ -121,7 +122,8 @@
             <ng-container matColumnDef="transfer3d">
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%">Transfers (3D)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                {{ element.transfer3d | number }}
+                <!-- {{ element.transfer3d | number }} -->
+                -
               </td>
             </ng-container>
 

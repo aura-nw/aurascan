@@ -6,7 +6,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./token-summary.component.scss'],
 })
 export class TokenSummaryComponent implements OnInit {
-  @Input() isNFTContract: boolean;
   @Input() tokenDetail: any;
   constructor() {}
 

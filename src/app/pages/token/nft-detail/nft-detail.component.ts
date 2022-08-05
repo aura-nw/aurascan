@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
@@ -9,7 +9,8 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
-import {IContractPopoverData} from "src/app/core/models/contract.model";
+import { IContractPopoverData } from 'src/app/core/models/contract.model';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-nft-detail',
@@ -265,6 +266,8 @@ export class NFTDetailComponent implements OnInit {
 
   loading = false;
   nftId = '';
+  contractAddress = '';
+  nftDetail: any;
   typeTransaction = TYPE_TRANSACTION;
   contractType = ContractVerifyType.Exact_Match;
   contractVerifyType = ContractVerifyType;
@@ -274,12 +277,26 @@ export class NFTDetailComponent implements OnInit {
   constructor(
     public commonService: CommonService,
     public global: Globals,
-    public router: Router,
+    public route: Router,
     private environmentService: EnvironmentService,
+    private tokenService: TokenService,
+    private router: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    this.nftId = this.router.snapshot.paramMap.get('nftId');
+    this.getNFTDetail();
     this.getDataTable();
+  }
+
+  getNFTDetail() {
+    this.loading = true;
+    this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
+      this.nftDetail = res.data;
+      this.loading = false;
+    });
+    this.loading = false;
   }
 
   getDataTable(): void {

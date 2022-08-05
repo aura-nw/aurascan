@@ -8,19 +8,16 @@
   </div>
   <div class="row">
     <div class="col-12 col-lg-6">
-      <app-token-overview
-        [isNFTContract]="isNFTContract"
-        *ngIf="tokenDetail && tokenType"
-        [tokenDetail]="tokenDetail"></app-token-overview>
+      <app-token-overview *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-overview>
     </div>
 
     <div class="col-12 col-lg-6">
-      <app-token-summary
-        [isNFTContract]="isNFTContract"
-        *ngIf="tokenDetail && tokenType"
-        [tokenDetail]="tokenDetail"></app-token-summary>
+      <app-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-summary>
     </div>
   </div>
 
-  <app-token-content *ngIf="tokenType" [isNFTContract]="isNFTContract" [contractAddress]="contractAddress"></app-token-content>
+  <app-token-content
+    *ngIf="tokenDetail"
+    [tokenDetail]="tokenDetail"
+    [contractAddress]="contractAddress"></app-token-content>
 </ng-container>

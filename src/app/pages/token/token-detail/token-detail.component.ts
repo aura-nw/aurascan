@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TokenType } from 'src/app/core/constants/token.enum';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -12,22 +13,12 @@ import { TokenService } from 'src/app/core/services/token.service';
 export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
-  isNFTContract: boolean;
   tokenDetail: any;
-  //change type of Token
-  tokenType = TokenType.Token;
 
   constructor(private router: ActivatedRoute, private tokenService: TokenService) {}
 
   ngOnInit(): void {
-    //set temp type token
-    this.router.queryParams.subscribe((params) => {
-      this.tokenType = params?.tokenType || TokenType.Token;
-    });
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    if (this.tokenType === TokenType.NFT) {
-      this.isNFTContract = true;
-    }
     this.getTokenDetail();
   }
 
@@ -35,16 +26,13 @@ export class TokenDetailComponent implements OnInit {
 
   getTokenDetail(): void {
     this.loading = true;
-    if (this.isNFTContract) {
-      this.tokenService.getTokenCW721Detail(this.contractAddress).subscribe((res: ResponseDto) => {
-        this.tokenDetail = res.data;
-      });
-    } else {
-      this.tokenService.getTokenCW20Detail(this.contractAddress).subscribe((res: ResponseDto) => {
-        this.tokenDetail = res.data;
-      });
-    }
 
+    this.tokenService.getTokenCW20Detail(this.contractAddress).subscribe((res: ResponseDto) => {
+      this.tokenDetail = res.data;
+      if (this.tokenDetail.type === ContractRegisterType.CW721) {
+        this.tokenDetail.isNFTContract = true;
+      }
+    });
     this.loading = false;
   }
 }

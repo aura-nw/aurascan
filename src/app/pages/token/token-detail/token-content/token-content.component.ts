@@ -13,7 +13,7 @@ import { TokenTab } from '../../../../core/constants/token.enum';
   styleUrls: ['./token-content.component.scss'],
 })
 export class TokenContentComponent implements OnInit {
-  @Input() isNFTContract: boolean;
+  @Input() tokenDetail: any;
   @Input() contractAddress: string;
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
@@ -43,7 +43,7 @@ export class TokenContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.TABS = TOKEN_TAB.filter((vote) => (this.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key)).map(
+    this.TABS = TOKEN_TAB.filter((vote) => (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key)).map(
       (vote) => ({
         ...vote,
         value: vote.value,

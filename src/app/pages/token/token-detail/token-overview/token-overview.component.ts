@@ -7,7 +7,6 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./token-overview.component.scss']
 })
 export class TokenOverviewComponent implements OnInit {
-  @Input() isNFTContract: boolean;
   @Input() tokenDetail: any;
   constructor(public global: Globals) { }
 

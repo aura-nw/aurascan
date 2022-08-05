@@ -19,14 +19,14 @@
           </div>
         </div>
         <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center">
-          <h1 class="fw-semibold title-small mb-0 text--white">AuraDiamond #1289</h1>
+          <h1 class="fw-semibold title-small mb-0 text--white">{{ nftDetail?.name }} #{{ nftDetail?.id }}</h1>
           <div class="mb-0">
             <img
               [src]="'assets/images/icons/token-logo.png' | imageS3"
               width="24px"
               height="24px"
               class="mr-1 object-fit--none" />
-            <h2 class="text--green body mb-0 fw-normal">AuraDiamond</h2>
+            <h2 class="text--green body mb-0 fw-normal">{{ nftDetail?.name }}</h2>
           </div>
         </div>
       </div>
@@ -34,14 +34,14 @@
     <!-- End nft-image -->
     <div class="col-12 col-xl-8 pl-xl-7">
       <div class="d-none d-xl-block">
-        <h1 class="fw-semibold sub-text text--white mb-0">AuraDiamond #1289</h1>
+        <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.id }}</h1>
         <div class="mb-6">
           <img
             [src]="'assets/images/icons/token-logo.png' | imageS3"
             width="24px"
             height="24px"
             class="mr-1 object-fit--none" />
-          <h2 class="text--green body mb-0 fw-normal">AuraDiamond</h2>
+          <h2 class="text--green body mb-0 fw-normal">{{ nftDetail?.name }}</h2>
         </div>
       </div>
       <!-- Desktop card info -->
@@ -106,11 +106,7 @@
         <div class="card__ntf-detail-item">
           <div class="label-detail">Owner:</div>
           <div class="d-flex align-items-center position-relative">
-            <a
-              class="text--green g-ellipsis"
-              [routerLink]="['/account', 'aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e']">
-              aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e</a
-            >
+            <a class="text--green g-ellipsis" [routerLink]="['/account', nftDetail?.owner]"> {{ nftDetail?.owner }}</a>
             <img
               [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
               class="ml-2 cursor-pointer btn-copy"
@@ -121,7 +117,7 @@
               #owner="matTooltip"
               (mouseenter)="$event.stopImmediatePropagation()"
               (mouseleave)="$event.stopImmediatePropagation()"
-              (click)="copyData('aura1trqfuz89vxe745lmn2yfedt7d4xnpcpvltc86e'); owner.toggle()" />
+              (click)="copyData(nftDetail?.owner); owner.toggle()" />
           </div>
         </div>
         <div class="card__ntf-detail-item">
@@ -134,10 +130,8 @@
               alt="contract_verification"
               width="16px"
               height="16px" />
-            <a
-              class="text--green g-ellipsis"
-              [routerLink]="['/contracts', 'aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw']">
-              aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw</a
+            <a class="text--green g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
+              {{ nftDetail?.contract_address }}</a
             >
             <img
               [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -149,13 +143,13 @@
               #address="matTooltip"
               (mouseenter)="$event.stopImmediatePropagation()"
               (mouseleave)="$event.stopImmediatePropagation()"
-              (click)="copyData('aura163k7evz6hx4dq33mfqfhf5fuqym5sy2gfrfn0g8av54d4v642ctqfw8mgw'); address.toggle()" />
+              (click)="copyData(nftDetail?.contract_address); address.toggle()" />
           </div>
         </div>
         <div class="card__ntf-detail-item">
           <div class="label-detail">Creator:</div>
           <div class="d-flex align-items-center">
-            <span class="text--green">Aura: Deployer</span>
+            <span class="text--green">{{ nftDetail?.creator }}</span>
             <img
               [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
               class="ml-2 cursor-pointer"
@@ -166,13 +160,13 @@
               #creator="matTooltip"
               (mouseenter)="$event.stopImmediatePropagation()"
               (mouseleave)="$event.stopImmediatePropagation()"
-              (click)="copyData('Aura: Deployer'); creator.toggle()" />
+              (click)="copyData(nftDetail?.creator); creator.toggle()" />
           </div>
         </div>
         <div class="card__ntf-detail-item">
           <div class="label-detail">Token ID:</div>
           <div class="d-flex align-items-center">
-            <span>1289</span>
+            <span>{{ nftDetail?.id }}</span>
             <img
               [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
               class="ml-2 cursor-pointer"
@@ -183,7 +177,7 @@
               #tokenId="matTooltip"
               (mouseenter)="$event.stopImmediatePropagation()"
               (mouseleave)="$event.stopImmediatePropagation()"
-              (click)="copyData('1289'); tokenId.toggle()" />
+              (click)="copyData(nftDetail?.id); tokenId.toggle()" />
           </div>
         </div>
         <div class="card__ntf-detail-item">
