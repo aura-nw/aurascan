@@ -92,7 +92,6 @@ export class ProposalComponent implements OnInit {
     this.proposalService.getProposalList(addr).subscribe((res) => {
       if (res?.data) {
         this.proposalData = res.data;
-        console.log(this.proposalData)
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
         this.lastedList = [...res.data];

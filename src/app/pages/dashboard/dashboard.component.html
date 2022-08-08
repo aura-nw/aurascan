@@ -249,7 +249,10 @@
                     { label: 'Height', class: 'text--primary', info: data.height },
                     { label: 'Proposer', class: 'text--primary', info: data.proposer },
                     { label: 'Txs', info: data.num_txs.toString() },
-                    { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+                    { label: 'Time',
+                      class: 'card__date text--gray-1 body-01',
+                      info: '<span>'+(data.timestamp | date: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.timestamp | date: 'h:mm:ss')+'</span>'
+                    }
                   ]"></app-card-mob-simple>
               </div>
             </ng-container>
@@ -346,7 +349,10 @@
                   }"
                   [content]="[
                     { label: 'Height', class: 'text--primary', info: data.height},
-                    { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+                    { label: 'Time',
+                      class: 'card__date text--gray-1 body-01',
+                      info: '<span>'+(data.timestamp | date: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.timestamp | date: 'h:mm:ss')+'</span>'
+                    }
                   ]"></app-card-mob-simple>
               </div>
             </ng-container>

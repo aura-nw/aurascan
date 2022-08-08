@@ -98,15 +98,15 @@ body {
 
         li {
             &.primary {
-                background-color: #5ee6d0;
+                background-color: var(--aura-primary);
             }
 
             &.danger {
-                background-color: #e65e5e;
+                background-color: var(--aura-danger);
             }
 
             &.info {
-                background-color: #5e84e6;
+                background-color: var(--aura-secondary);
             }
 
             &.secondary {

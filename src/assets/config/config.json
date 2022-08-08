@@ -1,15 +1,15 @@
 {
   "fabric": "",
-  "cosmos": "https://serenity-api.aurascan.io/api/v1",
-  "chainId": "serenity-testnet-001",
+  "cosmos": "https://explorer-api.dev.aura.network/api/v1",
+  "chainId": "aura-testnet",
   "timeStaking": "1814400",
   "urlSocket": "https://explorer-api.dev.aura.network",
   "validator_s3": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
   "chain_info": {
-    "chainId": "serenity-testnet-001",
-    "chainName": "Aura Serenity TestNet",
-    "rpc": "https://rpc.serenity.aura.network",
-    "rest": "https://lcd.serenity.aura.network",
+    "chainId": "aura-testnet",
+    "chainName": "aura testnet",
+    "rpc": "https://rpc.dev.aura.network",
+    "rest": "https://lcd.dev.aura.network",
     "bip44": { "coinType": 118 },
     "bech32Config": {
       "bech32PrefixAccAddr": "aura",
@@ -27,7 +27,7 @@
     "features": ["no-legacy-stdTx"],
     "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
     "logo": "https://i.imgur.com/zi0mTYb.png",
-    "explorer": "https://serenity.aurascan.io/"
+    "explorer": "https://explorer.dev.aura.network/"
   },
   "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/"
 }

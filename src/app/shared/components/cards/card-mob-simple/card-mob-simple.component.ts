@@ -1,5 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { CodeTransaction } from '../../../../core/constants/transaction.enum';
+import {VALIDATOR_AVATAR_DF} from "src/app/core/constants/common.constant";
+
+export interface CardMobSimpleValidatorAddress {
+  imgUrl: string;
+  validatorName: string;
+  validatorAddress: string;
+  validatorNumber: string;
+}
 
 export interface CardMobSimpleTitle {
   size: 'sm' | 'md' | 'lg',
@@ -25,12 +33,13 @@ export interface CardMobSimpleContent {
 export class CardMobSimpleComponent implements OnInit {
   @Input() link: string;
   @Input() title: CardMobSimpleTitle;
+  @Input() validatorData: CardMobSimpleValidatorAddress;
   @Input() content: CardMobSimpleContent[];
 
   statusTransaction = CodeTransaction;
+  img_df = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg';
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

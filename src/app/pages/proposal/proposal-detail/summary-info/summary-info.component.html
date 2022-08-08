@@ -1,11 +1,11 @@
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card" *ngIf="proposalDetail">
-    <div class="card-header bg-transparent border-bottom" *ngIf="!breakpoint.value.matches">
+    <div class="card-header bg-transparent border-bottom pb-0" *ngIf="!breakpoint.value.matches">
       <div class="d-flex justify-content-between">
-        <div class="sub-text fw-500 text--white">
-          #{{ proposalId }} <br />
+        <h2 class="text--white">
+          <div class="text--gray-3">#{{ proposalId }}</div>
           <a href="javascript:void(0)" class="text--white">{{ proposalDetail.pro_title }}</a>
-        </div>
+        </h2>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--greyscale-4" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
           <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
@@ -29,106 +29,146 @@
       </div>
     </div>
     <div class="card-header bg-transparent pb-0" *ngIf="breakpoint.value.matches">
-      <div class="d-flex justify-content-between mb-3">
-        <div class="col-3 sub-text fw-500 sub-text-mob text--white align-self-center">#{{ proposalId }}</div>
-        <div class="col-9 justify-content-end card__status d-flex align-items-center flex-shrink-0">
+
+      <div class="d-flex justify-content-between">
+        <div>
+          <div class="h3 mb-0">
+            <span class="text--gray-3 mr-2">#{{ proposalId }}</span>
+            <span class="text--white v-ellipsis">{{ proposalDetail.pro_title }}</span>
+          </div>
+        </div>
+        <div class="ml-3 flex-shrink-0 text-end">
+          <div class="d-inline-block">
+            <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }} mb-2">
+              <span class="small-body-mob fw-semibold">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
+            </div>
+          </div>
           <button
-            [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-            (click)="openVoteDialog(proposalDetail)"
-            class="button button-outline button-outline__in-card body flex-shrink-0 ml-3">
-            <span class="text-gradient">
+                  [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                  (click)="openVoteDialog(proposalDetail)"
+                  class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card
+                         body d-block flex-shrink-0">
+            <span>
               {{
-                proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? 'Voting Ended'
-                  : 'Vote'
+              proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+              proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                      ? 'Voting Ended'
+                      : 'Vote'
               }}
             </span>
           </button>
-          <div class="ml-3 proposal-status-mobile proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
-            <span class="small-body-mob fw-semibold">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
-          </div>
+
         </div>
       </div>
-      <a class="sub-text fw-500 sub-text-mob text--white">{{ proposalDetail.pro_title }}</a>
-      <div class="text--greyscale-4 mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
-      <div class="divider divider-horizontal mt-4"></div>
+      <div class="text--gray-5 mt-1" *ngIf="true">You voted '{{ proposalVotes }}' for this proposal</div>
+
+
+      <div class="divider divider-horizontal mt-3"></div>
     </div>
-    <div class="card-body">
+    <div class="card-body pt-3 pt-lg-0">
       <div class="text--white">
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Proposer</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">
-            <a class="text--primary" href="/account/{{ proposalDetail.pro_proposer_address }}">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Proposer</div>
+          <div class="col-8 col-md-10">
+            <a class="text--primary h6" href="/account/{{ proposalDetail.pro_proposer_address }}">
               {{ proposalDetail.pro_proposer ? proposalDetail.pro_proposer : proposalDetail.pro_proposer_address }}
             </a>
           </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Initial Deposit</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Initial Deposit</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
             <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Total Deposit</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Total Deposit</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
             <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Voting Start</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_voting_start_time }}</div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Voting Start</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.pro_voting_start_time | date: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.pro_voting_start_time | date: 'h:mm:ss' }}</span>
+            </div>
+          </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Voting End</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_voting_end_time }}</div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Voting End</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.pro_voting_end_time | date: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.pro_voting_end_time | date: 'h:mm:ss' }}</span>
+            </div>
+          </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Type</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_type }}</div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Type</div>
+          <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type">{{ proposalDetail.pro_type }}</div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Submit Time</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_submit_time }}</div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Submit Time</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.pro_submit_time | date: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.pro_submit_time | date: 'h:mm:ss' }}</span>
+            </div>
+          </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Deposit End Time</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_deposit_end_time }}</div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
+          <div class="col-auto col-md-2 text--gray-5">Deposit End Time</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+            <div class="d-flex align-items-center">
+              <span>{{ proposalDetail.pro_deposit_end_time | date: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical mx-1 mx-md-2"></div>
+              <span>{{ proposalDetail.pro_deposit_end_time | date: 'h:mm:ss' }}</span>
+            </div>
+          </div>
         </div>
-        <div class="row small-body">
-          <div class="col-12 col-md-2 fw-semibold d-lg-flex align-items-center">Details</div>
+        <div class="row mb-3 mb-md-4 body-02">
+          <div class="col-12 col-md-2 text--gray-5">Details</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
-            <div class="editorial-container p-4 py-lg-8 px-lg-4">
+            <div class="editorial-container p-4">
               <div id="marked" class="editorial"></div>
             </div>
           </div>
         </div>
-        <div class="divider divider-horizontal mt-4 mt-lg-5"></div>
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.requestAmount">
+          <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
+          <div class="col-auto col-md-10 mt-0">{{ proposalDetail.requestAmount }}</div>
+        </div>
+        <div class="divider divider-horizontal mt-3 mt-lg-5"></div>
       </div>
     </div>
-    <div class="card-footer pt-0">
+    <div class="card-footer pt-0 pb-0">
       <div
         class="proposal__summary-total"
         *ngIf="!votingBarLoading && proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
-        <div class="row mb-3 small-body" *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-          <div class="col-12 col-md-2 title-small fw-semibold">Final Status:</div>
-          <div
-            class="col-12 col-md-10 mt-2 mt-lg-0 text--primary title-small fw-semibold"
-            [class.text--danger]="getStatus(proposalDetail.pro_status)?.value === 'rejected'">
-            {{ getStatus(proposalDetail.pro_status)?.value | titlecase }}
+        <div class="row justify-content-between align-items-center mb-3" *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
+          <div class="col-6 col-md-2 body-03 h6-mob">Final Status:</div>
+          <div class="col-6 col-md-10 body-02 text-end text-md-start">
+            <div class="aura-status-inline
+                 {{getStatus(proposalDetail.pro_status)?.value === 'rejected' ? 'text--danger' : 'text--primary'}}">
+              <span class="status">{{ getStatus(proposalDetail.pro_status)?.value | titlecase }}</span>
+            </div>
           </div>
         </div>
         <div
-          class="mt-2 mb-3 small-body text--white"
+          class="mt-2 mb-3 body-03 text--white"
           *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
           {{ finalSubTitle }}
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-md-2 fw-semibold">Total:</div>
-          <div class="col-12 col-md-10 mt-2 mt-lg-0">
+        <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob">
+          <div class="col-auto col-md-2">Total:</div>
+          <div class="col-auto col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
             <span class="text--primary">{{ denom }}</span>
           </div>
@@ -157,57 +197,55 @@
               [matTooltipPosition]="'above'"></li>
           </ul>
         </div>
-        <div class="vote-legend vote-legend-mobile" *ngIf="breakpoint.value.matches">
-          <ul>
-            <li data-style="primary">
-              <div class="item-box">
-                <span class="item item-label">Yes</span>
+        <div class="mt-4" *ngIf="breakpoint.value.matches">
+          <div class="d-flex align-items-center">
+            <div class="vote status--primary"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col col-lg-5 fw-semibold">
+                <span class="body-02"> Yes </span>
               </div>
-              <span class="item item-percent">
-                {{ this.proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
-              </span>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_yes || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
-              </p>
-            </li>
-            <li data-style="danger">
-              <div class="item-box">
-                <span class="item item-label">No</span>
+              <div class="col col-lg-3 h5 mb-0 text--white">{{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%</div>
+              <div class="col col-lg-4 text-end h6 mb-0 fw-normal text--gray-4">{{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}</div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <div class="vote status--danger flex-grow-0"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col col-lg-5 fw-semibold">
+                <span class="body-02"> No </span>
               </div>
-              <span class="item item-percent">
-                {{ this.proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
-              </span>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
-              </p>
-            </li>
-            <li data-style="info">
-              <div class="item-box">
-                <span class="item item-label">NoWithVeto</span>
+              <div class="col col-lg-3 h5 mb-0 text--white">{{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%</div>
+              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-4">{{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}</div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <div class="vote status--info"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col col-lg-5 fw-semibold">
+                <span class="body-02"> NoWithVeto</span>
               </div>
-              <span class="item item-percent">
-                {{ this.proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
-              </span>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_no_with_veto || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
-              </p>
-            </li>
-            <li data-style="secondary">
-              <div class="item-box">
-                <span class="item item-label">Abstain</span>
+              <div class="col col-lg-3 h5 mb-0 text--white">
+                {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <span class="item item-percent">
-                {{ this.proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
-              </span>
-              <p class="item item-amount">
-                <span>{{ this.proposalDetail.pro_votes_abstain || 0 | number: global.formatNumberToken }}</span>
-                <span class="text--primary ml-1">{{ denom }}</span>
-              </p>
-            </li>
-          </ul>
+              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-4">
+                {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-2 pb-3">
+            <div class="vote status--secondary"></div>
+            <div class="row align-items-center flex-grow-1">
+              <div class="col col-lg-5 fw-semibold">
+                <span class="body-02"> Abstain</span>
+              </div>
+              <div class="col col-lg-3 h5 mb-0 text--white">
+                {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+              </div>
+              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-4">
+                {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
+              </div>
+            </div>
+          </div>
         </div>
         <div class="vote-legend" *ngIf="!breakpoint.value.matches">
           <ul>
@@ -263,8 +301,8 @@
         </div>
       </div>
       <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-        <div class="row proposal__summary-total">
-          <div class="col-12 col-lg-6 pr-lg-8" [class.border-right]="!breakpoint.value.matches">
+        <div class="row proposal__summary-total pb-6">
+          <div class="col-12 col-lg-6 pr-lg-8 border-right" [class.border-right]="!breakpoint.value.matches">
             <app-current-turnout
               [proposalDetail]="proposalDetail"
               [isNotReached]="isNotReached"
@@ -287,8 +325,3 @@
     </div>
   </div>
 </ng-container>
-<script>
-  $( document ).ready(function() {
-    document.getElementById('marked').innerHTML =  marked.parse('# Marked in the browser\n\nRendered by **marked**.');
-  });
-</script>

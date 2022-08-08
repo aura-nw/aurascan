@@ -99,7 +99,8 @@ $textColors: (
   "gray-3",
   "gray-4",
   "gray-5",
-  "gray-6"
+  "gray-6",
+  "gray-7"
 );
 @each $color in $textColors {
   .text--#{$color} {
@@ -113,9 +114,12 @@ $textColors: (
 .fw-500 {
   font-weight: 500 !important;
 }
-
 .text-gradient {
   background: var(--aura-gradient-general);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.text-hover-gray{
+  color: #9DA2AF;
 }
