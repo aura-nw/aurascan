@@ -12,7 +12,6 @@ import { getFee } from 'src/app/core/utils/signing/fee';
   templateUrl: './token-contract-write.component.html',
   styleUrls: ['./token-contract-write.component.scss'],
 })
-
 export class TokenContractWriteComponent implements OnInit {
   @Input() tokenDetailData: any;
 
@@ -47,7 +46,9 @@ export class TokenContractWriteComponent implements OnInit {
       }
     });
 
-    this.jsonWriteContract = JSON.parse(this.tokenDetailData?.execute_msg_schema);
+    try {
+      this.jsonWriteContract = JSON.parse(this.tokenDetailData?.execute_msg_schema);
+    } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -96,7 +97,7 @@ export class TokenContractWriteComponent implements OnInit {
       let err = {};
       let objWriteContract = {};
       let msg = {};
-      const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
+      const contractTemp = this.jsonWriteContract?.oneOf.find((contract) => contract.required[0] === name);
       if (contractTemp.properties[name].hasOwnProperty('properties')) {
         Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
           let element: HTMLInputElement = document.getElementsByClassName(
@@ -191,7 +192,7 @@ export class TokenContractWriteComponent implements OnInit {
     if (!ref) {
       return 'any';
     }
-    
+
     let objectTemp = ref.replace('#/', '')?.split('/');
     let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
     let data = {};

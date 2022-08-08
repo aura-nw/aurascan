@@ -8,7 +8,6 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   templateUrl: './token-contract-read.component.html',
   styleUrls: ['./token-contract-read.component.scss'],
 })
-
 export class TokenContractReadComponent implements OnInit {
   @Input() tokenDetailData: any;
 
@@ -25,7 +24,9 @@ export class TokenContractReadComponent implements OnInit {
   constructor(public walletService: WalletService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
-    this.jsonReadContract = JSON.parse(this.tokenDetailData?.query_msg_schema);
+    try {
+      this.jsonReadContract = JSON.parse(this.tokenDetailData?.query_msg_schema);
+    } catch {}
     //auto execute query without params
     this.handleQueryContract();
   }
@@ -64,7 +65,7 @@ export class TokenContractReadComponent implements OnInit {
     this.dataResponse = null;
     let err = {};
     let objReadContract = {};
-    const contractTemp = this.jsonReadContract.oneOf.find((contract) => contract.required[0] === name);
+    const contractTemp = this.jsonReadContract?.oneOf.find((contract) => contract.required[0] === name);
 
     //Check has required property, else execute query without params
     if (contractTemp.properties[name].hasOwnProperty('required')) {
@@ -122,7 +123,7 @@ export class TokenContractReadComponent implements OnInit {
   }
 
   handleQueryContract(): void {
-    this.jsonReadContract.oneOf.forEach((contract) => {
+    this.jsonReadContract?.oneOf.forEach((contract) => {
       let key = Object.keys(contract.properties)[0];
       let queryData = {};
       if (!contract.properties[key].hasOwnProperty('required')) {
@@ -138,4 +139,3 @@ export class TokenContractReadComponent implements OnInit {
     this.errorInput = false;
   }
 }
-
