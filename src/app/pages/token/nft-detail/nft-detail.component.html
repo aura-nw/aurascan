@@ -236,9 +236,15 @@
                 </div>
               </ng-container>
               <ng-container *ngSwitchCase="'from_address'">
-                <a class="text--green content-transfer" [routerLink]="['/account', data[template.matColumnDef]]">
+                <a
+                  class="text--green content-transfer"
+                  [routerLink]="['/account', data[template.matColumnDef]]"
+                  *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
                   {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                 </a>
+                <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
+                  data[template.matColumnDef] | cutStringPipe: 8:8
+                }}</span>
                 <img
                   [src]="'assets/images/icons/arrow-right.png' | imageS3"
                   width="14"
@@ -246,13 +252,17 @@
                   class="ml-10 ml-lg-15" />
               </ng-container>
               <ng-container *ngSwitchCase="'to_address'">
-                <a class="text--green" [routerLink]="['/account', data[template.matColumnDef]]">
+                <a
+                  class="text--green"
+                  [routerLink]="['/account', data[template.matColumnDef]]"
+                  *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
                   {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                 </a>
+                <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
+                  data[template.matColumnDef] | cutStringPipe: 8:8
+                }}</span>
               </ng-container>
-              <ng-container *ngSwitchCase="'price'">
-                {{ data[template.matColumnDef] | number }} {{ denom }}
-              </ng-container>
+              <ng-container *ngSwitchCase="'fee'"> {{ data[template.matColumnDef] }} {{ denom }} </ng-container>
               <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
             </ng-container>
           </td>

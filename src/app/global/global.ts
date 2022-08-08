@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NUMBER_CONVERT } from '../core/constants/common.constant';
-import { TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
+import { NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
+import { ModeExecuteTransaction, TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 
 Injectable();
@@ -58,7 +58,7 @@ export function getDataInfo(arrayMsg, addressContract) {
   let method = '';
   let value = 0;
   let tokenId = '';
-  let isBurnWallet = false;
+  let modeExecute = ModeExecuteTransaction.Default;
   let eTransType = TRANSACTION_TYPE_ENUM;
   switch (itemMessage['@type']) {
     case eTransType.InstantiateContract:
@@ -89,9 +89,13 @@ export function getDataInfo(arrayMsg, addressContract) {
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner;
       tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
-      if (method === 'burn') {
-        toAddress = '0x00000000';
-        isBurnWallet = true;
+      if (method === ModeExecuteTransaction.Burn) {
+        toAddress = NULL_ADDRESS;
+        modeExecute = ModeExecuteTransaction.Burn;
+      }
+      if (method === ModeExecuteTransaction.Mint) {
+        fromAddress = NULL_ADDRESS;
+        modeExecute = ModeExecuteTransaction.Mint;
       }
       break;
     case eTransType.Deposit:
@@ -120,5 +124,5 @@ export function getDataInfo(arrayMsg, addressContract) {
       toAddress = itemMessage.to_address;
       break;
   }
-  return [fromAddress, toAddress, value, method, tokenId, isBurnWallet];
+  return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -12,7 +12,7 @@ import { Globals } from '../../../../../../global/global';
   templateUrl: './token-holders-tab.component.html',
   styleUrls: ['./token-holders-tab.component.scss'],
 })
-export class TokenHoldersTabComponent implements OnInit, OnChanges {
+export class TokenHoldersTabComponent implements OnInit {
   @Input() keyWord = '';
   @Input() contractAddress: string;
   @Input() isNFTContract: boolean;
@@ -56,14 +56,10 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
       tokenType = ContractRegisterType.CW721;
     }
     this.getListTokenHolder(tokenType);
-    // this.template = this.getTemplate();
-    // this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
   }
 
   getListTokenHolder(tokenType: string) {
+    this.loading = true;
     this.tokenService
       .getListTokenHolder(
         this.pageData.pageSize,
@@ -71,21 +67,20 @@ export class TokenHoldersTabComponent implements OnInit, OnChanges {
         tokenType,
         this.contractAddress,
       )
-      .subscribe(
-        (res) => {
-          this.loading = true;
-          if (res && res.data?.resultAsset?.length > 0) {
-            this.pageData.length = res.data?.resultCount;
-            this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
-          }
-          this.loading = false;
-        },
-        // () => {
-        //   this.loading = false;
-        // },
-      );
+      .subscribe((res) => {
+        if (res && res.data?.resultAsset?.length > 0) {
+          this.pageData.length = res.data?.resultCount;
+          let sortedData = res.data?.resultAsset.sort((a, b) => {
+            return this.compare(a.percent_hold, b.percent_hold, false);
+          });
+          this.dataSource = new MatTableDataSource<any>(sortedData);
+        }
+        this.loading = false;
+      });
+  }
 
-  
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   paginatorEmit(event): void {

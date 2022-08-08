@@ -60,3 +60,5 @@ export const CHART_RANGE = {
   D_30: '30d',
   MONTH_12: '12M',
 };
+
+export const NULL_ADDRESS = "0".repeat(43);

@@ -11,6 +11,8 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { TokenService } from 'src/app/core/services/token.service';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 
 @Component({
   selector: 'app-nft-detail',
@@ -259,7 +261,7 @@ export class NFTDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'price', headerCellDef: 'Price' },
+    { matColumnDef: 'fee', headerCellDef: 'Price' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -271,8 +273,10 @@ export class NFTDetailComponent implements OnInit {
   typeTransaction = TYPE_TRANSACTION;
   contractType = ContractVerifyType.Exact_Match;
   contractVerifyType = ContractVerifyType;
+  modeExecuteTransaction = ModeExecuteTransaction;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     public commonService: CommonService,
@@ -296,24 +300,28 @@ export class NFTDetailComponent implements OnInit {
       this.nftDetail = res.data;
       this.loading = false;
     });
-    this.loading = false;
   }
 
   getDataTable(): void {
-    this.pageData = {
-      length: this.mockData.length,
-      pageSize: this.pageData.pageSize,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
-    };
-
-    let data = this.mockData.slice();
-
-    data.forEach((token) => {
-      token['price'] = Number(token.amount) * 1;
-      const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
-      token.type = typeTrans?.value;
-    });
-    this.dataSource = new MatTableDataSource<any>(data);
+    this.tokenService
+    .getListTokenTransfer(
+      this.pageData.pageSize,
+      this.pageData.pageIndex * this.pageData.pageSize,
+      this.contractAddress,
+      this.nftId,
+    )
+    .subscribe(
+      (res) => {
+        if (res && res.data?.transactions?.length > 0) {
+          res.data.transactions.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+            this.dataSource.data = res.data.transactions;
+            this.pageData.length = res.data?.transactions?.length;
+          });
+        }
+        this.loading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {
@@ -341,18 +349,19 @@ export class NFTDetailComponent implements OnInit {
   getPopoverData(data): IContractPopoverData {
     return {
       amount: data?.value || 0,
-      code: 0,
+      code: Number(data?.tx_response?.code),
       fee: data?.fee || 0,
-      from_address: data?.from || '-',
-      to_address: data?.to || '-',
+      from_address: data?.from_address || '-',
+      to_address: data?.to_address || '-',
       price: 0,
-      status: 'Success',
-      symbol: 'AURA',
+      status: data?.status,
+      symbol: this.denom,
       // tokenAddress: this.contractInfo?.contractsAddress,
-      tokenAddress: 'demo',
+      tokenAddress: '',
       tx_hash: data?.txHash || '-',
-      gas_used: data.gas_used,
-      gas_wanted: data.gas_wanted,
+      gas_used: data?.tx_response?.gas_used,
+      gas_wanted: data?.tx_response?.gas_wanted,
+      nftDetail: this.nftDetail
     };
   }
 }

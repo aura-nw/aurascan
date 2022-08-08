@@ -37,7 +37,6 @@ export class TokenService extends CommonService {
   ): Observable<any> {
     let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&query=execute._contract_address%3D'${contractAddress}'`;
     if (filterData) {
-      console.log(filterData);
       if (filterData.length > 60) {
         url += `&txHash=${filterData}`;
       } else if (filterData?.length >= 43 && filterData?.startsWith(this.prefixAdd)) {

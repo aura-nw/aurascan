@@ -81,9 +81,13 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--green txt-from-address content-transfer"
-                            href="/tokens/token/{{ contractAddress }}?a={{ data['from_address'] }}">
-                            {{ data['from_address'] | cutStringPipe: 8:8 }}
+                            href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
+                          <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
+                            data[template.matColumnDef] | cutStringPipe: 8:8
+                          }}</span>
                           <ng-container *ngIf="!isSearchAddress">
                             <img
                               [src]="'assets/images/icons/arrow-right.png' | imageS3"
@@ -106,13 +110,13 @@
                       <ng-container *ngSwitchCase="'to_address'">
                         <a
                           class="text--green"
-                          href="/tokens/token/{{ contractAddress }}?a={{ data['to_address'] }}"
-                          *ngIf="!data.isBurnWallet">
-                          {{ data['to_address'] | cutStringPipe: 8:8 }}
+                          href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                          *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
+                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
-                        <span *ngIf="data.isBurnWallet"
-                          >Null Address: {{ data['to_address'] | cutStringPipe: 8:8 }}</span
-                        >
+                        <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
+                          data[template.matColumnDef] | cutStringPipe: 8:8
+                        }}</span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
                         <a

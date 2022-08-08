@@ -4,10 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction } from '../../../../../../core/constants/transaction.enum';
+import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
@@ -71,6 +70,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   dataSearch: any;
+  modeExecuteTransaction = ModeExecuteTransaction;
 
   constructor(
     public global: Globals,
@@ -92,16 +92,16 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.keyWord.length > 0) {
-      this.getDataToken(this.keyWord);
+      this.getListTransactionToken(this.keyWord);
     }
   }
 
   getDataTable(): void {
     this.loading = true;
-    this.getDataToken();
+    this.getListTransactionToken();
   }
 
-  getDataToken(filterData = '') {
+  getListTransactionToken(filterData = '') {
     filterData = this.keyWord || filterData;
     this.tokenService
       .getListTokenTransfer(
@@ -122,9 +122,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
           this.loading = false;
           this.dataSearch = res;
         },
-        // () => {
-        //   this.loading = false;
-        // },
       );
   }
 

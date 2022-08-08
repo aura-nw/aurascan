@@ -67,7 +67,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
     trans.status = StatusTransaction.Success;
   }
-  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.isBurnWallet] = getDataInfo(
+  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] = getDataInfo(
     trans.tx_response?.tx?.body?.messages,
     tokenID,
   );
