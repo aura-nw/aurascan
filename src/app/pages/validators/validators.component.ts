@@ -339,7 +339,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         if (res?.data?.length > 0) {
           this.lstValidator = res.data;
           this.lstValidator.forEach((f) => {
-            f.isStaking = f.amount_staked > 0 ? true : false;
+            f.isStaking = f.isStaking === 1 ? true : false;
           });
         }
       },

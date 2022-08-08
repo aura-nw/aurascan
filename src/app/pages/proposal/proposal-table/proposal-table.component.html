@@ -62,6 +62,11 @@
                       <br />
                       {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
                     </ng-container>
+                    <ng-container *ngSwitchCase="'timestamp'">
+                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                      <br />
+                      {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
+                    </ng-container>
 
                     <ng-container *ngSwitchDefault>
                       {{
@@ -204,7 +209,7 @@
                     class="table-body__item d-flex justify-content-between text--white mb-2"
                     *ngIf="!template?.desktopOnly">
                     <span>{{ template['headerCellDef'] }}</span>
-                    <ng-container *ngIf="template.matColumnDef === 'created_at'">
+                    <ng-container *ngIf="template.matColumnDef === 'timestamp'">
                       {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
                     </ng-container>
                     <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
