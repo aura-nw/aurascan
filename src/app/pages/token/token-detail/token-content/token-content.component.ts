@@ -16,11 +16,7 @@ export class TokenContentComponent implements OnInit {
   @Input() contractAddress: string;
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
-  TABS = TOKEN_TAB.filter((vote) => this.tabToken.includes(vote.key)).map((vote) => ({
-    ...vote,
-    value: vote.value,
-    key: vote.key === TokenTab.Transfers ? '' : vote.key,
-  }));
+  TABS = [];
   countCurrent: string = '';
   paramQuery = '';
   textSearch: string = '';
@@ -43,11 +39,11 @@ export class TokenContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.TABS = TOKEN_TAB.filter((vote) => (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(vote.key)).map(
-      (vote) => ({
-        ...vote,
-        value: vote.value,
-        key: vote.key === TokenTab.Transfers ? '' : vote.key,
+    this.TABS = TOKEN_TAB.filter((tab) => (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(tab.key)).map(
+      (tab) => ({
+        ...tab,
+        value: tab.value,
+        key: tab.key === TokenTab.Transfers ? '' : tab.key,
       }),
     );
     this.tabsBackup = this.TABS;
