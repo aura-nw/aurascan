@@ -67,8 +67,8 @@ export class ReadContractComponent implements OnInit {
     const contractTemp = this.jsonReadContract?.oneOf.find((contract) => contract.required[0] === name);
 
     //Check has required property, else execute query without params
-    if (contractTemp.properties[name].hasOwnProperty('required')) {
-      contractTemp.properties[name].required.forEach((contract) => {
+    if (contractTemp.properties[name].hasOwnProperty('properties')) {
+      Object.entries(contractTemp.properties[name].properties).forEach(([contract, value]) => {
         let element: HTMLInputElement = document.getElementsByClassName(
           'form-check-input ' + name + ' ' + contract,
         )[0] as HTMLInputElement;
@@ -81,10 +81,13 @@ export class ReadContractComponent implements OnInit {
         }
 
         let type = contractTemp.properties[name].properties[contract].type;
-        objReadContract[contract] = element?.value;
+        //check exit value
+        if (element?.value) {
+          objReadContract[contract] = element?.value;
+        }
 
         //convert number if integer field
-        if (type === 'integer') {
+        if (type === 'integer' || type[0] === 'integer' && element?.value) {
           objReadContract[contract] = Number(element?.value);
         }
       });
@@ -125,7 +128,7 @@ export class ReadContractComponent implements OnInit {
     this.jsonReadContract?.oneOf.forEach((contract) => {
       let key = Object.keys(contract.properties)[0];
       let queryData = {};
-      if (!contract.properties[key].hasOwnProperty('required')) {
+      if (!contract.properties[key].hasOwnProperty('properties')) {
         queryData = {
           [key]: {},
         };
@@ -136,5 +139,9 @@ export class ReadContractComponent implements OnInit {
 
   resetCheck() {
     this.errorInput = false;
+  }
+
+  objectKeys(obj) {
+    return obj ? Object.keys(obj) : [];
   }
 }
