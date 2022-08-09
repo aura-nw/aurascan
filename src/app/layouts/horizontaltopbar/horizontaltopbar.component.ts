@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { EnvironmentService } from "src/app/core/data-services/environment.service";
-import { NETWORK } from '../../../app/core/constants/common.constant';
+import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
 import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
 import { LanguageService } from '../../core/services/language.service';
@@ -303,7 +303,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
       if (regexRule.test(this.searchValue)) {
-        if (this.searchValue.length > 60) {
+        if (this.searchValue.length > LENGTH_CHARACTER.TRANSACTION) {
           if (this.searchValue.toLowerCase() === this.searchValue) {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['contracts', this.searchValue]);
@@ -311,7 +311,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           } else {
             this.getTxhDetail(this.searchValue);
           }
-        } else if (this.searchValue.length > 40) {
+        } else if (this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
           let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate([urlLink, this.searchValue]);

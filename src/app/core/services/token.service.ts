@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { INDEXER_URL } from '../constants/common.constant';
+import { INDEXER_URL, LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
-  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
@@ -33,16 +32,17 @@ export class TokenService extends CommonService {
     limit: string | number,
     offset: string | number,
     contractAddress: string,
-    filterData = '',
+    filterData: any,
+    mode = '',
   ): Observable<any> {
     let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&query=execute._contract_address%3D'${contractAddress}'`;
-    if (filterData) {
-      if (filterData.length > 60) {
-        url += `&txHash=${filterData}`;
-      } else if (filterData?.length >= 43 && filterData?.startsWith(this.prefixAdd)) {
-        url += `&address=${filterData}`;
+    if (filterData?.keyWord) {
+      if (filterData?.keyWord.length > LENGTH_CHARACTER.TRANSACTION) {
+        url += `&txHash=${filterData?.keyWord}`;
+      } else if (filterData['isSearchWallet']) {
+        url += `%2Cwasm.${mode}%3D'${filterData?.keyWord}'`;
       } else {
-        url += `%2C%20wasm.token_id%3D'${filterData}'`;
+        url += `%2Cwasm.token_id%3D'${filterData?.keyWord}'`;
       }
     }
     return this.http.get<any>(url);

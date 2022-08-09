@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { AccountService } from 'src/app/core/services/account.service';
 import { Globals } from 'src/app/global/global';
@@ -71,11 +72,11 @@ export class TokenContentComponent implements OnInit {
     if (regexRule.test(this.searchTemp)) {
       this.textSearch = this.searchTemp;
       let tempTabs;
-      if (this.textSearch.length > 60) {
+      if (this.textSearch.length > LENGTH_CHARACTER.TRANSACTION) {
         this.paramQuery = this.searchTemp;
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-      } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(this.prefixAdd)) {
+      } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
         this.paramQuery = this.searchTemp;
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);

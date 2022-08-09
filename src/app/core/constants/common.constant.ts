@@ -61,4 +61,9 @@ export const CHART_RANGE = {
   MONTH_12: '12M',
 };
 
-export const NULL_ADDRESS = "0".repeat(43);
+export const LENGTH_CHARACTER = {
+  ADDRESS: 43,
+  TRANSACTION: 60
+};
+
+export const NULL_ADDRESS = "0".repeat(LENGTH_CHARACTER.ADDRESS);

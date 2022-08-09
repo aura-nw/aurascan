@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
@@ -28,8 +29,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   @Input() contractAddress: string;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
-  tokenDataList: any[];
-  length: number;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() resultLength = new EventEmitter<any>();
 
@@ -67,10 +66,11 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   };
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
+  modeExecuteTransaction = ModeExecuteTransaction;
+
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  dataSearch: any;
-  modeExecuteTransaction = ModeExecuteTransaction;
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     public global: Globals,
@@ -101,28 +101,54 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     this.getListTransactionToken();
   }
 
-  getListTransactionToken(filterData = '') {
-    filterData = this.keyWord || filterData;
-    this.tokenService
-      .getListTokenTransfer(
+  getListTransactionToken(dataSearch = '') {
+    let filterData = {};
+    filterData['keyWord'] = this.keyWord || dataSearch;
+    if (
+      filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
+      filterData['keyWord']?.startsWith(this.prefixAdd)
+    ) {
+      filterData['isSearchWallet'] = true;
+    }
+    forkJoin({
+      lstData: this.tokenService.getListTokenTransfer(
         this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize,
         this.contractAddress,
         filterData,
-      )
-      .subscribe(
-        (res) => {
-          if (res && res.data?.transactions?.length > 0) {
-            res.data.transactions.forEach((trans) => {
-              trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-              this.dataSource.data = res.data.transactions;
-              this.pageData.length = res.data?.transactions?.length;
-            });
-          }
-          this.loading = false;
-          this.dataSearch = res;
-        },
-      );
+        'from',
+      ),
+      listExtend: this.tokenService.getListTokenTransfer(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+        'to',
+      ),
+    }).subscribe((res) => {
+      if (res) {
+        let data = res.lstData?.data?.transactions;
+
+        //add list search address if filter with address
+        if (filterData['isSearchWallet']) {
+          let temp = data.concat(res.listExtend?.data?.transactions);
+          data = temp.sort((a, b) => {
+            return this.compare(a.tx_response?.timestamp, b.tx_response?.timestamp, false);
+          });
+        }
+
+        data.forEach((trans) => {
+          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+          this.dataSource.data = data;
+          this.pageData.length = data?.length;
+        });
+      }
+      this.loading = false;
+    });
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   getTemplate(): Array<TableTemplate> {
@@ -146,16 +172,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
         isNFTContract: this.isNFTContract,
       });
     }
-  }
-
-  getListData(): any[] {
-    if (!(this.dataSource?.paginator && this.dataSource?.data)) {
-      return [];
-    }
-    return this.dataSource.data.slice(
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
-    );
   }
 
   paginatorEmit(event): void {
