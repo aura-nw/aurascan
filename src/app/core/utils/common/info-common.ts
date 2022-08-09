@@ -1,4 +1,4 @@
-import { getAddress, getAmount } from 'src/app/global/global';
+import { getDataInfo, getAmount } from 'src/app/global/global';
 import { NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
@@ -61,14 +61,17 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   );
   trans.fee = balanceOf(trans?.tx?.auth_info?.fee?.amount[0]?.amount);
   trans.gas_limit = balanceOf(trans?.tx?.auth_info?.fee?.gas_limit);
-  trans.type = typeTrans?.value;
   trans.height = trans.tx_response?.height;
   trans.timestamp = trans.tx_response?.timestamp;
   trans.status = StatusTransaction.Fail;
   if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
     trans.status = StatusTransaction.Success;
   }
-  [trans.from_address, trans.to_address] = getAddress(trans.tx_response?.tx?.body?.messages, tokenID);
+  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] = getDataInfo(
+    trans.tx_response?.tx?.body?.messages,
+    tokenID,
+  );
+  trans.type = trans.method || typeTrans?.value;
   trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
   return trans;
 }

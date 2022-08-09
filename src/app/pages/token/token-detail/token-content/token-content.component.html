@@ -25,11 +25,11 @@
             </td>
             <td>
               <div class="small-text txt-light mb-1">BALANCE</div>
-              0.004999999999999999 stETH
+              {{ infoSearch?.balances[0]?.amount || 0 | number: global.formatNumberToken }} {{ denom }}
             </td>
             <td>
               <div class="small-text txt-light mb-1">VALUE</div>
-              $10.14 ( ~0.00490867635170134 Eth)
+              - ( - {{ denom }})
             </td>
           </tr>
         </table>
@@ -39,7 +39,11 @@
 </ng-container>
 <section class="card main-tab mt-2 p-4">
   <div class="d-lg-flex justify-content-between align-items-end tab-wrapper tab-token">
-    <ul ngbNav #customNav="ngbNav" [activeId]="0" class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="0"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
@@ -50,22 +54,25 @@
     </ul>
     <div class="d-lg-flex align-item-center justify-content-end">
       <form class="aura-form single-input-field search-form">
-        <div class="input-group">
+        <div class="input-group small-input">
           <input
             type="text"
             class="form-control aura-form"
-            placeholder="Filter Address/ TX Hash/ Token ID"
+            placeholder="{{ tokenDetail?.isNFTContract ? 'Filter Address/ TX Hash/ Token ID' : 'Search for Token Name or Address' }}"
             [(ngModel)]="searchTemp"
             [maxLength]="maxLengthSearch"
             name="search"
             (keyup.enter)="handleSearch()"
+            [disabled]="paramQuery?.length > 0"
             autocomplete="off" />
           <button type="submit" class="btn-search {{ searchTemp && searchTemp?.length > 0 ? 'd-none' : '' }}">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
-            class="cursor-pointer btn-reset {{ !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : '' }}"
+            class="cursor-pointer btn-reset {{
+              !searchTemp || (searchTemp && searchTemp.length === 0) ? 'd-none' : ''
+            }}"
             (click)="resetSearch()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
@@ -76,12 +83,14 @@
   <div class="mt-4 mt-lg-3">
     <app-token-transfers-tab
       *ngIf="countCurrent === ''"
-      [type]="'TABLE_TOKEN'"
+      [isNFTContract]="tokenDetail?.isNFTContract"
       [keyWord]="textSearch"
+      [contractAddress]="contractAddress"
+      [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"></app-token-transfers-tab>
-    <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch"></app-token-holders-tab>
+    <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch" [isNFTContract]="tokenDetail?.isNFTContract" [contractAddress]="contractAddress"></app-token-holders-tab>
     <app-token-inventory-tab *ngIf="countCurrent === tokenTab.Inventory"></app-token-inventory-tab>
     <app-token-info-tab *ngIf="countCurrent === tokenTab.Info"></app-token-info-tab>
-    <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract"></app-token-contract-tab>
+    <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract" [contractAddress]="contractAddress"></app-token-contract-tab>
   </div>
 </section>

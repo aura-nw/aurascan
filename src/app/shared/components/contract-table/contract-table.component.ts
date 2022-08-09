@@ -104,8 +104,9 @@ export class ContractTableComponent implements OnInit, OnChanges {
       symbol: this.denom,
       tokenAddress: this.contractInfo?.contractsAddress,
       tx_hash: data?.txHash || '-',
-      gas_used: data.gas_used,
-      gas_wanted: data.gas_wanted,
+      gas_used: data?.gas_used,
+      gas_wanted: data?.gas_wanted,
+      nftDetail: undefined
     };
   }
 

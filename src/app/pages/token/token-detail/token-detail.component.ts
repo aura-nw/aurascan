@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { TokenType } from 'src/app/core/constants/token.enum';
-import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
-import { CodeTransaction } from '../../../../app/core/constants/transaction.enum';
+import { ResponseDto } from 'src/app/core/models/common.model';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-detail',
@@ -10,28 +11,28 @@ import { CodeTransaction } from '../../../../app/core/constants/transaction.enum
   styleUrls: ['./token-detail.component.scss'],
 })
 export class TokenDetailComponent implements OnInit {
-  countCurrent: string = '';
-  token: string = '';
   loading = true;
-  typeTransaction = TYPE_TRANSACTION;
-  textSearch: string = '';
-  codeTransaction = CodeTransaction;
-  tokenName = 'AuraDiamon';
-  isNFTContract = false;
-  //change type of Token
-  tokenType = TokenType.Token;
+  contractAddress = '';
+  tokenDetail: any;
 
-  constructor(private router: ActivatedRoute) {}
+  constructor(private router: ActivatedRoute, private tokenService: TokenService) {}
 
   ngOnInit(): void {
-    //set temp type token
-    this.router.queryParams.subscribe((params) => {
-      this.tokenType = params?.tokenType || TokenType.Token;
-    });
-
-    if (this.tokenType === TokenType.NFT) {
-      this.isNFTContract = true;
-    }
+    this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    this.getTokenDetail();
   }
+
   searchTokenTable(): void {}
+
+  getTokenDetail(): void {
+    this.loading = true;
+
+    this.tokenService.getTokenCW20Detail(this.contractAddress).subscribe((res: ResponseDto) => {
+      this.tokenDetail = res.data;
+      if (this.tokenDetail.type === ContractRegisterType.CW721) {
+        this.tokenDetail.isNFTContract = true;
+      }
+    });
+    this.loading = false;
+  }
 }

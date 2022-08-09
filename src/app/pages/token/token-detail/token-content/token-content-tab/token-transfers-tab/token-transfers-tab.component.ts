@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ADDRESS_PREFIX, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../../../../../core/constants/transaction.enum';
+import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
@@ -12,7 +16,7 @@ import { Globals } from '../../../../../../global/global';
 
 interface CustomPageEvent {
   next: number;
-  type: string;
+  isNFTContract: boolean;
 }
 
 @Component({
@@ -21,21 +25,32 @@ interface CustomPageEvent {
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
 export class TokenTransfersTabComponent implements OnInit, OnChanges {
-  @Input() type: 'TABLE_TOKEN' | 'TABLE_ADDRESS';
+  @Input() isNFTContract: boolean;
+  @Input() contractAddress: string;
   @Input() keyWord = '';
-  tokenDataList: any[];
-  length: number;
+  @Input() isSearchAddress: boolean;
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() resultLength = new EventEmitter<any>();
 
-  tokenTransferTemplates: Array<TableTemplate> = [
+  noneNFTTemplates: Array<TableTemplate> = [
     { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'amount', headerCellDef: 'Amount', isShort: true },
+    { matColumnDef: 'amountToken', headerCellDef: 'Amount', isShort: true },
+  ];
+
+  NFTTemplates: Array<TableTemplate> = [
+    { matColumnDef: 'action', headerCellDef: '' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
+    { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
+    { matColumnDef: 'from_address', headerCellDef: 'From' },
+    { matColumnDef: 'to_address', headerCellDef: 'To' },
+    { matColumnDef: 'token_id', headerCellDef: 'TokenID' },
+    { matColumnDef: 'details', headerCellDef: 'Details' },
   ];
 
   displayedColumns: string[];
@@ -43,79 +58,101 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   loading = true;
-  token: string = '';
   typeTransaction = TYPE_TRANSACTION;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
-  tokenType = 'Aura';
-  tokenAddress = '0xb8c77482e45f1f44de1745f52c74426c631bdd52';
-  isSearchAddress = false;
+  modeExecuteTransaction = ModeExecuteTransaction;
 
-  constructor(public global: Globals, public commonService: CommonService, private tokenService: TokenService) {}
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+
+  constructor(
+    public global: Globals,
+    public commonService: CommonService,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.keyWord = params?.a || '';
+    });
+
     this.getDataTable();
-    this.template = this.getTemplate(this.type);
-    this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
+    this.template = this.getTemplate();
+    this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.tokenDataList) {
-      this.isSearchAddress = false;
-
-      const filterData = this.tokenDataList.filter(
-        (data) =>
-          data.tx_hash.includes(this.keyWord) ||
-          data.from_address.includes(this.keyWord) ||
-          data.to_address.includes(this.keyWord),
-      );
-      if (filterData.length > 0) {
-        this.pageData.length = filterData.length;
-        if (this.keyWord?.length >= 43 && this.keyWord?.startsWith(ADDRESS_PREFIX)) {
-          this.isSearchAddress = true;
-        }
-        this.dataSource = new MatTableDataSource<any>(filterData);
-      }
-      this.resultLength.emit(filterData.length);
+    if (this.keyWord.length > 0) {
+      this.getListTransactionToken(this.keyWord);
     }
   }
 
   getDataTable(): void {
-    this.tokenService.getListTokenTransfer(this.token).subscribe((res) => {
-      this.loading = true;
-      if (res && res.length > 0) {
-        this.tokenDataList = [...res];
-        this.tokenDataList.forEach((token) => {
-          token.status = StatusTransaction.Fail;
-          if (token?.code == CodeTransaction.Success) {
-            token.status = StatusTransaction.Success;
-          }
-          token.price = token.amount * 1;
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === token.type.toLowerCase());
-          token.type = typeTrans?.value;
-        });
+    this.loading = true;
+    this.getListTransactionToken();
+  }
 
-        this.dataSource = new MatTableDataSource(this.tokenDataList);
-        this.pageData.length = res.length;
+  getListTransactionToken(dataSearch = '') {
+    let filterData = {};
+    filterData['keyWord'] = this.keyWord || dataSearch;
+    if (
+      filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
+      filterData['keyWord']?.startsWith(this.prefixAdd)
+    ) {
+      filterData['isSearchWallet'] = true;
+    }
+    forkJoin({
+      lstData: this.tokenService.getListTokenTransfer(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+        'from',
+      ),
+      listExtend: this.tokenService.getListTokenTransfer(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+        'to',
+      ),
+    }).subscribe((res) => {
+      if (res) {
+        let data = res.lstData?.data?.transactions;
+
+        //add list search address if filter with address
+        if (filterData['isSearchWallet']) {
+          let temp = data.concat(res.listExtend?.data?.transactions);
+          data = temp.sort((a, b) => {
+            return this.compare(a.tx_response?.timestamp, b.tx_response?.timestamp, false);
+          });
+        }
+
+        data.forEach((trans) => {
+          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+          this.dataSource.data = data;
+          this.pageData.length = data?.length;
+        });
       }
       this.loading = false;
     });
   }
 
-  getTemplate(type: 'TABLE_TOKEN' | 'TABLE_ADDRESS'): Array<TableTemplate> {
-    switch (type) {
-      case 'TABLE_TOKEN':
-        return this.tokenTransferTemplates;
-      case 'TABLE_ADDRESS':
-      // return this.depositorsTemplates;
-      default:
-        return [];
-    }
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  getTemplate(): Array<TableTemplate> {
+    return this.isNFTContract ? this.NFTTemplates : this.noneNFTTemplates;
   }
 
   shortenAddress(address: string): string {
@@ -132,19 +169,9 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     if (next) {
       this.loadMore.emit({
         next: 1,
-        type: this.type,
+        isNFTContract: this.isNFTContract,
       });
     }
-  }
-
-  getListData(): any[] {
-    if (!(this.dataSource?.paginator && this.dataSource?.data)) {
-      return [];
-    }
-    return this.dataSource.data.slice(
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
-      this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
-    );
   }
 
   paginatorEmit(event): void {
@@ -153,5 +180,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   getTokenDetail(data: any): void {
     this.tokenDetail = data;
+    this.tokenDetail.gasPrice = this.tokenDetail?.fee / this.tokenDetail?.tx_response?.gas_used;
+    this.tokenDetail.gasPriceU = this.tokenDetail.gasPrice * Math.pow(10, 6);
   }
 }

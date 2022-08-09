@@ -1,189 +1,231 @@
-<div class="col-12 mb-4 mb-lg-3">
-  <span class="small-body text--light-gray">A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : ''  }} found</span>
-</div>
+<ng-container *ngIf="!loading">
+  <div class="col-12 mb-4 mb-lg-3">
+    <span class="small-body text--light-gray"
+      >A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }} found</span
+    >
+  </div>
+  <div class="transfer-table-container aura-table-contain table-responsive">
+    <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+      <ng-container>
+        <table mat-table [dataSource]="dataSource" class="aura-table">
+          <ng-container *ngFor="let template of template; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'type'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'tx_hash'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-17">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-5">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'from_address'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'details'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef class="col-per-13">
+                  <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
 
-<div class="transfer-table-container aura-table-contain table-responsive">
-  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-    <ng-container>
-      <table mat-table [dataSource]="dataSource" class="aura-table">
-        <ng-container *ngFor="let template of template; index as i">
-          <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
-            <ng-container *ngSwitchCase="'type'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-15">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-              </th>
-            </ng-container>
-            <ng-container *ngSwitchCase="'tx_hash'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-17">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-              </th>
-            </ng-container>
-            <ng-container *ngSwitchCase="'action'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-5">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-              </th>
-            </ng-container>
-            <ng-container *ngSwitchCase="'from_address'">
-              <th mat-header-cell *matHeaderCellDef class="col-per-25">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-              </th>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <th mat-header-cell *matHeaderCellDef class="col-per-13">
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-              </th>
-            </ng-container>
-
-            <td mat-cell *matCellDef="let data">
-              <div [classList]="[template.cssClass]">
-                <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
-                  <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                    {{
-                      (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef]) ||
-                        '-'
-                    }}
-                  </a>
-                </ng-container>
-                <ng-container *ngIf="template.isUrl && template.isShort">
-                  <a
-                    [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                    [class.disabled-link]="!data[template.matColumnDef]">
-                    {{ shortenAddress(data[template.matColumnDef]) || '-' }}
-                  </a>
-                </ng-container>
-                <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
-                  <ng-container [ngSwitch]="template.matColumnDef">
-                    <ng-container *ngSwitchCase="'amount'">
-                      {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'timestamp'">
-                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'type'">
-                      <div class="aura-status text-capitalize">
-                        <span class="status">{{ data[template.matColumnDef] }}</span>
-                      </div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'tx_hash'">
-                      <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
-                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                      </a>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'from_address'">
-                      <div class="d-flex align-items-center">
-                        <a class="text--green txt-from-address content-transfer" [routerLink]="['/account', data.from_address]">
-                          {{ data['from_address'] | cutStringPipe: 8:8 }}
+              <td mat-cell *matCellDef="let data">
+                <div [classList]="[template.cssClass]">
+                  <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
+                    <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
+                      {{
+                        (template.isShort
+                          ? shortenAddress(data[template.matColumnDef])
+                          : data[template.matColumnDef]) || '-'
+                      }}
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="template.isUrl && template.isShort">
+                    <a
+                      [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                      [class.disabled-link]="!data[template.matColumnDef]">
+                      {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
+                    <ng-container [ngSwitch]="template.matColumnDef">
+                      <ng-container *ngSwitchCase="'amountToken'">
+                        {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'timestamp'">
+                        {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'type'">
+                        <div class="aura-status text-capitalize">
+                          <span class="status">{{ data[template.matColumnDef] }}</span>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'tx_hash'">
+                        <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
-                        <ng-container *ngIf="!isSearchAddress">
-                          <img
-                            [src]="'assets/images/icons/arrow-right.png' | imageS3"
-                            width="14"
-                            height="9"
-                            class="ml-8 ml-lg-15" />
-                        </ng-container>
-                        <ng-container *ngIf="isSearchAddress">
-                          <div class="box-token-transfer">
-                            <span
-                              class="ml-5 token-transfer-status d-flex"
-                              [ngClass]="{ 'status-out': data.from_address === keyWord }">
-                              <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
-                              <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
-                            </span>
-                          </div>
-                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'from_address'">
+                        <div class="d-flex align-items-center">
+                          <a
+                            class="text--green txt-from-address content-transfer"
+                            href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                          </a>
+                          <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
+                            data[template.matColumnDef] | cutStringPipe: 8:8
+                          }}</span>
+                          <ng-container *ngIf="!isSearchAddress">
+                            <img
+                              [src]="'assets/images/icons/arrow-right.png' | imageS3"
+                              width="14"
+                              height="9"
+                              class="ml-4 ml-lg-0" />
+                          </ng-container>
+                          <ng-container *ngIf="isSearchAddress">
+                            <div class="box-token-transfer">
+                              <span
+                                class="token-transfer-status d-flex"
+                                [ngClass]="{ 'status-out': data.from_address === keyWord }">
+                                <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
+                                <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
+                              </span>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'to_address'">
+                        <a
+                          class="text--green"
+                          href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                          *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
+                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                        </a>
+                        <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
+                          data[template.matColumnDef] | cutStringPipe: 8:8
+                        }}</span>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'details'">
+                        <a
+                          class="button button-chart button-outline button-outline__in-card px-2 button-view-nft"
+                          [routerLink]="['/tokens/token', contractAddress, data.token_id]">
+                          <span class="text-gradient">View NFT</span>
+                        </a>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'token_id'">
+                        <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}">
+                          {{ data[template.matColumnDef] }}
+                        </a>
+                      </ng-container>
+                      <div *ngSwitchCase="'action'">
+                        <button
+                          mat-icon-button
+                          aria-label="Example icon-button with a menu"
+                          placement="right"
+                          (click)="getTokenDetail(data)"
+                          [ngbPopover]="popContent"
+                          popoverClass="custom-popover token-popover">
+                          <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
+                        </button>
                       </div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="'to_address'">
-                      <a class="text--green" [routerLink]="['/account', data.to_address]">
-                        {{ data['to_address'] | cutStringPipe: 8:8 }}
-                      </a>
-                    </ng-container>
-                    <div *ngSwitchCase="'action'">
-                      <button
-                        mat-icon-button
-                        aria-label="Example icon-button with a menu"
-                        placement="right"
-                        (click)="getTokenDetail(data)"
-                        [ngbPopover]="popContent"
-                        popoverClass="custom-popover token-popover">
-                        <img
-                          [src]="'assets/images/icons/token-detail.png' | imageS3"
-                          alt=""
-                          width="16"
-                          height="16" />
-                      </button>
-                    </div>
-                    <ng-container *ngSwitchDefault>
-                      {{ data[template.matColumnDef] }}
+                      <ng-container *ngSwitchDefault>
+                        {{ data[template.matColumnDef] }}
+                      </ng-container>
                     </ng-container>
                   </ng-container>
-                </ng-container>
-              </div>
-            </td>
+                </div>
+              </td>
+            </ng-container>
           </ng-container>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell g-no-data" colspan="9999">
-            {{ 'NO DATA' | translate }}
-          </td>
-        </tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              {{ 'NO DATA' | translate }}
+            </td>
+          </tr>
+        </table>
+      </ng-container>
     </ng-container>
-  </ng-container>
-  <app-paginator
-    [length]="dataSource?.data?.length"
-    [pageSize]="pageData?.pageSize"
-    (paginator)="paginatorEmit($event)"
-    (pageEvent)="pageEvent($event)"></app-paginator>
-  <ng-template #noValues>
-    <app-table-no-data></app-table-no-data>
-  </ng-template>
+    <app-paginator
+      [length]="dataSource?.data?.length"
+      [pageSize]="pageData?.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="pageEvent($event)"></app-paginator>
+    <ng-template #noValues>
+      <app-table-no-data></app-table-no-data>
+    </ng-template>
+  </div>
+</ng-container>
+
+<div *ngIf="loading">
+  <app-loading-sprint></app-loading-sprint>
 </div>
 
 <ng-template #popContent>
   <div class="text--white">
     <span class="sub-text sub-text-mob">Additional info</span><br />
     Status:<br />
-    <img
-      [src]="
-        tokenDetail?.code == codeTransaction.Success
-          ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
-          : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-      "
-      alt="" />
-    {{ tokenDetail?.status }} (504 Block Confirmations)
+    <div
+      [class.text--active]="tokenDetail.tx_response?.code == codeTransaction.Success"
+      [class.text--danger]="tokenDetail.tx_response?.code != codeTransaction.Success">
+      <img
+        width="16px"
+        alt="{{ tokenDetail.tx_response?.code }}"
+        [src]="
+          tokenDetail.tx_response?.code == codeTransaction.Success
+            ? ('assets/icons/icons-svg/color/check-circle-2.svg' | imageS3)
+            : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
+        " />
+      {{ tokenDetail?.status }}
+    </div>
     <hr />
     Token Transfer:<br />
     {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
       tokenDetail?.price | number: global.formatNumber2Decimal
-    }}) <a class="text--green" [routerLink]="['/tokens/token', tokenAddress]">{{ tokenType }}</a
+    }}) <a class="text--green" [routerLink]="['/tokens/token', contractAddress]">{{ denom }}</a
     ><br />
     <div>
       <span class="text--light-gray mr-1">From</span>
-      <a class="text--green" [routerLink]="['/account', tokenDetail?.from_address]">
-        {{ tokenDetail?.from_address }}
+      <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ tokenDetail['from_address'] }}">
+        {{ tokenDetail?.from_address || '-' | cutStringPipe: 8:8 }}
       </a>
       <br class="d-sm-none" />
       <span class="text--light-gray mr-1 ml-sm-1">To</span>
-      <a class="text--green" [routerLink]="['/account', tokenDetail?.to_address]">
-        {{ tokenDetail?.to_address }}
+      <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ tokenDetail['to_address'] }}">
+        {{ tokenDetail?.to_address || '-' | cutStringPipe: 8:8 }}
       </a>
     </div>
     <hr />
     Transaction Fee:<br />
-    0.00075177042 Ether ($1.52)
+    {{ tokenDetail?.fee }} {{ denom }} ($0.00)
     <hr />
     <div>
       Gas info:<br />
-      47,566 Gas Used From 78,549 <br class="d-sm-none" />Gas Limit @ 0.00000001580573182 <br class="d-sm-none" />
-      Ether (15.807219472 Gwei)
+      {{ tokenDetail?.tx_response?.gas_used | mask: 'separator' }} Gas Used From
+      {{ tokenDetail?.tx_response?.gas_wanted | mask: 'separator' }} <br class="d-sm-none" />Gas Limit @<br />
+      {{ tokenDetail?.gasPrice }} {{ denom }} ({{ tokenDetail?.gasPriceU }} {{ coinMinimalDenom }})
       <hr />
-      Nonce:<br />
-      29 (in the position 92)
     </div>
-    <a class="fw-normal text--green body-mob" [routerLink]="['/transaction', tokenDetail?.tx_hash]">See more details</a>
+    <a
+      class="small-text text--green cursor-pointer d-flex align-items-center gap-2"
+      [routerLink]="['/transaction', tokenDetail?.tx_hash]"
+      target="_blank">
+      See more details <img class="d-inline" [src]="'assets/icons/icons-svg/color/share.svg' | imageS3" alt="share" />
+    </a>
   </div>
 </ng-template>

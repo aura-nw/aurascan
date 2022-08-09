@@ -1,19 +1,45 @@
 <div class="card box-token-info">
   <div class="">
-    <div class="table-responsive">
+    <div class="">
       <table class="aura-basic-table w-100">
         <tr>
           <td colspan="2">
             <div class="d-flex justify-content-between align-items-center">
               <div class="body">
                 <span class="fw-semibold text--white">Profile Summary </span>
-                <a class="text--green" href="javascript:void(0)">[Edit]</a>
+                <!-- <a class="text--green" href="javascript:void(0)">[Edit]</a> -->
               </div>
-              <div>
-                <button class="button button-chart button-outline button-outline__in-card -small">
-                  <span class="mr-2 small-text">More</span>
+              <div class="dropdown aura-dropdown">
+                <!-- <button
+                  class="button button-chart button-outline button-outline__in-card -small"
+                  type="button"
+                  id="token-summary-more"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <span class="text-white small-text mr-4">More</span>
                   <img [src]="'assets/images/icons/arrow-move-down.svg' | imageS3" alt="" width="24px" />
-                </button>
+                </button> -->
+                <ul
+                  class="dropdown-menu aura-dropdown-menu token-summary-more"
+                  *ngIf="!tokenDetail.isNFTContract"
+                  aria-labelledby="token-summary-more">
+                  <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+                  <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+                  <!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                </ul>
+                <ul
+                  class="dropdown-menu aura-dropdown-menu token-summary-more"
+                  *ngIf="tokenDetail.isNFTContract"
+                  aria-labelledby="token-summary-more">
+                  <li class="dropdown-item cursor-pointer">Add token to Web3</li>
+                  <li class="dropdown-item cursor-pointer">Update Token Info</li>
+                  <li class="dropdown-item cursor-pointer">Update Name Tag</li>
+                  <!--                  <li class="dropdown-item cursor-pointer">Submit Burn Details</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Report/ Flag Address</li>-->
+                  <!--                  <li class="dropdown-item cursor-pointer">Add to Ignore List</li>-->
+                </ul>
               </div>
             </div>
           </td>
@@ -24,19 +50,19 @@
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Contract:</div>
               <div class="break-word">
-                <a class="text--green" routerLink="/blocks/id/0xB8c77482e45F1F44dE1745F52C74426C631bDD52"
-                  >0xB8c77482e45F1F44dE1745F52C74426C631bDD52</a
-                >
+                <a class="text--green" [routerLink]="['/contracts', tokenDetail.contract_address]">{{
+                  tokenDetail.contract_address
+                }}</a>
               </div>
             </div>
           </td>
         </tr>
 
-        <tr *ngIf="!isNFTContract">
+        <tr *ngIf="!tokenDetail.isNFTContract">
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Decimals:</div>
-              <div>6</div>
+              <div>{{ tokenDetail.decimals }}</div>
             </div>
           </td>
         </tr>
@@ -45,7 +71,10 @@
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Official Site:</div>
-              <div><a class="text--green" href="https://aura.network">https://aura.network</a></div>
+              <div>
+                -
+                <!-- <a class="text--green" href="javascript:void(0)"></a> -->
+              </div>
             </div>
           </td>
         </tr>
@@ -55,7 +84,8 @@
             <div class="d-flex align-items-center py-2">
               <div class="first-col">Social Profiles:</div>
               <div class="d-flex social-group">
-                <a
+                -
+                <!-- <a
                   href="https://github.com/aura-nw"
                   target="_blank"
                   class="d-flex align-items-center justify-content-center body">
@@ -84,13 +114,13 @@
                   target="_blank"
                   class="d-flex align-items-center justify-content-center body">
                   <i class="ml-3 icon icon-email"></i>
-                </a>
+                </a> -->
               </div>
             </div>
           </td>
         </tr>
 
-        <tr *ngIf="isNFTContract">
+        <tr *ngIf="tokenDetail.isNFTContract">
           <td colspan="2"></td>
         </tr>
       </table>

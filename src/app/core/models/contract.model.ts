@@ -64,6 +64,7 @@ export interface IContractPopoverData {
   fee: number;
   gas_wanted?: string;
   gas_used?: string;
+  nftDetail: any;
 }
 
 

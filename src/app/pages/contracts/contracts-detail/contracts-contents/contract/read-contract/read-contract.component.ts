@@ -23,7 +23,9 @@ export class ReadContractComponent implements OnInit {
   constructor(public walletService: WalletService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
-    this.jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
+    try {
+      this.jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
+    } catch {}
     //auto execute query without params
     this.handleQueryContract();
   }
@@ -62,7 +64,7 @@ export class ReadContractComponent implements OnInit {
     this.dataResponse = null;
     let err = {};
     let objReadContract = {};
-    const contractTemp = this.jsonReadContract.oneOf.find((contract) => contract.required[0] === name);
+    const contractTemp = this.jsonReadContract?.oneOf.find((contract) => contract.required[0] === name);
 
     //Check has required property, else execute query without params
     if (contractTemp.properties[name].hasOwnProperty('required')) {
@@ -120,7 +122,7 @@ export class ReadContractComponent implements OnInit {
   }
 
   handleQueryContract(): void {
-    this.jsonReadContract.oneOf.forEach((contract) => {
+    this.jsonReadContract?.oneOf.forEach((contract) => {
       let key = Object.keys(contract.properties)[0];
       let queryData = {};
       if (!contract.properties[key].hasOwnProperty('required')) {
