@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { LCD_COSMOS } from '../constants/url.constant';
-import axios from 'axios';
 import { INDEXER_URL } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +43,7 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsListUndelegateWallet(address: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators/${address}/unbonding-delegations`);
+    return this.http.get<any>(`${INDEXER_URL}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`);
   }
 
   // validatorsListRedelegate(delegatorAddress: string, operatorAddress: string): Observable<any> {
