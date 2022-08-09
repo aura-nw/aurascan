@@ -176,6 +176,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
+  TABS = ['ASSETS','TRANSACTIONS','STAKE']
+  currentTab = 'ASSETS'
+
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
@@ -232,22 +235,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  copyMessage(val: string) {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
     document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.isCopy = true;
-    setTimeout(() => {
-      this.isCopy = false;
-    }, 1000);
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function () {
+      document.getElementById('currentAddress').click();
+    }, 800);
   }
 
   changePage(page: any): void {

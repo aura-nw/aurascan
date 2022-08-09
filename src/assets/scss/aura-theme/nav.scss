@@ -3,7 +3,7 @@
         .nav-link {
             &::after {
                 color: var(--aura-white);
-                background: var(--aura-white);
+                background: var(--aura-gray-6);
             }
 
             &.active {
