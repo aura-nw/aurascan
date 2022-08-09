@@ -26,7 +26,7 @@
               *ngFor="let item of readContract?.properties[readContract.required[0]]?.required; index as idx">
               <p
                 class="px-0"
-                [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
+                [class.input-require]="readContract?.properties[readContract?.required[0]].required?.includes(item)">
                 {{ item }} ({{
                   readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
                     readContract?.properties[readContract?.required[0]]?.properties[item]?.$ref ||
@@ -40,7 +40,7 @@
                   errorInput &&
                   currentFrom === i
                 "
-                [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')"
+                [class.input-require]="readContract?.properties[readContract?.required[0]].required?.includes(item)"
                 class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
                 [type]="
                   readContract?.properties[readContract?.required[0]]?.properties[item]?.type === 'integer'

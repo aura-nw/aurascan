@@ -44,7 +44,7 @@
                 <p
                   class="px-0 text--greyscale-1"
                   [class.input-require]="
-                    writeContract?.properties[writeContract?.required[0]]?.hasOwnProperty('required')
+                    writeContract?.properties[writeContract?.required[0]].required?.includes(item)
                   ">
                   {{ item }} ({{
                     writeContract?.properties[writeContract?.required[0]]?.properties[item]?.type
@@ -54,9 +54,7 @@
                 </p>
                 <input
                   class="form-check-input {{ writeContract?.required }} {{ item }} col-12 mb-4"
-                  [class.input-require]="
-                    writeContract?.properties[writeContract?.required[0]]?.hasOwnProperty('required')
-                  "
+                  [class.input-require]="writeContract?.properties[writeContract?.required[0]].required?.includes(item)"
                   [type]="
                     writeContract?.properties[writeContract?.required[0]]?.properties[item]?.type === 'integer'
                       ? 'number'
