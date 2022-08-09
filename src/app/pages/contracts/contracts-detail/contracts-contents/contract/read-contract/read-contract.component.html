@@ -23,7 +23,7 @@
           </mat-expansion-panel-header>
           <div class="d-flex row p-3">
             <ng-container
-              *ngFor="let item of readContract?.properties[readContract.required[0]]?.required; index as idx">
+              *ngFor="let item of objectKeys(readContract?.properties[readContract?.required[0]]?.properties); index as idx">
               <p
                 class="px-0"
                 [class.input-require]="readContract?.properties[readContract?.required[0]].required?.includes(item)">
@@ -56,7 +56,7 @@
             </ng-container>
             <div class="w-100 mb-2 px-0">
               <button
-                *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')"
+                *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('properties')"
                 class="button button-chart button-outline button-outline__in-card body btn-contract"
                 [disabled]="currentFrom === i && (errorInput || isLoading)"
                 type="button"
@@ -71,7 +71,7 @@
               </button>
             </div>
             <div class="col-12">
-              <ng-container *ngIf="!readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
+              <ng-container *ngIf="!readContract?.properties[readContract?.required[0]]?.hasOwnProperty('properties')">
                 <div class="mb-2">
                   {{ readContract.required }}
                   <span class="ml-1 font-italic text--light-gray small-body">{{
@@ -88,7 +88,7 @@
                   </div>
                 </div>
               </ng-container>
-              <ng-container *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
+              <ng-container *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('properties')">
                 <p>
                   {{ readContract?.required }}
                   <span class="ml-1 font-italic text--light-gray small-body">{{ readContract?.type }}</span>
