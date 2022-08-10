@@ -1,0 +1,25 @@
+.contract-address {
+  width: 125px;
+}
+.aura__change {
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  font-weight: 500;
+
+  &--desc,&--asc {
+    &::after {
+      top: -3px;
+      left: 0;
+      transform: unset;
+    }
+  }
+}
+
+@media (max-width: 991.99px) {
+  .aura-table th.mat-header-cell {
+    min-width: 150px;
+  }
+  .aura-table th.mat-header-cell:nth-child(3) {
+    min-width: 200px;
+  }
+}
