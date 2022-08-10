@@ -232,7 +232,7 @@ body {
 
 .table-mobile {
     &__item {
-        background: #38383D;
+        background: var(--aura-gray-9);
         border-radius: 8px;
         padding: 0 12px;
         margin: 8px 0px;
@@ -241,7 +241,7 @@ body {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            border-bottom: 1px solid #777E91;
+            border-bottom: 1px solid var(--aura-gray-8);
             padding: 12px 0px;
 
             &__title {
@@ -285,6 +285,10 @@ body {
                 flex-wrap: wrap-reverse;
             }
         }
+
+        .button-outline__in-card {
+            box-shadow: 2px 1000px 1px var(--aura-gray-9) inset !important;
+        }
     }
 }
 
@@ -325,7 +329,7 @@ body {
         background-color: #5EE6D0;
 
         span {
-            color: var(--aura-bg-contract);
+            color: var(--aura-black);
         }
     }
 

@@ -8,19 +8,19 @@
 .box-token-transfer {
   justify-content: center;
   min-width: 80px;
-  margin-left: 30px;
+  margin-right: 20px;
   display: flex;
   .token-transfer-status {
     display: inline-flex;
     align-items: center;
     padding: var(--spacer-2) var(--spacer-4);
-    background: rgba(84, 206, 140, 0.2);
-    color: var(--aura-green-3);
+    background-color: rgba(94, 230, 157, 0.2);
+    color: var(--aura-active);
     border-radius: 4px;
     width: auto;
     &.status-out {
-      background-color: rgba(213, 98, 94, 0.2);
-      color: var(--aura-red-3);
+      background-color: rgba(230, 94, 94, 0.2);
+      color: var(--aura-danger);
     }
   }
 }
@@ -41,6 +41,17 @@
         border-right-color: var(--aura-bg-form) !important;
       }
     }
+  }
+}
+
+.aura-status {
+  display: flex;
+  align-items: center;
+  .status {
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #7b7b7b33;
+    color: var(--aura-white);
   }
 }
 

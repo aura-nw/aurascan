@@ -141,7 +141,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
-        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList; index as idex">
+        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idex">
           <div class="card mb-0 h-100">
             <div class="card-body px-3 py-3">
               <div class="border-bottom-mobile d-flex justify-content-between pb-4">

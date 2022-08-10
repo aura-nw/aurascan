@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { first } from 'rxjs/operators';
 import { EnvironmentService } from "src/app/core/data-services/environment.service";
-import { NETWORK, VALIDATOR_ADDRESS_PREFIX } from '../../../app/core/constants/common.constant';
+import {NETWORK, VALIDATOR_ADDRESS_PREFIX} from '../../../app/core/constants/common.constant';
 import { CommonService } from '../../../app/core/services/common.service';
 import { ResponseDto } from '../../core/models/common.model';
 import { AuthenticationService } from '../../core/services/auth.service';

@@ -11,14 +11,14 @@
      bottom: 0;
      right: 0;
      width: 1px;
-     background-color: var(--aura-gray-10);
+     background-color: var(--aura-dark-gray);
     }
   }
   table.aura-basic-table {
     min-height: 280px;
     tr,
     td {
-      color: var(--aura-gray-1);
+      color: var(--aura-contract);
       height: 56px;
       padding: 0px var(--spacer-4);
     }

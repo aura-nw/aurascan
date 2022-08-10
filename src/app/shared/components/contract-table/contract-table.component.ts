@@ -95,7 +95,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   getPopoverData(data): IContractPopoverData {
     return {
       amount: data?.value || 0,
-      code: 0,
+      code: 0, nftDetail: undefined,
       fee: data?.fee || 0,
       from_address: data?.from || '-',
       to_address: data?.to || '-',
@@ -105,7 +105,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       tokenAddress: this.contractInfo?.contractsAddress,
       tx_hash: data?.txHash || '-',
       gas_used: data.gas_used,
-      gas_wanted: data.gas_wanted,
+      gas_wanted: data.gas_wanted
     };
   }
 

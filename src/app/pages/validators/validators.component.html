@@ -12,52 +12,78 @@
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
   <div class="card box-validators">
-    <div class="card-header card-header-dark d-flex align-items-center justify-content-between header-mob">
-      <div class="sub-text text--white" [class.fw-500]="breakpoint.value.matches">Validators</div>
-      <div class="d-flex align-item-center">
-        <form class="aura-form single-input-field search-form-validators mr-6" *ngIf="!breakpoint.value.matches">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search validator"
-              [(ngModel)]="textSearch"
-              (ngModelChange)="searchValidator()"
-              name="search"
-              autocomplete="off" />
-            <button
-              type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-              (click)="searchValidator()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-            <button
-              type="reset"
-              class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-              (click)="textSearch = ''; searchValidator()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-          </div>
-        </form>
-        <div class="button-switch-stage">
+    <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
+      <h2 class="h3-mob mb-0 text--white">Validators</h2>
+      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search validator"
+            [(ngModel)]="textSearch"
+            (ngModelChange)="searchValidator()"
+            name="search"
+            autocomplete="off" />
           <button
-            [class.active]="typeValidator === statusValidator.Active"
-            (click)="changeType(statusValidator.Active)">
-            Active
+            type="submit"
+            class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+            (click)="searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
-            [class.active]="typeValidator === statusValidator.Inactive"
-            (click)="changeType(statusValidator.Inactive)">
-            Inactive
+            type="reset"
+            class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+            (click)="textSearch = ''; searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
-      </div>
+      </form>
     </div>
 
-    <div class="card-body pt-4">
+    <div class="card-body pt-0">
+      <!-- tab -->
+      <ul ngbNav
+          #customNav="ngbNav"
+          [activeId]="0"
+          class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
+          [class.mobile-tab]="breakpoint.value.matches">
+        <ng-container *ngFor="let tab of TABS; index as index">
+          <li [ngbNavItem]="index">
+            <a ngbNavLink (click)="changeType(tab.key)">
+              <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">{{ tab.label }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+      <!-- Search mobile -->
+      <form class="aura-form single-input-field search-form-validators my-4" *ngIf="breakpoint.value.matches">
+        <div class="input-group">
+          <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search validator"
+                  [(ngModel)]="textSearch"
+                  (ngModelChange)="searchValidator()"
+                  name="search"
+                  autocomplete="off" />
+          <button
+                  type="submit"
+                  class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                  (click)="searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+          <button
+                  type="reset"
+                  class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                  (click)="textSearch = ''; searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+        </div>
+      </form>
+      <!-- validator -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <ng-container *ngIf="!breakpoint.value.matches">
-          <div class="table-responsive">
+          <div class="table-responsive mt-6">
             <table
               mat-table
               matSort
@@ -113,7 +139,7 @@
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4">
                           {{ data[template.matColumnDef] | number }}<br />
-                          <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
+                          <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] }}
@@ -208,50 +234,53 @@
                             </div>
                           </div>
                         </div>
-                        <span [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
+                        <h5 class="text--primary mb-0" [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
-                        </span>
+                        </h5>
                       </a>
-                    </div>
-                    <div class="sub-title small-body-mob fw-semibold">
-                      <span class="mr-2 text--white">
-                        {{ validator.power | number: globals.formatNumberOnlyDecimal }}</span
-                      >
-                      <span class="percent-vote text--light-gray">{{ validator['percent_power'] + '%' }}</span>
                     </div>
                   </div>
                   <div class="table-header__action">
                     <button
                       type="button"
-                      class="button button--sm button-pill  button-outline button-outline__in-card ml-auto"
+                      class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                       [disabled]="clicked"
                       *ngIf="validator['status'] === statusValidator.Active"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      <span class="text-gradient">Delegate</span>
+                      <span>Delegate</span>
                     </button>
                   </div>
                 </div>
-                <div class="table-body table-body__revert small-body-mob pb-0">
+                <div class="table-body body-01 pb-0">
                   <ng-container *ngFor="let template of templates; index as idx">
                     <div
                       class="table-body__item d-flex justify-content-between text--white mb-3"
                       *ngIf="!template?.desktopOnly">
+
                       <span>{{ template['headerCellDef'] }}</span>
 
-                      <span class="">
+                      <div class="body-01 text--gray-4 text-end">
                         <ng-container [ngSwitch]="template['headerCellDef']">
+                          <ng-container *ngSwitchCase="'Voting Power'">
+                            <h5 class="mb-1 text--gray-1">{{ validator.power | number: globals.formatNumberOnlyDecimal }}</h5>
+                            <div>{{ validator['percent_power'] + '%' }}</div>
+                          </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
-                            {{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                            <div class="text--gray-1">{{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}</div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
                             <ng-container *ngIf="validator['status'] === statusValidator.Active">
-                              {{ calculatorUpTime(validator['cons_address']) }}%
+                              <div class="text--gray-1">{{ calculatorUpTime(validator['cons_address']) }}%</div>
                             </ng-container>
-                            <ng-container *ngIf="validator['status'] !== statusValidator.Active"> 0.00% </ng-container>
+                            <ng-container *ngIf="validator['status'] !== statusValidator.Active">
+                              <div class="text--gray-1">0.00%</div>
+                            </ng-container>
                           </ng-container>
-                          <ng-container *ngSwitchDefault>{{ validator[template.matColumnDef] }}</ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <div class="text--gray-1">{{ validator[template.matColumnDef] }}</div>
+                          </ng-container>
                         </ng-container>
-                      </span>
+                      </div>
                     </div>
                   </ng-container>
                 </div>

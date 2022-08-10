@@ -38,7 +38,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
     { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly: true },
-    { matColumnDef: 'power', headerCellDef: 'Voting Power', desktopOnly: true },
+    { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
@@ -75,6 +75,16 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstUndelegate = [];
   numberCode = 0;
   arrBlocksMiss = [];
+  TABS = [
+    {
+      key: 3,
+      label: 'ACTIVE'
+    },
+    {
+      key: 2,
+      label: 'INACTIVE'
+    }
+  ]
 
   timerUnSub: Subscription;
   errorExceedAmount = false;

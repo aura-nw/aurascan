@@ -22,6 +22,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.component';
+import {  NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent],
@@ -42,6 +43,7 @@ import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.com
     LayoutModule,
     MatTooltipModule,
     LoadingImageModule,
+    NgbNavModule
   ],
   providers: [
     CommonService,

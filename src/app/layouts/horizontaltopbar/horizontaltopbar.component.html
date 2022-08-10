@@ -7,9 +7,6 @@
                     <a routerLink="/" class="logo logo-dark">
                         <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100">
                     </a>
-                    <a routerLink="/" class="logo logo-light">
-                        <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100">
-                    </a>
                 </div>
                 <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
 
@@ -70,7 +67,7 @@
         </form>
     </div>
 </header>
-<div class="topnav">
+<div class="topnav d-none d-lg-block">
     <div class="container-fluid">
         <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
             <div class="collapse navbar-collapse active" id="topnav-menu-content">
@@ -92,6 +89,7 @@
                                        *ngFor="let subMenu of item.subItems"
                                        [class.active]="subMenu.id === 1 && router.url.includes('/tokens') && !router.url.includes('/tokens-nft') && !router.url.includes('/token-nft') ||
                                                        subMenu.id === 2 && (router.url.includes('/tokens-nft') || router.url.includes('/token-nft'))">{{ subMenu.label }}</a>
+
                                 </span>
                             </a>
                         </li>

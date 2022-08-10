@@ -1,40 +1,38 @@
 <ng-container *ngIf="userAddress">
   <div class="card" *ngIf="arrayDelegate?.length > 0">
     <!-- heading -->
-    <div class="card-header title-small small-body-mob">
+    <div class="card-header card-header-gray title-small small-body-mob">
       <div class="row justify-content-between">
         <div class="col-12 col-lg-4">
-          <div class="mb-3 d-flex justify-content-between text--white">
-            <span [class.fw-semibold]="breakpoint.value.matches">Available Balance: </span>
-            <span>
-              <span [class.small-body]="breakpoint.value.matches">
+          <div class="mb-1 mb-lg-2 d-flex justify-content-between text--white">
+            <span class="body-02 body-01-mob text--gray-3">Available Balance: </span>
+            <h6 class="mb-0">
+              <span class="text--white">
                 {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
               </span>
               <span class="ml-1 text--primary">{{ denom }}</span>
-            </span>
+            </h6>
           </div>
-          <div class="mb-3 d-flex justify-content-between text--white">
-            <span [class.fw-semibold]="breakpoint.value.matches">Total Staked: </span>
-            <span>
-              <span [class.small-body]="breakpoint.value.matches">
+          <div class="mb-3 mb-lg-0 d-flex justify-content-between text--white">
+            <span class="body-02 body-01-mob text--gray-3">Total Staked: </span>
+            <h6 class="mb-0">
+              <span class="text--white">
                 {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
               </span>
               <span class="ml-1 text--primary">{{ denom }}</span>
-            </span>
+            </h6>
           </div>
         </div>
-        <div class="col-12 col-lg-8 mt-2">
-          <div class="d-flex justify-content-center justify-content-lg-end btn-claim">
+        <div class="col-12 col-lg-8 mt-1 mt-lg-0 d-flex align-items-center justify-content-center justify-content-lg-end">
             <button
-              class="button button-outline button--lg button-pill button-flat d-flex text--black"
+              class="button button-outline button--sm button-pill button-flat d-flex text--black fw-semibold"
               type="button"
               [disabled]="isDisableClaim || isLoading"
               (click)="viewDialog(true)">
               <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
-              <span class="body text--black">Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}</span>
+              <span class="text--black">Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}</span>
               <span class="ml-1 text--black">{{ denom }}</span>
             </button>
-          </div>
         </div>
       </div>
     </div>

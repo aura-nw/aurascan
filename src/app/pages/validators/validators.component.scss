@@ -19,17 +19,15 @@
 }
 
 form.search-form-validators {
+  width: 100%;
+  @media (min-width: 992px) {
+    width: 300px;
+  }
+  @media (min-width: 1200px) {
+    width: 500px;
+  }
   .input-group {
-    background-color: var(--aura-bg-form);
-    input.form-control {
-      width: 100%;
-      @media (min-width: 992px) {
-        width: 300px;
-      }
-      @media (min-width: 1200px) {
-        width: 500px;
-      }
-    }
+    background-color: var(--aura-black);
   }
 }
 
@@ -220,4 +218,8 @@ form.search-form-validators {
       border-radius: 0 !important;
     }
   }
+}
+.mat-tab-header-pagination.mat-tab-header-pagination-disabled,
+.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+  display: none !important;
 }

@@ -28,6 +28,9 @@
     background-color: var(--aura-gray-10);
     border-radius: 12px 12px 0 0 !important;
     border-bottom: none !important;
+    &-gray {
+        background-color: var(--aura-gray-9);
+    }
 }
 
 .card-header-tabs {
@@ -35,7 +38,7 @@
 }
 
 .card-body {
-    padding: var(--spacer-3) !important;
+    padding: var(--spacer-4) !important;
 }
 
 .card-footer {
@@ -72,7 +75,7 @@ body[data-layout-mode="dark"] {
 
     body[data-layout-mode="dark"] {
         .card-header.card-header-gray-des {
-            background-color: var(--aura-gray-10);
+            background-color: var(--aura-gray-9);
         }
     }
 }

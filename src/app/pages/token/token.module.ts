@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { AccountService } from 'src/app/core/services/account.service';
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { MaterialModule } from '../../../app/app.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
@@ -64,7 +66,8 @@ import { TokenRoutingModule } from './token-routing.module';
     NgbPopoverModule,
     CommonPipeModule,
     ContractPopoverModule,
+    NgxMaskModule
   ],
-  providers: [TokenService],
+  providers: [TokenService, AccountService],
 })
 export class TokenModule {}

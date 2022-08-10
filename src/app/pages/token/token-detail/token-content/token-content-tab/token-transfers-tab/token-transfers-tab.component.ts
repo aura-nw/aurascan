@@ -4,9 +4,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
-import { CodeTransaction } from '../../../../../../core/constants/transaction.enum';
+import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
@@ -72,11 +73,11 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(
-      public global: Globals,
-      public commonService: CommonService,
-      private tokenService: TokenService,
-      private environmentService: EnvironmentService,
-      private route: ActivatedRoute,
+    public global: Globals,
+    public commonService: CommonService,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -104,25 +105,25 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     let filterData = {};
     filterData['keyWord'] = this.keyWord || dataSearch;
     if (
-        filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
-        filterData['keyWord']?.startsWith(this.prefixAdd)
+      filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
+      filterData['keyWord']?.startsWith(this.prefixAdd)
     ) {
       filterData['isSearchWallet'] = true;
     }
     forkJoin({
       lstData: this.tokenService.getListTokenTransfer(
-          this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.contractAddress,
-          filterData,
-          'from',
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+        'from',
       ),
       listExtend: this.tokenService.getListTokenTransfer(
-          this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.contractAddress,
-          filterData,
-          'to',
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+        'to',
       ),
     }).subscribe((res) => {
       if (res) {
