@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -6,7 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
   templateUrl: './nft-list.component.html',
   styleUrls: ['./nft-list.component.scss'],
 })
-export class NftListComponent implements OnInit {
+export class NftListComponent implements OnInit, OnChanges {
   @Input() assetCW721: any[];
   searchValue = null;
   loading = true;
@@ -17,7 +17,6 @@ export class NftListComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    //this.getNftData();
     this.pageData = {
       length: 0,
       pageSize: 10,
