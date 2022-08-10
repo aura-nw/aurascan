@@ -161,6 +161,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
+  assetCW20: any[] = [];
+  assetCW721: any[] = [];
 
   // loading param check
   accDetailLoading = true;
@@ -176,8 +178,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
-  TABS = ['ASSETS','TRANSACTIONS','STAKE']
-  currentTab = 'ASSETS'
+  TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
+  currentTab = 'ASSETS';
 
   constructor(
     private transactionService: TransactionService,
@@ -207,6 +209,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.loadDataTemp();
         this.getAccountDetail();
         this.getListTransaction();
+        this.getAssetByOnwer();
       }
     });
   }
@@ -386,6 +389,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
           local.setItem('accountDetail', accountDetail);
         }
+      }
+    });
+  }
+
+  getAssetByOnwer(): void {
+    this.accountService.getAssetByOnwer(this.currentAddress).subscribe((res) => {
+      this.accDetailLoading = true;
+      if (res?.data?.assets?.CW20?.asset.length > 0) {
+        this.assetCW20 = res?.data?.assets?.CW20.asset;
+      }
+      if (res?.data?.assets?.CW721?.asset.length > 0) {
+        this.assetCW721 = res?.data?.assets?.CW721.asset;
       }
     });
   }

@@ -65,9 +65,9 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === 'ASSETS'">
       <!-- Coin & Token-->
-      <app-token-table></app-token-table>
+      <app-token-table [assetCW20]="assetCW20"></app-token-table>
       <!-- NFT -->
-      <app-nft-list></app-nft-list>
+      <app-nft-list [assetCW721]="assetCW721"></app-nft-list>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === 'TRANSACTIONS'">

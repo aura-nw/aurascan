@@ -1,18 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { IResponsesTemplates } from '../models/common.model';
-import { IWalletDetail } from '../models/wallet';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class AccountService extends CommonService {
+  chainInfo = this.environmentService.configValue.chain_info;
+
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
   getAccountDetail(account_id: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
+  }
+
+  getAssetByOnwer(address: string): Observable<any> {
+    return this.http.get<any>(
+      `${INDEXER_URL}/asset/getByOwner?chainid=${this.chainInfo.chainId}&owner=${address}&countTotal=true&reverse=false`,
+    );
   }
 }

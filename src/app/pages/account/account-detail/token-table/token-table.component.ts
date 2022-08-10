@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import {ResponseDto, TableTemplate} from "src/app/core/models/common.model";
-import {PageEvent} from "@angular/material/paginator";
-import {PAGE_EVENT} from "src/app/core/constants/common.constant";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatSort, Sort} from "@angular/material/sort";
-import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
-import {Globals} from "src/app/global/global";
+import { Component, Input, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-token-table',
   templateUrl: './token-table.component.html',
-  styleUrls: ['./token-table.component.scss']
+  styleUrls: ['./token-table.component.scss'],
 })
 export class TokenTableComponent implements OnInit {
+  @Input() assetCW20: any[];
   math = Math;
   textSearch = '';
   templates: Array<TableTemplate> = [
@@ -22,7 +23,7 @@ export class TokenTableComponent implements OnInit {
     { matColumnDef: 'amount', headerCellDef: 'amount' },
     { matColumnDef: 'price', headerCellDef: 'price' },
     { matColumnDef: 'chance', headerCellDef: 'chance' },
-    { matColumnDef: 'value', headerCellDef: 'value' }
+    { matColumnDef: 'value', headerCellDef: 'value' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
@@ -267,11 +268,9 @@ export class TokenTableComponent implements OnInit {
       value: '4.12 ',
       valueByToken: '0.14',
     },
-  ]
+  ];
 
-  constructor(
-      public global: Globals
-  ) { }
+  constructor(public global: Globals) {}
 
   ngOnInit(): void {
     this.getListToken();
@@ -287,9 +286,7 @@ export class TokenTableComponent implements OnInit {
     this.pageData.length = this.mockData.length;
   }
 
-  sortData(sort: Sort) {
-
-  }
+  sortData(sort: Sort) {}
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
   }
@@ -305,10 +302,9 @@ export class TokenTableComponent implements OnInit {
         keyword: this.textSearch,
       };
 
-
       let keyWord = this.textSearch.toLowerCase();
       this.filterSearchData = this.mockData.filter(
-          (data) => data.contractAddress.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
+        (data) => data.contractAddress.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
       );
     }
   }
