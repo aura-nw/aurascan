@@ -24,6 +24,10 @@ const routes: Routes = [
     component: TokenDetailComponent,
   },
   {
+    path: 'token-nft/:contractAddress',
+    component: TokenDetailComponent,
+  },
+  {
     path: 'address/:contractAddress',
     component: TokenDetailComponent,
   },
@@ -32,7 +36,7 @@ const routes: Routes = [
     component: TokenHoldingComponent,
   },
   {
-    path: 'token/:contractAddress/:nftId',
+    path: 'token-nft/:contractAddress/:nftId',
     component: NFTDetailComponent,
   },
 ];

@@ -10,7 +10,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { balanceOf } from '../../../../app/core/utils/common/parsing';
@@ -177,6 +176,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
+  TABS = ['ASSETS','TRANSACTIONS','STAKE']
+  currentTab = 'ASSETS'
+
   constructor(
     private transactionService: TransactionService,
     public commonService: CommonService,
@@ -233,22 +235,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  copyMessage(val: string) {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
     document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.isCopy = true;
-    setTimeout(() => {
-      this.isCopy = false;
-    }, 1000);
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function () {
+      document.getElementById('currentAddress').click();
+    }, 800);
   }
 
   changePage(page: any): void {
@@ -280,12 +278,25 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.transactionService
       .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        if (res?.data?.transactions?.length > 0) {
-          res.data.transactions.forEach((trans) => {
-            trans = parseDataTransaction(trans, this.coinMinimalDenom);
-            this.dataSource.data = res.data.transactions;
-            this.pageData.length = res.data.count;
+        if (res?.data?.length > 0) {
+          res.data.forEach((trans) => {
+            //get amount of transaction
+            trans.typeOrigin = trans.type;
+            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
+            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
+            trans.type = typeTrans?.value;
+            trans.status = StatusTransaction.Fail;
+            if (trans.code === CodeTransaction.Success) {
+              trans.status = StatusTransaction.Success;
+            }
+            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
+              trans.type = TypeTransaction.Received;
+            }
           });
+          this.dataSource.data = res.data;
+
+          this.length = res.meta.count;
+          this.pageData.length = res.meta.count;
         }
       });
   }

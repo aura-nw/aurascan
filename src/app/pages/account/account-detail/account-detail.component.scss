@@ -1,9 +1,7 @@
 section.account-detail {
-  .box-account {
-    .qr-code {
-      border-radius: var(--spacer-2);
-      overflow: hidden;
-    }
+  .qr-code {
+    border-right: 1px solid #363843;
+    vertical-align: middle;
   }
   form.search-form {
     .input-group {
@@ -57,9 +55,6 @@ section.account-detail {
       border-radius: 50%;
     }
   }
-  #canvas {
-    border-radius: 8px;
-  }
   .article-1 {
     @media (min-width: 1440px) {
       min-height: 675px;
@@ -82,10 +77,32 @@ section.account-detail {
     margin: 0.2rem 1rem 0 0;
   }
 }
-
+.button {
+  &.button-circle {
+    aspect-ratio : 1 / 1 !important;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #363843;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &.button--md {
+    width: 40px;
+    height: 40px;
+  }
+  &.button--xxs {
+    width: 24px;
+    height: 24px;
+  }
+}
 @media (max-width: 991.98px) {
-  .account-address {
-    margin-bottom: 1.6rem !important;
+  .g-ellipsis-address {
+    width: 310px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
   }
   .box-account {
     padding: var(--spacer-4) !important;
@@ -96,6 +113,7 @@ section.account-detail {
         width: 80%;
         min-width: 300px;
         margin: 0 auto;
+        padding-bottom: 52px !important;
       }
     }
   }
@@ -116,5 +134,11 @@ section.account-detail {
       font-size: 1.6rem !important;
       font-weight: 600;
     }
+  }
+}
+::ng-deep.account-search-form {
+  width: 100%;
+  @media (min-width: 992px) {
+    width: 410px;
   }
 }
