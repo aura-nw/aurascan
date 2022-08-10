@@ -1,7 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ADDRESS_PREFIX } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import {EnvironmentService} from "src/app/core/data-services/environment.service";
+import {Globals} from "src/app/global/global";
+import {ActivatedRoute} from "@angular/router";
+import {AccountService} from "src/app/core/services/account.service";
 
 @Component({
   selector: 'app-token-content',
@@ -19,6 +23,7 @@ export class TokenContentComponent implements OnInit {
     key: vote.key === TokenTab.Transfers ? '' : vote.key,
   }));
   countCurrent: string = '';
+  paramQuery = '';
   textSearch: string = '';
   searchTemp: string = '';
   isSearchTx = false;
@@ -26,9 +31,17 @@ export class TokenContentComponent implements OnInit {
   resultSearch = 0;
   tokenTab = TokenTab;
   tabsBackup: any;
+  infoSearch: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
-  constructor() {}
+  constructor(
+      private route: ActivatedRoute,
+      private accountService: AccountService,
+      private environmentService: EnvironmentService,
+      public global: Globals
+  ) {}
 
   ngOnInit(): void {
     this.TABS = TOKEN_TAB.filter((vote) =>
@@ -39,6 +52,12 @@ export class TokenContentComponent implements OnInit {
       key: vote.key === TokenTab.Transfers ? '' : vote.key,
     }));
     this.tabsBackup = this.TABS;
+
+    this.route.queryParams.subscribe((params) => {
+      this.paramQuery = params?.a || '';
+      this.searchTemp = this.paramQuery;
+      this.handleSearch();
+    });
   }
 
   changeTab(tabId): void {
@@ -58,10 +77,10 @@ export class TokenContentComponent implements OnInit {
       setTimeout(() => {
         if (this.resultSearch > 0) {
           let tempTabs;
-          if (this.textSearch.length > 60) {
+          if (this.textSearch.length > LENGTH_CHARACTER.TRANSACTION) {
             this.isSearchTx = true;
             tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
-          } else if (this.textSearch?.length >= 43 && this.textSearch?.startsWith(ADDRESS_PREFIX)) {
+          } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
             this.isSearchAddress = true;
             tempTabs = this.TABS.filter((k) => k.key !== TokenTab.Holders);
           }
@@ -79,9 +98,18 @@ export class TokenContentComponent implements OnInit {
 
   resetSearch() {
     this.searchTemp = null;
-    this.textSearch = null;
-    this.isSearchAddress = false;
-    this.isSearchTx = false;
-    this.handleSearch();
+    if (this.paramQuery) {
+      const params = { ...this.route.snapshot.params };
+      if(!this.isNFTContract) {
+        window.location.href = `/tokens/token/${params.contractAddress}`;
+      } else {
+        window.location.href = `/tokens/token-nft/${params.contractAddress}`;
+      }
+    }
+  }
+  getInfoAddress(address: string) {
+    this.accountService.getAccountDetail(address).subscribe((res) => {
+      this.infoSearch = res.data;
+    });
   }
 }
