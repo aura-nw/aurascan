@@ -36,11 +36,13 @@ export class TokenCw20Component implements OnInit {
   };
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   dataSearch: any;
+  enterSearch = '';
 
   constructor(
     public translate: TranslateService,
@@ -69,12 +71,13 @@ export class TokenCw20Component implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource<any>(res.data);
+      this.dataSourceBk = this.dataSource;
       this.pageData.length = res.meta.count;
     });
   }
 
   searchToken(): void {
-    if (this.textSearch.length > 0) {
+    if (this.textSearch?.length > 0) {
       const payload = {
         limit: this.pageData.pageSize,
         offset: 0,
@@ -142,10 +145,19 @@ export class TokenCw20Component implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  handleLink(): void {
+  setPageList(): void {
     if (this.filterSearchData?.length > 0) {
-      this.router.navigate(['/tokens/token/', this.filterSearchData[0]?.contract_address]);
+      this.enterSearch = this.textSearch;
+      this.dataSource = new MatTableDataSource<any>(this.filterSearchData);
+      this.pageData.length = this.filterSearchData?.length || 0;
     }
+  }
+
+  resetSearch() {
+    this.textSearch = '';
+    this.enterSearch = '';
+    this.dataSource = this.dataSourceBk;
+    this.pageData.length = this.dataSource?.data?.length || 0;
   }
 
   pageEvent(e: PageEvent): void {
