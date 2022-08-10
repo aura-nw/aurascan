@@ -51,7 +51,7 @@ export class TokenCw721Component implements OnInit {
   getTokenData() {
     const payload = {
       limit: this.pageData.pageSize,
-      offset: 0,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: '',
     };
     this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
@@ -71,7 +71,6 @@ export class TokenCw721Component implements OnInit {
   }
 
   searchToken(): void {
-    this.filterSearchData = null;
     if (this.textSearch.length > 0) {
       let payload = {
         limit: this.pageData.pageSize,
@@ -83,11 +82,12 @@ export class TokenCw721Component implements OnInit {
         if (res?.data?.length > 0) {
           this.dataSearch = res.data;
         }
+
+        let keyWord = this.textSearch.toLowerCase();
+        this.filterSearchData = this.dataSearch?.filter(
+          (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
+        );
       });
-      let keyWord = this.textSearch.toLowerCase();
-      this.filterSearchData = this.dataSearch?.filter(
-        (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
-      );
     }
   }
 
@@ -95,12 +95,15 @@ export class TokenCw721Component implements OnInit {
     this.dataSource.paginator = event;
   }
 
-  handlePageEvent(e: any) {
-    this.pageData = e;
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getTokenData();
   }
 
   handleLink(): void {
-    this.router.navigate(['/tokens/token/', this.filterSearchData[0]?.tokenContract]);
+    if (this.filterSearchData?.length > 0) {
+      this.router.navigate(['/tokens/token/', this.filterSearchData[0]?.contract_address]);
+    }
   }
 
   sortData(sort: Sort) {

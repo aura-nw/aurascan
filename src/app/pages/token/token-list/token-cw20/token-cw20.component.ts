@@ -40,6 +40,7 @@ export class TokenCw20Component implements OnInit {
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  dataSearch: any;
 
   constructor(
     public translate: TranslateService,
@@ -55,7 +56,7 @@ export class TokenCw20Component implements OnInit {
   getListToken() {
     const payload = {
       limit: this.pageData.pageSize,
-      offset: 0,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: '',
     };
     this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
@@ -73,7 +74,6 @@ export class TokenCw20Component implements OnInit {
   }
 
   searchToken(): void {
-    this.filterSearchData = null;
     if (this.textSearch.length > 0) {
       const payload = {
         limit: this.pageData.pageSize,
@@ -83,11 +83,13 @@ export class TokenCw20Component implements OnInit {
 
       this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
         if (res?.data?.length > 0) {
-          let keyWord = this.textSearch.toLowerCase();
-          this.filterSearchData = res.data?.filter(
-            (data) => data.name.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
-          );
+          this.dataSearch = res.data;
         }
+
+        let keyWord = this.textSearch.toLowerCase();
+        this.filterSearchData = this.dataSearch?.filter(
+          (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
+        );
       });
     }
   }
@@ -141,10 +143,13 @@ export class TokenCw20Component implements OnInit {
   }
 
   handleLink(): void {
-    this.router.navigate(['/tokens/token', this.filterSearchData[0]?.hashCode]);
+    if (this.filterSearchData?.length > 0) {
+      this.router.navigate(['/tokens/token/', this.filterSearchData[0]?.contract_address]);
+    }
   }
 
-  handlePageEvent(e: any) {
-    this.pageData = e;
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListToken();
   }
 }

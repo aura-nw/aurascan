@@ -57,7 +57,7 @@
                   <ng-container *ngFor="let item of filterSearchData">
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.tokenContract]">
+                      [routerLink]="['/tokens/token', item.contract_address]">
                       <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="px-2 d-flex align-items-center justify-content-between" style="flex: 0 0 95%">
                         <span class="text-clamp small-body" style="max-width:60%; height: 18px">{{ item.name }}</span>
@@ -134,7 +134,7 @@
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>
