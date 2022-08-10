@@ -1,4 +1,4 @@
-<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
+<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Non-Fungible Tokens (NFT)</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-5">
@@ -31,23 +31,18 @@
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearch"
                 (ngModelChange)="searchToken()"
-                (keyup.enter)="handleLink()"
+                (keyup.enter)="setPageList()"
+                [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-              </button>
-              <button
                 type="reset"
-                class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="textSearch = ''; searchToken()">
+                class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                (click)="resetSearch()">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0">
+            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
               <div class="box-search-data text-white">
                 <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
                   <span> There are no matching NFT </span>
@@ -57,7 +52,7 @@
                   <ng-container *ngFor="let item of filterSearchData">
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.tokenContract]">
+                      [routerLink]="['/tokens/token', item.contract_address]">
                       <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="px-2 d-flex align-items-center justify-content-between" style="flex: 0 0 95%">
                         <span class="text-clamp small-body" style="max-width:60%; height: 18px">{{ item.name }}</span>
@@ -134,7 +129,7 @@
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>

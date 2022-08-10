@@ -1,4 +1,4 @@
-<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
+<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">CW-20 Tokens</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-5">
@@ -31,7 +31,8 @@
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="searchToken()"
-                (keyup.enter)="handleLink()"
+                (keyup.enter)="setPageList()"
+                [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button
@@ -42,14 +43,16 @@
               </button>
               <button
                 type="reset"
-                class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="textSearch = ''; searchToken()">
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0">
+            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
               <div class="box-search-data text-white">
-                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
+                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
                   <span> There are no matching contracts </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
@@ -183,7 +186,7 @@
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
@@ -10,45 +11,46 @@ import { TokenService } from 'src/app/core/services/token.service';
 })
 export class TokenInventoryComponent implements OnInit {
   loading = true;
-  pageData: PageEvent;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   nftData = [];
-  showedData = [];
   contractAddress = '';
+  keyWord = '';
   constructor(private route: ActivatedRoute, private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.contractAddress = params?.contractAddress;
-      this.getNftData();
     });
+
+    this.route.queryParams.subscribe((params) => {
+      this.keyWord = params?.a || '';
+    });
+    this.getNftData();
   }
 
   getNftData() {
     this.loading = true;
     let payload = {
-      limit: 20,
-      offset: 0,
-      token_id: '',
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      token_id: this.keyWord || '',
       owner: '',
     };
     this.tokenService.getListTokenNFT(this.contractAddress, payload).subscribe((res) => {
       if (res && res.data?.length > 0) {
         this.nftData = res.data;
-        this.showedData = this.nftData.slice(0, 20);
-        this.pageData = {
-          length: res.data?.length,
-          pageSize: 20,
-          pageIndex: 1,
-        };
+        this.pageData.length = res.meta?.count;
       }
       this.loading = false;
     });
-    this.loading = false;
   }
 
-  paginatorEmit(event): void {
-    // handle paginator with API
-    const pageEvent = event;
-    this.showedData = this.nftData.slice(10 * pageEvent.pageIndex, 10 * (pageEvent.pageIndex + 1));
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getNftData();
   }
 }
