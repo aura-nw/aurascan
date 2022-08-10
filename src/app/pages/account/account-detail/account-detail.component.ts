@@ -179,7 +179,26 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
+  TABS_STAKE = [
+      {
+        key: 0,
+        label: 'Delegations',
+      },
+      {
+        key: 1,
+        label: 'Unbondings',
+      },
+      {
+        key: 2,
+        label: 'Redelegations',
+      },
+      {
+        key: 3,
+        label: 'Vestings',
+      },
+  ];
   currentTab = 'ASSETS';
+  currentStake = 0;
 
   constructor(
     private transactionService: TransactionService,

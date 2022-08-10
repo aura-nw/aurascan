@@ -56,7 +56,7 @@
         [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a ngbNavLink (click)="currentTab = tab">
+          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab">
             <span class="body fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--light-gray' }}">{{ tab }}</span>
           </a>
         </li>
@@ -200,28 +200,42 @@
       <div class="row row-eq-height">
         <div class="col-12 col-lg-8">
           <div class="card card-h-100 px-lg-6 py-lg-6">
-            <div class="article-2">
-              <mat-tab-group *ngIf="!accDetailLoading" class="aura-tab" mat-stretch-tabs>
-                <mat-tab label="Delegations">
-                  <app-account-table
-                          [dataSource]="dataSourceDelegation"
-                          [templates]="templatesDelegation"
-                          [displayedColumns]="displayedColumnsDelegation"
-                          [pageData]="pageDataDelegation"
-                          [pageEventType]="pageEventType.Delegation"
-                          (pageEvent)="changePage($event)">
-                  </app-account-table>
-                </mat-tab>
-                <mat-tab label="Unbondings">
-                  <app-account-table
-                          [dataSource]="dataSourceUnBonding"
-                          [templates]="templatesUnBonding"
-                          [displayedColumns]="displayedColumnsUnBonding"
-                          [pageData]="pageDataUnbonding"
-                          [pageEventType]="pageEventType.Unbonding"
-                          (pageEvent)="changePage($event)"></app-account-table>
-                </mat-tab>
-                <mat-tab label="Redelegations">
+            <div class="card-body article-2">
+              <div *ngIf="!accDetailLoading">
+                <!-- Tab List-->
+                <ul ngbNav
+                    #customNav2="ngbNav"
+                    [activeId]="0"
+                    class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+                    [class.mobile-tab]="breakpoint.value.matches">
+                  <ng-container *ngFor="let tab of TABS_STAKE; index as index">
+                    <li [ngbNavItem]="index">
+                      <a class="account__tab-item" ngbNavLink (click)="currentStake = tab.key">
+                        <span class="body fw-semibold mb-0 {{ customNav2.activeId === index ? 'text--white' : 'text--light-gray' }}">{{ tab.label }}</span>
+                      </a>
+                    </li>
+                  </ng-container>
+                </ul>
+                <!-- Delegations-->
+                <app-account-table *ngIf="currentStake === 0"
+                                   [dataSource]="dataSourceDelegation"
+                                   [templates]="templatesDelegation"
+                                   [displayedColumns]="displayedColumnsDelegation"
+                                   [pageData]="pageDataDelegation"
+                                   [pageEventType]="pageEventType.Delegation"
+                                   (pageEvent)="changePage($event)">
+                </app-account-table>
+                <!-- Unbondings-->
+                <app-account-table *ngIf="currentStake === 1"
+                                   [dataSource]="dataSourceUnBonding"
+                                   [templates]="templatesUnBonding"
+                                   [displayedColumns]="displayedColumnsUnBonding"
+                                   [pageData]="pageDataUnbonding"
+                                   [pageEventType]="pageEventType.Unbonding"
+                                   (pageEvent)="changePage($event)">
+                </app-account-table>
+                <!-- Redelegations-->
+                <div *ngIf="currentStake === 2">
                   <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
                     1. {{ 'NOTICE.REDELEGATE_WAITING' | translate: { timeStaking: timeStaking } }}<br />
                     2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
@@ -233,17 +247,17 @@
                           [pageData]="pageDataRedelegation"
                           [pageEventType]="pageEventType.Redelegation"
                           (pageEvent)="changePage($event)"></app-account-table>
-                </mat-tab>
-                <mat-tab label="Vestings">
-                  <app-account-table
-                          [dataSource]="dataSourceVesting"
-                          [templates]="templatesVesting"
-                          [displayedColumns]="displayedColumnsVesting"
-                          [pageData]="pageDataVesting"
-                          [pageEventType]="pageEventType.Vestings"
-                          (pageEvent)="changePage($event)"></app-account-table>
-                </mat-tab>
-              </mat-tab-group>
+                </div>
+                <!-- Vestings-->
+                <app-account-table *ngIf="currentStake === 3"
+                                   [dataSource]="dataSourceVesting"
+                                   [templates]="templatesVesting"
+                                   [displayedColumns]="displayedColumnsVesting"
+                                   [pageData]="pageDataVesting"
+                                   [pageEventType]="pageEventType.Vestings"
+                                   (pageEvent)="changePage($event)">
+                </app-account-table>
+              </div>
               <div class="mt-20" *ngIf="accDetailLoading">
                 <app-loading-sprint></app-loading-sprint>
               </div>
