@@ -150,10 +150,10 @@
               </div>
               <div class="table-body small-body-mob">
                 <ng-container *ngFor="let template of templatesWallet; index as idx">
-                  <div class="d-flex justify-content-between text--white mb-2" *ngIf="!template?.desktopOnly">
+                  <div class="d-flex justify-content-between text--gray-4 mb-2" *ngIf="!template?.desktopOnly">
                     <span>{{ template['headerCellDef'] }}</span>
                     <div>
-                      <span> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
+                      <span class="text--white"> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
                       <span *ngIf="template['headerCellDef']" class="ml-2 text--primary">
                         {{ denom }}
                       </span>
@@ -170,8 +170,7 @@
 
   <div class="card box-undelegate" *ngIf="lstUndelegate.length > 0">
     <div
-      class="d-flex justify-content-between card-header card-header-dark card-header-gray-des title-small text--white"
-      [class.fw-500]="breakpoint.value.matches">
+      class="d-flex justify-content-between card-header card-header-dark card-header-gray-des body-02 body-01-mob text--gray-3">
       Undelegating
     </div>
     <div class="card-body" *ngIf="!breakpoint.value.matches">
@@ -180,23 +179,24 @@
           <div class="col-3 body title-name">
             <a
               [routerLink]="['/validators', validator.validator_address]"
-              class="text-clamp text--primary box-title-validator small-body">
+              class="text-clamp text--primary box-title-validator small-body fw-500">
               <div class="avatar-wrapper">
                 <div class="validator-avatar">
                   <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])">
                   </app-loading-image>
                 </div>
               </div>
-              {{ validator.validator_name }}</a
-            >
+              {{ validator.validator_name }}
+            </a>
           </div>
-          <div class="col-9 text--white small-body pl-0 pl-lg-1">
-            {{ validator.balance | number: globals.formatNumberToken }}
-            <span class="text--primary">{{ denom }}</span
-            ><br />
-            <span class="text--neutrals-4">{{
-              commonService.getDateValue(validator.completion_time, false)[1]
-            }}</span>
+          <div class="col-9 text--white body-02 pl-0 pl-lg-1">
+            <div>
+              <span>{{ validator.balance | number: globals.formatNumberToken }}</span>
+              <span class="text--primary ml-2">{{ denom }}</span>
+            </div>
+            <div class="text--gray-5">
+              {{ commonService.getDateValue(validator.completion_time, false)[1] }}
+            </div>
           </div>
         </div>
       </ng-container>
@@ -206,17 +206,24 @@
       <div class="table-mobile">
         <ng-container *ngFor="let validator of lstUndelegate">
           <div class="table-mobile__item undelegate-item">
-            <div class="body fw-semibold">
-              <a [routerLink]="['/validators', validator.validator_address]" class="text-clamp text--primary">
-                {{ validator.validator_name }}</a
-              >
+            <div class="d-flex justify-content-between align-items-center">
+              <a [routerLink]="['/validators', validator.validator_address]"
+                 class="text-clamp text--primary box-title-validator h5 mb-0">
+                <div class="avatar-wrapper">
+                  <div class="validator-avatar">
+                    <app-loading-image [srcImg]="getValidatorAvatar(validator['validator_address'])">
+                    </app-loading-image>
+                  </div>
+                </div>
+                {{ validator.validator_name }}
+              </a>
+              <div class="body-01 text-end">
+                <span class="text--white">{{ validator.balance | number: globals.formatNumberToken }}</span>
+                <span class="text--primary ml-2">{{ denom }}</span>
+              </div>
             </div>
-            <div class="d-flex align-items-center justify-content-between text--white small-body-mob">
-              <span>{{ commonService.getDateValue(validator.completion_time, false)[1] }}</span>
-              <span>
-                {{ validator.balance | number: globals.formatNumberToken }}
-                <span class="text--primary">{{ denom }}</span>
-              </span>
+            <div class="body-02 text--gray-5 text-end">
+              {{ commonService.getDateValue(validator.completion_time, false)[1] }}
             </div>
           </div>
         </ng-container>

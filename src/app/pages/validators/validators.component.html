@@ -313,16 +313,16 @@
               <app-loading-image [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
             </div>
           </div>
-          <div>
-            <div class="title title-medium-mob text-gradient fw-bolder d-inline-block">
-              <span>{{ dataModal?.title }}</span>
+          <div class="ml-2">
+            <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
+              <span class="modal__title">{{ dataModal?.title }}</span>
             </div>
-            <div class="body small-body-mob text--white">
+            <div class="h6 mb-0 text--white">
               Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
             </div>
           </div>
         </div>
-        <div class="body small-body-mob text--greyscale-3">
+        <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
             <span>({{ dataModal?.power | number: globals.formatNumberToken }}</span>
@@ -335,12 +335,12 @@
       <div>
         <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
-          <div class="mt-2 body small-body-mob">
+          <div class="mt-2 h6 text--white mb-0">
             <span>Available for undelegatation</span>
-            <span class="ml-3">
+            <span class="ml-3 fw-normal">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
-            <span class="text--primary"> {{ denom }} </span>
+            <span class="text--primary fw-normal"> {{ denom }} </span>
           </div>
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -351,7 +351,7 @@
               (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
-                class="button button-primary active button-max body small-body-mob fw-semibold"
+                class="button button-max body-02"
                 type="button"
                 (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX

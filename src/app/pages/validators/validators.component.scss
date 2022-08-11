@@ -193,13 +193,13 @@ form.search-form-validators {
 }
 
 .button-max {
+  border-radius: 2px;
+  background-color: var(--aura-gray-6);
+  color: var(--aura-white);
   padding: 0 var(--spacer-4);
-  height: 32px;
+  height: 28px;
   display: flex;
   align-items: center;
-  @media (min-width: 992px) {
-    height: 34px;
-  }
 }
 
 .modal {
@@ -217,6 +217,16 @@ form.search-form-validators {
       border: none;
       border-radius: 0 !important;
     }
+  }
+}
+.modal__title {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  width: 250px;
+  @media (min-width: 768px) {
+    width: 550px;
   }
 }
 .mat-tab-header-pagination.mat-tab-header-pagination-disabled,
