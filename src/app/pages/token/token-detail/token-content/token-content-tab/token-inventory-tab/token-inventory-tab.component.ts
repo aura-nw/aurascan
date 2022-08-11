@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
@@ -16,10 +18,17 @@ export class TokenInventoryComponent implements OnInit {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  nftData = [];
+  nftData: MatTableDataSource<any> = new MatTableDataSource();
   contractAddress = '';
   keyWord = '';
-  constructor(private route: ActivatedRoute, private tokenService: TokenService) {}
+
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+
+  constructor(
+    private route: ActivatedRoute,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -37,12 +46,21 @@ export class TokenInventoryComponent implements OnInit {
     let payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      token_id: this.keyWord || '',
+      token_id: '',
       owner: '',
     };
+
+    if (this.keyWord) {
+      if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+        payload.owner = this.keyWord;
+      } else if (this.keyWord?.length !== LENGTH_CHARACTER.TRANSACTION) {
+        payload.token_id = this.keyWord;
+      }
+    }
+
     this.tokenService.getListTokenNFT(this.contractAddress, payload).subscribe((res) => {
       if (res && res.data?.length > 0) {
-        this.nftData = res.data;
+        this.nftData.data = res.data;
         this.pageData.length = res.meta?.count;
       }
       this.loading = false;
@@ -52,5 +70,9 @@ export class TokenInventoryComponent implements OnInit {
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getNftData();
+  }
+
+  paginatorEmit(e): void {
+    this.nftData.paginator = e;
   }
 }

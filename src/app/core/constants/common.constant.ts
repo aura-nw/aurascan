@@ -63,7 +63,7 @@ export const CHART_RANGE = {
 
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
-  TRANSACTION: 60
+  TRANSACTION: 64
 };
 
 export const NULL_ADDRESS = "0".repeat(LENGTH_CHARACTER.ADDRESS);

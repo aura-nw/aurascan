@@ -21,41 +21,36 @@ export class TokenHoldersTabComponent implements OnInit {
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'balance', headerCellDef: 'quantity' },
+    { matColumnDef: 'balance', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
+    { matColumnDef: 'value', headerCellDef: 'value' },
   ];
 
   CW721Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'balance', headerCellDef: 'quantity' },
+    { matColumnDef: 'amount', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
   ];
 
   template: Array<TableTemplate> = [];
-
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'balance', headerCellDef: 'quantity' },
-    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
-  ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+  displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-
+  tokenType = ContractRegisterType.CW20;
   constructor(public global: Globals, private tokenService: TokenService) {}
 
   ngOnInit(): void {
-    let tokenType = ContractRegisterType.CW20;
     if (this.isNFTContract) {
-      tokenType = ContractRegisterType.CW721;
+      this.tokenType = ContractRegisterType.CW721;
     }
-    this.getListTokenHolder(tokenType);
+    this.template = this.getTemplate();
+    this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
+    this.getListTokenHolder(this.tokenType);
   }
 
   getListTokenHolder(tokenType: string) {
@@ -70,6 +65,9 @@ export class TokenHoldersTabComponent implements OnInit {
       .subscribe((res) => {
         if (res && res.data?.resultAsset?.length > 0) {
           this.pageData.length = res.data?.resultCount;
+          res.data?.resultAsset.forEach(element => {
+            element['value'] = 0;
+          });
           let sortedData = res.data?.resultAsset.sort((a, b) => {
             return this.compare(a.percent_hold, b.percent_hold, false);
           });
@@ -83,7 +81,16 @@ export class TokenHoldersTabComponent implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
+  getTemplate(): Array<TableTemplate> {
+    return this.isNFTContract ? this.CW721Templates : this.CW20Templates;
+  }
+
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListTokenHolder(this.tokenType);
   }
 }

@@ -201,7 +201,7 @@
     <span class="body text--white mb-2">Item Activity</span>
     <div class="divider divider-horizontal"></div>
     <div class="text--light-gray small-body mt-3">
-      A total of {{ dataSource?.data?.length }} record{{ dataSource?.data?.length > 1 ? 's' : '' }} found
+      A total of {{ pageData?.length }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
     <div class="table-responsive aura-table-contain">
       <table mat-table [dataSource]="dataSource" class="aura-table">
@@ -243,12 +243,13 @@
                   <a
                     class="text--green content-transfer"
                     [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                     data[template.matColumnDef] | cutStringPipe: 8:8
                   }}</span>
+                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img
                     [src]="'assets/images/icons/arrow-right.png' | imageS3"
                     width="14"
@@ -259,12 +260,13 @@
                   <a
                     class="text--green"
                     [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
                     data[template.matColumnDef] | cutStringPipe: 8:8
                   }}</span>
+                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'fee'"> {{ data[template.matColumnDef] }} {{ denom }} </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -282,7 +284,7 @@
         </tr>
       </table>
       <app-paginator
-        [length]="dataSource?.data?.length"
+        [length]="pageData?.length"
         [pageSize]="pageData?.pageSize"
         (paginator)="paginatorEmit($event)"
         (pageEvent)="handlePageEvent($event)">

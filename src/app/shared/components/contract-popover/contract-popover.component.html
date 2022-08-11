@@ -24,48 +24,40 @@
         <div>
           <img class="d-inline" width="20px" [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="aura" />
           {{ popoverData?.amount | number: FORMAT.PRICE_6 }}
-          (${{ popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
+          (${{ popoverData?.amount * popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
           <a class="text--green" [routerLink]="['/tokens/token', popoverData.tokenAddress]">
             {{ popoverData.symbol }}
           </a>
         </div>
         <div>
-          <span class="text--light-gray mr-1">From</span>
-          <a class="text--green" [routerLink]="['/account', popoverData?.from_address]">
-            {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
-          </a>
+          <span class="text--light-gray mr-1 ml-sm-1">From</span>
+          <span [innerHTML]="popoverData['from_address_convert']"></span>
           <br class="d-sm-none" />
           <span class="text--light-gray mr-1 ml-sm-1">To</span>
-          <a class="text--green" [routerLink]="['/account', popoverData?.to_address]">
-            {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
-          </a>
+          <span [innerHTML]="popoverData['to_address_convert']"></span>
         </div>
       </ng-container>
       <ng-container *ngIf="popoverData?.nftDetail !== undefined">
         <div>Transaction Action</div>
         <div>
-          <span class="text--light-gray mr-1"
-            >Transfer of
+          <div class="text--light-gray mr-1">
+            Transfer of
             <img
-              [src]="'assets/images/icons/token-logo.png' | imageS3"
+              [src]="popoverData['image'] || defaultLogoToken"
               width="24px"
               height="24px"
               class="mr-1 object-fit--none" />
             <a class="text--green" [routerLink]="['/tokens/token', popoverData?.nftDetail?.contract_address]"
               >({{ popoverData?.nftDetail?.name }})</a
             >
-            From</span
-          >
-          <a class="text--green" [routerLink]="['/account', popoverData?.from_address]">
-            {{ popoverData?.from_address || '-' | cutStringPipe: 8:8 }}
-          </a>
+            From
+          </div>
+          <span [innerHTML]="popoverData['from_address_convert']"></span>
           <br class="d-sm-none" />
           <span class="text--light-gray mr-1 ml-sm-1">To</span>
-          <a class="text--green" [routerLink]="['/account', popoverData?.to_address]">
-            {{ popoverData?.to_address || '-' | cutStringPipe: 8:8 }}
-          </a>
+          <span [innerHTML]="popoverData['to_address_convert']"></span>
         </div>
-        <div class="mt-2">
+        <div class="mt-2" *ngIf="popoverData?.nftDetail?.token_id">
           1 of TokenID [<a
             class="text--green"
             href="/tokens/token/{{ popoverData?.nftDetail?.contract_address }}?a={{ popoverData?.nftDetail?.token_id }}"
@@ -79,7 +71,11 @@
 
     <div class="d-flex flex-column gap-2 small-body">
       <div>Transaction Fee:</div>
-      <div class="text--contract">{{ popoverData.fee | number: FORMAT.PRICE_6 }} {{ denom }} ($0.00)</div>
+      <div class="text--contract">
+        {{ popoverData.fee | number: FORMAT.PRICE_6 }} {{ denom }} (${{
+          popoverData?.fee * popoverData?.price || 0 | number: FORMAT.PRICE_2
+        }})
+      </div>
     </div>
     <hr />
 
@@ -87,7 +83,11 @@
       <div>Gas info:</div>
       <div class="text--contract">
         {{ popoverData.gas_used | mask: 'separator' }} Gas Used From
-        {{ popoverData.gas_wanted | mask: 'separator' }} Gas Limit
+        {{ popoverData.gas_wanted | mask: 'separator' }} Gas Limit<br />
+        {{ popoverData['gasPrice'] | number: FORMAT.PRICE_6 }} {{ denom }} ({{
+          popoverData['gasPriceU'] | number: FORMAT.PRICE_6
+        }}
+        {{ coinMinimalDenom }})
       </div>
     </div>
     <hr />

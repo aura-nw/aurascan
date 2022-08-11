@@ -33,19 +33,25 @@ export class TokenService extends CommonService {
     offset: string | number,
     contractAddress: string,
     filterData: any,
-    mode = '',
   ): Observable<any> {
-    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&query=execute._contract_address%3D'${contractAddress}'`;
+    let payload = {
+      contract_address: contractAddress,
+      account_address: '',
+      tx_hash: '',
+      token_id: '',
+      limit: limit,
+      offset: offset,
+    };
     if (filterData?.keyWord) {
-      if (filterData?.keyWord.length > LENGTH_CHARACTER.TRANSACTION) {
-        url += `&txHash=${filterData?.keyWord}`;
+      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
+        payload.tx_hash = filterData?.keyWord;
       } else if (filterData['isSearchWallet']) {
-        url += `%2Cwasm.${mode}%3D'${filterData?.keyWord}'`;
+        payload.account_address = filterData?.keyWord;
       } else {
-        url += `%2Cwasm.token_id%3D'${filterData?.keyWord}'`;
+        payload.token_id = filterData?.keyWord;
       }
     }
-    return this.http.get<any>(url);
+    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/transactions`, payload);
   }
 
   getListTokenNFT(contractAddress: string, payload): Observable<any> {
