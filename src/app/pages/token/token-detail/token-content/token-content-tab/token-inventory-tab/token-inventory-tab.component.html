@@ -7,10 +7,10 @@
 </div>
 
 <!-- Table -->
-<ng-container *ngIf="!loading">
+<ng-container>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="mt-6">
-      <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
+      <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"  *ngIf="!loading">
         <div class="nft-cards__col col" *ngFor="let item of nftData?.data">
           <div class="nft-cards__item-border">
             <a href="/tokens/token/{{ item.contract_address }}/{{ item.token_id }}" class="nft-cards__item">
