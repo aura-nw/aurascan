@@ -69,7 +69,6 @@ export class TokenInventoryComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.nftData.paginator.pageIndex = e.pageIndex;
     this.getNftData();
   }
 
