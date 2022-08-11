@@ -73,7 +73,7 @@
       <!-- Coin & Token-->
       <app-token-table [address]="currentAddress"></app-token-table>
       <!-- NFT -->
-      <app-nft-list [address]="currentAddress" [assetCW721]="assetCW721"></app-nft-list>
+      <app-nft-list [address]="currentAddress"></app-nft-list>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === 'TRANSACTIONS'">

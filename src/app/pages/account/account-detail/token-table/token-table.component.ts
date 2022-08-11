@@ -4,7 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { TableTemplate } from 'src/app/core/models/common.model';
+import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
@@ -54,7 +54,7 @@ export class TokenTableComponent implements OnInit {
       offset: 0,
       keyword: '',
     };
-    this.accountService.getAssetCW20ByOnwer(payload).subscribe((res) => {
+    this.accountService.getAssetCW20ByOnwer(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
         this.assetCW20 = res?.data;
         this.assetCW20.length = res.data.length;
@@ -76,18 +76,22 @@ export class TokenTableComponent implements OnInit {
     this.pageData = e;
   }
   searchToken(): void {
-    this.filterSearchData = null;
-    // if (this.textSearch.length > 0) {
-    //   const payload = {
-    //     limit: this.pageData.pageSize,
-    //     offset: 0,
-    //     keyword: this.textSearch,
-    //   };
+    if (this.textSearch.length > 0) {
+      const payload = {
+        account_address: this.address,
+        limit: 0,
+        offset: 0,
+        keyword: this.textSearch,
+      };
 
-    //   let keyWord = this.textSearch.toLowerCase();
-    //   this.filterSearchData = this.mockData.filter(
-    //     (data) => data.contractAddress.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
-    //   );
-    // }
+      this.accountService.getAssetCW20ByOnwer(payload).subscribe((res: ResponseDto) => {
+        if (res?.data?.length > 0) {
+          let keyWord = this.textSearch.toLowerCase();
+          this.filterSearchData = res.data?.filter(
+            (data) => data.name.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
+          );
+        }
+      });
+    }
   }
 }

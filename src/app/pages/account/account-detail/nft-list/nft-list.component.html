@@ -14,7 +14,7 @@
             class="form-control"
             placeholder="Search for Token ID or Address"
             [(ngModel)]="searchValue"
-            (keyup.enter)="handleSearch()"
+            (keyup)="handleSearch()"
             [ngModelOptions]="{ standalone: true }"
             name="inputEmail"
             autocomplete="off" />
@@ -43,7 +43,7 @@
                   <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                   <div class="ml-3">
                     <div class="d-flex align-items-center">
-                      <span class="text-clamp">{{ item.name }}</span>
+                      <span class="text-clamp">{{ item.contract_name }}</span>
                     </div>
                   </div>
                 </div>
@@ -61,15 +61,15 @@
             <div class="nft-cards__item-border">
               <a href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}" class="nft-cards__item">
                 <div class="nft-cards__img">
-                  <img *ngIf="item.asset_info.data.info.token_uri" src="{{ item.asset_info.data.info.token_uri }}" alt="" />
-                  <img *ngIf="!item.asset_info.data.info.token_uri" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
+                  <img *ngIf="item.uri" src="{{ item.uri }}" alt="" />
+                  <img *ngIf="!item.uri" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
                   <div class="nft-cards__label">
                     <span class="text-gradient">CW-721</span>
                   </div>
                 </div>
                 <div class="mt-3">
                   <span class="small-text mr-1 text--white">Token:</span>
-                  <span class="small-text text--green">{{ item.name }}</span>
+                  <span class="small-text text--green">{{ item.contract_name }}</span>
                 </div>
                 <div class="mt-1 token-id">
                   <span class="small-text mr-1 text--white">Token ID:</span>
