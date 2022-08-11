@@ -121,11 +121,12 @@
                         <span *ngIf="!data[template.matColumnDef]"> - </span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
-                        <a
-                          class="button button-chart button-outline button-outline__in-card px-2 button-view-nft"
+                        <button
+                          class="button button-chart button-outline button-outline__in-card px-5 button-view-nft"
+                          [disabled]="!data.token_id"
                           [routerLink]="['/tokens/token', contractAddress, data.token_id]">
                           <span class="text-gradient">View NFT</span>
-                        </a>
+                      </button>
                       </ng-container>
                       <ng-container *ngSwitchCase="'token_id'">
                         <a
@@ -141,7 +142,7 @@
                           mat-icon-button
                           aria-label="Example icon-button with a menu"
                           placement="right"
-                          (click)="getTokenDetail(data)"
+                          (click)="getNFTDetail(data)"
                           [ngbPopover]="popContent"
                           popoverClass="custom-popover token-popover">
                           <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />

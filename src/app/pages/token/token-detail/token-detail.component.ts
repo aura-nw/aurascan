@@ -16,7 +16,7 @@ export class TokenDetailComponent implements OnInit {
   tokenDetail: any;
 
   image_s3 = this.environmentService.configValue.image_s3;
-  defaultImage = this.image_s3 + 'images/icons/token-logo.png';
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     private router: ActivatedRoute,

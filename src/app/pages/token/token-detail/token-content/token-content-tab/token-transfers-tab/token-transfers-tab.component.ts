@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import BigNumber from 'bignumber.js';
-import { forkJoin } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
@@ -67,7 +65,6 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   codeTransaction = CodeTransaction;
-  tokenDetail = undefined;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
 
@@ -159,33 +156,30 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     this.dataSource.paginator = event;
   }
 
-  getTokenDetail(data: any): void {
-    this.tokenDetail = data;
-    this.tokenDetail.gasPrice = new BigNumber(this.tokenDetail?.fee)
-      .dividedBy(this.tokenDetail?.tx_response?.gas_used)
-      .toFixed(30)
-      .replace(/^0+|0+$/g, '');
-    //add first '0' before float
-    this.tokenDetail.gasPrice = '0' + this.tokenDetail.gasPrice;
-    this.tokenDetail.gasPriceU = this.tokenDetail.gasPrice * Math.pow(10, 6);
+  getNFTDetail(data) {
+    if (this.isNFTContract) {
+      this.tokenService.getNFTDetail(this.contractAddress, data.token_id).subscribe((res) => {
+        this.nftDetail = res.data;
+      });
+    }
   }
 
   getPopoverData(data): IContractPopoverData {
     return {
-      amount: data?.value || 0,
+      amount: data?.amountToken || 0,
       code: Number(data?.tx_response?.code),
       fee: data?.fee || 0,
-      from_address: data?.from_address || '-',
-      to_address: data?.to_address || '-',
+      from_address: data?.from_address || '',
+      to_address: data?.to_address || '',
       price: 0,
       status: data?.status,
       symbol: this.denom,
-      // tokenAddress: this.contractInfo?.contractsAddress,
-      tokenAddress: '',
-      tx_hash: data?.txHash || '-',
+      tokenAddress: data?.contract_address,
+      tx_hash: data?.txHash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
       nftDetail: this.nftDetail,
+      modeExecute: data?.modeExecute,
     };
   }
 }

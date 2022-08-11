@@ -243,12 +243,13 @@
                   <a
                     class="text--green content-transfer"
                     [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                     data[template.matColumnDef] | cutStringPipe: 8:8
                   }}</span>
+                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img
                     [src]="'assets/images/icons/arrow-right.png' | imageS3"
                     width="14"
@@ -259,12 +260,13 @@
                   <a
                     class="text--green"
                     [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
                     data[template.matColumnDef] | cutStringPipe: 8:8
                   }}</span>
+                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'fee'"> {{ data[template.matColumnDef] }} {{ denom }} </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>

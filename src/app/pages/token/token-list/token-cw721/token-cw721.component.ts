@@ -41,7 +41,7 @@ export class TokenCw721Component implements OnInit {
   enterSearch = '';
 
   image_s3 = this.environmentService.configValue.image_s3;
-  defaultImage = this.image_s3 + 'images/icons/token-logo.png';
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     public translate: TranslateService,
@@ -81,7 +81,7 @@ export class TokenCw721Component implements OnInit {
   searchToken(): void {
     if (this.textSearch?.length > 0) {
       let payload = {
-        limit: this.pageData.pageSize,
+        limit: 0,
         offset: 0,
         keyword: this.textSearch,
       };

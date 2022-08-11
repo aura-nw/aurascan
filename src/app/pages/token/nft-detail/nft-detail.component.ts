@@ -124,17 +124,18 @@ export class NFTDetailComponent implements OnInit {
       amount: data?.value || 0,
       code: Number(data?.tx_response?.code),
       fee: data?.fee || 0,
-      from_address: data?.from_address || '-',
-      to_address: data?.to_address || '-',
+      from_address: data?.from_address || '',
+      to_address: data?.to_address || '',
       price: 0,
       status: data?.status,
       symbol: this.denom,
       // tokenAddress: this.contractInfo?.contractsAddress,
       tokenAddress: '',
-      tx_hash: data?.txHash || '-',
+      tx_hash: data?.txHash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail
+      nftDetail: this.nftDetail,
+      modeExecute: data?.modeExecute
     };
   }
 }

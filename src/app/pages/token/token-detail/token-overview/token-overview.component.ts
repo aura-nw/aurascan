@@ -29,7 +29,7 @@ export class TokenOverviewComponent implements OnInit {
 
   getTotalTransfer() {
     this.tokenService.getListTokenTransfer(20, 0, this.tokenDetail?.contract_address, null).subscribe((res) => {
-      this.tokenDetail['transfers'] = res.data?.transactions?.length || 0;
+      this.tokenDetail['transfers'] = res.meta?.count || 0;
     });
   }
 }
