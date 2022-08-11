@@ -49,9 +49,9 @@
                 <th mat-header-cell *matHeaderCellDef>ASSET</th>
                 <td mat-cell *matCellDef="let element">
                   <div class="d-flex align-items-center">
-                    <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="24px" height="24px" />
+                    <img [src]="element.image" width="24px" height="24px" />
                     <div class="ml-2">
-                      {{ element.asset }}
+                      {{ element.asset_info.data.name }}
                     </div>
                   </div>
                 </td>

@@ -17,9 +17,13 @@ export class AccountService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
   }
 
-  getAssetByOnwer(address: string): Observable<any> {
+  getAssetByOnwerIndexer(address: string, keyWord: string): Observable<any> {
     return this.http.get<any>(
-      `${INDEXER_URL}/asset/getByOwner?chainid=${this.chainInfo.chainId}&owner=${address}&countTotal=true&reverse=false`,
+      `${INDEXER_URL}/asset/getByOwner?chainid=${this.chainInfo.chainId}&owner=${address}&countTotal=true&reverse=false${keyWord}`,
     );
+  }
+
+  getAssetByOnwer(address: string | number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${address}`);
   }
 }

@@ -15,6 +15,7 @@ import { Globals } from 'src/app/global/global';
 })
 export class TokenTableComponent implements OnInit, OnChanges {
   @Input() assetCW20: any[];
+  @Input() address: string;
   math = Math;
   textSearch = '';
   templates: Array<TableTemplate> = [

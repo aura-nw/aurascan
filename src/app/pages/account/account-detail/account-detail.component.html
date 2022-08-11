@@ -15,31 +15,33 @@
             <div class="body g-ellipsis-address" id="currentAddress">{{ currentAddress }}</div>
             <div class="button button--xxs button-circle ml-2">
               <img
-                      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                      class=""
-                      alt=""
-                      width="12px"
-                      height="12px"
-                      matTooltip="Copied!"
-                      #tooltip="matTooltip"
-                      (mouseenter)="$event.stopImmediatePropagation()"
-                      (mouseleave)="$event.stopImmediatePropagation()"
-                      (click)="copyMessage(currentAddress); tooltip.toggle()" />
+                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                class=""
+                alt=""
+                width="12px"
+                height="12px"
+                matTooltip="Copied!"
+                #tooltip="matTooltip"
+                (mouseenter)="$event.stopImmediatePropagation()"
+                (mouseleave)="$event.stopImmediatePropagation()"
+                (click)="copyMessage(currentAddress); tooltip.toggle()" />
             </div>
           </div>
         </div>
         <div class="pl-lg-6 mt-6 mt-lg-0">
           <div class="text--white title-small fw-500">Total Value</div>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
-            <span class="sub-text fw-semibold mb-0 text-gradient d-inline">$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span>
+            <span class="sub-text fw-semibold mb-0 text-gradient d-inline"
+              >$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span
+            >
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
-                      [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
-                      alt=""
-                      width="30px"
-                      height="30px"
-                      *ngIf="breakpoint.value.matches"
-                      (click)="viewQrAddress(modalManage)" />
+                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                alt=""
+                width="30px"
+                height="30px"
+                *ngIf="breakpoint.value.matches"
+                (click)="viewQrAddress(modalManage)" />
             </div>
           </div>
         </div>
@@ -49,15 +51,19 @@
   <!-- Main info -->
   <div class="mt-4 mt-lg-6">
     <!-- Tab List-->
-    <ul ngbNav
-        #customNav="ngbNav"
-        [activeId]="0"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
-        [class.mobile-tab]="breakpoint.value.matches">
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="0"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+      [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a class="account__tab-item" ngbNavLink (click)="currentTab = tab">
-            <span class="body fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--light-gray' }}">{{ tab }}</span>
+            <span
+              class="body fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--light-gray' }}"
+              >{{ tab }}</span
+            >
           </a>
         </li>
       </ng-container>
@@ -65,9 +71,9 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === 'ASSETS'">
       <!-- Coin & Token-->
-      <app-token-table [assetCW20]="assetCW20"></app-token-table>
+      <app-token-table [address]="currentAddress" [assetCW20]="assetCW20"></app-token-table>
       <!-- NFT -->
-      <app-nft-list [assetCW721]="assetCW721"></app-nft-list>
+      <app-nft-list [address]="currentAddress" [assetCW721]="assetCW721"></app-nft-list>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === 'TRANSACTIONS'">
@@ -81,9 +87,9 @@
                     <ng-container *ngFor="let template of templates; index as i">
                       <ng-container [matColumnDef]="template.matColumnDef">
                         <th
-                                mat-header-cell
-                                *matHeaderCellDef
-                                class="{{
+                          mat-header-cell
+                          *matHeaderCellDef
+                          class="{{
                             template.headerCellDef === 'Time' ||
                             template.headerCellDef === 'Result' ||
                             template.headerCellDef === 'Tx Hash'
@@ -100,15 +106,15 @@
                                 {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                               </div>
                               <a
-                                      *ngSwitchCase="'tx_hash'"
-                                      class="text--primary cursor-pointer hash-link"
-                                      [routerLink]="['/transaction', data['tx_hash']]">
+                                *ngSwitchCase="'tx_hash'"
+                                class="text--primary cursor-pointer hash-link"
+                                [routerLink]="['/transaction', data['tx_hash']]">
                                 {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                               </a>
                               <a
-                                      *ngSwitchCase="'height'"
-                                      class="text--primary cursor-pointer block-link"
-                                      [routerLink]="['/blocks/id', data['blockId']]">
+                                *ngSwitchCase="'height'"
+                                class="text--primary cursor-pointer block-link"
+                                [routerLink]="['/blocks/id', data['blockId']]">
                                 {{ data[template.matColumnDef] }}
                               </a>
                               <div *ngSwitchCase="'type'">
@@ -139,9 +145,9 @@
                                 <ng-template #displayNonNumber>
                                   <span *ngIf="data[template.matColumnDef] === 0"> - </span>
                                   <a
-                                          *ngIf="data[template.matColumnDef] !== 0"
-                                          class="text--primary cursor-pointer"
-                                          [routerLink]="['/transaction', data['tx_hash']]">
+                                    *ngIf="data[template.matColumnDef] !== 0"
+                                    class="text--primary cursor-pointer"
+                                    [routerLink]="['/transaction', data['tx_hash']]">
                                     More
                                   </a>
                                 </ng-template>
@@ -164,24 +170,24 @@
                 </ng-container>
                 <ng-container *ngIf="breakpoint.value.matches">
                   <app-card-mob-simple
-                          *ngFor="let data of dataSource?.data"
-                          [link]="'/transaction/' + data.tx_hash"
-                          [title]="{
+                    *ngFor="let data of dataSource?.data"
+                    [link]="'/transaction/' + data.tx_hash"
+                    [title]="{
                       size: 'md',
                       label: data.tx_hash | cutStringPipe: 6:6,
                       subLabelContent: data.type,
                       subLabelClass: 'label__status'
                     }"
-                          [content]="[
+                    [content]="[
                       { label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash, data.typeOrigin) },
                       { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
                     ]"></app-card-mob-simple>
                 </ng-container>
                 <app-paginator
-                        [length]="pageData.length"
-                        [pageSize]="pageSize"
-                        (paginator)="paginatorEmit($event)"
-                        (pageEvent)="pageEvent($event)">
+                  [length]="pageData.length"
+                  [pageSize]="pageSize"
+                  (paginator)="paginatorEmit($event)"
+                  (pageEvent)="pageEvent($event)">
                 </app-paginator>
               </div>
             </ng-container>
@@ -203,36 +209,44 @@
             <div class="card-body article-2">
               <div *ngIf="!accDetailLoading">
                 <!-- Tab List-->
-                <ul ngbNav
-                    #customNav2="ngbNav"
-                    [activeId]="0"
-                    class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
-                    [class.mobile-tab]="breakpoint.value.matches">
+                <ul
+                  ngbNav
+                  #customNav2="ngbNav"
+                  [activeId]="0"
+                  class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6"
+                  [class.mobile-tab]="breakpoint.value.matches">
                   <ng-container *ngFor="let tab of TABS_STAKE; index as index">
                     <li [ngbNavItem]="index">
                       <a class="account__tab-item" ngbNavLink (click)="currentStake = tab.key">
-                        <span class="body fw-semibold mb-0 {{ customNav2.activeId === index ? 'text--white' : 'text--light-gray' }}">{{ tab.label }}</span>
+                        <span
+                          class="body fw-semibold mb-0 {{
+                            customNav2.activeId === index ? 'text--white' : 'text--light-gray'
+                          }}"
+                          >{{ tab.label }}</span
+                        >
                       </a>
                     </li>
                   </ng-container>
                 </ul>
                 <!-- Delegations-->
-                <app-account-table *ngIf="currentStake === 0"
-                                   [dataSource]="dataSourceDelegation"
-                                   [templates]="templatesDelegation"
-                                   [displayedColumns]="displayedColumnsDelegation"
-                                   [pageData]="pageDataDelegation"
-                                   [pageEventType]="pageEventType.Delegation"
-                                   (pageEvent)="changePage($event)">
+                <app-account-table
+                  *ngIf="currentStake === 0"
+                  [dataSource]="dataSourceDelegation"
+                  [templates]="templatesDelegation"
+                  [displayedColumns]="displayedColumnsDelegation"
+                  [pageData]="pageDataDelegation"
+                  [pageEventType]="pageEventType.Delegation"
+                  (pageEvent)="changePage($event)">
                 </app-account-table>
                 <!-- Unbondings-->
-                <app-account-table *ngIf="currentStake === 1"
-                                   [dataSource]="dataSourceUnBonding"
-                                   [templates]="templatesUnBonding"
-                                   [displayedColumns]="displayedColumnsUnBonding"
-                                   [pageData]="pageDataUnbonding"
-                                   [pageEventType]="pageEventType.Unbonding"
-                                   (pageEvent)="changePage($event)">
+                <app-account-table
+                  *ngIf="currentStake === 1"
+                  [dataSource]="dataSourceUnBonding"
+                  [templates]="templatesUnBonding"
+                  [displayedColumns]="displayedColumnsUnBonding"
+                  [pageData]="pageDataUnbonding"
+                  [pageEventType]="pageEventType.Unbonding"
+                  (pageEvent)="changePage($event)">
                 </app-account-table>
                 <!-- Redelegations-->
                 <div *ngIf="currentStake === 2">
@@ -241,21 +255,22 @@
                     2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
                   </div>
                   <app-account-table
-                          [dataSource]="dataSourceReDelegation"
-                          [templates]="templatesReDelegation"
-                          [displayedColumns]="displayedColumnsReDelegation"
-                          [pageData]="pageDataRedelegation"
-                          [pageEventType]="pageEventType.Redelegation"
-                          (pageEvent)="changePage($event)"></app-account-table>
+                    [dataSource]="dataSourceReDelegation"
+                    [templates]="templatesReDelegation"
+                    [displayedColumns]="displayedColumnsReDelegation"
+                    [pageData]="pageDataRedelegation"
+                    [pageEventType]="pageEventType.Redelegation"
+                    (pageEvent)="changePage($event)"></app-account-table>
                 </div>
                 <!-- Vestings-->
-                <app-account-table *ngIf="currentStake === 3"
-                                   [dataSource]="dataSourceVesting"
-                                   [templates]="templatesVesting"
-                                   [displayedColumns]="displayedColumnsVesting"
-                                   [pageData]="pageDataVesting"
-                                   [pageEventType]="pageEventType.Vestings"
-                                   (pageEvent)="changePage($event)">
+                <app-account-table
+                  *ngIf="currentStake === 3"
+                  [dataSource]="dataSourceVesting"
+                  [templates]="templatesVesting"
+                  [displayedColumns]="displayedColumnsVesting"
+                  [pageData]="pageDataVesting"
+                  [pageEventType]="pageEventType.Vestings"
+                  (pageEvent)="changePage($event)">
                 </app-account-table>
               </div>
               <div class="mt-20" *ngIf="accDetailLoading">
@@ -271,17 +286,17 @@
                 <div id="walletChart" class="my-0 mx-auto">
                   <ng-container *ngIf="+currentAccountDetail?.total > 0; else chartNoValue">
                     <apx-chart
-                            [series]="chartOptions.series"
-                            [chart]="chartOptions.chart"
-                            [labels]="chartOptions.labels"
-                            [fill]="chartOptions.fill"
-                            [dataLabels]="chartOptions.dataLabels"
-                            [responsive]="chartOptions.responsive"
-                            [plotOptions]="chartOptions.plotOptions"
-                            [legend]="chartOptions.legend"
-                            [colors]="chartOptions.colors"
-                            [tooltip]="chartOptions.tooltip"
-                            [stroke]="chartOptions.stroke">
+                      [series]="chartOptions.series"
+                      [chart]="chartOptions.chart"
+                      [labels]="chartOptions.labels"
+                      [fill]="chartOptions.fill"
+                      [dataLabels]="chartOptions.dataLabels"
+                      [responsive]="chartOptions.responsive"
+                      [plotOptions]="chartOptions.plotOptions"
+                      [legend]="chartOptions.legend"
+                      [colors]="chartOptions.colors"
+                      [tooltip]="chartOptions.tooltip"
+                      [stroke]="chartOptions.stroke">
                     </apx-chart>
                   </ng-container>
                   <ng-template #chartNoValue>
@@ -298,7 +313,8 @@
                     <span class="body">{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
-                    <div class="d-flex justify-content-between align-items-center small-body chart-legend-item py-3 px-0">
+                    <div
+                      class="d-flex justify-content-between align-items-center small-body chart-legend-item py-3 px-0">
                       <div class="d-flex align-items-center">
                         <div class="item-color-balance fw-500" [ngStyle]="{ 'background-color': item.color }"></div>
                         <span>{{ item.name }}</span>
@@ -316,19 +332,7 @@
         </div>
       </div>
     </ng-container>
-
-
-
-
   </div>
-
-
-
-
-
-
-
-
 
   <!-- QR code popup-->
   <div class="col-lg-6">
