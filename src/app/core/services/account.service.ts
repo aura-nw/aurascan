@@ -23,7 +23,11 @@ export class AccountService extends CommonService {
     );
   }
 
-  getAssetByOnwer(address: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/${address}`);
+  getAssetCW20ByOnwer(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/`,payload);
+  }
+
+  getAssetCW721ByOnwer(address: string | number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/get-by-owner/${address}`);
   }
 }

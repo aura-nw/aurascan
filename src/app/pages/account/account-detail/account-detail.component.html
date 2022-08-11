@@ -71,7 +71,7 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === 'ASSETS'">
       <!-- Coin & Token-->
-      <app-token-table [address]="currentAddress" [assetCW20]="assetCW20"></app-token-table>
+      <app-token-table [address]="currentAddress"></app-token-table>
       <!-- NFT -->
       <app-nft-list [address]="currentAddress" [assetCW721]="assetCW721"></app-nft-list>
     </ng-container>

@@ -228,7 +228,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.loadDataTemp();
         this.getAccountDetail();
         this.getListTransaction();
-        this.getAssetByOnwer();
       }
     });
   }
@@ -408,18 +407,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           accountDetail['dataChart'] = JSON.stringify(this.chartOptions);
           local.setItem('accountDetail', accountDetail);
         }
-      }
-    });
-  }
-
-  getAssetByOnwer(): void {
-    this.accountService.getAssetByOnwer(this.currentAddress).subscribe((res) => {
-      this.accDetailLoading = true;
-      if (res?.data?.assets?.CW20?.asset.length > 0) {
-        this.assetCW20 = res?.data?.assets?.CW20.asset;
-      }
-      if (res?.data?.assets?.CW721?.asset.length > 0) {
-        this.assetCW721 = res?.data?.assets?.CW721.asset;
       }
     });
   }

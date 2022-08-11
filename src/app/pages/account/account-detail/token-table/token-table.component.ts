@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { AccountService } from 'src/app/core/services/account.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -13,8 +14,7 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './token-table.component.html',
   styleUrls: ['./token-table.component.scss'],
 })
-export class TokenTableComponent implements OnInit, OnChanges {
-  @Input() assetCW20: any[];
+export class TokenTableComponent implements OnInit {
   @Input() address: string;
   math = Math;
   textSearch = '';
@@ -40,27 +40,31 @@ export class TokenTableComponent implements OnInit, OnChanges {
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  constructor(public global: Globals) {}
+  assetCW20: any[];
+  constructor(public global: Globals, private accountService: AccountService,) {}
 
   ngOnInit(): void {
-    //this.getListToken();
-  }
-
-  ngOnChanges(): void {
     this.getListToken();
   }
 
   getListToken() {
     const payload = {
+      account_address: this.address,
       limit: this.pageData.pageSize,
       offset: 0,
       keyword: '',
     };
-    this.dataSource = new MatTableDataSource<any>(this.assetCW20);
-    this.pageData.length = this.assetCW20.length;
+    this.accountService.getAssetCW20ByOnwer(payload).subscribe((res) => {
+      if (res?.data?.length > 0) {
+        this.assetCW20 = res?.data;
+        this.assetCW20.length = res.data.length;
+        this.dataSource = new MatTableDataSource<any>(this.assetCW20);
+        this.pageData.length = this.assetCW20?.length;
+      }
+    });
   }
 
-  convertValue(value: any, decimal: number){
+  convertValue(value: any, decimal: number) {
     return balanceOf(value, decimal);
   }
 
