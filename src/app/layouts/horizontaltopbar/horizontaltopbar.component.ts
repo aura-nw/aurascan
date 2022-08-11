@@ -303,7 +303,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
       if (regexRule.test(this.searchValue)) {
-        if (this.searchValue.length > LENGTH_CHARACTER.TRANSACTION) {
+        if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
           if (this.searchValue.toLowerCase() === this.searchValue) {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['contracts', this.searchValue]);

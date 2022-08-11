@@ -165,12 +165,10 @@
       >{{ contractDetailData?.execute_msg_schema }}</pre
     >
 
-    <div
-      class="d-flex justify-content-between align-items-center mt-2"
-      [class.row]="breakpoint.value.matches"
-      *ngIf="contractDetailData?.instantiate_msg_schema">
+    <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 2 of 3: instantiate msg.json</span>
       <div
+        *ngIf="contractDetailData?.instantiate_msg_schema"
         class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
         [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">

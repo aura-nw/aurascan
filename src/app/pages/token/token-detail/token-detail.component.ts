@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
-import { TokenType } from 'src/app/core/constants/token.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
 
@@ -15,9 +15,17 @@ export class TokenDetailComponent implements OnInit {
   contractAddress = '';
   tokenDetail: any;
 
-  constructor(private router: ActivatedRoute, private tokenService: TokenService) {}
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultImage = this.image_s3 + 'images/icons/token-logo.png';
+
+  constructor(
+    private router: ActivatedRoute,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
+    
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.getTokenDetail();
   }

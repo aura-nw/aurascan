@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
 
@@ -11,7 +12,13 @@ import { Globals } from 'src/app/global/global';
 export class TokenOverviewComponent implements OnInit {
   @Input() tokenDetail: any;
   params = '';
-  constructor(public global: Globals, private tokenService: TokenService, private route: ActivatedRoute) {}
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  constructor(
+    public global: Globals,
+    private tokenService: TokenService,
+    private route: ActivatedRoute,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {

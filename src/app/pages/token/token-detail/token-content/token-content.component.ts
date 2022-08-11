@@ -73,7 +73,7 @@ export class TokenContentComponent implements OnInit {
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = this.searchTemp;
-      if (this.textSearch.length > LENGTH_CHARACTER.TRANSACTION) {
+      if (this.textSearch.length === LENGTH_CHARACTER.TRANSACTION) {
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
       } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {

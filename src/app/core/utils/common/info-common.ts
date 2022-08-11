@@ -59,8 +59,8 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
     trans.tx_response?.raw_log,
     coinMinimalDenom,
   );
-  trans.fee = balanceOf(trans?.tx?.auth_info?.fee?.amount[0]?.amount);
-  trans.gas_limit = balanceOf(trans?.tx?.auth_info?.fee?.gas_limit);
+  trans.fee = balanceOf(trans?.tx_response?.tx?.auth_info?.fee?.amount[0]?.amount);
+  trans.gas_limit = balanceOf(trans?.tx_response?.tx?.auth_info?.fee?.gas_limit);
   trans.height = trans.tx_response?.height;
   trans.timestamp = trans.tx_response?.timestamp;
   trans.status = StatusTransaction.Fail;

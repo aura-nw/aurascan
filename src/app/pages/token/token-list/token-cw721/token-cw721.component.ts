@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
@@ -39,11 +40,15 @@ export class TokenCw721Component implements OnInit {
   sort: MatSort;
   enterSearch = '';
 
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultImage = this.image_s3 + 'images/icons/token-logo.png';
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
     private router: Router,
     public tokenService: TokenService,
+    private environmentService: EnvironmentService
   ) {}
 
   ngOnInit(): void {

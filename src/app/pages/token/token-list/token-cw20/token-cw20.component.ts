@@ -4,6 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
@@ -44,11 +45,14 @@ export class TokenCw20Component implements OnInit {
   dataSearch: any;
   enterSearch = '';
 
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultImage = this.image_s3 + 'images/icons/token-logo.png';
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private router: Router,
     public tokenService: TokenService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

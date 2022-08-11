@@ -7,7 +7,6 @@
         <div class="d-lg-flex justify-content-between">
           <div>
             <div class="mb-3 mb-lg-0 d-flex justify-content-between d-lg-block">
-              <div class="title-medium sub-text-mob text--white fw-bold">CW-20 Tokens</div>
               <button
                 class="button d-lg-none p-0"
                 (click)="
@@ -59,7 +58,7 @@
                   <div class="txt-title-search">CW-20 Tokens</div>
                   <ng-container *ngFor="let item of filterSearchData">
                     <div class="d-flex p-3 cursor-pointer" [routerLink]="['/tokens/token', item.contract_address]">
-                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+                      <img [src]="item.image || defaultImage" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
                           <span class="text-clamp">{{ item.name }}</span>
@@ -89,7 +88,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
+                  <img [src]="element.image || defaultImage" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token', element.contract_address]">{{ element.name }}</a
                     ><br class="d-none d-lg-block" />

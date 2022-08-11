@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit {
       //update data common
       this.getInfoCommon();
       const data1 = res.data.map((i) => i.total);
-      let categories = res.data.map((i) => String(i.timestamp).replace('Z', ''));
+      let categories = res.data.map((i) => String(i.timestamp));
 
       this.chartOptions.series = [
         {

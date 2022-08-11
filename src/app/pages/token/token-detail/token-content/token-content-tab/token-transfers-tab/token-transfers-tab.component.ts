@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import { forkJoin } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
@@ -67,6 +69,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   codeTransaction = CodeTransaction;
   tokenDetail = undefined;
   modeExecuteTransaction = ModeExecuteTransaction;
+  nftDetail: any;
 
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -110,41 +113,26 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     ) {
       filterData['isSearchWallet'] = true;
     }
-    forkJoin({
-      lstData: this.tokenService.getListTokenTransfer(
-        this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.contractAddress,
-        filterData,
-        'from',
-      ),
-      listExtend: this.tokenService.getListTokenTransfer(
-        this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.contractAddress,
-        filterData,
-        'to',
-      ),
-    }).subscribe((res) => {
-      if (res) {
-        let data = res.lstData?.data?.transactions;
 
-        //add list search address if filter with address
-        if (filterData['isSearchWallet']) {
-          let temp = data.concat(res.listExtend?.data?.transactions);
-          data = temp.sort((a, b) => {
-            return this.compare(a.tx_response?.timestamp, b.tx_response?.timestamp, false);
+    this.tokenService
+      .getListTokenTransfer(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+      )
+      .subscribe((res) => {
+        if (res && res.data?.length > 0) {
+          this.dataSource.data = res.data;
+          res.data.forEach((trans) => {
+            trans['tx_response'] = JSON.parse(trans.tx);
+            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+            this.dataSource.data = res.data;
           });
+          this.pageData.length = res.meta?.count;
         }
-
-        data.forEach((trans) => {
-          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-          this.dataSource.data = data;
-          this.pageData.length = data?.length;
-        });
-      }
-      this.loading = false;
-    });
+        this.loading = false;
+      });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -163,15 +151,8 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= pageIndex * pageSize;
-
-    if (next) {
-      this.loadMore.emit({
-        next: 1,
-        isNFTContract: this.isNFTContract,
-      });
-    }
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListTransactionToken();
   }
 
   paginatorEmit(event): void {
@@ -180,7 +161,31 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   getTokenDetail(data: any): void {
     this.tokenDetail = data;
-    this.tokenDetail.gasPrice = this.tokenDetail?.fee / this.tokenDetail?.tx_response?.gas_used;
+    this.tokenDetail.gasPrice = new BigNumber(this.tokenDetail?.fee)
+      .dividedBy(this.tokenDetail?.tx_response?.gas_used)
+      .toFixed(30)
+      .replace(/^0+|0+$/g, '');
+    //add first '0' before float
+    this.tokenDetail.gasPrice = '0' + this.tokenDetail.gasPrice;
     this.tokenDetail.gasPriceU = this.tokenDetail.gasPrice * Math.pow(10, 6);
+  }
+
+  getPopoverData(data): IContractPopoverData {
+    return {
+      amount: data?.value || 0,
+      code: Number(data?.tx_response?.code),
+      fee: data?.fee || 0,
+      from_address: data?.from_address || '-',
+      to_address: data?.to_address || '-',
+      price: 0,
+      status: data?.status,
+      symbol: this.denom,
+      // tokenAddress: this.contractInfo?.contractsAddress,
+      tokenAddress: '',
+      tx_hash: data?.txHash || '-',
+      gas_used: data?.tx_response?.gas_used,
+      gas_wanted: data?.tx_response?.gas_wanted,
+      nftDetail: this.nftDetail,
+    };
   }
 }

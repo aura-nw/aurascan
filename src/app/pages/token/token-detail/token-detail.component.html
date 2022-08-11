@@ -1,7 +1,7 @@
 <app-loading-sprint *ngIf="loading"></app-loading-sprint>
 <ng-container *ngIf="!loading">
   <div class="d-flex mb-4 mb-lg-5 align-items-center">
-    <img [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="" width="32px" height="32px" />
+    <img [src]="tokenDetail?.image || defaultImage" alt="" width="32px" height="32px" />
     <h1 class="sub-text title-small-mob mb-0 text--white ml-2 fw-500">
       Token <span class="text--light-gray">{{ tokenDetail?.name }}</span>
     </h1>

@@ -20,39 +20,46 @@
     <ng-container *ngIf="pageData?.length > 0; else noValues">
       <div class="table-responsive aura-table-contain">
         <table mat-table [dataSource]="dataSource" class="aura-table">
-          <!-- Rank Column -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>Rank</th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
-            </td>
-          </ng-container>
-
-          <!-- Address Column -->
-          <ng-container matColumnDef="owner">
-            <th mat-header-cell *matHeaderCellDef>Address</th>
-            <td mat-cell *matCellDef="let element" class="title-cell py-4">
-              <a href="/tokens/token/{{ contractAddress }}?a={{ element.owner }}" class="text-clamp">{{
-                element.owner
-              }}</a>
-            </td>
-          </ng-container>
-
-          <!-- quantity Column -->
-          <ng-container matColumnDef="balance">
-            <th mat-header-cell *matHeaderCellDef>Quantity</th>
-            <td mat-cell *matCellDef="let element">{{ element.balance | number: global.formatNumberToken }}</td>
-          </ng-container>
-
-          <!-- Percentage Column -->
-          <ng-container matColumnDef="percent_hold">
-            <th mat-header-cell *matHeaderCellDef>Percentage</th>
-            <td mat-cell *matCellDef="let element">
-              <div>{{ element.percent_hold }}%</div>
-              <div class="percentage-bar mt-4">
-                <div class="percentage-bar__process" [style.width]="element.percent_hold + '%'"></div>
-              </div>
-            </td>
+          <ng-container *ngFor="let template of template; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-capitalize"></div>
+                </th>
+              </ng-container>
+              <td mat-cell *matCellDef="let data">
+                <div [classList]="[template.cssClass]">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'id'">
+                      <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'owner'">
+                      <a href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}" class="text-clamp">{{
+                        data[template.matColumnDef]
+                      }}</a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'balance'">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'amount'">
+                      {{ data[template.matColumnDef] || 0 }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'percent_hold'">
+                      <span *ngIf="!isNFTContract">{{ data[template.matColumnDef] | number: global.formatNumberToken }}%</span>
+                      <div class="percentage-bar mt-4" *ngIf="isNFTContract">
+                        <div class="percentage-bar__process" [style.width]="data[template.matColumnDef] || 0 + '%'"></div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'value'">
+                      ${{ data['balance'] * data[template.matColumnDef]  | number: global.formatNumberToken }}
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{ data[template.matColumnDef] }}
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -63,7 +70,11 @@
             </td>
           </tr>
         </table>
-        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
         </app-paginator>
       </div>
     </ng-container>

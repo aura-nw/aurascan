@@ -201,7 +201,7 @@
     <span class="body text--white mb-2">Item Activity</span>
     <div class="divider divider-horizontal"></div>
     <div class="text--light-gray small-body mt-3">
-      A total of {{ dataSource?.data?.length }} record{{ dataSource?.data?.length > 1 ? 's' : '' }} found
+      A total of {{ pageData?.length }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
     <div class="table-responsive aura-table-contain">
       <table mat-table [dataSource]="dataSource" class="aura-table">
@@ -282,7 +282,7 @@
         </tr>
       </table>
       <app-paginator
-        [length]="dataSource?.data?.length"
+        [length]="pageData?.length"
         [pageSize]="pageData?.pageSize"
         (paginator)="paginatorEmit($event)"
         (pageEvent)="handlePageEvent($event)">
