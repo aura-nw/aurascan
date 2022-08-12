@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -15,12 +14,6 @@ export class AccountService extends CommonService {
 
   getAccountDetail(account_id: string | number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
-  }
-
-  getAssetByOnwerIndexer(address: string, keyWord: string): Observable<any> {
-    return this.http.get<any>(
-      `${INDEXER_URL}/asset/getByOwner?chainid=${this.chainInfo.chainId}&owner=${address}&countTotal=true&reverse=false${keyWord}`,
-    );
   }
 
   getAssetCW20ByOnwer(payload): Observable<any> {
