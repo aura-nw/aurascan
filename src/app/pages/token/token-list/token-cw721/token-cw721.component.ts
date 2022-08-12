@@ -39,6 +39,7 @@ export class TokenCw721Component implements OnInit {
   sortedData: any;
   sort: MatSort;
   enterSearch = '';
+  length = 0;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
@@ -48,7 +49,7 @@ export class TokenCw721Component implements OnInit {
     public global: Globals,
     private router: Router,
     public tokenService: TokenService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -74,6 +75,7 @@ export class TokenCw721Component implements OnInit {
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.dataSourceBk = this.dataSource;
         this.pageData.length = res.meta.count;
+        this.length = this.pageData.length;
       }
     });
   }
@@ -120,7 +122,7 @@ export class TokenCw721Component implements OnInit {
     this.textSearch = '';
     this.enterSearch = '';
     this.dataSource = this.dataSourceBk;
-    this.pageData.length = this.dataSource?.data?.length || 0;
+    this.pageData.length = this.length;
   }
 
   sortData(sort: Sort) {

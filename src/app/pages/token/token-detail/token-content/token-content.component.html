@@ -25,9 +25,9 @@
             </td>
             <td>
               <div class="small-text txt-light mb-1">BALANCE</div>
-              {{ infoSearch?.balances[0]?.amount || 0 | number: global.formatNumberToken }} {{ denom }}
+              {{ infoSearch?.total || 0 | number: global.formatNumberToken }} {{ denom }}
             </td>
-            <td>
+            <td *ngIf="!tokenDetail?.isNFTContract">
               <div class="small-text txt-light mb-1">VALUE</div>
               - ( - {{ denom }})
             </td>
