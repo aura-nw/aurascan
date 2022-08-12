@@ -31,7 +31,7 @@ export class ProposalService extends CommonService {
     offset: string | number,
   ): Observable<any> {
     return this.http.get<any>(
-      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&address=${voter}&searchType=proposal_vote&searchKey=proposal_id&searchValue=${proposalId}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`,
+      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&query=transfer.sender%3D'${voter}'%2Cproposal_vote.proposal_id%3D'${proposalId}'&pageOffset=${offset}&pageLimit=${limit}&countTotal=false&reverse=false`,
     );
   }
 
