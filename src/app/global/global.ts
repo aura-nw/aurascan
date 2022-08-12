@@ -19,26 +19,32 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom: string)
   let eTransType = TRANSACTION_TYPE_ENUM;
   let itemMessage = arrayMsg[0];
 
-  if (
-    itemMessage?.amount &&
-    (type === eTransType.Undelegate || type === eTransType.Delegate || type === eTransType.Redelegate)
-  ) {
-    amount = itemMessage?.amount.amount;
-  } else if (itemMessage?.amount) {
-    amount = itemMessage?.amount[0].amount;
-  } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
-    amount = itemMessage?.funds[0].amount;
-  } else if (type === eTransType.SubmitProposalTx) {
-    amount = itemMessage?.initial_deposit[0]?.amount || itemMessage?.content?.amount[0].amount || 0;
-  } else if (type === eTransType.CreateValidator) {
-    amount = itemMessage?.value?.amount || 0;
-  } else if (type === eTransType.GetReward && arrayMsg.length === 1) {
-    //check error with rawlog
-    try {
-      const jsonData = JSON.parse(rawRog);
-      amount = jsonData[0].events[0].attributes[1].value.replace(coinMinimalDenom, '');
-    } catch {}
-  }
+  try {
+    if (
+      itemMessage?.amount &&
+      (type === eTransType.Undelegate || type === eTransType.Delegate || type === eTransType.Redelegate)
+    ) {
+      amount = itemMessage?.amount.amount;
+    } else if (itemMessage?.amount) {
+      amount = itemMessage?.amount[0].amount;
+    } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
+      amount = itemMessage?.funds[0].amount;
+    } else if (type === eTransType.SubmitProposalTx) {
+      amount =
+        itemMessage?.initial_deposit[0]?.amount ||
+        itemMessage?.content?.amount[0].amount ||
+        itemMessage?.amount[0].amount ||
+        0;
+    } else if (type === eTransType.CreateValidator) {
+      amount = itemMessage?.value?.amount || 0;
+    } else if (type === eTransType.GetReward && arrayMsg.length === 1) {
+      //check error with rawlog
+      try {
+        const jsonData = JSON.parse(rawRog);
+        amount = jsonData[0].events[0].attributes[1].value.replace(coinMinimalDenom, '');
+      } catch {}
+    }
+  } catch {}
 
   if (itemMessage && amount >= 0) {
     amount = amount / NUMBER_CONVERT || 0;

@@ -185,7 +185,7 @@
                 </ng-container>
                 <app-paginator
                   [length]="pageData.length"
-                  [pageSize]="pageSize"
+                  [pageSize]="pageData.pageSize"
                   (paginator)="paginatorEmit($event)"
                   (pageEvent)="pageEvent($event)">
                 </app-paginator>
