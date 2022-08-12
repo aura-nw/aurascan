@@ -221,7 +221,8 @@
     border-radius: 25px;
     background-color: var(--aura-bg-form);
     padding: 0;
-    border: none;
+    border: 1px solid var(--aura-gray-10);
+    overflow: hidden;
     box-shadow: none;
     transform: unset !important;
     li.dropdown-item {
@@ -231,12 +232,12 @@
       @media (min-width: 992px) {
         padding: var(--spacer-3) var(--spacer-6);
       }
-      background-color: var(--aura-bg-form) !important;
+      background-color: var(--aura-bg-form);
       & > * {
         color: var(--aura-white);
       }
       &:hover {
-        background-color: var(--aura-dark-gray) !important;
+        background-color: var(--aura-gray-9);
       }
       &:first-child {
         border-top-left-radius: 25px;

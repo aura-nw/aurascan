@@ -34,7 +34,7 @@
             <span class="h1 mb-0 text-gradient d-inline">$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
-                      [src]="'assets/images/icons/icons-svg/color/qr-code.svg'"
+                      [src]="'assets/images/icons/icons-svg/color/qr-code.svg' | imageS3"
                       alt=""
                       width="30px"
                       height="30px"

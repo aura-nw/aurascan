@@ -1,17 +1,16 @@
-<div class="card box-contract-overview">
-  <div class="">
-    <div class="table-responsive">
-      <table class="aura-basic-table w-100">
+<div class="card box-contract-overview mb-4 mb-lg-5">
+  <div class="table-responsive">
+      <table class="aura-basic-table w-100 body-02 body-mob">
         <tr>
           <td colspan="2">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="body fw-semibold">Contract Overview</div>
+              <h6 class="h3-mob mb-0 text--white">Contract Overview</h6>
               <div class="justify-content-end">
                 <div class="d-flex justify-content-end">
                   <ng-container *ngIf="contractDetail?.token_tracker">
                     <button class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card">
-                      <img [src]="'assets/images/icons/token-chart.svg' | imageS3" alt="" width="16px" />
-                      <span class="ml-2 small-text" *ngIf="contractDetail?.token_tracker?.symbol && contractDetail?.token_tracker?.name">
+                      <img [src]="'assets/images/icons/chart-line-up.svg' | imageS3" alt="" width="16px" height="16px" />
+                      <span class="ml-2 fw-semibold" *ngIf="contractDetail?.token_tracker?.symbol && contractDetail?.token_tracker?.name">
                         {{ contractDetail?.token_tracker?.symbol + ': ' + contractDetail?.token_tracker?.name }}
                       </span>
                     </button>
@@ -23,7 +22,7 @@
         </tr>
 
         <tr>
-          <td>Balance:</td>
+          <td class="text--gray-5">Balance:</td>
           <td>
             {{ contractDetail?.balance | number: global.formatNumberToken }}
             {{ denom }}
@@ -31,20 +30,20 @@
         </tr>
 
         <tr>
-          <td>Aura Value:</td>
+          <td class="text--gray-5">Aura Value:</td>
           <td>
             ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
-            <span class="text--light-gray ml-1 small-text"
-              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})</span
-            >
+            <span class="text--gray-5 ml-1 caption fw-normal">
+              (@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})
+            </span>
           </td>
         </tr>
 
         <tr class="d-lg-none">
           <!-- Mobile -->
           <td colspan="2" class="border_none py-4">
-            <div>Token:</div>
-            <div class="mt-1">
+            <div class="text--gray-5">Token:</div>
+            <div class="mt-2">
               <div class="aura-form list-token d-flex align-items-center justify-content-between">
                 <mat-select
                   #assetTypeSelect
@@ -61,8 +60,8 @@
                     <span class="selected-token__label">1</span>
                   </mat-option>
                 </mat-select>
-                <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="button button--sm button-circle ml-3">
-                  <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="16" height="16" />
+                <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="button button--sm button--md-mob button-circle ml-3">
+                  <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="20px" height="20px" />
                 </a>
               </div>
             </div>
@@ -70,7 +69,7 @@
         </tr>
         <tr class="d-none d-lg-table-row">
           <!-- Desktop -->
-          <td>Token:</td>
+          <td class="text--gray-5">Token:</td>
           <td>
             <div class="aura-form list-token d-flex align-items-center justify-content-between">
               <mat-select
@@ -95,6 +94,5 @@
           </td>
         </tr>
       </table>
-    </div>
-  </div>
+</div>
 </div>

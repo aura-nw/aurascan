@@ -100,7 +100,7 @@
       position: absolute;
       bottom: -90%;
       transform: translateY(98%);
-      background-color: var(--aura-bg-form);
+      border: 1px solid transparent;
       border-radius: 25px;
       z-index: 1500;
       overflow: hidden;
@@ -124,7 +124,7 @@
         }
         &:hover {
           color: var(--aura-white);
-          background-color: var(--aura-gray-10);
+          background-color: var(--aura-gray-9);
         }
         &.active {
           color: var(--aura-white);
@@ -134,6 +134,8 @@
     .nav-item.dropdown:hover {
         .nav-link__panel {
           max-height: 900px;
+          background-color: var(--aura-gray-10);
+          border: 1px solid var(--aura-gray-9);
         }
       }
   }

@@ -96,6 +96,7 @@
 
     &.button-outline {
       border: 1px solid var(--aura-gray-7);
+      transition: border-color .35s ease-in-out;
       span {
         color: var(--aura-white);
         transition: background .35s ease-in-out;
@@ -113,6 +114,9 @@
       &:disabled {
         opacity: .6;
         cursor: not-allowed;
+      }
+      &:not(.button-outline--gradient):hover {
+        border-color: var(--aura-white);
       }
     }
 

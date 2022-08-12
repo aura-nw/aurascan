@@ -18,8 +18,8 @@
   .list-token .select-input-field {
     background-color: var(--aura-bg-form);
     width: 100%;
-    padding: 2px 16px;
-    height: auto;
+    padding: 8px 16px;
+    height: 40px;
     border: 1px solid var(--aura-dark-gray);
 
     @media (min-width: 992px) {

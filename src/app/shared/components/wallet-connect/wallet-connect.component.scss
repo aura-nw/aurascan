@@ -30,6 +30,17 @@
   }
 
   .walletMenu {
+    &.aura-dropdown .dropdown-menu.aura-dropdown-menu {
+      background-color: var(--aura-gray-10) !important;
+      border: 1px solid var(--aura-gray-9);
+      li.dropdown-item {
+        background-color: var(--aura-gray-10) !important;
+        transition: background-color .35s ease-in-out;
+        &:hover {
+          background-color: var(--aura-gray-9) !important;
+        }
+      }
+    }
     .button__title {
       @media (min-width: 576px) {
         min-width: 100px;

@@ -1,4 +1,4 @@
-<section class="card main-tab p-4">
+<section class="card main-tab px-4 py-4 py-lg-6 px-lg-6">
   <div class="d-flex justify-content-between tab-wrapper tab-contract">
     <ul
       ngbNav
@@ -13,7 +13,7 @@
             [class.verify-contract]="
               tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed
             ">
-            <span class="tab-title mr-2">{{ tab.value }}</span>
+            <span class="tab-title mr-2 h5 mb-0 text-uppercase">{{ tab.value }}</span>
             <img
               *ngIf="tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed"
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
