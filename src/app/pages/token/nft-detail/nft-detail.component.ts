@@ -136,7 +136,7 @@ export class NFTDetailComponent implements OnInit {
       symbol: this.denom,
       // tokenAddress: this.contractInfo?.contractsAddress,
       tokenAddress: '',
-      tx_hash: data?.txHash || '',
+      tx_hash: data?.tx_hash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
       nftDetail: this.nftDetail,

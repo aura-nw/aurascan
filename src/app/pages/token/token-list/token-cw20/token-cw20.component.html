@@ -57,7 +57,9 @@
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
                   <div class="txt-title-search mb-2">CW-20 Tokens</div>
                   <ng-container *ngFor="let item of filterSearchData">
-                    <div class="d-flex p-3 cursor-pointer search-result" [routerLink]="['/tokens/token', item.contract_address]">
+                    <div
+                      class="d-flex p-3 cursor-pointer search-result"
+                      [routerLink]="['/tokens/token', item.contract_address]">
                       <img [src]="item.image || defaultLogoToken" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
