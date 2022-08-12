@@ -80,7 +80,7 @@
       <div class="card">
         <div class="card-body px-6 pt-0">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
-            <ng-container *ngIf="length > 0; else noValues">
+            <ng-container *ngIf="dataSource.data.length > 0; else noValues">
               <div class="table-responsive aura-table-contain">
                 <ng-container *ngIf="!breakpoint.value.matches">
                   <table mat-table [dataSource]="dataSource" class="aura-table">

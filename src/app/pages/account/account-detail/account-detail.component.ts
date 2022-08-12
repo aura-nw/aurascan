@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { balanceOf } from '../../../../app/core/utils/common/parsing';
@@ -180,22 +181,22 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
   TABS_STAKE = [
-      {
-        key: 0,
-        label: 'Delegations',
-      },
-      {
-        key: 1,
-        label: 'Unbondings',
-      },
-      {
-        key: 2,
-        label: 'Redelegations',
-      },
-      {
-        key: 3,
-        label: 'Vestings',
-      },
+    {
+      key: 0,
+      label: 'Delegations',
+    },
+    {
+      key: 1,
+      label: 'Unbondings',
+    },
+    {
+      key: 2,
+      label: 'Redelegations',
+    },
+    {
+      key: 3,
+      label: 'Vestings',
+    },
   ];
   currentTab = 'ASSETS';
   currentStake = 0;
@@ -299,25 +300,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.transactionService
       .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((trans) => {
-            //get amount of transaction
-            trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-            trans.type = typeTrans?.value;
-            trans.status = StatusTransaction.Fail;
-            if (trans.code === CodeTransaction.Success) {
-              trans.status = StatusTransaction.Success;
-            }
-            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-              trans.type = TypeTransaction.Received;
-            }
+        if (res?.data?.transactions?.length > 0) {
+          res.data.transactions.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom);
+            this.dataSource.data = res.data.transactions;
+            this.pageData.length = res.data.count;
           });
-          this.dataSource.data = res.data;
-
-          this.length = res.meta.count;
-          this.pageData.length = res.meta.count;
         }
       });
   }
