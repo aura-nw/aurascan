@@ -26,8 +26,9 @@ export class PipeCutString implements PipeTransform {
   transform(value: string, start: number, end?: number): string {
     if (value && value.length > start) {
       if (end) {
-        const middleText = value.substring(start, value.length - end);
-        value = value.replace(middleText, '...');
+        const firstChar = value.substring(0, start);
+        const lastChar = value.substring(value.length - end);
+        value = firstChar + '...' + lastChar;
       } else {
         const middleText = value.substring(0, start);
         value = middleText + '...';

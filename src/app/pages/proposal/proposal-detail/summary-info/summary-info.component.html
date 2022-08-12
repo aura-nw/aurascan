@@ -50,7 +50,9 @@
         </div>
       </div>
       <a class="sub-text fw-500 sub-text-mob text--white">{{ proposalDetail.pro_title }}</a>
-      <div class="text--greyscale-4 mt-2 text-end" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
+      <div class="text--greyscale-4 mt-2 text-end" *ngIf="proposalVotes">
+        You voted '{{ proposalVotes }}' for this proposal
+      </div>
       <div class="divider divider-horizontal mt-4"></div>
     </div>
     <div class="card-body">
@@ -97,12 +99,21 @@
           <div class="col-12 col-md-2 fw-semibold">Deposit End Time</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">{{ proposalDetail.pro_deposit_end_time }}</div>
         </div>
-        <div class="row small-body">
+        <div class="row mb-3 small-body">
           <div class="col-12 col-md-2 fw-semibold d-lg-flex align-items-center">Details</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
             <div class="editorial-container p-4 py-lg-8 px-lg-4">
               <div id="marked" class="editorial"></div>
             </div>
+          </div>
+        </div>
+        <div
+          class="row small-body"
+          *ngIf="proposalDetail.pro_type == 'CommunityPoolSpendProposal'">
+          <div class="col-12 col-md-2 fw-semibold">Request Amount</div>
+          <div class="col-12 col-md-10 mt-2 mt-lg-0">
+            {{ proposalDetail.request_amount | number: global.formatNumberToken }}
+            <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
         <div class="divider divider-horizontal mt-4 mt-lg-5"></div>
@@ -287,7 +298,7 @@
   </div>
 </ng-container>
 <script>
-  $( document ).ready(function() {
-    document.getElementById('marked').innerHTML =  marked.parse('# Marked in the browser\n\nRendered by **marked**.');
+  $(document).ready(function () {
+    document.getElementById('marked').innerHTML = marked.parse('# Marked in the browser\n\nRendered by **marked**.');
   });
 </script>

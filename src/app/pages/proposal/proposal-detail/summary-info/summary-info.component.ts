@@ -198,6 +198,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
+      request_amount: balanceOf(data.request_amount),
     };
   }
 

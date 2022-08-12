@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { balanceOf } from '../../../../app/core/utils/common/parsing';
@@ -23,18 +24,13 @@ import {
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import {
-  CodeTransaction,
-  StatusTransaction,
-  TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
-} from '../../../core/constants/transaction.enum';
+import { TRANSACTION_TYPE_ENUM } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { getAmount, Globals } from '../../../global/global';
+import { Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -161,6 +157,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
+  assetCW20: any[] = [];
+  assetCW721: any[] = [];
 
   // loading param check
   accDetailLoading = true;
@@ -175,6 +173,28 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+
+  TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
+  TABS_STAKE = [
+    {
+      key: 0,
+      label: 'Delegations',
+    },
+    {
+      key: 1,
+      label: 'Unbondings',
+    },
+    {
+      key: 2,
+      label: 'Redelegations',
+    },
+    {
+      key: 3,
+      label: 'Vestings',
+    },
+  ];
+  currentTab = 'ASSETS';
+  currentStake = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -232,22 +252,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  copyMessage(val: string) {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
     document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.isCopy = true;
-    setTimeout(() => {
-      this.isCopy = false;
-    }, 1000);
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function () {
+      document.getElementById('currentAddress').click();
+    }, 800);
   }
 
   changePage(page: any): void {
@@ -279,25 +295,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.transactionService
       .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((trans) => {
-            //get amount of transaction
-            trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-            trans.type = typeTrans?.value;
-            trans.status = StatusTransaction.Fail;
-            if (trans.code === CodeTransaction.Success) {
-              trans.status = StatusTransaction.Success;
-            }
-            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-              trans.type = TypeTransaction.Received;
-            }
+        if (res?.data?.transactions?.length > 0) {
+          res.data.transactions.forEach((trans) => {
+            trans = parseDataTransaction(trans, this.coinMinimalDenom);
+            this.dataSource.data = res.data.transactions;
+            this.pageData.length = res.data.count;
           });
-          this.dataSource.data = res.data;
-
-          this.length = res.meta.count;
-          this.pageData.length = res.meta.count;
         }
       });
   }
