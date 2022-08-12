@@ -50,7 +50,7 @@ export class TokenTableComponent implements OnInit {
   getListToken() {
     const payload = {
       account_address: this.address,
-      limit: this.pageData.pageSize,
+      limit: 0,
       offset: 0,
       keyword: '',
     };

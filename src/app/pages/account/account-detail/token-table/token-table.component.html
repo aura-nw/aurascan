@@ -11,55 +11,57 @@
                 <div class="sub-text text-gradient fw-semibold"></div>
               </div>
             </div>
-            <form class="aura-form single-input-field search-form account-search-form mt-2 mt-lg-0" #searchForm>
-              <div class="input-group small-input">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Search for Token Name or Address"
-                  [(ngModel)]="textSearch"
-                  [maxLength]="maxLengthSearch"
-                  (keyup)="searchToken()"
-                  name="search"
-                  autocomplete="off" />
-                <button
-                  type="submit"
-                  class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                  (click)="searchToken()">
-                  <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-                </button>
-                <button
-                  type="reset"
-                  class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                  (click)="textSearch = ''; searchToken()">
-                  <img
-                    [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
-                    alt=""
-                    width="24"
-                    height="24" />
-                </button>
-              </div>
-            </form>
-            <ng-container *ngIf="textSearch?.length > 0">
-              <div class="box-search-data text-white">
-                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
-                  <span> No coins & tokens </span>
-                </ng-container>
-                <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search">CW-20 Tokens</div>
-                  <ng-container *ngFor="let item of filterSearchData">
-                    <div class="d-flex p-3 cursor-pointer" [routerLink]="['/tokens/token', item.contract_address]">
-                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
-                      <div class="ml-3">
-                        <div class="d-flex align-items-center">
-                          <span class="text-clamp">{{ item.name }}</span>
+            <div class="position-relative">
+              <form class="aura-form single-input-field search-form account-search-form mt-2 mt-lg-0" #searchForm>
+                <div class="input-group small-input">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search for Token Name or Address"
+                    [(ngModel)]="textSearch"
+                    [maxLength]="maxLengthSearch"
+                    (keyup)="searchToken()"
+                    name="search"
+                    autocomplete="off" />
+                  <button
+                    type="submit"
+                    class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                    (click)="searchToken()">
+                    <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                  </button>
+                  <button
+                    type="reset"
+                    class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                    (click)="textSearch = ''; searchToken()">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                      alt=""
+                      width="24"
+                      height="24" />
+                  </button>
+                </div>
+              </form>
+              <ng-container *ngIf="textSearch?.length > 0">
+                <div class="box-search-data text-white">
+                  <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
+                    <span> No coins & tokens </span>
+                  </ng-container>
+                  <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+                    <div class="txt-title-search">CW-20 Tokens</div>
+                    <ng-container *ngFor="let item of filterSearchData">
+                      <div class="d-flex p-3 cursor-pointer" [routerLink]="['/tokens/token', item.contract_address]">
+                        <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+                        <div class="ml-3">
+                          <div class="d-flex align-items-center">
+                            <span class="text-clamp">{{ item.name }}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </ng-container>
                   </ng-container>
-                </ng-container>
-              </div>
-            </ng-container>
+                </div>
+              </ng-container>
+            </div>
           </div>
           <!-- Table -->
           <div class="table-responsive aura-table-contain mt-4 table-token">

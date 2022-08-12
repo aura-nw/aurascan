@@ -14,6 +14,7 @@
             class="form-control"
             placeholder="Search for Token ID or Address"
             [(ngModel)]="searchValue"
+            [maxLength]="maxLengthSearch"
             (keyup)="handleSearch()"
             [ngModelOptions]="{ standalone: true }"
             name="inputEmail"
@@ -34,10 +35,10 @@
         <ng-container *ngIf="searchValue?.length > 0">
           <div class="box-search-data text-white">
             <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
-              <span> No coins & tokens </span>
+              <span> No NFTs </span>
             </ng-container>
             <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-              <div class="txt-title-search">CW-20 Tokens</div>
+              <div class="txt-title-search">NFT assets</div>
               <ng-container *ngFor="let item of filterSearchData">
                 <div class="d-flex p-3 cursor-pointer" [routerLink]="['/tokens/token', item.contract_address]">
                   <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />

@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 
@@ -23,6 +23,7 @@ export class NftListComponent implements OnInit, OnChanges {
   nftData = [];
   showedData = [];
   filterSearchData = [];
+  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
   constructor(private accountService: AccountService) {}
 
@@ -62,21 +63,7 @@ export class NftListComponent implements OnInit, OnChanges {
     this.loading = false;
   }
 
-  // getNftData() {
-  //   this.loading = true;
-  //   if (this.pageData) {
-  //     this.pageData.length = this.assetCW721?.length || 0;
-  //     const { pageIndex, pageSize } = this.pageData;
-  //     const start = pageIndex * pageSize;
-  //     const end = start + pageSize;
-  //     this.showedData = this.assetCW721.slice(start, end);
-  //   }
-  //   this.loading = false;
-  // }
-
   handleSearch() {
-    console.log(this.searchValue.length);
-    
     if (this.searchValue.length > 0) {
       const payload = {
         account_address: this.address,
@@ -88,7 +75,8 @@ export class NftListComponent implements OnInit, OnChanges {
         if (res?.data?.length > 0) {
           let keyWord = this.searchValue.toLowerCase();
           this.filterSearchData = res.data?.filter(
-            (data) => data.contract_name.toLowerCase().includes(keyWord) || data.token_id.toLowerCase().includes(keyWord),
+            (data) =>
+              data.contract_name.toLowerCase().includes(keyWord) || data.token_id.toLowerCase().includes(keyWord),
           );
         }
       });
