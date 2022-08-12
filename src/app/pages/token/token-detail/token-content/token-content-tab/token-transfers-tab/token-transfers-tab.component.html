@@ -81,8 +81,22 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--green txt-from-address content-transfer"
+                            href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            *ngIf="
+                              data.modeExecute !== modeExecuteTransaction.Mint &&
+                              data[template.matColumnDef] &&
+                              isNFTContract
+                            ">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                          </a>
+                          <a
+                            class="text--green txt-from-address content-transfer"
                             href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                            *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
+                            *ngIf="
+                              data.modeExecute !== modeExecuteTransaction.Mint &&
+                              data[template.matColumnDef] &&
+                              !isNFTContract
+                            ">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
                           <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
@@ -126,7 +140,7 @@
                           [disabled]="!data.token_id"
                           [routerLink]="['/tokens/token', contractAddress, data.token_id]">
                           <span class="text-gradient">View NFT</span>
-                      </button>
+                        </button>
                       </ng-container>
                       <ng-container *ngSwitchCase="'token_id'">
                         <a

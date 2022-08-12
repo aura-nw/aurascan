@@ -43,10 +43,15 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
     const firstChar = address.substring(0, 8);
     const lastChar = address.substring(address.length - 8);
     const addressFormat = firstChar + '...' + lastChar;
+    let url = '/tokens/token/';
+    if (this.popoverData?.nftDetail !== undefined) {
+      url = '/tokens/token-nft/';
+    }
     if (isToAddress) {
       if (this.popoverData.modeExecute !== this.modeExecuteTransaction.Burn && this.popoverData?.to_address) {
         element =
-          `<a class="text--green cursor-pointer" href="/tokens/token/` +
+          `<a class="text--green cursor-pointer" href="` +
+          url +
           this.popoverData.tokenAddress +
           '?a=' +
           address +
@@ -61,7 +66,8 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
     } else {
       if (this.popoverData.modeExecute !== this.modeExecuteTransaction.Mint && this.popoverData?.from_address) {
         element =
-          `<a class="text--green cursor-pointer" href="/tokens/token/` +
+          `<a class="text--green cursor-pointer" href="` +
+          url +
           this.popoverData.tokenAddress +
           '?a=' +
           address +

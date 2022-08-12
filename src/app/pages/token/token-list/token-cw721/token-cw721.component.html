@@ -51,7 +51,7 @@
                   <ng-container *ngFor="let item of filterSearchData">
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.contract_address]">
+                      [routerLink]="['/tokens/token-nft', item.contract_address]">
                       <img [src]="item.image || defaultLogoToken" class="logo-token" />
                       <div class="px-2 d-flex align-items-center justify-content-between" style="flex: 0 0 95%">
                         <span class="text-clamp small-body" style="max-width:60%; height: 18px">{{ item.name }}</span>

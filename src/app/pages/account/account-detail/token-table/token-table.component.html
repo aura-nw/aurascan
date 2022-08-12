@@ -93,8 +93,8 @@
                 <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                   <a class="d-flex align-items-center" [routerLink]="['/contracts', element.contract_address]">
                     <img [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3" width="24px" height="24px" />
-                    <div class="ml-2 text--green g-ellipsis contract-address">
-                      {{ element.contract_address }}
+                    <div class="ml-2 text--green">
+                      {{ element.contract_address | cutStringPipe: 8:8 }}
                     </div>
                   </a>
                 </td>
