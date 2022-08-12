@@ -15,7 +15,7 @@ import { TokenTab } from '../../../../core/constants/token.enum';
 export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
-  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = [];
   countCurrent: string = '';
@@ -40,13 +40,13 @@ export class TokenContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.TABS = TOKEN_TAB.filter((tab) => (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(tab.key)).map(
-      (tab) => ({
-        ...tab,
-        value: tab.value,
-        key: tab.key === TokenTab.Transfers ? '' : tab.key,
-      }),
-    );
+    this.TABS = TOKEN_TAB.filter((tab) =>
+      (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(tab.key),
+    ).map((tab) => ({
+      ...tab,
+      value: tab.value,
+      key: tab.key === TokenTab.Transfers ? '' : tab.key,
+    }));
     this.tabsBackup = this.TABS;
 
     this.route.queryParams.subscribe((params) => {
@@ -72,17 +72,21 @@ export class TokenContentComponent implements OnInit {
     if (regexRule.test(this.searchTemp)) {
       this.textSearch = this.searchTemp;
       let tempTabs;
-      if (this.textSearch.length > LENGTH_CHARACTER.TRANSACTION) {
-        this.paramQuery = this.searchTemp;
+      this.paramQuery = this.searchTemp;
+      if (this.textSearch.length === LENGTH_CHARACTER.TRANSACTION) {
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
       } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
-        this.paramQuery = this.searchTemp;
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         this.getInfoAddress(this.paramQuery);
       }
       this.TABS = tempTabs || this.tabsBackup;
+      this.route.queryParams.subscribe((params) => {
+        if (!params?.a) {
+          window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+        }
+      });
     } else {
       this.textSearch = '';
     }

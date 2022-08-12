@@ -84,11 +84,12 @@ export class NFTDetailComponent implements OnInit {
     )
     .subscribe(
       (res) => {
-        if (res && res.data?.transactions?.length > 0) {
-          res.data.transactions.forEach((trans) => {
+        if (res && res.meta?.count > 0) {
+          res.data.forEach((trans) => {
+            trans['tx_response'] = JSON.parse(trans.tx);
             trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-            this.dataSource.data = res.data.transactions;
-            this.pageData.length = res.data?.transactions?.length;
+            this.dataSource.data = res.data;
+            this.pageData.length = res.meta?.count;
           });
         }
         this.loading = false;
@@ -123,17 +124,18 @@ export class NFTDetailComponent implements OnInit {
       amount: data?.value || 0,
       code: Number(data?.tx_response?.code),
       fee: data?.fee || 0,
-      from_address: data?.from_address || '-',
-      to_address: data?.to_address || '-',
+      from_address: data?.from_address || '',
+      to_address: data?.to_address || '',
       price: 0,
       status: data?.status,
       symbol: this.denom,
       // tokenAddress: this.contractInfo?.contractsAddress,
       tokenAddress: '',
-      tx_hash: data?.txHash || '-',
+      tx_hash: data?.txHash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail
+      nftDetail: this.nftDetail,
+      modeExecute: data?.modeExecute
     };
   }
 }

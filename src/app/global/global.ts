@@ -119,7 +119,6 @@ export function getDataInfo(arrayMsg, addressContract) {
       toAddress = itemMessage.delegator_address;
       break;
     default:
-      method = Object.keys(itemMessage.msg)[0];
       fromAddress = itemMessage.from_address;
       toAddress = itemMessage.to_address;
       break;

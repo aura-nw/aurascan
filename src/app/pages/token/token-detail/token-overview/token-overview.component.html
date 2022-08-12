@@ -30,7 +30,7 @@
                 </div>
                 <div>
                   <span class="small-body">-</span>
-                  <span class="small-text text--light-gray py-3 mx-2">Aura</span>
+                  <span class="small-text text--light-gray py-3 mx-2">{{ denom }}</span>
                   <br class="d-lg-none" />
                   <!-- <span class="text-danger small-body" *ngIf="!isNFTContract">(-0,87%)</span> -->
                 </div>
@@ -53,7 +53,9 @@
                 <span style="min-width: 120px" class="text--white" *ngIf="tokenDetail.isNFTContract"
                   >Max Total Supply:</span
                 >
-                <div class="small-body">{{ tokenDetail.total_supply | number: global.formatNumberToken }} AURA</div>
+                <div class="small-body">
+                  {{ tokenDetail.total_supply | number: global.formatNumberToken }} {{ denom }}
+                </div>
               </div>
 
               <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">

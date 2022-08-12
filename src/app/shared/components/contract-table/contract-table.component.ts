@@ -97,16 +97,17 @@ export class ContractTableComponent implements OnInit, OnChanges {
       amount: data?.value || 0,
       code: 0,
       fee: data?.fee || 0,
-      from_address: data?.from || '-',
-      to_address: data?.to || '-',
+      from_address: data?.from || '',
+      to_address: data?.to || '',
       price: 0,
       status: 'Success',
       symbol: this.denom,
       tokenAddress: this.contractInfo?.contractsAddress,
-      tx_hash: data?.txHash || '-',
+      tx_hash: data?.txHash || '',
       gas_used: data?.gas_used,
       gas_wanted: data?.gas_wanted,
-      nftDetail: undefined
+      nftDetail: undefined,
+      modeExecute: data?.modeExecute
     };
   }
 

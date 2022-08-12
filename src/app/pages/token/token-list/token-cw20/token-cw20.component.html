@@ -1,4 +1,4 @@
-<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
+<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">CW-20 Tokens</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-5">
@@ -7,7 +7,6 @@
         <div class="d-lg-flex justify-content-between">
           <div>
             <div class="mb-3 mb-lg-0 d-flex justify-content-between d-lg-block">
-              <div class="title-medium sub-text-mob text--white fw-bold">CW-20 Tokens</div>
               <button
                 class="button d-lg-none p-0"
                 (click)="
@@ -31,7 +30,8 @@
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="searchToken()"
-                (keyup.enter)="handleLink()"
+                (keyup.enter)="setPageList()"
+                [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button
@@ -42,21 +42,23 @@
               </button>
               <button
                 type="reset"
-                class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="textSearch = ''; searchToken()">
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0">
+            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
               <div class="box-search-data text-white">
-                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
+                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
                   <span> There are no matching contracts </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
                   <div class="txt-title-search">CW-20 Tokens</div>
                   <ng-container *ngFor="let item of filterSearchData">
                     <div class="d-flex p-3 cursor-pointer" [routerLink]="['/tokens/token', item.contract_address]">
-                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+                      <img [src]="item.image || defaultLogoToken" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
                           <span class="text-clamp">{{ item.name }}</span>
@@ -86,7 +88,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
+                  <img [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token', element.contract_address]">{{ element.name }}</a
                     ><br class="d-none d-lg-block" />
@@ -183,7 +185,7 @@
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>

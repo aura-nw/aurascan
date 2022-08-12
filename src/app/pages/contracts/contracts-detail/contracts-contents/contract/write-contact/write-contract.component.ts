@@ -113,10 +113,16 @@ export class WriteContractComponent implements OnInit {
           }
 
           let type = contractTemp.properties[name].properties[key].type;
-          objWriteContract[key] = element?.value;
+          //check exit value
+          if (element?.value) {
+            objWriteContract[key] = element?.value;
+          }
+
           //convert number if integer field
-          if (type === 'integer') {
-            objWriteContract[key] = Number(element?.value);
+          if (type) {
+            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
+              objWriteContract[key] = Number(element?.value);
+            }
           }
         });
       }
@@ -141,9 +147,12 @@ export class WriteContractComponent implements OnInit {
           if (element?.value) {
             objWriteContract[key] = element?.value;
           }
+
           //convert number if integer field
-          if (type === 'integer') {
-            objWriteContract[key] = Number(element?.value);
+          if (type) {
+            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
+              objWriteContract[key] = Number(element?.value);
+            }
           }
         });
       }
