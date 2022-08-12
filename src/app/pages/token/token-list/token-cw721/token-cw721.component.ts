@@ -119,10 +119,12 @@ export class TokenCw721Component implements OnInit {
   }
 
   resetSearch() {
-    this.textSearch = '';
-    this.enterSearch = '';
-    this.dataSource = this.dataSourceBk;
-    this.pageData.length = this.length;
+    if (this.enterSearch) {
+      window.location.reload();
+    } else {
+      this.textSearch = '';
+      this.enterSearch = '';
+    }
   }
 
   sortData(sort: Sort) {

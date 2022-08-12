@@ -160,10 +160,12 @@ export class TokenCw20Component implements OnInit {
   }
 
   resetSearch() {
-    this.textSearch = '';
-    this.enterSearch = '';
-    this.dataSource = this.dataSourceBk;
-    this.pageData.length = this.length;
+    if (this.enterSearch) {
+      window.location.reload();
+    } else {
+      this.textSearch = '';
+      this.enterSearch = '';
+    }
   }
 
   pageEvent(e: PageEvent): void {

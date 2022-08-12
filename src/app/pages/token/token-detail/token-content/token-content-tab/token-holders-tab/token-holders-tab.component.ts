@@ -19,7 +19,7 @@ export class TokenHoldersTabComponent implements OnInit {
   loading = true;
 
   CW20Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
     { matColumnDef: 'balance', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
@@ -27,7 +27,7 @@ export class TokenHoldersTabComponent implements OnInit {
   ];
 
   CW721Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
     { matColumnDef: 'amount', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },

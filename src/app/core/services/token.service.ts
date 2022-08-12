@@ -75,4 +75,8 @@ export class TokenService extends CommonService {
   getNFTDetail(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
   }
+
+  getBalanceAddress(payload, type = 'cw20-tokens'): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${type}/get-by-owner`, payload);
+  }
 }
