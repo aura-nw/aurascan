@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { AccountService } from 'src/app/core/services/account.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
@@ -34,7 +34,7 @@ export class TokenContentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private accountService: AccountService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public global: Globals,
   ) {}
@@ -113,8 +113,21 @@ export class TokenContentComponent implements OnInit {
   }
 
   getInfoAddress(address: string) {
-    this.accountService.getAccountDetail(address).subscribe((res) => {
+    const payload = {
+      account_address: address,
+      limit: 0,
+      offset: 0,
+      keyword: this.contractAddress,
+    };
+
+    let type = 'cw20-tokens';
+    if (this.tokenDetail?.isNFTContract) {
+      type = 'cw721-tokens';
+    }
+
+    this.tokenService.getBalanceAddress(payload, type).subscribe((res) => {
       this.infoSearch = res.data;
+      this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ?  res.meta.count : res.data[0].balance;
     });
   }
 }

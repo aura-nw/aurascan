@@ -33,7 +33,7 @@ export class NFTDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'fee', headerCellDef: 'Price' },
+    { matColumnDef: 'price', headerCellDef: 'Price' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -46,6 +46,9 @@ export class NFTDetailComponent implements OnInit {
   contractType = ContractVerifyType.Exact_Match;
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
+
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -75,12 +78,14 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getDataTable(): void {
+    let filterData = {};
+    filterData['keyWord'] = this.nftId;
     this.tokenService
     .getListTokenTransfer(
       this.pageData.pageSize,
       this.pageData.pageIndex * this.pageData.pageSize,
       this.contractAddress,
-      this.nftId,
+      filterData,
     )
     .subscribe(
       (res) => {
@@ -131,7 +136,7 @@ export class NFTDetailComponent implements OnInit {
       symbol: this.denom,
       // tokenAddress: this.contractInfo?.contractsAddress,
       tokenAddress: '',
-      tx_hash: data?.txHash || '',
+      tx_hash: data?.tx_hash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
       nftDetail: this.nftDetail,

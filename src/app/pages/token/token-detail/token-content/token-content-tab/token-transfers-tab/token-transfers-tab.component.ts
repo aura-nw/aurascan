@@ -175,7 +175,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
       status: data?.status,
       symbol: this.denom,
       tokenAddress: data?.contract_address,
-      tx_hash: data?.txHash || '',
+      tx_hash: data?.tx_hash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
       nftDetail: this.nftDetail,

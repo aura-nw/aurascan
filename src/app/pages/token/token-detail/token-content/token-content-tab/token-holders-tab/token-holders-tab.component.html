@@ -6,8 +6,11 @@
     </button> -->
   </div>
   <div class="col-12 mt-3">
-    <span class="small-body text--light-gray"
-      >Top 100 holders (From a total of {{ pageData?.length || 0 }} holders)</span
+    <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder"
+      >Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holders)</span
+    >
+    <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder"
+      >A total of {{ pageData?.length || 0 }} token holders</span
     >
   </div>
 </div>

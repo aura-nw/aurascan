@@ -19,7 +19,7 @@ export class TokenHoldersTabComponent implements OnInit {
   loading = true;
 
   CW20Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
     { matColumnDef: 'balance', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
@@ -27,7 +27,7 @@ export class TokenHoldersTabComponent implements OnInit {
   ];
 
   CW721Templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
+    { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
     { matColumnDef: 'amount', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
@@ -42,6 +42,8 @@ export class TokenHoldersTabComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   tokenType = ContractRegisterType.CW20;
+  numberTopHolder = 100;
+
   constructor(public global: Globals, private tokenService: TokenService) {}
 
   ngOnInit(): void {
@@ -65,7 +67,7 @@ export class TokenHoldersTabComponent implements OnInit {
       .subscribe((res) => {
         if (res && res.data?.resultAsset?.length > 0) {
           this.pageData.length = res.data?.resultCount;
-          res.data?.resultAsset.forEach(element => {
+          res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
           });
           let sortedData = res.data?.resultAsset.sort((a, b) => {
