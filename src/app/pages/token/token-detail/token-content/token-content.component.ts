@@ -80,6 +80,8 @@ export class TokenContentComponent implements OnInit {
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         this.getInfoAddress(this.paramQuery);
+      } else {
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
       }
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
@@ -127,7 +129,7 @@ export class TokenContentComponent implements OnInit {
 
     this.tokenService.getBalanceAddress(payload, type).subscribe((res) => {
       this.infoSearch = res.data;
-      this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ?  res.meta.count : res.data[0].balance;
+      this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ? res.meta.count : res.data[0].balance;
     });
   }
 }
