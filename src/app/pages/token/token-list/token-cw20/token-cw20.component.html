@@ -55,14 +55,19 @@
                   <span> There are no matching contracts </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search">CW-20 Tokens</div>
+                  <div class="txt-title-search mb-2">CW-20 Tokens</div>
                   <ng-container *ngFor="let item of filterSearchData">
-                    <div class="d-flex p-3 cursor-pointer" [routerLink]="['/tokens/token', item.contract_address]">
+                    <div class="d-flex p-3 cursor-pointer search-result" [routerLink]="['/tokens/token', item.contract_address]">
                       <img [src]="item.image || defaultLogoToken" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
-                          <span class="text-clamp">{{ item.name }}</span>
+                          <div class="text-clamp">
+                            {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
+                          </div>
                         </div>
+                        <span class="text-clamp small-body text--green">{{
+                          item.contract_address | cutStringPipe: 8:8
+                        }}</span>
                       </div>
                     </div>
                   </ng-container>
@@ -90,7 +95,8 @@
                 <div class="d-flex">
                   <img [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
-                    <a [routerLink]="['/tokens/token', element.contract_address]">{{ element.name }}</a
+                    <a [routerLink]="['/tokens/token', element.contract_address]"
+                      >{{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span></a
                     ><br class="d-none d-lg-block" />
                     <div class="pr-5 d-none d-lg-block">{{ element.description }}</div>
                   </div>

@@ -33,7 +33,7 @@ export class NFTDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'fee', headerCellDef: 'Price' },
+    { matColumnDef: 'price', headerCellDef: 'Price' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -46,6 +46,9 @@ export class NFTDetailComponent implements OnInit {
   contractType = ContractVerifyType.Exact_Match;
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
+
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
