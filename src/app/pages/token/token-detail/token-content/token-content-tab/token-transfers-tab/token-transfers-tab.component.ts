@@ -29,11 +29,10 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   @Input() contractAddress: string;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
-  @Output() loadMore = new EventEmitter<CustomPageEvent>();
   @Output() resultLength = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'action', headerCellDef: '' },
+    // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
@@ -43,7 +42,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   ];
 
   NFTTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'action', headerCellDef: '' },
+    // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
