@@ -74,7 +74,6 @@
       }
     }
 
-
     &.button-pill {
       border-radius: 24px;
     }
@@ -217,6 +216,13 @@
 .card-header {
   .button-outline {
     box-shadow: 2px 1000px 1px var(--aura-dark-gray) inset;
+  }
+}
+
+.button-fixed {
+  width: 100%;
+  @media (min-width: 768px) {
+    width: auto;
   }
 }
 

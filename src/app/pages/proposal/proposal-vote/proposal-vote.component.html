@@ -2,10 +2,10 @@
     <ng-container *ngIf="!data.warning">
         <div class="d-flex">
             <img [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
-            <div class="h1 ml-3 ml-lg-0 text--white">Your vote</div>
+            <div class="h1 ml-3 ml-lg-0 mb-0 text--white">Your vote</div>
         </div>
-        <div class="mt-4 body-03">#{{data.id}} {{data.title}}</div>
-        <form #voteForm="ngForm">
+        <div class="mt-6 body-03 body-01-mob">#{{data.id}} {{data.title}}</div>
+        <form #voteForm="ngForm" class="mt-2">
             <mat-radio-group class="vote-group" aria-label="Select an option" [(ngModel)]="keyVote" name="inputVote">
                 <mat-radio-button class="body-03" color="primary" value="Yes">{{ 'PAGES.PROPOSAL.yes' | translate }}
                 </mat-radio-button>
@@ -16,9 +16,9 @@
                 <mat-radio-button class="body-03" color="primary" value="Abstain">{{ 'PAGES.PROPOSAL.abstain' | translate
                     }}</mat-radio-button>
             </mat-radio-group>
-            <div class="mt-4 d-flex justify-content-end">
-                <button class="button button--sm button-pill button-outline mr-3 text--white" (click)="closeVoteForm()" color="primary">Cancel</button>
-                <button class="button button--sm button-pill button-outline button-outline--gradient" color="primary" (click)="onSubmitVoteForm()"
+            <div class="mt-6 d-flex justify-content-center justify-content-lg-end">
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" (click)="closeVoteForm()" color="primary">Back</button>
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient" color="primary" (click)="onSubmitVoteForm()"
                     [disabled]="keyVote === null">
                     <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
                     <span>Confirm</span>

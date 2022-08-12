@@ -306,7 +306,7 @@
         width="24px"
         height="24px"
         (click)="closeDialog(modal)" />
-      <div class="mb-4 mb-xl-8">
+      <div class="mb-4 mb-xl-6">
         <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
@@ -317,7 +317,7 @@
             <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
               <span class="modal__title">{{ dataModal?.title }}</span>
             </div>
-            <div class="h6 mb-0 text--white">
+            <div class="h6 body-02-mob mb-0 text--white">
               Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
             </div>
           </div>
@@ -351,13 +351,13 @@
               (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
-                class="button button-max body-02"
+                class="button button-flat button--xs button--sm-mob button-max body-02"
                 type="button"
                 (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append body small-body-mob fw-semibold">{{ denom }}</div>
+            <div class="input-group-append h6 mb-0 text--primary">{{ denom }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
@@ -365,20 +365,21 @@
             <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-2 mr-4">
               <button
-                class="button button-primary active button-max fw-semibold"
+                class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                 type="button"
                 (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append fw-semibold">{{ denom }}</div>
+            <div class="input-group-append fw-500 text--primary">{{ denom }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
             Insufficient available balance for transaction fee
           </div>
         </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
-          <div class="small-body mb-2">Redelegate to:</div>
+          <div class="divider divider-horizontal mb-6"></div>
+          <div class="h6 body-02-mob mb-3 text--white">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
               class="list-token"
@@ -409,8 +410,8 @@
             </mat-select>
           </mat-form-field>
           <div *ngIf="selectedValidator">
-            <div class="mt-6 body small-body-mob">
-              <span>Available for redelegatation</span>
+            <div class="mt-6 body-01 body-02-mob">
+              <span class="fw-500">Available for redelegatation</span>
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
@@ -420,23 +421,23 @@
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-2 mr-4">
                 <button
-                  class="button button-primary active button-max fw-semibold"
+                  class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX
                 </button>
               </div>
-              <div class="input-group-append fw-semibold">{{ denom }}</div>
+              <div class="input-group-append fw-500 text--primary">{{ denom }}</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="mt-4 mt-lg-8">
+      <div class="mt-6">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
-          <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
-            <div class="dropdown aura-dropdown mr-4">
+          <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-between justify-content-sm-end button-group-selection">
+            <div class="dropdown aura-dropdown mr-4 btn-item">
               <button
-                class="button button--sm button-pill button-outline button-outline--gradient button-dropdown"
+                class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-dropdown w-100"
                 type="button"
                 id="delegateAction"
                 data-bs-toggle="dropdown"
@@ -464,23 +465,23 @@
                 </li>
               </ul>
             </div>
-            <button type="button" class="button button--sm button-pill button-outline button-outline--gradient d-flex" (click)="changeTypePopup(dialogMode.Delegate)">
+            <button type="button" class="button button--sm button--md-mob button-pill button-outline button-outline--gradient d-flex btn-item" (click)="changeTypePopup(dialogMode.Delegate)">
               <img class="mr-2"
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="ml-2 fw-semibold">Delegate</span>
+              <span class="fw-semibold">Delegate</span>
             </button>
           </div>
-          <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button button--sm button-pill button-outline mr-3" (click)="changeTypePopup(dialogMode.Manage)">
+          <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            <button type="button" class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4" (click)="changeTypePopup(dialogMode.Manage)">
               <span>Back</span>
             </button>
             <button
               type="button"
-              class="button button--sm button-pill button-outline button-outline--gradient d-flex"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img class="mr-2"
@@ -492,24 +493,17 @@
               <span class="fw-semibold">Undelegate</span>
             </button>
           </div>
-          <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-end">
+          <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
             <button
               type="button"
-              class="button button--sm button-pill button-outline mr-3"
-              (click)="changeTypePopup(dialogMode.Manage)"
+              class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4"
+              (click)="!isOpenStaking ? changeTypePopup(dialogMode.Manage) : closeDialog(modal)"
               *ngIf="!isOpenStaking">
               <span>Back</span>
             </button>
             <button
               type="button"
-              class="button button--sm button-pill button-outline mr-3"
-              (click)="closeDialog(modal)"
-              *ngIf="isOpenStaking">
-              <span>Back</span>
-            </button>
-            <button
-              type="button"
-              class="button button--sm button-pill button-outline button-outline--gradient d-flex"
+              class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img class="mr-2"
@@ -521,13 +515,13 @@
               <span>Delegate</span>
             </button>
           </div>
-          <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button button--sm button-pill button-outline mr-3" (click)="changeTypePopup(dialogMode.Manage)">
+          <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            <button type="button" class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4" (click)="changeTypePopup(dialogMode.Manage)">
               <span>Back</span>
             </button>
             <button
               type="button"
-              class="button button--sm button-pill button-outline button-outline--gradient d-flex"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img class="mr-2"

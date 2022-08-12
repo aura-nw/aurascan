@@ -96,9 +96,9 @@
           <div class="col-auto col-md-2 text--gray-5">Voting Start</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.pro_voting_start_time | date: 'yyyy-MM-dd' }}</span>
+              <span>{{ proposalDetail.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.pro_voting_start_time | date: 'h:mm:ss' }}</span>
+              <span>{{ proposalDetail.pro_voting_start_time | customDate: 'h:mm:ss' }}</span>
             </div>
           </div>
         </div>
@@ -106,9 +106,9 @@
           <div class="col-auto col-md-2 text--gray-5">Voting End</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.pro_voting_end_time | date: 'yyyy-MM-dd' }}</span>
+              <span>{{ proposalDetail.pro_voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.pro_voting_end_time | date: 'h:mm:ss' }}</span>
+              <span>{{ proposalDetail.pro_voting_end_time | customDate: 'h:mm:ss' }}</span>
             </div>
           </div>
         </div>
@@ -120,9 +120,9 @@
           <div class="col-auto col-md-2 text--gray-5">Submit Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.pro_submit_time | date: 'yyyy-MM-dd' }}</span>
+              <span>{{ proposalDetail.pro_submit_time | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.pro_submit_time | date: 'h:mm:ss' }}</span>
+              <span>{{ proposalDetail.pro_submit_time | customDate: 'h:mm:ss' }}</span>
             </div>
           </div>
         </div>
@@ -130,9 +130,9 @@
           <div class="col-auto col-md-2 text--gray-5">Deposit End Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
-              <span>{{ proposalDetail.pro_deposit_end_time | date: 'yyyy-MM-dd' }}</span>
+              <span>{{ proposalDetail.pro_deposit_end_time | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical mx-1 mx-md-2"></div>
-              <span>{{ proposalDetail.pro_deposit_end_time | date: 'h:mm:ss' }}</span>
+              <span>{{ proposalDetail.pro_deposit_end_time | customDate: 'h:mm:ss' }}</span>
             </div>
           </div>
         </div>
