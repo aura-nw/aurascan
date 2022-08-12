@@ -10,7 +10,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { balanceOf } from '../../../../app/core/utils/common/parsing';
@@ -20,17 +19,22 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { TRANSACTION_TYPE_ENUM } from '../../../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  StatusTransaction,
+  TRANSACTION_TYPE_ENUM,
+  TypeTransaction
+} from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals } from '../../../global/global';
+import { getAmount, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -109,7 +113,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
@@ -146,9 +150,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
-  length: number;
-  pageSize = 5;
-  pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
   pageEventType = PageEventType;
   assetsType = TYPE_ACCOUNT;
@@ -293,14 +294,25 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+      .txsWithAddress(this.pageData.pageSize, this.pageData.pageIndex * this.pageData.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
-        if (res?.data?.transactions?.length > 0) {
-          res.data.transactions.forEach((trans) => {
-            trans = parseDataTransaction(trans, this.coinMinimalDenom);
-            this.dataSource.data = res.data.transactions;
-            this.pageData.length = res.data.count;
+        if (res?.data?.length > 0) {
+          res.data.forEach((trans) => {
+            //get amount of transaction
+            trans.typeOrigin = trans.type;
+            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
+            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
+            trans.type = typeTrans?.value;
+            trans.status = StatusTransaction.Fail;
+            if (trans.code === CodeTransaction.Success) {
+              trans.status = StatusTransaction.Success;
+            }
+            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
+              trans.type = TypeTransaction.Received;
+            }
           });
+          this.dataSource.data = res.data;
+          this.pageData.length = res.meta.count;
         }
       });
   }
