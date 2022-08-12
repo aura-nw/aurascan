@@ -59,7 +59,7 @@
                   <ng-container *ngFor="let item of filterSearchData">
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.contract_address]">
+                      [routerLink]="['/tokens/token-nft', item.contract_address]">
                       <img [src]="item.image || defaultLogoToken" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
@@ -99,7 +99,7 @@
                 <div class="d-flex">
                   <img [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
-                    <a [routerLink]="['/tokens/token', element.contract_address]"
+                    <a [routerLink]="['/tokens/token-nft', element.contract_address]"
                       >{{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span></a
                     ><br class="d-none d-lg-block" />
                     <div class="pr-5 d-none d-lg-block">{{ element.desc }}</div>

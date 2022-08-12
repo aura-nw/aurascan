@@ -38,6 +38,13 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'owner'">
                       <a
+                        *ngIf="isNFTContract"
+                        href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                        class="text-clamp"
+                        >{{ data[template.matColumnDef] }}</a
+                      >
+                      <a
+                        *ngIf="!isNFTContract"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                         class="text-clamp"
                         >{{ data[template.matColumnDef] }}</a

@@ -84,7 +84,11 @@ export class TokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
-          window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+          if (this.tokenDetail?.isNFTContract) {
+            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${this.paramQuery}`;
+          } else {
+            window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+          }
         }
       });
     } else {
@@ -100,7 +104,11 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      window.location.href = `/tokens/token/${params.contractAddress}`;
+      if (this.tokenDetail?.isNFTContract) {
+        window.location.href = `/tokens/token-nft/${params.contractAddress}`;
+      } else {
+        window.location.href = `/tokens/token/${params.contractAddress}`;
+      }
     }
   }
 

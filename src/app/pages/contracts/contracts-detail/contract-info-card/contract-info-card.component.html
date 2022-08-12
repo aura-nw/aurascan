@@ -52,7 +52,16 @@
           <td>Token Tracker:</td>
           <td colspan="2">
             <ng-container *ngIf="contractDetail?.token_tracker">
-              <a class="text--green" [routerLink]="['/tokens/token', contractDetail?.contract_address]">
+              <a
+                *ngIf="!(contractDetail.token_tracker?.type === 'CW721')"
+                class="text--green"
+                [routerLink]="['/tokens/token', contractDetail?.contract_address]">
+                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+              </a>
+              <a
+                *ngIf="contractDetail.token_tracker?.type === 'CW721'"
+                class="text--green"
+                [routerLink]="['/tokens/token-nft', contractDetail?.contract_address]">
                 {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
               </a>
               <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->
