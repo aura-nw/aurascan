@@ -55,7 +55,7 @@
                 >
                 <div class="small-body">
                   <ng-container *ngIf="!tokenDetail.isNFTContract">
-                    {{ tokenDetail.total_supply | number: global.formatNumberOnlyDecimal }}
+                    {{ tokenDetail.total_supply | number: global.formatNumberToken }}
                   </ng-container>
                   <ng-container *ngIf="tokenDetail.isNFTContract">
                     {{ tokenDetail.num_tokens | number: global.formatNumberOnlyDecimal }}
