@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -10,7 +10,7 @@ import { AccountService } from 'src/app/core/services/account.service';
   templateUrl: './nft-list.component.html',
   styleUrls: ['./nft-list.component.scss'],
 })
-export class NftListComponent implements OnInit, OnChanges {
+export class NftListComponent implements OnChanges {
   assetCW721: any[];
   @Input() address: string;
   searchValue = null;
@@ -27,16 +27,13 @@ export class NftListComponent implements OnInit, OnChanges {
 
   constructor(private accountService: AccountService) {}
 
-  ngOnInit(): void {
-    this.pageData = {
-      length: 0,
-      pageSize: 10,
-      pageIndex: 0,
-    };
-  }
-
   ngOnChanges(): void {
     this.getNftData();
+    this.pageData = {
+      length: 0,
+      pageSize: 25,
+      pageIndex: 0,
+    };
   }
 
   getNftData() {

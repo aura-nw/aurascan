@@ -218,6 +218,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
+    // this.walletService.wallet$.subscribe((wallet) => {
+    //   if (wallet) this.currentAddress = wallet.bech32Address;
+    // });
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
