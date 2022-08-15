@@ -176,6 +176,7 @@ footer {
   right: 0 !important;
   transform: translate3D(-10px, -8px, 0) !important;
   .popover-body {
+    overflow: hidden;
     background-color: #1F1F22;
     border-color: #1F1F22;
     box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
@@ -184,6 +185,12 @@ footer {
     padding: 0;
     .menu-item {
       padding: var(--spacer-3) !important;
+      &:hover {
+        background-color: var(--aura-gray-9);
+        a {
+          color: var(--aura-white) !important;
+        }
+      }
     }
     .box-menu {
       min-width: 240px;
@@ -203,10 +210,4 @@ footer {
     background-color: var(--aura-black);
     opacity: .6;
   }
-}
-.h4-heading {
-  font-family: BigShouldersDisplay;
-  font-size: 3.2rem;
-  line-height: 4rem;
-  font-weight: 700;
 }

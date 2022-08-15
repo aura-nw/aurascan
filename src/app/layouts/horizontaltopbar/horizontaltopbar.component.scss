@@ -26,16 +26,20 @@
   .divider.divider-vertical {
     min-height: 48px;
   }
-  form.aura-form.single-input-field {
-    button.btn-search, button.btn-reset  {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-    }
-    @media (min-width: 992px) {
-      min-width: 504px;
-    }
+}
+form.aura-form.single-input-field {
+  button.btn-search, button.btn-reset  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  @media (min-width: 992px) {
+    min-width: 504px;
+  }
+  .input-group {
+    background-color: var(--aura-gray-10);
+    border: 1px solid var(--aura-gray-9);
   }
 }
 .topnav {
