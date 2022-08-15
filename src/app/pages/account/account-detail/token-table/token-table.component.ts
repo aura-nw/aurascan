@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,7 +14,7 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './token-table.component.html',
   styleUrls: ['./token-table.component.scss'],
 })
-export class TokenTableComponent implements OnInit {
+export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   math = Math;
   textSearch = '';
@@ -41,9 +41,9 @@ export class TokenTableComponent implements OnInit {
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   assetCW20: any[];
-  constructor(public global: Globals, private accountService: AccountService,) {}
+  constructor(public global: Globals, private accountService: AccountService) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.getListToken();
   }
 
