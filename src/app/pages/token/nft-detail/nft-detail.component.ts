@@ -33,7 +33,7 @@ export class NFTDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'fee', headerCellDef: 'Price' },
+    { matColumnDef: 'price', headerCellDef: 'Price' },
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -46,6 +46,9 @@ export class NFTDetailComponent implements OnInit {
   contractType = ContractVerifyType.Exact_Match;
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
+
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -75,20 +78,23 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getDataTable(): void {
+    let filterData = {};
+    filterData['keyWord'] = this.nftId;
     this.tokenService
     .getListTokenTransfer(
       this.pageData.pageSize,
       this.pageData.pageIndex * this.pageData.pageSize,
       this.contractAddress,
-      this.nftId,
+      filterData,
     )
     .subscribe(
       (res) => {
-        if (res && res.data?.transactions?.length > 0) {
-          res.data.transactions.forEach((trans) => {
+        if (res && res.meta?.count > 0) {
+          res.data.forEach((trans) => {
+            trans['tx_response'] = JSON.parse(trans.tx);
             trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-            this.dataSource.data = res.data.transactions;
-            this.pageData.length = res.data?.transactions?.length;
+            this.dataSource.data = res.data;
+            this.pageData.length = res.meta?.count;
           });
         }
         this.loading = false;
@@ -123,17 +129,18 @@ export class NFTDetailComponent implements OnInit {
       amount: data?.value || 0,
       code: Number(data?.tx_response?.code),
       fee: data?.fee || 0,
-      from_address: data?.from_address || '-',
-      to_address: data?.to_address || '-',
+      from_address: data?.from_address || '',
+      to_address: data?.to_address || '',
       price: 0,
       status: data?.status,
       symbol: this.denom,
       // tokenAddress: this.contractInfo?.contractsAddress,
       tokenAddress: '',
-      tx_hash: data?.txHash || '-',
+      tx_hash: data?.tx_hash || '',
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
-      nftDetail: this.nftDetail
+      nftDetail: this.nftDetail,
+      modeExecute: data?.modeExecute
     };
   }
 }

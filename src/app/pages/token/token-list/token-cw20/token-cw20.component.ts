@@ -4,6 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
@@ -36,16 +37,23 @@ export class TokenCw20Component implements OnInit {
   };
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  dataSearch: any;
+  enterSearch = '';
+  length = 0;
+
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private router: Router,
     public tokenService: TokenService,
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +63,7 @@ export class TokenCw20Component implements OnInit {
   getListToken() {
     const payload = {
       limit: this.pageData.pageSize,
-      offset: 0,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: '',
     };
     this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
@@ -68,26 +76,29 @@ export class TokenCw20Component implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource<any>(res.data);
+      this.dataSourceBk = this.dataSource;
       this.pageData.length = res.meta.count;
+      this.length = this.pageData.length;
     });
   }
 
   searchToken(): void {
-    this.filterSearchData = null;
-    if (this.textSearch.length > 0) {
+    if (this.textSearch?.length > 0) {
       const payload = {
-        limit: this.pageData.pageSize,
+        limit: 0,
         offset: 0,
         keyword: this.textSearch,
       };
 
       this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
         if (res?.data?.length > 0) {
-          let keyWord = this.textSearch.toLowerCase();
-          this.filterSearchData = res.data?.filter(
-            (data) => data.name.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
-          );
+          this.dataSearch = res.data;
         }
+
+        let keyWord = this.textSearch.toLowerCase();
+        this.filterSearchData = this.dataSearch?.filter(
+          (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
+        );
       });
     }
   }
@@ -140,11 +151,25 @@ export class TokenCw20Component implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  handleLink(): void {
-    this.router.navigate(['/tokens/token', this.filterSearchData[0]?.hashCode]);
+  setPageList(): void {
+    if (this.filterSearchData?.length > 0) {
+      this.enterSearch = this.textSearch;
+      this.dataSource = new MatTableDataSource<any>(this.filterSearchData);
+      this.pageData.length = this.filterSearchData?.length || 0;
+    }
   }
 
-  handlePageEvent(e: any) {
-    this.pageData = e;
+  resetSearch() {
+    if (this.enterSearch) {
+      window.location.reload();
+    } else {
+      this.textSearch = '';
+      this.enterSearch = '';
+    }
+  }
+
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListToken();
   }
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { AccountService } from 'src/app/core/services/account.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
@@ -15,7 +15,7 @@ import { TokenTab } from '../../../../core/constants/token.enum';
 export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
-  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract, TokenTab.Analytics];
+  tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = [];
   countCurrent: string = '';
@@ -34,19 +34,19 @@ export class TokenContentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private accountService: AccountService,
+    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public global: Globals,
   ) {}
 
   ngOnInit(): void {
-    this.TABS = TOKEN_TAB.filter((tab) => (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(tab.key)).map(
-      (tab) => ({
-        ...tab,
-        value: tab.value,
-        key: tab.key === TokenTab.Transfers ? '' : tab.key,
-      }),
-    );
+    this.TABS = TOKEN_TAB.filter((tab) =>
+      (this.tokenDetail?.isNFTContract ? this.tabNFT : this.tabToken).includes(tab.key),
+    ).map((tab) => ({
+      ...tab,
+      value: tab.value,
+      key: tab.key === TokenTab.Transfers ? '' : tab.key,
+    }));
     this.tabsBackup = this.TABS;
 
     this.route.queryParams.subscribe((params) => {
@@ -72,17 +72,27 @@ export class TokenContentComponent implements OnInit {
     if (regexRule.test(this.searchTemp)) {
       this.textSearch = this.searchTemp;
       let tempTabs;
-      if (this.textSearch.length > LENGTH_CHARACTER.TRANSACTION) {
-        this.paramQuery = this.searchTemp;
+      this.paramQuery = this.searchTemp;
+      if (this.textSearch.length === LENGTH_CHARACTER.TRANSACTION) {
         this.isSearchTx = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders && k.key !== TokenTab.Analytics);
       } else if (this.textSearch?.length >= LENGTH_CHARACTER.ADDRESS && this.textSearch?.startsWith(this.prefixAdd)) {
-        this.paramQuery = this.searchTemp;
         this.isSearchAddress = true;
         tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
         this.getInfoAddress(this.paramQuery);
+      } else {
+        tempTabs = this.TABS?.filter((k) => k.key !== TokenTab.Holders);
       }
       this.TABS = tempTabs || this.tabsBackup;
+      this.route.queryParams.subscribe((params) => {
+        if (!params?.a) {
+          if (this.tokenDetail?.isNFTContract) {
+            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${this.paramQuery}`;
+          } else {
+            window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+          }
+        }
+      });
     } else {
       this.textSearch = '';
     }
@@ -96,13 +106,30 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      window.location.href = `/tokens/token/${params.contractAddress}`;
+      if (this.tokenDetail?.isNFTContract) {
+        window.location.href = `/tokens/token-nft/${params.contractAddress}`;
+      } else {
+        window.location.href = `/tokens/token/${params.contractAddress}`;
+      }
     }
   }
 
   getInfoAddress(address: string) {
-    this.accountService.getAccountDetail(address).subscribe((res) => {
+    const payload = {
+      account_address: address,
+      limit: 0,
+      offset: 0,
+      keyword: this.contractAddress,
+    };
+
+    let type = 'cw20-tokens';
+    if (this.tokenDetail?.isNFTContract) {
+      type = 'cw721-tokens';
+    }
+
+    this.tokenService.getBalanceAddress(payload, type).subscribe((res) => {
       this.infoSearch = res.data;
+      this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ? res.meta.count : res.data[0].balance;
     });
   }
 }

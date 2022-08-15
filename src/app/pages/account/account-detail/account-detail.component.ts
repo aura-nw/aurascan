@@ -19,7 +19,7 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -27,7 +27,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
+  TypeTransaction
 } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
@@ -113,7 +113,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
@@ -150,9 +150,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
-  length: number;
-  pageSize = 5;
-  pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
   pageEventType = PageEventType;
   assetsType = TYPE_ACCOUNT;
@@ -161,6 +158,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
+  assetCW20: any[] = [];
+  assetCW721: any[] = [];
 
   // loading param check
   accDetailLoading = true;
@@ -176,8 +175,27 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
-  TABS = ['ASSETS','TRANSACTIONS','STAKE']
-  currentTab = 'ASSETS'
+  TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
+  TABS_STAKE = [
+    {
+      key: 0,
+      label: 'Delegations',
+    },
+    {
+      key: 1,
+      label: 'Unbondings',
+    },
+    {
+      key: 2,
+      label: 'Redelegations',
+    },
+    {
+      key: 3,
+      label: 'Vestings',
+    },
+  ];
+  currentTab = 'ASSETS';
+  currentStake = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -276,7 +294,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+      .txsWithAddress(this.pageData.pageSize, this.pageData.pageIndex * this.pageData.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
         if (res?.data?.length > 0) {
           res.data.forEach((trans) => {
@@ -294,8 +312,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             }
           });
           this.dataSource.data = res.data;
-
-          this.length = res.meta.count;
           this.pageData.length = res.meta.count;
         }
       });

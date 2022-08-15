@@ -25,9 +25,12 @@
             </td>
             <td>
               <div class="small-text txt-light mb-1">BALANCE</div>
-              {{ infoSearch?.balances[0]?.amount || 0 | number: global.formatNumberToken }} {{ denom }}
+              <span *ngIf="!tokenDetail?.isNFTContract"
+                >{{ infoSearch?.balance || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}</span
+              >
+              <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch?.balance || 0 }}</span>
             </td>
-            <td>
+            <td *ngIf="!tokenDetail?.isNFTContract">
               <div class="small-text txt-light mb-1">VALUE</div>
               - ( - {{ denom }})
             </td>
@@ -58,7 +61,7 @@
           <input
             type="text"
             class="form-control aura-form"
-            placeholder="{{ tokenDetail?.isNFTContract ? 'Filter Address/ TX Hash/ Token ID' : 'Search for Token Name or Address' }}"
+            placeholder="Filter Address/ TX Hash/ Token ID"
             [(ngModel)]="searchTemp"
             [maxLength]="maxLengthSearch"
             name="search"
@@ -88,9 +91,15 @@
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"></app-token-transfers-tab>
-    <app-token-holders-tab *ngIf="countCurrent === tokenTab.Holders" [keyWord]="textSearch" [isNFTContract]="tokenDetail?.isNFTContract" [contractAddress]="contractAddress"></app-token-holders-tab>
+    <app-token-holders-tab
+      *ngIf="countCurrent === tokenTab.Holders"
+      [keyWord]="textSearch"
+      [isNFTContract]="tokenDetail?.isNFTContract"
+      [contractAddress]="contractAddress"></app-token-holders-tab>
     <app-token-inventory-tab *ngIf="countCurrent === tokenTab.Inventory"></app-token-inventory-tab>
     <app-token-info-tab *ngIf="countCurrent === tokenTab.Info"></app-token-info-tab>
-    <app-token-contract-tab *ngIf="countCurrent === tokenTab.Contract" [contractAddress]="contractAddress"></app-token-contract-tab>
+    <app-token-contract-tab
+      *ngIf="countCurrent === tokenTab.Contract"
+      [contractAddress]="contractAddress"></app-token-contract-tab>
   </div>
 </section>

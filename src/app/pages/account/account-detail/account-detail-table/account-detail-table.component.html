@@ -117,86 +117,97 @@
               *ngIf="i >= pageData.pageSize * currentPage && i < pageData.pageSize * (currentPage + 1)">
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
-                  <a
-                    class="fw-normal text--primary body-mob"
-                    [routerLink]="['/validators', item['validator_address']]">
-                    {{ item.validator_name }}
-                  </a>
-                  <br />
-                  <div class="d-flex justify-content-between">
-                    <div class="fw-normal">
-                      Amount<br />
-                      Reward
+                  <a class="body-mob text--green d-flex" [routerLink]="['/validators', item['validator_address']]">
+                    <div class="avatar-wrapper">
+                      <span class="validator-avatar">
+                        <app-loading-image [srcImg]="getValidatorAvatar(item['validator_address'])">
+                        </app-loading-image>
+                      </span>
                     </div>
+                    <span class="fw-semibold"> {{ item.validator_name }} </span>
+                  </a>
+                  <div class="divider divider-horizontal my-3"></div>
+                  <div class="d-flex justify-content-between body">
+                    <div class="fw-normal">Amount</div>
                     <div class="txt-right">
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--primary">{{ denom }}</span
-                      ><br />
+                      <span class="text--primary">{{ denom }}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between body">
+                    <div class="fw-normal">Reward</div>
+                    <div class="txt-right">
                       {{ item.reward | number: global.formatNumberToken }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                 </div>
                 <div *ngSwitchCase="pageType.Unbonding">
-                  <div class="d-flex justify-content-between">
-                    <div class="fw-normal">
-                      <a
-                        class="fw-normal text--primary body-mob"
-                        [routerLink]="['/validators', item['validator_address']]">
-                        {{ item.validator_name }}
-                      </a>
-                      <br />
-                      Amount<br />
-                      Completion Time
+                    <a class="body-mob text--green d-flex justify-content-between" [routerLink]="['/validators', item['validator_address']]">
+                      <div class="d-flex">
+                        <div class="avatar-wrapper">
+                        <span class="validator-avatar">
+                      <app-loading-image [srcImg]="getValidatorAvatar(item['validator_address'])">
+                      </app-loading-image>
+                    </span>
+                        </div>
+                        <span class="fw-semibold"> {{ item.validator_name }} </span>
+                      </div>
+                      <div class="text--white">{{ commonService.getDateValue(item.completion_time, false)[1] }}</div>
+                    </a>
+                    <div class="divider divider-horizontal my-3"></div>
+                    <div class="d-flex justify-content-between body">
+                      <div class="fw-normal">Amount</div>
+                      <div class="txt-right">
+                        {{ item.amount | number: global.formatNumberToken }}
+                        <span class="text--primary">{{ denom }}</span>
+                      </div>
                     </div>
-                    <div class="txt-right">
-                      {{ commonService.getDateValue(item.completion_time, false)[1] }}<br />
-                      {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--primary">{{ denom }}</span
-                      ><br />
-                      {{ commonService.getDateValue(item.completion_time, false)[0] }}
+                    <div class="d-flex justify-content-between body">
+                      <div class="fw-normal">Completion Time</div>
+                      <div class="txt-right">
+                        {{ commonService.getDateValue(item.completion_time, false)[0] }}
+                      </div>
                     </div>
-                  </div>
                 </div>
                 <div *ngSwitchCase="pageType.Redelegation">
                   <div class="d-flex justify-content-between">
-                    <div class="fw-normal">
-                      <a
-                        class="fw-normal text--primary body-mob"
-                        [routerLink]="['/validators', item['validator_address']]">
-                        {{ item.validator_src_name }}
-                      </a>
-                      <br />
-                      Amount<br />
-                      Time
-                    </div>
+                    <a class="fw-normal text--primary body-mob" [routerLink]="['/validators', item['validator_src_address']]">
+                      {{ item.validator_src_name }}
+                    </a>
+                    <a class="fw-normal text--primary body-mob" [routerLink]="['/validators', item['validator_dst_address']]">
+                      {{ item.validator_dst_name }}
+                    </a>
+                  </div>
+                  <div class="divider divider-horizontal my-3"></div>
+                  <div class="d-flex justify-content-between body">
+                    <div class="fw-normal">Amount</div>
                     <div class="txt-right">
-                      <a
-                        class="fw-normal text--primary body-mob"
-                        [routerLink]="['/validators', item['validator_address']]">
-                        {{ item.validator_dst_name }}
-                      </a>
-                      <br />
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--primary">{{ denom }}</span
-                      ><br />
-                      {{ commonService.getDateValue(item.completion_time, false)[0] }} <br />
+                      <span class="text--primary">{{ denom }}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between body">
+                    <div class="fw-normal">Time</div>
+                    <div class="txt-right">
+                      {{ commonService.getDateValue(item.completion_time, false)[1] }}
                     </div>
                   </div>
                 </div>
                 <div *ngSwitchCase="pageType.Vestings">
-                  <span class="fw-normal text--primary body-mob">{{ item.type_format }}</span
-                  ><br />
-                  <div class="d-flex justify-content-between">
-                    <div class="fw-normal">
-                      Amount<br />
-                      Vesting Schedule
-                    </div>
+                  <span class="fw-normal text--primary body-mob">{{ item.type_format }}</span>
+                  <div class="divider divider-horizontal my-3"></div>
+                  <div class="d-flex justify-content-between body">
+                    <div class="fw-normal">Amount</div>
                     <div class="txt-right">
                       {{ item.amount | number: global.formatNumberToken }}
-                      <span class="text--primary">{{ denom }}</span
-                      ><br />
-                      {{ commonService.getDateValue(item.date_format, false)[1] }} <br />
+                      <span class="text--primary">{{ denom }}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between body">
+                    <div class="fw-normal">Vesting Schedule</div>
+                    <div class="txt-right">
+                      {{ commonService.getDateValue(item.date_format, false)[1] }}
                     </div>
                   </div>
                 </div>

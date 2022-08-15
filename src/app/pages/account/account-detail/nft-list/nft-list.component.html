@@ -1,0 +1,91 @@
+<h1 class="sub-text fw-semibold text--white">NFT Assets ({{assetCW721?.length}})</h1>
+<div class="card mt-3">
+  <div class="card-body">
+    <div *ngIf="loading" class="m-auto mt-10">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
+    <!-- Filter -->
+    <div class="mb-6 d-lg-flex align-items-center justify-content-between">
+      <div class="sub-text fw-semibold text-gradient d-inline-block mb-4 mb-lg-0"></div>
+      <form class="aura-form single-input-field account-search-form">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for Token ID or Address"
+            [(ngModel)]="searchValue"
+            [maxLength]="maxLengthSearch"
+            (keyup)="handleSearch()"
+            [ngModelOptions]="{ standalone: true }"
+            name="inputEmail"
+            autocomplete="off" />
+          <button
+            type="submit"
+            class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
+            (click)="handleSearch()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+          <button
+            type="reset"
+            class="btn-reset {{ !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : '' }}"
+            (click)="searchValue = null">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+        </div>
+        <ng-container *ngIf="searchValue?.length > 0">
+          <div class="box-search-data text-white">
+            <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
+              <span> No NFTs </span>
+            </ng-container>
+            <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+              <div class="txt-title-search">NFT assets</div>
+              <ng-container *ngFor="let item of filterSearchData">
+                <a class="d-flex p-3 cursor-pointer text--white" href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}">
+                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+                  <div class="ml-3">
+                    <div class="d-flex align-items-center">
+                      <span class="text-clamp">{{ item.contract_name }}</span>
+                    </div>
+                  </div>
+                </a>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+      </form>
+    </div>
+    <!-- Table -->
+    <ng-container *ngIf="showedData?.length > 0; else noValues">
+      <div>
+        <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
+          <div class="nft-cards__col col" *ngFor="let item of showedData">
+            <div class="nft-cards__item-border">
+              <a href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}" class="nft-cards__item">
+                <div class="nft-cards__img">
+                  <img *ngIf="item.uri" src="{{ item.uri }}" alt="" />
+                  <img *ngIf="!item.uri" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
+                  <div class="nft-cards__label">
+                    <span class="text-gradient">CW-721</span>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <span class="small-text mr-1 text--white">Token:</span>
+                  <span class="small-text text--green">{{ item.contract_name }}</span>
+                </div>
+                <div class="mt-1 token-id">
+                  <span class="small-text mr-1 text--white">Token ID:</span>
+                  <span class="small-text text--green">{{ item.token_id }}</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (pageEvent)="paginatorEmit($event)">
+        </app-paginator>
+      </div>
+    </ng-container>
+    <ng-template #noValues>
+      <app-table-no-data></app-table-no-data>
+    </ng-template>
+  </div>
+</div>

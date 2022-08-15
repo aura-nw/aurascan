@@ -2,12 +2,9 @@ import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } 
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
-import { first } from 'rxjs/operators';
 import { EnvironmentService } from "src/app/core/data-services/environment.service";
-import {NETWORK, VALIDATOR_ADDRESS_PREFIX} from '../../../app/core/constants/common.constant';
-import { CommonService } from '../../../app/core/services/common.service';
+import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
 import { ResponseDto } from '../../core/models/common.model';
-import { AuthenticationService } from '../../core/services/auth.service';
 import { EventService } from '../../core/services/event.service';
 import { LanguageService } from '../../core/services/language.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -42,6 +39,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   pageTitle = null;
   innerWidth;
 
+  prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
+
   /**
    * Language Listing
    */
@@ -66,8 +65,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     public languageService: LanguageService,
     public _cookiesService: CookieService,
     private eventService: EventService,
-    private authService: AuthenticationService,
-    private commonService: CommonService,
     private walletService: WalletService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
@@ -77,9 +74,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.activateMenu();
       }
     });
-    // if (this.currentChanel?.channel_genesis_hash) {
-    //   this.authService.change({ channel_genesis_hash: this.currentChanel.channel_genesis_hash });
-    // }
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -309,7 +303,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
       if (regexRule.test(this.searchValue)) {
-        if (this.searchValue.length > 60) {
+        if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
           if (this.searchValue.toLowerCase() === this.searchValue) {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['contracts', this.searchValue]);
@@ -317,8 +311,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
           } else {
             this.getTxhDetail(this.searchValue);
           }
-        } else if (this.searchValue.length > 40) {
-          let urlLink = this.searchValue.startsWith(VALIDATOR_ADDRESS_PREFIX) ? 'validators' : 'account';
+        } else if (this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
+          let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate([urlLink, this.searchValue]);
           });

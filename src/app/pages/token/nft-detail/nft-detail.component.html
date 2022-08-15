@@ -16,14 +16,14 @@
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
               <!-- !important:
             Default image if this ntf-detail has not image -->
-              <img *ngIf="true" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" />
+              <img *ngIf="true" [src]="nftDetail?.image || defaultLogoToken" />
             </div>
           </div>
           <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center">
             <h1 class="fw-semibold title-small mb-0 text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
             <div class="mb-0">
               <img
-                [src]="'assets/images/icons/token-logo.png' | imageS3"
+                [src]="nftDetail?.image || defaultLogoToken"
                 width="24px"
                 height="24px"
                 class="mr-1 object-fit--none" />
@@ -137,7 +137,7 @@
                 alt="contract_verification"
                 width="16px"
                 height="16px" />
-              <a class="text--green g-ellipsis" [routerLink]="['/account', nftDetail?.contract_address]">
+              <a class="text--green g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
                 {{ nftDetail?.contract_address }}</a
               >
               <img
@@ -201,7 +201,7 @@
     <span class="body text--white mb-2">Item Activity</span>
     <div class="divider divider-horizontal"></div>
     <div class="text--light-gray small-body mt-3">
-      A total of {{ dataSource?.data?.length }} record{{ dataSource?.data?.length > 1 ? 's' : '' }} found
+      A total of {{ pageData?.length }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
     <div class="table-responsive aura-table-contain">
       <table mat-table [dataSource]="dataSource" class="aura-table">
@@ -243,12 +243,13 @@
                   <a
                     class="text--green content-transfer"
                     [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                     data[template.matColumnDef] | cutStringPipe: 8:8
                   }}</span>
+                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img
                     [src]="'assets/images/icons/arrow-right.png' | imageS3"
                     width="14"
@@ -259,14 +260,19 @@
                   <a
                     class="text--green"
                     [routerLink]="['/account', data[template.matColumnDef]]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
                     data[template.matColumnDef] | cutStringPipe: 8:8
                   }}</span>
+                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
-                <ng-container *ngSwitchCase="'fee'"> {{ data[template.matColumnDef] }} {{ denom }} </ng-container>
+                <ng-container *ngSwitchCase="'price'">
+                  <span *ngIf="data[template.matColumnDef]">
+                    {{ data[template.matColumnDef] || '-' }} {{ denom }}
+                  </span>
+                </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>
             </td>
@@ -282,7 +288,7 @@
         </tr>
       </table>
       <app-paginator
-        [length]="dataSource?.data?.length"
+        [length]="pageData?.length"
         [pageSize]="pageData?.pageSize"
         (paginator)="paginatorEmit($event)"
         (pageEvent)="handlePageEvent($event)">

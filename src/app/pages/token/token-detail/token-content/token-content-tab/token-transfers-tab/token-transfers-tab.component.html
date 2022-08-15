@@ -81,13 +81,28 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--green txt-from-address content-transfer"
+                            href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            *ngIf="
+                              data.modeExecute !== modeExecuteTransaction.Mint &&
+                              data[template.matColumnDef] &&
+                              isNFTContract
+                            ">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                          </a>
+                          <a
+                            class="text--green txt-from-address content-transfer"
                             href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                            *ngIf="data.modeExecute !== modeExecuteTransaction.Mint">
+                            *ngIf="
+                              data.modeExecute !== modeExecuteTransaction.Mint &&
+                              data[template.matColumnDef] &&
+                              !isNFTContract
+                            ">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
                           <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                             data[template.matColumnDef] | cutStringPipe: 8:8
                           }}</span>
+                          <span *ngIf="!data[template.matColumnDef]"> - </span>
                           <ng-container *ngIf="!isSearchAddress">
                             <img
                               [src]="'assets/images/icons/arrow-right.png' | imageS3"
@@ -111,35 +126,44 @@
                         <a
                           class="text--green"
                           href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                          *ngIf="data.modeExecute !== modeExecuteTransaction.Burn">
+                          *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
                         <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
                           data[template.matColumnDef] | cutStringPipe: 8:8
                         }}</span>
+                        <span *ngIf="!data[template.matColumnDef]"> - </span>
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
-                        <a
-                          class="button button-chart button-outline button-outline__in-card px-2 button-view-nft"
-                          [routerLink]="['/tokens/token', contractAddress, data.token_id]">
+                        <button
+                          class="button button-chart button-outline button-outline__in-card px-5 button-view-nft"
+                          [disabled]="!data.token_id"
+                          [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                           <span class="text-gradient">View NFT</span>
-                        </a>
+                        </button>
                       </ng-container>
                       <ng-container *ngSwitchCase="'token_id'">
-                        <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}">
+                        <a
+                          class="text--green"
+                          href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}"
+                          *ngIf="data['token_id']?.length > 0">
                           {{ data[template.matColumnDef] }}
                         </a>
+                        <span *ngIf="data['token_id']?.length === 0"> - </span>
                       </ng-container>
                       <div *ngSwitchCase="'action'">
                         <button
                           mat-icon-button
                           aria-label="Example icon-button with a menu"
                           placement="right"
-                          (click)="getTokenDetail(data)"
+                          (click)="getNFTDetail(data)"
                           [ngbPopover]="popContent"
                           popoverClass="custom-popover token-popover">
                           <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
                         </button>
+                        <ng-template #popContent class="popContent">
+                          <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
+                        </ng-template>
                       </div>
                       <ng-container *ngSwitchDefault>
                         {{ data[template.matColumnDef] }}
@@ -162,7 +186,7 @@
       </ng-container>
     </ng-container>
     <app-paginator
-      [length]="dataSource?.data?.length"
+      [length]="pageData?.length"
       [pageSize]="pageData?.pageSize"
       (paginator)="paginatorEmit($event)"
       (pageEvent)="pageEvent($event)"></app-paginator>
@@ -175,57 +199,3 @@
 <div *ngIf="loading">
   <app-loading-sprint></app-loading-sprint>
 </div>
-
-<ng-template #popContent>
-  <div class="text--white">
-    <span class="sub-text sub-text-mob">Additional info</span><br />
-    Status:<br />
-    <div
-      [class.text--active]="tokenDetail.tx_response?.code == codeTransaction.Success"
-      [class.text--danger]="tokenDetail.tx_response?.code != codeTransaction.Success">
-      <img
-        width="16px"
-        alt="{{ tokenDetail.tx_response?.code }}"
-        [src]="
-          tokenDetail.tx_response?.code == codeTransaction.Success
-            ? ('assets/icons/icons-svg/color/check-circle-2.svg' | imageS3)
-            : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-        " />
-      {{ tokenDetail?.status }}
-    </div>
-    <hr />
-    Token Transfer:<br />
-    {{ tokenDetail?.amount | number: global.formatNumberToken }} (${{
-      tokenDetail?.price | number: global.formatNumber2Decimal
-    }}) <a class="text--green" [routerLink]="['/tokens/token', contractAddress]">{{ denom }}</a
-    ><br />
-    <div>
-      <span class="text--light-gray mr-1">From</span>
-      <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ tokenDetail['from_address'] }}">
-        {{ tokenDetail?.from_address || '-' | cutStringPipe: 8:8 }}
-      </a>
-      <br class="d-sm-none" />
-      <span class="text--light-gray mr-1 ml-sm-1">To</span>
-      <a class="text--green" href="/tokens/token/{{ contractAddress }}?a={{ tokenDetail['to_address'] }}">
-        {{ tokenDetail?.to_address || '-' | cutStringPipe: 8:8 }}
-      </a>
-    </div>
-    <hr />
-    Transaction Fee:<br />
-    {{ tokenDetail?.fee }} {{ denom }} ($0.00)
-    <hr />
-    <div>
-      Gas info:<br />
-      {{ tokenDetail?.tx_response?.gas_used | mask: 'separator' }} Gas Used From
-      {{ tokenDetail?.tx_response?.gas_wanted | mask: 'separator' }} <br class="d-sm-none" />Gas Limit @<br />
-      {{ tokenDetail?.gasPrice }} {{ denom }} ({{ tokenDetail?.gasPriceU }} {{ coinMinimalDenom }})
-      <hr />
-    </div>
-    <a
-      class="small-text text--green cursor-pointer d-flex align-items-center gap-2"
-      [routerLink]="['/transaction', tokenDetail?.tx_hash]"
-      target="_blank">
-      See more details <img class="d-inline" [src]="'assets/icons/icons-svg/color/share.svg' | imageS3" alt="share" />
-    </a>
-  </div>
-</ng-template>

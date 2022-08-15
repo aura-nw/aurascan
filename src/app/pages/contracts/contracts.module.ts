@@ -23,7 +23,6 @@ import { CodeContractComponent } from './contracts-detail/contracts-contents/con
 import { ContractComponent } from './contracts-detail/contracts-contents/contract/contract.component';
 import { ReadContractComponent } from './contracts-detail/contracts-contents/contract/read-contract/read-contract.component';
 import { WriteContractComponent } from './contracts-detail/contracts-contents/contract/write-contact/write-contract.component';
-import { Cw20TokenComponent } from './contracts-detail/contracts-contents/cw20-token/cw20-token.component';
 import { ContractsDetailComponent } from './contracts-detail/contracts-detail.component';
 import { ContractsOverviewCardComponent } from './contracts-detail/contracts-overview-card/contracts-overview-card.component';
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
@@ -42,7 +41,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
     ContractInfoCardComponent,
     ContractsDetailComponent,
     ContractsOverviewCardComponent,
-    Cw20TokenComponent,
     ContractComponent,
     CodeContractComponent,
     ContractsVerifyComponent,

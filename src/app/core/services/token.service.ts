@@ -29,23 +29,29 @@ export class TokenService extends CommonService {
   }
 
   getListTokenTransfer(
-      limit: string | number,
-      offset: string | number,
-      contractAddress: string,
-      filterData: any,
-      mode = '',
+    limit: string | number,
+    offset: string | number,
+    contractAddress: string,
+    filterData: any,
   ): Observable<any> {
-    let url = `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false&query=execute._contract_address%3D'${contractAddress}'`;
+    let payload = {
+      contract_address: contractAddress,
+      account_address: '',
+      tx_hash: '',
+      token_id: '',
+      limit: limit,
+      offset: offset,
+    };
     if (filterData?.keyWord) {
-      if (filterData?.keyWord.length > LENGTH_CHARACTER.TRANSACTION) {
-        url += `&txHash=${filterData?.keyWord}`;
+      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
+        payload.tx_hash = filterData?.keyWord;
       } else if (filterData['isSearchWallet']) {
-        url += `%2Cwasm.${mode}%3D'${filterData?.keyWord}'`;
+        payload.account_address = filterData?.keyWord;
       } else {
-        url += `%2Cwasm.token_id%3D'${filterData?.keyWord}'`;
+        payload.token_id = filterData?.keyWord;
       }
     }
-    return this.http.get<any>(url);
+    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/transactions`, payload);
   }
 
   getListTokenNFT(contractAddress: string, payload): Observable<any> {
@@ -53,10 +59,10 @@ export class TokenService extends CommonService {
   }
 
   getListTokenHolder(
-      limit: string | number,
-      offset: string | number,
-      contractType: string,
-      contractAddress: string,
+    limit: string | number,
+    offset: string | number,
+    contractType: string,
+    contractAddress: string,
   ): Observable<any> {
     let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true`;
     return this.http.get<any>(url);
@@ -68,5 +74,9 @@ export class TokenService extends CommonService {
 
   getNFTDetail(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
+  }
+
+  getBalanceAddress(payload, type = 'cw20-tokens'): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${type}/get-by-owner`, payload);
   }
 }
