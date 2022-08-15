@@ -3,6 +3,7 @@ mat-expansion-panel {
   margin-bottom: var(--spacer-5);
 
   mat-expansion-panel-header {
+    height: 40px;
     background-color: var(--aura-gray-9);
     border-color: var(--aura-gray-9);
     padding: 10px var(--spacer-4);

@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-between">
-  <div>
-    <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="14" height="17" />
-    <span class="small-text text--white ml-2">Read Contract Information</span>
+  <div class="d-flex align-items-center">
+    <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
+    <span class="body-02 text--white ml-2">Read Contract Information</span>
   </div>
-  <div class="small-text">
+  <div class="caption fw-normal-mob">
     <span class="cursor-pointer text--primary mr-6" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse all</ng-container>
@@ -17,13 +17,13 @@
     <ng-container *ngIf="!readContract?.required?.toString().includes('_logo')">
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header class="content-contract">
-          <mat-panel-title class="item-content"> {{ i + 1 }}. {{ readContract?.required }} </mat-panel-title>
+          <mat-panel-title class="item-content body-02 fw-semibold-mob"> {{ i + 1 }}. {{ readContract?.required }} </mat-panel-title>
           <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
-        <div class="d-flex row p-3">
+        <div class="d-flex row px-3 py-1">
           <ng-container *ngFor="let item of readContract?.properties[readContract.required[0]]?.required; index as idx">
             <p
-              class="px-0 mb-2"
+              class="px-0 mb-2 body-02"
               [class.input-require]="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
               {{ item }} ({{
                 readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
@@ -69,17 +69,17 @@
               <span>Query</span>
             </button>
           </div>
-          <div class="col-12">
+          <div class="px-0">
             <ng-container *ngIf="!readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
-              <div class="mb-2">
+              <div class="mb-0">
                 {{ readContract.required }}
-                <span class="ml-1 font-italic text--light-gray small-body">{{
+                <span class="ml-1 font-italic text--gray-light small-body">{{
                   readContract?.properties[readContract?.required[0]]?.type
                 }}</span>
               </div>
               <div class="d-flex" *ngIf="objQuery[readContract?.required]">
                 <div class="">Response:</div>
-                <div class="">
+                <div class="overflow-scroll-x">
                   <pre
                     id="json"
                     class="raw-content text--white pl-2"
@@ -88,15 +88,15 @@
               </div>
             </ng-container>
             <ng-container *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('required')">
-              <p>
+              <p class="mb-0">
                 {{ readContract?.required }}
-                <span class="ml-1 font-italic text--light-gray small-body">{{ readContract?.type }}</span>
+                <span class="ml-1 font-italic text--gray-light small-body">{{ readContract?.type }}</span>
               </p>
             </ng-container>
             <ng-container *ngIf="dataResponse && currentFrom === i">
               <div class="d-flex">
                 <div class="">Response:</div>
-                <div class="">
+                <div class="overflow-scroll-x">
                   <pre id="json" class="raw-content text--white ml-2" [innerHtml]="dataResponse | appJson"></pre>
                 </div>
               </div>

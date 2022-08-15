@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center">
-  <div class="my-3 small-text">
+  <div class="my-t mb-1 mb-lg-3 small-text">
     <button
       (click)="connectWallet()"
       class="button button-pill button--xs button-outline button-outline__in-card"
@@ -15,7 +15,7 @@
       <span class="fw-semibold">Connected to Web3</span>
     </button>
   </div>
-  <div class="caption d-flex align-items-center">
+  <div class="caption fw-normal-mob d-flex align-items-center">
     <span class="cursor-pointer text--primary" (click)="expandMenu()">
       <ng-container *ngIf="!isExpand">Expand all</ng-container>
       <ng-container *ngIf="isExpand">Collapse all</ng-container>
@@ -34,7 +34,7 @@
           <mat-panel-title class="item-content"> {{ i + 1 }}. {{ writeContract?.required }} </mat-panel-title>
           <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
-        <div class="d-flex row p-3">
+        <div class="d-flex row px-3 py-1">
           <ng-container *ngIf="writeContract?.properties[writeContract?.required[0]]?.hasOwnProperty('properties')">
             <ng-container
               *ngFor="
@@ -42,7 +42,7 @@
                 index as idx
               ">
               <p
-                class="px-0 text--greyscale-1"
+                class="px-0 text--gray-1 body-02 mb-2"
                 [class.input-require]="
                   writeContract?.properties[writeContract?.required[0]]?.hasOwnProperty('required')
                 ">
@@ -88,7 +88,7 @@
                 index as idx
               ">
               <p
-                class="px-0 text--greyscale-1"
+                class="px-0 text--gray-1 body-02 mb-2"
                 [class.input-require]="checkRequire(item, objDefine[writeContract?.required])">
                 {{ item }} ({{
                   jsonWriteContract[objDefine[writeContract?.required]?.key[0]][

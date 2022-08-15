@@ -2,7 +2,7 @@
   <button class="button button--xs button-circle" type="button" id="dropDownButton" data-bs-toggle="dropdown" aria-expanded="false">
     <img [src]="'assets/icons/icons-svg/white/more-vertical.svg' | imageS3" alt="" class="cursor-pointer" width="16px" height="16px"/>
   </button>
-  <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="dropDownButton">
+  <ul class="dropdown-menu aura-dropdown-menu mt-2" aria-labelledby="dropDownButton">
     <li
       class="dropdown-item cursor-pointer"
       *ngFor="let element of elements"
@@ -17,15 +17,14 @@
             class="icon"
             width="25px" />
         </div> -->
-        <div class="icon-wrapper d-inline">
+        <div class="icon-wrapper d-flex align-items-center justify-content-center">
           <img
             *ngIf="element?.image"
             [src]="element.key == currentLabel ? (element?.imageActive | imageS3) : (element?.image | imageS3)"
-            alt="icon"
-            class="icon" />
+            alt="icon" class="icon mr-2" width="20px" height="20px" />
           <!-- <img *ngIf="element?.image" [src]="element?.image" alt="icon" class="icon" /> -->
         </div>
-        <span class="text--{{ element.key == currentLabel ? 'primary' : 'contract' }} small-body">{{
+        <span class="text--{{ element.key == currentLabel ? 'primary' : 'contract' }} body">{{
           element?.disableTranslate ? element.label : (element.label | translate)
         }}</span>
       </button>
