@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { ResponseDto } from 'src/app/core/models/common.model';
@@ -24,7 +25,7 @@ export class NftListComponent implements OnChanges {
   showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService, private router : Router) {}
 
   ngOnChanges(): void {
     this.getNftData();
@@ -87,5 +88,10 @@ export class NftListComponent implements OnChanges {
   resetSearch(): void {
     this.searchValue = '';
     this.getNftData();
+  }
+
+  handleRouterLink(e: Event, link): void {
+    this.router.navigate(link)
+    e.preventDefault();
   }
 }

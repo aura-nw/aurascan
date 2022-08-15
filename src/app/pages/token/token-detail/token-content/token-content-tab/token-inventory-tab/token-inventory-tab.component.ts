@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -28,6 +28,7 @@ export class TokenInventoryComponent implements OnInit {
     private route: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -74,5 +75,12 @@ export class TokenInventoryComponent implements OnInit {
 
   paginatorEmit(e): void {
     this.nftData.paginator = e;
+  }
+
+  handleRouterLink(e: Event, link, params?): void {
+    this.router.navigate(link, {
+      queryParams: params,
+    });
+    e.preventDefault();
   }
 }
