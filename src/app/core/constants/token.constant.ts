@@ -27,4 +27,4 @@ export const TOKEN_TAB = [
   },
 ];
 
-export const MAX_LENGTH_SEARCH_TOKEN = 200;
+export const MAX_LENGTH_SEARCH_TOKEN = 100;
