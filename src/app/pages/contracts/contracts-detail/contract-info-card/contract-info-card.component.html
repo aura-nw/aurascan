@@ -57,7 +57,7 @@
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
             <ng-container *ngIf="contractDetail?.token_tracker">
-              <a class="text--primary" [routerLink]="['/token', contractDetail?.contract_address]">
+              <a class="text--primary" [routerLink]="['/token', contractDetail?.contract_address]"
                 *ngIf="!(contractDetail.token_tracker?.type === 'CW721')"
                 [routerLink]="['/tokens/token', contractDetail?.contract_address]">
                 {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
