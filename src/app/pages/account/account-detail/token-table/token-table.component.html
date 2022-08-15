@@ -1,5 +1,5 @@
 <section>
-  <div class="sub-text fw-semibold">Coins & Tokens ({{ assetCW20?.length }})</div>
+  <div class="sub-text fw-semibold">Coins & Tokens ({{ assetCW20?.length || 0 }})</div>
   <div class="mt-4">
     <ng-container *ngIf="pageData?.length > 0; else noValues">
       <div class="card mt-5">
@@ -70,12 +70,12 @@
               <ng-container matColumnDef="asset">
                 <th mat-header-cell *matHeaderCellDef>ASSET</th>
                 <td mat-cell *matCellDef="let element">
-                  <div class="d-flex align-items-center">
+                  <a class="d-flex align-items-center" [routerLink]="['/tokens/token', element.contract_address]">
                     <img [src]="element.image" width="24px" height="24px" />
                     <div class="ml-2">
                       {{ element.name }}
                     </div>
-                  </div>
+                  </a>
                 </td>
               </ng-container>
 
@@ -104,7 +104,7 @@
               <ng-container matColumnDef="amount">
                 <th mat-header-cell *matHeaderCellDef class="">AMOUNT</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ convertValue(element.balance, element.decimals) | number: global.formatNumberToken }}
+                  {{ element.balance | number: global.formatNumberToken }}
                 </td>
               </ng-container>
 
@@ -120,7 +120,7 @@
 
               <!-- CHANCE (24h) Column -->
               <ng-container matColumnDef="chance">
-                <th mat-header-cell *matHeaderCellDef class="">CHANGE (24h)</th>
+                <th mat-header-cell *matHeaderCellDef class="">CHANGE (24H)</th>
                 <td mat-cell *matCellDef="let element">
                   <!-- <div class="aura__change {{ element.chance > 0 ? 'aura__change--asc' : 'aura__change--desc' }} ">
                     {{ math.abs(element.chance) }}
