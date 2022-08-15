@@ -35,6 +35,7 @@ export interface TableData {
 export class ContractTableComponent implements OnInit, OnChanges {
   @Input() dataList;
   @Input() length: number;
+  @Input() pageSize = 25;
   @Input() contractInfo!: ITableContract;
   @Input() templates!: Array<TableTemplate>;
   @Input() label!: string;
@@ -68,7 +69,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   loadTableData() {
     this.pageData = {
       length: this.dataList?.data?.length,
-      pageSize: 25,
+      pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
 
