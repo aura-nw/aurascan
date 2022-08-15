@@ -54,7 +54,13 @@
                   >Max Total Supply:</span
                 >
                 <div class="small-body">
-                  {{ tokenDetail.total_supply | number: global.formatNumberToken }} {{ tokenDetail.name }}
+                  <ng-container *ngIf="!tokenDetail.isNFTContract">
+                    {{ tokenDetail.total_supply | number: global.formatNumberOnlyDecimal }}
+                  </ng-container>
+                  <ng-container *ngIf="tokenDetail.isNFTContract">
+                    {{ tokenDetail.num_tokens | number: global.formatNumberOnlyDecimal }}
+                  </ng-container>
+                  <span class="ml-1">{{ tokenDetail.name }}</span>
                 </div>
               </div>
 
