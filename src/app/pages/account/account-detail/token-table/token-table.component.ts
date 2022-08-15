@@ -18,6 +18,7 @@ export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   math = Math;
   textSearch = '';
+  searchTemp: string = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
@@ -38,7 +39,6 @@ export class TokenTableComponent implements OnChanges {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   assetCW20: any[];
   constructor(public global: Globals, private accountService: AccountService) {}
@@ -52,7 +52,7 @@ export class TokenTableComponent implements OnChanges {
       account_address: this.address,
       limit: 0,
       offset: 0,
-      keyword: '',
+      keyword: this.textSearch,
     };
     this.accountService.getAssetCW20ByOnwer(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
@@ -60,6 +60,8 @@ export class TokenTableComponent implements OnChanges {
         this.assetCW20.length = res.data.length;
         this.dataSource = new MatTableDataSource<any>(this.assetCW20);
         this.pageData.length = this.assetCW20?.length;
+      } else {
+        this.pageData.length = 0;
       }
     });
   }
@@ -75,23 +77,24 @@ export class TokenTableComponent implements OnChanges {
   handlePageEvent(e: any) {
     this.pageData = e;
   }
-  searchToken(): void {
-    if (this.textSearch.length > 0) {
-      const payload = {
-        account_address: this.address,
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
 
-      this.accountService.getAssetCW20ByOnwer(payload).subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          let keyWord = this.textSearch.toLowerCase();
-          this.filterSearchData = res.data?.filter(
-            (data) => data.name.toLowerCase().includes(keyWord) || data.symbol.toLowerCase().includes(keyWord),
-          );
-        }
-      });
+  searchToken(): void {
+    const VALIDATORS = {
+      HASHRULE: /^[A-Za-z0-9]/,
+    };
+    const regexRule = VALIDATORS.HASHRULE;
+    this.textSearch = this.textSearch?.trim();
+    if (this.textSearch.length > 0) {
+      if (regexRule.test(this.textSearch)) {
+        this.getListToken();
+      }
+    } else {
+      this.getListToken();
     }
+  }
+
+  resetSearch(): void {
+    this.textSearch = '';
+    this.getListToken();
   }
 }
