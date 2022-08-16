@@ -64,7 +64,7 @@
                         >{{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}%</span
                       >
                       <div class="percentage-bar mt-4" *ngIf="isNFTContract">
-                        <div class="percentage-bar__process" [style.width]="(data.percent_hold || 0) + '%'"></div>
+                        <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">

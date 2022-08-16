@@ -63,7 +63,7 @@ export class TokenHoldersTabComponent implements OnInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
     setTimeout(() => {
       this.getListTokenHolder(this.tokenType);
-    }, 1500);
+    }, 2000);
   }
 
   getListTokenHolder(tokenType: string) {
@@ -78,6 +78,8 @@ export class TokenHoldersTabComponent implements OnInit {
       .subscribe((res) => {
         if (res && res.data?.resultAsset?.length > 0) {
           this.pageData.length = res.data?.resultCount;
+
+          let numberTop = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
           res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
           });
@@ -85,6 +87,7 @@ export class TokenHoldersTabComponent implements OnInit {
           if (this.totalQuantity) {
             res.data?.resultAsset.forEach((k) => {
               k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
+              k['width_chart'] = (k.quantity / numberTop) * 100;
             });
           }
 
