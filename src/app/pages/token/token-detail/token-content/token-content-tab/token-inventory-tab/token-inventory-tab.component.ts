@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-token-inventory-tab',
@@ -9,169 +13,74 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TokenInventoryComponent implements OnInit {
   loading = true;
-  pageData: PageEvent;
-  nftData = [];
-  showedData = [];
-  tokenId = 'abc';
-  constructor(private route: ActivatedRoute) {}
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+  nftData: MatTableDataSource<any> = new MatTableDataSource();
+  contractAddress = '';
+  keyWord = '';
+
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+
+  constructor(
+    private route: ActivatedRoute,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.tokenId = params?.tokenId || 'abc';
-      this.getNftData();
-      this.showedData = this.nftData.slice(0, 10);
+      this.contractAddress = params?.contractAddress;
     });
+
+    this.route.queryParams.subscribe((params) => {
+      this.keyWord = params?.a || '';
+    });
+    this.getNftData();
   }
 
   getNftData() {
     this.loading = true;
-    // call API get nft data -> import data to showedData
-    this.nftData = [
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: null,
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-      {
-        symbol: 'CW - 721',
-        name: '443432324234agbki443432324adw453443',
-        tokenID: '12345',
-        link: '/tokens/token/' + this.tokenId + '/1',
-        img: 'assets/images/about.png',
-      },
-    ];
-    this.pageData = {
-      length: this.nftData.length,
-      pageSize: 10,
-      pageIndex: 1,
+    let payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      token_id: '',
+      owner: '',
     };
-    this.loading = false;
+
+    if (this.keyWord) {
+      if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
+        payload.owner = this.keyWord;
+      } else if (this.keyWord?.length !== LENGTH_CHARACTER.TRANSACTION) {
+        payload.token_id = this.keyWord;
+      }
+    }
+
+    this.tokenService.getListTokenNFT(this.contractAddress, payload).subscribe((res) => {
+      if (res && res.data?.length > 0) {
+        this.nftData.data = res.data;
+        this.pageData.length = res.meta?.count;
+      }
+      this.loading = false;
+    });
   }
 
-  paginatorEmit(event): void {
-    // handle paginator with API
-    const pageEvent = event;
-    this.showedData = this.nftData.slice(10 * pageEvent.pageIndex, 10 * (pageEvent.pageIndex + 1));
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getNftData();
+  }
+
+  paginatorEmit(e): void {
+    this.nftData.paginator = e;
+  }
+
+  handleRouterLink(e: Event, link, params?): void {
+    this.router.navigate(link, {
+      queryParams: params,
+    });
+    e.preventDefault();
   }
 }

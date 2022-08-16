@@ -6,38 +6,38 @@
           <td class="">
             <span class="fw-semibold">Overview </span>
             <span class="text--light-gray">
-              <ng-container *ngIf="!isNFTContract">[CW-20]</ng-container>
-              <ng-container *ngIf="isNFTContract">[CW-721]</ng-container>
+              <ng-container *ngIf="!tokenDetail.isNFTContract">[CW-20]</ng-container>
+              <ng-container *ngIf="tokenDetail.isNFTContract">[CW-721]</ng-container>
             </span>
           </td>
           <td class="">
-            <div class="d-flex justify-content-end" *ngIf="!isNFTContract">
+            <!-- <div class="d-flex justify-content-end" *ngIf="!tokenDetail.isNFTContract">
               <button class="button button-chart button-outline button-outline__in-card -small">
                 <img [src]="'assets/images/icons/token-chart.svg' | imageS3" alt="" width="16px" />
                 <span class="ml-2 small-text">Chart</span>
               </button>
-            </div>
+            </div> -->
           </td>
         </tr>
 
         <tr>
           <td colspan="2" class="py-2">
             <div class="d-flex">
-              <div [class.flex-item]="!isNFTContract">
+              <div [class.flex-item]="!tokenDetail.isNFTContract">
                 <div class="text--light-gray small-text">
-                  <span *ngIf="isNFTContract">Min price</span>
-                  <span *ngIf="!isNFTContract">Price</span>
+                  <span *ngIf="tokenDetail.isNFTContract">Min price</span>
+                  <span *ngIf="!tokenDetail.isNFTContract">Price</span>
                 </div>
                 <div>
-                  <span class="small-body">$0.17</span>
-                  <span class="small-text text--light-gray py-3 mx-2"> @0.217711 Aura</span>
+                  <span class="small-body">-</span>
+                  <span class="small-text text--light-gray py-3 mx-2">{{ denom }}</span>
                   <br class="d-lg-none" />
-                  <span class="text-danger small-body" *ngIf="!isNFTContract">(-0,87%)</span>
+                  <!-- <span class="text-danger small-body" *ngIf="!isNFTContract">(-0,87%)</span> -->
                 </div>
               </div>
-              <div class="pl-4" *ngIf="!isNFTContract">
+              <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
                 <div class="text--light-gray small-text">CIRCULATING SUPPLY MARKET CAP</div>
-                <div class="small-body">$7,342,381,252.35</div>
+                <div class="small-body">-</div>
               </div>
             </div>
           </td>
@@ -47,16 +47,26 @@
           <td colspan="2" class="py-2">
             <div class="d-flex align-item-center">
               <div
-                [class.flex-item]="!isNFTContract"
-                [ngClass]="{ 'd-flex': isNFTContract, 'align-items-center': isNFTContract }">
-                <span class="small-text text--light-gray" *ngIf="!isNFTContract">Max Total Supply</span>
-                <span style="min-width: 120px" class="text--white" *ngIf="isNFTContract">Max Total Supply:</span>
-                <div class="small-body">1.000.000.000 AURA</div>
+                [class.flex-item]="!tokenDetail.isNFTContract"
+                [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
+                <span class="small-text text--light-gray" *ngIf="!tokenDetail.isNFTContract">Max Total Supply</span>
+                <span style="min-width: 120px" class="text--white" *ngIf="tokenDetail.isNFTContract"
+                  >Max Total Supply:</span
+                >
+                <div class="small-body">
+                  <ng-container *ngIf="!tokenDetail.isNFTContract">
+                    {{ tokenDetail.total_supply | number: global.formatNumberToken }}
+                  </ng-container>
+                  <ng-container *ngIf="tokenDetail.isNFTContract">
+                    {{ tokenDetail.num_tokens | number: global.formatNumberOnlyDecimal }}
+                  </ng-container>
+                  <span class="ml-1">{{ tokenDetail.name }}</span>
+                </div>
               </div>
 
-              <div class="pl-4" *ngIf="!isNFTContract">
+              <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
                 <div class="text--light-gray small-text">FULLY DILUTED MARKET CAP</div>
-                <div class="small-body">$27,342,381,252.35</div>
+                <div class="small-body">-</div>
               </div>
             </div>
           </td>
@@ -67,17 +77,20 @@
             <div class="d-flex">
               <div style="min-width: 120px">Holders:</div>
               <div>
-                23,130 <span class="text-danger ml-1" *ngIf="!isNFTContract">(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span>
+                {{ tokenDetail?.holder }}
+                <!-- <span class="text-danger ml-1" *ngIf="!isNFTContract"
+                  >(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span
+                > -->
               </div>
             </div>
           </td>
         </tr>
 
-        <tr>
+        <tr *ngIf="!params">
           <td colspan="2">
             <div class="d-flex">
               <div style="min-width: 120px">Transfers:</div>
-              <div>269,902</div>
+              <div>{{ tokenDetail.transfers }}</div>
             </div>
           </td>
         </tr>

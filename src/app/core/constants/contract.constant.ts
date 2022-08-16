@@ -33,7 +33,7 @@ export const CONTRACT_RESULT = {
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
 export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
-  { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
+  // { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
   { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
   {

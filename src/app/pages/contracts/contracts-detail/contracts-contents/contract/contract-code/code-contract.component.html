@@ -54,20 +54,22 @@
       <span class="text--white ml-2 fw-semibold">Link Contract Source Code</span>
     </div>
     <div class="d-flex justify-content-between align-items-center">
-      <div class="w-100 text-nowrap small-text content-info link-url mr-6" [class.g-ellipsis]="breakpoint.value.matches">
+      <div
+        class="w-100 text-nowrap small-text content-info link-url mr-6"
+        [class.g-ellipsis]="breakpoint.value.matches">
         {{ contractDetailData?.url }}
       </div>
       <div class="d-flex justify-content-end">
-          <button
-            class="button button-chart button-outline button-outline__in-card btn-copy"
-            matTooltip="Copied!"
-            #tooltip1="matTooltip"
-            (mouseenter)="$event.stopImmediatePropagation()"
-            (mouseleave)="$event.stopImmediatePropagation()"
-            (click)="copyData(contractDetailData?.url); tooltip1.toggle()">
-            <span class="ml-1">Copy</span>
-          </button>
-        </div>
+        <button
+          class="button button-chart button-outline button-outline__in-card btn-copy"
+          matTooltip="Copied!"
+          #tooltip1="matTooltip"
+          (mouseenter)="$event.stopImmediatePropagation()"
+          (mouseleave)="$event.stopImmediatePropagation()"
+          (click)="copyData(contractDetailData?.url); tooltip1.toggle()">
+          <span class="ml-1">Copy</span>
+        </button>
+      </div>
     </div>
     <!-- File Contract Source Code -->
     <div *ngIf="contractDetailData.s3_location">
@@ -76,13 +78,21 @@
         <span class="text--white ml-2 fw-semibold">File Contract Source Code</span>
       </div>
       <div class="d-flex justify-content-between align-items-center">
-        <div class="w-100 text-nowrap small-text content-info link-url mr-6" [class.g-ellipsis]="breakpoint.value.matches">
-          {{ contractDetailData?.s3_location.split('/')[contractDetailData?.s3_location.split('/').length-1] }}
+        <div
+          class="w-100 text-nowrap small-text content-info link-url mr-6"
+          [class.g-ellipsis]="breakpoint.value.matches">
+          {{ contractDetailData?.s3_location.split('/')[contractDetailData?.s3_location.split('/').length - 1] }}
         </div>
-        <a href="{{contractDetailData?.s3_location}}"
-           class="button button-chart button-outline button-outline__in-card d-flex flex-shrink-0">
-          <img [src]="'assets/icons/icons-svg/white/download.svg' | imageS3" alt="" width="16px" height="16px" class="d-none d-lg-block">
-          <span class="ml-2 text-white">{{ breakpoint.value.matches ? 'Download' : 'Download ZIP'}}</span>
+        <a
+          href="{{ contractDetailData?.s3_location }}"
+          class="button button-chart button-outline button-outline__in-card d-flex flex-shrink-0">
+          <img
+            [src]="'assets/icons/icons-svg/white/download.svg' | imageS3"
+            alt=""
+            width="16px"
+            height="16px"
+            class="d-none d-lg-block" />
+          <span class="ml-2 text-white">{{ breakpoint.value.matches ? 'Download' : 'Download ZIP' }}</span>
         </a>
       </div>
     </div>
@@ -99,6 +109,7 @@
     <div class="d-flex justify-content-between align-items-center" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.ison</span>
       <div
+        *ngIf="contractDetailData?.execute_msg_schema"
         class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
         [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
@@ -145,11 +156,19 @@
           (click)="pre1.className.includes('show') ? pre1.classList.remove('show') : pre1.classList.add('show')" />
       </div>
     </div>
-    <pre class="mt-3 small-text content-info" #pre1>{{ contractDetailData?.execute_msg_schema }}</pre>
+    <pre
+      class="mt-3 small-text content-info"
+      [ngStyle]="{
+        display: contractDetailData?.execute_msg_schema ? 'block' : 'none'
+      }"
+      #pre1
+      >{{ contractDetailData?.execute_msg_schema }}</pre
+    >
 
     <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 2 of 3: instantiate msg.json</span>
       <div
+        *ngIf="contractDetailData?.instantiate_msg_schema"
         class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
         [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
@@ -168,12 +187,12 @@
           <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction2">
             <li
               class="dropdown-item cursor-pointer"
-              (click)="sendRouteObject('json', contractDetailData?.execute_msg_schema)">
+              (click)="sendRouteObject('json', contractDetailData?.instantiate_msg_schema)">
               <button type="button" class="button p-0 small-text">JSON Format</button>
             </li>
             <li
               class="dropdown-item cursor-pointer"
-              (click)="sendRouteObject('text', contractDetailData?.execute_msg_schema)">
+              (click)="sendRouteObject('text', contractDetailData?.instantiate_msg_schema)">
               <button type="button" class="button p-0 small-text">JRAW/Text Format</button>
             </li>
           </ul>
@@ -194,11 +213,19 @@
           (click)="pre2.className.includes('show') ? pre2.classList.remove('show') : pre2.classList.add('show')" />
       </div>
     </div>
-    <pre class="mt-3 small-text content-info" #pre2>{{ contractDetailData?.instantiate_msg_schema }}</pre>
+    <pre
+      class="mt-3 small-text content-info"
+      [ngStyle]="{
+        display: contractDetailData?.instantiate_msg_schema ? 'block' : 'none'
+      }"
+      #pre2
+      >{{ contractDetailData?.instantiate_msg_schema }}</pre
+    >
 
     <div class="d-flex justify-content-between align-items-center mt-2" [class.row]="breakpoint.value.matches">
       <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 3 of 3: query msg.json</span>
       <div
+        *ngIf="contractDetailData?.query_msg_schema"
         class="d-flex align-items-center justify-content-end mt-1 mt-lg-0"
         [class.btn-export-mob]="breakpoint.value.matches">
         <div class="dropdown aura-dropdown small-text">
@@ -219,12 +246,12 @@
           <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction3">
             <li
               class="dropdown-item cursor-pointer"
-              (click)="sendRouteObject('json', contractDetailData?.execute_msg_schema)">
+              (click)="sendRouteObject('json', contractDetailData?.query_msg_schema)">
               <button type="button" class="button p-0 small-text">JSON Format</button>
             </li>
             <li
               class="dropdown-item cursor-pointer"
-              (click)="sendRouteObject('text', contractDetailData?.execute_msg_schema)">
+              (click)="sendRouteObject('text', contractDetailData?.query_msg_schema)">
               <button type="button" class="button p-0 small-text">JRAW/Text Format</button>
             </li>
           </ul>
@@ -245,7 +272,14 @@
           (click)="pre3.className.includes('show') ? pre3.classList.remove('show') : pre3.classList.add('show')" />
       </div>
     </div>
-    <pre class="mt-3 small-text content-info" #pre3>{{ contractDetailData?.query_msg_schema }}</pre>
+    <pre
+      class="mt-3 small-text content-info"
+      [ngStyle]="{
+        display: contractDetailData?.query_msg_schema ? 'block' : 'none'
+      }"
+      #pre3
+      >{{ contractDetailData?.query_msg_schema }}</pre
+    >
   </ng-container>
 
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
