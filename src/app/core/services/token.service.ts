@@ -64,7 +64,7 @@ export class TokenService extends CommonService {
     contractType: string,
     contractAddress: string,
   ): Observable<any> {
-    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true`;
+    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=true`;
     return this.http.get<any>(url);
   }
 

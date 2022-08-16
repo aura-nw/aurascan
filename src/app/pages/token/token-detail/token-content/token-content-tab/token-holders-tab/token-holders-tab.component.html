@@ -63,9 +63,12 @@
                       <span *ngIf="!isNFTContract"
                         >{{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}%</span
                       >
-                      <div class="percentage-bar mt-4" *ngIf="isNFTContract">
-                        <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
-                      </div>
+                      <ng-container *ngIf="isNFTContract">
+                        <span>{{ data.percent_hold || 0 | number: global.formatNumber2Decimal }} %</span>
+                        <div class="percentage-bar mt-2">
+                          <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
+                        </div>
+                      </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
                       ${{ data['balance'] * data[template.matColumnDef] | number: global.formatNumber2Decimal }}
