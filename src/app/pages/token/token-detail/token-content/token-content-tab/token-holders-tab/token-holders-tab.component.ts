@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
@@ -29,7 +31,7 @@ export class TokenHoldersTabComponent implements OnInit {
   CW721Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
-    { matColumnDef: 'amount', headerCellDef: 'amount' },
+    { matColumnDef: 'quantity', headerCellDef: 'amount' },
     { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
   ];
 
@@ -43,16 +45,25 @@ export class TokenHoldersTabComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   tokenType = ContractRegisterType.CW20;
   numberTopHolder = 100;
+  totalQuantity = 0;
+  chainInfo = this.environmentService.configValue.chain_info;
 
-  constructor(public global: Globals, private tokenService: TokenService) {}
+  constructor(
+    public global: Globals,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     if (this.isNFTContract) {
       this.tokenType = ContractRegisterType.CW721;
+      this.getQuantity();
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
-    this.getListTokenHolder(this.tokenType);
+    setTimeout(() => {
+      this.getListTokenHolder(this.tokenType);
+    }, 2000);
   }
 
   getListTokenHolder(tokenType: string) {
@@ -67,9 +78,19 @@ export class TokenHoldersTabComponent implements OnInit {
       .subscribe((res) => {
         if (res && res.data?.resultAsset?.length > 0) {
           this.pageData.length = res.data?.resultCount;
+
+          let numberTop = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
           res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
           });
+
+          if (this.totalQuantity) {
+            res.data?.resultAsset.forEach((k) => {
+              k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
+              k['width_chart'] = (k.quantity / numberTop) * 100;
+            });
+          }
+
           let sortedData = res.data?.resultAsset.sort((a, b) => {
             return this.compare(a.percent_hold, b.percent_hold, false);
           });
@@ -94,5 +115,16 @@ export class TokenHoldersTabComponent implements OnInit {
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getListTokenHolder(this.tokenType);
+  }
+
+  async getQuantity() {
+    let queryData = {
+      num_tokens: {},
+    };
+    const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
+    try {
+      const config = await client.queryContractSmart(this.contractAddress, queryData);
+      this.totalQuantity = config?.count || 0;
+    } catch (error) {}
   }
 }

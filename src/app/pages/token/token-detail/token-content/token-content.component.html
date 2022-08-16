@@ -49,8 +49,14 @@
       class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-lg-8 mb-4 mb-lg-0">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a ngbNavLink (click)="changeTab(tab.key)">
-            <span class="tab-title">{{ tab.value }}</span>
+          <a ngbNavLink (click)="changeTab(tab.key)" class="verify-contract">
+            <span class="tab-title mr-2">{{ tab.value }}</span>
+            <img
+              *ngIf="tab.key === tokenTab.Contract"
+              [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+              alt="contract_verification"
+              width="16px"
+              height="16px" />
           </a>
         </li>
       </ng-container>
