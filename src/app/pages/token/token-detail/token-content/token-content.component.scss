@@ -3,6 +3,12 @@
     min-width: 350px;
   }
 }
+a.verify-contract {
+  img {
+    position: absolute;
+    top: 2px;
+  }
+}
 .aura-basic-table tr td:not(:last-child) {
   border-right: 1px solid var(--aura-dark-gray);
 }
@@ -15,14 +21,14 @@
 }
 .aura-nav-tabs.nav-tabs {
   flex-wrap: nowrap;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   overflow: hidden;
   overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;
   }
-  .nav-link{
+  .nav-link {
     font-weight: 600;
     font-size: 14px;
   }
