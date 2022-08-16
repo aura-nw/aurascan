@@ -47,7 +47,7 @@
               width="24px"
               height="24px"
               class="mr-1 object-fit--none" />
-            <a class="text--green" [routerLink]="['/tokens/token-nft', popoverData?.nftDetail?.contract_address]"
+            <a class="text--primary" [routerLink]="['/tokens/token-nft', popoverData?.nftDetail?.contract_address]"
               >({{ popoverData?.nftDetail?.name }})</a
             >
             From
@@ -59,7 +59,7 @@
         </div>
         <div class="mt-2" *ngIf="popoverData?.nftDetail?.token_id">
           1 of TokenID [<a
-            class="text--green"
+            class="text--primary"
             href="/tokens/token-nft/{{ popoverData?.nftDetail?.contract_address }}?a={{
               popoverData?.nftDetail?.token_id
             }}"

@@ -67,12 +67,12 @@
                             {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
                           </div>
                         </div>
-                        <span class="text-clamp small-body text--green">{{
+                        <span class="text-clamp small-body text--primary">{{
                           item.contract_address | cutStringPipe: 8:8
                         }}</span>
                       </div>
 
-                      <!-- <div class="text-clamp small-body text--green" style="height: 18px">
+                      <!-- <div class="text-clamp small-body text--primary" style="height: 18px">
                         {{ item.contract_address | cutStringPipe: 8:8 }}
                       </div> -->
                     </div>

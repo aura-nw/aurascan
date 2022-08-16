@@ -91,3 +91,9 @@ a {
 app-paginator {
   overflow: hidden;
 }
+.hover-link, a.text--primary {
+  transition: all .35s ease-in-out;
+  &:hover {
+    color: var(--aura-green-3) !important;
+  }
+}

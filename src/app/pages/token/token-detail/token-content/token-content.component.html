@@ -5,7 +5,7 @@
         <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="15" height="15" />
         FILTER BY TOKEN TXN HASH
       </p>
-      <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
+      <a class="text--primary" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
     </div>
     <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab p-3">
       <div class="table-responsive">
@@ -21,7 +21,7 @@
                   height="15" />
                 FILTER BY TOKEN HOLDER
               </div>
-              <a class="text--green" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
+              <a class="text--primary" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
             </td>
             <td>
               <div class="small-text txt-light mb-1">BALANCE</div>

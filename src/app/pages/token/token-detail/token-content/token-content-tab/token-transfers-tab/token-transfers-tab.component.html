@@ -73,14 +73,14 @@
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'tx_hash'">
-                        <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                        <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
                       </ng-container>
                       <ng-container *ngSwitchCase="'from_address'">
                         <div class="d-flex align-items-center">
                           <a
-                            class="text--green txt-from-address content-transfer"
+                            class="text--primary txt-from-address content-transfer"
                             href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Mint &&
@@ -90,7 +90,7 @@
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
                           <a
-                            class="text--green txt-from-address content-transfer"
+                            class="text--primary txt-from-address content-transfer"
                             href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Mint &&
@@ -124,7 +124,7 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'to_address'">
                         <a
-                          class="text--green"
+                          class="text--primary"
                           href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                           *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
@@ -144,7 +144,7 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'token_id'">
                         <a
-                          class="text--green"
+                          class="text--primary"
                           href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}"
                           *ngIf="data['token_id']?.length > 0">
                           {{ data[template.matColumnDef] }}

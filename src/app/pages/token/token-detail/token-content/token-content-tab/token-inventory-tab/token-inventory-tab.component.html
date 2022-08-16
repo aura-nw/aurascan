@@ -24,20 +24,19 @@
               <div class="mt-3 token-id">
                 <span class="small-text mr-1 text--white">Token ID:</span>
                 <a
-                  class="small-text text--green hover-link"
-                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.token_id }}"
-                  >{{ item.token_id }}</a
-                >
+                  class="small-text text--primary hover-link"
+                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.token_id }}">
+                  {{ item.token_id }}</a>
               </div>
               <div class="mt-1">
                 <span class="small-text mr-1 text--white">Owner:</span>
                 <a
-                  class="small-text text--green d-lg-none hover-link"
+                  class="small-text text--primary d-lg-none hover-link"
                   href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.owner }}"
                   >{{ item.owner | cutStringPipe: 6:6 }}</a
                 >
                 <a
-                  class="small-text text--green d-none d-lg-inline hover-link"
+                  class="small-text text--primary d-none d-lg-inline hover-link"
                   href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.owner }}"
                   >{{ item.owner | cutStringPipe: 8:8 }}</a
                 >

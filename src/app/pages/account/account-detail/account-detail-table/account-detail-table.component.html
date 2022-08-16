@@ -121,7 +121,7 @@
               *ngIf="i >= pageData.pageSize * currentPage && i < pageData.pageSize * (currentPage + 1)">
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
-                  <a class="body-mob text--green d-flex align-items-center" [routerLink]="['/validators', item['validator_address']]">
+                  <a class="body-mob text--primary d-flex align-items-center" [routerLink]="['/validators', item['validator_address']]">
                     <div class="avatar-wrapper">
                       <span class="validator-avatar">
                         <app-loading-image [srcImg]="getValidatorAvatar(item['validator_address'])">
@@ -147,7 +147,7 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="pageType.Unbonding">
-                    <a class="body-mob text--green d-flex justify-content-between align-items-center" [routerLink]="['/validators', item['validator_address']]">
+                    <a class="body-mob text--primary d-flex justify-content-between align-items-center" [routerLink]="['/validators', item['validator_address']]">
                       <div class="d-flex align-items-center">
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">

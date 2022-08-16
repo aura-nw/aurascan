@@ -73,7 +73,7 @@
                 <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                   <a class="d-flex align-items-center" [routerLink]="['/contracts', element.contract_address]">
                     <img [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3" width="24px" height="24px" />
-                    <div class="ml-2 text--green">
+                    <div class="ml-2 text--primary">
                       {{ element.contract_address | cutStringPipe: 8:8 }}
                     </div>
                   </a>
@@ -132,7 +132,6 @@
                   (paginator)="paginatorEmit($event)"
                   (pageEvent)="handlePageEvent($event)">
           </app-paginator>
-        </div>
         </ng-container>
         <ng-template #noValues>
           <div class="card">
