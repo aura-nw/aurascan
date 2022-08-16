@@ -78,14 +78,14 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.menuItems.forEach((item) => {
-          if (item.id === 7) {
+          if (item.id === 8) {
             // check if item is account
             item.link = `/account/${wallet.bech32Address}`;
           }
         });
       } else {
         this.menuItems.forEach((item) => {
-          if (item.id === 7) {
+          if (item.id === 8) {
             item.link = null;
           }
         });
