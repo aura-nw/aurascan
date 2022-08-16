@@ -35,6 +35,7 @@ export interface TableData {
 export class ContractTableComponent implements OnInit, OnChanges {
   @Input() dataList;
   @Input() length: number;
+  @Input() pageSize = 25;
   @Input() contractInfo!: ITableContract;
   @Input() templates!: Array<TableTemplate>;
   @Input() label!: string;
@@ -68,7 +69,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   loadTableData() {
     this.pageData = {
       length: this.dataList?.data?.length,
-      pageSize: 25,
+      pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
 
@@ -97,15 +98,17 @@ export class ContractTableComponent implements OnInit, OnChanges {
       amount: data?.value || 0,
       code: 0,
       fee: data?.fee || 0,
-      from_address: data?.from || '-',
-      to_address: data?.to || '-',
+      from_address: data?.from || '',
+      to_address: data?.to || '',
       price: 0,
       status: 'Success',
       symbol: this.denom,
       tokenAddress: this.contractInfo?.contractsAddress,
-      tx_hash: data?.txHash || '-',
-      gas_used: data.gas_used,
-      gas_wanted: data.gas_wanted,
+      tx_hash: data?.txHash || '',
+      gas_used: data?.gas_used,
+      gas_wanted: data?.gas_wanted,
+      nftDetail: undefined,
+      modeExecute: data?.modeExecute
     };
   }
 

@@ -1,4 +1,4 @@
-<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
+<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">CW-20 Tokens</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-5">
@@ -7,7 +7,6 @@
         <div class="d-lg-flex justify-content-between">
           <div>
             <div class="mb-3 mb-lg-0 d-flex justify-content-between d-lg-block">
-              <div class="title-medium sub-text-mob text--white fw-bold">CW-20 Tokens</div>
               <button
                 class="button d-lg-none p-0"
                 (click)="
@@ -23,7 +22,7 @@
             </div>
           </div>
           <form class="aura-form single-input-field search-form mt-2 mt-lg-0" #searchForm>
-            <div class="input-group">
+            <div class="input-group small-input">
               <input
                 type="text"
                 class="form-control"
@@ -31,7 +30,8 @@
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="searchToken()"
-                (keyup.enter)="handleLink()"
+                (keyup.enter)="setPageList()"
+                [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button
@@ -42,40 +42,34 @@
               </button>
               <button
                 type="reset"
-                class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="textSearch = ''; searchToken()">
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0">
-              <div class="box-search-data box-search-token text-white">
-                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
-                  <span> There are no matching tokens </span>
+            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
+              <div class="box-search-data text-white">
+                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
+                  <span> There are no matching contracts </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search mb-3">Tokens (CW-20)</div>
+                  <div class="txt-title-search mb-2">CW-20 Tokens</div>
                   <ng-container *ngFor="let item of filterSearchData">
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.hashCode]">
-                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
-                      <div class="ml-2" style="flex: 0 0 95%">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <div class="d-flex">
-                            <span class="text-clamp small-body" style="max-width: 65%; height: 18px">{{
-                              item.name
-                            }}</span>
-                            <div class="box-price small-text">
-                              ${{ item.price | number: global.formatNumber2Decimal }}
-                            </div>
+                      [routerLink]="['/tokens/token', item.contract_address]">
+                      <img [src]="item.image || defaultLogoToken" class="logo-token" />
+                      <div class="ml-3">
+                        <div class="d-flex align-items-center">
+                          <div class="text-clamp">
+                            {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
                           </div>
-                          <img
-                            [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                            alt="icon"
-                            class="icon ml-4 mr-2"
-                            width="16px" />
                         </div>
-                        <div class="pr-5 small-text text--light-gray">{{ item.hashCode }}</div>
+                        <span class="text-clamp small-body text--green">{{
+                          item.contract_address | cutStringPipe: 8:8
+                        }}</span>
                       </div>
                     </div>
                   </ng-container>
@@ -101,11 +95,12 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
+                  <img [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
-                    <a [routerLink]="['/tokens/token', element.hashCode]">{{ element.name }}</a
+                    <a [routerLink]="['/tokens/token', element.contract_address]"
+                      >{{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span></a
                     ><br class="d-none d-lg-block" />
-                    <div class="pr-5 d-none d-lg-block">{{ element.desc }}</div>
+                    <div class="pr-5 d-none d-lg-block">{{ element.description }}</div>
                   </div>
                 </div>
               </td>
@@ -172,7 +167,7 @@
             <ng-container matColumnDef="holders">
               <th mat-header-cell *matHeaderCellDef class="col-per-13">Holders</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
+                <!-- {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
                 <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
                   <ng-container *ngIf="element.isValueUp">
                     <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
@@ -181,7 +176,8 @@
                     <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
                   <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
-                </span>
+                </span> -->
+                -
               </td>
             </ng-container>
 
@@ -197,7 +193,7 @@
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>

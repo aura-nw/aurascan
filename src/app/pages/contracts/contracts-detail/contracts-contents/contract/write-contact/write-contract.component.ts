@@ -46,7 +46,9 @@ export class WriteContractComponent implements OnInit {
       }
     });
 
-    this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
+    try {
+      this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
+    } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
@@ -95,7 +97,7 @@ export class WriteContractComponent implements OnInit {
       let err = {};
       let objWriteContract = {};
       let msg = {};
-      const contractTemp = this.jsonWriteContract.oneOf.find((contract) => contract.required[0] === name);
+      const contractTemp = this.jsonWriteContract?.oneOf.find((contract) => contract.required[0] === name);
       if (contractTemp.properties[name].hasOwnProperty('properties')) {
         Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
           let element: HTMLInputElement = document.getElementsByClassName(
@@ -111,10 +113,16 @@ export class WriteContractComponent implements OnInit {
           }
 
           let type = contractTemp.properties[name].properties[key].type;
-          objWriteContract[key] = element?.value;
+          //check exit value
+          if (element?.value) {
+            objWriteContract[key] = element?.value;
+          }
+
           //convert number if integer field
-          if (type === 'integer') {
-            objWriteContract[key] = Number(element?.value);
+          if (type) {
+            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
+              objWriteContract[key] = Number(element?.value);
+            }
           }
         });
       }
@@ -139,9 +147,12 @@ export class WriteContractComponent implements OnInit {
           if (element?.value) {
             objWriteContract[key] = element?.value;
           }
+
           //convert number if integer field
-          if (type === 'integer') {
-            objWriteContract[key] = Number(element?.value);
+          if (type) {
+            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
+              objWriteContract[key] = Number(element?.value);
+            }
           }
         });
       }
@@ -190,7 +201,7 @@ export class WriteContractComponent implements OnInit {
     if (!ref) {
       return 'any';
     }
-    
+
     let objectTemp = ref.replace('#/', '')?.split('/');
     let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
     let data = {};

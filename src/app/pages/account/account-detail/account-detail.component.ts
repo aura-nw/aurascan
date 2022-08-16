@@ -19,7 +19,7 @@ import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -27,7 +27,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
+  TypeTransaction
 } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
@@ -113,7 +113,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: PAGE_EVENT.PAGE_SIZE,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
@@ -150,9 +150,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
-  length: number;
-  pageSize = 5;
-  pageIndex = 0;
   typeTransaction = TYPE_TRANSACTION;
   pageEventType = PageEventType;
   assetsType = TYPE_ACCOUNT;
@@ -161,6 +158,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
+  assetCW20: any[] = [];
+  assetCW721: any[] = [];
 
   // loading param check
   accDetailLoading = true;
@@ -175,6 +174,28 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+
+  TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
+  TABS_STAKE = [
+    {
+      key: 0,
+      label: 'Delegations',
+    },
+    {
+      key: 1,
+      label: 'Unbondings',
+    },
+    {
+      key: 2,
+      label: 'Redelegations',
+    },
+    {
+      key: 3,
+      label: 'Vestings',
+    },
+  ];
+  currentTab = 'ASSETS';
+  currentStake = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -198,6 +219,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
+    // this.walletService.wallet$.subscribe((wallet) => {
+    //   if (wallet) this.currentAddress = wallet.bech32Address;
+    // });
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
@@ -232,22 +256,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  copyMessage(val: string) {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
+  copyMessage(text: string) {
+    const dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
     document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.isCopy = true;
-    setTimeout(() => {
-      this.isCopy = false;
-    }, 1000);
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function () {
+      document.getElementById('currentAddress').click();
+    }, 800);
   }
 
   changePage(page: any): void {
@@ -277,7 +297,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   getListTransaction(): void {
     this.transactionService
-      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+      .txsWithAddress(this.pageData.pageSize, this.pageData.pageIndex * this.pageData.pageSize, this.currentAddress)
       .subscribe((res: ResponseDto) => {
         if (res?.data?.length > 0) {
           res.data.forEach((trans) => {
@@ -295,8 +315,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             }
           });
           this.dataSource.data = res.data;
-
-          this.length = res.meta.count;
           this.pageData.length = res.meta.count;
         }
       });

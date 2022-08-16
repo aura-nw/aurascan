@@ -20,19 +20,23 @@ const routes: Routes = [
     component: TokenCw721Component,
   },
   {
-    path: 'token/:tokenId',
+    path: 'token/:contractAddress',
     component: TokenDetailComponent,
   },
   {
-    path: 'address/:tokenId',
+    path: 'token-nft/:contractAddress',
     component: TokenDetailComponent,
   },
   {
-    path: 'token-holding/:tokenId',
+    path: 'address/:contractAddress',
+    component: TokenDetailComponent,
+  },
+  {
+    path: 'token-holding/:contractAddress',
     component: TokenHoldingComponent,
   },
   {
-    path: 'token/:tokenId/:nftId',
+    path: 'token-nft/:contractAddress/:nftId',
     component: NFTDetailComponent,
   },
 ];
