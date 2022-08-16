@@ -106,8 +106,16 @@
                       '</span>'
                     : checkAmountValue(data.amount, data.tx_hash)
               },
-              { label: 'Fee', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
-              { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+              { label: 'Fee', class: 'body-01-mob text--gray-1', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
+              { label: 'Time', class: 'body-01-mob text--gray-1',
+                info:
+                  '<span>' +
+                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.timestamp | customDate: 'h:mm:ss') +
+                  '</span>'
+              }
             ]"></app-card-mob-simple>
         </div>
       </div>

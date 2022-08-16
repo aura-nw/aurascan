@@ -4,7 +4,7 @@
       {{ contractInfo.count > 1 ? 'More than > ' :'A total of ' }}
       {{ contractInfo.count | mask : 'separator.6'}}
       <div class="d-inline-flex align-items-center aura-status" *ngIf="label">
-        <div  class="d-inline status" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>
+        <div  class="status px-2" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>
       </div>
       transaction{{ contractInfo.count > 1 ? 's' :'' }} found
     </div>

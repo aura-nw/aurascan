@@ -55,11 +55,19 @@
           <app-card-mob-simple
             *ngFor="let data of dataBlock"
             [link]="'/blocks/' + data.height"
-            [title]="{ size: 'md', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0] }"
+            [title]="{ size: 'md', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0], subLabelClass: 'text--gray-1'}"
             [content]="[
               { label: 'Proposer', info: '<span class=text--primary>' + data.proposer + '</span>' },
-              { label: 'Txs', info: data.num_txs.toString() },
-              { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+              { label: 'Txs', class: 'body-01-mob text--gray-1', info: data.num_txs.toString() },
+              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
+                info:
+                  '<span>' +
+                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.timestamp | customDate: 'h:mm:ss') +
+                  '</span>'
+              }
             ]"></app-card-mob-simple>
         </div>
       </div>

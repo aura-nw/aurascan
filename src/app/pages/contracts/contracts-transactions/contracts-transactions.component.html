@@ -1,11 +1,11 @@
 <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div *ngIf="contractInfo">
-    <p class="title-medium mb-2 text--white fw-bold" *ngIf="!breakpoint.value.matches">Transactions</p>
-    <p class="title-medium mb-2 text--white sub-text-mob fw-500" *ngIf="breakpoint.value.matches">Transactions</p>
-    <div class="body text--gray d-flex">
-      <span class="text-gray">for</span><a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
-        {{ contractInfo.contractsAddress }}</a
-      >
+    <h1 class="mb-2 text--white">Transactions</h1>
+    <div class="body-02 text--gray-1 d-flex">
+      for
+      <a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
+        {{ contractInfo.contractsAddress }}
+      </a>
     </div>
   </div>
   <section>
