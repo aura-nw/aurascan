@@ -13,10 +13,10 @@ import { PaginatorModule } from '../../../app/shared/components/paginator/pagina
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { TokenService } from '../../core/services/token.service';
+import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
+import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
-import { TokenContractReadComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-read/token-contract-read.component';
 import { TokenContractTabComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
-import { TokenContractWriteComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-write/token-contract-write.component';
 import { TokenHoldersTabComponent } from './token-detail/token-content/token-content-tab/token-holders-tab/token-holders-tab.component';
 import { TokenInfoTabComponent } from './token-detail/token-content/token-content-tab/token-info-tab/token-info-tab.component';
 import { TokenInventoryComponent } from './token-detail/token-content/token-content-tab/token-inventory-tab/token-inventory-tab.component';
@@ -44,8 +44,6 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenTransfersTabComponent,
     TokenInfoTabComponent,
     TokenContractTabComponent,
-    TokenContractReadComponent,
-    TokenContractWriteComponent,
     TokenHoldingComponent,
     TokenHoldingWalletComponent,
     TokenHoldingNftComponent,
@@ -66,7 +64,9 @@ import { TokenRoutingModule } from './token-routing.module';
     NgbPopoverModule,
     CommonPipeModule,
     ContractPopoverModule,
-    NgxMaskModule
+    NgxMaskModule,
+    WriteContractModule,
+    ReadContractModule
   ],
   providers: [TokenService, AccountService],
 })
