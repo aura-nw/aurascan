@@ -7,7 +7,7 @@
           <div class="card mb-0 h-100">
             <div class="card-body pb-0">
               <div class="d-flex justify-content-between align-items-start">
-                <a [routerLink]="[lastedItem.pro_id]" class="fw-semibold ">
+                <a [routerLink]="[lastedItem.pro_id]" class="fw-semibold">
                   <div class="text--gray-3 h2 d-block mb-0">#{{ lastedItem.pro_id }}</div>
                   <div class="text--white h2 d-block mb-0 pr-3">{{ lastedItem.pro_title }}</div>
                 </a>
@@ -26,12 +26,13 @@
                         lastedItem.pro_proposer
                           ? lastedItem.pro_proposer
                           : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
-                      }}</a>
+                      }}</a
+                    >
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body">Voting Start</div>
                     <div class="text--white body-02 d-flex align-items-center">
-                      <span>{{ lastedItem.pro_voting_start_time | customDate: 'yyyy-MM-dd'}}</span>
+                      <span>{{ lastedItem.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
                       <span>{{ lastedItem.pro_voting_start_time | customDate: 'h:mm:ss' }}</span>
                     </div>
@@ -96,15 +97,15 @@
                       ).name
                     }}
                     <span class="h4 mb-0 text--white ml-4">
-                    {{
-                      getHighestVote(
-                              lastedItem.pro_votes_yes,
-                              lastedItem.pro_votes_no,
-                              lastedItem.pro_votes_no_with_veto,
-                              lastedItem.pro_votes_abstain
-                      ).value | number: global.formatNumber2Decimal
-                      }}%
-                    </span>&nbsp;
+                      {{
+                        getHighestVote(
+                          lastedItem.pro_votes_yes,
+                          lastedItem.pro_votes_no,
+                          lastedItem.pro_votes_no_with_veto,
+                          lastedItem.pro_votes_abstain
+                        ).value | number: global.formatNumber2Decimal
+                      }}% </span
+                    >&nbsp;
                   </div>
                 </div>
               </div>
@@ -114,24 +115,28 @@
               <div class="top-border">
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="body-03 text--gray-3">
-                    <span *ngIf="lastedItem.vote_option">You voted "{{ lastedItem.vote_option }}" for this proposal</span>
+                    <span *ngIf="lastedItem.vote_option"
+                      >You voted "{{ lastedItem.vote_option }}" for this proposal</span
+                    >
                   </div>
                   <div class="d-flex">
-                    <button class="button button--sm button-pill button-outline body mr-3" [routerLink]="[lastedItem.pro_id]">
+                    <button
+                      class="button button--sm button-pill button-outline body mr-3"
+                      [routerLink]="[lastedItem.pro_id]">
                       <span>Details</span>
                     </button>
                     <button
-                            [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-                            (click)="openVoteDialog(lastedItem, idx)"
-                            class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
-                    <span>
-                      {{
-                      lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                      lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                              ? 'Voting Ended'
-                              : 'Vote'
-                      }}
-                    </span>
+                      [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                      (click)="openVoteDialog(lastedItem, idx)"
+                      class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
+                      <span>
+                        {{
+                          lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                          lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                            ? 'Voting Ended'
+                            : 'Vote'
+                        }}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -154,9 +159,11 @@
                     You voted "{{ lastedItem.vote_option }}" for this proposal
                   </div>
                 </div>
-                <div *ngIf="getStatus(lastedItem.pro_status)"
-                      class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
-                       getStatus(lastedItem.pro_status).key }}">
+                <div
+                  *ngIf="getStatus(lastedItem.pro_status)"
+                  class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
+                    getStatus(lastedItem.pro_status).key
+                  }}">
                   <span class="status">{{ getStatus(lastedItem.pro_status).value }}</span>
                 </div>
               </div>
@@ -166,9 +173,9 @@
                     <div class="text--gray-4">Proposer</div>
                     <div class="text--primary fw-500">
                       {{
-                      lastedItem.pro_proposer
-                              ? lastedItem.pro_proposer
-                              : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
+                        lastedItem.pro_proposer
+                          ? lastedItem.pro_proposer
+                          : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
                       }}
                     </div>
                   </div>
@@ -191,63 +198,63 @@
                 </div>
                 <div class="mt-6 d-flex justify-content-between border-bottom-mobile pb-3">
                   <div class="vote-bar flex-grow-1 mr-0">
-                    <ul class="mt-4">
+                    <ul class="mt-4 ul-mobile">
                       <li
-                              class="primary"
-                              [style.width]="lastedItem.pro_votes_yes + '%'"
-                              matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
-                              [matTooltipPosition]="'above'"></li>
+                        class="primary"
+                        [style.width]="lastedItem.pro_votes_yes + '%'"
+                        matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
+                        [matTooltipPosition]="'above'"></li>
                       <li
-                              class="danger"
-                              *ngIf="lastedItem.pro_votes_no"
-                              [style.width]="lastedItem.pro_votes_no + '%'"
-                              matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
-                              [matTooltipPosition]="'above'"></li>
+                        class="danger"
+                        *ngIf="lastedItem.pro_votes_no"
+                        [style.width]="lastedItem.pro_votes_no + '%'"
+                        matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
+                        [matTooltipPosition]="'above'"></li>
                       <li
-                              class="info"
-                              *ngIf="lastedItem.pro_votes_no_with_veto"
-                              [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
-                              matTooltip="No with veto {{
-                        lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal
-                      }}%"
-                              [matTooltipPosition]="'above'"></li>
+                        class="info"
+                        *ngIf="lastedItem.pro_votes_no_with_veto"
+                        [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
+                        matTooltip="No with veto {{
+                          lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal
+                        }}%"
+                        [matTooltipPosition]="'above'"></li>
                       <li
-                              class="secondary"
-                              *ngIf="lastedItem.pro_votes_abstain"
-                              [style.width]="lastedItem.pro_votes_abstain + '%'"
-                              matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
-                              [matTooltipPosition]="'above'"></li>
+                        class="secondary"
+                        *ngIf="lastedItem.pro_votes_abstain"
+                        [style.width]="lastedItem.pro_votes_abstain + '%'"
+                        matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
+                        [matTooltipPosition]="'above'"></li>
                     </ul>
                   </div>
                   <div class="most-vote flex-shrink-0 ml-4">
-                    <div class="body-02 text--gray-5">Most voted on</div>
+                    <div class="caption-mob fw-normal text--gray-5">Most voted on</div>
                     <div
-                            class="body-02 value {{
-                      getHighestVote(
-                        lastedItem.pro_votes_yes,
-                        lastedItem.pro_votes_no,
-                        lastedItem.pro_votes_no_with_veto,
-                        lastedItem.pro_votes_abstain
-                      ).class
-                    }}">
-                      {{
-                      getHighestVote(
-                              lastedItem.pro_votes_yes,
-                              lastedItem.pro_votes_no,
-                              lastedItem.pro_votes_no_with_veto,
-                              lastedItem.pro_votes_abstain
-                      ).name
-                      }}
-                      <span class="h4 h6-mob mb-0 text--white ml-4">
-                    {{
+                      class="body-02 value {{
                         getHighestVote(
-                                lastedItem.pro_votes_yes,
-                                lastedItem.pro_votes_no,
-                                lastedItem.pro_votes_no_with_veto,
-                                lastedItem.pro_votes_abstain
-                        ).value | number: global.formatNumber2Decimal
+                          lastedItem.pro_votes_yes,
+                          lastedItem.pro_votes_no,
+                          lastedItem.pro_votes_no_with_veto,
+                          lastedItem.pro_votes_abstain
+                        ).class
+                      }}">
+                      {{
+                        getHighestVote(
+                          lastedItem.pro_votes_yes,
+                          lastedItem.pro_votes_no,
+                          lastedItem.pro_votes_no_with_veto,
+                          lastedItem.pro_votes_abstain
+                        ).name
+                      }}
+                      <span class="h4 h6-mob mb-0 text--white ml-2">
+                        {{
+                          getHighestVote(
+                            lastedItem.pro_votes_yes,
+                            lastedItem.pro_votes_no,
+                            lastedItem.pro_votes_no_with_veto,
+                            lastedItem.pro_votes_abstain
+                          ).value | number: global.formatNumber2Decimal
                         }}%
-                    </span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -257,7 +264,8 @@
               <button class="button button-pill button--md button-outline w-100" [routerLink]="[lastedItem.pro_id]">
                 <span>Details</span>
               </button>
-              <button class="button button-pill button--md button-outline button-outline--gradient button-outline__in-card w-100 ml-4"
+              <button
+                class="button button-pill button--md button-outline button-outline--gradient button-outline__in-card w-100 ml-4"
                 [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                 (click)="openVoteDialog(lastedItem, idex)">
                 <span>
@@ -364,31 +372,46 @@
       <div class="card-body">
         <div *ngIf="proposalData && proposalData.length > 0">
           <app-card-mob-simple
-                  *ngFor="let data of proposalData"
-                  [link]="'/voting/' + data.pro_id"
-                  [title]="{
-                    size: 'md',
-                    label: '#' + data.pro_id,
-                    titleClass: 'text--white h5 mb-0',
-                    subLabelContent: data.pro_title,
-                    subLabelClass: 'text--primary g-ellipsis h5 mb-0'
-                  }"
-                  [content]="[
-                    { label: 'Status',
-                      class: 'aura-status-inline text-capitalize ' + getStatus(data.pro_status).class,
-                      info: '<span class=status>'+getStatus(data.pro_status).value+'</span>'
-                    },
-                    { label: 'Voting Start',
-                      class: 'card__date text--gray-1 body-01',
-                      info: '<span>'+(data.pro_voting_start_time | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.pro_voting_start_time | customDate: 'h:mm:ss')+'</span>'
-                    },
-                    { label: 'Submit Time',
-                      class: 'card__date text--gray-1 body-01',
-                      info: '<span>'+(data.pro_voting_end_time | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.pro_voting_end_time | customDate: 'h:mm:ss')+'</span>'
-                    }
-                  ]"></app-card-mob-simple>
+            *ngFor="let data of proposalData"
+            [link]="'/voting/' + data.pro_id"
+            [title]="{
+              size: 'md',
+              label: '#' + data.pro_id,
+              titleClass: 'text--white h5 mb-0',
+              subLabelContent: data.pro_title,
+              subLabelClass: 'text--primary g-ellipsis h5 mb-0'
+            }"
+            [content]="[
+              {
+                label: 'Status',
+                class: 'aura-status-inline text-capitalize ' + getStatus(data.pro_status).class,
+                info: '<span class=status>' + getStatus(data.pro_status).value + '</span>'
+              },
+              {
+                label: 'Voting Start',
+                class: 'card__date text--gray-1 body-01',
+                info:
+                  '<span>' +
+                  (data.pro_voting_start_time | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.pro_voting_start_time | customDate: 'h:mm:ss') +
+                  '</span>'
+              },
+              {
+                label: 'Submit Time',
+                class: 'card__date text--gray-1 body-01',
+                info:
+                  '<span>' +
+                  (data.pro_voting_end_time | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.pro_voting_end_time | customDate: 'h:mm:ss') +
+                  '</span>'
+              }
+            ]"></app-card-mob-simple>
         </div>
-        <div *ngIf="!proposalData || proposalData && proposalData.length === 0">
+        <div *ngIf="!proposalData || (proposalData && proposalData.length === 0)">
           <app-table-no-data></app-table-no-data>
         </div>
       </div>
