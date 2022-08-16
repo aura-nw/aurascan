@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { ResponseDto } from 'src/app/core/models/common.model';
@@ -13,7 +14,7 @@ import { AccountService } from 'src/app/core/services/account.service';
 export class NftListComponent implements OnChanges {
   assetCW721: any[];
   @Input() address: string;
-  searchValue = null;
+  searchValue = '';
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -22,10 +23,9 @@ export class NftListComponent implements OnChanges {
   };
   nftData = [];
   showedData = [];
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService, private router : Router) {}
 
   ngOnChanges(): void {
     this.getNftData();
@@ -42,7 +42,7 @@ export class NftListComponent implements OnChanges {
       account_address: this.address,
       limit: 0,
       offset: 0,
-      keyword: '',
+      keyword: this.searchValue,
     };
     this.accountService.getAssetCW721ByOnwer(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
@@ -55,28 +55,25 @@ export class NftListComponent implements OnChanges {
           const end = start + pageSize;
           this.showedData = this.assetCW721.slice(start, end);
         }
+      } else {
+        this.showedData.length = 0;
       }
     });
     this.loading = false;
   }
 
   handleSearch() {
+    const VALIDATORS = {
+      HASHRULE: /^[A-Za-z0-9]/,
+    };
+    const regexRule = VALIDATORS.HASHRULE;
+    this.searchValue = this.searchValue?.trim();
     if (this.searchValue.length > 0) {
-      const payload = {
-        account_address: this.address,
-        limit: 0,
-        offset: 0,
-        keyword: this.searchValue,
-      };
-      this.accountService.getAssetCW721ByOnwer(payload).subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          let keyWord = this.searchValue.toLowerCase();
-          this.filterSearchData = res.data?.filter(
-            (data) =>
-              data.contract_name.toLowerCase().includes(keyWord) || data.token_id.toLowerCase().includes(keyWord),
-          );
-        }
-      });
+      if (regexRule.test(this.searchValue)) {
+        this.getNftData();
+      }
+    } else {
+      this.getNftData();
     }
   }
 
@@ -86,5 +83,15 @@ export class NftListComponent implements OnChanges {
       length: this.assetCW721?.length,
     };
     this.getNftData();
+  }
+
+  resetSearch(): void {
+    this.searchValue = '';
+    this.getNftData();
+  }
+
+  handleRouterLink(e: Event, link): void {
+    this.router.navigate(link)
+    e.preventDefault();
   }
 }

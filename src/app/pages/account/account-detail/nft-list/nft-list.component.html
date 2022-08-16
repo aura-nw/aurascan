@@ -15,7 +15,7 @@
             placeholder="Search for Token ID or Address"
             [(ngModel)]="searchValue"
             [maxLength]="maxLengthSearch"
-            (keyup)="handleSearch()"
+            (keyup.enter)="handleSearch()"
             [ngModelOptions]="{ standalone: true }"
             name="inputEmail"
             autocomplete="off" />
@@ -28,32 +28,10 @@
           <button
             type="reset"
             class="btn-reset {{ !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : '' }}"
-            (click)="searchValue = null">
+            (click)="resetSearch()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
-        <ng-container *ngIf="searchValue?.length > 0">
-          <div class="box-search-data text-white">
-            <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
-              <span> No NFTs </span>
-            </ng-container>
-            <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-              <div class="txt-title-search">NFT assets</div>
-              <ng-container *ngFor="let item of filterSearchData">
-                <a
-                  class="d-flex p-3 cursor-pointer text--white"
-                  href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}">
-                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
-                  <div class="ml-3">
-                    <div class="d-flex align-items-center">
-                      <span class="text-clamp">{{ item.contract_name }}</span>
-                    </div>
-                  </div>
-                </a>
-              </ng-container>
-            </ng-container>
-          </div>
-        </ng-container>
       </form>
     </div>
     <!-- Table -->
@@ -62,7 +40,9 @@
         <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
           <div class="nft-cards__col col" *ngFor="let item of showedData">
             <div class="nft-cards__item-border">
-              <a href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}" class="nft-cards__item">
+              <a
+                [routerLink]="['/tokens/token-nft/' + item.contract_address + '/' + item.token_id]"
+                class="nft-cards__item">
                 <div class="nft-cards__img">
                   <img *ngIf="item.uri" src="{{ item.uri }}" alt="" />
                   <img *ngIf="!item.uri" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
@@ -72,11 +52,21 @@
                 </div>
                 <div class="mt-3">
                   <span class="small-text mr-1 text--white">Token:</span>
-                  <span class="small-text text--green">{{ item.contract_name }}</span>
+                  <span
+                    class="small-text text--green hover-link"
+                    (click)="handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address])"
+                    >{{ item.contract_name }}</span
+                  >
                 </div>
                 <div class="mt-1 token-id">
                   <span class="small-text mr-1 text--white">Token ID:</span>
-                  <span class="small-text text--green">{{ item.token_id }}</span>
+                  <span
+                    class="small-text text--green hover-link"
+                    (click)="
+                      handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address + '/' + item.token_id])
+                    ">
+                    {{ item.token_id }}
+                  </span>
                 </div>
               </a>
             </div>
@@ -87,7 +77,7 @@
       </div>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data></app-table-no-data>
+      <app-table-no-data [textNull]="'No NFTs'"></app-table-no-data>
     </ng-template>
   </div>
 </div>
