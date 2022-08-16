@@ -8,6 +8,7 @@ import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constan
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-transaction-messages',
@@ -42,11 +43,13 @@ export class TransactionMessagesComponent implements OnInit {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   constructor(
     public global: Globals,
     private datePipe: DatePipe,
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
+    private layout: BreakpointObserver
   ) {}
 
   ngOnInit(): void {

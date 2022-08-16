@@ -86,18 +86,6 @@
     min-width: 410px;
   }
 }
-.card-info {
-  background-color: var(--aura-gray-9);
-  border-radius: 8px;
-  padding: var(--spacer-3);
-  color: var(--aura-white);
-  &:not(:last-child) {
-    margin-bottom: var(--spacer-2);
-  }
-  .divider.divider-horizontal {
-    background-color: var(--aura-gray-8);
-  }
-}
 @media (max-width: 414px) {
   ::ng-deep .contract-modal.modal .modal-dialog .modal-content {
     overflow-y: auto;

@@ -20,6 +20,16 @@ export class BlockDetailComponent implements OnInit {
   id: string | number;
   blockId: string | number;
   item = undefined;
+    TAB = [
+        {
+            id: 0,
+            value: 'SUMMARY'
+        },
+        {
+            id: 1,
+            value: 'JSON'
+        }
+    ]
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
