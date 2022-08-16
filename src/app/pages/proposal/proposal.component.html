@@ -20,7 +20,7 @@
               <div class="d-flex justify-content-between mt-6 proposal-lasted__content small-body">
                 <div>
                   <div class="d-flex mb-2">
-                    <div class="content-body">Proposer</div>
+                    <div class="content-body fw-500">Proposer</div>
                     <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--primary h6 mb-0">
                       {{
                         lastedItem.pro_proposer
@@ -30,7 +30,7 @@
                     >
                   </div>
                   <div class="d-flex mb-2">
-                    <div class="content-body">Voting Start</div>
+                    <div class="content-body fw-500">Voting Start</div>
                     <div class="text--white body-02 d-flex align-items-center">
                       <span>{{ lastedItem.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
@@ -38,7 +38,7 @@
                     </div>
                   </div>
                   <div class="d-flex mb-2">
-                    <div class="content-body">Voting End</div>
+                    <div class="content-body fw-500">Voting End</div>
                     <div class="text--white body-02 d-flex align-items-center">
                       <span>{{ lastedItem.pro_voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
@@ -123,7 +123,7 @@
                     <button
                       class="button button--sm button-pill button-outline body mr-3"
                       [routerLink]="[lastedItem.pro_id]">
-                      <span>Details</span>
+                      <span class="fw-semibold">Details</span>
                     </button>
                     <button
                       [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
@@ -322,7 +322,7 @@
           <ng-container matColumnDef="votingStart">
             <th mat-header-cell *matHeaderCellDef>Voting Start</th>
             <td mat-cell *matCellDef="let element">
-              <div class="text--white body-02 d-flex align-items-center">
+              <div class="body-02 d-flex align-items-center">
                 <span>{{ element.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
                 <span>{{ element.pro_voting_start_time | customDate: 'h:mm:ss' }}</span>
@@ -334,7 +334,7 @@
           <ng-container matColumnDef="submitTime">
             <th mat-header-cell *matHeaderCellDef>Submit Time</th>
             <td mat-cell *matCellDef="let element">
-              <div class="text--white body-02 d-flex align-items-center">
+              <div class="body-02 d-flex align-items-center">
                 <span>{{ element.pro_submit_time | customDate: 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
                 <span>{{ element.pro_submit_time | customDate: 'h:mm:ss' }}</span>

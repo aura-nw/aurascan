@@ -10,27 +10,27 @@ export const PROPOSAL_STATUS = [
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_FAILED,
     value: 'rejected',
-    class: 'text--danger',
+    class: 'text--red-3',
   },
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
     value: 'rejected',
-    class: 'text--danger',
+    class: 'text--red-3',
   },
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_PASSED,
     value: 'passed',
-    class: 'text--primary',
+    class: 'text--green-3',
   },
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD,
     value: 'voting period',
-    class: 'text--info',
+    class: 'text--blue-2',
   },
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD,
     value: 'deposit period',
-    class: 'text--warning',
+    class: 'text--yellow-3',
   },
 ];
 
