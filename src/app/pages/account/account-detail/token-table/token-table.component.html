@@ -1,19 +1,19 @@
 <section>
-  <div class="sub-text fw-semibold">Coins & Tokens ({{ assetCW20?.length || 0 }})</div>
-  <div class="mt-4">
+  <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ assetCW20?.length || 0 }})</h2>
+  <div>
     <ng-container *ngIf="pageData?.length > 0; else noValues">
-      <div class="card mt-5">
+      <div class="card">
         <div class="card-body">
           <!-- Title -->
           <div class="d-lg-flex justify-content-between">
-            <div>
+            <div class="d-none d-lg-block"> <!-- Remove this class when integrate data -->
               <div class="mb-4 mb-lg-0 d-flex justify-content-between d-lg-block">
                 <div class="sub-text text-gradient fw-semibold"></div>
               </div>
             </div>
             <div class="position-relative">
               <form class="aura-form single-input-field search-form account-search-form mt-2 mt-lg-0" #searchForm>
-                <div class="input-group small-input">
+                <div class="input-group">
                   <input
                     type="text"
                     class="form-control"
@@ -145,13 +145,13 @@
                 </td>
               </tr>
             </table>
-            <app-paginator
-              [length]="pageData.length"
-              [pageSize]="pageData.pageSize"
-              (paginator)="paginatorEmit($event)"
-              (pageEvent)="handlePageEvent($event)">
-            </app-paginator>
           </div>
+          <app-paginator
+                  [length]="pageData.length"
+                  [pageSize]="pageData.pageSize"
+                  (paginator)="paginatorEmit($event)"
+                  (pageEvent)="handlePageEvent($event)">
+          </app-paginator>
         </div>
       </div>
     </ng-container>

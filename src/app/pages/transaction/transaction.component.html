@@ -32,18 +32,20 @@
                         [routerLink]="['/blocks/id', data['blockId']]">
                         {{ data[template.matColumnDef] }}
                       </a>
-                      <div *ngSwitchCase="'type'" class="text--primary">
-                        {{ data[template.matColumnDef] }}
+                      <div *ngSwitchCase="'type'" class="aura-status">
+                        <div class="status">
+                          {{ data[template.matColumnDef] }}
+                        </div>
                       </div>
                       <div *ngSwitchCase="'status'">
-                        <div [ngSwitch]="data[template.matColumnDef]">
-                          <div *ngSwitchCase="'Success'" class="text--primary">
+                        <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                          <div *ngSwitchCase="'Success'" class="text--green-3">
                             {{ data[template.matColumnDef] }}
                           </div>
-                          <div *ngSwitchCase="'Fail'" class="text--danger">
+                          <div *ngSwitchCase="'Fail'" class="text--red-3">
                             {{ data[template.matColumnDef] }}
                           </div>
-                          <div *ngSwitchCase="'Pending'" class="text--warning">
+                          <div *ngSwitchCase="'Pending'" class="text--yellow-3">
                             {{ data[template.matColumnDef] }}
                           </div>
                         </div>

@@ -1,7 +1,7 @@
-<div class="card-header title-small d-none d-lg-block">Message</div>
+<h2 class="card-header mb-0 pb-0 text--white d-none d-lg-block">Message</h2>
 <div class="card-body body">
   <div class="d-flex justify-content-between align-items-center d-lg-none">
-    <div class="sub-text-mob fw-500">Messages</div>
+    <h2 class="mb-0 text--white">Messages</h2>
     <div class="label__status fw-semibold body small-body-mob">{{ transactionDetailType }}</div>
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
@@ -16,25 +16,26 @@
   </div>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
+
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">From Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">To Address</div>
+      <div class="col-12 col-lg-6">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
@@ -44,23 +45,23 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Contract</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Contract</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/contracts', transactionDetail?.messages[0]?.contract]">
           {{ transactionDetail?.messages[0]?.contract }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
+    <div class="row mb-3 body-02">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
       <div class="col-12 col-lg-9">
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
@@ -69,22 +70,22 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Label</div>
-      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.label }}</div>
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
+      <div class="col-9">{{ transactionDetail?.messages[0]?.label }}</div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
           {{ transactionDetail?.messages[0]?.sender }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
+    <div class="row mb-3 body-02">
       <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
       <div class="col-12 col-lg-9">
-        <pre id="json" class="raw-content text--white px-2" [innerHtml]="objMsgContract | appJson"></pre>
+        <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
       </div>
     </div>
   </ng-container>
@@ -98,16 +99,16 @@
     <ng-container
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
+        <div class="row mb-3 body-02">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/account', item.delegator_address]">
               {{ item.delegator_address }}
             </a>
           </div>
         </div>
-        <div class="row mb-3 small-body">
-          <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+        <div class="row mb-3 body-02">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
               {{ item.validator_address }}<br />
@@ -115,9 +116,9 @@
             </a>
           </div>
         </div>
-        <div class="row mb-5 small-body">
-          <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-          <div class="col-12 col-lg-9">
+        <div class="row mb-3 body-02">
+          <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+          <div class="col-9">
             <ng-container *ngIf="listAmountClaim[i] > 0">
               {{ listAmountClaim[i] | number: global.formatNumberToken }}
               <span class="text--primary">{{ denom }}</span>
@@ -128,16 +129,16 @@
       </ng-container>
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
-      <div class="row mb-3 small-body">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
+      <div class="row mb-3 body-02">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
             {{ transactionDetail?.messages[0]?.delegator_address }}
           </a>
         </div>
       </div>
-      <div class="row mb-3 small-body">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+      <div class="row mb-3 body-02">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
@@ -145,9 +146,9 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 small-body">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-        <div class="col-12 col-lg-9">
+      <div class="row mb-3 body-02">
+        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+        <div class="col-9">
           <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
             {{ amountCommission || amount | number: global.formatNumberToken }}
             <span class="text--primary">{{ denom }}</span>
@@ -155,25 +156,24 @@
           <ng-template #noValues> - </ng-template>
         </div>
       </div>
-      <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
+      <div class="row mb-3 body-02" *ngIf="amountClaim > 0">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
         <div class="col-12 col-lg-9">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
     </ng-container>
     <ng-container *ngIf="commissionAutoClaim > 0">
-      <div class="row mb-3 mt-5 d-none d-lg-flex body small-body-mob">
-        <div class="col-12 col-lg-3">
+      <div class="row mb-3 mt-5 d-none d-lg-flex">
+        <div class="col-12">
           <div class="card-text header-title">
             <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
             Get Commission
           </div>
         </div>
       </div>
-
-      <div class="row mb-3 small-body">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+      <div class="row mb-3 body-02">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}<br />
@@ -181,10 +181,9 @@
           </a>
         </div>
       </div>
-
-      <div class="row mb-3 small-body">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-        <div class="col-12 col-lg-9">
+      <div class="row mb-3 body-02">
+        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+        <div class="col-9">
           {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
@@ -192,58 +191,56 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Voter</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Voter</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
           {{ transactionDetail?.messages[0]?.voter }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Option</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Option</div>
+      <div class="col-9">
         {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
       </div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">From Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">From Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
           {{ transactionDetail?.messages[0]?.from_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">To Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">To Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
           {{ transactionDetail?.messages[0]?.to_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Vesting Schedule</div>
-      <div class="col-12 col-lg-9">
-        {{ dateVesting }}
-      </div>
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Vesting Schedule</div>
+      <div class="col-9">{{ dateVesting }}</div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Initial Deposit</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 text--gray-4 mb-2 mb-lg-0">Initial Deposit</div>
       <div class="col-12 col-lg-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -253,45 +250,39 @@
         >
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposer</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposer</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
           {{ transactionDetail?.messages[0]?.proposer }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}
-      </div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}</div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Type</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}
-      </div>
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Proposal Type</div>
+      <div class="col-9">{{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}</div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Title</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}
-      </div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Title</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}</div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegate Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegate Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Source Validator Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Validator Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
           {{ transactionDetail?.messages[0]?.validator_src_address }}
@@ -299,8 +290,8 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Destination Validator Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Validator Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
           {{ transactionDetail?.messages[0]?.validator_dst_address }}
@@ -308,17 +299,17 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
     </div>
-    <div class="row mb-3 small-body" *ngIf="amountClaim > 0">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Auto Claim Reward</div>
+    <div class="row mb-3 body-02" *ngIf="amountClaim > 0">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
       <div class="col-12 col-lg-9">
         {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
       </div>
@@ -326,25 +317,25 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Proposal Id</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
           {{ transactionDetail?.messages[0]?.proposal_id }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Depositor</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Depositor</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
           {{ transactionDetail?.messages[0]?.depositor }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
@@ -354,12 +345,12 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
       <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}
@@ -369,60 +360,58 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
       <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
-      <a
-        class="col-12 col-lg-9 text--primary"
-        [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
-        {{ transactionDetail?.messages[0]?.validator_address }}
-      </a>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary"
+           [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
+          {{ transactionDetail?.messages[0]?.validator_address }}
+        </a>
+      </div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Sender</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
       <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
-          {{ transactionDetail?.messages[0]?.sender }}
+        <a class="text--primary"
+           [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
+          {{ transactionDetail?.messages[0]?.validator_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Code Id</div>
-      <div class="col-12 col-lg-9">
-        {{ storeCodeId }}
-      </div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Code Id</div>
+      <div class="col-12 col-lg-9">{{ storeCodeId }}</div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Byte Code</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.wasm_byte_code }}
-      </div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Byte Code</div>
+      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.wasm_byte_code }}</div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.CreateValidator">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Min Self Delegation</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Min Self Delegation</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Delegator Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
           {{ transactionDetail?.messages[0]?.delegator_address }}
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Validator Address</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
       <div class="col-12 col-lg-9">
         <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
           {{ transactionDetail?.messages[0]?.validator_address }}<br />
@@ -430,26 +419,30 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Amount</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-9">
         <ng-container *ngIf="amount > 0">
           {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </ng-container>
         <ng-container *ngIf="amount == 0"> - </ng-container>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Details</div>
-      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.details || '-' }}</div>
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Details</div>
+      <div class="col-9">
+        {{ transactionDetail?.messages[0]?.description?.details || '-' }}
+      </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Moniker</div>
-      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Moniker</div>
+      <div class="col-9">
+        {{ transactionDetail?.messages[0]?.description?.moniker }}
+      </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Website</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
+      <div class="col-9">
         <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length > 0">
           <a class="text--primary" [href]="transactionDetail?.messages[0]?.description?.website">
             {{ transactionDetail?.messages[0]?.description?.website }}
@@ -458,31 +451,35 @@
         <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length === 0">-</ng-container>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Identity</div>
-      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.identity || '-' }}</div>
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Identity</div>
+      <div class="col-9">
+        {{ transactionDetail?.messages[0]?.description?.identity || '-' }}
+      </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Commission Rate</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
+      <div class="col-9">
         {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent: global.formatNumber2Decimal }}
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Commission Max Rate</div>
-      <div class="col-12 col-lg-9">
+    <div class="row mb-3 body-02">
+      <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
+      <div class="col-9">
         {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent: global.formatNumber2Decimal }}
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Commission Max Change Rate</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3  mb-2 mb-lg-0 text--gray-4">Commission Max Change Rate</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Public Key</div>
-      <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.pubkey?.key }}</div>
+    <div class="row mb-3 body-02">
+      <div class="col-12 col-lg-3  mb-2 mb-lg-0 text--gray-4">Public Key</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.pubkey?.key }}
+      </div>
     </div>
   </ng-container>
 </div>

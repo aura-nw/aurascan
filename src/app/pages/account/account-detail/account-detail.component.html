@@ -10,9 +10,9 @@
       </div>
       <div class="d-flex flex-column justify-content-between py-lg-6 w-100">
         <div class="pl-lg-6">
-          <div class="title-small text--white fw-500">Address</div>
-          <div class="mt-1 mt-lg-2 d-flex align-items-center">
-            <div class="body g-ellipsis-address" id="currentAddress">{{ currentAddress }}</div>
+          <h3 class="mb-1 mb-lg-2 text--white">Address</h3>
+          <div class="d-flex align-items-center">
+            <div class="body-01 g-ellipsis-address" id="currentAddress">{{ currentAddress }}</div>
             <div class="button button--xxs button-circle ml-2">
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -29,9 +29,9 @@
           </div>
         </div>
         <div class="pl-lg-6 mt-6 mt-lg-0">
-          <div class="text--white title-small fw-500">Total Value</div>
+          <h3 class="mb-1 mb-lg-2 text--white">Total Value</h3>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
-            <span class="sub-text fw-semibold mb-0 text-gradient d-inline"
+            <span class="h1 mb-0 fw-semibold mb-0 text-gradient d-inline"
               >$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span
             >
             <div class="button button--md button-circle ml-1 d-lg-none">
@@ -60,10 +60,9 @@
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a class="account__tab-item" ngbNavLink (click)="currentTab = tab">
-            <span
-              class="body fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--light-gray' }}"
-              >{{ tab }}</span
-            >
+            <span class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--light-gray' }}">
+              {{ tab }}
+            </span>
           </a>
         </li>
       </ng-container>
@@ -78,12 +77,12 @@
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === 'TRANSACTIONS'">
       <div class="card">
-        <div class="card-body px-6 pt-0">
+        <div class="card-body p-4 p-lg-6">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
               <div class="table-responsive aura-table-contain">
-                <ng-container *ngIf="!breakpoint.value.matches">
-                  <table mat-table [dataSource]="dataSource" class="aura-table">
+                <ng-container>
+                  <table mat-table [dataSource]="dataSource" class="aura-table transaction-table">
                     <ng-container *ngFor="let template of templates; index as i">
                       <ng-container [matColumnDef]="template.matColumnDef">
                         <th
@@ -118,17 +117,21 @@
                                 {{ data[template.matColumnDef] }}
                               </a>
                               <div *ngSwitchCase="'type'">
-                                {{ data[template.matColumnDef] }}
+                                <div class="aura-status">
+                                  <div class="status">
+                                    {{ data[template.matColumnDef] }}
+                                  </div>
+                                </div>
                               </div>
                               <div *ngSwitchCase="'status'">
-                                <div [ngSwitch]="data[template.matColumnDef]">
-                                  <div *ngSwitchCase="'Success'" class="text--primary">
+                                <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                                  <div *ngSwitchCase="'Success'" class="text--green-3">
                                     {{ data[template.matColumnDef] }}
                                   </div>
-                                  <div *ngSwitchCase="'Fail'" class="text--danger">
+                                  <div *ngSwitchCase="'Fail'" class="text--red-3">
                                     {{ data[template.matColumnDef] }}
                                   </div>
-                                  <div *ngSwitchCase="'Pending'" class="text--warning">
+                                  <div *ngSwitchCase="'Pending'" class="text--yellow-3">
                                     {{ data[template.matColumnDef] }}
                                   </div>
                                 </div>
@@ -168,28 +171,13 @@
                     </tr>
                   </table>
                 </ng-container>
-                <ng-container *ngIf="breakpoint.value.matches">
-                  <app-card-mob-simple
-                    *ngFor="let data of dataSource?.data"
-                    [link]="'/transaction/' + data.tx_hash"
-                    [title]="{
-                      size: 'md',
-                      label: data.tx_hash | cutStringPipe: 6:6,
-                      subLabelContent: data.type,
-                      subLabelClass: 'label__status'
-                    }"
-                    [content]="[
-                      { label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash, data.typeOrigin) },
-                      { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
-                    ]"></app-card-mob-simple>
-                </ng-container>
-                <app-paginator
-                  [length]="pageData.length"
-                  [pageSize]="pageData.pageSize"
-                  (paginator)="paginatorEmit($event)"
-                  (pageEvent)="pageEvent($event)">
-                </app-paginator>
               </div>
+              <app-paginator
+                      [length]="pageData.length"
+                      [pageSize]="pageData.pageSize"
+                      (paginator)="paginatorEmit($event)"
+                      (pageEvent)="pageEvent($event)">
+              </app-paginator>
             </ng-container>
             <ng-template #noValues>
               <app-table-no-data></app-table-no-data>
@@ -218,12 +206,10 @@
                   <ng-container *ngFor="let tab of TABS_STAKE; index as index">
                     <li [ngbNavItem]="index">
                       <a class="account__tab-item" ngbNavLink (click)="currentStake = tab.key">
-                        <span
-                          class="body fw-semibold mb-0 {{
-                            customNav2.activeId === index ? 'text--white' : 'text--light-gray'
-                          }}"
-                          >{{ tab.label }}</span
-                        >
+                        <span class="h5 text--white text-uppercase mb-0
+                          {{ customNav2.activeId === index ? 'text--white' : 'text--light-gray' }}">
+                            {{ tab.label }}
+                        </span>
                       </a>
                     </li>
                   </ng-container>
@@ -308,18 +294,18 @@
                   </ng-template>
                 </div>
                 <div>
-                  <div class="d-flex justify-content-between align-items-center mb-5">
-                    <span class="text--primary fw-500 title-small">{{ denom }}</span>
-                    <span class="body">{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="h2 h3-mob mb-0 text--white">{{ denom }}</span>
+                    <span class="h5 h6-mob mb-0 text--white">{{ currentAccountDetail?.total | number: global.formatNumberToken }}</span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
                     <div
-                      class="d-flex justify-content-between align-items-center small-body chart-legend-item py-3 px-0">
+                      class="d-flex justify-content-between align-items-center body-02 body-01-mob chart-legend-item py-3 px-0">
                       <div class="d-flex align-items-center">
-                        <div class="item-color-balance fw-500" [ngStyle]="{ 'background-color': item.color }"></div>
-                        <span>{{ item.name }}</span>
+                        <div class="item-color-balance mr-2" [ngStyle]="{ 'background-color': item.color }"></div>
+                        <span class="text--gray-5">{{ item.name }}</span>
                       </div>
-                      <span>{{ item.amount | number: global.formatNumberToken }}</span>
+                      <span class="text--gray-1">{{ item.amount | number: global.formatNumberToken }}</span>
                     </div>
                   </ng-container>
                 </div>

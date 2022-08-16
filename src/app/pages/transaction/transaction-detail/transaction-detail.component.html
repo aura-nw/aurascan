@@ -1,72 +1,77 @@
 <app-pagetitle title="Transaction Details"></app-pagetitle>
 <div class="row justify-content-end mb-2 d-none d-lg-flex">
   <div class="col-auto">
-    <div class="button-switch-stage">
-      <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
-      <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
+    <div class="button-tab-group">
+      <button class="button-tab" [class.active]="!isRawData" (click)="changeType(false)"><span>Summary</span></button>
+      <button class="button-tab" [class.active]="isRawData" (click)="changeType(true)"><span>JSON</span></button>
     </div>
   </div>
 </div>
 
 <div class="card text--white">
-  <div class="card-header title-small d-none d-lg-flex fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
+  <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
   <div class="card-body body">
     <div class="d-flex justify-content-between align-items-center d-lg-none">
-      <div class="title-small fw-500">{{ !isRawData ? 'Information' : 'Raw Data' }}</div>
-      <div class="button-switch-stage">
-        <button [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
-        <button [class.active]="isRawData" (click)="changeType(true)">JSON</button>
+      <h2 class="mb-0 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+      <div class="button-tab-group">
+        <button class="button-tab" [class.active]="!isRawData" (click)="changeType(false)"><span>Summary</span></button>
+        <button class="button-tab" [class.active]="isRawData" (click)="changeType(true)"><span>JSON</span></button>
       </div>
     </div>
-    <div class="divider divider-horizontal my-4 d-lg-none"></div>
-    <div *ngIf="!isRawData" class="small-body">
+    <div class="divider divider-horizontal divider-lighter my-4 d-lg-none"></div>
+    <div *ngIf="!isRawData">
       <div class="row box-error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Chain Id</div>
-        <div class="col-12 col-lg-6">{{ transaction?.chainid }}</div>
+      <div class="row mb-3 body-02">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Chain Id</div>
+        <div class="col-12 col-lg-9 text--primary">{{ transaction?.chainid }}</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">TxHash</div>
-        <div class="col-12 col-lg-6">{{ transaction?.tx_hash }}</div>
+      <div class="row mb-3 body-02">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">TxHash</div>
+        <div class="col-12 col-lg-9">{{ transaction?.tx_hash }}</div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Status</div>
-        <div class="col-12 col-lg-6 d-flex align-items-center">
+      <div class="row mb-3 body-02 align-items-center">
+        <div class="col-3 mb-0 text--gray-4">Status</div>
+        <div class="col-9 d-flex align-items-center">
           <img
             [src]="
               transaction?.code == codeTransaction.Success
                 ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
                 : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
             "
-            alt="" />
-          <span>{{ transaction?.status }}</span>
+            alt="" width="20px" height="20px" />
+          <span class="ml-2">{{ transaction?.status }}</span>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Height</div>
-        <div class="col-12 col-lg-6">
+      <div class="row mb-3 body-02 align-items-center">
+        <div class="col-3 mb-0 text--gray-4">Height</div>
+        <div class="col-9">
           <a class="text--primary" routerLink="/blocks/id/{{ transaction?.blockId }}">
             {{ transaction?.height | number }}
           </a>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Time</div>
-        <div class="col-12 col-lg-6">
-          {{ commonService.getDateValue(transaction?.timestamp)[0] }} {{ commonService.getDateValue(dateFormat)[1] }}
+      <div class="row mb-3 body-02">
+        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Time</div>
+        <div class="col-9">
+          <div class="d-flex align-items-center">
+            <span>{{ transaction?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
+            <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
+            <span>{{ transaction?.timestamp | customDate: 'h:mm:ss' }}</span>
+          </div>
+          <div class="text--gray-4 mt-1">({{ commonService.getDateValue(transaction?.timestamp)[0] }})</div>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Fee</div>
-        <div class="col-12 col-lg-6">
+      <div class="row mb-3 body-02 align-items-center">
+        <div class="col-3 mb-0 text--gray-4">Fee</div>
+        <div class="col-9">
           {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Gas (used / wanted)</div>
-        <div class="col-12 col-lg-6">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
+      <div class="row mb-3 body-02">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Gas (used / wanted)</div>
+        <div class="col-12 col-lg-9">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
       </div>
     </div>
 

@@ -20,12 +20,15 @@ body[data-layout-mode="dark"] {
                 color: var(--aura-gray-4) !important;
             }
             color: var(--aura-gray-4);
-            font-family: "SF Pro Display";
-            font-style: normal;
-            font-weight: 500;
-            font-size: 20px;
-            line-height: 24px;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
             letter-spacing: 0.02em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            padding: 0;
 
             &.active {
                 background-color: transparent;

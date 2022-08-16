@@ -1,7 +1,6 @@
 .aura-form.single-input-field {
   .input-group {
-    height: 36px;
-    padding: 0 16px;
+    padding: 0 var(--spacer-6);
     input {
       font-size: 1.4rem;
       line-height: 1.9rem;

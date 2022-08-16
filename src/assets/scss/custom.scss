@@ -348,7 +348,7 @@ body {
 }
 
 .box-mob-table {
-    background-color: var(--aura-gray-10);
+    background-color: var(--aura-gray-9);
     border-radius: 8px;
     padding: 12px;
     width: 100%;
@@ -416,7 +416,7 @@ body {
     font-weight: 500;
 
     &--desc {
-        color: var(--aura-danger) !important;
+        color: var(--aura-red-3) !important;
         padding-left: 24px;
 
         &::after {
@@ -432,7 +432,7 @@ body {
 
     &--asc {
         padding-left: 24px;
-        color: var(--aura-primary) !important;
+        color: var(--aura-green-3) !important;
 
         &::after {
             content: '';
