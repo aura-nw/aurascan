@@ -77,13 +77,13 @@
                             <a class="nav-link d-flex align-items-center" *ngIf="!item.subItems && item.link" (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
                                [routerLink]="item.link" routerLinkActive="active" [class.active]="router.url === '/' && item.link === '/dashboard'" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>
-                                <span class="ml-2 fw-500">{{ item.label | translate}}</span>
+                                <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
                             </a>
                             <a *ngIf="item.subItems" class="nav-link dropdown-toggle arrow-none d-flex align-items-center" (click)="onMenuClick($event)"
                                [class.active]="router.url === '/' && item.link === '/dashboard' ||
                                                item.id === 6 && router.url.includes('/token')" href="javascript: void(0);" id="topnav-components" role="button">
                                 <i class="icon icon-{{ item.icon }}"></i>
-                                <span class="ml-2 fw-500">{{ item.label | translate}}</span>
+                                <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
                                 <span class="nav-link__panel">
                                     <a [routerLink]="subMenu.link"
                                        *ngFor="let subMenu of item.subItems"
