@@ -64,7 +64,7 @@ export const PROPOSAL_VOTE = [
   },
   {
     key: VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO,
-    value: 'No with veto',
+    value: 'NoWithVeto',
     class: 'info',
     voteOption: 'NoWithVeto',
   },

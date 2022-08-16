@@ -50,7 +50,7 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                        <span [class.label-circle]="j <= 2">{{ data[template.matColumnDef]}}</span>
+                      <span [class.label-circle]="j <= 2">{{ data[template.matColumnDef] }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'updated_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -58,7 +58,7 @@
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'h:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -69,7 +69,18 @@
                         <div class="text--gray-5 body-02 d-flex align-items-center">
                           <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                           <div class="divider divider-vertical mx-2"></div>
-                          <span>{{ data[template.matColumnDef] | customDate: 'h:mm:ss' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'timestamp'">
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
@@ -104,69 +115,122 @@
           <!-- VOTES -->
           <ng-container *ngIf="type === 'VOTES'">
             <app-card-mob-simple
-                    [content]="[
-                    { label: 'Voter', class: 'h5 mb-0 text--gray-1', info: data.voter ? shortenAddress(data.voter) : '-' },
-                    { label: 'TxHash',
-                      class: 'body-01',
-                      info: '<a class=text--primary href='+ ('/transaction/'+data.tx_hash) + '>' + (data.tx_hash ? shortenAddress(data.tx_hash) : '-') + '</a>'
-                    },
-                    { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
-                    { label: 'Time',
-                      class: 'card__date text--gray-1 body-01',
-                      info: '<div class=text-end>' + commonService.getDateValue(data.created_at, false)[0] + '</div><div class=text--gray-5><span>'+(data.created_at | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.created_at | customDate: 'h:mm:ss')+'</span></div>'
-                    }
-                  ]"></app-card-mob-simple>
+              [content]="[
+                { label: 'Voter', class: 'h5 mb-0 text--gray-1', info: data.voter ? shortenAddress(data.voter) : '-' },
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/transaction/' + data.tx_hash) +
+                    '>' +
+                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
+                    '</a>'
+                },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info:
+                    '<div class=text-end>' +
+                    commonService.getDateValue(data.created_at, false)[0] +
+                    '</div><div class=text--gray-5><span>' +
+                    (data.created_at | customDate: 'yyyy-MM-dd') +
+                    '</span>' +
+                    '<span>' +
+                    (data.created_at | customDate: 'HH:mm:ss') +
+                    '</span></div>'
+                }
+              ]"></app-card-mob-simple>
           </ng-container>
           <!-- VALIDATORS_VOTES -->
           <ng-container *ngIf="type === 'VALIDATORS_VOTES'">
             <app-card-mob-simple
-                    [validatorData]="{
-                      imgUrl: getValidatorAvatar(data.operator_address),
-                      validatorName: data.validator_name,
-                      validatorAddress: data.validator_address,
-                      validatorNumber: data.rank
-                    }"
-                    [content]="[
-                    { label: 'TxHash',
-                      class: 'body-01',
-                      info: '<a class=text--primary href='+ ('/transaction/'+data.tx_hash) + '>' + (data.tx_hash ? shortenAddress(data.tx_hash) : '-') + '</a>'
-                    },
-                    { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
-                    { label: 'Time',
-                      class: 'card__date text--gray-1 body-01',
-                      info: data.created_at ? ('<div class=text-end>' + commonService.getDateValue(data.created_at, false)[0] + '</div>' +
-                            '<div class=text--gray-5><span>'+(data.created_at | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.created_at | customDate: 'h:mm:ss')+'</span></div>') : '-'
-                    }
-                    ]"></app-card-mob-simple>
+              [validatorData]="{
+                imgUrl: getValidatorAvatar(data.operator_address),
+                validatorName: data.validator_name,
+                validatorAddress: data.validator_address,
+                validatorNumber: data.rank
+              }"
+              [content]="[
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/transaction/' + data.tx_hash) +
+                    '>' +
+                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
+                    '</a>'
+                },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info: data.created_at
+                    ? '<div class=text-end>' +
+                      commonService.getDateValue(data.created_at, false)[0] +
+                      '</div>' +
+                      '<div class=text--gray-5><span>' +
+                      (data.created_at | customDate: 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.created_at | customDate: 'HH:mm:ss') +
+                      '</span></div>'
+                    : '-'
+                }
+              ]"></app-card-mob-simple>
           </ng-container>
           <!-- DEPOSITORS -->
           <ng-container *ngIf="type === 'DEPOSITORS'">
             <app-card-mob-simple
-                    [content]="[
-                    {
-                      label: 'Depositor',
-                      class: 'h5 mb-0 text--gray-1',
-                      info: data.depositor ? shortenAddress(data.depositor) : '-'
-                    },
-                    { label: 'TxHash',
-                      class: 'body-01',
-                      info: '<a class=text--primary href='+ ('/transaction/'+data.tx_hash) + '>' + (data.tx_hash ? shortenAddress(data.tx_hash) : '-') + '</a>'
-                    },
-                    {
-                      label: 'Amount',
-                      class: 'h6 mb-0 text--gray-1',
-                      info: data.amount ? ('<span class=mr-1>'+(data.amount | number: global.formatNumberToken)+'</span><span class=text--primary>'+denom+'</span>') : '-'
-                    },
-                    { label: 'Time',
-                      class: 'card__date text--gray-1 body-01',
-                      info: data.created_at ? ('<div class=text-end>' + commonService.getDateValue(data.created_at, false)[0] + '</div>' +
-                            '<div class=text--gray-5><span>'+(data.created_at | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.created_at | customDate: 'h:mm:ss')+'</span></div>') : '-'
-                    }
-                    ]"></app-card-mob-simple>
+              [content]="[
+                {
+                  label: 'Depositor',
+                  class: 'h5 mb-0 text--gray-1',
+                  info: data.depositor ? shortenAddress(data.depositor) : '-'
+                },
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/transaction/' + data.tx_hash) +
+                    '>' +
+                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
+                    '</a>'
+                },
+                {
+                  label: 'Amount',
+                  class: 'h6 mb-0 text--gray-1',
+                  info: data.amount
+                    ? '<span class=mr-1>' +
+                      (data.amount | number: global.formatNumberToken) +
+                      '</span><span class=text--primary>' +
+                      denom +
+                      '</span>'
+                    : '-'
+                },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info: data.timestamp
+                    ? '<div class=text-end>' +
+                      commonService.getDateValue(data.timestamp, false)[0] +
+                      '</div>' +
+                      '<div class=text--gray-5><span>' +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      '</span></div>'
+                    : '-'
+                }
+              ]"></app-card-mob-simple>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          <tr class="mat-row " *matNoDataRow>
+          <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
               {{ 'NO DATA' | translate }}
             </td>
