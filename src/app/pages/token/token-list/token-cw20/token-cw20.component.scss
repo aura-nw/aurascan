@@ -3,18 +3,17 @@
   opacity: 0;
   transition: all 0.35s ease-in-out;
   &.show {
-    height: 50px;
+    height: 40px;
     opacity: 1;
   }
   min-width: 100%;
   @media (min-width: 992px) {
     min-width: 410px;
-    height: 50px !important;
+    height: 40px !important;
     opacity: 1 !important;
   }
 }
 .box-search-data {
-  min-width: 410px;
   max-height: 350px;
   width: 90%;
   @media (min-width: 992px) {
@@ -58,4 +57,11 @@
 }
 .vertical-align-top {
   vertical-align: top;
+}
+.desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
