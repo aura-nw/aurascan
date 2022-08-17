@@ -46,6 +46,7 @@ export class TokenHoldersTabComponent implements OnInit {
   tokenType = ContractRegisterType.CW20;
   numberTopHolder = 100;
   totalQuantity = 0;
+  numberTop = 0;
   chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -79,7 +80,8 @@ export class TokenHoldersTabComponent implements OnInit {
         if (res && res.data?.resultAsset?.length > 0) {
           this.pageData.length = res.data?.resultCount;
 
-          let numberTop = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
+          let topHolder = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
+          this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
           res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
           });
@@ -87,7 +89,7 @@ export class TokenHoldersTabComponent implements OnInit {
           if (this.totalQuantity) {
             res.data?.resultAsset.forEach((k) => {
               k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
-              k['width_chart'] = (k.quantity / numberTop) * 100;
+              k['width_chart'] = (k.quantity / this.numberTop) * 100;
             });
           }
 
