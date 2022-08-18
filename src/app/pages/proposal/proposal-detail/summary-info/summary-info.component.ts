@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
-import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import {
   MESSAGE_WARNING,
   PROPOSAL_STATUS,
@@ -14,7 +13,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE,
+  VOTING_SUBTITLE
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { IResponsesTemplates } from '../../../../core/models/common.model';
@@ -186,10 +185,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
     return {
       ...data,
-      pro_voting_start_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
-      pro_voting_end_time: this.datePipe.transform(data.pro_voting_end_time, DATEFORMAT.DATETIME_UTC),
-      pro_submit_time: this.datePipe.transform(data.pro_submit_time, DATEFORMAT.DATETIME_UTC),
-      pro_deposit_end_time: this.datePipe.transform(data.pro_deposit_end_time, DATEFORMAT.DATETIME_UTC),
       initial_deposit: balanceOf(data.initial_deposit),
       pro_total_deposits: balanceOf(data.pro_total_deposits),
       pro_type: data.pro_type.split('.').pop(),
