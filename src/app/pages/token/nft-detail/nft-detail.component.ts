@@ -27,7 +27,7 @@ export class NFTDetailComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'popover', headerCellDef: '' },
+    // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },

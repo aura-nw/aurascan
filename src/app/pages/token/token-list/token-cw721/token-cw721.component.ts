@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -39,7 +39,6 @@ export class TokenCw721Component implements OnInit {
   sortedData: any;
   sort: MatSort;
   enterSearch = '';
-  length = 0;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
@@ -47,12 +46,16 @@ export class TokenCw721Component implements OnInit {
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private router: Router,
+    private route: ActivatedRoute,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.enterSearch = params?.a || '';
+      this.textSearch = this.enterSearch;
+    });
     this.getTokenData();
   }
 
@@ -60,7 +63,7 @@ export class TokenCw721Component implements OnInit {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: '',
+      keyword: this.enterSearch,
     };
     this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
       if (res.data.length > 0) {
@@ -75,7 +78,6 @@ export class TokenCw721Component implements OnInit {
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.dataSourceBk = this.dataSource;
         this.pageData.length = res.meta.count;
-        this.length = this.pageData.length;
       }
     });
   }
@@ -112,15 +114,13 @@ export class TokenCw721Component implements OnInit {
 
   setPageList(): void {
     if (this.filterSearchData?.length > 0) {
-      this.enterSearch = this.textSearch;
-      this.dataSource = new MatTableDataSource<any>(this.filterSearchData);
-      this.pageData.length = this.filterSearchData?.length || 0;
+      window.location.href = `/tokens/tokens-nft?a=${this.textSearch}`;
     }
   }
 
   resetSearch() {
     if (this.enterSearch) {
-      window.location.reload();
+      window.location.href = `/tokens/tokens-nft`;
     } else {
       this.textSearch = '';
       this.enterSearch = '';

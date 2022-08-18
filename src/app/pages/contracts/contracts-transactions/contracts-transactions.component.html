@@ -13,7 +13,7 @@
       <div class="card-body" *ngIf="contract$ | async as contract">
         <app-contract-table
           [length]="contractInfo?.count"
-          [pageSize]="20"
+          [pageSize]="pageSize"
           [label]="queryParams?.label?.toString()"
           [dataList]="contract"
           [templates]="templates"

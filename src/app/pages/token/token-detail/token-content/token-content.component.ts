@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
@@ -30,6 +31,8 @@ export class TokenContentComponent implements OnInit {
   tabsBackup: any;
   infoSearch: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  contractVerifyType = ContractVerifyType;
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);

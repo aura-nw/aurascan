@@ -6,7 +6,9 @@
     </div>
     <!-- Filter -->
     <div class="mb-6 d-lg-flex align-items-center justify-content-between">
-      <div class="sub-text fw-semibold text-gradient d-inline-block mb-4 mb-lg-0"></div>
+      <div class="sub-text fw-semibold text-gradient d-inline-block mb-4 mb-lg-0">
+        $ {{(totalValue || 0) | number: global.formatNumber2Decimal}}
+      </div>
       <form class="aura-form single-input-field account-search-form">
         <div class="input-group">
           <input

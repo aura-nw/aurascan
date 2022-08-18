@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, HostListener, OnInit, Output } 
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
-import { EnvironmentService } from "src/app/core/data-services/environment.service";
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
 import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
@@ -10,7 +10,7 @@ import { LanguageService } from '../../core/services/language.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { LAYOUT_MODE } from '../layouts.model';
-import { MENU } from './menu';
+import { MENU, MenuName } from './menu';
 import { MenuItem } from './menu.model';
 
 @Component({
@@ -38,6 +38,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   env = null;
   pageTitle = null;
   innerWidth;
+  menuName = MenuName;
 
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
 
@@ -78,14 +79,14 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.menuItems.forEach((item) => {
-          if (item.id === 7) {
+          if (item.name === this.menuName.Account) {
             // check if item is account
             item.link = `/account/${wallet.bech32Address}`;
           }
         });
       } else {
         this.menuItems.forEach((item) => {
-          if (item.id === 7) {
+          if (item.name === this.menuName.Account) {
             item.link = null;
           }
         });
@@ -135,16 +136,16 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.env = this.environmentService.configValue.env;
     this.innerWidth = window.innerWidth;
     switch (this.env) {
-      case 'serenity' :
-        this.pageTitle = (this.innerWidth > 992) ? 'Serenity Testnet Network' : 'Serenity Testnet';
+      case 'serenity':
+        this.pageTitle = this.innerWidth > 992 ? 'Serenity Testnet Network' : 'Serenity Testnet';
         break;
-      case 'halo' :
-        this.pageTitle = (this.innerWidth > 992) ? 'Halo Testnet Network' : 'Halo Testnet';
+      case 'halo':
+        this.pageTitle = this.innerWidth > 992 ? 'Halo Testnet Network' : 'Halo Testnet';
         break;
-      case 'euphoria' :
-        this.pageTitle = (this.innerWidth > 992) ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
+      case 'euphoria':
+        this.pageTitle = this.innerWidth > 992 ? 'Euphoria Testnet Network' : 'Euphoria Testnet';
         break;
-      default :
+      default:
         this.pageTitle = null;
         break;
     }

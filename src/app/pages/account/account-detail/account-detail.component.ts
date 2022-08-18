@@ -14,12 +14,14 @@ import { EnvironmentService } from '../../../../app/core/data-services/environme
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import { balanceOf } from '../../../../app/core/utils/common/parsing';
 import local from '../../../../app/core/utils/storage/local';
-import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount
+  StakeModeAccount,
+  TabsAccount,
+  WalletAcount,
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -27,7 +29,7 @@ import {
   CodeTransaction,
   StatusTransaction,
   TRANSACTION_TYPE_ENUM,
-  TypeTransaction
+  TypeTransaction,
 } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
@@ -175,27 +177,31 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
-  TABS = ['ASSETS', 'TRANSACTIONS', 'STAKE'];
+  TABS = TABS_TITLE_ACCOUNT;
+  tabsData = TabsAccount;
+  stakeMode = StakeModeAccount;
   TABS_STAKE = [
     {
-      key: 0,
+      key: StakeModeAccount.Delegations,
       label: 'Delegations',
     },
     {
-      key: 1,
+      key: StakeModeAccount.Unbondings,
       label: 'Unbondings',
     },
     {
-      key: 2,
+      key: StakeModeAccount.Redelegations,
       label: 'Redelegations',
     },
     {
-      key: 3,
+      key: StakeModeAccount.Vestings,
       label: 'Vestings',
     },
   ];
-  currentTab = 'ASSETS';
-  currentStake = 0;
+  currentTab = TabsAccount.Assets;
+  currentStake = StakeModeAccount.Delegations;
+  totalValueToken = 0;
+  totalValueNft = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -219,9 +225,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
-    // this.walletService.wallet$.subscribe((wallet) => {
-    //   if (wallet) this.currentAddress = wallet.bech32Address;
-    // });
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
