@@ -73,6 +73,9 @@
                 <ng-container *ngSwitchCase="'time-distance'">
                   {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }}
                 </ng-container>
+                <ng-container *ngSwitchCase="'short-string'">
+                  {{ data[template.matColumnDef] |  cutStringPipe: 8:8 }}
+                </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>
               <span class="d-inline" *ngIf="template?.suffix"> {{ template.suffix }} </span>

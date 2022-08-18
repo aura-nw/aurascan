@@ -1,4 +1,10 @@
 .box-contract {
+  .content-info {
+    background: var(--aura-dark-gray);
+    padding: var(--spacer-2) var(--spacer-4);
+    border-radius: 8px;
+    color: var(--aura-contract);
+  }
   .btn-contract {
     padding: var(--spacer-2) var(--spacer-4);
     border-radius: 4px;

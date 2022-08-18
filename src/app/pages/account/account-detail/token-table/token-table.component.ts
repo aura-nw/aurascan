@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -16,6 +17,8 @@ import { Globals } from 'src/app/global/global';
 })
 export class TokenTableComponent implements OnChanges {
   @Input() address: string;
+  @Output() totalValue = new EventEmitter<number>();
+
   math = Math;
   textSearch = '';
   searchTemp: string = '';
@@ -41,10 +44,22 @@ export class TokenTableComponent implements OnChanges {
   sort: MatSort;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   assetCW20: any[];
-  constructor(public global: Globals, private accountService: AccountService) {}
+  currentBalance = 0;
+  assetsLoading = true;
+  total = 0;
+
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
+
+  constructor(
+    public global: Globals,
+    private accountService: AccountService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnChanges(): void {
-    this.getListToken();
+    this.getAccountDetail();
   }
 
   getListToken() {
@@ -54,9 +69,27 @@ export class TokenTableComponent implements OnChanges {
       offset: 0,
       keyword: this.textSearch,
     };
-    this.accountService.getAssetCW20ByOnwer(payload).subscribe((res: ResponseDto) => {
+    this.accountService.getAssetCW20ByOwner(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
+        if (res?.data) {
+          res?.data.unshift({
+            name: 'Aura',
+            symbol: this.coinInfo.coinDenom,
+            image: this.defaultLogoAura,
+            contract_address: '',
+            balance: this.currentBalance,
+            decimals: this.coinInfo.coinDecimals,
+            total_supply: 0,
+            price: this.global.tokenPrice,
+          });
+        }
+
         this.assetCW20 = res?.data;
+        this.assetCW20.forEach((item) => {
+          this.total += +item.price * +item.balance || 0;
+        });
+        this.totalValue.emit(this.total);
+
         this.assetCW20.length = res.data.length;
         this.dataSource = new MatTableDataSource<any>(this.assetCW20);
         this.pageData.length = this.assetCW20?.length;
@@ -71,9 +104,11 @@ export class TokenTableComponent implements OnChanges {
   }
 
   sortData(sort: Sort) {}
+
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
   }
+
   handlePageEvent(e: any) {
     this.pageData = e;
   }
@@ -96,5 +131,16 @@ export class TokenTableComponent implements OnChanges {
   resetSearch(): void {
     this.textSearch = '';
     this.getListToken();
+  }
+
+  getAccountDetail(): void {
+    this.assetsLoading = true;
+    this.accountService.getAccountDetail(this.address).subscribe((res) => {
+      if (res?.data) {
+        this.currentBalance = +res?.data.total;
+        this.getListToken();
+        this.assetsLoading = false;
+      }
+    });
   }
 }

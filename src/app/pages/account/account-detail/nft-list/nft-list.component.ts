@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-nft-list',
@@ -12,6 +13,8 @@ import { AccountService } from 'src/app/core/services/account.service';
   styleUrls: ['./nft-list.component.scss'],
 })
 export class NftListComponent implements OnChanges {
+  @Output() totalValueNft = new EventEmitter<number>();
+
   assetCW721: any[];
   @Input() address: string;
   searchValue = '';
@@ -24,8 +27,9 @@ export class NftListComponent implements OnChanges {
   nftData = [];
   showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  totalValue = 0;
 
-  constructor(private accountService: AccountService, private router : Router) {}
+  constructor(private accountService: AccountService, private router: Router, public global: Globals) {}
 
   ngOnChanges(): void {
     this.getNftData();
@@ -44,7 +48,7 @@ export class NftListComponent implements OnChanges {
       offset: 0,
       keyword: this.searchValue,
     };
-    this.accountService.getAssetCW721ByOnwer(payload).subscribe((res: ResponseDto) => {
+    this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
         this.assetCW721 = res?.data;
         this.assetCW721.length = res.data.length;
@@ -54,6 +58,8 @@ export class NftListComponent implements OnChanges {
           const start = pageIndex * pageSize;
           const end = start + pageSize;
           this.showedData = this.assetCW721.slice(start, end);
+          this.totalValue = 0;
+          this.totalValueNft.emit(this.totalValue);
         }
       } else {
         this.showedData.length = 0;
@@ -91,7 +97,7 @@ export class NftListComponent implements OnChanges {
   }
 
   handleRouterLink(e: Event, link): void {
-    this.router.navigate(link)
+    this.router.navigate(link);
     e.preventDefault();
   }
 }
