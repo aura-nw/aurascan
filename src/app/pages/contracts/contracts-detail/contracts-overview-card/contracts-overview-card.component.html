@@ -35,7 +35,7 @@
           <td>
             ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
             <span class="text--light-gray ml-1 small-text"
-              >(@ ${{ contractDetail?.price | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})</span
+              >(@ ${{ global.tokenPrice | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})</span
             >
           </td>
         </tr>

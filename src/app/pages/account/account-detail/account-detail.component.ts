@@ -200,6 +200,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   ];
   currentTab = TabsAccount.Assets;
   currentStake = StakeModeAccount.Delegations;
+  totalValueToken = 0;
+  totalValueNft = 0;
 
   constructor(
     private transactionService: TransactionService,
