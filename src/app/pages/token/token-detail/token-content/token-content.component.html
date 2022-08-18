@@ -47,7 +47,7 @@
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)" class="verify-contract">
             <span class="text-uppercase">{{ tab.value }}</span>
-            <img
+            <img class="ml-2"
               *ngIf="tab.key === tokenTab.Contract && tokenDetail.contract_verification !== contractVerifyType.Unverifed"
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"

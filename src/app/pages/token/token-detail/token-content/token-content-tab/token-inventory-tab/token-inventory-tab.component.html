@@ -1,4 +1,4 @@
-<span class="small-body text--light-gray"
+<span class="body-02 caption fw-normal-mob text--gray-5"
   >A total of {{ pageData?.length }} token{{ pageData?.length > 1 ? 's' : '' }} found</span
 >
 
@@ -9,7 +9,7 @@
 <!-- Table -->
 <ng-container>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
-    <div class="mt-6">
+    <div class="mt-2 mt-lg-4">
       <div
         class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
         *ngIf="!loading">
