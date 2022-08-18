@@ -16,11 +16,11 @@ export class AccountService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/account/${account_id}`);
   }
 
-  getAssetCW20ByOnwer(payload): Observable<any> {
+  getAssetCW20ByOwner(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens/get-by-owner/`,payload);
   }
 
-  getAssetCW721ByOnwer(payload): Observable<any> {
+  getAssetCW721ByOwner(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens/get-by-owner/`,payload);
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -44,12 +44,12 @@ export class TokenCw20Component implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   dataSearch: any;
   enterSearch = '';
-  length = 0;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
+    private route: ActivatedRoute,
     public translate: TranslateService,
     public global: Globals,
     public tokenService: TokenService,
@@ -57,6 +57,10 @@ export class TokenCw20Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.enterSearch = params?.a || '';
+      this.textSearch = this.enterSearch;
+    });
     this.getListToken();
   }
 
@@ -64,7 +68,7 @@ export class TokenCw20Component implements OnInit {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: '',
+      keyword: this.enterSearch,
     };
     this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
       res.data.forEach((data) => {
@@ -78,7 +82,6 @@ export class TokenCw20Component implements OnInit {
       this.dataSource = new MatTableDataSource<any>(res.data);
       this.dataSourceBk = this.dataSource;
       this.pageData.length = res.meta.count;
-      this.length = this.pageData.length;
     });
   }
 
@@ -153,15 +156,13 @@ export class TokenCw20Component implements OnInit {
 
   setPageList(): void {
     if (this.filterSearchData?.length > 0) {
-      this.enterSearch = this.textSearch;
-      this.dataSource = new MatTableDataSource<any>(this.filterSearchData);
-      this.pageData.length = this.filterSearchData?.length || 0;
+      window.location.href = `/tokens?a=${this.textSearch}`;
     }
   }
 
   resetSearch() {
     if (this.enterSearch) {
-      window.location.reload();
+      window.location.href = `/tokens`;
     } else {
       this.textSearch = '';
       this.enterSearch = '';

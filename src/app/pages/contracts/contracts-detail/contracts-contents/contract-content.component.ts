@@ -39,6 +39,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
 
   activeId = 0;
+  limit = 25;
 
   contractInfo = {
     contractsAddress: this.contractsAddress,
@@ -104,7 +105,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
       let payload = {
-        limit: 25,
+        limit: this.limit,
         offset: 0,
         label: '',
         contract_address: this.contractsAddress,

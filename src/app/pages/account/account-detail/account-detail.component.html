@@ -32,7 +32,7 @@
           <div class="text--white title-small fw-500">Total Value</div>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
             <span class="sub-text fw-semibold mb-0 text-gradient d-inline"
-              >$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span
+              >$ {{ totalValueToken + totalValueNft || 0 | number: global.formatNumber2Decimal }}</span
             >
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
@@ -59,24 +59,24 @@
       [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab">
+          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label">
             <span
               class="body fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--light-gray' }}"
-              >{{ tab }}</span
+              >{{ tab.label }}</span
             >
           </a>
         </li>
       </ng-container>
     </ul>
     <!-- Assets-->
-    <ng-container *ngIf="currentTab === 'ASSETS'">
+    <ng-container *ngIf="currentTab === tabsData.Assets">
       <!-- Coin & Token-->
-      <app-token-table [address]="currentAddress"></app-token-table>
+      <app-token-table [address]="currentAddress" (totalValue)="totalValueToken = $event"></app-token-table>
       <!-- NFT -->
-      <app-nft-list [address]="currentAddress"></app-nft-list>
+      <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
     </ng-container>
     <!-- Transaction -->
-    <ng-container *ngIf="currentTab === 'TRANSACTIONS'">
+    <ng-container *ngIf="currentTab === tabsData.Transactions">
       <div class="card">
         <div class="card-body px-6 pt-0">
           <ngx-simplebar *ngIf="dataSource && dataSource.data">
@@ -202,7 +202,7 @@
       </div>
     </ng-container>
     <!-- Stake -->
-    <ng-container *ngIf="currentTab === 'STAKE'">
+    <ng-container *ngIf="currentTab === tabsData.Stake">
       <div class="row row-eq-height">
         <div class="col-12 col-lg-8">
           <div class="card card-h-100 px-lg-6 py-lg-6">
@@ -230,7 +230,7 @@
                 </ul>
                 <!-- Delegations-->
                 <app-account-table
-                  *ngIf="currentStake === 0"
+                  *ngIf="currentStake === stakeMode.Delegations"
                   [dataSource]="dataSourceDelegation"
                   [templates]="templatesDelegation"
                   [displayedColumns]="displayedColumnsDelegation"
@@ -240,7 +240,7 @@
                 </app-account-table>
                 <!-- Unbondings-->
                 <app-account-table
-                  *ngIf="currentStake === 1"
+                  *ngIf="currentStake === stakeMode.Unbondings"
                   [dataSource]="dataSourceUnBonding"
                   [templates]="templatesUnBonding"
                   [displayedColumns]="displayedColumnsUnBonding"
@@ -249,7 +249,7 @@
                   (pageEvent)="changePage($event)">
                 </app-account-table>
                 <!-- Redelegations-->
-                <div *ngIf="currentStake === 2">
+                <div *ngIf="currentStake === stakeMode.Redelegations">
                   <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
                     1. {{ 'NOTICE.REDELEGATE_WAITING' | translate: { timeStaking: timeStaking } }}<br />
                     2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
@@ -264,7 +264,7 @@
                 </div>
                 <!-- Vestings-->
                 <app-account-table
-                  *ngIf="currentStake === 3"
+                  *ngIf="currentStake === stakeMode.Vestings"
                   [dataSource]="dataSourceVesting"
                   [templates]="templatesVesting"
                   [displayedColumns]="displayedColumnsVesting"

@@ -307,7 +307,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             id,
             title,
             warning,
-            voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
+            voteValue: this.voteConstant?.find((s) => s.key === this.voteValue?.keyVote)?.voteOption || null,
           });
         });
       }

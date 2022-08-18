@@ -44,3 +44,16 @@ export enum WalletAcount {
   StakingReward = '#CA6702',
   Commission = '#9B2226',
 }
+
+export enum TabsAccount {
+  Assets = 'ASSETS',
+  Transactions = 'TRANSACTIONS',
+  Stake = 'STAKE'
+}
+
+export enum StakeModeAccount {
+  Delegations = 0,
+  Unbondings = 1,
+  Redelegations = 2,
+  Vestings = 3,
+}
