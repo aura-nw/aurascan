@@ -1,13 +1,13 @@
 <div class="h-100 d-flex justify-content-between flex-column">
   <div class="">
-    <div class="d-lg-flex justify-content-between align-items-center">
-      <h4 class="mb-0 text--gray-1 fw-normal" style="min-height: 32px">Current Turnout</h4>
+    <div class="d-flex justify-content-between align-items-center">
+      <h6 class="mb-0 text--gray-1 fw-normal">Current Turnout</h6>
       <div class="caption fw-500 text--gray-5">
         <h5 class="text--gray-1 mr-lg-2 mb-0 d-inline">
           {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
         </h5>
         ({{ formatNumber(proposalDetail.pro_total_vote) || 0 }} of
-        {{ formatNumber(proposalDetail.total_bonded_token) }} has voted)
+        {{ formatNumber(proposalDetail.total_bonded_token) }} voted)
       </div>
     </div>
     <div class="mt-1 caption text--gray-5 content--fixed-height">

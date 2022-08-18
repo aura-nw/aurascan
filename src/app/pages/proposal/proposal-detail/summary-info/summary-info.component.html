@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <div class="card-header bg-transparent pb-0" *ngIf="breakpoint.value.matches">
+    <div class="card-header bg-transparent pb-0 px-3" *ngIf="breakpoint.value.matches">
       <div class="d-flex justify-content-between">
         <div>
           <div class="h3 mb-0">
@@ -50,7 +50,7 @@
       <div class="text--gray-5 mt-1" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
       <div class="divider divider-horizontal mt-3"></div>
     </div>
-    <div class="card-body pt-3 pt-lg-0">
+    <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
       <div class="text--white">
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-5">Proposer</div>
@@ -145,7 +145,7 @@
         <div class="divider divider-horizontal mt-3 mt-lg-5"></div>
       </div>
     </div>
-    <div class="card-footer pt-0 pb-0">
+    <div class="card-footer pt-0 pb-0 px-3 px-lg-10">
       <div
         class="proposal__summary-total"
         *ngIf="!votingBarLoading && proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'">
