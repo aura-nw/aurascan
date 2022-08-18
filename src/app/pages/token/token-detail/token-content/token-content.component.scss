@@ -1,23 +1,14 @@
 .single-input-field {
   @media (min-width: 992px) {
-    min-width: 350px;
-  }
-}
-a.verify-contract {
-  img {
-    position: absolute;
-    top: 2px;
+    min-width: 410px;
   }
 }
 .aura-basic-table tr td:not(:last-child) {
-  border-right: 1px solid var(--aura-dark-gray);
+  border-right: 1px solid var(--aura-gray-9);
 }
 .input-group {
   background-color: var(--aura-bg-form);
   padding: var(--spacer-1) var(--spacer-4) !important;
-}
-.txt-light {
-  color: var(--aura-light-gray);
 }
 .aura-nav-tabs.nav-tabs {
   flex-wrap: nowrap;
@@ -36,10 +27,13 @@ a.verify-contract {
 
 .tab-token {
   width: 100%;
-
   .nav-item {
-    flex-grow: 0;
-    flex-shrink: 1;
     min-width: 130px;
+  }
+}
+.border-x {
+  @media (min-width: 992px) {
+    border-left: 1px solid var(--aura-gray-9);
+    border-right: 1px solid var(--aura-gray-9);
   }
 }

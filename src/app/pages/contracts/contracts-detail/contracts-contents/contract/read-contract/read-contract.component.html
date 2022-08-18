@@ -1,18 +1,19 @@
 <ng-container *ngIf="jsonReadContract; else noValues">
-  <div class="d-flex justify-content-between">
+  <div class="d-flex justify-content-between contract__title">
     <div class="d-flex align-items-center">
       <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
-      <span class="body-02 text--white ml-2">Read Contract Information</span>
+      <span class="caption body-02-mob text--white ml-2">Read Contract Information</span>
     </div>
-    <div class="caption fw-normal-mob">
-      <span class="cursor-pointer text--primary mr-6" (click)="expandMenu()">
+    <div class="caption fw-normal-mob d-flex align-items-center">
+      <span class="cursor-pointer text--primary" (click)="expandMenu()">
         <ng-container *ngIf="!isExpand">Expand all</ng-container>
         <ng-container *ngIf="isExpand">Collapse all</ng-container>
       </span>
+      <div class="divider divider-vertical mx-2 mx-lg-4"></div>
       <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
     </div>
   </div>
-  <div class="box-content text--white mt-3">
+  <div class="box-content text--white mt-4">
     <ng-container *ngFor="let readContract of jsonReadContract?.oneOf; index as i">
       <!-- skip logo function -->
       <ng-container *ngIf="!readContract?.required?.toString().includes('_logo')">

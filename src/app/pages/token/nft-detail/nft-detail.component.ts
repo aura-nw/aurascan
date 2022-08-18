@@ -48,6 +48,7 @@ export class NFTDetailComponent implements OnInit {
   modeExecuteTransaction = ModeExecuteTransaction;
 
   image_s3 = this.environmentService.configValue.image_s3;
+  defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;

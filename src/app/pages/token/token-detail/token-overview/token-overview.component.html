@@ -2,7 +2,7 @@
   <div class="table-responsive">
       <table class="aura-basic-table w-100">
         <tr class="body">
-          <td class="h6 mb-0">
+          <td class="h6 h3-mob mb-0">
             <span class="text--white">Overview </span>
             <span class="text--gray-light">
               <ng-container *ngIf="!tokenDetail.isNFTContract">[CW-20]</ng-container>
@@ -48,7 +48,7 @@
               <div
                 [class.flex-item]="!tokenDetail.isNFTContract"
                 [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
-                <span class="text--gray-5 caption">Max Total Supply</span>
+                <span class="text--gray-5 caption fixed-col">Max Total Supply</span>
                 <div class="body-02 text--gray-1">
                   <ng-container *ngIf="!tokenDetail.isNFTContract">
                     {{ tokenDetail.total_supply | number: global.formatNumberToken }}

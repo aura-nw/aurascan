@@ -4,22 +4,9 @@
     <div class="card mt-4 mt-lg-5">
       <div class="card-body">
         <!-- Title -->
-        <div class="d-lg-flex justify-content-between align-items-center">
-          <div class="d-flex d-lg-block flex-row-reverse justify-content-between align-items-center">
-            <div class="d-flex justify-content-between d-lg-block">
-              <button
-                class="button d-lg-none p-0"
-                (click)="
-                  searchForm.classList.contains('show')
-                    ? searchForm.classList.remove('show')
-                    : searchForm.classList.add('show')
-                ">
-                <img [src]="'assets/icons/icons-svg/white/search.svg' | imageS3" alt="" width="20px" height="20px" />
-              </button>
-            </div>
-            <div class="caption-mob fw-normal-mob body-03 text--gray-5">
-              A total of {{ pageData?.length }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
-            </div>
+        <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
+          <div class="caption-mob fw-normal-mob body-03 text--gray-5 mt-4 mt-lg-0">
+            A total of {{ pageData?.length }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
           </div>
           <form class="aura-form single-input-field search-form mt-2 mt-lg-0" #searchForm>
             <div class="input-group">
@@ -82,7 +69,7 @@
             </ng-container>
           </form>
         </div>
-        <div class="divider divider-horizontal d-lg-none mt-2"></div>
+        <div class="divider divider-horizontal d-lg-none my-4"></div>
         <!-- Table -->
         <div class="table-responsive aura-table-contain mt-4">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
