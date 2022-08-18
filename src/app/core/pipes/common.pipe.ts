@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { EnvironmentService } from '../data-services/environment.service';
-import {DatePipe} from "@angular/common";
+import {DatePipe, formatDate} from "@angular/common";
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -55,8 +55,8 @@ export class ImageURL implements PipeTransform {
 @Pipe({ name: 'customDate' })
 export class CustomDate implements PipeTransform {
   transform(value: string, format: string) {
-    const datePipe = new DatePipe("en-US");
-    value = datePipe.transform(value, format ? format : 'dd/MM/yyyy');
+    const date = new Date(value);
+    value = formatDate(date, format, 'en-US');
     return value;
   }
 }
