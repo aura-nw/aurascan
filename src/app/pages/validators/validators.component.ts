@@ -442,7 +442,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkAmountStaking(): void {
     let amountCheck;
     if (this.dataDelegate.dialogMode === this.dialogMode.Delegate) {
-      amountCheck = +this.dataDelegate.availableToken + +this.dataDelegate.delegatableVesting || 0;
+      amountCheck = (
+        +this.dataDelegate.availableToken +
+          +this.dataDelegate.delegatableVesting -
+          (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT || 0
+      ).toFixed(6);
     } else if (
       this.dataDelegate.dialogMode === this.dialogMode.Redelegate ||
       this.dataDelegate.dialogMode === this.dialogMode.Undelegate

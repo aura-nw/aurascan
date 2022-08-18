@@ -1,4 +1,8 @@
-<section>
+<div *ngIf="assetsLoading" class="mt-14">
+  <app-loading-sprint></app-loading-sprint>
+</div>
+
+<section *ngIf="!assetsLoading">
   <div class="sub-text fw-semibold">Coins & Tokens ({{ assetCW20?.length || 0 }})</div>
   <div class="mt-4">
     <div class="card mt-5">
@@ -50,12 +54,21 @@
               <ng-container matColumnDef="asset">
                 <th mat-header-cell *matHeaderCellDef>ASSET</th>
                 <td mat-cell *matCellDef="let element">
-                  <a class="d-flex align-items-center" [routerLink]="['/tokens/token', element.contract_address]">
+                  <a
+                    class="d-flex align-items-center"
+                    [routerLink]="['/tokens/token', element.contract_address]"
+                    *ngIf="element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
                     <div class="ml-2">
                       {{ element.name }}
                     </div>
                   </a>
+                  <div class="d-flex align-items-center" *ngIf="!element.contract_address">
+                    <img [src]="element.image" width="24px" height="24px" />
+                    <div class="ml-2">
+                      {{ element.name }}
+                    </div>
+                  </div>
                 </td>
               </ng-container>
 
@@ -71,12 +84,16 @@
               <ng-container matColumnDef="contractAddress">
                 <th mat-header-cell *matHeaderCellDef>CONTRACT ADDRESS</th>
                 <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                  <a class="d-flex align-items-center" [routerLink]="['/contracts', element.contract_address]">
+                  <a
+                    class="d-flex align-items-center"
+                    [routerLink]="['/contracts', element.contract_address]"
+                    *ngIf="element.contract_address">
                     <img [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3" width="24px" height="24px" />
                     <div class="ml-2 text--green">
                       {{ element.contract_address | cutStringPipe: 8:8 }}
                     </div>
                   </a>
+                  <span *ngIf="!element.contract_address">-</span>
                 </td>
               </ng-container>
 
@@ -92,9 +109,14 @@
               <ng-container matColumnDef="price">
                 <th mat-header-cell *matHeaderCellDef class="">PRICE</th>
                 <td mat-cell *matCellDef="let element">
-                  <!-- <span>${{ element.price }}</span> -->
-                  <span>-</span>
-                  <!-- <span class="ml-2 text--neutrals-4">({{ element.priceByToken }})</span> -->
+                  <div *ngIf="element.contract_address">
+                    <ng-container *ngIf="element.price; else defaultValues"
+                      >${{ element.price | number: global.formatNumber2Decimal }}</ng-container
+                    >
+                  </div>
+                  <span *ngIf="!element.contract_address"
+                    >${{ global.tokenPrice | number: global.formatNumber2Decimal }}</span
+                  >
                 </td>
               </ng-container>
 
@@ -112,10 +134,20 @@
               <ng-container matColumnDef="value">
                 <th mat-header-cell *matHeaderCellDef>VALUE</th>
                 <td mat-cell *matCellDef="let element">
-                  <!-- <span>${{ element.value }}</span>
-        <span class="ml-2 text--neutrals-4">({{ element.valueByToken }})</span> -->-
+                  <div *ngIf="element.contract_address">
+                    <span>
+                      <ng-container *ngIf="element.price && element.balance; else defaultValues"
+                        >${{ element.price * element.balance | number: global.formatNumber2Decimal }}</ng-container
+                      >
+                    </span>
+                  </div>
+                  <span *ngIf="!element.contract_address"
+                    >${{ global.tokenPrice * element.balance | number: global.formatNumber2Decimal }}</span
+                  >
                 </td>
               </ng-container>
+
+              <ng-template #defaultValues>-</ng-template>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

@@ -32,7 +32,7 @@
           <div class="text--white title-small fw-500">Total Value</div>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
             <span class="sub-text fw-semibold mb-0 text-gradient d-inline"
-              >$ {{ tokenPrice * +currentAccountDetail?.total | number: global.formatNumber2Decimal }}</span
+              >$ {{ totalValueToken + totalValueNft || 0 | number: global.formatNumber2Decimal }}</span
             >
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
@@ -71,9 +71,9 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
       <!-- Coin & Token-->
-      <app-token-table [address]="currentAddress"></app-token-table>
+      <app-token-table [address]="currentAddress" (totalValue)="totalValueToken = $event"></app-token-table>
       <!-- NFT -->
-      <app-nft-list [address]="currentAddress"></app-nft-list>
+      <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === tabsData.Transactions">
