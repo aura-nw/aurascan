@@ -45,19 +45,6 @@
               <span class="small-body-mob fw-semibold">{{ getStatus(proposalDetail.pro_status)?.value }}</span>
             </div>
           </div>
-          <button
-            [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
-            (click)="openVoteDialog(proposalDetail)"
-            class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0">
-            <span>
-              {{
-                proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
-                  ? 'Voting Ended'
-                  : 'Vote'
-              }}
-            </span>
-          </button>
         </div>
       </div>
       <div class="text--gray-5 mt-1" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
@@ -165,7 +152,7 @@
         <div
           class="row justify-content-between align-items-center mb-3"
           *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
-          <div class="col-6 col-md-2 body-03 h6-mob">Final Status:</div>
+          <div class="col-6 col-md-2 body-03 h6-mob text--gray-1">Final Status:</div>
           <div class="col-6 col-md-10 body-02 text-end text-md-start">
             <div
               class="aura-status-inline
@@ -175,11 +162,11 @@
           </div>
         </div>
         <div
-          class="mt-2 mb-3 body-03 text--white"
+          class="mt-2 mb-3 body-03 text--gray-7"
           *ngIf="proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'">
           {{ finalSubTitle }}
         </div>
-        <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob">
+        <div class="row justify-content-between align-items-center mb-3 body-03 h6-mob text--gray-1">
           <div class="col-auto col-md-2">Total:</div>
           <div class="col-auto col-md-10 mt-2 mt-lg-0">
             {{ proposalDetail.pro_total_vote | number: global.formatNumberToken }}
@@ -214,8 +201,8 @@
           <div class="d-flex align-items-center">
             <div class="vote status--primary"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5 fw-semibold">
-                <span class="body-02"> Yes </span>
+              <div class="col col-lg-5">
+                <span class="body-03"> Yes </span>
               </div>
               <div class="col col-lg-3 h5 mb-0 text--white">
                 {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
@@ -228,8 +215,8 @@
           <div class="d-flex align-items-center mt-2">
             <div class="vote status--danger flex-grow-0"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5 fw-semibold">
-                <span class="body-02"> No </span>
+              <div class="col col-lg-5">
+                <span class="body-03"> No </span>
               </div>
               <div class="col col-lg-3 h5 mb-0 text--white">
                 {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
@@ -242,8 +229,8 @@
           <div class="d-flex align-items-center mt-2">
             <div class="vote status--info"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5 fw-semibold">
-                <span class="body-02"> NoWithVeto</span>
+              <div class="col col-lg-5">
+                <span class="body-03"> NoWithVeto</span>
               </div>
               <div class="col col-lg-3 h5 mb-0 text--white">
                 {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
@@ -256,8 +243,8 @@
           <div class="d-flex align-items-center mt-2 pb-3">
             <div class="vote status--secondary"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5 fw-semibold">
-                <span class="body-02"> Abstain</span>
+              <div class="col col-lg-5">
+                <span class="body-03"> Abstain</span>
               </div>
               <div class="col col-lg-3 h5 mb-0 text--white">
                 {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
@@ -322,7 +309,7 @@
         </div>
       </div>
       <ng-container *ngIf="proposalDetail.pro_status == 'PROPOSAL_STATUS_VOTING_PERIOD'">
-        <div class="row proposal__summary-total pb-6">
+        <div class="row proposal__summary-total pb-3">
           <div class="col-12 col-lg-6 pr-lg-8 border-right" [class.border-right]="!breakpoint.value.matches">
             <app-current-turnout
               [proposalDetail]="proposalDetail"
@@ -336,6 +323,23 @@
               [currentSubTitle]="currentSubTitle"
               [currentStatus]="getCurrentStatus(currentStatus)">
             </app-current-status>
+          </div>
+          <div *ngIf="breakpoint.value.matches" class="divider divider-horizontal mt-4 mt-lg-5"></div>
+          <div class="mt-3">
+            <button
+              *ngIf="breakpoint.value.matches"
+              [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+              (click)="openVoteDialog(proposalDetail)"
+              class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0">
+              <span>
+                {{
+                  proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                  proposalDetail.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    ? 'Voting Ended'
+                    : 'Vote'
+                }}
+              </span>
+            </button>
           </div>
         </div>
       </ng-container>

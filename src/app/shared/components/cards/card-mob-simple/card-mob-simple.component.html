@@ -14,7 +14,7 @@
         </div>
         <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
             <div class="avt">
-                <img [src]="(validatorData.imgUrl ? validatorData.imgUrl : img_df)" alt="">
+                <app-loading-image [srcImg]="getValidatorAvatar(validatorData.validatorAddress)"> </app-loading-image>
                 <span class="avt__num">{{validatorData.validatorNumber}}</span>
             </div>
             <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{validatorData.validatorName}}</a>
@@ -42,7 +42,7 @@
         </div>
         <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
             <div class="avt">
-                <img [src]="(validatorData.imgUrl ? validatorData.imgUrl : img_df)" alt="">
+                <app-loading-image [srcImg]="getValidatorAvatar(validatorData.validatorAddress)"> </app-loading-image>
                 <span class="avt__num">{{validatorData.validatorNumber}}</span>
             </div>
             <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{validatorData.validatorName}}</a>

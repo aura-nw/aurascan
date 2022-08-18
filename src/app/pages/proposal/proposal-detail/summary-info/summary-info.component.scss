@@ -9,23 +9,40 @@
   overflow-y: scroll;
   background: rgba(19, 20, 25, 0.5);
   border-radius: 8px;
+
   ::ng-deep {
     & * {
       color: var(--aura-gray-3) !important;
       margin-top: var(--spacer-1);
     }
-    h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5,h6,.h6 {
+
+    h1,
+    .h1,
+    h2,
+    .h2,
+    h3,
+    .h3,
+    h4,
+    .h4,
+    h5,
+    .h5,
+    h6,
+    .h6 {
       color: var(--aura-gray-1) !important;
       margin-top: var(--spacer-3);
     }
-    h1,.h1 {
+
+    h1,
+    .h1 {
       margin-top: 0;
     }
+
     a {
       color: var(--aura-primary) !important;
     }
   }
 }
+
 ::ng-deep.proposal__summary-total {
   color: var(--aura-white);
 
@@ -73,6 +90,7 @@
       top: 0;
       bottom: 0;
       transform: translate(-50%, -130%);
+
       &:before {
         content: '';
         position: absolute;
@@ -84,6 +102,7 @@
         background-color: var(--aura-white);
         border-radius: 2px;
       }
+
       &:after {
         content: '';
         position: absolute;
@@ -206,10 +225,12 @@
   .vote {
     width: 8px;
     height: 8px;
+
     @media (min-width: 992px) {
       width: 16px;
       height: 16px;
     }
+
     display: inline-block;
     margin-right: 8px;
 
@@ -252,9 +273,11 @@
     min-height: 48px;
   }
 }
+
 .border-right {
   border-right: 1px solid var(--aura-gray-9);
 }
+
 .g-ellipsis__type {
   @media (max-width: 991.99px) {
     width: 200px;
@@ -264,6 +287,7 @@
     text-overflow: ellipsis;
   }
 }
+
 .v-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
