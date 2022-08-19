@@ -59,12 +59,11 @@ export class TokenHoldersTabComponent implements OnInit {
     if (this.isNFTContract) {
       this.tokenType = ContractRegisterType.CW721;
       this.getQuantity();
+    } else {
+      this.getListTokenHolder(this.tokenType);
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
-    setTimeout(() => {
-      this.getListTokenHolder(this.tokenType);
-    }, 2000);
   }
 
   getListTokenHolder(tokenType: string) {
@@ -127,6 +126,7 @@ export class TokenHoldersTabComponent implements OnInit {
     try {
       const config = await client.queryContractSmart(this.contractAddress, queryData);
       this.totalQuantity = config?.count || 0;
+      this.getListTokenHolder(this.tokenType);
     } catch (error) {}
   }
 }
