@@ -1,16 +1,16 @@
 <div class="box-contract text-white">
   <ng-container *ngIf="tokenDetail.contract_verification === contractVerifyType.Unverifed">
-    <div class="d-flex fw-normal content-contract">
+    <div class="d-flex fw-normal content-contract body-02">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
         width="16"
         height="16"
-        class="mr-2 mt-1" />
+        class="mr-2" />
       <div>
         Are you the contract creator?
         <a
-          class="text--green fw-semibold ml-1 mr-1 cursor-pointer"
+          class="text--primary"
           [routerLink]="['/contracts/verify', contractAddress, tokenDetail.tx_hash]">
           Verify and Publish
         </a>
