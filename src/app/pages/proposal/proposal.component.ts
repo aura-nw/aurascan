@@ -1,18 +1,18 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe, ViewportScroller } from '@angular/common';
+import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from '../../../app/global/global';
-import { DATEFORMAT } from '../../core/constants/common.constant';
 import {
   MESSAGE_WARNING,
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
   VOTE_OPTION,
-  VOTING_STATUS,
+  VOTING_STATUS
 } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -45,6 +45,7 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  proposalData: any[];
   length: number;
   pageIndex = 0;
   lastedList: IProposal[] = [];
@@ -65,13 +66,13 @@ export class ProposalComponent implements OnInit {
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    private datePipe: DatePipe,
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -88,13 +89,11 @@ export class ProposalComponent implements OnInit {
     const addr = this.walletService.wallet?.bech32Address || null;
     this.proposalService.getProposalList(addr).subscribe((res) => {
       if (res?.data) {
+        this.proposalData = res.data;
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
         this.lastedList = [...res.data];
         this.lastedList.forEach((pro, index) => {
-          pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-          pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-          pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
           if (
@@ -250,7 +249,6 @@ export class ProposalComponent implements OnInit {
       }
       const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
       let totalVote = +yes + +no + +no_with_veto + +abstain;
-
       this.lastedList[index].pro_votes_yes = (+yes * 100) / totalVote;
       this.lastedList[index].pro_votes_no = (+no * 100) / totalVote;
       this.lastedList[index].pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;

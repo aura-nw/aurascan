@@ -1,37 +1,16 @@
-.tab-title {
-    font-size: 20px;
-    white-space: nowrap;
-}
-
-.tab-title-mobile {
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.card__title {
-    font-size: 2.4rem;
-    line-height: 3.2rem;
-    font-weight: 500;
-    color: var(--aura-white);
-
-    margin-bottom: 32px;
-}
-
 .mobile-tab {
     overflow: hidden;
     overflow-x: auto;
+    &.nav-tabs-custom .nav-item {
+        min-width: 180px;
+    }
 }
 
-.card__title-mobile {
-    font-size: 2rem;
-    line-height: 2.3rem;
-    margin-bottom: 16px;
-}
-
-:host::ng-deep {
-    app-proposal-table {
-        table th {
-            width: 20%;
-        }
+:host::ng-deep app-proposal-table {
+    table.aura-table th:first-child {
+        width: 8%;
+    }
+    table.aura-table th:not(:first-child) {
+        width: 23%;
     }
 }

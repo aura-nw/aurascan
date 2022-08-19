@@ -1,17 +1,22 @@
 mat-expansion-panel {
-  border: 1px solid var(--aura-light-gray);
+  border: 1px solid var(--aura-gray-9);
   margin-bottom: var(--spacer-5);
 
   mat-expansion-panel-header {
-    background-color: var(--aura-dark-gray);
-    border-color: var(--aura-light-gray);
+    height: 40px;
+    background-color: var(--aura-gray-9);
+    border-color: var(--aura-gray-9);
     padding: 10px var(--spacer-4);
+    &:hover, &:focus {
+      background-color: var(--aura-gray-9);
+    }
 
     &::after {
       font-family: 'Font Awesome 5 Free';
       font-weight: 700;
       content: '\f077';
       color: var(--aura-white);
+      font-size: 12px;
     }
 
     &[aria-expanded='true']::after {
@@ -19,13 +24,13 @@ mat-expansion-panel {
     }
 
     &[aria-expanded='true'] {
-      border-bottom: 1px solid var(--aura-light-gray);
+      border-bottom: 1px solid var(--aura-gray-9);
     }
   }
 
   ::ng-deep .mat-expansion-panel-body {
-    background-color: #20262b;
-    padding: var(--spacer-3) var(--spacer-4);
+    background-color: var(--aura-gray-10);
+    padding: var(--spacer-4);
   }
 
   .txt-response {
@@ -41,14 +46,16 @@ mat-expansion-panel {
     height: 48px;
   }
 }
-
-.error-null {
-  border: 2px solid red !important;
-}
-
-@media (max-width: 414px) {
-  .btn-contract {
-    height: 34px;
-    padding: 0 var(--spacer-5);
+.overflow-scroll-x {
+  overflow-x: scroll;
+  ::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
   }
+}
+.contract__title {
+  min-height: 32px;
+}
+.divider.divider-vertical {
+  height: 10px;
 }

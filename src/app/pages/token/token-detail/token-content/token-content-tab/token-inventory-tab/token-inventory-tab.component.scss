@@ -55,7 +55,8 @@
     border-radius: var(--spacer-1);
   }
 }
-
-.hover-link:hover {
-  opacity: 0.8;
+.nft__info {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

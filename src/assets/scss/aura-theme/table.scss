@@ -9,29 +9,25 @@
 }
 .aura-table {
   background: transparent;
-  mat-footer-row, mat-header-row, mat-row, td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
-    border-bottom-color: var(--aura-dark-gray);
+  tr.mat-header-row {
+    height: 32px;
+    text-transform: uppercase;
   }
-  .mat-row:last-child {
-    td.mat-cell {
-      border-bottom: none;
-    }
+  tr.mat-row, tr.mat-footer-row {
+    height: 56px;
   }
   th.mat-header-cell {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     line-height: 1.6rem;
     font-weight: 600;
-    color: var(--aura-white);
-    &.has-border-top {
-      border-top-width: 1px;
-      border-top-style: solid;
-      border-top-color: var(--aura-dark-gray);
-    }
+    color: var(--aura-gray-5);
+    background-color: var(--aura-gray-9);
   }
   .mat-cell, .mat-footer-cell {
     font-size: 1.4rem;
-    line-height: 1.6rem;
-    color: var(--aura-greyscale-1);
+    line-height: 1.8rem;
+    font-weight: 500;
+    color: var(--aura-gray-1);
   }
   th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     padding-left: 16px;
@@ -40,15 +36,15 @@
     padding-right: 8px;
   }
   td a {
-    color: var(--aura-green);
+    color: var(--aura-primary);
 
     &.disabled-link {
       pointer-events: none;
       color: var(--aura-white);
   }
   }
-  button.button.button-outline {
-    padding: var(--spacer-2) var(--spacer-6);
+  mat-row, mat-header-row, mat-footer-row, th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    border-bottom-color: var(--aura-gray-9);
   }
 }
 
@@ -56,8 +52,8 @@
   tr {
     td {
     padding: var(--spacer-4);
-    color: var(--aura-greyscale-1);
-    border-bottom: 1px solid var(--aura-dark-gray);
+    color: var(--aura-gray-5);
+    border-bottom: 1px solid var(--aura-gray-9);
     }
     &:last-child td {
       border-bottom: none;

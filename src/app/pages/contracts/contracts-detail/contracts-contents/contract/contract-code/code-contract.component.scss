@@ -1,36 +1,43 @@
 .code-contract {
+  pre.content-info {
+    min-height: 124px;
+    align-items: start;
+    @media (max-width: 991.98px) {
+      &::-webkit-scrollbar {
+        height: 4px;
+        width: 4px;
+      }
+    }
+  }
   .content-info {
-    background: var(--aura-dark-gray);
-    padding: var(--spacer-2) var(--spacer-4);
+    background: var(--aura-gray-9);
+    padding: 0 var(--spacer-4);
+    min-height: 34px;
+    @media (min-width: 992px) {
+      min-height: 32px;
+    }
     border-radius: 8px;
-    color: var(--aura-contract);
+    color: var(--aura-gray-1);
     max-height: 203px;
     transition: all 0.5s ease-in-out;
     white-space: pre-wrap;
-
-    &.link-url {
-      padding: var(--spacer-3) var(--spacer-4);
-    }
-
+    display: flex;
+    align-items: center;
     &.show {
       max-height: 9999px;
       height: auto;
     }
-  }
-  .icon-contract {
-    width: 24px;
-    height: 24px;
-    @media (max-width: 414px) {
-      width: 20px;
-      height: 20px;
+    &-ellipsis {
+      display: inline;
+      padding: 7px 16px;
     }
   }
 
   li.dropdown-item {
-    padding: var(--spacer-2) var(--spacer-6);
+    padding: var(--spacer-2) var(--spacer-4);
 
     button {
-      color: var(--aura-contract);
+      color: var(--aura-gray-1);
     }
 
     &:first-child {
@@ -53,12 +60,8 @@
   .aura-basic-table {
     tr,
     td {
-      color: var(--aura-contract);
+      color: var(--aura-gray-1);
     }
-  }
-
-  .btn-copy {
-    padding: var(--spacer-2) var(--spacer-4);
   }
 }
 
@@ -95,8 +98,7 @@
       }
     }
   }
-  .button-export {
-    height: 30px;
-    padding: 0 var(--spacer-4);
-  }
+}
+.aura-dropdown .dropdown-menu.aura-dropdown-menu li.dropdown-item:hover {
+  background-color: var(--aura-gray-10);
 }

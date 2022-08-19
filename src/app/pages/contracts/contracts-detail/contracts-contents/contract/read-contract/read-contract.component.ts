@@ -56,6 +56,7 @@ export class ReadContractComponent implements OnInit {
     this.expandMenu(true);
     this.dataResponse = null;
     this.errorInput = false;
+    this.isExpand = false;
   }
 
   querySmartContract(name: string, currentFrom: number) {

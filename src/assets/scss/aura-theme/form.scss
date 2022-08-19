@@ -4,19 +4,15 @@
   }
   &.single-input-field {
     .input-group {
-      border: 2px solid var(--aura-dark-gray);
-      border-radius: 90px;
-      padding: var(--spacer-3) 22px var(--spacer-3) var(--spacer-6);
+      border: 1px solid var(--aura-gray-9);
+      border-radius: 32px;
       justify-content: space-between;
       align-items: center;
-      height: 50px;
+      height: 40px;
+      padding: 0 var(--spacer-6);
       &.small-input {
-        height: 36px;
-        padding: var(--spacer-1) 22px var(--spacer-1) var(--spacer-5);
-        input {
-          font-size: 14px;
-          font-weight: 400;
-        }
+        height: 32px;
+        padding: 0 var(--spacer-2);
       }
       input {
         max-width: 80%;
@@ -24,15 +20,15 @@
         padding-left: var(--spacer-1);
         border: none;
         background-color: transparent;
-        color: var(--aura-white);
-        font-size: 16px;
-        line-height: 24px;
-        font-family: SFProDisplay;
+        color: var(--aura-gray-1);
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 400;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         &::placeholder {
-          color: var(--aura-light-gray) !important;
+          color: var(--aura-gray-5) !important;
         }
         &:placeholder-shown {
           max-width: 100%;
@@ -57,13 +53,13 @@
   }
   .select-input-field {
     height: 50px;
-    border: 2px solid var(--aura-neutrals-3);
+    border: 2px solid var(--aura-gray-9);
     border-radius: 90px;
     padding: 12px 22px 14px 24px;
     color: var(--aura-white);
     font-size: 16px;
     line-height: 24px;
-    font-family: SFProDisplay;
+    font-family: SFPro;
     .mat-select-arrow-wrapper .mat-select-arrow {
       border: none;
       width: 24px;
@@ -87,8 +83,8 @@
   .input-group {
     display: flex;
     width: 100%;
-    height: 100%;
-    border: 2px solid var(--aura-neutrals-3);
+    height: 48px;
+    border: 2px solid var(--aura-gray-9);
     border-radius: 16px;
     padding: 0 var(--spacer-4);
     background: var(--aura-bg-form);
@@ -100,8 +96,8 @@
       flex-shrink: 0;
       flex-grow: 1;
       padding: 0;
-      font-size: 2rem;
-      line-height: 2.4rem;
+      font-size: 1.6rem;
+      line-height: 2rem;
       background: transparent;
       outline: none;
       border: none;
@@ -124,7 +120,6 @@
       display: flex;
       align-items: center;
       background: transparent;
-      padding: var(--spacer-4) 0;
       padding-left: var(--spacer-4);
       font-size: 1.4rem;
       line-height: 1.6rem;
@@ -135,7 +130,7 @@
         line-height: 2rem;
       }
       color: var(--aura-white);
-      border-left: 2px solid var(--aura-neutrals-3);
+      border-left: 2px solid var(--aura-gray-9);
       @media (min-width: 992px) {
         padding-left: var(--spacer-6);
       }
@@ -154,7 +149,7 @@
     }
     input.form-control, .select-input--flat {
       border-radius: var(--spacer-2);
-      background-color: var(--aura-dark-gray);
+      background-color: var(--aura-gray-10);
       padding: var(--spacer-2) var(--spacer-4);
       color: #E6E7E8;
       font-size: 1.4rem;
@@ -164,18 +159,18 @@
       overflow: hidden;
       text-overflow: ellipsis;
       &::placeholder {
-        color: var(--aura-light-gray);
+        color: var(--aura-gray-6);
       }
     }
     input.form-control:disabled {
       pointer-events: none;
     }
     .error {
-      color: var(--aura-danger);
-      font-size: 1.4rem;
-      line-height: 2.1rem;
+      color: var(--aura-red-3);
+      font-size: 1.2rem;
+      line-height: 1.6rem;
       font-weight: 400;
-      margin-top: var(--spacer-2);
+      margin-top: var(--spacer-1);
     }
   }
 }
@@ -226,7 +221,8 @@
     border-radius: 25px;
     background-color: var(--aura-bg-form);
     padding: 0;
-    border: none;
+    border: 1px solid var(--aura-gray-10);
+    overflow: hidden;
     box-shadow: none;
     transform: unset !important;
     li.dropdown-item {
@@ -236,12 +232,12 @@
       @media (min-width: 992px) {
         padding: var(--spacer-3) var(--spacer-6);
       }
-      background-color: var(--aura-bg-form) !important;
+      background-color: var(--aura-bg-form);
       & > * {
         color: var(--aura-white);
       }
       &:hover {
-        background-color: var(--aura-dark-gray) !important;
+        background-color: var(--aura-gray-9);
       }
       &:first-child {
         border-top-left-radius: 25px;
@@ -261,3 +257,8 @@
   content: " *";
   color: var(--aura-danger);
 }
+
+.error-null {
+  border: 2px solid var(--aura-red-3) !important;
+}
+

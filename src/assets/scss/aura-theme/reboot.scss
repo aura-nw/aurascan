@@ -12,7 +12,7 @@
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #FFF;
-  background-image: var(--aura-gradient-simple)
+  background-image: var(--aura-gradient-general)
 }
 h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
   margin-bottom: 0;
@@ -44,7 +44,7 @@ a {
     height: 4px;
   }
   .ng-bar {
-    background: var(--aura-gradient-simple) !important;
+    background: var(--aura-gradient-general) !important;
   }
 }
 // @media (min-width: 1400px) {
@@ -72,23 +72,29 @@ a {
 }
 
 .label__status {
-  background: rgba(94, 230, 208, 0.2);
+  background: var(--aura-gray-8);
+  color: var(--aura-gray-light);
   border-radius: 4px;
-  padding: 8px 16px;
+  height: 32px;
+  padding: 8px 16px 0;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
-  @media (max-width: 414px) {
-    padding: 8px 12px;
+  @media (min-width: 992px) {
+    background: var(--aura-gray-9);
+    padding: 8px 16px;
   }
   @media (max-width: 375px) {
     max-width: 100px; 
   }
-  justify-content: center;
-  align-items: center;
-  color: var(--aura-green);
-  text-align: center;
+  display: inline;
 }
 app-paginator {
   overflow: hidden;
+}
+.hover-link, a.text--primary {
+  transition: all .35s ease-in-out;
+  &:hover {
+    color: var(--aura-green-3) !important;
+  }
 }

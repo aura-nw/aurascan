@@ -7,6 +7,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-token-content',
@@ -34,12 +35,14 @@ export class TokenContentComponent implements OnInit {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private route: ActivatedRoute,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public global: Globals,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
@@ -132,7 +135,9 @@ export class TokenContentComponent implements OnInit {
 
     this.tokenService.getBalanceAddress(payload, type).subscribe((res) => {
       this.infoSearch = res.data;
-      this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ? res.meta.count : res.data[0].balance;
+      if(res.data && res.data.length > 0) {
+        this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ? res.meta.count : res.data[0].balance;
+      }
     });
   }
 }

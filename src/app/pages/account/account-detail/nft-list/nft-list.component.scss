@@ -1,7 +1,6 @@
 .aura-form.single-input-field {
   .input-group {
-    height: 36px;
-    padding: 0 16px;
+    padding: 0 var(--spacer-6);
     input {
       font-size: 1.4rem;
       line-height: 1.9rem;
@@ -61,13 +60,9 @@
     padding: 0 var(--spacer-2);
     border-radius: var(--spacer-1);
   }
-  .token-id {
+  .nft__info {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-}
-
-.hover-link:hover {
-  opacity: 0.8;
 }

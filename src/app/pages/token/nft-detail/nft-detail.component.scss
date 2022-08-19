@@ -18,10 +18,10 @@
   @media (min-width: 1200px) {
     padding: var(--spacer-3);
   }
-  border: 1px solid var(--aura-dark-gray);
+  border: 1px solid var(--aura-gray-9);
   border-radius: 16px;
   img {
-    width: 108px;
+    width: 136px;
     height: auto;
     @media (min-width: 1200px) {
       width: 100%;
@@ -36,16 +36,11 @@
     display: flex;
     padding: var(--spacer-4);
     margin: 0;
-    border-top: 1px solid var(--aura-dark-gray);
-    font-size: 1.4rem;
-    line-height: 2.1rem;
-    font-weight: 400;
+    border-top: 1px solid var(--aura-gray-9);
     &:first-child {
-      font-weight: 600;
       border-top: none;
     }
     .label-detail {
-      color: var(--aura-greyscale-1);
       min-width: 160px;
     }
     .g-ellipsis {
@@ -77,4 +72,21 @@
   .aura-table th.mat-header-cell:nth-child(5) {
     min-width: 300px;
   }
+}
+.title--mob {
+  max-width: 60%;
+}
+.btn-copy {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  @media(min-width: 992px) {
+    width: 16px;
+    height: 16px;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--aura-gray-9);
 }

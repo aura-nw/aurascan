@@ -12,11 +12,3 @@
     font-weight: 500;
     margin-bottom: 16px;
 }
-
-:host::ng-deep {
-    app-proposal-table {
-        table th {
-            width: 25%;
-        }
-    }
-}

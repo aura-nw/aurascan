@@ -1,13 +1,11 @@
 <div class="card box-token-info">
-  <div class="">
-    <div class="">
-      <table class="aura-basic-table w-100">
+  <table class="aura-basic-table w-100 body-02">
         <tr>
           <td colspan="2">
             <div class="d-flex justify-content-between align-items-center">
-              <div class="body">
-                <span class="fw-semibold text--white">Profile Summary </span>
-                <!-- <a class="text--green" href="javascript:void(0)">[Edit]</a> -->
+              <div class="h6 h3-mob mb-0">
+                <span class="text--white">Profile Summary </span>
+                <!-- <a class="text--primary" href="javascript:void(0)">[Edit]</a> -->
               </div>
               <div class="dropdown aura-dropdown">
                 <!-- <button
@@ -44,45 +42,41 @@
             </div>
           </td>
         </tr>
-
         <tr>
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
-              <div class="first-col">Contract:</div>
+              <div class="first-col text--gray-5">Contract:</div>
               <div class="break-word">
-                <a class="text--green" [routerLink]="['/contracts', tokenDetail.contract_address]">{{
+                <a class="text--primary" [routerLink]="['/contracts', tokenDetail.contract_address]">{{
                   tokenDetail.contract_address
                 }}</a>
               </div>
             </div>
           </td>
         </tr>
-
         <tr *ngIf="!tokenDetail.isNFTContract">
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
-              <div class="first-col">Decimals:</div>
-              <div>{{ tokenDetail.decimals }}</div>
+              <div class="first-col text--gray-5">Decimals:</div>
+              <div class="text--white">{{ tokenDetail.decimals }}</div>
             </div>
           </td>
         </tr>
-
         <tr>
           <td colspan="2">
             <div class="d-flex align-items-center py-2">
-              <div class="first-col">Official Site:</div>
+              <div class="first-col text--gray-5">Official Site:</div>
               <div>
                 -
-                <!-- <a class="text--green" href="javascript:void(0)"></a> -->
+                <!-- <a class="text--primary" href="javascript:void(0)"></a> -->
               </div>
             </div>
           </td>
         </tr>
-
         <tr>
           <td colspan="2" class="border_none">
             <div class="d-flex align-items-center py-2">
-              <div class="first-col">Social Profiles:</div>
+              <div class="first-col text--gray-5">Social Profiles:</div>
               <div class="d-flex social-group">
                 -
                 <!-- <a
@@ -119,11 +113,8 @@
             </div>
           </td>
         </tr>
-
         <tr *ngIf="tokenDetail.isNFTContract">
           <td colspan="2"></td>
         </tr>
       </table>
-    </div>
-  </div>
 </div>

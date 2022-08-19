@@ -14,16 +14,8 @@ import { WSService } from 'src/app/core/services/ws.service';
   styleUrls: ['./contracts-verify.component.scss'],
 })
 export class ContractsVerifyComponent implements OnInit, OnDestroy {
-  tabCurrent = 0;
   contractAddress = '';
   contractTxHash = '';
-
-  TAB = [
-    {
-      id: 0,
-      value: 'Contract Source Code',
-    },
-  ];
 
   versionList = CONTRACT_VERSIONS;
 
@@ -79,10 +71,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         updateOn: 'submit',
       },
     );
-  }
-
-  changeTab(tabId): void {
-    this.tabCurrent = tabId;
   }
 
   onSubmit() {

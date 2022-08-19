@@ -77,7 +77,7 @@
     </form>
   </div>
 </header>
-<div class="topnav">
+<div class="topnav d-none d-lg-block">
   <div class="container-fluid">
     <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
       <div class="collapse navbar-collapse active" id="topnav-menu-content">
@@ -95,7 +95,7 @@
                 [class.active]="router.url === '/' && item.link === '/dashboard'"
                 role="button">
                 <i class="icon icon-{{ item.icon }}"></i>
-                <span class="ml-2 fw-500">{{ item.label | translate }}</span>
+                                <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
               </a>
               <a
                 *ngIf="item.subItems"
@@ -108,7 +108,7 @@
                 id="topnav-components"
                 role="button">
                 <i class="icon icon-{{ item.icon }}"></i>
-                <span class="ml-2 fw-500">{{ item.label | translate }}</span>
+                                <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
                 <span class="nav-link__panel">
                   <a
                     [routerLink]="subMenu.link"

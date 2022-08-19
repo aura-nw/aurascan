@@ -3,13 +3,13 @@
     min-height: 224px;
     tr,
     td {
-      color: var(--aura-contract);
+      color: var(--aura-gray-1);
       height: 56px;
       padding: 0px var(--spacer-4);
     }
 
     tr:first-child td:first-child {
-      width: 30%;
+      width: 40%;
       color: var(--aura-white);
     }
   }

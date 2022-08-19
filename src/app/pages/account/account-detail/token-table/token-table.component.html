@@ -1,24 +1,19 @@
 <div *ngIf="assetsLoading" class="mt-14">
   <app-loading-sprint></app-loading-sprint>
 </div>
-
 <section *ngIf="!assetsLoading">
-  <div class="sub-text fw-semibold">Coins & Tokens ({{ assetCW20?.length || 0 }})</div>
-  <div class="mt-4">
-    <div class="card mt-5">
+  <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ assetCW20?.length || 0 }})</h2>
+  <div>
+      <div class="card">
       <div class="card-body">
         <!-- Title -->
-        <div class="d-lg-flex justify-content-between">
-          <div>
-            <div class="mb-4 mb-lg-0 d-flex justify-content-between d-lg-block">
-              <div class="sub-text text-gradient fw-semibold">
-                $ {{ total || 0 | number: global.formatNumber2Decimal }}
-              </div>
-            </div>
+        <div class="d-lg-flex justify-content-between align-items-center">
+          <div class="h1 mb-0 text-gradient">
+            $ {{ total || 0 | number: global.formatNumber2Decimal }}
           </div>
           <div class="position-relative">
-            <form class="aura-form single-input-field search-form account-search-form mt-2 mt-lg-0" #searchForm>
-              <div class="input-group small-input">
+            <form class="aura-form single-input-field search-form account-search-form mt-4 mt-lg-0" #searchForm>
+                <div class="input-group">
                 <input
                   type="text"
                   class="form-control"
@@ -91,7 +86,7 @@
                     [routerLink]="['/contracts', element.contract_address]"
                     *ngIf="element.contract_address">
                     <img [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3" width="24px" height="24px" />
-                    <div class="ml-2 text--green">
+                    <div class="ml-2 text--primary">
                       {{ element.contract_address | cutStringPipe: 8:8 }}
                     </div>
                   </a>
@@ -161,13 +156,13 @@
                 </td>
               </tr>
             </table>
-            <app-paginator
-              [length]="pageData.length"
-              [pageSize]="pageData.pageSize"
-              (paginator)="paginatorEmit($event)"
-              (pageEvent)="handlePageEvent($event)">
-            </app-paginator>
           </div>
+          <app-paginator
+                  [length]="pageData.length"
+                  [pageSize]="pageData.pageSize"
+                  (paginator)="paginatorEmit($event)"
+                  (pageEvent)="handlePageEvent($event)">
+          </app-paginator>
         </ng-container>
         <ng-template #noValues>
           <div class="card">

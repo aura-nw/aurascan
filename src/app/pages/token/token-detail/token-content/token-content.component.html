@@ -1,46 +1,42 @@
 <ng-container *ngIf="textSearch && textSearch?.length > 0">
   <section class="text--white">
-    <div *ngIf="isSearchTx" class="p-4 card main-tab">
-      <p class="small-text d-flex align-item-center">
-        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="15" height="15" />
+    <div *ngIf="isSearchTx" class="px-4 py-4 py-lg-3 card border_none">
+      <p class="caption d-flex align-item-center mb-1 mb-lg-0">
+        <img [src]="'assets/images/icons/token-tx.png' | imageS3" class="mr-2" alt="" width="18px" height="18px" />
         FILTER BY TOKEN TXN HASH
       </p>
-      <a class="text--green" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
+      <a class="text--primary body-02" [routerLink]="['/transaction', textSearch]">{{ textSearch }}</a>
     </div>
-    <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab p-3">
-      <div class="table-responsive">
-        <table class="aura-basic-table w-100">
-          <tr>
-            <td>
-              <div class="small-text d-flex align-item-center mb-1">
-                <img
-                  [src]="'assets/images/icons/token-holder.png' | imageS3"
-                  class="mr-2"
-                  alt=""
-                  width="15"
-                  height="15" />
-                FILTER BY TOKEN HOLDER
-              </div>
-              <a class="text--green" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
-            </td>
-            <td>
-              <div class="small-text txt-light mb-1">BALANCE</div>
-              <span *ngIf="!tokenDetail?.isNFTContract"
-                >{{ infoSearch?.balance || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}</span
-              >
-              <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch?.balance || 0 }}</span>
-            </td>
-            <td *ngIf="!tokenDetail?.isNFTContract">
-              <div class="small-text txt-light mb-1">VALUE</div>
-              - ( - {{ denom }})
-            </td>
-          </tr>
-        </table>
+    <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab py-3 py-lg-4 px-4">
+      <div class="row">
+        <div class="col-12 col-lg-5">
+          <div class="caption d-flex align-item-center mb-1 mb-lg-0">
+            <img
+                    [src]="'assets/images/icons/token-holder.png' | imageS3"
+                    class="mr-2"
+                    alt=""
+                    width="18px"
+                    height="18px" />
+            FILTER BY TOKEN HOLDER
+          </div>
+          <a class="body-02 text--primary" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
+        </div>
+        <div class="col-12 col-lg-4 px-lg-4 border-x text--gray-1">
+          <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
+          <span *ngIf="!tokenDetail?.isNFTContract">
+                {{ infoSearch?.balance || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
+              </span>
+          <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch?.balance || 0 }}</span>
+        </div>
+        <div class="col-12 col-lg-3 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
+          <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
+          - ( - {{ denom }})
+        </div>
       </div>
     </div>
   </section>
 </ng-container>
-<section class="card main-tab mt-2 p-4">
+<section class="card mt-2 p-4" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-lg-flex justify-content-between align-items-end tab-wrapper tab-token">
     <ul
       ngbNav
@@ -50,8 +46,8 @@
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)" class="verify-contract">
-            <span class="tab-title mr-2">{{ tab.value }}</span>
-            <img
+            <span class="text-uppercase">{{ tab.value }}</span>
+            <img class="ml-2"
               *ngIf="tab.key === tokenTab.Contract && tokenDetail.contract_verification !== contractVerifyType.Unverifed"
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
@@ -61,9 +57,10 @@
         </li>
       </ng-container>
     </ul>
-    <div class="d-lg-flex align-item-center justify-content-end">
-      <form class="aura-form single-input-field search-form">
-        <div class="input-group small-input">
+    <div class="d-lg-flex align-item-center justify-content-end mb-3 mb-lg-0">
+      <form class="aura-form single-input-field search-form"
+            *ngIf="!breakpoint.value.matches || (breakpoint.value.matches && (countCurrent === '' || countCurrent === tokenTab.Holders))">
+        <div class="input-group">
           <input
             type="text"
             class="form-control aura-form"
@@ -89,7 +86,7 @@
       </form>
     </div>
   </div>
-  <div class="mt-4 mt-lg-3">
+  <div class="mt-lg-3">
     <app-token-transfers-tab
       *ngIf="countCurrent === ''"
       [isNFTContract]="tokenDetail?.isNFTContract"

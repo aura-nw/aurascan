@@ -1,16 +1,13 @@
-.button {
-  &-primary {
-    padding: var(--spacer-2) var(--spacer-3);
-    @media (min-width: 992px) {
-      padding: 8px 20px;
-    }
-  }
+.button.button-flat--inactive {
+  border: none;
+  background: var(--aura-gray-9);
+  color: var(--aura-gray-5);
 }
 
 .box-dashboard {
   min-height: 200px;
   @media (min-width: 992px) {
-    min-height: 320px;
+    min-height: 305px;
   }
 }
 
@@ -29,53 +26,51 @@
     width: 33% !important;
   }
   .label__status {
-    display: inline-block;
     max-width: 165px;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
   }
 }
 
 .card-highlight {
-  .card-highlight__label {
-    font-weight: 500;
-    @media (min-width: 992px) {
-      font-weight: 400;
-    }
-  }
   .card-highlight__content {
-    font-weight: 500;
+    @media (min-width: 992px) {
+      font-weight: 700 !important;
+      line-height: 2.8rem !important;
+    }
   }
 }
 
 :host::ng-deep {
   apx-chart {
     .apexcharts-text tspan {
+      color: var(--aura-gray-5);
       font-size: 1.2rem;
       line-height: 1.6rem;
       @media (min-width: 992px) {
-        font-size: 1.6rem;
-        line-height: 2.4rem;
+        font-size: 1.4rem;
+        line-height: 1.6rem;
       }
     }
     .apexcharts-toolbar {
+      padding: 0;
       top: -15px !important;
       @media (max-width: 992px) {
-        top: -33px !important;
+        top: -25px !important;
       }
       .apexcharts-zoomin-icon,
       .apexcharts-zoomout-icon,
       .apexcharts-menu-icon {
         display: flex;
         align-items: center;
-        margin-right: 12px;
         width: auto;
         height: auto;
+        &:not(:nth-last-child(2)) {
+          margin-right: 12px;
+        }
       }
       i.icon {
         font-size: 2.86rem;
         transition: color 0.35s ease-in-out;
+        color: var(--aura-gray-5);
         &:hover {
           color: var(--aura-green);
         }

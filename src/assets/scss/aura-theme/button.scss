@@ -1,81 +1,232 @@
 .button {
-    display: inline-block;
-    padding: var(--spacer-3) var(--spacer-6) calc(var(--spacer-half) + var(--spacer-3)) var(--spacer-6);
-    letter-spacing: 0.02em;
-    font-family: SFProDisplay;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
     outline: none;
     background-color: transparent;
     cursor: pointer;
-    //&.button-outline {
-    //    -webkit-background-clip: text;
-    //    -webkit-text-fill-color: transparent;
-    //    color: transparent;
-    //    border: none;
-    //    border-radius: 90px;
-    //    display: flex;
-    //    align-items: center;
-    //    justify-content: center;
-    //    position: relative;
-    //    z-index: 0;
-    //    text-decoration: none;
-    //}
-    &.button-inline {
-        border: none;
-        color: var(--aura-white);
+
+    &--lg {
+      height: 48px;
+      padding: 0 24px;
     }
-    &.button-primary {
-        background: var(--aura-dark-gray);
-        color: var(--aura-neutrals-4);
-        border-radius: 100px;
-        &:hover,
-        &.active {
-            background: var(--aura-gradient-simple);
-            color: var(--aura-neutrals-2);
-        }
+    &--md {
+      height: 40px;
+      padding: 0 24px;
     }
-    &.button-secondary {
-        background: var(--aura-light-gray);
-        color: var(--aura-white);
-        border-radius: 100px;
+    &--sm {
+      height: 32px;
+      padding: 0 20px;
     }
-    &.button-fixed {
-        @media (max-width: 991.99px) {
-            width: 100%;
-        }
+    &--xs {
+      height: 28px;
+      padding: 0 16px;
+    }
+    &--xxs {
+      height: 24px;
+      padding: 0 12px;
+    }
+    &--lg, &--md {
+      font-size: 1.6rem;
+      line-height: 2.4rem;
+    }
+    &--sm {
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+    }
+    &--xs, &--xxs {
+      font-size: 1.2rem;
+      line-height: 1.6rem;
+    }
+    @media (max-width: 991.98px) {
+      &--lg-mob {
+        height: 48px;
+        padding: 0 24px;
+      }
+      &--md-mob {
+        height: 40px;
+        padding: 0 24px;
+      }
+      &--sm-mob {
+        height: 32px;
+        padding: 0 20px;
+      }
+      &--xs-mob {
+        height: 28px;
+        padding: 0 16px;
+      }
+      &--xxs-mob {
+        height: 24px;
+        padding: 0 12px;
+      }
+      &--lg-mob, &--md-mob {
+        font-size: 1.6rem;
+        line-height: 2.4rem;
+      }
+      &--sm-mob {
+        font-size: 1.4rem;
+        line-height: 1.6rem;
+      }
+      &--xs-mob, &--xxs-mob {
+        font-size: 1.2rem;
+        line-height: 1.6rem;
+      }
     }
 
-    &:disabled {
-      cursor: default;
-      opacity: 0.4;
+    &.button-pill {
+      border-radius: 24px;
+    }
+
+    &.button-flat {
+      border: 1px solid var(--aura-black);
+      background: var(--aura-gradient-general);
+      transition: border-color .35s ease-in-out;
+      span {
+        color: var(--aura-black);
+      }
+      &:hover {
+        border: 1px solid transparent;
+      }
+      &:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+      }
+    }
+
+    &.button-outline {
+      border: 1px solid var(--aura-gray-7);
+      transition: border-color .35s ease-in-out;
+      span {
+        color: var(--aura-white);
+        transition: background .35s ease-in-out;
+      }
+      &--gradient {
+        border: solid 1px transparent;
+        background-image: linear-gradient(#000, #000), linear-gradient( 108deg, rgba(94, 230, 208, 1) 12.51%, rgba(191, 198, 255, 1) 51.13%, rgba(255, 186, 105, 1) 87.49%);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+        box-shadow: 2px 1000px 1px #141416 inset;
+      }
+      &__in-card {
+        box-shadow: 2px 1000px 1px var(--aura-gray-10) inset !important;
+      }
+      &:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+      }
+      &:not(.button-outline--gradient):hover {
+        border-color: var(--aura-white);
+      }
+    }
+
+    &.button-dropdown {
+    position: relative;
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+    }
+    &.button--lg, &.button--md {
+      padding-right: var(--spacer-11);
+      &:before, &:after {
+        right: 24px;
+      }
+    }
+    &.button--sm {
+      padding-right: 38px;
+      &:before, &:after {
+        right: 20px;
+      }
+    }
+    &.button--xs {
+      padding-right: 34px;
+      &:before, &:after {
+        right: 16px;
+      }
+    }
+    &.button--xxs {
+      padding-right: 30px;
+      &:before, &:after {
+        right: 12px;
+      }
+    }
+    @media (max-width: 991.98px) {
+      &.button--lg-mob, &.button--md-mob {
+        padding-right: var(--spacer-11);
+        &:before, &:after {
+          right: 24px;
+        }
+      }
+      &.button--sm-mob {
+        padding-right: 38px;
+        &:before, &:after {
+          right: 20px;
+        }
+      }
+      &.button--xs-mob {
+        padding-right: 34px;
+        &:before, &:after {
+          right: 16px;
+        }
+      }
+      &.button--xxs-mob {
+        padding-right: 30px;
+        &:before, &:after {
+          right: 12px;
+        }
+      }
+    }
+
+
+    &:before {
+      opacity: 1;
+      background: url("../../icons/icons-svg/white/caret-down.svg") center no-repeat;
+    }
+    &:after {
+      opacity: 0;
+      background: url("../../icons/icons-svg/color/caret-down.svg") center no-repeat;
+    }
+    &.button-outline--gradient:hover, &.button-outline--gradient[aria-expanded = 'true'] {
+      &:before {
+        opacity: 0;
+      }
+      &:after {
+        opacity: 1;
+      }
+      span {
+        background: var(--aura-gradient-general);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
+    &.button-circle {
+      aspect-ratio : 1 / 1 !important;
+      padding: 0;
+      border-radius: 50%;
+      background-color: var(--aura-gray-9);
+      span {
+        color: var(--aura-gray-3);
+      }
     }
 }
 
-.button-outline {
-  border-radius: 100rem;
-  color: var(--aura-white);
-  border: solid 1.5px transparent;
-  background-image: linear-gradient(#000, #000), linear-gradient( 108deg, rgba(94, 230, 208, 1) 12.51%, rgba(191, 198, 255, 1) 51.13%, rgba(255, 186, 105, 1) 87.49%);
-  background-origin: border-box;
-  background-clip: content-box, border-box;
-  box-shadow: 2px 1000px 1px #141416 inset;
-  padding: 0 var(--spacer-6);
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &__in-card {
-    box-shadow: 2px 1000px 1px #20262B inset;
-  }
-
-  &.-small {
-    height: 30px;
-    padding: 0 var(--spacer-3);
-  }
-}
 .card-header {
   .button-outline {
     box-shadow: 2px 1000px 1px var(--aura-dark-gray) inset;
+  }
+}
+
+.button-fixed {
+  width: 100%;
+  @media (min-width: 768px) {
+    width: auto;
   }
 }
 
@@ -137,7 +288,45 @@
   &.show {
       opacity: 1;
   }
+}
 
+.button-tab {
+  height: 34px;
+  padding: 0 var(--spacer-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--aura-gray-9);
+  transition: background-color .35s ease-in-out;
+  span {
+    color: var(--aura-gray-4);
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    font-weight: 500;
+  }
+  &:focus, &:hover, &.active {
+    background-color:  var(--aura-gray-10);
+    span {
+      background: var(--aura-gradient-general);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+.button-tab-group {
+  display: flex;
+  align-items: center;
+  .button-tab {
+    border: 1px solid var(--aura-gray-8);
+  }
+  .button-tab:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+  .button-tab:not(:last-child) {
+    border-right: none;
+  }
 }
 
 .button-switch-stage {
@@ -169,7 +358,7 @@
     color: var(--aura-neutrals-4);
     transition: all .35s ease-in-out;
     &.active {
-      background: var(--aura-gradient-simple);
+      background: var(--aura-gradient-general);
       color: var(--aura-black);
     }
   }

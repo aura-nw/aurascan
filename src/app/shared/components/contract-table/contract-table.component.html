@@ -1,18 +1,19 @@
 <section class="contract-table">
-  <div class="d-flex justify-content-between">
-    <div class="small-body total-text">
-      A total of {{ contractInfo.count | mask : 'separator.6'}}
-      <div class="d-inline aura-status" *ngIf="label">
-        <div  class="d-inline status" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="text--gray-5 caption-mob fw-normal">
+      {{ contractInfo.count > 1 ? 'More than > ' :'A total of ' }}
+      {{ contractInfo.count | mask : 'separator.6'}}
+      <div class="d-inline-flex align-items-center aura-status" *ngIf="label">
+        <div  class="status px-2" [ngClass]="parseLabel(label)">{{ parseLabel(label) }}</div>
       </div>
       transaction{{ contractInfo.count > 1 ? 's' :'' }} found
     </div>
     <div class="d-flex align-items-center flex-shrink-0 ml-4">
       <button
-        class="button account-button button-outline button-outline__in-card -small small-text mr-4"
+        class="button button--xs button--sm-mob button-pill button-outline button-outline__in-card mr-4"
         *ngIf="contractInfo.viewAll"
         [routerLink]="['/contracts/transactions', contractInfo.contractsAddress]">
-        View all
+        <span>View all</span>
       </button>
       <app-dropdown [elements]="elements" (onSelected)="viewSelected($event)" [currentLabel]="label"> </app-dropdown>
     </div>
@@ -41,14 +42,14 @@
                   </ng-template>
                 </ng-container>
                 <ng-container *ngSwitchCase="'hash-url-se'">
-                  <a class="text--green cursor-pointer hash-link">
+                  <a class="text--primary cursor-pointer hash-link">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                 </ng-container>
                 <ng-container *ngSwitchCase="'hash-url'">
                   <a
                     *ngIf="data[template.matColumnDef]"
-                    class="text--green cursor-pointer hash-link"
+                    class="text--primary cursor-pointer hash-link"
                     [routerLink]="[
                       template?.isUrl,
                       template?.paramField ? data[template?.paramField] : data[template.matColumnDef]
@@ -78,7 +79,7 @@
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
               </ng-container>
-              <span class="d-inline" *ngIf="template?.suffix"> {{ template.suffix }} </span>
+              <div class="d-inline" *ngIf="template?.suffix" [innerHTML]="template.suffix"></div>
             </td>
           </ng-container>
         </ng-container>

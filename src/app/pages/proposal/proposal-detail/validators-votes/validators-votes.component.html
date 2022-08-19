@@ -1,6 +1,6 @@
 <div class="card" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card-body">
-    <div class="card__title" [class.card__title-mobile]="breakpoint.value.matches">Validators Votes</div>
+    <div class="h2 mb-0 text--white mb-4">Validators Votes</div>
     <ul
       ngbNav
       #customNav="ngbNav"
@@ -10,9 +10,9 @@
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)">
-            <span class="tab-title" [class.tab-title-mobile]="breakpoint.value.matches"
-              >{{ tab.value }} ({{ countVote.get(tab.key) }})</span
-            >
+            <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">
+              {{ tab.value }} ({{ countVote.get(tab.key) }})
+            </span>
           </a>
         </li>
       </ng-container>
