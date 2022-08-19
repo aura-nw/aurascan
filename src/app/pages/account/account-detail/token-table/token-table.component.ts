@@ -86,7 +86,7 @@ export class TokenTableComponent implements OnChanges {
 
         this.assetCW20 = res?.data;
         this.assetCW20.forEach((item) => {
-          this.total += +item.price * +item.balance || 0;
+          this.total += item.price * +item.balance || 0;
         });
         this.totalValue.emit(this.total);
 
