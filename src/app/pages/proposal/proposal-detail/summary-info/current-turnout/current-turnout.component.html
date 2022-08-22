@@ -32,11 +32,11 @@
     <div class="d-flex align-items-center">
       <div class="vote --w-0"></div>
       <div class="row flex-grow-1 align-items-center">
-        <div class="col col-lg-4 col-xl-7 body-01 text--gray-5 mb-0">Voted</div>
-        <div class="col col-lg-4 col-xl-2 h6 mb-0 text--gray-1">
+        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0">Voted</div>
+        <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
           {{ proposalDetail.voted_percent | number: global.formatNumber2Decimal }}%
         </div>
-        <div class="col col-lg-4 col-xl-3 text-end body-01 mb-0 text--gray-4">
+        <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-4">
           {{ proposalDetail.voted | number: global.formatNumberToken }}
         </div>
       </div>
@@ -44,11 +44,11 @@
     <div class="d-flex align-items-center mt-2">
       <div class="vote --w-0"></div>
       <div class="row flex-grow-1 align-items-center">
-        <div class="col col-lg-4 col-xl-7 body-01 text--gray-5 mb-0">Voted Abstain</div>
-        <div class="col col-lg-4 col-xl-2 h6 mb-0 text--gray-1">
+        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0">Voted Abstain</div>
+        <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
           {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
         </div>
-        <div class="col col-lg-4 col-xl-3 text-end body-01 mb-0 text--gray-4">
+        <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-4">
           {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
         </div>
       </div>
@@ -56,11 +56,11 @@
     <div class="d-flex align-items-center mt-2">
       <div class="vote --w-0"></div>
       <div class="row flex-grow-1 align-items-center">
-        <div class="col col-lg-4 col-xl-7 body-01 text--gray-5 mb-0">Did not vote</div>
-        <div class="col col-lg-4 col-xl-2 h6 mb-0 text--gray-1">
+        <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0">Did not vote</div>
+        <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
           {{ 100 - proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
         </div>
-        <div class="col col-lg-4 col-xl-3 text-end body-01 mb-0 text--gray-4">
+        <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-4">
           {{ proposalDetail.total_bonded_token - proposalDetail.pro_total_vote | number: global.formatNumberToken }}
         </div>
       </div>

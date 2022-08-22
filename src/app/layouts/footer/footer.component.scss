@@ -177,19 +177,14 @@ footer {
   transform: translate3D(-10px, -8px, 0) !important;
   .popover-body {
     overflow: hidden;
-    background-color: #1F1F22;
-    border-color: #1F1F22;
+    background-color: var(--aura-gray-10);
     box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
     font-size: 1.4rem;
     border-radius: 8px;
     padding: 0;
     .menu-item {
-      padding: var(--spacer-3) !important;
-      &:hover {
-        background-color: var(--aura-gray-9);
-        a {
-          color: var(--aura-white) !important;
-        }
+      .menu-link {
+        color: var(--aura-white) !important;
       }
     }
     .box-menu {
@@ -208,6 +203,17 @@ footer {
     bottom: -8px;
     z-index: -1;
     background-color: var(--aura-black);
-    opacity: .6;
+    opacity: .9;
+  }
+}
+.menu-token {
+  background: rgba(19, 20, 25, 0.5);
+  padding-left: 0px !important;
+  .menu-token__button {
+    background-color: var(--aura-gray-10);
+  }
+  .dropdown-item.menu-link:active,
+  .dropdown-item.menu-link:focus {
+    background: transparent;
   }
 }

@@ -201,13 +201,13 @@
           <div class="d-flex align-items-center">
             <div class="vote status--primary"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5">
+              <div class="col-4 col-lg-5">
                 <span class="body-03"> Yes </span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--gray-1">
+              <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
                 {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}
               </div>
             </div>
@@ -215,13 +215,13 @@
           <div class="d-flex align-items-center mt-2">
             <div class="vote status--danger flex-grow-0"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5">
+              <div class="col-4 col-lg-5">
                 <span class="body-03"> No </span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--gray-1">
+              <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
                 {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}
               </div>
             </div>
@@ -229,13 +229,13 @@
           <div class="d-flex align-items-center mt-2">
             <div class="vote status--info"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5">
+              <div class="col-4 col-lg-5">
                 <span class="body-03"> NoWithVeto</span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--gray-1">
+              <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
                 {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
               </div>
             </div>
@@ -243,13 +243,13 @@
           <div class="d-flex align-items-center mt-2 pb-3">
             <div class="vote status--secondary"></div>
             <div class="row align-items-center flex-grow-1">
-              <div class="col col-lg-5">
+              <div class="col-4 col-lg-5">
                 <span class="body-03"> Abstain</span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--gray-1">
+              <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1">
                 {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
               </div>
             </div>

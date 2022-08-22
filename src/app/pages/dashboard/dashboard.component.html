@@ -14,28 +14,28 @@
                     class="button button--sm button-pill button-flat px-3 body mr-2"
                     [class.button-flat--inactive]="chartRange !== chartRangeData.M_60"
                     (click)="updateBlockAndTxs(chartRangeData.M_60)">
-                    60m
+                    <span>60m</span>
                   </button>
                   <button
                     type="button"
                     class="button button--sm button-pill button-flat px-3 body mr-2"
                     [class.button-flat--inactive]="chartRange !== chartRangeData.H_24"
                     (click)="updateBlockAndTxs(chartRangeData.H_24)">
-                    24h
+                    <span>24h</span>
                   </button>
                   <button
                     type="button"
                     class="button button--sm button-pill button-flat px-3 body mr-2"
                     [class.button-flat--inactive]="chartRange !== chartRangeData.D_30"
                     (click)="updateBlockAndTxs(chartRangeData.D_30)">
-                    30d
+                    <span>30d</span>
                   </button>
                   <button
                     type="button"
                     class="button button--sm button-pill button-flat px-3 body"
                     [class.button-flat--inactive]="chartRange !== chartRangeData.MONTH_12"
                     (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
-                    12M
+                    <span>12M</span>
                   </button>
                 </div>
               </div>
@@ -59,28 +59,28 @@
                 class="button button--sm button-pill button-flat px-3 body mr-3"
                 [class.button-flat--inactive]="chartRange !== chartRangeData.M_60"
                 (click)="updateBlockAndTxs(chartRangeData.M_60)">
-                60m
+                <span>60m</span>
               </button>
               <button
                 type="button"
                 class="button button--sm button-pill button-flat px-3 body mr-3"
                 [class.button-flat--inactive]="chartRange !== chartRangeData.H_24"
                 (click)="updateBlockAndTxs(chartRangeData.H_24)">
-                24h
+                <span>24h</span>
               </button>
               <button
                 type="button"
                 class="button button--sm button-pill button-flat px-3 body mr-3"
                 [class.button-flat--inactive]="chartRange !== chartRangeData.D_30"
                 (click)="updateBlockAndTxs(chartRangeData.D_30)">
-                30d
+                <span>30d</span>
               </button>
               <button
                 type="button"
                 class="button button--sm button-pill button-flat px-3 body"
                 [class.button-flat--inactive]="chartRange !== chartRangeData.MONTH_12"
                 (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
-                12M
+                <span>12M</span>
               </button>
             </div>
           </div>

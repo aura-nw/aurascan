@@ -115,17 +115,22 @@
   <section class="menu-bar d-lg-none">
     <ul class="d-flex justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuDefault; index as idx">
-        <li class="menu-item" *ngIf="item.id !== 7 && idx <= numberMenuFooter + 1">
+        <li class="menu-item" *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
           <ng-container *ngIf="item.id === 99">
             <button
+              id="popover-link"
               class="menu-link text-center"
               #popover="ngbPopover"
               [ngbPopover]="popContent"
+              [autoClose]="'outside'"
               [popoverClass]="'mobile-menu-more'"
               [class.active]="popover.isOpen()">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
             </button>
+
+
+
           </ng-container>
          <ng-container *ngIf="item.id !== 99">
             <a
@@ -142,21 +147,37 @@
     </ul>
   </section>
 </footer>
-
-<ng-template #popContent>
-  <div class="text--white box-menu">
+<ng-template #popContent >
+  <div class="text--white box-menu" (clickOutside)="closeDialog($event)" id="popContent">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuMore; index as idx">
-        <li class="menu-item" *ngIf="item.id !== 7 && idx <= numberMenuFooter + 1">
-          <ng-container *ngIf="item.link !== 'more'">
+        <li class="menu-item px-3  {{item.name === menuName.Token ? 'menu-token py-0' : ''}} " *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
+          <ng-container *ngIf="item.name !== menuName.Token">
             <a
               class="menu-link text-center d-flex"
               [routerLink]="item.link"
               routerLinkActive="active"
               [class.active]="router.url === '/' && item.link === '/dashboard'">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-              <div class="fw-semibold d-block ml-4">{{ item.label | translate }}</div>
+              <div class="fw-500 d-block ml-4">{{ item.label | translate }}</div>
             </a>
+          </ng-container>
+          <ng-container *ngIf="item.name === menuName.Token">
+            <button class="button menu-token__button w-100 menu-link justify-content-start pl-3 py-3" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample"
+                    aria-expanded="false"
+                    aria-controls="collapseExample">
+              <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
+              <div class="fw-500 d-block ml-4">{{ item.label | translate }}</div>
+            </button>
+            <ul class="collapse pl-3" id="collapseExample">
+              <li class="dropdown-item menu-link pl-0 d-flex py-3" *ngFor="let subItem of item.subItems"
+                  [routerLink]="subItem.link" >
+                <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>
+                <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>
+              </li>
+            </ul>
           </ng-container>
         </li>
       </ng-container>

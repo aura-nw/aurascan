@@ -8,7 +8,13 @@
             <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
           </a> -->
           <a routerLink="/" class="logo logo-light">
-            <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
+            <figure class="my-0">
+              <picture>
+                <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3">
+                <source media="(min-width: 320px)" [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3">
+                <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy">
+              </picture>
+            </figure>
           </a>
         </div>
         <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
