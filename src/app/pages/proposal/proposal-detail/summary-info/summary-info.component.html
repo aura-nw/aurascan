@@ -330,7 +330,7 @@
               *ngIf="breakpoint.value.matches"
               [disabled]="proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
               (click)="openVoteDialog(proposalDetail)"
-              class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0">
+              class="button button--md button-fixed button-pill button-outline button-outline--gradient button-outline__in-card body d-block flex-shrink-0 h5-mob">
               <span>
                 {{
                   proposalDetail.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
