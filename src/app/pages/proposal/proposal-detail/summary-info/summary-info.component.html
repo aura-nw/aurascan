@@ -8,7 +8,7 @@
         </h2>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--gray-5 mr-6 d-flex flex-column align-items-center" *ngIf="proposalVotes">
-            <span> You voted '{{ proposalVotes }}' </span>
+            <span> You voted "{{ proposalVotes }}" </span>
             <span>for this proposal</span>
           </div>
           <div class="proposal-status proposal-status__{{ getStatus(proposalDetail?.pro_status)?.key }}">
@@ -47,13 +47,13 @@
           </div>
         </div>
       </div>
-      <div class="text--gray-5 mt-1" *ngIf="proposalVotes">You voted '{{ proposalVotes }}' for this proposal</div>
+      <div class="text--gray-5 mt-1" *ngIf="proposalVotes">You voted "{{ proposalVotes }}" for this proposal</div>
       <div class="divider divider-horizontal mt-3"></div>
     </div>
     <div class="card-body pt-3 pt-lg-0 px-3 px-lg-6">
       <div class="text--white">
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Proposer</div>
+          <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
             <a class="text--primary h6" href="/account/{{ proposalDetail.pro_proposer_address }}">
               <span class="d-none d-lg-block">
@@ -70,21 +70,21 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Initial Deposit</div>
-          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+          <div class="col-auto col-md-2 text--gray-4">Initial Deposit</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
             {{ proposalDetail.initial_deposit | number: global.formatNumberToken }}
             <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Total Deposit</div>
-          <div class="col-auto col-md-10 mt-0 text-end text-md-start">
+          <div class="col-auto col-md-2 text--gray-4">Total Deposit</div>
+          <div class="col-auto col-md-10 mt-0 text-end text-md-start text--gray-1">
             {{ proposalDetail.pro_total_deposits | number: global.formatNumberToken }}
             <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Voting Start</div>
+          <div class="col-auto col-md-2 text--gray-4">Voting Start</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
               <span>{{ proposalDetail.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Voting End</div>
+          <div class="col-auto col-md-2 text--gray-4">Voting End</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
               <span>{{ proposalDetail.pro_voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
@@ -104,11 +104,11 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Type</div>
-          <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type">{{ proposalDetail.pro_type }}</div>
+          <div class="col-auto col-md-2 text--gray-4">Type</div>
+          <div class="col-auto col-md-10 mt-0 fw-500 g-ellipsis__type text--gray-1">{{ proposalDetail.pro_type }}</div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Submit Time</div>
+          <div class="col-auto col-md-2 text--gray-4">Submit Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
               <span>{{ proposalDetail.pro_submit_time | customDate: 'yyyy-MM-dd' }}</span>
@@ -118,7 +118,7 @@
           </div>
         </div>
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
-          <div class="col-auto col-md-2 text--gray-5">Deposit End Time</div>
+          <div class="col-auto col-md-2 text--gray-4">Deposit End Time</div>
           <div class="col-auto col-md-10 mt-0 text-end text-md-start">
             <div class="d-flex align-items-center">
               <span>{{ proposalDetail.pro_deposit_end_time | customDate: 'yyyy-MM-dd' }}</span>
@@ -127,7 +127,7 @@
             </div>
           </div>
         </div>
-        <div class="row mb-3 mb-md-4 body-02">
+        <div class="row mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-12 col-md-2 text--gray-5">Details</div>
           <div class="col-12 col-md-10 mt-2 mt-lg-0">
             <div class="editorial-container p-4">
@@ -156,7 +156,7 @@
           <div class="col-6 col-md-10 body-02 text-end text-md-start">
             <div
               class="aura-status-inline
-                 {{ getStatus(proposalDetail.pro_status)?.value === 'rejected' ? 'text--danger' : 'text--primary' }}">
+                 {{ getStatus(proposalDetail.pro_status)?.value === 'rejected' ? 'text--red-3' : 'text--green-3' }}">
               <span class="status">{{ getStatus(proposalDetail.pro_status)?.value | titlecase }}</span>
             </div>
           </div>
@@ -204,10 +204,10 @@
               <div class="col col-lg-5">
                 <span class="body-03"> Yes </span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--white">
+              <div class="col col-lg-3 h5 mb-0 text--gray-1">
                 {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 text-end h6 mb-0 fw-normal text--gray-4">
+              <div class="col col-lg-4 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}
               </div>
             </div>
@@ -218,10 +218,10 @@
               <div class="col col-lg-5">
                 <span class="body-03"> No </span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--white">
+              <div class="col col-lg-3 h5 mb-0 text--gray-1">
                 {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-4">
+              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}
               </div>
             </div>
@@ -232,10 +232,10 @@
               <div class="col col-lg-5">
                 <span class="body-03"> NoWithVeto</span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--white">
+              <div class="col col-lg-3 h5 mb-0 text--gray-1">
                 {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-4">
+              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
               </div>
             </div>
@@ -246,10 +246,10 @@
               <div class="col col-lg-5">
                 <span class="body-03"> Abstain</span>
               </div>
-              <div class="col col-lg-3 h5 mb-0 text--white">
+              <div class="col col-lg-3 h5 mb-0 text--gray-1">
                 {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-4">
+              <div class="col col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
               </div>
             </div>
