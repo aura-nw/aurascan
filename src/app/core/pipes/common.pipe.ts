@@ -39,6 +39,17 @@ export class PipeCutString implements PipeTransform {
   }
 }
 
+@Pipe({ name: 'stringEllipsis' })
+export class StringEllipsis implements PipeTransform {
+  transform(value: string, limit: number): string {
+    if (value && value.length > limit) {
+      let firstChar = limit ? value.substring(0, limit) : value.substring(0, 16);
+      value = firstChar + '...';
+    }
+    return value;
+  }
+}
+
 @Pipe({ name: 'imageS3' })
 export class ImageURL implements PipeTransform {
   constructor(private environmentService: EnvironmentService) {
