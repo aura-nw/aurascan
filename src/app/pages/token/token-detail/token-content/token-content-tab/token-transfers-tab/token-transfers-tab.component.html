@@ -146,7 +146,7 @@
                           class="text--primary"
                           href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}"
                           *ngIf="data['token_id']?.length > 0">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] | stringEllipsis : 16 }}
                         </a>
                         <span *ngIf="data['token_id']?.length === 0"> - </span>
                       </ng-container>
