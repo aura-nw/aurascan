@@ -200,7 +200,7 @@ form.search-form-validators {
   align-items: center;
 }
 
-.modal {
+.modal.validator-modal {
   @media (max-width: 991.99px) {
     .modal-dialog {
       margin: 0;
