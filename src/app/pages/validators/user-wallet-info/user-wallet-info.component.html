@@ -4,19 +4,19 @@
     <div class="card-header card-header-gray title-small small-body-mob">
       <div class="row justify-content-between">
         <div class="col-12 col-lg-4">
-          <div class="mb-1 mb-lg-2 d-flex justify-content-between text--white">
+          <div class="mb-1 mb-lg-2 d-flex justify-content-between">
             <span class="body-02 body-01-mob text--gray-3">Available Balance: </span>
             <h6 class="mb-0">
-              <span class="text--white">
+              <span class="text--gray-1">
                 {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
               </span>
               <span class="ml-1 text--primary">{{ denom }}</span>
             </h6>
           </div>
-          <div class="mb-3 mb-lg-0 d-flex justify-content-between text--white">
+          <div class="mb-3 mb-lg-0 d-flex justify-content-between">
             <span class="body-02 body-01-mob text--gray-3">Total Staked: </span>
             <h6 class="mb-0">
-              <span class="text--white">
+              <span class="text--gray-1">
                 {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
               </span>
               <span class="ml-1 text--primary">{{ denom }}</span>
