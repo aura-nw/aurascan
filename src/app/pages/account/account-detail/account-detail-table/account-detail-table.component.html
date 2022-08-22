@@ -47,7 +47,7 @@
                       <div class="d-flex align-items-center">
                         <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data[template.matColumnDef] | customDate: 'h:mm:ss' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDate: 'hh:mm:ss' }}</span>
                       </div>
                       <div class="small-body">
                         ({{ commonService.getDateValue(data[template.matColumnDef], false)[1] }})
@@ -172,7 +172,7 @@
                       <div class="d-flex align-items-center">
                         <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ item.completion_time | customDate: 'h:mm:ss' }}</span>
+                        <span>{{ item.completion_time | customDate: 'hh:mm:ss' }}</span>
                       </div>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
                     <div class="d-flex align-items-center">
                       <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.completion_time | customDate: 'h:mm:ss' }}</span>
+                      <span>{{ item.completion_time | customDate: 'hh:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -217,7 +217,7 @@
                     <div class="d-flex align-items-center">
                       <span>{{ item.date_format | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ item.date_format | customDate: 'h:mm:ss' }}</span>
+                      <span>{{ item.date_format | customDate: 'hh:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>

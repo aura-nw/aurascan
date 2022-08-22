@@ -85,7 +85,7 @@
           <ng-container *ngFor="let item of menuItems">
             <li class="nav-item dropdown">
               <a
-                class="nav-link d-flex align-items-center"
+                class="nav-link d-flex align-items-center h4 mb-0"
                 *ngIf="!item.subItems && item.link"
                 (click)="onMenuClick($event)"
                 href="javascript: void(0);"
@@ -99,7 +99,7 @@
               </a>
               <a
                 *ngIf="item.subItems"
-                class="nav-link dropdown-toggle arrow-none d-flex align-items-center"
+                class="nav-link dropdown-toggle arrow-none d-flex align-items-center h4 mb-0"
                 (click)="onMenuClick($event)"
                 [class.active]="
                   (router.url === '/' && item.link === '/dashboard') || (item.name === menuName.Token && router.url.includes('/token'))

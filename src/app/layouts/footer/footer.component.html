@@ -124,7 +124,7 @@
               [popoverClass]="'mobile-menu-more'"
               [class.active]="popover.isOpen()">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-              <div class="small-text d-block mt-1">{{ item.label | translate }}</div>
+              <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
             </button>
           </ng-container>
          <ng-container *ngIf="item.id !== 99">
@@ -134,7 +134,7 @@
               routerLinkActive="active"
               [class.active]="router.url === '/' && item.link === '/dashboard'">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-              <div class="small-text d-block mt-1">{{ item.label | translate }}</div>
+              <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
             </a>
           </ng-container>
         </li>
