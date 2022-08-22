@@ -261,11 +261,11 @@
               </div>
             </div>
             <div class="card-footer card-footer-mobile d-flex justify-content-around">
-              <button class="button button-pill button--md button-outline w-100" [routerLink]="[lastedItem.pro_id]">
+              <button class="button button-pill button--md button-outline button-fixed" [routerLink]="[lastedItem.pro_id]">
                 <span>Details</span>
               </button>
               <button
-                class="button button-pill button--md button-outline button-outline--gradient button-outline__in-card w-100 ml-4"
+                class="button button-pill button--md button-outline button-outline--gradient button-outline__in-card button-fixed ml-4"
                 [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                 (click)="openVoteDialog(lastedItem, idex)">
                 <span>

@@ -76,6 +76,7 @@
 
     &.button-pill {
       border-radius: 24px;
+      font-weight: 600;
     }
 
     &.button-flat {
@@ -227,6 +228,9 @@
   width: 100%;
   @media (min-width: 768px) {
     width: auto;
+  }
+  @media (max-width: 767.98px) {
+    padding: 0;
   }
 }
 
