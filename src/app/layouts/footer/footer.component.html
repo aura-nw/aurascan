@@ -128,9 +128,6 @@
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
             </button>
-
-
-
           </ng-container>
          <ng-container *ngIf="item.id !== 99">
             <a
@@ -147,8 +144,8 @@
     </ul>
   </section>
 </footer>
-<ng-template #popContent >
-  <div class="text--white box-menu" (clickOutside)="closeDialog($event)" id="popContent">
+<ng-template #popContent>
+  <div class="text--white box-menu" id="popContent">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuMore; index as idx">
         <li class="menu-item px-3  {{item.name === menuName.Token ? 'menu-token py-0' : ''}} " *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
@@ -173,7 +170,7 @@
             </button>
             <ul class="collapse pl-3" id="collapseExample">
               <li class="dropdown-item menu-link pl-0 d-flex py-3" *ngFor="let subItem of item.subItems"
-                  [routerLink]="subItem.link" >
+                  [routerLink]="subItem.link" (click)="closeDialog()">
                 <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>
                 <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>
               </li>
@@ -184,3 +181,6 @@
     </ul>
   </div>
 </ng-template>
+<script>
+  document.
+</script>
