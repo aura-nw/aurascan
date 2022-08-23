@@ -125,8 +125,8 @@
               [autoClose]="'outside'"
               [popoverClass]="'mobile-menu-more'"
               [class.active]="popover.isOpen()">
-              <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-              <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
+              <div><i class="icon icon-{{ item.icon }} d-block" id="popover-icon"></i></div>
+              <div class="caption fw-500 d-block mt-1" id="popover-text">{{ item.label | translate }}</div>
             </button>
           </ng-container>
          <ng-container *ngIf="item.id !== 99">
@@ -160,17 +160,17 @@
             </a>
           </ng-container>
           <ng-container *ngIf="item.name === menuName.Token">
-            <button class="button menu-token__button w-100 menu-link justify-content-start pl-3 py-3" type="button"
+            <button class="button menu-token__button w-100 menu-link justify-content-start pl-3 py-3" type="button" id="btnDropdown"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseExample"
                     aria-expanded="false"
                     aria-controls="collapseExample">
-              <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
-              <div class="fw-500 d-block ml-4">{{ item.label | translate }}</div>
+              <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownIcon"></i></div>
+              <div class="fw-500 d-block ml-4" id="btnDropdownText">{{ item.label | translate }}</div>
             </button>
             <ul class="collapse pl-3" id="collapseExample">
               <li class="dropdown-item menu-link pl-0 d-flex py-3" *ngFor="let subItem of item.subItems"
-                  [routerLink]="subItem.link" (click)="closeDialog()">
+                  [routerLink]="subItem.link">
                 <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>
                 <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>
               </li>
@@ -181,6 +181,3 @@
     </ul>
   </div>
 </ng-template>
-<script>
-  document.
-</script>

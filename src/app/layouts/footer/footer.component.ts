@@ -1,9 +1,9 @@
 import {AfterViewChecked, Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EnvironmentService } from '../../core/data-services/environment.service';
-import { MenuItem } from '../horizontaltopbar/menu.model';
+import {ActivatedRoute, Router} from '@angular/router';
+import {EnvironmentService} from '../../core/data-services/environment.service';
+import {MenuItem} from '../horizontaltopbar/menu.model';
 import {MENU, MenuName} from '../horizontaltopbar/menu';
-import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import {DropdownElement} from 'src/app/shared/components/dropdown/dropdown.component';
 import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -15,7 +15,7 @@ import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
 /**
  * Footer Component
  */
-export class FooterComponent implements OnInit, AfterViewChecked {
+export class FooterComponent implements OnInit {
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
   @Input() label!: string;
   chainId = this.environmentService.configValue.chainId;
@@ -34,7 +34,7 @@ export class FooterComponent implements OnInit, AfterViewChecked {
   menuName = MenuName;
   popOver;
 
-  constructor(private environmentService: EnvironmentService, public router: Router, private route: ActivatedRoute) {}
+  constructor(private environmentService: EnvironmentService, public router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.url.subscribe((url) => {
@@ -59,13 +59,16 @@ export class FooterComponent implements OnInit, AfterViewChecked {
   viewSelected(e: DropdownElement): void {
     this.onViewSelected.emit(e);
   }
-  closeDialog(){
-    if(this.popover.isOpen()) {
-      // console.log('opened!')
-      document.getElementById("popover-link").click();
-    }
-  }
 
-  ngAfterViewChecked(): void {
+  @HostListener('body:click', ['$event'])
+  mouseleave(event) {
+    const ids = ['popover-link', 'popover-icon', 'popover-text', 'btnDropdown', 'btnDropdownIcon', 'btnDropdownText'];
+    const id= event.target?.id;
+    if(this.popover.isOpen()) {
+      if(ids.indexOf(id) < 0){
+        document.getElementById('popover-link').click();
+      }
+    }
+
   }
 }

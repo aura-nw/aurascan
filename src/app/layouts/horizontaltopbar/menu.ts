@@ -58,13 +58,6 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 7,
-    label: 'MENUITEMS.ACCOUNT.TEXT',
-    icon: 'user',
-    link: '',
-    name: MenuName.Account
-  },
-  {
-    id: 8,
     label: 'MENUITEMS.TOKEN.TEXT',
     icon: 'coin',
     link: '/tokens',
@@ -85,5 +78,12 @@ export const MENU: MenuItem[] = [
             icon: 'coins',
         }
     ]
+  },
+  {
+    id: 8,
+    label: 'MENUITEMS.ACCOUNT.TEXT',
+    icon: 'user',
+    link: '',
+    name: MenuName.Account
   },
 ];
