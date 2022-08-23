@@ -379,12 +379,12 @@
               label: '#' + data.pro_id,
               titleClass: 'text--white h5 mb-0',
               subLabelContent: data.pro_title,
-              subLabelClass: 'text--primary g-ellipsis h5 mb-0'
+              subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
             }"
             [content]="[
               {
                 label: 'Status',
-                class: 'aura-status-inline text-capitalize ' + getStatus(data.pro_status).class,
+                class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.pro_status).class,
                 info: '<span class=status>' + getStatus(data.pro_status).value + '</span>'
               },
               {
