@@ -2,7 +2,7 @@
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-flex justify-content-between align-items-center d-lg-none">
     <h2 class="mb-0 text--white">Messages</h2>
-    <div class="label__status fw-semibold body small-body-mob">{{ transactionDetailType }}</div>
+    <div class="label__status body body-02-mob">{{ transactionDetailType }}</div>
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="row mb-3 d-none d-lg-flex">
@@ -16,7 +16,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">From Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
@@ -24,7 +24,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">To Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
@@ -32,7 +32,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
@@ -47,7 +47,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Contract</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/contracts', transactionDetail?.messages[0]?.contract]">
@@ -55,7 +55,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
@@ -63,7 +63,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
@@ -74,11 +74,11 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9">{{ transactionDetail?.messages[0]?.label }}</div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
@@ -86,7 +86,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
@@ -105,7 +105,7 @@
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
         <div [ngClass]="{'card-info': breakpoint.value.matches}">
-          <div class="row mb-3 body-02 body-03-mob">
+          <div class="row mb-3 body-02 body-01-mob">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
             <div class="col-12 col-lg-9">
               <a class="text--primary" [routerLink]="['/account', item.delegator_address]">
@@ -113,7 +113,7 @@
               </a>
             </div>
           </div>
-          <div class="row mb-3 body-02 body-03-mob">
+          <div class="row mb-3 body-02 body-01-mob">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
             <div class="col-12 col-lg-9">
               <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
@@ -124,7 +124,7 @@
               </a>
             </div>
           </div>
-          <div class="row mb-3 body-02 body-03-mob">
+          <div class="row mb-3 body-02 body-01-mob">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
             <div class="col-12 col-lg-9">
               <ng-container *ngIf="listAmountClaim[i] > 0">
@@ -139,7 +139,7 @@
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
       <div [ngClass]="{'card-info': breakpoint.value.matches}">
-        <div class="row mb-3 body-02 body-03-mob">
+        <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
@@ -147,7 +147,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-03-mob">
+        <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
@@ -158,7 +158,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-03-mob">
+        <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
           <div class="col-12 col-lg-9">
             <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
@@ -168,7 +168,7 @@
             <ng-template #noValues> - </ng-template>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-03-mob" *ngIf="amountClaim > 0">
+        <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
           <div class="col-12 col-lg-9">
             {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -186,7 +186,7 @@
             </div>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-03-mob">
+        <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
@@ -197,7 +197,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-03-mob">
+        <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
           <div class="col-12 col-lg-9">{{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span></div>
         </div>
@@ -207,7 +207,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
@@ -215,7 +215,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Voter</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.voter]">
@@ -223,7 +223,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Option</div>
         <div class="col-9">
           {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
@@ -234,7 +234,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">From Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.from_address]">
@@ -242,7 +242,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">To Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.to_address]">
@@ -250,7 +250,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Vesting Schedule</div>
         <div class="col-9">{{ dateVesting }}</div>
       </div>
@@ -259,7 +259,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
@@ -269,7 +269,7 @@
             0.000000 <span class="text--primary">{{ denom }}</span></ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposer</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.proposer]">
@@ -277,15 +277,15 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
         <div class="col-12 col-lg-9">{{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}</div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Proposal Type</div>
         <div class="col-9">{{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}</div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Title</div>
         <div class="col-12 col-lg-9">{{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}</div>
       </div>
@@ -294,7 +294,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegate Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
@@ -302,7 +302,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_src_address]">
@@ -313,7 +313,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_dst_address]">
@@ -324,7 +324,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
@@ -333,7 +333,7 @@
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob" *ngIf="amountClaim > 0">
+      <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
         <div class="col-12 col-lg-9">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -344,7 +344,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/votings', transactionDetail?.messages[0]?.proposal_id]">
@@ -352,7 +352,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Depositor</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.depositor]">
@@ -360,7 +360,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
@@ -374,11 +374,11 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
         <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.validator_address]">
@@ -391,11 +391,11 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
         <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary"
@@ -409,7 +409,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary"
@@ -418,11 +418,11 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Code Id</div>
         <div class="col-12 col-lg-9">{{ storeCodeId }}</div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Byte Code</div>
         <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.wasm_byte_code }}</div>
       </div>
@@ -431,13 +431,13 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.CreateValidator">
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Min Self Delegation</div>
         <div class="col-12 col-lg-9">
           {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.delegator_address]">
@@ -445,7 +445,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
@@ -456,7 +456,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="amount > 0">
@@ -465,19 +465,19 @@
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Details</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.description?.details || '-' }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Moniker</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.description?.moniker }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
         <div class="col-9">
           <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length > 0">
@@ -488,31 +488,31 @@
           <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length === 0">-</ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Identity</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.description?.identity || '-' }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3  mb-2 mb-lg-0 text--gray-4">Commission Max Change Rate</div>
         <div class="col-12 col-lg-9">
           {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-03-mob">
+      <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3  mb-2 mb-lg-0 text--gray-4">Public Key</div>
         <div class="col-12 col-lg-9">
           {{ transactionDetail?.messages[0]?.pubkey?.key }}
