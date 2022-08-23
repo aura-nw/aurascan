@@ -16,7 +16,7 @@
         class="aura-form"
         autocomplete="off">
         <div class="form-group mb-4 mb-lg-6">
-          <label for="address" class="form-label text--gray-1">Contract Address to verify </label>
+          <label for="address" class="form-label text--gray-1 body-02">Contract Address to verify </label>
           <input
             formControlName="contract_address"
             type="text"
@@ -26,7 +26,7 @@
           <div class="error" *ngIf="formControls['contract_address'].invalid">Contract address is required!</div>
         </div>
         <div class="form-group mb-4 mb-lg-6">
-          <label for="link" class="form-label text--gray-1">
+          <label for="link" class="form-label text--gray-1 body-02">
             Link GitHub Source Code
           </label>
           <input formControlName="link" type="text" class="form-control" id="link" maxlength="200" />
@@ -41,7 +41,7 @@
           </ng-container>
         </div>
         <div class="form-group mb-4 mb-lg-6">
-          <label for="wasm_file" class="form-label text--gray-1"> Compiled wasm file name </label>
+          <label for="wasm_file" class="form-label text--gray-1 body-02"> Compiled wasm file name </label>
           <input
             formControlName="wasm_file"
             type="text"
@@ -57,7 +57,7 @@
           </ng-container>
         </div>
         <div class="form-group mb-4 mb-lg-6">
-          <label for="version" class="form-label text--gray-1">Compiler Version</label>
+          <label for="version" class="form-label text--gray-1 body-02">Compiler Version</label>
           <mat-select
             #version
             id="version"
