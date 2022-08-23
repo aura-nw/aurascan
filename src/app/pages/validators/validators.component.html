@@ -247,14 +247,14 @@
                       [disabled]="clicked"
                       *ngIf="validator['status'] === statusValidator.Active"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      <span>Delegate</span>
+                      <span class="text--gray-1">Delegate</span>
                     </button>
                   </div>
                 </div>
                 <div class="table-body body-01 pb-0">
                   <ng-container *ngFor="let template of templates; index as idx">
                     <div
-                      class="table-body__item d-flex justify-content-between text--white mb-3"
+                      class="table-body__item d-flex justify-content-between text--gray-4 mb-3"
                       *ngIf="!template?.desktopOnly">
 
                       <span>{{ template['headerCellDef'] }}</span>
