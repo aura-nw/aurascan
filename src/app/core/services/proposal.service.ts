@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import { Observable } from 'rxjs';
 import { INDEXER_URL } from '../constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
 import { IListVoteQuery, IListVotesRes, IProposal, IVotingInfo } from '../models/proposal.model';
@@ -24,14 +26,9 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
   }
 
-  getVotes(
-    proposalId: string | number,
-    voter: string,
-    limit: string | number,
-    offset: string | number,
-  ): Observable<any> {
-    return this.http.get<any>(
-      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&query=proposal_vote.proposal_id%3D'${proposalId}'%2Ctransfer.sender%3D'${voter}'&pageOffset=${offset}&pageLimit=${limit}&countTotal=false&reverse=false`,
+  getVotes(proposalId: string | number, voter: string, limit: string | number, offset: string | number) {
+    return axios.get(
+      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}`,
     );
   }
 
