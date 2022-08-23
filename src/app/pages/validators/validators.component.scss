@@ -60,7 +60,7 @@ form.search-form-validators {
     font-weight: 500;
     @media (min-width: 992px) {
       font-size: 1.6rem;
-      line-height: 1.9rem;
+      line-height: 2.4rem;
     }
     &:after {
       content: '';
@@ -119,7 +119,7 @@ form.search-form-validators {
 }
 
 .commissionPanel {
-  background: #25252c;
+  background: var(--aura-gray-10);
   min-width: 100% !important;
   padding: var(--spacer-3) 0 !important;
   border-radius: 8px;
@@ -222,10 +222,7 @@ form.search-form-validators {
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
-  width: 250px;
-  @media (min-width: 768px) {
-    width: 550px;
-  }
+  font-weight: 600;
 }
 .mat-tab-header-pagination.mat-tab-header-pagination-disabled,
 .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
