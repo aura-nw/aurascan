@@ -144,7 +144,7 @@
                     {{ data[template.matColumnDef] !== contractVerifyType.Unverifed ? data['updated_at'] : '-' }}
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
-                    {{ (data[template.matColumnDef] | cutStringPipe: 20) || '-' }}
+                    {{ (data[template.matColumnDef] | cutStringPipe: 16) || '-' }}
                   </ng-container>
                   <ng-container
                     *ngIf="
