@@ -90,6 +90,7 @@
             [link]="'/transaction/' + data.tx_hash"
             [title]="{
               size: 'md',
+              titleClass: 'h6-mob',
               label: data.tx_hash | cutStringPipe: 6:6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
@@ -98,6 +99,7 @@
             [content]="[
               {
                 label: 'Amount',
+                class: 'body-01-mob text--gray-1',
                 info:
                   data.amount > 0
                     ? (data.amount | number: global.formatNumberToken) +
@@ -107,7 +109,7 @@
                     : checkAmountValue(data.amount, data.tx_hash)
               },
               { label: 'Fee', class: 'body-01-mob text--gray-1', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
-              { label: 'Time', class: 'body-01-mob text--gray-1',
+              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
                   (data.timestamp | customDate: 'yyyy-MM-dd') +

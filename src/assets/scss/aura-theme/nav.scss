@@ -33,9 +33,9 @@ body[data-layout-mode="dark"] {
             &.active {
                 background-color: transparent;
                 border-color: var(--aura-gray-6);
-                color: var(--aura-white);
+                color: var(--aura-gray-1);
                 > * {
-                    color: var(--aura-white) !important;
+                    color: var(--aura-gray-1) !important;
                 }
             }
         }

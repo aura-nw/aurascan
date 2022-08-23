@@ -135,7 +135,7 @@
                         </app-loading-image>
                       </span>
                     </div>
-                    <span class="fw-semibold"> {{ validator.validator_name }} </span>
+                    <span class="h5-mob"> {{ validator.validator_name }} </span>
                   </a>
                 </div>
                 <div class="table-header__action">
@@ -150,7 +150,7 @@
               </div>
               <div class="table-body small-body-mob">
                 <ng-container *ngFor="let template of templatesWallet; index as idx">
-                  <div class="d-flex justify-content-between text--gray-4 mb-2" *ngIf="!template?.desktopOnly">
+                  <div class="d-flex justify-content-between text--gray-4 mb-2 body-01-mob" *ngIf="!template?.desktopOnly">
                     <span>{{ template['headerCellDef'] }}</span>
                     <div>
                       <span class="text--white"> {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span>
@@ -189,7 +189,7 @@
               {{ validator.validator_name }}
             </a>
           </div>
-          <div class="col-9 text--white body-02 pl-0 pl-lg-1">
+          <div class="col-9 text--gray-1 body-02 pl-0 pl-lg-1">
             <div>
               <span>{{ validator.balance | number: globals.formatNumberToken }}</span>
               <span class="text--primary ml-2">{{ denom }}</span>
