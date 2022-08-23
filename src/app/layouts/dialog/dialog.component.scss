@@ -32,9 +32,11 @@
     transition: transform 0.3s ease-out;
     transform: translate(0, -50px);
 
-    .__header {
-    }
-    .__body {
+    &__header {
+      .warning-icon {
+        height: 24px;
+        width: 24px;
+      }
     }
   }
 }

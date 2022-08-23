@@ -8,7 +8,13 @@
             <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
           </a> -->
           <a routerLink="/" class="logo logo-light">
-            <img [src]="'assets/images/logo/aura-explorer-logo.png' | imageS3" alt="Aura Logo" class="w-100" />
+            <figure class="my-0">
+              <picture>
+                <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3">
+                <source media="(min-width: 320px)" [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3">
+                <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy">
+              </picture>
+            </figure>
           </a>
         </div>
         <div class="page-title ml-1 ml-lg-2 fw-500" *ngIf="pageTitle">{{ pageTitle }}</div>
@@ -85,7 +91,7 @@
           <ng-container *ngFor="let item of menuItems">
             <li class="nav-item dropdown">
               <a
-                class="nav-link d-flex align-items-center"
+                class="nav-link d-flex align-items-center h4 mb-0"
                 *ngIf="!item.subItems && item.link"
                 (click)="onMenuClick($event)"
                 href="javascript: void(0);"
@@ -99,7 +105,7 @@
               </a>
               <a
                 *ngIf="item.subItems"
-                class="nav-link dropdown-toggle arrow-none d-flex align-items-center"
+                class="nav-link dropdown-toggle arrow-none d-flex align-items-center h4 mb-0"
                 (click)="onMenuClick($event)"
                 [class.active]="
                   (router.url === '/' && item.link === '/dashboard') || (item.name === menuName.Token && router.url.includes('/token'))

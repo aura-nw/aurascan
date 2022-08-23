@@ -134,7 +134,13 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'code_id'"><div class="text--primary">{{ data[template.matColumnDef] }}</div></ng-container>
                     <ng-container *ngSwitchCase="'type'"> {{ data[template.matColumnDef] }} Contract </ng-container>
-                    <ng-container *ngSwitchCase="'updated_at'"> {{ data[template.matColumnDef] | customDate: 'M/d/yyyy' }}</ng-container>
+                    <ng-container *ngSwitchCase="'updated_at'">
+                      <div class="d-flex align-items-center">
+                        <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                        <div class="divider divider-vertical divider-lighter mx-2"></div>
+                        <span>{{ data[template.matColumnDef] | customDate: 'hh:mm:ss' }}</span>
+                      </div>
+                    </ng-container>
                     <ng-container *ngSwitchCase="'result'">
                       <div
                         [ngStyle]="{
@@ -207,7 +213,11 @@
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Time Registered</span>
-            <span>{{ data.updated_at | customDate: 'yyyy-MM-dd'}}</span>
+            <div class="d-flex align-items-center">
+              <span>{{ data.updated_at | customDate: 'yyyy-MM-dd' }}</span>
+              <div class="divider divider-vertical divider-lighter mx-2"></div>
+              <span>{{ data.updated_at | customDate: 'hh:mm:ss' }}</span>
+            </div>
           </div>
         </div>
       </div>

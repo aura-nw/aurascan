@@ -50,27 +50,6 @@ export const MENU: MenuItem[] = [
     name: MenuName.Block
   },
   {
-      id: 6,
-      label: 'MENUITEMS.TOKEN.TEXT',
-      icon: 'coin',
-      link: '/tokens',
-      name: MenuName.Token,
-      subItems: [
-          {
-              id: 1,
-              label: 'CW-20 Top Tokens',
-              link: '/tokens',
-              name: MenuName.TokenCW20,
-          },
-          {
-              id: 2,
-              label: 'CW-721 Top Tokens',
-              link: '/tokens/tokens-nft',
-              name: MenuName.TokenCW721,
-          }
-      ]
-  },
-  {
     id: 6,
     label: 'MENUITEMS.CONTRACT.TEXT',
     icon: 'file-document',
@@ -83,5 +62,28 @@ export const MENU: MenuItem[] = [
     icon: 'user',
     link: '',
     name: MenuName.Account
+  },
+  {
+    id: 8,
+    label: 'MENUITEMS.TOKEN.TEXT',
+    icon: 'coin',
+    link: '/tokens',
+    name: MenuName.Token,
+    subItems: [
+        {
+            id: 1,
+            label: 'cw-20',
+            link: '/tokens',
+            name: MenuName.TokenCW20,
+            icon: 'coins',
+        },
+        {
+            id: 2,
+            label: 'cw-721',
+            link: '/tokens/tokens-nft',
+            name: MenuName.TokenCW721,
+            icon: 'coins',
+        }
+    ]
   },
 ];

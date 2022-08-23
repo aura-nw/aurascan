@@ -94,3 +94,6 @@ i {
 .icon-dot:before {
   content: "\e916";
 }
+.icon-coins:before {
+  content: "\e917";
+}

@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {AfterViewChecked, Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { MenuItem } from '../horizontaltopbar/menu.model';
-import { MENU } from '../horizontaltopbar/menu';
+import {MENU, MenuName} from '../horizontaltopbar/menu';
 import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.component';
+import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-footer',
@@ -14,10 +15,11 @@ import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.com
 /**
  * Footer Component
  */
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, AfterViewChecked {
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
   @Input() label!: string;
   chainId = this.environmentService.configValue.chainId;
+  @ViewChild('popover') public popover: NgbPopover;
 
   dashboardURL = 'dashboard';
   blocksURL = 'blocks';
@@ -29,6 +31,8 @@ export class FooterComponent implements OnInit {
   menuDefault: MenuItem[] = MENU;
   menuMore: MenuItem[] = MENU;
   currentUrl = '';
+  menuName = MenuName;
+  popOver;
 
   constructor(private environmentService: EnvironmentService, public router: Router, private route: ActivatedRoute) {}
 
@@ -54,5 +58,14 @@ export class FooterComponent implements OnInit {
 
   viewSelected(e: DropdownElement): void {
     this.onViewSelected.emit(e);
+  }
+  closeDialog(){
+    if(this.popover.isOpen()) {
+      // console.log('opened!')
+      document.getElementById("popover-link").click();
+    }
+  }
+
+  ngAfterViewChecked(): void {
   }
 }

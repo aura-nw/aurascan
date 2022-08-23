@@ -1,7 +1,9 @@
 .button.button-flat--inactive {
   border: none;
   background: var(--aura-gray-9);
-  color: var(--aura-gray-5);
+  span {
+    color: var(--aura-gray-5);
+  }
 }
 
 .box-dashboard {
