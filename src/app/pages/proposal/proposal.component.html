@@ -129,7 +129,7 @@
                       [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                       (click)="openVoteDialog(lastedItem, idx)"
                       class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
-                      <span>
+                      <span class="fw-semibold">
                         {{
                           lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                           lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'

@@ -6,7 +6,7 @@
         <h5 class="text--gray-1 mr-lg-2 mb-0 d-inline">
           {{ proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
         </h5>
-        <span class="fw-semibold-mob">
+        <span class="body-03 caption-mob">
           ({{ formatNumber(proposalDetail.pro_total_vote) || 0 }} of
           {{ formatNumber(proposalDetail.total_bonded_token) }} voted)
         </span>
