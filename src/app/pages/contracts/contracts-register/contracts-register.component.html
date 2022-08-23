@@ -138,7 +138,7 @@
                       <div class="d-flex align-items-center">
                         <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                         <div class="divider divider-vertical divider-lighter mx-2"></div>
-                        <span>{{ data[template.matColumnDef] | customDate: 'hh:mm:ss' }}</span>
+                        <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'result'">
@@ -216,7 +216,7 @@
             <div class="d-flex align-items-center">
               <span>{{ data.updated_at | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical divider-lighter mx-2"></div>
-              <span>{{ data.updated_at | customDate: 'hh:mm:ss' }}</span>
+              <span>{{ data.updated_at | customDate: 'HH:mm:ss' }}</span>
             </div>
           </div>
         </div>
