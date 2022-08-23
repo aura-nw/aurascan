@@ -13,7 +13,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE
+  VOTING_SUBTITLE,
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { IResponsesTemplates } from '../../../../core/models/common.model';
@@ -328,15 +328,17 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  getVotedProposal() {
+  async getVotedProposal() {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
-      this.proposalService.getVotes(this.proposalId, addr, 10, 0).subscribe((res) => {
-        this.proposalVotes = this.voteConstant.find((s) => s.key === res.data?.transactions[0]?.tx?.body?.messages[0]?.option)?.voteOption;
-        this.voteValue = {
-          keyVote: res.data?.transactions[0]?.tx?.body?.messages[0]?.option,
-        };
-      });
+      const res = await this.proposalService.getVotes(this.proposalId, addr, 10, 0);
+
+      this.proposalVotes = this.voteConstant.find(
+        (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+      )?.voteOption;
+      this.voteValue = {
+        keyVote: res.data?.txs[0]?.body?.messages[0]?.option,
+      };
     } else {
       this.proposalVotes = null;
     }
