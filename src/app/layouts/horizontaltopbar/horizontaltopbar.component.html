@@ -126,7 +126,10 @@
                         !router.url.includes('/token-nft')) ||
                       (subMenu.name === menuName.TokenCW721 && (router.url.includes('/tokens-nft') || router.url.includes('/token-nft')))
                     "
-                    >{{ subMenu.label }}</a
+                    >
+                    <ng-container *ngIf="subMenu.label === 'cw-20'">CW-20 Top Tokens</ng-container>
+                    <ng-container *ngIf="subMenu.label === 'cw-721'">CW-721 Top Tokens</ng-container>
+                  </a
                   >
                 </span>
               </a>
