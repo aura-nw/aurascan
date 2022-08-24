@@ -1,12 +1,14 @@
 <app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
-<div class="row justify-content-end mb-2 d-none d-lg-flex">
-  <div class="col-auto">
-    <div class="button-tab-group">
-      <button class="button-tab" [class.active]="!isRawData" (click)="changeType(false)"><span>Summary</span></button>
-      <button class="button-tab" [class.active]="isRawData" (click)="changeType(true)"><span>JSON</span></button>
-    </div>
-  </div>
-</div>
+<!-- Tabs -->
+<ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
+  <ng-container *ngFor="let tab of TAB; index as index">
+    <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
+      <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
+        <span>{{ tab.value }}</span>
+      </a>
+    </li>
+  </ng-container>
+</ul>
 
 <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
@@ -85,7 +87,7 @@
     </ng-container>
   </div>
 </div>
-<div class="card text--gray-1">
+<div class="card text--gray-1" *ngIf="!isRawData">
   <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
   <div class="card-body body">
     <ng-container *ngIf="length > 0; else noValues">
@@ -188,9 +190,10 @@
           ]"></app-card-mob-simple>
       </div>
     </ng-container>
-
-    <ng-template #noValues>
-      <app-table-no-data></app-table-no-data>
-    </ng-template>
   </div>
 </div>
+
+
+<ng-template #noValues>
+  <app-table-no-data></app-table-no-data>
+</ng-template>
