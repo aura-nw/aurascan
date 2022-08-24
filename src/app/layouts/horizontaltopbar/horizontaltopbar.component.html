@@ -83,7 +83,7 @@
     </form>
   </div>
 </header>
-<div class="topnav d-none d-lg-block">
+<div class="topnav d-none d-lg-flex align-items-center">
   <div class="container-fluid">
     <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
       <div class="collapse navbar-collapse active" id="topnav-menu-content">
@@ -127,10 +127,9 @@
                       (subMenu.name === menuName.TokenCW721 && (router.url.includes('/tokens-nft') || router.url.includes('/token-nft')))
                     "
                     >
-                    <ng-container *ngIf="subMenu.label === 'cw-20'">CW-20 Top Tokens</ng-container>
-                    <ng-container *ngIf="subMenu.label === 'cw-721'">CW-721 Top Tokens</ng-container>
-                  </a
-                  >
+                    <ng-container *ngIf="subMenu.label === 'CW-20'">CW-20 Top Tokens</ng-container>
+                    <ng-container *ngIf="subMenu.label === 'CW-721'">CW-721 Top Tokens</ng-container>
+                  </a>
                 </span>
               </a>
             </li>

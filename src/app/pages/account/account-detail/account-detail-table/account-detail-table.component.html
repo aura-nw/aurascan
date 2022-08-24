@@ -29,17 +29,17 @@
                             {{ data[template.matColumnDef] }}
                           </span>
                     </a>
-                    <div *ngSwitchCase="'amount'" class="fw-normal">
+                    <div *ngSwitchCase="'amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
-                    <div *ngSwitchCase="'token_amount'" class="fw-normal">
+                    <div *ngSwitchCase="'token_amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                     </div>
-                    <div *ngSwitchCase="'token_name'" class="fw-normal text--primary">
+                    <div *ngSwitchCase="'token_name'" class=" text--primary">
                       {{ data[template.matColumnDef] }}
                     </div>
-                    <div *ngSwitchCase="'reward'" class="fw-normal">
+                    <div *ngSwitchCase="'reward'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
@@ -58,7 +58,7 @@
                         commonService.getDateValue(data['date_format'], false)[0]
                       }})
                     </div>
-                    <div *ngSwitchCase="'total_value'" class="fw-normal">
+                    <div *ngSwitchCase="'total_value'">
                       $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </div>
                     <a  *ngSwitchCase="'validator_src_name'"
@@ -97,7 +97,7 @@
                             {{ data[template.matColumnDef] }}
                       </span>
                     </a>
-                    <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>
                 </div>
               </td>

@@ -189,6 +189,13 @@ footer {
     }
     .box-menu {
       min-width: 240px;
+      li.dropdown-item.menu-link {
+        color: var(--aura-gray-1);
+        &.active, &:hover {
+          background: rgba(54, 56, 67, 0.5);
+          color: var(--aura-white);
+        }
+      }
     }
   }
   .arrow {
@@ -211,6 +218,34 @@ footer {
   padding-left: 0px !important;
   .menu-token__button {
     background-color: var(--aura-gray-10);
+    max-width: 200px;
+    position: relative;
+    &:after, &:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      background-size: contain;
+      right: 12px;
+      top: 18px;
+      width: 14px;
+      height: 14px;
+    }
+    &:before {
+      opacity: 1;
+    }
+    &:after {
+      transform: rotate(180deg);
+      opacity: 0;
+    }
+    &[aria-expanded="true"]{
+      &:before {
+        opacity: 0;
+      }
+      &:after {
+        opacity: 1;
+      }
+    }
   }
   .dropdown-item.menu-link:active,
   .dropdown-item.menu-link:focus {

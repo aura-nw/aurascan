@@ -10,9 +10,9 @@
       </div>
       <div class="d-flex flex-column justify-content-between py-lg-6 w-100">
         <div class="pl-lg-6">
-          <h3 class="mb-1 mb-lg-2 text--white">Address</h3>
+          <h3 class="mb-1 mb-lg-2 text--gray-1">Address</h3>
           <div class="d-flex align-items-center">
-            <div class="body-01 g-ellipsis-address" id="currentAddress">{{ currentAddress }}</div>
+            <div class="body-01 g-ellipsis-address text--gray-1" id="currentAddress">{{ currentAddress }}</div>
             <div class="button button--xxs button-circle ml-2">
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="pl-lg-6 mt-6 mt-lg-0">
-          <h3 class="mb-1 mb-lg-2 text--white">Total Value</h3>
+          <h3 class="mb-1 mb-lg-2 text--gray-1">Total Value</h3>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
             <span class="h1 mb-0 fw-semibold mb-0 text-gradient d-inline"
               >$ {{ totalValueToken + totalValueNft || 0 | number: global.formatNumber2Decimal }}</span
