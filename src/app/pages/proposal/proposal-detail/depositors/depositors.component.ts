@@ -30,15 +30,12 @@ export class DepositorsComponent implements OnInit {
     const res = await this.proposalService.getDepositors(this.proposalId);
     this.loading = true;
     if (res?.data?.tx_responses?.length > 0) {
-      console.log(res.data);
       this.voteDataList = res.data.tx_responses.filter(
         (transaction) =>
           transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
           (transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
             transaction?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
       );
-      console.log(this.voteDataList);
-
       this.voteDataList.forEach((item) => {
         if (item.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
           item.depositors = item.tx?.body?.messages[0]?.proposer;
