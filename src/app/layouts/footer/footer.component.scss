@@ -196,6 +196,9 @@ footer {
           color: var(--aura-white);
         }
       }
+      a.menu-link.active {
+        background: rgba(54, 56, 67, 0.5);
+      }
     }
   }
   .arrow {
