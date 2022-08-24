@@ -79,7 +79,7 @@
     <ng-container *ngIf="isRawData">
       <ng-container *ngIf="item?.json_data; else noValues">
         <div class="body">
-          <pre id="json" class="raw-content text--white px-4" [innerHtml]="item?.json_data | appJson"></pre>
+          <pre id="json" class="raw-content text--gray-1 px-4" [innerHtml]="item?.json_data | appJson"></pre>
         </div>
       </ng-container>
     </ng-container>

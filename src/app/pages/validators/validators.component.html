@@ -247,7 +247,7 @@
                       [disabled]="clicked"
                       *ngIf="validator['status'] === statusValidator.Active"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      <span class="text--gray-1">Delegate</span>
+                      <span class="text--gray-1 body-02-mob">Delegate</span>
                     </button>
                   </div>
                 </div>
@@ -442,7 +442,7 @@
                 id="delegateAction"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span class="fw-semibold">Select Action</span>
+                <span>Select Action</span>
               </button>
               <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
@@ -472,7 +472,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="fw-semibold">Delegate</span>
+              <span>Delegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
@@ -490,7 +490,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="fw-semibold">Undelegate</span>
+              <span>Undelegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">

@@ -123,13 +123,13 @@
                     <button
                       class="button button--sm button-pill button-outline body mr-3"
                       [routerLink]="[lastedItem.pro_id]">
-                      <span class="fw-semibold">Details</span>
+                      <span>Details</span>
                     </button>
                     <button
                       [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                       (click)="openVoteDialog(lastedItem, idx)"
                       class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
-                      <span class="fw-semibold">
+                      <span>
                         {{
                           lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
                           lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
