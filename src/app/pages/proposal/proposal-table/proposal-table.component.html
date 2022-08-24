@@ -42,7 +42,7 @@
                       {{
                         (template.isShort
                           ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
+                          : data[template.matColumnDef]) | number: global.formatNumberToken || '-' 
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>

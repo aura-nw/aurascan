@@ -4,8 +4,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
-import { DATEFORMAT } from '../../../../core/constants/common.constant';
 
 @Component({
   selector: 'app-depositors',
@@ -26,26 +26,29 @@ export class DepositorsComponent implements OnInit {
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit(): void {
-    this.proposalService.getDepositors(this.proposalId).subscribe((res) => {
-      this.loading = true;
-      if (res?.data?.transactions?.length > 0) {
-        res.data.transactions.forEach((trans) => {
-          trans = parseDataTransaction(trans, this.coinMinimalDenom);
-        });
-        this.voteDataList = res.data.transactions.filter(
-          (transaction) =>
-            transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
-            (transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
-              transaction?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
-        );
-        this.voteDataList.forEach((item) => {
-          if (item.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
-            item.depositors = item.tx?.body?.messages[0]?.proposer;
-          }
-        });
-      }
-      this.loading = false;
-    });
+  async ngOnInit() {
+    const res = await this.proposalService.getDepositors(this.proposalId);
+    this.loading = true;
+    if (res?.data?.tx_responses?.length > 0) {
+      console.log(res.data);
+      this.voteDataList = res.data.tx_responses.filter(
+        (transaction) =>
+          transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
+          (transaction?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
+            transaction?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
+      );
+      console.log(this.voteDataList);
+
+      this.voteDataList.forEach((item) => {
+        if (item.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
+          item.depositors = item.tx?.body?.messages[0]?.proposer;
+          item.amount = balanceOf(item.tx?.body?.messages[0].initial_deposit[0].amount);
+        } else {
+          item.depositors = item.tx?.body?.messages[0]?.depositor;
+          item.amount = balanceOf(item.tx?.body?.messages[0].amount[0].amount);
+        }
+      });
+    }
+    this.loading = false;
   }
 }
