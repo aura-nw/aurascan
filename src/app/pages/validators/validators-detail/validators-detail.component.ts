@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,13 +14,14 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+const marked = require('marked');
 
 @Component({
   selector: 'app-validators-detail',
   templateUrl: './validators-detail.component.html',
   styleUrls: ['./validators-detail.component.scss'],
 })
-export class ValidatorsDetailComponent implements OnInit {
+export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -299,5 +300,12 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
+  }
+  ngAfterViewChecked(): void {
+    const editor = document.getElementById('marked');
+    if (editor) {
+      editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
+      return;
+    }
   }
 }

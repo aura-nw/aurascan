@@ -10,7 +10,7 @@
                   <ng-container *ngIf="contractDetail?.token_tracker">
                     <button class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card">
                       <img [src]="'assets/images/icons/chart-line-up.svg' | imageS3" alt="" width="16px" height="16px" />
-                      <span class="ml-2 fw-semibold" *ngIf="contractDetail?.token_tracker?.symbol && contractDetail?.token_tracker?.name">
+                      <span class="ml-2" *ngIf="contractDetail?.token_tracker?.symbol && contractDetail?.token_tracker?.name">
                         {{ contractDetail?.token_tracker?.symbol + ': ' + contractDetail?.token_tracker?.name }}
                       </span>
                     </button>
