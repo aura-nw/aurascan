@@ -168,8 +168,13 @@
               <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownIcon"></i></div>
               <div class="fw-500 d-block ml-4" id="btnDropdownText">{{ item.label | translate }}</div>
             </button>
-            <ul class="collapse pl-3" id="collapseExample">
-              <li class="dropdown-item menu-link pl-0 d-flex py-3" *ngFor="let subItem of item.subItems"
+            <ul class="collapse pl-0" id="collapseExample">
+              <li class="dropdown-item menu-link pl-0 d-flex py-3 pl-3"
+                  [class.active]="
+                      (subItem.name === menuName.TokenCW20 && !router.url.includes('/tokens-nft')) ||
+                      (subItem.name === menuName.TokenCW721 && router.url.includes('/tokens-nft'))
+                    "
+                  *ngFor="let subItem of item.subItems"
                   [routerLink]="subItem.link">
                 <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>
                 <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>
