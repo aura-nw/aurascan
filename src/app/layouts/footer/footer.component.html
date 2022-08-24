@@ -148,10 +148,10 @@
   <div class="text--white box-menu" id="popContent">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuMore; index as idx">
-        <li class="menu-item px-3  {{item.name === menuName.Token ? 'menu-token py-0' : ''}} " *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
+        <li class="menu-item p-0  {{item.name === menuName.Token ? 'menu-token' : ''}} " *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
           <ng-container *ngIf="item.name !== menuName.Token">
             <a
-              class="menu-link text-center d-flex"
+              class="menu-link text-center d-flex py-3 px-3"
               [routerLink]="item.link"
               routerLinkActive="active"
               [class.active]="router.url === '/' && item.link === '/dashboard'">
