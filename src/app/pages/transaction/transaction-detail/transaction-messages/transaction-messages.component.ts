@@ -8,7 +8,7 @@ import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constan
 import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -34,11 +34,13 @@ export class TransactionMessagesComponent implements OnInit {
   listValidator: any[];
   listAmountClaim = [];
   objMsgContract: any;
+  ibcData: any;
   typeGetData = {
     Transfer: 'transfer',
     WithdrawRewards: 'withdraw_rewards',
     WithdrawCommission: 'withdraw_commission',
     StoreCode: 'store_code',
+    SendPacket: 'send_packet'
   };
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -49,7 +51,7 @@ export class TransactionMessagesComponent implements OnInit {
     private datePipe: DatePipe,
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +75,10 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
     ) {
       this.displayMsgRaw();
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.IBCTransfer) {
+      this.getDataIBC();
     }
+
     //get amount of transaction
     this.amount = getAmount(
       this.transactionDetail?.messages,
@@ -192,6 +197,19 @@ export class TransactionMessagesComponent implements OnInit {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.StoreCode);
         if (temp) {
           this.storeCodeId = temp[0]?.attributes[0]?.value || 0;
+        }
+      }
+    } catch (e) {}
+  }
+
+  getDataIBC(): void {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      if (jsonData && jsonData[0]) {
+        const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.SendPacket);
+        if (temp) {
+          this.ibcData = temp[0]?.attributes;
+          this.ibcData.packet_sequence = this.ibcData.find((f) => f.key === "packet_sequence").value;
         }
       }
     } catch (e) {}
