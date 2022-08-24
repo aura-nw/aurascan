@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -48,12 +48,12 @@ export class TokenTableComponent implements OnChanges {
   total = 0;
   stableTokenName = 'Aura';
   pageEvent: any;
+  paginator: MatPaginator;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
-
   constructor(
     public global: Globals,
     private accountService: AccountService,
@@ -117,22 +117,30 @@ export class TokenTableComponent implements OnChanges {
   sortData(sort: Sort) {}
 
   paginatorEmit(event): void {
-    this.dataSource.paginator = event;
+    this.paginator = event;
   }
 
   handlePageEvent(e: any) {
     this.pageData.pageIndex = e.pageIndex;
+    this.getKeySearch();
+  }
+
+  getKeySearch() {
+    this.textSearch = this.textSearch?.trim();
     this.getListToken();
   }
 
   searchToken(): void {
-    this.pageData.pageIndex = 0;
-    this.getListToken();
+    if (this.paginator.pageIndex !== 0) {
+      this.paginator.firstPage();
+    } else {
+      this.getKeySearch();
+    }
   }
 
   resetSearch(): void {
     this.textSearch = '';
     this.pageData.pageIndex = 0;
-    this.getListToken();
+    this.searchToken();
   }
 }

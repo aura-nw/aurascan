@@ -42,7 +42,7 @@
         </div>
         <ng-container *ngIf="pageData?.length > 0; else noValues">
           <!-- Table -->
-          <div class="table-responsive aura-table-contain mt-4 table-token" *ngIf="!assetsLoading">
+          <div class="table-responsive mt-4 table-token" *ngIf="!assetsLoading">
             <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
               <!-- Asset Column -->
               <ng-container matColumnDef="asset">
@@ -54,13 +54,13 @@
                     *ngIf="element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
                     <div class="ml-2 body-03 fw-semibold">
-                      {{ element.name }}
+                      {{ element.name | stringEllipsis: 19 }}
                     </div>
                   </a>
                   <div class="d-flex align-items-center" *ngIf="!element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
                     <div class="ml-2 body-03 fw-semibold">
-                      {{ element.name }}
+                      {{ element.name | stringEllipsis: 19 }}
                     </div>
                   </div>
                 </td>
@@ -108,7 +108,7 @@
                       >${{ element.price | number: global.formatNumberToken }}</span
                     >
                     <span *ngIf="global.price.aura" class="ml-1 text--gray-5">
-                      ({{ element.price / global.price.aura | number: global.formatNumber2Decimal }} {{ denom }})
+                      ({{ element.price / global.price.aura | number: global.formatNumberToken }} {{ denom }})
                     </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
@@ -177,6 +177,7 @@
             (pageEvent)="handlePageEvent($event)">
           </app-paginator>
         </ng-container>
+
         <ng-template #noValues>
           <div class="card" *ngIf="!assetsLoading">
             <app-table-no-data [textNull]="'No coin & tokens'"></app-table-no-data>
