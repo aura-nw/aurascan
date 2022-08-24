@@ -4,13 +4,11 @@
     <span class="text--gray-5 body-01 body-02-mob ml-lg-2 break-word mt-2 mt-lg-0">{{ contractAddress }}</span>
   </div>
   <div class="d-flex align-items-center ml-10 ml-lg-2">
-    <button class="button button--xxs button-circle">
+    <button class="button button--xxs button--sm-mob button-circle">
       <img
             [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-            class=""
+            class="button__icon"
             alt=""
-            width="15px"
-            height="15px"
             matTooltip="Copied!"
             #tooltip="matTooltip"
             (mouseenter)="$event.stopImmediatePropagation()"
@@ -18,12 +16,11 @@
             (click)="copyData(); tooltip.toggle()" />
 
     </button>
-    <button class="button button--xxs button-circle ml-4 ml-lg-2">
+    <button class="button button--xxs button--sm-mob button-circle ml-4 ml-lg-2">
       <img
             [src]="'assets/icons/icons-svg/basic/qr-code.svg' | imageS3"
             alt=""
-            width="15px"
-            height="15px"
+            class="button__icon"
             (click)="viewQrAddress(modalManage)" />
     </button>
   </div>

@@ -56,13 +56,13 @@
                     [routerLink]="['/tokens/token', element.contract_address]"
                     *ngIf="element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
-                    <div class="ml-2">
+                    <div class="ml-2 body-03 fw-semibold">
                       {{ element.name }}
                     </div>
                   </a>
                   <div class="d-flex align-items-center" *ngIf="!element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
-                    <div class="ml-2">
+                    <div class="ml-2 body-03 fw-semibold">
                       {{ element.name }}
                     </div>
                   </div>
