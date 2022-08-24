@@ -1,4 +1,4 @@
-<ng-container *ngIf="jsonWriteContract; else noValues">
+<ng-container *ngIf="root; else noValues">
   <div class="d-flex justify-content-between align-items-center">
     <div class="my-t mb-1 mb-lg-3 small-text">
       <button
@@ -55,7 +55,7 @@
           <div class="px-0">
             <button
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
-              [disabled]="errorInput && currentFrom === index"
+              [disabled]="false"
               type="button"
               (click)="handleExecute(msg)">
               <span>Write</span>

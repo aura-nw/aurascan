@@ -20,12 +20,12 @@ export class WriteContractComponent implements OnInit {
   isExpand = false;
   isConnectedWallet = false;
   walletAddress = '';
-  jsonWriteContract: any;
   userAddress = '';
-  errorInput = false;
-  currentFrom = 0;
   walletAccount: any;
-  objDefine = {};
+  // jsonWriteContract: any;
+  // currentFrom = 0;
+  // errorInput = false;
+  // objDefine = {};
 
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -53,9 +53,9 @@ export class WriteContractComponent implements OnInit {
     });
 
     try {
-      this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
+      const jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
 
-      this.jsValidator.addSchema(this.jsonWriteContract);
+      this.jsValidator.addSchema(jsonWriteContract);
 
       if (this.jsValidator.schemas) {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
@@ -94,144 +94,19 @@ export class WriteContractComponent implements OnInit {
   }
 
   reloadData() {
-    for (let i = 0; i < document.getElementsByClassName('form-check-input').length; i++) {
-      (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
-    }
+    // for (let i = 0; i < document.getElementsByClassName('form-check-input').length; i++) {
+    //   (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
+    // }
+    // this.errorInput = false;
     this.expandMenu(true);
-    this.errorInput = false;
+
+    this.root?.forEach((msg) => {
+      this.resetError(msg, true);
+    });
   }
 
   connectWallet(): void {
     this.walletAccount = this.walletService.getAccount();
-  }
-
-  async executeSmartContract(name: string, currentFrom: number) {
-    this.connectWallet();
-    if (this.walletAccount) {
-      let err = {};
-      let objWriteContract = {};
-      let msg = {};
-      const contractTemp = this.jsonWriteContract?.oneOf.find((contract) => contract.required[0] === name);
-      if (contractTemp.properties[name].hasOwnProperty('properties')) {
-        Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
-          let element: HTMLInputElement = document.getElementsByClassName(
-            'form-check-input ' + name + ' ' + key,
-          )[0] as HTMLInputElement;
-
-          //check input null && require field
-          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
-            err[key.toString()] = true;
-            this.errorInput = true;
-            this.currentFrom = currentFrom;
-            return;
-          }
-
-          let type = contractTemp.properties[name].properties[key].type;
-          //check exit value
-          if (element?.value) {
-            objWriteContract[key] = element?.value;
-          }
-
-          //convert number if integer field
-          if (type) {
-            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
-              objWriteContract[key] = Number(element?.value);
-            }
-          }
-        });
-      }
-      //check exit ref define
-      else if (contractTemp.properties[name].hasOwnProperty('$ref')) {
-        let objectTemp = contractTemp.properties[name].$ref.replace('#/', '')?.split('/');
-        const contractRef = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
-        Object.entries(contractRef.properties).forEach(([key, value]) => {
-          let element: HTMLInputElement = document.getElementsByClassName(
-            'form-check-input ' + name + ' ' + key,
-          )[0] as HTMLInputElement;
-
-          //check input null && require field
-          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
-            err[key.toString()] = true;
-            this.errorInput = true;
-            this.currentFrom = currentFrom;
-            return;
-          }
-
-          let type = contractRef.properties[key].type || 'string';
-          if (element?.value) {
-            objWriteContract[key] = element?.value;
-          }
-
-          //convert number if integer field
-          if (type) {
-            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
-              objWriteContract[key] = Number(element?.value);
-            }
-          }
-        });
-      }
-      contractTemp.properties[name].checkErr = err;
-
-      if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
-        return;
-      }
-
-      msg = {
-        [name]: objWriteContract,
-      };
-      let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-      const client = await SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer);
-      const fee: any = {
-        amount: [
-          {
-            denom: this.coinMinimalDenom,
-            amount: '1',
-          },
-        ],
-        gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
-      };
-      try {
-        await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-        contractTemp.properties[name].checkErr = null;
-        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-      } catch (error) {
-        if (!error.toString().includes('Request rejected')) {
-          let msgError = error.toString() || 'Error';
-          this.toastr.error(msgError);
-        }
-      }
-    }
-  }
-
-  resetCheck() {
-    this.errorInput = false;
-  }
-
-  objectKeys(obj) {
-    return obj ? Object.keys(obj) : [];
-  }
-
-  objectRef(ref, getType = false, contractDetail = null) {
-    if (!ref) {
-      return 'any';
-    }
-
-    this.getRefType(ref);
-
-    let objectTemp = ref.replace('#/', '')?.split('/');
-    let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
-    let data = {};
-    if (obj) {
-      data = { key: objectTemp, value: obj };
-    }
-    if (contractDetail) {
-      this.objDefine[Object.keys(contractDetail.properties)[0]] = data;
-    }
-    if (getType) {
-      return obj.type || 'string';
-    } else {
-      return obj?.properties ? Object.keys(obj?.properties) : [];
-    }
   }
 
   getRef(ref: string) {
@@ -344,13 +219,21 @@ export class WriteContractComponent implements OnInit {
     }
   }
 
-  resetError(msg) {
+  resetError(msg, all = false) {
     if (msg) {
       const { fieldList } = msg;
       fieldList.forEach((item) => {
-        _.assign(item, {
-          isError: false,
-        });
+        _.assign(
+          item,
+          all
+            ? {
+                isError: false,
+                value: '',
+              }
+            : {
+                isError: false,
+              },
+        );
       });
     }
   }
@@ -382,10 +265,139 @@ export class WriteContractComponent implements OnInit {
       });
   }
 
+  /*
   checkRequire(item, objDefine): boolean {
     if (objDefine.value.required.includes(item)) {
       return true;
     }
     return false;
   }
+
+    async executeSmartContract(name: string, currentFrom: number) {
+    this.connectWallet();
+    if (this.walletAccount) {
+      let err = {};
+      let objWriteContract = {};
+      let msg = {};
+      const contractTemp = this.jsonWriteContract?.oneOf.find((contract) => contract.required[0] === name);
+      if (contractTemp.properties[name].hasOwnProperty('properties')) {
+        Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
+          let element: HTMLInputElement = document.getElementsByClassName(
+            'form-check-input ' + name + ' ' + key,
+          )[0] as HTMLInputElement;
+
+          //check input null && require field
+          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
+            err[key.toString()] = true;
+            this.errorInput = true;
+            this.currentFrom = currentFrom;
+            return;
+          }
+
+          let type = contractTemp.properties[name].properties[key].type;
+          //check exit value
+          if (element?.value) {
+            objWriteContract[key] = element?.value;
+          }
+
+          //convert number if integer field
+          if (type) {
+            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
+              objWriteContract[key] = Number(element?.value);
+            }
+          }
+        });
+      }
+      //check exit ref define
+      else if (contractTemp.properties[name].hasOwnProperty('$ref')) {
+        let objectTemp = contractTemp.properties[name].$ref.replace('#/', '')?.split('/');
+        const contractRef = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
+        Object.entries(contractRef.properties).forEach(([key, value]) => {
+          let element: HTMLInputElement = document.getElementsByClassName(
+            'form-check-input ' + name + ' ' + key,
+          )[0] as HTMLInputElement;
+
+          //check input null && require field
+          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
+            err[key.toString()] = true;
+            this.errorInput = true;
+            this.currentFrom = currentFrom;
+            return;
+          }
+
+          let type = contractRef.properties[key].type || 'string';
+          if (element?.value) {
+            objWriteContract[key] = element?.value;
+          }
+
+          //convert number if integer field
+          if (type) {
+            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
+              objWriteContract[key] = Number(element?.value);
+            }
+          }
+        });
+      }
+      contractTemp.properties[name].checkErr = err;
+
+      if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
+        return;
+      }
+
+      msg = {
+        [name]: objWriteContract,
+      };
+      let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
+      const client = await SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer);
+      const fee: any = {
+        amount: [
+          {
+            denom: this.coinMinimalDenom,
+            amount: '1',
+          },
+        ],
+        gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
+      };
+      try {
+        await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+        contractTemp.properties[name].checkErr = null;
+        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+      } catch (error) {
+        if (!error.toString().includes('Request rejected')) {
+          let msgError = error.toString() || 'Error';
+          this.toastr.error(msgError);
+        }
+      }
+    }
+  }
+
+    resetCheck() {
+    this.errorInput = false;
+  }
+
+  objectKeys(obj) {
+    return obj ? Object.keys(obj) : [];
+  }
+
+  objectRef(ref, getType = false, contractDetail = null) {
+    if (!ref) {
+      return 'any';
+    }
+
+    let objectTemp = ref.replace('#/', '')?.split('/');
+    let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
+    let data = {};
+    if (obj) {
+      data = { key: objectTemp, value: obj };
+    }
+    if (contractDetail) {
+      this.objDefine[Object.keys(contractDetail.properties)[0]] = data;
+    }
+    if (getType) {
+      return obj.type || 'string';
+    } else {
+      return obj?.properties ? Object.keys(obj?.properties) : [];
+    }
+  }
+  */
 }
