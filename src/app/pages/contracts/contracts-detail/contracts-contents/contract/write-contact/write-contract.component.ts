@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
+import { Schema, Validator } from 'jsonschema';
+import * as _ from 'lodash';
 import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -30,6 +32,10 @@ export class WriteContractComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
+  jsValidator = new Validator();
+
+  root: any[];
+
   constructor(
     public walletService: WalletService,
     private toastr: NgxToastrService,
@@ -48,6 +54,14 @@ export class WriteContractComponent implements OnInit {
 
     try {
       this.jsonWriteContract = JSON.parse(this.contractDetailData?.execute_msg_schema);
+
+      this.jsValidator.addSchema(this.jsonWriteContract);
+
+      if (this.jsValidator.schemas) {
+        this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
+      }
+
+      console.log('debug', { root: this.root });
     } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {
@@ -202,6 +216,8 @@ export class WriteContractComponent implements OnInit {
       return 'any';
     }
 
+    this.getRefType(ref);
+
     let objectTemp = ref.replace('#/', '')?.split('/');
     let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
     let data = {};
@@ -215,6 +231,124 @@ export class WriteContractComponent implements OnInit {
       return obj.type || 'string';
     } else {
       return obj?.properties ? Object.keys(obj?.properties) : [];
+    }
+  }
+
+  getRef(ref: string) {
+    if (ref) {
+      const schema = this.jsValidator.schemas;
+      if (schema && schema[`/${ref}`]) {
+        return schema[`/${ref}`];
+      }
+    }
+
+    return null;
+  }
+
+  getRefType(ref: string): string | string[] {
+    if (ref) {
+      const schema = this.jsValidator.schemas;
+
+      if (schema && schema[`/${ref}`]) {
+        const _ref = schema[`/${ref}`];
+        const type = _ref.type;
+        if (type === 'object') {
+        }
+        return schema[`/${ref}`].type;
+      }
+    }
+
+    return 'any';
+  }
+
+  getType(schema) {
+    const { $ref: ref, type } = schema;
+    const ret = ref ? this.getRefType(ref) : type;
+
+    return ret;
+  }
+
+  getProperties(schema: Schema) {
+    const fieldName = _.first(Object.keys(schema.properties));
+
+    const { $ref: ref } = schema.properties[fieldName];
+
+    let props = ref ? this.getRef(ref) : schema.properties[fieldName];
+
+    const childProps = props?.properties;
+
+    let fieldList = [];
+
+    if (childProps) {
+      // console.log({
+      //   [fieldName]: props,
+      // });
+
+      fieldList = Object.keys(childProps).map((e) => ({
+        fieldName: e,
+        type: this.getType(childProps[e]) || 'any',
+        isRequired: (props.required as string[])?.includes(e),
+      }));
+    }
+
+    return {
+      fieldName,
+      properties: props,
+      fieldList,
+    };
+  }
+
+  makeSchemaInput(schemas: Schema[]): any[] {
+    const result = schemas.map((msg) => {
+      try {
+        const properties = this.getProperties(msg);
+
+        return properties;
+      } catch (e) {
+        return {};
+      }
+    });
+
+    return result;
+  }
+
+  handleExecute(msg) {
+    this.connectWallet();
+    if (this.walletAccount && msg) {
+      // console.log({ msg });
+      const { fieldList, fieldName } = msg;
+
+      const msgExecute = {
+        [fieldName]: {},
+      };
+
+      fieldList.forEach((item) => {
+        const isError = item.isRequired && !item.value;
+        if (!isError) {
+          _.assign(msgExecute[fieldName], {
+            [item.fieldName]: item.value,
+          });
+          return;
+        }
+
+        _.assign(item, { isError });
+        msgExecute[fieldName] = null;
+      });
+
+      if (msgExecute[fieldName]) {
+        console.log(msgExecute);
+      }
+    }
+  }
+
+  resetError(msg) {
+    if (msg) {
+      const { fieldList } = msg;
+      fieldList.forEach((item) => {
+        _.assign(item, {
+          isError: false,
+        });
+      });
     }
   }
 
