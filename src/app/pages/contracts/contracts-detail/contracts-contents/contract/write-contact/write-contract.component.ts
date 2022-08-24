@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { SigningCosmWasmClient, toBinary } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
@@ -137,10 +137,15 @@ export class WriteContractComponent implements OnInit {
   }
 
   getType(schema) {
-    const { $ref: ref, type } = schema;
-    const ret = ref ? this.getRefType(ref) : type;
+    const { $ref: ref, type: _type } = schema;
+    const isBinary = ref === '#/definitions/Binary';
 
-    return ret;
+    const type = ref ? this.getRefType(ref) : _type;
+
+    return {
+      type: type || 'any',
+      isBinary,
+    };
   }
 
   getProperties(schema: Schema) {
@@ -155,14 +160,12 @@ export class WriteContractComponent implements OnInit {
     let fieldList = [];
 
     if (childProps) {
-      // console.log({
-      //   [fieldName]: props,
-      // });
+      // console.log({ [fieldName]: childProps });
 
       fieldList = Object.keys(childProps).map((e) => ({
         fieldName: e,
-        type: this.getType(childProps[e]) || 'any',
         isRequired: (props.required as string[])?.includes(e),
+        ...this.getType(childProps[e]),
       }));
     }
 
@@ -187,10 +190,25 @@ export class WriteContractComponent implements OnInit {
     return result;
   }
 
+  parseValue(item) {
+    let value;
+    if (item.type === 'any') {
+      try {
+        value = JSON.parse(item.value);
+      } catch (e) {
+        value = item.value;
+      }
+    } else if (item.isBinary) {
+      value = toBinary(item.value);
+    } else {
+      value = item.value;
+    }
+    return value;
+  }
+
   handleExecute(msg) {
     this.connectWallet();
     if (this.walletAccount && msg) {
-      // console.log({ msg });
       const { fieldList, fieldName } = msg;
 
       const msgExecute = {
@@ -199,10 +217,11 @@ export class WriteContractComponent implements OnInit {
 
       fieldList.forEach((item) => {
         const isError = item.isRequired && !item.value;
+
         if (!isError) {
           item.value &&
             _.assign(msgExecute[fieldName], {
-              [item.fieldName]: item.value,
+              [item.fieldName]: this.parseValue(item),
             });
           return;
         }
@@ -216,25 +235,6 @@ export class WriteContractComponent implements OnInit {
 
         this.execute(msgExecute);
       }
-    }
-  }
-
-  resetError(msg, all = false) {
-    if (msg) {
-      const { fieldList } = msg;
-      fieldList.forEach((item) => {
-        _.assign(
-          item,
-          all
-            ? {
-                isError: false,
-                value: '',
-              }
-            : {
-                isError: false,
-              },
-        );
-      });
     }
   }
 
@@ -263,6 +263,25 @@ export class WriteContractComponent implements OnInit {
           this.toastr.error(msgError);
         }
       });
+  }
+
+  resetError(msg, all = false) {
+    if (msg) {
+      const { fieldList } = msg;
+      fieldList.forEach((item) => {
+        _.assign(
+          item,
+          all
+            ? {
+                isError: false,
+                value: '',
+              }
+            : {
+                isError: false,
+              },
+        );
+      });
+    }
   }
 
   /*
