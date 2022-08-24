@@ -61,7 +61,7 @@ export class WriteContractComponent implements OnInit {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
       }
 
-      console.log('debug', { root: this.root });
+      // console.log('debug', { root: this.root });
     } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {
@@ -325,9 +325,10 @@ export class WriteContractComponent implements OnInit {
       fieldList.forEach((item) => {
         const isError = item.isRequired && !item.value;
         if (!isError) {
-          _.assign(msgExecute[fieldName], {
-            [item.fieldName]: item.value,
-          });
+          item.value &&
+            _.assign(msgExecute[fieldName], {
+              [item.fieldName]: item.value,
+            });
           return;
         }
 
@@ -337,6 +338,8 @@ export class WriteContractComponent implements OnInit {
 
       if (msgExecute[fieldName]) {
         console.log(msgExecute);
+
+        this.execute(msgExecute);
       }
     }
   }
@@ -350,6 +353,33 @@ export class WriteContractComponent implements OnInit {
         });
       });
     }
+  }
+
+  execute(msg) {
+    let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
+    const fee: any = {
+      amount: [
+        {
+          denom: this.coinMinimalDenom,
+          amount: '1',
+        },
+      ],
+      gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
+    };
+
+    SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
+      .then((client) => {
+        return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+      })
+      .then(() => {
+        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+      })
+      .catch((error) => {
+        if (!error.toString().includes('Request rejected')) {
+          let msgError = error.toString() || 'Error';
+          this.toastr.error(msgError);
+        }
+      });
   }
 
   checkRequire(item, objDefine): boolean {
