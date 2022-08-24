@@ -2,6 +2,8 @@
   pre.content-info {
     min-height: 124px;
     align-items: start;
+    font-size: 1.2rem;
+    font-weight: 400;
     @media (max-width: 991.98px) {
       &::-webkit-scrollbar {
         height: 4px;
@@ -29,7 +31,7 @@
     }
     &-ellipsis {
       display: inline;
-      padding: 7px 16px;
+      padding: 9px 16px;
     }
   }
 
