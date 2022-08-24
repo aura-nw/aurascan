@@ -1,37 +1,60 @@
-<span class="small-body text--light-gray">A total of {{ nftData?.length }} token{{ nftData?.length > 1 ? 's' : '' }} found</span>
+<span class="small-body text--light-gray"
+  >A total of {{ pageData?.length }} token{{ pageData?.length > 1 ? 's' : '' }} found</span
+>
 
 <div *ngIf="loading" class="m-auto mt-10">
   <app-loading-sprint></app-loading-sprint>
 </div>
+
 <!-- Table -->
-<ng-container *ngIf="showedData?.length > 0; else noValues">
-  <div class="mt-6">
-    <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
-      <div class="nft-cards__col col" *ngFor="let item of showedData">
-        <div class="nft-cards__item-border">
-          <a href="{{ item.link }}" class="nft-cards__item">
-            <div class="nft-cards__img">
-              <img *ngIf="item.img" src="{{ item.img }}" alt="" />
-              <img *ngIf="!item.img" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
-              <!--                            <div class="nft-cards__label"><span class="text-gradient">{{item.symbol}}</span></div>-->
-            </div>
-            <div class="mt-3 token-id">
-              <span class="small-text mr-1 text--white">Token ID:</span>
-              <span class="small-text text--green">{{ item.tokenID }}</span>
-            </div>
-            <div class="mt-1">
-              <span class="small-text mr-1 text--white">Owner:</span>
-              <span class="small-text text--green d-lg-none">{{ item.name | cutStringPipe: 6:6 }}</span>
-              <span class="small-text text--green d-none d-lg-block">{{ item.name | cutStringPipe: 8:8 }}</span>
-            </div>
-          </a>
+<ng-container>
+  <ng-container *ngIf="pageData?.length > 0; else noValues">
+    <div class="mt-6">
+      <div
+        class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+        *ngIf="!loading">
+        <div class="nft-cards__col col" *ngFor="let item of nftData?.data">
+          <div class="nft-cards__item-border">
+            <a href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}" class="nft-cards__item">
+              <div class="nft-cards__img">
+                <img *ngIf="item.img" src="{{ item.uri }}" alt="" />
+                <img *ngIf="!item.img" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
+                <!--                            <div class="nft-cards__label"><span class="text-gradient">{{item.symbol}}</span></div>-->
+              </div>
+              <div class="mt-3 token-id">
+                <span class="small-text mr-1 text--white">Token ID:</span>
+                <a
+                  class="small-text text--green hover-link"
+                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.token_id }}"
+                  >{{ item.token_id }}</a
+                >
+              </div>
+              <div class="mt-1">
+                <span class="small-text mr-1 text--white">Owner:</span>
+                <a
+                  class="small-text text--green d-lg-none hover-link"
+                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.owner }}"
+                  >{{ item.owner | cutStringPipe: 6:6 }}</a
+                >
+                <a
+                  class="small-text text--green d-none d-lg-inline hover-link"
+                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.owner }}"
+                  >{{ item.owner | cutStringPipe: 8:8 }}</a
+                >
+              </div>
+            </a>
+          </div>
         </div>
       </div>
+      <app-paginator
+        [length]="pageData?.length"
+        [pageSize]="pageData?.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="pageEvent($event)">
+      </app-paginator>
     </div>
-    <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (pageEvent)="paginatorEmit($event)">
-    </app-paginator>
-  </div>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data *ngIf="!loading"></app-table-no-data>
+  </ng-template>
 </ng-container>
-<ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
-</ng-template>

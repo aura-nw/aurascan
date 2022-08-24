@@ -1,10 +1,17 @@
+.aura-form.single-input-field {
+  .input-group {
+    height: 36px;
+    padding: 0 16px;
+    input {
+      font-size: 1.4rem;
+      line-height: 1.9rem;
+    }
+  }
+}
 .nft-cards {
   &__col {
     overflow: hidden;
-    margin-bottom: var(--spacer-4);
-    @media (min-width: 992px) {
-      margin-bottom: var(--spacer-6);
-    }
+    margin-bottom: var(--spacer-6);
   }
   &__item-border {
     display: block;
@@ -53,6 +60,11 @@
     background-color: var(--aura-dark-gray);
     padding: 0 var(--spacer-2);
     border-radius: var(--spacer-1);
+  }
+  .token-id {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 

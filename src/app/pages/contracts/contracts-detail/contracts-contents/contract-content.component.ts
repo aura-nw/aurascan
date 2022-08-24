@@ -17,18 +17,18 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   @Input() contractsAddress = '';
   @Input() contractTypeData: ContractVerifyType;
 
-  TABS = CONTRACT_TAB.filter((vote) =>
+  TABS = CONTRACT_TAB.filter((tab) =>
     [
       ContractTab.Transactions,
       // ContractTab.Cw20Token,
       ContractTab.Contract,
       // ContractTab.Events,
       // ContractTab.Analytics,
-    ].includes(vote.key),
-  ).map((vote) => ({
-    ...vote,
-    value: vote.value,
-    key: vote.key === ContractTab.Transactions ? '' : vote.key,
+    ].includes(tab.key),
+  ).map((tab) => ({
+    ...tab,
+    value: tab.value,
+    key: tab.key === ContractTab.Transactions ? '' : tab.key,
   }));
 
   countCurrent: string = ContractTab.Transactions;
@@ -39,6 +39,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
 
   activeId = 0;
+  limit = 25;
 
   contractInfo = {
     contractsAddress: this.contractsAddress,
@@ -104,7 +105,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
       let payload = {
-        limit: 25,
+        limit: this.limit,
         offset: 0,
         label: '',
         contract_address: this.contractsAddress,

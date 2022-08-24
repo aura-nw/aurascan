@@ -27,13 +27,12 @@
   </div>
   <div class="mt-5">
     <app-contract-table
-      [length]="25"
+      [length]="limit"
       *ngIf="countCurrent === contractTab.Transactions"
       [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"
       (onViewSelected)="filterTransaction($event)"></app-contract-table>
-    <app-cw20-token *ngIf="countCurrent === contractTab.Cw20Token"></app-cw20-token>
     <app-contract
       *ngIf="countCurrent === contractTab.Contract"
       [contractTypeData]="contractTypeData"

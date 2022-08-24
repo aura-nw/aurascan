@@ -75,3 +75,9 @@ export enum StatusTransaction {
 export enum CodeTransaction {
   Success = 0
 }
+
+export enum ModeExecuteTransaction {
+  Default = 'default',
+  Mint = 'mint',
+  Burn = 'burn'
+}

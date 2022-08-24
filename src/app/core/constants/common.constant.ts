@@ -42,12 +42,6 @@ export const PAGE_EVENT = {
 
 export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
-export const VALIDATOR_ADDRESS_PREFIX = 'auravaloper';
-
-export const ADDRESS_PREFIX = 'aura';
-
-// export const AURA_DENOM = 'utaura';
-
 export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 
 export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg';
@@ -58,9 +52,18 @@ export const TIME_OUT_CALL_API = 5000;
 
 export const NUM_BLOCK = 10000;
 
+export const INDEXER_URL = 'https://indexer.dev.aurascan.io:/api/v1';
+
 export const CHART_RANGE = {
   M_60: '60m',
   H_24: '24h',
   D_30: '30d',
   MONTH_12: '12M',
 };
+
+export const LENGTH_CHARACTER = {
+  ADDRESS: 43,
+  TRANSACTION: 64
+};
+
+export const NULL_ADDRESS = "0".repeat(LENGTH_CHARACTER.ADDRESS);

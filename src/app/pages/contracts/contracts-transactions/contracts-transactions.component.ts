@@ -34,6 +34,8 @@ export class ContractsTransactionsComponent implements OnInit {
     label: '',
   };
 
+  pageSize = 20;
+
   contract$ = combineLatest([this.activeRouter.params, this.activeRouter.queryParams]).pipe(
     map((result) => ({
       params: result[0],
@@ -43,7 +45,7 @@ export class ContractsTransactionsComponent implements OnInit {
       if (isContract(params?.addressId)) {
         this.contractInfo.contractsAddress = params?.addressId;
         let payload = {
-          limit: 25,
+          limit: this.pageSize,
           offset: +queryParams['offset'] || 0,
           label: parseLabel(queryParams['label'] || ''),
           contract_address: params.addressId,
@@ -86,7 +88,7 @@ export class ContractsTransactionsComponent implements OnInit {
     this.router.navigate([`/contracts/transactions`, this.contractInfo.contractsAddress], {
       queryParams: {
         label: this.queryParams?.label || '',
-        offset: (event?.next || 0) * 25,
+        offset: (event?.next || 0) * this.pageSize,
       },
     });
   }

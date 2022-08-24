@@ -33,7 +33,7 @@ export const CONTRACT_RESULT = {
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
 export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
-  { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
+  // { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
   { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
   {
@@ -47,7 +47,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account' },
   { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 6, justify: 'center' },
-  { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 12, isUrl: '/account' },
+  { matColumnDef: 'to', headerCellDef: 'To', type: 'short-string', headerWidth: 12 },
   { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'AURA', headerWidth: 10 },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];

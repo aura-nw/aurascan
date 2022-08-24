@@ -30,7 +30,6 @@ export class TransactionService extends CommonService {
   }
 
   txsWithAddress(limit: string | number, offset: string | number, address: string): Observable<any> {
-    this.setURL();
     return this.http.get<any>(`${this.apiUrl}/account/${address}/transaction?limit=${limit}&offset=${offset}`);
   }
 }

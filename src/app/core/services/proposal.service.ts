@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
 import { IListVoteQuery, IListVotesRes, IProposal, IVotingInfo } from '../models/proposal.model';
@@ -8,6 +9,8 @@ import { CommonService } from './common.service';
 
 @Injectable()
 export class ProposalService extends CommonService {
+  chainInfo = this.environmentService.configValue.chain_info;
+
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
@@ -21,8 +24,15 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
   }
 
-  getVotes(proposalId: string | number, voter: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/votes/${voter}`);
+  getVotes(
+    proposalId: string | number,
+    voter: string,
+    limit: string | number,
+    offset: string | number,
+  ): Observable<any> {
+    return this.http.get<any>(
+      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&query=proposal_vote.proposal_id%3D'${proposalId}'%2Ctransfer.sender%3D'${voter}'&pageOffset=${offset}&pageLimit=${limit}&countTotal=false&reverse=false`,
+    );
   }
 
   getValidatorVotes(data): Observable<any> {
@@ -30,7 +40,9 @@ export class ProposalService extends CommonService {
   }
 
   getDepositors(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/deposits`);
+    return this.http.get<any>(
+      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchType=proposal_deposit&searchKey=proposal_id&searchValue=${proposalId}&countTotal=true&reverse=false`,
+    );
   }
 
   getListVote(payload: IListVoteQuery): Observable<IResponsesTemplates<IListVotesRes>> {
@@ -45,7 +57,7 @@ export class ProposalService extends CommonService {
     return this.http.get<IResponsesTemplates<IVotingInfo>>(`${this.apiUrl}/proposals/delegations/${delegatorAddress}`);
   }
 
-  getProposalDetailFromNode(proposalId: string | number):  Observable<any> {
+  getProposalDetailFromNode(proposalId: string | number): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
   }

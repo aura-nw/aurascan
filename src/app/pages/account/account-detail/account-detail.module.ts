@@ -15,9 +15,12 @@ import { SharedModule } from '../../../shared/shared.module';
 import { AccountDetailRoutingModule } from './account-detail-routing.module';
 import { AccountDetailTableModule } from './account-detail-table/account-detail-table.module';
 import { AccountDetailComponent } from './account-detail.component';
+import {  NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { TokenTableComponent } from './token-table/token-table.component';
+import { NftListComponent } from './nft-list/nft-list.component';
 
 @NgModule({
-  declarations: [AccountDetailComponent],
+  declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent],
   imports: [
     CommonModule,
     AccountDetailRoutingModule,
@@ -33,6 +36,7 @@ import { AccountDetailComponent } from './account-detail.component';
     TableNoDataModule,
     PaginatorModule,
     QrModule,
+    NgbNavModule,
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })
