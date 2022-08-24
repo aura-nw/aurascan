@@ -1,7 +1,7 @@
 <div *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div *ngIf="contractInfo">
     <h1 class="mb-2 text--white">Transactions</h1>
-    <div class="body-02 text--gray-1 d-flex">
+    <div class="body-02 text--gray-5 d-flex">
       for
       <a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
         {{ contractInfo.contractsAddress }}
