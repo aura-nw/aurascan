@@ -1,0 +1,137 @@
+section.account-detail {
+  .qr-code {
+    border-right: 1px solid var(--aura-gray-9);
+    vertical-align: middle;
+  }
+  form.search-form {
+    .input-group {
+      background-color: var(--aura-bg-form);
+    }
+    input {
+      width: 100%;
+      @media (min-width: 992px) {
+        width: 150px;
+      }
+      @media (min-width: 1200px) {
+        width: 250px;
+      }
+      @media (min-width: 1440px) {
+        width: 405px;
+      }
+    }
+  }
+  @media (max-width: 991.98px) {
+    .row-eq-height {
+      flex-direction: column-reverse;
+    }
+  }
+
+  .box-chart {
+    width: 180px;
+    height: 180px;
+    border: 1px solid #d3d3d3;
+    border-radius: 50%;
+    div {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #d3d3d3;
+      border-radius: 50%;
+    }
+  }
+  .article-2 {
+    min-height: 500px;
+  }
+}
+.chart-legend-item {
+  border-bottom: 1px solid var(--aura-gray-9);
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  .item-color-balance {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    @media (min-width: 992px) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+.button {
+  &.button-circle {
+    aspect-ratio : 1 / 1 !important;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #363843;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &.button--md {
+    width: 40px;
+    height: 40px;
+  }
+  &.button--xxs {
+    width: 24px;
+    height: 24px;
+  }
+}
+@media (max-width: 991.98px) {
+  .g-ellipsis-address {
+    width: 310px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+  .box-account {
+    padding: var(--spacer-4) !important;
+  }
+  ::ng-deep {
+    .modal-dialog {
+      .modal-content {
+        width: 80%;
+        min-width: 300px;
+        margin: 0 auto;
+        padding-bottom: 52px !important;
+      }
+    }
+  }
+  .header-mob {
+    padding-bottom: 0px !important;
+    font-size: 2rem !important;
+    font-weight: 500;
+  }
+  .aura-form {
+    .select-input-field {
+      height: auto;
+      padding: 6px 16px 8px 22px;
+      border: 1px solid var(--aura-white);
+    }
+  }
+  ::ng-deep {
+    .mat-tab-label-content {
+      font-size: 1.6rem !important;
+      font-weight: 600;
+    }
+  }
+}
+::ng-deep.account-search-form {
+  width: 100%;
+  @media (min-width: 992px) {
+    width: 410px;
+  }
+}
+.account__tab-item {
+  min-width: 160px;
+}
+
+.aura-table.transaction-table th.mat-header-cell {
+  min-width: 150px;
+}
+.aura-table.transaction-table th.mat-header-cell:nth-child(1),
+.aura-table.transaction-table th.mat-header-cell:nth-child(2),
+.aura-table.transaction-table th.mat-header-cell:nth-child(7) {
+  min-width: 200px;
+}
