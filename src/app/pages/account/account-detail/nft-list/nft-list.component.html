@@ -6,9 +6,7 @@
     </div>
     <!-- Filter -->
     <div class="mb-6 d-lg-flex align-items-center justify-content-between">
-      <div class="h1 mb-0 text-gradient">
-        $ {{(totalValue || 0) | number: global.formatNumber2Decimal}}
-      </div>
+      <div class="h1 mb-0 text-gradient">$ {{ totalValue || 0 | number: global.formatNumber2Decimal }}</div>
       <form class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
         <div class="input-group">
           <input
@@ -17,19 +15,19 @@
             placeholder="Search for Token ID or Address"
             [(ngModel)]="searchValue"
             [maxLength]="maxLengthSearch"
-            (keyup.enter)="handleSearch()"
+            (keyup)="checkSearch()"
+            (keyup.enter)="searchTokenNft()"
             [ngModelOptions]="{ standalone: true }"
             name="inputEmail"
             autocomplete="off" />
-          <button
-            type="submit"
-            class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
-            (click)="handleSearch()">
+          <button type="submit" class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
             type="reset"
-            class="btn-reset {{ !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : '' }}"
+            class="btn-reset cursor-pointer {{
+              !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+            }}"
             (click)="resetSearch()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
@@ -74,7 +72,11 @@
             </div>
           </div>
         </div>
-        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (pageEvent)="paginatorEmit($event)">
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="handlePageEvent($event)">
         </app-paginator>
       </div>
     </ng-container>

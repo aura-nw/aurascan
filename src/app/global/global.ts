@@ -11,7 +11,10 @@ export class Globals {
   formatNumber2Decimal = '1.2-2';
   formatNumberOnlyDecimal = '1.0-0';
   maxNumberInput = 100000000000000;
-  tokenPrice = 0;
+  price = {
+    aura: 0,
+    btc: 0
+  }
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom: string) {

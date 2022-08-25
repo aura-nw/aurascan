@@ -23,7 +23,7 @@
       </button>
       <button
         type="reset"
-        class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+        class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="textSearch = ''; searchToken()">
         <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
@@ -76,7 +76,7 @@
                       autocomplete="off" />
               <button
                       type="reset"
-                      class="btn-reset"
+                      class="btn-reset cursor-pointer"
                       (click)="textSearch = ''; searchToken(); searchMobVisible = false;">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>

@@ -71,3 +71,8 @@ export const LENGTH_CHARACTER = {
 };
 
 export const NULL_ADDRESS = "0".repeat(LENGTH_CHARACTER.ADDRESS);
+
+export const TOKEN_ID_GET_PRICE = {
+  AURA: 'aura-network',
+  BTC: 'bitcoin'
+};

@@ -87,7 +87,7 @@
                   <img [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token-nft', element.contract_address]" class="text--primary">
-                      {{ element.name  | stringEllipsis : 16}} <span *ngIf="element.symbol">({{ element.symbol }})</span>
+                      {{ element.name | stringEllipsis: 16 }} <span *ngIf="element.symbol">({{ element.symbol }})</span>
                     </a>
                     <div class="h6 caption-mob mb-0 text--gray-6 pr-5 desc">{{ element.description }}</div>
                   </div>
@@ -104,19 +104,21 @@
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="transfer">
+            <ng-container matColumnDef="transfers_24h">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- {{ element.transfer | number }} -->
-                -
+                <ng-container *ngIf="element.transfers_24h; else noData">
+                  {{ element.transfers_24h | number }}
+                </ng-container>
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="transfer3d">
+            <ng-container matColumnDef="transfers_3d">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (3D)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- {{ element.transfer3d | number }} -->
-                -
+                <ng-container *ngIf="element.transfers_3d; else noData">
+                  {{ element.transfers_3d | number }}
+                </ng-container>
               </td>
             </ng-container>
 
@@ -141,4 +143,5 @@
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>
+  <ng-template #noData> - </ng-template>
 </section>
