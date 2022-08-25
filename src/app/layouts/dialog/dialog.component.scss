@@ -23,6 +23,12 @@
   }
 
   .app-dialog {
+    @media (max-width: 768px) {
+      margin: auto 32px;
+    }
+    @media (max-width: 576px) {
+      margin: auto 16px;
+    }
     padding: var(--spacer-6);
     background: var(--aura-black);
     box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
