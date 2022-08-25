@@ -18,6 +18,7 @@
                   placeholder="Search for Token Name or Address"
                   [(ngModel)]="textSearch"
                   [maxLength]="maxLengthSearch"
+                  (keyup)="checkSearch()"
                   (keyup.enter)="searchToken()"
                   name="search"
                   autocomplete="off" />
@@ -180,7 +181,7 @@
 
         <ng-template #noValues>
           <div class="card" *ngIf="!assetsLoading">
-            <app-table-no-data [textNull]="'No coin & tokens'"></app-table-no-data>
+            <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
           </div>
         </ng-template>
       </div>

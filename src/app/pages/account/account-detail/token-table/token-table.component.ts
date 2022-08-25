@@ -138,6 +138,12 @@ export class TokenTableComponent implements OnChanges {
     }
   }
 
+  checkSearch(): void {
+    if (this.textSearch.length === 0) {
+      this.searchToken();
+    }
+  }
+
   resetSearch(): void {
     this.textSearch = '';
     this.pageData.pageIndex = 0;

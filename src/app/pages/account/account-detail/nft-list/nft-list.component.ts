@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -21,23 +21,19 @@ export class NftListComponent implements OnChanges {
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   nftData = [];
   showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
+  paginator: MatPaginator;
 
   constructor(private accountService: AccountService, private router: Router, public global: Globals) {}
 
   ngOnChanges(): void {
     this.getNftData();
-    this.pageData = {
-      length: 0,
-      pageSize: 20,
-      pageIndex: 0,
-    };
   }
 
   getNftData() {
@@ -74,32 +70,37 @@ export class NftListComponent implements OnChanges {
     this.loading = false;
   }
 
-  handleSearch() {
-    const VALIDATORS = {
-      HASHRULE: /^[A-Za-z0-9]/,
-    };
-    const regexRule = VALIDATORS.HASHRULE;
-    this.searchValue = this.searchValue?.trim();
-    if (this.searchValue.length > 0) {
-      if (regexRule.test(this.searchValue)) {
-        this.getNftData();
-      }
-    } else {
-      this.getNftData();
-    }
-  }
-
   paginatorEmit(event): void {
-    this.pageData = {
-      ...event,
-      length: this.assetCW721?.length,
-    };
-    this.getNftData();
+    this.paginator = event;
   }
 
   resetSearch(): void {
     this.searchValue = '';
     this.getNftData();
+  }
+
+  getKeySearch() {
+    this.searchValue = this.searchValue?.trim();
+    this.getNftData();
+  }
+
+  searchTokenNft(): void {
+    if (this.paginator.pageIndex !== 0) {
+      this.paginator.firstPage();
+    } else {
+      this.getKeySearch();
+    }
+  }
+
+  checkSearch(): void {
+    if (this.searchValue.length === 0) {
+      this.searchTokenNft();
+    }
+  }
+
+  handlePageEvent(e: any) {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getKeySearch();
   }
 
   handleRouterLink(e: Event, link): void {
