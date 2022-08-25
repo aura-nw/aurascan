@@ -52,14 +52,20 @@ export class NftListComponent implements OnChanges {
       if (res?.data?.length > 0) {
         this.assetCW721 = res?.data;
         this.assetCW721.length = res.data.length;
+
+        res?.data.forEach((element) => {
+          if (!this.searchValue) {
+            this.totalValue += element.price * +element.balance || 0;
+          }
+        });
+        this.totalValueNft.emit(this.totalValue);
+
         if (this.pageData) {
           this.pageData.length = this.assetCW721?.length || 0;
           const { pageIndex, pageSize } = this.pageData;
           const start = pageIndex * pageSize;
           const end = start + pageSize;
           this.showedData = this.assetCW721.slice(start, end);
-          this.totalValue = 0;
-          this.totalValueNft.emit(this.totalValue);
         }
       } else {
         this.showedData.length = 0;

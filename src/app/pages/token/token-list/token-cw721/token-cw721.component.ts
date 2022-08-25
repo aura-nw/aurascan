@@ -24,8 +24,8 @@ export class TokenCw721Component implements OnInit {
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
     { matColumnDef: 'tokenContract', headerCellDef: 'tokenContract' },
-    { matColumnDef: 'transfer', headerCellDef: 'transfer' },
-    { matColumnDef: 'transfer3d', headerCellDef: 'transfer3d' },
+    { matColumnDef: 'transfers_24h', headerCellDef: 'transfer' },
+    { matColumnDef: 'transfers_3d', headerCellDef: 'transfer3d' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {

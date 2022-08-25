@@ -79,4 +79,8 @@ export class TokenService extends CommonService {
   getBalanceAddress(payload, type = 'cw20-tokens'): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${type}/get-by-owner`, payload);
   }
+
+  getPriceToken(tokenId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
+  }
 }

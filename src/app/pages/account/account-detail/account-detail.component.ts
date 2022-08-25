@@ -156,7 +156,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   pageEventType = PageEventType;
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
-  tokenPrice = 0;
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
@@ -374,7 +373,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           }
           token.total_value = token.price * Number(token.amount);
         });
-        this.tokenPrice = 0;
 
         this.currentAccountDetail?.balances?.forEach((f) => {
           f.token_amount = f.amount;
