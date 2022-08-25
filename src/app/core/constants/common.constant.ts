@@ -76,3 +76,8 @@ export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',
   BTC: 'bitcoin'
 };
+
+export const SORT_ORDER = {
+  DESC: 'desc',
+  ASC: 'asc'
+}

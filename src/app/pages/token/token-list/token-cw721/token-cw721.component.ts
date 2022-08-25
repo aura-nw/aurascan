@@ -4,7 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT, SORT_ORDER } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -39,6 +39,13 @@ export class TokenCw721Component implements OnInit {
   sortedData: any;
   sort: MatSort;
   enterSearch = '';
+  typeSortBy = {
+    transfers24h: 'transfers_24h',
+    transfers3d: 'transfers_3d',
+  };
+  sortBy = this.typeSortBy.transfers24h;
+  sortOrder = SORT_ORDER.DESC;
+  isSorting = true;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
@@ -64,8 +71,11 @@ export class TokenCw721Component implements OnInit {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.enterSearch,
+      sort_column: this.sortBy,
+      sort_order: this.sortOrder,
     };
     this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
+      this.isSorting = false;
       if (res.data.length > 0) {
         res.data.forEach((data) => {
           data['isValueUp'] = true;
@@ -128,29 +138,25 @@ export class TokenCw721Component implements OnInit {
   }
 
   sortData(sort: Sort) {
-    // let data = this.mockData.slice();
-    // if (!sort.active || sort.direction === '') {
-    //   this.sortedData = data;
-    //   return;
-    // }
-    // this.sortedData = data.sort((a, b) => {
-    //   const isAsc = sort.direction === 'asc';
-    //   switch (sort.active) {
-    //     case 'transfer':
-    //       return this.compare(a.transfer, b.transfer, isAsc);
-    //     case 'transfer3d':
-    //       return this.compare(a.transfer3d, b.transfer3d, isAsc);
-    //     default:
-    //       return 0;
-    //   }
-    // });
-    // let dataFilter = this.sortedData;
-    // this.pageData = {
-    //   length: dataFilter.length,
-    //   pageSize: this.pageSize,
-    //   pageIndex: PAGE_EVENT.PAGE_INDEX,
-    // };
-    // this.dataSource = new MatTableDataSource<any>(dataFilter);
+    if (!this.isSorting) {
+      this.dataSource.data.sort((a, b) => {
+        const isAsc = sort.direction === SORT_ORDER.ASC;
+        switch (sort.active) {
+          case 'transfers_24h':
+            this.sortBy = this.typeSortBy.transfers24h;
+            this.sortOrder = sort.direction;
+            this.getTokenData();
+            return 0;
+          case 'transfers_3d':
+            this.sortBy = this.typeSortBy.transfers3d;
+            this.sortOrder = sort.direction;
+            this.getTokenData();
+            return 0;
+          default:
+            return 0;
+        }
+      });
+    }
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
