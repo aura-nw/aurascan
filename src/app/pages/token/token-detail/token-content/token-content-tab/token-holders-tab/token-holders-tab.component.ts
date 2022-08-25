@@ -18,8 +18,9 @@ export class TokenHoldersTabComponent implements OnInit {
   @Input() keyWord = '';
   @Input() contractAddress: string;
   @Input() isNFTContract: boolean;
-  loading = true;
+  @Input() tokenDetail: any;
 
+  loading = true;
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },

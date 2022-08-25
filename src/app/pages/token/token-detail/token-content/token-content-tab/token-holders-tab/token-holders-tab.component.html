@@ -70,7 +70,7 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
-                      ${{ data['balance'] * data[template.matColumnDef] | number: global.formatNumberToken }}
+                      ${{ data['balance'] * tokenDetail?.price || 0 | number: global.formatNumber2Decimal }}
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}

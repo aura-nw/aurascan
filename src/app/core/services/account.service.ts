@@ -23,4 +23,8 @@ export class AccountService extends CommonService {
   getAssetCW721ByOwner(payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens/get-by-owner/`,payload);
   }
+
+  getTotalAssets(account_id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/total-asset/${account_id}`);
+  }
 }
