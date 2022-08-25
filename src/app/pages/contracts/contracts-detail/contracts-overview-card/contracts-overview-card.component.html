@@ -1,49 +1,52 @@
 <div class="card box-contract-overview mb-4 mb-lg-5">
   <div class="table-responsive">
-      <table class="aura-basic-table w-100 body-02 body-mob">
-        <tr>
-          <td colspan="2">
-            <div class="d-flex justify-content-between align-items-center">
-              <h6 class="h3-mob mb-0 text--white">Contract Overview</h6>
-              <div class="justify-content-end">
-                <div class="d-flex justify-content-end">
-                  <ng-container *ngIf="contractDetail?.token_tracker">
-                    <button class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card">
-                      <img [src]="'assets/images/icons/chart-line-up.svg' | imageS3" alt="" width="16px" height="16px" />
-                      <span class="ml-2" *ngIf="contractDetail?.token_tracker?.symbol && contractDetail?.token_tracker?.name">
-                        {{ contractDetail?.token_tracker?.symbol + ': ' + contractDetail?.token_tracker?.name }}
-                      </span>
-                    </button>
-                  </ng-container>
-                </div>
+    <table class="aura-basic-table w-100 body-02 body-mob">
+      <tr>
+        <td colspan="2">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="h3-mob mb-0 text--white">Contract Overview</h6>
+            <div class="justify-content-end">
+              <div class="d-flex justify-content-end">
+                <ng-container *ngIf="contractDetail?.token_tracker">
+                  <button
+                    class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card">
+                    <img [src]="'assets/images/icons/chart-line-up.svg' | imageS3" alt="" width="16px" height="16px" />
+                    <span
+                      class="ml-2"
+                      *ngIf="contractDetail?.token_tracker?.symbol && contractDetail?.token_tracker?.name">
+                      {{ contractDetail?.token_tracker?.symbol + ': ' + contractDetail?.token_tracker?.name }}
+                    </span>
+                  </button>
+                </ng-container>
               </div>
             </div>
-          </td>
-        </tr>
+          </div>
+        </td>
+      </tr>
 
-        <tr>
-          <td class="text--gray-5 body-02-mob">Balance:</td>
-          <td>
-            {{ contractDetail?.balance | number: global.formatNumberToken }}
-            {{ denom }}
-          </td>
-        </tr>
+      <tr>
+        <td class="text--gray-5 body-02-mob">Balance:</td>
+        <td>
+          {{ contractDetail?.balance | number: global.formatNumberToken }}
+          {{ denom }}
+        </td>
+      </tr>
 
-        <tr>
-          <td class="text--gray-5 body-02-mob">Aura Value:</td>
-          <td>
-            ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
-            <span class="text--gray-5 ml-1 caption-mob fw-normal">
-              >(@ ${{ global.tokenPrice | number: global.formatNumber2Decimal }}/{{ denom | uppercase }})
-            </span>
-          </td>
-        </tr>
+      <tr>
+        <td class="text--gray-5 body-02-mob border_none">Aura Value:</td>
+        <td class="border_none">
+          ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
+          <span class="text--gray-5 ml-1 caption-mob fw-normal">
+            >(@ ${{ global.price.aura | number: global.formatNumberToken }}/{{ denom | uppercase }})
+          </span>
+        </td>
+      </tr>
 
-        <tr class="d-lg-none">
-          <!-- Mobile -->
-          <td colspan="2" class="border_none py-4">
-            <div class="text--gray-5 body-02-mob">Token:</div>
-            <div class="mt-2">
+      <tr class="d-lg-none">
+        <!-- Mobile -->
+        <td colspan="2" class="border_none py-4">
+          <!--<div class="text--gray-5 body-02-mob">Token:</div>
+             <div class="mt-2">
               <div class="aura-form list-token d-flex align-items-center justify-content-between">
                 <mat-select
                   #assetTypeSelect
@@ -64,35 +67,37 @@
                   <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="20px" height="20px" />
                 </a>
               </div>
-            </div>
-          </td>
-        </tr>
-        <tr class="d-none d-lg-table-row">
-          <!-- Desktop -->
-          <td class="text--gray-5">Token:</td>
-          <td>
-            <div class="aura-form list-token d-flex align-items-center justify-content-between">
-              <mat-select
-                #assetTypeSelect
-                class="list-token form-control select-input-field select-input__arrow--gray"
-                panelClass="aura-optional-panel aura-optional-token-panel"
-                [disableOptionCentering]="true"
-                [(value)]="selectedToken">
-                <mat-select-trigger>
-                  <span class="small-body">{{ selectedToken }}</span>
-                  <span class="selected-token__label">1</span>
-                </mat-select-trigger>
-                <mat-option [value]="'$0.00'">
-                  <span class="small-body">$0.00</span>
-                  <span class="selected-token__label">1</span>
-                </mat-option>
-              </mat-select>
-              <a [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']" class="button button--sm button-circle ml-3">
-                <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="16" height="16" />
-              </a>
-            </div>
-          </td>
-        </tr>
-      </table>
-</div>
+            </div> -->
+        </td>
+      </tr>
+      <tr class="d-none d-lg-table-row">
+        <!-- Desktop -->
+        <!-- <td class="text--gray-5">Token:</td>
+        <td>
+          <div class="aura-form list-token d-flex align-items-center justify-content-between">
+            <mat-select
+              #assetTypeSelect
+              class="list-token form-control select-input-field select-input__arrow--gray"
+              panelClass="aura-optional-panel aura-optional-token-panel"
+              [disableOptionCentering]="true"
+              [(value)]="selectedToken">
+              <mat-select-trigger>
+                <span class="small-body">{{ selectedToken }}</span>
+                <span class="selected-token__label">1</span>
+              </mat-select-trigger>
+              <mat-option [value]="'$0.00'">
+                <span class="small-body">$0.00</span>
+                <span class="selected-token__label">1</span>
+              </mat-option>
+            </mat-select>
+            <a
+              [routerLink]="['/tokens/token-holding/', 'tokenID-123456789010']"
+              class="button button--sm button-circle ml-3">
+              <img [src]="'assets/icons/icons-svg/color/wallet.svg' | imageS3" alt="" width="16" height="16" />
+            </a>
+          </div>
+        </td> -->
+      </tr>
+    </table>
+  </div>
 </div>

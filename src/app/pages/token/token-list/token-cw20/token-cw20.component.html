@@ -97,20 +97,26 @@
             <ng-container matColumnDef="price">
               <th mat-header-cell *matHeaderCellDef class="">Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <div>
-                  <!-- <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
-                  <div class="caption text--gray-5">{{ element.btc }} Btc</div>
-                  <div class="caption text--gray-5">{{ element.eth }} Eth</div> -->
-                  -
-                </div>
+                <ng-container *ngIf="element.price; else noData">
+                  <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
+                  <div class="small-text text--light-gray" *ngIf="global.price.btc">
+                    {{ element.price / global.price.btc || 0 | number: global.formatNumberToken }} Btc
+                  </div>
+                  <div class="small-text text--light-gray" *ngIf="global.price.aura">
+                    {{ element.price / global.price.aura || 0 | number: global.formatNumberToken }} {{ denom }}
+                  </div>
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- Change Column -->
             <ng-container matColumnDef="change">
-              <th mat-header-cell *matHeaderCellDef class="">Change (%)</th>
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Change (%)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
+                <div
+                  [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }"
+                  class="d-flex"
+                  *ngIf="element.change; else noData">
                   <ng-container *ngIf="element.isValueUp">
                     <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
@@ -118,53 +124,56 @@
                     <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
                   <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
-                </span> -->
-                -
+                </div>
               </td>
             </ng-container>
 
             <!-- Volume Column -->
             <ng-container matColumnDef="volume">
-              <th mat-header-cell *matHeaderCellDef class="">Volume (24H)</th>
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Volume (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- ${{ element.volume | number: global.formatNumber2Decimal }} -->
-                -
+                <ng-container *ngIf="element.volume; else noData">
+                  ${{ element.volume | number: global.formatNumber2Decimal }}
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- Circulating Market Cap Column -->
-            <ng-container matColumnDef="circulatingMarketCap">
-              <th mat-header-cell *matHeaderCellDef class="">Circulating Market Cap</th>
+            <ng-container matColumnDef="circulating_market_cap">
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Circulating Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }} -->
-                -
+                <ng-container *ngIf="element.circulating_market_cap >= 0; else noData">
+                  ${{ element.circulating_market_cap | number: global.formatNumber2Decimal }}
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- On-Chain Market Cap Column -->
             <ng-container matColumnDef="onChainMarketCap">
-              <th mat-header-cell *matHeaderCellDef class="">On-Chain Market Cap</th>
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>On-Chain Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }} -->
-                -
+                <ng-container *ngIf="element.onChainMarketCap >= 0; else noData">
+                  ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }}
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- Holders Column -->
             <ng-container matColumnDef="holders">
-              <th mat-header-cell *matHeaderCellDef class="col-per-13">Holders</th>
+              <th mat-header-cell *matHeaderCellDef class="col-per-13" mat-sort-header>Holders</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
-                <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
-                  <ng-container *ngIf="element.isValueUp">
+                {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
+                <span [ngStyle]="{ color: element.isHolderUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
+                  <ng-container *ngIf="element.isHolderUp">
                     <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
-                  <ng-container *ngIf="!element.isValueUp">
+                  <ng-container *ngIf="!element.isHolderUp">
                     <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
-                  <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
-                </span> -->
-                -
+                  <span class="ml-1">{{
+                    element.holders_change_percentage_24h | number: global.formatNumber2Decimal
+                  }}</span>%
+                </span>
               </td>
             </ng-container>
 
@@ -189,4 +198,5 @@
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>
+  <ng-template #noData> - </ng-template>
 </section>

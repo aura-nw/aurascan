@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -43,15 +43,17 @@ export class TokenTableComponent implements OnChanges {
   sortedData: any;
   sort: MatSort;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  assetCW20: any[];
   currentBalance = 0;
   assetsLoading = true;
   total = 0;
+  stableTokenName = 'Aura';
+  pageEvent: any;
+  paginator: MatPaginator;
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
-
   constructor(
     public global: Globals,
     private accountService: AccountService,
@@ -59,43 +61,52 @@ export class TokenTableComponent implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    this.getAccountDetail();
+    this.getListToken();
   }
 
   getListToken() {
+    this.assetsLoading = true;
     const payload = {
       account_address: this.address,
-      limit: 0,
-      offset: 0,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.textSearch,
     };
+
+    if (!this.textSearch) {
+      this.total = 0;
+    }
+
     this.accountService.getAssetCW20ByOwner(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
-        if (res?.data) {
-          res?.data.unshift({
-            name: 'Aura',
-            symbol: this.coinInfo.coinDenom,
-            image: this.defaultLogoAura,
-            contract_address: '',
-            balance: this.currentBalance,
-            decimals: this.coinInfo.coinDecimals,
-            total_supply: 0,
-            price: this.global.tokenPrice,
-          });
-        }
+        res?.data.forEach((element) => {
+          if (element.name.toLowerCase() === this.denom?.toLowerCase()) {
+            element.balance = balanceOf(element.balance);
+            element.contract_address = '';
+            element.name = this.stableTokenName;
+            element.symbol = this.denom;
+          }
 
-        this.assetCW20 = res?.data;
-        this.assetCW20.forEach((item) => {
-          this.total += item.price * +item.balance || 0;
+          element['change'] = element.price_change_percentage_24h;
+          element['isValueUp'] = true;
+          if (element.change < 0) {
+            element['isValueUp'] = false;
+            element.change = Number(element.change.toString().substring(1));
+          }
+
+          if (!this.textSearch) {
+            this.total += element.price * +element.balance || 0;
+          }
         });
-        this.totalValue.emit(this.total);
 
-        this.assetCW20.length = res.data.length;
-        this.dataSource = new MatTableDataSource<any>(this.assetCW20);
-        this.pageData.length = this.assetCW20?.length;
+        this.totalValue.emit(this.total);
+        this.dataSource = new MatTableDataSource<any>(res?.data);
+        this.pageData.length = res.meta.count;
       } else {
         this.pageData.length = 0;
+        this.dataSource.data = [];
       }
+      this.assetsLoading = false;
     });
   }
 
@@ -106,41 +117,36 @@ export class TokenTableComponent implements OnChanges {
   sortData(sort: Sort) {}
 
   paginatorEmit(event): void {
-    this.dataSource.paginator = event;
+    this.paginator = event;
   }
 
   handlePageEvent(e: any) {
-    this.pageData = e;
+    this.pageData.pageIndex = e.pageIndex;
+    this.getKeySearch();
+  }
+
+  getKeySearch() {
+    this.textSearch = this.textSearch?.trim();
+    this.getListToken();
   }
 
   searchToken(): void {
-    const VALIDATORS = {
-      HASHRULE: /^[A-Za-z0-9]/,
-    };
-    const regexRule = VALIDATORS.HASHRULE;
-    this.textSearch = this.textSearch?.trim();
-    if (this.textSearch.length > 0) {
-      if (regexRule.test(this.textSearch)) {
-        this.getListToken();
-      }
+    if (this.paginator.pageIndex !== 0) {
+      this.paginator.firstPage();
     } else {
-      this.getListToken();
+      this.getKeySearch();
+    }
+  }
+
+  checkSearch(): void {
+    if (this.textSearch.length === 0) {
+      this.searchToken();
     }
   }
 
   resetSearch(): void {
     this.textSearch = '';
-    this.getListToken();
-  }
-
-  getAccountDetail(): void {
-    this.assetsLoading = true;
-    this.accountService.getAccountDetail(this.address).subscribe((res) => {
-      if (res?.data) {
-        this.currentBalance = +res?.data.total;
-        this.getListToken();
-        this.assetsLoading = false;
-      }
-    });
+    this.pageData.pageIndex = 0;
+    this.searchToken();
   }
 }
