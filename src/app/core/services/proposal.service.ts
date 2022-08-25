@@ -28,7 +28,7 @@ export class ProposalService extends CommonService {
 
   getVotes(proposalId: string | number, voter: string, limit: string | number, offset: string | number) {
     return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}`,
+      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}&order_by=ORDER_BY_DESC`,
     );
   }
 
