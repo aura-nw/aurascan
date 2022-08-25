@@ -104,11 +104,10 @@
                 <th mat-header-cell *matHeaderCellDef class="">PRICE</th>
                 <td mat-cell *matCellDef="let element">
                   <ng-container *ngIf="element.contract_address">
-                    <span *ngIf="element.price > 0; else defaultValues"
-                      >${{ element.price | number: global.formatNumberToken }}</span
-                    >
+                    <span *ngIf="element.price > 0; else defaultValues">${{ element.price | number: global.formatNumberToken }}</span>
+
                     <span *ngIf="global.price.aura" class="ml-1 text--gray-5">
-                      ({{ element.price / global.price.aura | number: global.formatNumberToken }} {{ denom }})
+                      (&nbsp;{{ element.price / global.price.aura | number: global.formatNumberToken }}&nbsp;{{ denom }}&nbsp;)
                     </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
@@ -147,8 +146,7 @@
                       >${{ element.price * element.balance | number: global.formatNumber2Decimal }}</span
                     >
                     <span *ngIf="global.price.aura" class="ml-1 text--gray-5">
-                      ({{ (element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal }}
-                      {{ denom }})
+                      (&nbsp;{{ (element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal }}&nbsp;{{ denom }}&nbsp;)
                     </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
