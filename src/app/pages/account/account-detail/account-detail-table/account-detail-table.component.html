@@ -1,4 +1,4 @@
-<ngx-simplebar style="max-height: 530px" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<ngx-simplebar *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="table-responsive aura-table-contain">
       <ng-container *ngIf="!breakpoint.value.matches">
@@ -167,11 +167,11 @@
                         <span class="text--primary">{{ denom }}</span>
                       </div>
                     </div>
-                    <div class="d-flex justify-content-between body mt-3">
+                    <div class="d-flex justify-content-between body-01 mt-3">
                       <div class="text--gray-4">Completion Time</div>
                       <div class="d-flex align-items-center">
                         <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
-                        <div class="divider divider-vertical divider-lighter mx-2"></div>
+                        <div class="divider divider-vertical divider-lighter mx-1"></div>
                         <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
                       </div>
                     </div>

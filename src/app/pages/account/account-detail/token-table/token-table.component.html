@@ -108,9 +108,10 @@
                     <span *ngIf="element.price > 0; else defaultValues"
                       >${{ element.price | number: global.formatNumberToken }}</span
                     >
-
                     <span *ngIf="global.price.aura" class="text--gray-5">
-                      &nbsp;{{'('+(element.price / global.price.aura | number: global.formatNumberToken) }}&nbsp;{{ denom + ')'}}
+                      &nbsp;{{ '(' + (element.price / global.price.aura | number: global.formatNumberToken) }}&nbsp;{{
+                        denom + ')'
+                      }}
                     </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
@@ -149,7 +150,10 @@
                       >${{ element.price * element.balance | number: global.formatNumber2Decimal }}</span
                     >
                     <span *ngIf="global.price.aura" class="text--gray-5">
-                      &nbsp;{{'('+((element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal) }}&nbsp;{{ denom + ')' }}
+                      &nbsp;{{
+                        '(' +
+                          ((element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal)
+                      }}&nbsp;{{ denom + ')' }}
                     </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
