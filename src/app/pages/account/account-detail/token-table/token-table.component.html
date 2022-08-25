@@ -1,7 +1,4 @@
-<div *ngIf="assetsLoading" class="mt-14">
-  <app-loading-sprint></app-loading-sprint>
-</div>
-<section *ngIf="!assetsLoading">
+<section>
   <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ pageData?.length || 0 }})</h2>
   <div class="card">
       <div class="card-body">
@@ -167,6 +164,9 @@
               </tr>
             </table>
           </div>
+          <div *ngIf="assetsLoading" class="mt-14">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
           <app-paginator
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
@@ -174,7 +174,6 @@
             (pageEvent)="handlePageEvent($event)">
           </app-paginator>
         </ng-container>
-
         <ng-template #noValues>
           <div class="card" *ngIf="!assetsLoading">
             <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
