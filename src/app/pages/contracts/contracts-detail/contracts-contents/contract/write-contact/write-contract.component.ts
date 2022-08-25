@@ -92,10 +92,14 @@ export class WriteContractComponent implements OnInit {
 
   reloadData() {
     this.expandMenu(true);
+    this.clearAllError(true);
     this.isExpand = false;
+  }
 
+  clearAllError(all = false) {
     this.root?.forEach((msg) => {
-      this.resetError(msg, true);
+      this.resetError(msg, all);
+      if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
     });
   }
 
@@ -145,6 +149,7 @@ export class WriteContractComponent implements OnInit {
 
   handleExecute(msg) {
     this.connectWallet();
+    this.clearAllError();
     if (this.walletAccount && msg) {
       const { fieldList, fieldName } = msg;
 

@@ -67,7 +67,7 @@ export class ReadContractComponent implements OnInit {
   clearAllError(all = false) {
     this.root?.forEach((msg) => {
       this.resetError(msg, all);
-      if (msg.fieldList && msg.fieldList.length) msg.dataResponse = '';
+      if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
     });
   }
 
@@ -98,6 +98,8 @@ export class ReadContractComponent implements OnInit {
 
       fieldList.forEach((item) => {
         const isError = item.isRequired && !item.value;
+        console.log(item);
+        
 
         if (!isError) {
           item.value &&
