@@ -42,6 +42,7 @@
 
           <div class="w-100 mb-2 px-0">
             <button
+              *ngIf="msg.fieldList.length > 0"
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
               [disabled]="msg.isLoading"
               (click)="handleQueryContract(msg)"

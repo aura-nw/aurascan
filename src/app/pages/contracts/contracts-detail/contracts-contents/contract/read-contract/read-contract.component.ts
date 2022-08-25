@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SigningCosmWasmClient, toBinary } from '@cosmjs/cosmwasm-stargate';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
+import { WalletService } from 'src/app/core/services/wallet.service';
 @Component({
   selector: 'app-read-contract',
   templateUrl: './read-contract.component.html',
@@ -13,12 +14,6 @@ export class ReadContractComponent implements OnInit {
   @Input() contractDetailData: any;
 
   isExpand = false;
-  // jsonReadContract: any;
-  // dataResponse = null;
-  // errorInput = false;
-  // isLoading = false;
-  // currentFrom = null;
-  // objQuery = [];
 
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -42,8 +37,6 @@ export class ReadContractComponent implements OnInit {
         }
       }
     } catch {}
-    //auto execute query without params
-    // this.handleQueryContract();
   }
 
   expandMenu(closeAll = false): void {
@@ -66,18 +59,16 @@ export class ReadContractComponent implements OnInit {
   }
 
   reloadData() {
-    // for (let i = 0; i < document.getElementsByClassName('form-check-input').length; i++) {
-    //   (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
-    // }
     this.expandMenu(true);
-    this.root?.forEach((msg) => {
-      this.resetError(msg, true);
-      msg.dataResponse = '';
-    });
+    this.clearAllError(true);
     this.isExpand = false;
+  }
 
-    // this.dataResponse = null;
-    // this.errorInput = false;
+  clearAllError(all = false) {
+    this.root?.forEach((msg) => {
+      this.resetError(msg, all);
+      if (msg.fieldList && msg.fieldList.length) msg.dataResponse = '';
+    });
   }
 
   query(query, msg) {
@@ -86,7 +77,6 @@ export class ReadContractComponent implements OnInit {
       .then((client) => client.queryContractSmart(this.contractDetailData.contract_address, query))
       .then((config) => {
         if (config) {
-          // this.dataResponse = config;
           msg.dataResponse = config;
         }
         msg.isLoading = false;
@@ -98,6 +88,7 @@ export class ReadContractComponent implements OnInit {
   }
 
   handleQueryContract(query): void {
+    this.clearAllError();
     if (query) {
       const { fieldList, fieldName } = query;
 
@@ -111,7 +102,7 @@ export class ReadContractComponent implements OnInit {
         if (!isError) {
           item.value &&
             _.assign(msgQuery[fieldName], {
-              [item.fieldName]: this.parseValue(item),
+              [item.fieldName]: parseValue(item),
             });
           return;
         }
@@ -128,63 +119,22 @@ export class ReadContractComponent implements OnInit {
     }
   }
 
-  getRef(ref: string) {
-    if (ref) {
-      const schema = this.jsValidator.schemas;
-      if (schema && schema[`/${ref}`]) {
-        return schema[`/${ref}`];
-      }
-    }
-
-    return null;
-  }
-
-  getRefType(ref: string): string | string[] {
-    if (ref) {
-      const schema = this.jsValidator.schemas;
-
-      if (schema && schema[`/${ref}`]) {
-        const _ref = schema[`/${ref}`];
-        const type = _ref.type;
-        if (type === 'object') {
-        }
-        return schema[`/${ref}`].type;
-      }
-    }
-
-    return 'any';
-  }
-
-  getType(schema) {
-    const { $ref: ref, type: _type } = schema;
-    const isBinary = ref === '#/definitions/Binary';
-
-    const type = ref ? this.getRefType(ref) : _type;
-
-    return {
-      type: type || 'any',
-      isBinary,
-    };
-  }
-
   getProperties(schema: Schema) {
     const fieldName = _.first(Object.keys(schema.properties));
 
     const { $ref: ref } = schema.properties[fieldName];
 
-    let props = ref ? this.getRef(ref) : schema.properties[fieldName];
+    let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
 
     const childProps = props?.properties;
 
     let fieldList = [];
 
     if (childProps) {
-      // console.log({ [fieldName]: childProps });
-
       fieldList = Object.keys(childProps).map((e) => ({
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
-        ...this.getType(childProps[e]),
+        ...getType(this.jsValidator.schemas, childProps[e]),
       }));
     }
 
@@ -211,22 +161,6 @@ export class ReadContractComponent implements OnInit {
     });
 
     return result;
-  }
-
-  parseValue(item) {
-    let value;
-    if (item.type === 'any') {
-      try {
-        value = JSON.parse(item.value);
-      } catch (e) {
-        value = item.value;
-      }
-    } else if (item.isBinary) {
-      value = toBinary(item.value);
-    } else {
-      value = item.value;
-    }
-    return value;
   }
 
   resetError(msg, all = false) {

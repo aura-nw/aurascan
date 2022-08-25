@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SigningCosmWasmClient, toBinary } from '@cosmjs/cosmwasm-stargate';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
@@ -22,10 +23,6 @@ export class WriteContractComponent implements OnInit {
   walletAddress = '';
   userAddress = '';
   walletAccount: any;
-  // jsonWriteContract: any;
-  // currentFrom = 0;
-  // errorInput = false;
-  // objDefine = {};
 
   chainInfo = this.environmentService.configValue.chain_info;
 
@@ -61,7 +58,7 @@ export class WriteContractComponent implements OnInit {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
       }
 
-      // console.log('debug', { root: this.root });
+      console.log('debug', { root: this.root, schema: this.jsValidator.schemas });
     } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {
@@ -94,10 +91,6 @@ export class WriteContractComponent implements OnInit {
   }
 
   reloadData() {
-    // for (let i = 0; i < document.getElementsByClassName('form-check-input').length; i++) {
-    //   (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
-    // }
-    // this.errorInput = false;
     this.expandMenu(true);
     this.isExpand = false;
 
@@ -110,63 +103,22 @@ export class WriteContractComponent implements OnInit {
     this.walletAccount = this.walletService.getAccount();
   }
 
-  getRef(ref: string) {
-    if (ref) {
-      const schema = this.jsValidator.schemas;
-      if (schema && schema[`/${ref}`]) {
-        return schema[`/${ref}`];
-      }
-    }
-
-    return null;
-  }
-
-  getRefType(ref: string): string | string[] {
-    if (ref) {
-      const schema = this.jsValidator.schemas;
-
-      if (schema && schema[`/${ref}`]) {
-        const _ref = schema[`/${ref}`];
-        const type = _ref.type;
-        if (type === 'object') {
-        }
-        return schema[`/${ref}`].type;
-      }
-    }
-
-    return 'any';
-  }
-
-  getType(schema) {
-    const { $ref: ref, type: _type } = schema;
-    const isBinary = ref === '#/definitions/Binary';
-
-    const type = ref ? this.getRefType(ref) : _type;
-
-    return {
-      type: type || 'any',
-      isBinary,
-    };
-  }
-
   getProperties(schema: Schema) {
     const fieldName = _.first(Object.keys(schema.properties));
 
     const { $ref: ref } = schema.properties[fieldName];
 
-    let props = ref ? this.getRef(ref) : schema.properties[fieldName];
+    let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
 
     const childProps = props?.properties;
 
     let fieldList = [];
 
     if (childProps) {
-      // console.log({ [fieldName]: childProps });
-
       fieldList = Object.keys(childProps).map((e) => ({
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
-        ...this.getType(childProps[e]),
+        ...getType(this.jsValidator.schemas, childProps[e]),
       }));
     }
 
@@ -191,22 +143,6 @@ export class WriteContractComponent implements OnInit {
     return result;
   }
 
-  parseValue(item) {
-    let value;
-    if (item.type === 'any') {
-      try {
-        value = JSON.parse(item.value);
-      } catch (e) {
-        value = item.value;
-      }
-    } else if (item.isBinary) {
-      value = toBinary(item.value);
-    } else {
-      value = item.value;
-    }
-    return value;
-  }
-
   handleExecute(msg) {
     this.connectWallet();
     if (this.walletAccount && msg) {
@@ -222,7 +158,7 @@ export class WriteContractComponent implements OnInit {
         if (!isError) {
           item.value &&
             _.assign(msgExecute[fieldName], {
-              [item.fieldName]: this.parseValue(item),
+              [item.fieldName]: parseValue(item),
             });
           return;
         }
