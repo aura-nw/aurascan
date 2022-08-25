@@ -4,7 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { PAGE_EVENT, SORT_ORDER } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -16,6 +16,7 @@ import { Globals } from '../../../../global/global';
   templateUrl: './token-cw721.component.html',
   styleUrls: ['./token-cw721.component.scss'],
 })
+
 export class TokenCw721Component implements OnInit {
   textSearch = '';
   filterSearchData = [];
@@ -44,7 +45,7 @@ export class TokenCw721Component implements OnInit {
     transfers3d: 'transfers_3d',
   };
   sortBy = this.typeSortBy.transfers24h;
-  sortOrder = SORT_ORDER.DESC;
+  sortOrder = 'desc';
   isSorting = true;
 
   image_s3 = this.environmentService.configValue.image_s3;
@@ -140,7 +141,6 @@ export class TokenCw721Component implements OnInit {
   sortData(sort: Sort) {
     if (!this.isSorting) {
       this.dataSource.data.sort((a, b) => {
-        const isAsc = sort.direction === SORT_ORDER.ASC;
         switch (sort.active) {
           case 'transfers_24h':
             this.sortBy = this.typeSortBy.transfers24h;
