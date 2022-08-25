@@ -99,6 +99,7 @@ export class WriteContractComponent implements OnInit {
     // }
     // this.errorInput = false;
     this.expandMenu(true);
+    this.isExpand = false;
 
     this.root?.forEach((msg) => {
       this.resetError(msg, true);
