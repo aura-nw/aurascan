@@ -171,8 +171,8 @@
             <ul class="collapse pl-0" id="collapseExample">
               <li class="dropdown-item menu-link pl-0 d-flex py-3 pl-3"
                   [class.active]="
-                      (subItem.name === menuName.TokenCW20 && !router.url.includes('/tokens-nft')) ||
-                      (subItem.name === menuName.TokenCW721 && router.url.includes('/tokens-nft'))
+                      (subItem.name === menuName.TokenCW20 && router.url.includes('/tokens') && !router.url.includes('/tokens-nft') && !router.url.includes('/token-nft')) ||
+                      (subItem.name === menuName.TokenCW721 && (router.url.includes('/tokens-nft') || router.url.includes('/token-nft')))
                     "
                   *ngFor="let subItem of item.subItems"
                   [routerLink]="subItem.link">
