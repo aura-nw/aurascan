@@ -29,7 +29,7 @@ export enum ACCOUNT_TYPE_ENUM {
 
 export enum ACCOUNT_WALLET_COLOR_ENUM {
   Available = 'Available',
-  DelegatableVesting = 'Delegatable Vesting',
+  DelegableVesting = 'Delegable Vesting',
   Delegated = 'Delegated',
   Unbonding = 'Unbonding',
   StakingReward = 'Staking Reward',
@@ -38,7 +38,7 @@ export enum ACCOUNT_WALLET_COLOR_ENUM {
 
 export enum WalletAcount {
   Available = '#5EE6D0',
-  DelegatableVesting = '#005F73',
+  DelegableVesting = '#005F73',
   Delegated = '#E9D8A6',
   Unbonding = '#EE9B00',
   StakingReward = '#CA6702',

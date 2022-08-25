@@ -209,7 +209,7 @@
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Result Registration</span>
-            <span [ngStyle]="{color: data['result'] === 'TBD' ? '#5E84E6' : data['result'] === 'Incorrect' ? '#E65E5E' : '#5EE69D'}">{{ data.result }}</span>
+            <span [ngStyle]="{color: data['result'] === 'TBD' ? '#9DA8FF' : data['result'] === 'Incorrect' ? '#FA8684' : '#5EE69D'}">{{ data.result }}</span>
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Time Registered</span>
@@ -242,7 +242,7 @@
   <ng-template #modalManage let-modal>
     <div class="aura-form d-flex row p-3">
       <div class="col-12 d-flex justify-content-between px-0 mb-4">
-        <span class="h1 mb-0 text--white">
+        <span class="h1 h4-mob mb-0 text--white">
           <ng-container *ngIf="isEditMode">Update Type Contract</ng-container>
           <ng-container *ngIf="!isEditMode">Register Type Contract</ng-container>
         </span>
@@ -254,8 +254,9 @@
           class="mr-2 cursor-pointer"
           (click)="closeDialog(modal)" />
       </div>
+      <div class="divider divider-horizontal"></div>
       <div class="box-body-register col-12">
-        <p class="body-small" [class.input-require]="!isEditMode">Code ID</p>
+        <p class="body-02 mb-1 text--gray-1" [class.input-require]="!isEditMode">Code ID</p>
         <div class="box-input">
           <input type="text"
             class="form-check-input col-12 mb-4"
@@ -266,8 +267,8 @@
                  (keyup)="checkInput()"
             placeholder="Enter a Code ID" />
         </div>
-        <p class="small-text text--gray-6" *ngIf="!isEditMode">Enter a Code ID that you owned/ created (ID must be greater than 0).</p>
-        <p class="body-small input-require">Type Contract</p>
+        <p class="h6 text--gray-light" *ngIf="!isEditMode">Enter a Code ID that you owned/ created (ID must be greater than 0).</p>
+        <p class="body-02 mb-1 text--gray-1 input-require">Type Contract</p>
         <div class="box-input">
           <mat-form-field appearance="fill" contract>
             <mat-select
