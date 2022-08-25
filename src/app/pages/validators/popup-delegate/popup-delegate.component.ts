@@ -26,7 +26,7 @@ export class PopupDelegateComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
-    this.availableToken = +this.data?.availableToken + +this.data?.delegatableVesting;
+    this.availableToken = +this.data?.availableToken + +this.data?.delegableVesting;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

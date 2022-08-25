@@ -356,8 +356,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
               f.amount = this.currentAccountDetail.unbonding;
               break;
-            case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-              f.amount = this.currentAccountDetail?.delegatable_vesting;
+            case ACCOUNT_WALLET_COLOR_ENUM.DelegableVesting:
+              f.amount = this.currentAccountDetail?.delegable_vesting;
               break;
             default:
               break;

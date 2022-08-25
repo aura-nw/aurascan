@@ -336,7 +336,7 @@
         <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
           <div class="mt-2 h6 text--white mb-0">
-            <span>Available for undelegatation</span>
+            <span>Available for undelegation</span>
             <span class="ml-3 fw-normal">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
@@ -411,7 +411,7 @@
           </mat-form-field>
           <div *ngIf="selectedValidator">
             <div class="mt-6 body-01 body-02-mob">
-              <span class="fw-500">Available for redelegatation</span>
+              <span class="fw-500">Available for redelegation</span>
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
