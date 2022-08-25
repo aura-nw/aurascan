@@ -41,7 +41,7 @@ export interface IAccountDetail {
   price: number;
   total_price: number;
   commission: string;
-  delegatable_vesting: string;
+  delegable_vesting: string;
   delegated: string;
   delegations: Delegation[];
   redelegations: Redelegations[];
