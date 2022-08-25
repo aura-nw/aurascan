@@ -80,7 +80,7 @@ export class TokenTableComponent implements OnChanges {
       if (res?.data?.length > 0) {
         res?.data.forEach((element) => {
           if (element.name.toLowerCase() === this.denom?.toLowerCase()) {
-            element.balance = balanceOf(element.balance);
+            element.balance = element.balance;
             element.contract_address = '';
             element.name = this.stableTokenName;
             element.symbol = this.denom;
