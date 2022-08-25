@@ -53,6 +53,7 @@ import { CommonService } from './core/services/common.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import {BlankModule} from "./pages/blank/blank.module";
+import { TokenService } from './core/services/token.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -155,6 +156,7 @@ export class MaterialModule {}
       multi: true,
     },
     CommonService,
+    TokenService
   ],
   bootstrap: [AppComponent],
 })
