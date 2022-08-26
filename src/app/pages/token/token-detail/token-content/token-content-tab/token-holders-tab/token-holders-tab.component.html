@@ -8,10 +8,10 @@
   <div class="col-12 mb-lg-3">
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
         <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder">
-          Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holders)
+          Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holder{{pageData?.length > 1 ? 's' : ''}})
         </span>
       <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder">
-          A total of {{ pageData?.length || 0 }} token holders
+          A total of {{ pageData?.length || 0 }} token holder{{pageData?.length > 1 ? 's' : ''}}
         </span>
     </div>
   </div>
@@ -28,6 +28,11 @@
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'owner'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
               <ng-container *ngSwitchDefault>
                 <th mat-header-cell *matHeaderCellDef>
                   <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
@@ -43,11 +48,11 @@
                       <a
                         *ngIf="isNFTContract"
                         href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
+                        class="text-clamp">{{ data[template.matColumnDef] | cutStringPipe: 19}}</a>
                       <a
                         *ngIf="!isNFTContract"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
+                        class="text-clamp">{{ data[template.matColumnDef] | cutStringPipe: 19}}</a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
