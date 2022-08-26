@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
+import { fromHex, toBech32 } from '@cosmjs/encoding';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -125,12 +125,20 @@ export class ValidatorsDetailComponent implements OnInit {
         if (this.currentValidatorDetail?.cons_address) {
           this.consAddress = toBech32(this.prefixConsAdd, fromHex(this.currentValidatorDetail?.cons_address));
           this.getBlocksMiss(this.consAddress);
+          this.getSigningInfo(this.consAddress);
         }
       },
       (error) => {
         this.router.navigate(['/']);
       },
     );
+  }
+
+  async getSigningInfo(consAddress) {
+    const res = await this.validatorService.getSigningInfosByConsAddress(consAddress);
+    if (res?.data?.val_signing_info) {
+      this.currentValidatorDetail.bonded_height = res.data.val_signing_info.start_height;
+    }
   }
 
   getListBlockWithOperator(): void {
