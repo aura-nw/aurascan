@@ -11,9 +11,9 @@
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Similar_Match">
     <img [src]="'assets/images/icons/contract-simimar.svg' | imageS3" alt="" width="16" height="16" />
     <span class="body-02 ml-2 mr-1">Similar Match Source Code</span>
-    <div class="text--light-gray mt-1 mb-3 mt-lg-4 mb-lg-0 box-note pl-6 pl-lg-0">
-      <div class="caption fw-normal-mob text--gray-5 d-block d-lg-inline">Note: This contract matches the deployed ByteCode of the Source Code for Contract</div>
-      <a class="caption fw-normal-mob text--primary ml-lg-1 d-block d-lg-inline" href="/contracts/{{ contractDetailData?.contract_match }}">
+    <div class="body-02 caption-mob text--light-gray mt-1 mb-3 mt-lg-4 mb-lg-0 box-note pl-6 pl-lg-0">
+      <div class="fw-normal-mob text--gray-5 d-block d-lg-inline">Note: This contract matches the deployed ByteCode of the Source Code for Contract</div>
+      <a class="fw-normal-mob text--primary ml-lg-1 d-block d-lg-inline" href="/contracts/{{ contractDetailData?.contract_match }}">
         {{ contractDetailData?.contract_match }}</a>
     </div>
   </ng-container>
@@ -53,7 +53,7 @@
       <span class="text--white ml-2 body-02">Link Contract Source Code</span>
     </div>
     <div class="d-flex justify-content-between align-items-center">
-      <div class="w-100 text-nowrap caption-mob fw-normal-mob content-info mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
+      <div class="w-100 text-nowrap caption fw-normal content-info mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
         {{ contractDetailData?.url }}
       </div>
       <div class="d-flex justify-content-end">
@@ -75,7 +75,7 @@
         <span class="text--white ml-2 body-02">File Contract Source Code</span>
       </div>
       <div class="d-flex justify-content-between align-items-center">
-        <div class="w-100 text-nowrap caption-mob fw-normal-mob content-info  mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
+        <div class="w-100 text-nowrap caption fw-normal content-info  mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
           {{ contractDetailData?.s3_location.split('/')[contractDetailData?.s3_location.split('/').length-1] }}
         </div>
         <a href="{{contractDetailData?.s3_location}}"
