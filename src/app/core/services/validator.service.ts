@@ -53,12 +53,6 @@ export class ValidatorService extends CommonService {
     );
   }
 
-  getSigningInfosByConsAddress(cons_address: string) {
-    return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos/${cons_address}`,
-    );
-  }
-
   getValidatorAvatar(validatorAddress: string): string {
     return `${this.environmentService.configValue.validator_s3}/${validatorAddress}.png`;
   }
