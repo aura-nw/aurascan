@@ -1,5 +1,6 @@
 .single-input-field {
-  @media (min-width: 992px) {
+  min-width: 100%;
+  @media (min-width: 1440px) {
     min-width: 410px;
   }
 }
@@ -18,10 +19,6 @@
   overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;
-  }
-  .nav-link {
-    font-weight: 600;
-    font-size: 14px;
   }
 }
 
