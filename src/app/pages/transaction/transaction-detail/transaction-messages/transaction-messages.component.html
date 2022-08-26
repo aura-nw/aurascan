@@ -580,4 +580,331 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCReceived">
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_sequence }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
+        <span class="text--primary">{{ denom }}</span>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_src_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_src_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
+      <div class="col-12 col-lg-9">
+        <!-- {{ ibcData.packet_dst_channel }} -->
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
+          {{ transactionDetail?.messages[0]?.receiver }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+          {{ transactionDetail?.messages[0]?.sender }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
+      <div class="col-12 col-lg-9">0</div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCReceived">
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_sequence }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
+        <span class="text--primary">{{ denom }}</span>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.source_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.source_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
+      <div class="col-12 col-lg-9">
+        <!-- {{ ibcData.packet_dst_channel }} -->
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
+          {{ transactionDetail?.messages[0]?.receiver }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+          {{ transactionDetail?.messages[0]?.sender }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
+      <div class="col-12 col-lg-9">0</div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCAcknowledgement">
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_sequence }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
+        <span class="text--primary">{{ denom }}</span>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
+          {{ transactionDetail?.messages[0]?.receiver }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+          {{ transactionDetail?.messages[0]?.sender }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.source_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.source_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
+      <div class="col-12 col-lg-9">
+        <!-- {{ ibcData.packet_dst_channel }} -->
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
+      <div class="col-12 col-lg-9">0</div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCUpdateClient">
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
+      <div class="col-12 col-lg-9">
+        <!-- {{ ibcData.packet_dst_channel }} -->
+      </div>
+    </div>
+
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Client ID</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_sequence }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">block</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_sequence }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">app</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_sequence }}
+      </div>
+    </div>
+
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
+        <span class="text--primary">{{ denom }}</span>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
+          {{ transactionDetail?.messages[0]?.receiver }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
+          {{ transactionDetail?.messages[0]?.sender }}
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.source_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ transactionDetail?.messages[0]?.source_channel }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_port }}
+      </div>
+    </div>
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
+      <div class="col-12 col-lg-9">
+        {{ ibcData.packet_dst_channel }}
+      </div>
+    </div>
+    
+    <div class="row mb-3 small-body">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
+      <div class="col-12 col-lg-9">0</div>
+    </div>
+  </ng-container>
 </div>

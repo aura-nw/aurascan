@@ -40,7 +40,7 @@ export class TransactionMessagesComponent implements OnInit {
     WithdrawRewards: 'withdraw_rewards',
     WithdrawCommission: 'withdraw_commission',
     StoreCode: 'store_code',
-    SendPacket: 'send_packet'
+    SendPacket: 'send_packet',
   };
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -75,7 +75,10 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
     ) {
       this.displayMsgRaw();
-    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.IBCTransfer) {
+    } else if (
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.IBCTransfer ||
+      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.IBCReceived
+    ) {
       this.getDataIBC();
     }
 
@@ -209,7 +212,11 @@ export class TransactionMessagesComponent implements OnInit {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.SendPacket);
         if (temp) {
           this.ibcData = temp[0]?.attributes;
-          this.ibcData.packet_sequence = this.ibcData.find((f) => f.key === "packet_sequence").value;
+          this.ibcData.packet_sequence = this.ibcData.find((f) => f.key === 'packet_sequence').value;
+          this.ibcData.packet_src_port = this.ibcData.find((f) => f.key === 'packet_src_port').value;
+          this.ibcData.packet_dst_port = this.ibcData.find((f) => f.key === 'packet_dst_port').value;
+          this.ibcData.packet_dst_channel = this.ibcData.find((f) => f.key === 'packet_dst_channel').value;
+          this.ibcData.packet_dst_channel = this.ibcData.find((f) => f.key === 'packet_src_channel').value;
         }
       }
     } catch (e) {}
