@@ -31,7 +31,7 @@
               <h5 class="mb-0 text--primary">{{ currentValidatorDetail?.title }}</h5>
             </div>
             <div
-              class="valid-status fw-semibold"
+              class="valid-status caption"
               [class.status-inactive]="currentValidatorDetail?.status !== statusValidator.Active"
               [class.status-jailed]="currentValidatorDetail?.jailed"
               [ngClass]="{ 'small-body': breakpoint.value.matches }">
@@ -401,7 +401,7 @@
                             </a>
                             <div
                               *ngSwitchCase="'amount'"
-                              [ngStyle]="{ color: data['isStakeMode'] ? '#37cc6e' : '#ff2745' }">
+                              [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
                               {{ data['isStakeMode'] ? '+' : '-' }}
                               {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                             </div>
