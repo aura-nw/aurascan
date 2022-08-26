@@ -37,7 +37,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">TxHash</div>
-        <div class="col-auto col-lg-9">
+        <div class="col-auto col-lg-9 text--gray-1">
           <span class="d-none d-lg-block">{{transaction?.tx_hash}}</span>
           <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe: 8:8 }}</span>
         </div>
@@ -65,13 +65,13 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">Time</div>
-        <div class="col-auto col-lg-9 text-end text-lg-start">
+        <div class="col-auto col-lg-9 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
           <div>{{ commonService.getDateValue(transaction?.timestamp)[0] }}</div>
-          <div class="d-flex align-items-center text--gray-4 mt-1">
+          <div class="d-flex align-items-center ml-1">
             <span class="d-none d-lg-block">(</span>
-            <span class="text--gray-1">{{ transaction?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
+            <span>{{ transaction?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
             <div class="divider divider-vertical divider-lighter mx-2"></div>
-            <span class="text--gray-1">{{ transaction?.timestamp | customDate: 'HH:mm:ss' }}</span>
+            <span>{{ transaction?.timestamp | customDate: 'HH:mm:ss' }}</span>
             <span class="d-none d-lg-block">)</span>
           </div>
         </div>
@@ -84,7 +84,7 @@
       </div>
       <div class="row body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">Gas (used / wanted)</div>
-        <div class="col-auto col-lg-9">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
+        <div class="col-auto col-lg-9 text--gray-1">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
       </div>
     </div>
 
