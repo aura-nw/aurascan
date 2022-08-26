@@ -1,6 +1,10 @@
 <app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
 <!-- Tabs -->
-<ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
+<ul
+  ngbNav
+  #customNav="ngbNav"
+  [activeId]="isRawData ? 1 : 0"
+  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
   <ng-container *ngFor="let tab of TAB; index as index">
     <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
       <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
@@ -27,7 +31,7 @@
       </ul>
     </div>
     <ng-container *ngIf="!isRawData">
-      <div *ngIf="!loading" [ngClass]="{'card-info': breakpoint.value.matches}">
+      <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
           <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ item?.chainid }}</div>
@@ -59,7 +63,9 @@
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Gas (used / wanted)</div>
-          <div class="col-auto col-lg-9 h6 mb-0 text--gray-1 body-01-mob">{{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}</div>
+          <div class="col-auto col-lg-9 h6 mb-0 text--gray-1 body-01-mob">
+            {{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}
+          </div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
@@ -117,19 +123,19 @@
                       [routerLink]="['/blocks', data['height']]">
                       {{ data[template.matColumnDef] }}
                     </a>
-                    <div *ngSwitchCase="'type'" class="g-type">
-                      {{ data[template.matColumnDef] }}
+                    <div *ngSwitchCase="'type'" class="g-type aura-status">
+                      <span class="status">{{ data[template.matColumnDef] }}</span>
                     </div>
                     <div *ngSwitchCase="'status'">
                       <div [ngSwitch]="data[template.matColumnDef]">
                         <div *ngSwitchCase="'Success'" class="text--primary">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] | uppercase }}
                         </div>
                         <div *ngSwitchCase="'Fail'" class="text--danger">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] | uppercase }}
                         </div>
                         <div *ngSwitchCase="'Pending'" class="text--warning">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] | uppercase }}
                         </div>
                       </div>
                     </div>
@@ -192,7 +198,6 @@
     </ng-container>
   </div>
 </div>
-
 
 <ng-template #noValues>
   <app-table-no-data></app-table-no-data>
