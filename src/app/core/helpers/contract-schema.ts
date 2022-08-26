@@ -7,30 +7,22 @@ function parseValue(item) {
   } else {
     const type = item.type;
     switch (true) {
-      // case ['any', 'object'].includes(type):
-      //   try {
-      //     value = JSON.parse(item.value);
-      //   } catch (e) {
-      //     value = item.value;
-      //   }
-      //   break;
-      case type === 'integer' || [...type].includes('integer'):
-        value = Number(item.value);
-        break;
-      case [...type].includes('boolean'):
-        value = item.value === 'true' ? true : false;
-
-        console.log(value);
-
-        break;
-
-      default:
-        // value = item.value;
+      case ['any', 'object'].includes(type):
         try {
           value = JSON.parse(item.value);
         } catch (e) {
           value = item.value;
         }
+        break;
+      case type === 'integer' || [...type].includes('integer'):
+        value = Number(item.value);
+        break;
+      case [...type].includes('boolean'):
+        value = item.value === 'true' ? true : false;
+        break;
+
+      default:
+        value = item.value;
         break;
     }
   }

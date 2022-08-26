@@ -33,7 +33,7 @@ export class ReadContractComponent implements OnInit {
         if (this.jsValidator.schemas) {
           this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
 
-          console.log('Debug', { root: this.root, schema: this.jsValidator.schemas });
+          // console.log('Debug', { root: this.root, schema: this.jsValidator.schemas });
         }
       }
     } catch {}
@@ -98,8 +98,6 @@ export class ReadContractComponent implements OnInit {
 
       fieldList.forEach((item) => {
         const isError = item.isRequired && !item.value;
-        console.log(item);
-        
 
         if (!isError) {
           item.value &&
@@ -114,8 +112,6 @@ export class ReadContractComponent implements OnInit {
       });
 
       if (msgQuery[fieldName]) {
-        console.log(msgQuery);
-
         this.query(msgQuery, query);
       }
     }
@@ -149,20 +145,20 @@ export class ReadContractComponent implements OnInit {
   }
 
   makeSchemaInput(schemas: Schema[]): any[] {
-    const result = schemas.map((msg) => {
-      try {
-        const properties = this.getProperties(msg);
-        if (properties.fieldList && !properties.fieldList.length) {
-          this.handleQueryContract(properties);
+    return schemas
+      .map((msg) => {
+        try {
+          const properties = this.getProperties(msg);
+          if (properties.fieldList && !properties.fieldList.length) {
+            this.handleQueryContract(properties);
+          }
+
+          return properties;
+        } catch (e) {
+          return null;
         }
-
-        return properties;
-      } catch (e) {
-        return {};
-      }
-    });
-
-    return result;
+      })
+      .filter((list) => list && list?.fieldName !== 'download_logo'); // ignore case download_logo - CW20
   }
 
   resetError(msg, all = false) {
