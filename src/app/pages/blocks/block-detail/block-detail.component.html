@@ -38,13 +38,13 @@
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
-          <div class="col-auto col-lg-9 text-end text-lg-start body-01-mob">
+          <div class="col-auto col-lg-9 text-end text-lg-start body-01-mob text--gray-1 d-lg-flex align-items-center">
             <div>{{ commonService.getDateValue(item?.timestamp)[0] }}</div>
-            <div class="d-flex align-items-center text--gray-4 mt-1">
+            <div class="d-flex align-items-center ml-1">
               <span class="d-none d-lg-block">(</span>
-              <span class="text--gray-1">{{ item?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
+              <span>{{ item?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical divider-lighter mx-2"></div>
-              <span class="text--gray-1">{{ item?.timestamp | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ item?.timestamp | customDate: 'HH:mm:ss' }}</span>
               <span class="d-none d-lg-block">)</span>
             </div>
           </div>
