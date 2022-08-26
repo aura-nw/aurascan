@@ -82,14 +82,13 @@ export class NFTDetailComponent implements OnInit {
     let filterData = {};
     filterData['keyWord'] = this.nftId;
     this.tokenService
-    .getListTokenTransfer(
-      this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.contractAddress,
-      filterData,
-    )
-    .subscribe(
-      (res) => {
+      .getListTokenTransfer(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.contractAddress,
+        filterData,
+      )
+      .subscribe((res) => {
         if (res && res.meta?.count > 0) {
           res.data.forEach((trans) => {
             trans['tx_response'] = JSON.parse(trans.tx);
@@ -99,8 +98,7 @@ export class NFTDetailComponent implements OnInit {
           });
         }
         this.loading = false;
-      },
-    );
+      });
   }
 
   paginatorEmit(event): void {
@@ -109,6 +107,7 @@ export class NFTDetailComponent implements OnInit {
 
   handlePageEvent(e: any) {
     this.pageData = e;
+    this.getDataTable();
   }
 
   copyData(text: string) {
@@ -141,7 +140,7 @@ export class NFTDetailComponent implements OnInit {
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
       nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute
+      modeExecute: data?.modeExecute,
     };
   }
 }
