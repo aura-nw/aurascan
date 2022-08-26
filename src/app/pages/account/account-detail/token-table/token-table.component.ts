@@ -60,6 +60,10 @@ export class TokenTableComponent implements OnChanges {
     private environmentService: EnvironmentService,
   ) {}
 
+  ngOnInit(): void {
+    this.getTotalAssets();
+  }
+
   ngOnChanges(): void {
     this.getListToken();
   }
@@ -72,11 +76,6 @@ export class TokenTableComponent implements OnChanges {
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.textSearch,
     };
-
-    if (!this.textSearch) {
-      this.total = 0;
-    }
-
     this.accountService.getAssetCW20ByOwner(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
         res?.data.forEach((element) => {
@@ -93,13 +92,8 @@ export class TokenTableComponent implements OnChanges {
             element['isValueUp'] = false;
             element.change = Number(element.change.toString().substring(1));
           }
-
-          if (!this.textSearch) {
-            this.total += element.price * +element.balance || 0;
-          }
         });
 
-        this.totalValue.emit(this.total);
         this.dataSource = new MatTableDataSource<any>(res?.data);
         this.pageData.length = res.meta.count;
       } else {
@@ -148,5 +142,12 @@ export class TokenTableComponent implements OnChanges {
     this.textSearch = '';
     this.pageData.pageIndex = 0;
     this.searchToken();
+  }
+
+  getTotalAssets(): void {
+    this.accountService.getTotalAssets(this.address).subscribe((res: ResponseDto) => {
+      this.total = res.data || 0;
+      this.totalValue.emit(this.total);
+    });
   }
 }

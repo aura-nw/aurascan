@@ -38,7 +38,7 @@
                     {{ denom }}
                   </span>
 
-                  <div [ngStyle]="{ color: tokenDetail.isValueUp ? '#5EE69D' : '#E65E5E' }" *ngIf="tokenDetail.change">
+                  <span [ngStyle]="{ color: tokenDetail.isValueUp ? '#5EE69D' : '#E65E5E' }" *ngIf="tokenDetail.change">
                     (<ng-container *ngIf="tokenDetail.isValueUp">
                       <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                     </ng-container>
@@ -46,7 +46,7 @@
                       <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                     </ng-container>
                     <span class="ml-1">{{ tokenDetail.change | number: global.formatNumber2Decimal }} %</span>)
-                  </div>
+                  </span>
                 </div>
                 <!--                  <span class="caption fw-normal-mob ml-2 text&#45;&#45;light-gray">@0.000068 {{ denom }}</span>-->
                 <!--                  <br class="d-lg-none" />-->
