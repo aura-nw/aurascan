@@ -276,30 +276,30 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   getListTransaction(): void {
-    this.transactionService
-      .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
-      .subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((trans) => {
-            //get amount of transaction
-            trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-            trans.type = typeTrans?.value;
-            trans.status = StatusTransaction.Fail;
-            if (trans.code === CodeTransaction.Success) {
-              trans.status = StatusTransaction.Success;
-            }
-            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-              trans.type = TypeTransaction.Received;
-            }
-          });
-          this.dataSource.data = res.data;
+    // this.transactionService
+    //   .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+    //   .subscribe((res: ResponseDto) => {
+    //     if (res?.data?.length > 0) {
+    //       res.data.forEach((trans) => {
+    //         //get amount of transaction
+    //         trans.typeOrigin = trans.type;
+    //         trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
+    //         const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
+    //         trans.type = typeTrans?.value;
+    //         trans.status = StatusTransaction.Fail;
+    //         if (trans.code === CodeTransaction.Success) {
+    //           trans.status = StatusTransaction.Success;
+    //         }
+    //         if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
+    //           trans.type = TypeTransaction.Received;
+    //         }
+    //       });
+    //       this.dataSource.data = res.data;
 
-          this.length = res.meta.count;
-          this.pageData.length = res.meta.count;
-        }
-      });
+    //       this.length = res.meta.count;
+    //       this.pageData.length = res.meta.count;
+    //     }
+    //   });
   }
 
   getAccountDetail(): void {
