@@ -1,6 +1,10 @@
 <app-pagetitle title="Transaction Details"></app-pagetitle>
 <!-- Tabs -->
-<ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
+<ul
+  ngbNav
+  #customNav="ngbNav"
+  [activeId]="isRawData ? 1 : 0"
+  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
   <ng-container *ngFor="let tab of TAB; index as index">
     <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
       <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
@@ -9,7 +13,6 @@
     </li>
   </ng-container>
 </ul>
-
 
 <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
@@ -27,7 +30,7 @@
         </ng-container>
       </ul>
     </div>
-    <div *ngIf="!isRawData" [ngClass]="{'card-info': breakpoint.value.matches}">
+    <div *ngIf="!isRawData" [ngClass]="{ 'card-info': breakpoint.value.matches }">
       <div class="row box-error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
@@ -38,7 +41,7 @@
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">TxHash</div>
         <div class="col-auto col-lg-9 text--gray-1">
-          <span class="d-none d-lg-block">{{transaction?.tx_hash}}</span>
+          <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
           <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe: 8:8 }}</span>
         </div>
       </div>
@@ -51,8 +54,11 @@
                 ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
                 : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
             "
-            alt="" width="20px" height="20px" />
-          <span class="ml-2">{{ transaction?.status }}</span>
+            width="20px"
+            height="20px" />
+          <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">{{
+            transaction?.status | uppercase
+          }}</span>
         </div>
       </div>
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
@@ -78,13 +84,15 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">Fee</div>
-        <div class="col-auto col-lg-9">
+        <div class="col-auto col-lg-9 text--gray-1">
           {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
       <div class="row body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">Gas (used / wanted)</div>
-        <div class="col-auto col-lg-9 text--gray-1">{{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}</div>
+        <div class="col-auto col-lg-9 text--gray-1">
+          {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
+        </div>
       </div>
     </div>
 
