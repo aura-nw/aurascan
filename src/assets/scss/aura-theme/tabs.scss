@@ -22,6 +22,7 @@
   width: 100%;
   flex-wrap: nowrap;
   overflow: auto;
+  overflow-y: hidden;
 }
 
 .mobile-tab::-webkit-scrollbar{
