@@ -1,4 +1,4 @@
-<h1 class="mb-0 text--white">Non-Fungible Tokens (NFT)</h1>
+<h1 class="mb-0 text--white fw-500-mob">Non-Fungible Tokens (NFT)</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-4 mt-lg-5">
@@ -79,7 +79,6 @@
                 <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
               </td>
             </ng-container>
-
             <ng-container matColumnDef="token">
               <th mat-header-cell *matHeaderCellDef>Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
@@ -94,7 +93,6 @@
                 </div>
               </td>
             </ng-container>
-
             <ng-container matColumnDef="tokenContract">
               <th mat-header-cell *matHeaderCellDef>Token Contract</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
@@ -103,7 +101,6 @@
                 }}</a>
               </td>
             </ng-container>
-
             <ng-container matColumnDef="transfers_24h">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
@@ -112,7 +109,6 @@
                 </ng-container>
               </td>
             </ng-container>
-
             <ng-container matColumnDef="transfers_3d">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Transfers (3D)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
@@ -130,13 +126,13 @@
               </td>
             </tr>
           </table>
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
-          </app-paginator>
         </div>
+        <app-paginator
+                [length]="pageData.length"
+                [pageSize]="pageData.pageSize"
+                (paginator)="paginatorEmit($event)"
+                (pageEvent)="pageEvent($event)">
+        </app-paginator>
       </div>
     </div>
   </ng-container>

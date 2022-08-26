@@ -22,15 +22,14 @@
       <tr>
         <td colspan="2" class="py-2">
           <div class="d-flex">
-            <div [class.flex-item]="!tokenDetail.isNFTContract">
-              <div class="caption">
-                <span *ngIf="tokenDetail.isNFTContract">Min price</span>
-                <span *ngIf="!tokenDetail.isNFTContract">Price</span>
+            <div class="{{ !tokenDetail.isNFTContract ? 'flex-item' : 'd-flex d-lg-block' }}">
+              <div class="text--gray-5 body-02 fixed-col">
+                <span>Price:</span>
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
                   <span class="small-body">${{ tokenDetail.price | number: global.formatNumberToken }}</span>
-                  <span class="small-text text--light-gray py-3 mx-1">
+                  <span class="caption fw-normal text--gray-5 ml-1">
                     <ng-container *ngIf="global.price.aura">
                       @{{ tokenDetail.price / global.price.aura || 0 | number: global.formatNumber2Decimal }}
                     </ng-container>
@@ -54,7 +53,7 @@
               </div>
             </div>
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
-              <div class="text--gray-5 caption">CIRCULATING SUPPLY MARKET CAP</div>
+              <div class="text--gray-5 body-02">CIRCULATING SUPPLY MARKET CAP</div>
               <div class="body-02 text--gray-1">
                 ${{ tokenDetail.circulating_market_cap | number: global.formatNumber2Decimal }}
               </div>
@@ -69,7 +68,7 @@
             <div
               [class.flex-item]="!tokenDetail.isNFTContract"
               [ngClass]="{ 'd-flex': tokenDetail.isNFTContract, 'align-items-center': tokenDetail.isNFTContract }">
-              <span class="text--gray-5 caption fixed-col">Max Total Supply</span>
+              <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
                   {{ tokenDetail.max_total_supply | number: global.formatNumberToken }}
@@ -82,7 +81,7 @@
             </div>
 
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
-              <div class="text--gray-5 caption">FULLY DILUTED MARKET CAP</div>
+              <div class="text--gray-5 body-02">FULLY DILUTED MARKET CAP</div>
               <div class="body-02 text--gray-1">
                 ${{ tokenDetail.fully_diluted_market_cap | number: global.formatNumber2Decimal }}
               </div>

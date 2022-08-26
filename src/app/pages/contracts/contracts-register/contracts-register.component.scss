@@ -50,6 +50,9 @@
       font-size: 1.4rem;
       line-height: 1.6rem;
     }
+    .mat-select-value {
+      color: var(--aura-gray-1);
+    }
     .mat-form-field-underline {
       display: none;
     }
@@ -71,10 +74,12 @@
     transform: translate3D(5px, 35px, 0) !important;
     padding: var(--spacer-3) 0 !important;
     border-radius: 8px;
-
     @media (min-width: 992px) {
       padding: var(--spacer-4) 0 !important;
     }
+  }
+  .mat-option, .mat-option.mat-active {
+    color: var(--aura-gray-1);
   }
 }
 
@@ -90,12 +95,6 @@
   ::ng-deep .contract-modal.modal .modal-dialog .modal-content {
     overflow-y: auto;
     padding-bottom: 0;
-  }
-}
-.search__result {
-  color: var(--aura-gray-5);
-  @media (min-width: 992px) {
-    color: var(--aura-gray-6);
   }
 }
 .button-outline__in-card {

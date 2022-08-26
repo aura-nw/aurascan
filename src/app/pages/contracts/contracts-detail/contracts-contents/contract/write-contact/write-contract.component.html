@@ -6,14 +6,14 @@
         class="button button-pill button--xs button-outline button-outline__in-card"
         *ngIf="!isConnectedWallet">
         <span class="icon-connect"></span>
-        <span class="fw-semibold">Connect to Web3</span>
+        <span class="fw-semibold fw-normal-mob">Connect to Web3</span>
       </button>
       <button
         [routerLink]="['/account/', walletAddress]"
         class="button button-pill button--xs button-outline button-outline__in-card"
         *ngIf="isConnectedWallet">
         <span class="icon-connect connected"></span>
-        <span class="fw-semibold">Connected to Web3</span>
+        <span class="fw-semibold fw-normal-mob">Connected to Web3</span>
       </button>
     </div>
     <div class="caption fw-normal-mob d-flex align-items-center">
@@ -31,11 +31,11 @@
       <!-- <p>{{ index + 1 }}.{{ getRequired(msg) }} <br />{{ msg | json }}</p> -->
       <mat-expansion-panel hideToggle *ngIf="msg.fieldName">
         <mat-expansion-panel-header class="content-contract">
-          <mat-panel-title class="item-content"> {{ index + 1 }}. {{ msg.fieldName }} </mat-panel-title>
+          <mat-panel-title class="item-content body-02 fw-semibold text--gray-1"> {{ index + 1 }}. {{ msg.fieldName }} </mat-panel-title>
           <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <div class="d-flex row px-3 py-1">
+        <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
           <!-- {{ msg.fieldList | json}} -->
           <ng-container *ngFor="let item of msg.fieldList">
             <p class="px-0 text--gray-1 body-02 mb-2" [class.input-require]="item.isRequired">
