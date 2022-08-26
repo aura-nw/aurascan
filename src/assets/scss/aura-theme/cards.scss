@@ -85,6 +85,11 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     color: var(--aura-primary);
+    font-size: 1.2rem;
+    font-weight: 400;
+    @media (min-width: 992px) {
+      font-size: 1.6rem;
+    }
   }
 }
 
