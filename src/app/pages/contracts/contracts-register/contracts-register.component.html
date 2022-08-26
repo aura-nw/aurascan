@@ -13,7 +13,7 @@
         Before a user wants to register a type contract for a Code ID, the user has to claim ownership of the Code ID
         successfully
       </div>
-      <div class="body-03-mob body-02 mt-1 search__result">{{ pageData?.length }} contract{{ pageData?.length > 1 ? 's' : ''}} registered</div>
+      <div class="body-03-mob body-02 mt-1 text--gray-5">{{ pageData?.length }} contract{{ pageData?.length > 1 ? 's' : ''}} registered</div>
     </div>
     <form class="aura-form single-input-field search-form mt-4 mt-lg-0 d-none d-lg-block">
       <div class="input-group">
@@ -178,7 +178,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
-              <div class="d-flex justify-content-center align-items-center">
+              <div class="d-flex justify-content-center align-items-center body-01 body-02-mob">
                 <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="16px" height="16px" class="mr-2" />
                 You have yet to register any type contract
               </div>
@@ -259,7 +259,7 @@
         <p class="body-02 mb-1 text--gray-1" [class.input-require]="!isEditMode">Code ID</p>
         <div class="box-input">
           <input type="text"
-            class="form-check-input col-12 mb-4"
+            class="form-check-input col-12 mb-4 text--gray-1"
             [maxlength]="50"
             [(ngModel)]="currentCodeID"
             [disabled]="isEditMode"

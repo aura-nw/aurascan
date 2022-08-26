@@ -89,13 +89,13 @@
             </td>
           </tr>
         </table>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
       </div>
+      <app-paginator
+              [length]="pageData.length"
+              [pageSize]="pageData.pageSize"
+              (paginator)="paginatorEmit($event)"
+              (pageEvent)="pageEvent($event)">
+      </app-paginator>
     </ng-container>
     <ng-template #noValues>
       <app-table-no-data *ngIf="!loading"></app-table-no-data>
