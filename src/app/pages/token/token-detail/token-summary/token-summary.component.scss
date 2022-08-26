@@ -1,6 +1,8 @@
 .box-token-info {
   table.aura-basic-table {
-    min-height: 280px;
+    @media (min-width: 992px) {
+      min-height: 280px;
+    }
 
     tr,
     td {
