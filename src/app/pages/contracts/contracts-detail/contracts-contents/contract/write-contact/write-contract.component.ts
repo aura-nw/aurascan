@@ -58,7 +58,7 @@ export class WriteContractComponent implements OnInit {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
       }
 
-      console.log('debug', { root: this.root, schema: this.jsValidator.schemas });
+      // console.log('debug', { root: this.root, schema: this.jsValidator.schemas });
     } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {
@@ -119,6 +119,7 @@ export class WriteContractComponent implements OnInit {
     let fieldList = [];
 
     if (childProps) {
+
       fieldList = Object.keys(childProps).map((e) => ({
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
@@ -134,15 +135,17 @@ export class WriteContractComponent implements OnInit {
   }
 
   makeSchemaInput(schemas: Schema[]): any[] {
-    const result = schemas.map((msg) => {
-      try {
-        const properties = this.getProperties(msg);
+    const result = schemas
+      .map((msg) => {
+        try {
+          const properties = this.getProperties(msg);
 
-        return properties;
-      } catch (e) {
-        return {};
-      }
-    });
+          return properties;
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter((list) => list && list?.fieldName !== 'upload_logo'); // ignore case upload_logo - CW20
 
     return result;
   }
@@ -173,8 +176,6 @@ export class WriteContractComponent implements OnInit {
       });
 
       if (msgExecute[fieldName]) {
-        console.log(msgExecute);
-
         this.execute(msgExecute);
       }
     }
