@@ -76,7 +76,7 @@
     <div [ngClass]="{'card-info': breakpoint.value.matches}">
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
-        <div class="col-9">{{ transactionDetail?.messages[0]?.label }}</div>
+        <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
@@ -87,7 +87,7 @@
         </div>
       </div>
       <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
+        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0 text--gray-4">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
         </div>
@@ -225,7 +225,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Option</div>
-        <div class="col-9">
+        <div class="col-9 text--gray-1">
           {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
         </div>
       </div>
@@ -252,7 +252,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Vesting Schedule</div>
-        <div class="col-9">{{ dateVesting }}</div>
+        <div class="col-9 text--gray-1">{{ dateVesting }}</div>
       </div>
     </div>
   </ng-container>
