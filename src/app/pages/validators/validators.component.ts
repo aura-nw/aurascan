@@ -72,6 +72,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   currentValidatorDialog: string;
   commissionLabel = null;
   lstValidator = [];
+  lstReValidator = [];
   lstUndelegate = [];
   numberCode = 0;
   arrBlocksMiss = [];
@@ -179,6 +180,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             ? event.status === this.statusValidator.Active
             : event.status !== this.statusValidator.Active,
         );
+
+        //get init list Redelegate validator
+        if (this.typeValidator === this.statusValidator.Active && !(this.lstValidator?.length > 0)) {
+          this.lstValidator = dataFilter;
+        }
+
         this.dataSource = new MatTableDataSource(dataFilter);
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
@@ -300,7 +307,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.amountFormat = null;
         this.isHandleStake = false;
         this.getValidatorDetail(address, staticDataModal);
-        this.getListRedelegate(this.userAddress, address);
+        this.getListRedelegate(address);
       }
     };
     view();
@@ -333,18 +340,20 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     );
   }
 
-  getListRedelegate(userAddress, operatorAddress): void {
-    this.validatorService.validatorsListRedelegate(userAddress, operatorAddress).subscribe(
-      (res) => {
-        if (res?.data?.length > 0) {
-          this.lstValidator = res.data;
-          this.lstValidator.forEach((f) => {
-            f.isStaking = f.isStaking === 1 ? true : false;
-          });
-        }
-      },
-      (error) => {},
-    );
+  getListRedelegate(operatorAddress): void {
+    let listDelegate = this.arrayDelegate?.map(a => a.validator_address);
+    let arrTemp =  this.lstValidator.filter(k => k.operator_address !== operatorAddress);
+    arrTemp.forEach((f)=>{
+      f['isStaking'] = 0;
+      if(listDelegate?.includes(f.operator_address)){
+        f['isStaking'] = 1;
+      }
+    })
+    
+    let lstSort = arrTemp.sort((a, b) => {
+      return b.isStaking - a.isStaking || b.power - a.power;
+    });
+    this.lstReValidator = lstSort;
   }
 
   //Get data for wallet info and list staking
