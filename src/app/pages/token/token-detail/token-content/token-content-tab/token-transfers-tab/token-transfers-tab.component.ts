@@ -48,7 +48,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
-    { matColumnDef: 'token_id', headerCellDef: 'TokenID' },
+    { matColumnDef: 'token_id', headerCellDef: 'Token ID' },
     { matColumnDef: 'details', headerCellDef: 'Details' },
   ];
 

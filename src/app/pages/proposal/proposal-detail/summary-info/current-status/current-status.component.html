@@ -21,11 +21,11 @@
       <div class="vote-bar__info" [style.left]="proposalDetail.threshold + '%'">
         <span class="caption">
           <span class="text--gray-5">Threshold:</span>
-          <span class="text--white ml-1">{{ proposalDetail.threshold | number: global.formatNumber2Decimal }}%</span>
+          <span class="text--gray-1 ml-1">{{ proposalDetail.threshold | number: global.formatNumber2Decimal }}%</span>
         </span>
       </div>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center text--gray-1">
       <div class="vote status--primary"></div>
       <div class="row align-items-center flex-grow-1">
         <div class="col-4 col-lg-5 fw-semibold">
@@ -35,7 +35,7 @@
         <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-5">{{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}</div>
       </div>
     </div>
-    <div class="d-flex align-items-center mt-2">
+    <div class="d-flex align-items-center text--gray-1 mt-2">
       <div class="vote status--danger flex-grow-0"></div>
       <div class="row align-items-center flex-grow-1">
         <div class="col-4 col-lg-5 fw-semibold">
@@ -45,7 +45,7 @@
         <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">{{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}</div>
       </div>
     </div>
-    <div class="d-flex align-items-center mt-2">
+    <div class="d-flex align-items-center text--gray-1 mt-2">
       <div class="vote status--info"></div>
       <div class="row align-items-center flex-grow-1">
         <div class="col-4 col-lg-5 fw-semibold">
