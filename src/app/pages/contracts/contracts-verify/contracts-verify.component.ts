@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
@@ -17,6 +17,9 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   tabCurrent = 0;
   contractAddress = '';
   contractTxHash = '';
+  @ViewChild('version') versionSelect:any;
+
+
 
   TAB = [
     {
@@ -159,5 +162,9 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
 
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
+  }
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event) {
+    this.versionSelect.close();
   }
 }
