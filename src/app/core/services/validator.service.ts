@@ -42,10 +42,10 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/${address}/unbonding-delegations`);
   }
 
-  validatorsListRedelegate(delegatorAddress: string, operatorAddress: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators/${operatorAddress}/${delegatorAddress}/delegators`);
-  }
+  // validatorsListRedelegate(delegatorAddress: string, operatorAddress: string): Observable<any> {
+  //   this.setURL();
+  //   return this.http.get<any>(`${this.apiUrl}/validators/${operatorAddress}/${delegatorAddress}/delegators`);
+  // }
 
   delegators(limit: string | number, offset: string | number, address: string) {
     return axios.get(
