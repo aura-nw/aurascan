@@ -284,7 +284,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     const chainId = this.environmentService.configValue.chainId;
     const address = this.currentAddress;
 
-    this.transactionService.getAccountTxFromHoroscope(chainId, address, 100, nextKey).subscribe((txResponse) => {
+    this.transactionService.getAccountTxFromHoroscope(chainId, address, 50, nextKey).subscribe((txResponse) => {
       const { code, data } = txResponse;
 
       this.nextKey = data.nextKey || null;
@@ -292,6 +292,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       if (code === 200) {
         const txs = _.get(data, 'transactions').map((element) => {
           const tx_hash = _.get(element, 'tx_response.txhash');
+          const message = _.get(element, 'tx.body.messages');
 
           const _type = _.get(element, 'tx.body.messages[0].@type');
           const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
@@ -312,7 +313,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           const height = _.get(element, 'tx_response.height');
           const timestamp = _.get(element, 'tx_response.timestamp');
 
-          return { tx_hash, type, status, amount, fee, height, timestamp };
+          return { tx_hash, type, status, amount, fee, height, timestamp, message };
         });
 
         if (this.dataSource.data.length > 0) {
@@ -519,13 +520,14 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     let eTransType = TRANSACTION_TYPE_ENUM;
     if (message?.length > 1) {
       return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    } else if (message?.length === 0 || (message.length === 1 && !message[0]?.amount)) {
+    } else if (message?.length === 0 || (message?.length === 1 && !_.get(message, '[0].amount'))) {
       return '-';
     } else {
-      let amount = message[0]?.amount[0]?.amount;
+      // let amount = message[0]?.amount[0]?.amount;
+      let amount = _.get(message, '[0].amount[0].amount');
       //check type is Delegate/Undelegate/Redelegate
       if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
-        amount = message[0]?.amount?.amount;
+        amount = _.get(message[0], 'amount.amount'); // message[0]?.amount?.amount;
       }
       return (
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
