@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -118,6 +119,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
+  nextKey = null;
 
   pageDataToken: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -174,6 +176,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   TABS = TABS_TITLE_ACCOUNT;
@@ -229,7 +232,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.currentAddress = params?.id;
         this.loadDataTemp();
         this.getAccountDetail();
-        this.getListTransaction();
+        // this.getListTransaction();
+
+        this.getTxsFromHoroscope();
       }
     });
   }
@@ -297,6 +302,67 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getTxsFromHoroscope(nextKey?: null): void {
+    const chainId = this.environmentService.configValue.chainId;
+    const address = this.currentAddress;
+
+    this.transactionService.getAccountTxFromHoroscope(chainId, address, 50, nextKey).subscribe((txResponse) => {
+      const { code, data, nextKey } = txResponse;
+      if (nextKey) {
+        this.nextKey = nextKey;
+      }
+
+      if (code === 200) {
+        const txs = _.get(data, 'transactions').map((element) => {
+          const tx_hash = _.get(element, 'tx_response.txhash');
+
+          const _type = _.get(element, 'tx.body.messages[0].@type');
+          const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
+
+          const status =
+            _.get(element, 'tx_response.code') == CodeTransaction.Success
+              ? StatusTransaction.Success
+              : StatusTransaction.Fail;
+
+          const amount = getAmount(
+            _.get(element, 'tx.body.messages'),
+            _type,
+            _.get(element, 'tx.body.raw_log'),
+            this.coinMinimalDenom,
+          );
+
+          const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount'), this.coinDecimals);
+          const height = _.get(element, 'tx_response.height');
+          const timestamp = _.get(element, 'tx_response.timestamp');
+
+          return { tx_hash, type, status, amount, fee, height, timestamp };
+        });
+
+        console.log('this.dataSource.data.length', this.dataSource.data.length, txs.length);
+        if (this.dataSource.data.length > 0) {
+          this.dataSource.data.concat(txs);
+        } else {
+          this.dataSource.data = [...txs];
+        }
+        console.log('this.dataSource.data.length', this.dataSource.data.length, txs.length);
+
+        this.pageData.length = this.dataSource.data.length;
+      }
+    });
+
+    /*
+      {
+        tx_hash: '',
+        type: '',
+        status: '',
+        amount: '',
+        fee: '',
+        height: '',
+        timestamp: '',
+      }
+    */
+  }
+
   getListTransaction(): void {
     this.transactionService
       .txsWithAddress(this.pageData.pageSize, this.pageData.pageIndex * this.pageData.pageSize, this.currentAddress)
@@ -316,6 +382,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
               trans.type = TypeTransaction.Received;
             }
           });
+          console.log(res.data);
+
           this.dataSource.data = res.data;
           this.pageData.length = res.meta.count;
         }
@@ -432,8 +500,17 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   pageEvent(e: PageEvent): void {
+    const { length, pageIndex, pageSize } = e;
+    console.log(e);
+
+    const next = length <= pageIndex * pageSize;
+
+    if (next) {
+      this.getTxsFromHoroscope(this.nextKey);
+    }
+
     this.pageData.pageIndex = e.pageIndex;
-    this.getListTransaction();
+    // this.getListTransaction();
   }
 
   viewQrAddress(staticDataModal: any): void {
