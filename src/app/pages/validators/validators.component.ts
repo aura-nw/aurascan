@@ -65,7 +65,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   validatorDetail = '';
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
-  dataDelegate: DataDelegateDto;
+  dataDelegate: DataDelegateDto = {};
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
   modalReference: any;
@@ -307,7 +307,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
+  viewPopupDetail(staticDataModal: any, address: string, dialogMode = DIALOG_STAKE_MODE.Delegate, isOpenStaking = false) {
     this.currentValidatorDialog = address;
     this.isClaimRewardLoading = true;
     const view = async () => {
@@ -322,7 +322,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     };
     view();
     this.isOpenStaking = isOpenStaking;
-    this.dataDelegate.dialogMode = dialogMode;
+    this.dataDelegate = this.dataDelegate || {};
+    this.dataDelegate['dialogMode'] = dialogMode;
     this.isClaimRewardLoading = false;
   }
 
