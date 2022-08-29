@@ -73,10 +73,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
     <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
-        <div class="col-9">{{ transactionDetail?.messages[0]?.label }}</div>
-      </div>
+      <app-messages-item [label]="'Label'" [value]="transactionDetail?.messages[0]?.label"></app-messages-item>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
         <div class="col-12 col-lg-9">
@@ -251,10 +248,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Vesting Schedule</div>
-        <div class="col-9">{{ dateVesting }}</div>
-      </div>
+      <app-messages-item [label]="'Vesting Schedule'" [value]="dateVesting"></app-messages-item>
     </div>
   </ng-container>
 
@@ -279,18 +273,13 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Proposal Id</div>
-        <div class="col-12 col-lg-9">{{ transactionDetail?.tx?.logs[0].events[4].attributes[0].value }}</div>
-      </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Proposal Type</div>
-        <div class="col-9">{{ transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value }}</div>
-      </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Title</div>
-        <div class="col-12 col-lg-9">{{ transactionDetail?.tx?.tx?.body?.messages[0]?.content.title }}</div>
-      </div>
+      <app-messages-item [label]="'Proposal Id'" [value]="transactionDetail?.tx?.logs[0].events[4].attributes[0].value"></app-messages-item>
+      <app-messages-item
+        [label]="'Proposal Type'"
+        [value]="transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value"></app-messages-item>
+      <app-messages-item
+        [label]="'Title'"
+        [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.content.title"></app-messages-item>
     </div>
   </ng-container>
 
@@ -422,14 +411,8 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Code Id</div>
-        <div class="col-12 col-lg-9">{{ storeCodeId }}</div>
-      </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Byte Code</div>
-        <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.wasm_byte_code }}</div>
-      </div>
+      <app-messages-item [label]="'Code Id'" [value]="storeCodeId"></app-messages-item>
+      <app-messages-item [label]="'Byte Code'" [value]="transactionDetail?.messages[0]?.wasm_byte_code"></app-messages-item>
     </div>
   </ng-container>
 
@@ -475,12 +458,7 @@
           {{ transactionDetail?.messages[0]?.description?.details || '-' }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Moniker</div>
-        <div class="col-9">
-          {{ transactionDetail?.messages[0]?.description?.moniker }}
-        </div>
-      </div>
+      <app-messages-item [label]="'Moniker'" [value]="transactionDetail?.messages[0]?.description?.moniker"></app-messages-item>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
         <div class="col-9">
@@ -542,101 +520,55 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Port</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
+    <app-messages-item
+      [label]="'Source Channel'"
+      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Port'" [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
+    <app-messages-item
+      [label]="'Sequence'"
+      [value]="ibcData?.packet_sequence"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
-      </div>
-    </div>
+    <app-messages-item
+      [label]="'Origin Amount'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <app-messages-item
+      [label]="'Origin Denom'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.IBCReceived">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
+    <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container>
+    <app-messages-item
+      [label]="'Sequence'"
+      [value]="ibcData?.packet_sequence"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_src_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_src_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
-      <div class="col-12 col-lg-9">
-        <!-- {{ ibcData.packet_dst_channel }} -->
-      </div>
-    </div>
+    <app-messages-item
+      [label]="'Origin Amount'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <app-messages-item
+      [label]="'Origin Denom'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
+    <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
+    <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
+    <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
+    <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
+    <app-messages-item [label]="'Signer'" [value]="ibcData?.update_client?.signer"></app-messages-item>
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
       <div class="col-12 col-lg-9">
@@ -653,116 +585,29 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
-      <div class="col-12 col-lg-9">0</div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCReceived">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
-        <span class="text--primary">{{ denom }}</span>
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
-      <div class="col-12 col-lg-9">
-        <!-- {{ ibcData.packet_dst_channel }} -->
-      </div>
-    </div>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
-      <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
-          {{ transactionDetail?.messages[0]?.receiver }}
-        </a>
-      </div>
-    </div>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
-      <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
-          {{ transactionDetail?.messages[0]?.sender }}
-        </a>
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
-      <div class="col-12 col-lg-9">0</div>
-    </div>
+    <app-messages-item [label]="'Effected'" [value]="'0'"></app-messages-item>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.IBCAcknowledgement">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sequence</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
+    <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container>
+    <app-messages-item
+      [label]="'Sequence'"
+      [value]="ibcData?.packet_sequence"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
-      </div>
-    </div>
+    <app-messages-item
+      [label]="'Origin Amount'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <app-messages-item
+      [label]="'Origin Denom'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
       <div class="col-12 col-lg-9">
@@ -779,132 +624,115 @@
         </a>
       </div>
     </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
-      <div class="col-12 col-lg-9">
-        <!-- {{ ibcData.packet_dst_channel }} -->
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
-      <div class="col-12 col-lg-9">0</div>
-    </div>
+    <app-messages-item
+      [label]="'Source Port'"
+      [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
+    <app-messages-item
+      [label]="'Source Channel'"
+      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
+    <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
+    <app-messages-item
+      [label]="'Signer'"
+      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.signer"></app-messages-item>
+    <app-messages-item [label]="'Effected'" [value]="'0'"></app-messages-item>
   </ng-container>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCUpdateClient">
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
-      <div class="col-12 col-lg-9">
-        <!-- {{ ibcData.packet_dst_channel }} -->
-      </div>
-    </div>
-
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Client ID</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">block</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">app</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_sequence }}
-      </div>
-    </div>
-
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
-        <span class="text--primary">{{ denom }}</span>
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Amount</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | number }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Origin Denom</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom }}
-      </div>
-    </div>
+  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCTimeout">
+    <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container>
+    <app-messages-item
+      [label]="'Sequence'"
+      [value]="ibcData?.packet_sequence"
+      [pipeType]="pipeTypeData.Number"></app-messages-item>
+    <app-messages-item
+      [label]="'Source Port'"
+      [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
+    <app-messages-item
+      [label]="'Source Channel'"
+      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
+    <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Data</div>
       <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
-          {{ transactionDetail?.messages[0]?.receiver }}
-        </a>
+        <pre id="json" class="raw-content text--white px-4" [innerHtml]="ibcData?.time_out?.data | appJson"></pre>
       </div>
     </div>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
-      <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
-          {{ transactionDetail?.messages[0]?.sender }}
-        </a>
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Port</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ transactionDetail?.messages[0]?.source_channel }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Port</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_port }}
-      </div>
-    </div>
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Channel</div>
-      <div class="col-12 col-lg-9">
-        {{ ibcData.packet_dst_channel }}
-      </div>
-    </div>
-    
-    <div class="row mb-3 small-body">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Effected</div>
-      <div class="col-12 col-lg-9">0</div>
-    </div>
+    <app-messages-item
+      [label]="'Timeout Revision Number'"
+      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_number"></app-messages-item>
+    <app-messages-item
+      [label]="'Timeout Revision Height'"
+      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_height"></app-messages-item>
+    <app-messages-item
+      [label]="'Timeout Timestamp'"
+      [value]="ibcData?.time_out?.packet?.timeout_timestamp"></app-messages-item>
+    <app-messages-item
+      [label]="'Proof Revision Number'"
+      [value]="ibcData?.time_out?.proof_height?.revision_number"></app-messages-item>
+    <app-messages-item
+      [label]="'Proof Revision Height'"
+      [value]="ibcData?.time_out?.proof_height?.revision_height"></app-messages-item>
+    <app-messages-item
+      [label]="'Next Sequence Recv'"
+      [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
+    <app-messages-item [label]="'Signer'" [value]="ibcData?.time_out?.signer"></app-messages-item>
   </ng-container>
+
+  <ng-template #ibcUpdateClient>
+    <app-messages-item [label]="'Signer'" [value]="ibcData?.update_client?.signer"></app-messages-item>
+    <app-messages-item [label]="'Client ID'" [value]="ibcData?.update_client?.client_id"></app-messages-item>
+    <app-messages-item
+      [label]="'block'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.version?.block"></app-messages-item>
+    <app-messages-item
+      [label]="'app'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.version?.app"></app-messages-item>
+    <app-messages-item
+      [label]="'chain_id'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.chain_id"></app-messages-item>
+    <app-messages-item
+      [label]="'height'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.height"></app-messages-item>
+    <app-messages-item
+      [label]="'time'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.time"></app-messages-item>
+    <app-messages-item
+      [label]="'hash'"
+      [value]="
+        ibcData?.update_client?.header?.signed_header?.header?.last_block_id?.part_set_header?.hash
+      "></app-messages-item>
+    <app-messages-item
+      [label]="'total'"
+      [value]="
+        ibcData?.update_client?.header?.signed_header?.header?.last_block_id?.part_set_header?.total
+      "></app-messages-item>
+    <app-messages-item
+      [label]="'last_commit_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.last_commit_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'data_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.data_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'validators_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.validators_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'next_validators_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.next_validators_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'consensus_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.consensus_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'app_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.app_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'last_results_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.last_results_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'evidence_hash'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.evidence_hash"></app-messages-item>
+    <app-messages-item
+      [label]="'proposer_address'"
+      [value]="ibcData?.update_client?.header?.signed_header?.header?.proposer_address"></app-messages-item>
+  </ng-template>
 </div>

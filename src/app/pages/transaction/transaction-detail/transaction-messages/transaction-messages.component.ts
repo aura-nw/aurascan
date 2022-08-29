@@ -5,7 +5,7 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -42,6 +42,7 @@ export class TransactionMessagesComponent implements OnInit {
     StoreCode: 'store_code',
     SendPacket: 'send_packet',
   };
+  pipeTypeData = pipeTypeData;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -76,8 +77,8 @@ export class TransactionMessagesComponent implements OnInit {
     ) {
       this.displayMsgRaw();
     } else if (
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.IBCTransfer ||
-      this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.IBCReceived
+      //get data if type = IBC
+      this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
     ) {
       this.getDataIBC();
     }
@@ -212,11 +213,28 @@ export class TransactionMessagesComponent implements OnInit {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.SendPacket);
         if (temp) {
           this.ibcData = temp[0]?.attributes;
-          this.ibcData.packet_sequence = this.ibcData.find((f) => f.key === 'packet_sequence').value;
-          this.ibcData.packet_src_port = this.ibcData.find((f) => f.key === 'packet_src_port').value;
-          this.ibcData.packet_dst_port = this.ibcData.find((f) => f.key === 'packet_dst_port').value;
-          this.ibcData.packet_dst_channel = this.ibcData.find((f) => f.key === 'packet_dst_channel').value;
-          this.ibcData.packet_dst_channel = this.ibcData.find((f) => f.key === 'packet_src_channel').value;
+          this.ibcData = {
+            ...this.ibcData,
+            packet_sequence: this.ibcData.find((f) => f.key === 'packet_sequence').value,
+            packet_src_port: this.ibcData.find((f) => f.key === 'packet_src_port').value,
+            packet_dst_port: this.ibcData.find((f) => f.key === 'packet_dst_port').value,
+            packet_src_channel: this.ibcData.find((f) => f.key === 'packet_src_channel').value,
+            packet_dst_channel: this.ibcData.find((f) => f.key === 'packet_dst_channel').value,
+          };
+          this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
+            (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCTimeout,
+          );
+          this.ibcData['update_client'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
+            (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCUpdateClient,
+          );
+          if (this.ibcData['time_out']) {
+            this.ibcData['time_out']['data'] = {
+              amount: this.ibcData.find((f) => f.key === 'receiver').value,
+              denom: this.ibcData.find((f) => f.key === 'refund_denom').value,
+              receiver: this.ibcData.find((f) => f.key === 'refund_denom').value,
+              sender: this.ibcData.find((f) => f.key === 'sender').value,
+            };
+          }
         }
       }
     } catch (e) {}

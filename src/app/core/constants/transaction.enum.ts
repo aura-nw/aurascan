@@ -81,3 +81,7 @@ export enum ModeExecuteTransaction {
   Mint = 'mint',
   Burn = 'burn'
 }
+
+export enum pipeTypeData {
+  Number = 'number',
+}
