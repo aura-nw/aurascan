@@ -128,13 +128,13 @@
                     </div>
                     <div *ngSwitchCase="'status'">
                       <div [ngSwitch]="data[template.matColumnDef]">
-                        <div *ngSwitchCase="'Success'" class="text--primary">
+                        <div *ngSwitchCase="'Success'" class="text--green-3">
                           {{ data[template.matColumnDef] | uppercase }}
                         </div>
-                        <div *ngSwitchCase="'Fail'" class="text--danger">
+                        <div *ngSwitchCase="'Fail'" class="text--red-3">
                           {{ data[template.matColumnDef] | uppercase }}
                         </div>
-                        <div *ngSwitchCase="'Pending'" class="text--warning">
+                        <div *ngSwitchCase="'Pending'" class="text--yellow-3">
                           {{ data[template.matColumnDef] | uppercase }}
                         </div>
                       </div>
