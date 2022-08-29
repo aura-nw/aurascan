@@ -13,11 +13,17 @@
       color: var(--aura-white);
       @media (max-width: 414px) {
         overflow-y: auto;
-        padding-bottom: 120px;
+        //padding-bottom: 120px;
       }
       @media (min-width: 992px) {
         padding: var(--spacer-6);
       }
+      .box-staking.aura-form {
+        @media (max-width: 414px) {
+          margin-bottom: 120px;
+        }
+      }
+
     }
   }
 
