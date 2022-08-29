@@ -54,6 +54,15 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw20-tokens/transactions`, payload);
   }
 
+  getListNFTDetail(
+    contractAddress: string,
+    tokenId: string,
+    limit: string | number,
+    offset: string | number,
+  ): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/${tokenId}/${limit}/${offset}`);
+  }
+
   getListTokenNFT(contractAddress: string, payload): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nfts`, payload);
   }

@@ -79,14 +79,12 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getDataTable(): void {
-    let filterData = {};
-    filterData['keyWord'] = this.nftId;
     this.tokenService
-      .getListTokenTransfer(
+      .getListNFTDetail(
+        this.contractAddress,
+        this.nftId,
         this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize,
-        this.contractAddress,
-        filterData,
       )
       .subscribe((res) => {
         if (res && res.meta?.count > 0) {
