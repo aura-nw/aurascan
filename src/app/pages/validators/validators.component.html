@@ -389,12 +389,12 @@
               [disableOptionCentering]="true">
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
-                *ngFor="let item of lstValidator; let last = last"
+                *ngFor="let item of lstReValidator; let last = last"
                 [class.mb-lg-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain align-items-center">
-                  <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking }">
+                  <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
                       <div class="validator-avatar">
                         <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
