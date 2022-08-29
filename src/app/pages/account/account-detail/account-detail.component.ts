@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -296,21 +296,20 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.pageDataToken.pageIndex = page.pageIndex;
         break;
       default:
-        this.pageData.pageIndex = page.pageIndex;
-        this.getListTransaction();
+        // this.pageData.pageIndex = page.pageIndex;
+        // this.getListTransaction();
         break;
     }
   }
 
-  getTxsFromHoroscope(nextKey?: null): void {
+  getTxsFromHoroscope(nextKey = null): void {
     const chainId = this.environmentService.configValue.chainId;
     const address = this.currentAddress;
 
-    this.transactionService.getAccountTxFromHoroscope(chainId, address, 50, nextKey).subscribe((txResponse) => {
-      const { code, data, nextKey } = txResponse;
-      if (nextKey) {
-        this.nextKey = nextKey;
-      }
+    this.transactionService.getAccountTxFromHoroscope(chainId, address, 100, nextKey).subscribe((txResponse) => {
+      const { code, data } = txResponse;
+
+      this.nextKey = data.nextKey || null;
 
       if (code === 200) {
         const txs = _.get(data, 'transactions').map((element) => {
@@ -340,7 +339,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         console.log('this.dataSource.data.length', this.dataSource.data.length, txs.length);
         if (this.dataSource.data.length > 0) {
-          this.dataSource.data.concat(txs);
+          console.log();
+
+          this.dataSource.data = [...this.dataSource.data, ...txs];
         } else {
           this.dataSource.data = [...txs];
         }
@@ -382,7 +383,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
               trans.type = TypeTransaction.Received;
             }
           });
-          console.log(res.data);
 
           this.dataSource.data = res.data;
           this.pageData.length = res.meta.count;
@@ -495,17 +495,32 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  paginatorEmit(e): void {
-    this.dataSource.paginator = e;
+  paginatorEmit(e: MatPaginator): void {
+    if (this.dataSource.paginator) {
+      // e.pageSize = this.dataSource.paginator.pageSize;
+
+      // this.dataSource.paginator = e;
+
+      // this.pageData.pageIndex = e.pageIndex;
+
+      e.page.next({
+        length: this.dataSource.paginator.length,
+        pageIndex: 0,
+        pageSize: this.dataSource.paginator.pageSize,
+        previousPageIndex: this.dataSource.paginator.pageIndex,
+      });
+      this.dataSource.paginator = e;
+
+      // this.pageData.pageIndex = e.pageIndex;
+    } else this.dataSource.paginator = e;
   }
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-    console.log(e);
 
-    const next = length <= pageIndex * pageSize;
+    const next = length <= (pageIndex + 2) * pageSize;
 
-    if (next) {
+    if (next && this.nextKey) {
       this.getTxsFromHoroscope(this.nextKey);
     }
 
