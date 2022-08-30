@@ -27,9 +27,9 @@
   @media (min-width: 992px) {
     border: 2px solid var(--aura-gray-9);
   }
-  @media (max-width: 374.99px) {
+  @media (max-width: 413.99px) {
     &--manage {
-      max-height: 63px;
+      max-height: 45px;
       overflow: hidden;
       transition: max-height .35s ease-in-out;
       position: relative;
@@ -49,6 +49,11 @@
           transform: rotate(180deg);
         }
       }
+    }
+  }
+  @media (max-width: 374.99px) {
+    &--manage {
+      max-height: 63px;
     }
   }
   border-radius: 20px;
