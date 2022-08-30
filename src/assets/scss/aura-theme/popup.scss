@@ -23,8 +23,10 @@
       }
 
       .box-staking.aura-form {
-        @media (max-width: 414px) {
-          min-height: 800px;
+        @media (max-width: 375.99px) {
+          max-height: 650px;
+          overflow-y: auto;
+          padding-bottom: 130px;
         }
       }
 
