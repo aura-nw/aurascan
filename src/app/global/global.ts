@@ -17,7 +17,7 @@ export class Globals {
   }
 }
 
-export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom: string) {
+export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   let amount = 0;
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;

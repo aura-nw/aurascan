@@ -1,19 +1,22 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { Globals } from 'src/app/global/global';
+import { getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+import * as _ from 'lodash';
 const marked = require('marked');
 
 @Component({
@@ -207,23 +210,40 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListPower(): void {
+    this.lengthPowerLoading = true;
     this.validatorService
-      .validatorsDetailListPower(this.pageSize, this.pageIndexPower * this.pageSize, this.currentAddress)
+      .validatorsDetailListPowerIndexer(this.pageSize, this.pageIndexPower * this.pageSize, this.currentAddress)
       .subscribe((res) => {
-        this.lengthPowerLoading = true;
-        if (res.data?.length > 0) {
-          res.data.forEach((power) => {
-            power.isStakeMode = false;
+        const { code, data } = res;
+        if (code === 200) {
+          const txs = _.get(data, 'transactions').map((element) => {
+            let isStakeMode = false;
+
+            const tx_hash = _.get(element, 'tx_response.txhash');
+
+            const address = _.get(element, 'tx.body.messages[0].validator_dst_address');
+
+            const _type = _.get(element, 'tx.body.messages[0].@type');
             if (
-              power.type === 'delegate' ||
-              (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress) ||
-              power.type === 'create_validator'
+              _type === TRANSACTION_TYPE_ENUM.Delegate ||
+              (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
+              _type === TRANSACTION_TYPE_ENUM.CreateValidator
             ) {
-              power.isStakeMode = true;
+              isStakeMode = true;
             }
+            const amount = getAmount(_.get(element, 'tx.body.messages'), _type, _.get(element, 'tx.body.raw_log'));
+            const height = _.get(element, 'tx_response.height');
+            const timestamp = _.get(element, 'tx_response.timestamp');
+
+            return { tx_hash, amount, isStakeMode, height, timestamp };
           });
-          this.dataSourcePower = res;
-          this.lengthPower = res.meta?.count;
+          this.dataSourcePower.data = [];
+          if (this.dataSourcePower.data.length > 0) {
+            this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
+          } else {
+            this.dataSourcePower.data = [...txs];
+          }
+          this.lengthPower = res.data?.count;
         }
         this.lengthPowerLoading = false;
       });
