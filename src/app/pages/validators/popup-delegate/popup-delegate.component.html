@@ -21,14 +21,14 @@
 </ng-container>
 
 <ng-container *ngIf="data.dialogMode === dialogMode.Manage">
-  <div class="box-notice mb-4 mb-xl-8">
+  <div class="box-notice box-notice--manage mb-6 pr-6" [class.show]="boxNoticeShow" (click)="boxNoticeShow = !boxNoticeShow">
     <div class="warning-icon mr-3"></div>
     <div class="text--greyscale-4">
-      <div class="mb-2">You can <span class="fw-bold text--white">"Delegate"</span> more to this validator</div>
-      <div class="mb-2">
+      <div class="mb-2 box-notice__info">You can <span class="fw-bold text--white">"Delegate"</span> more to this validator</div>
+      <div class="mb-2 box-notice__info">
         Or use <span class="fw-bold text--white">"Redelagate"</span> to switch your assets to another validator.
       </div>
-      <div>Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.</div>
+      <div class="box-notice__info">Or use <span class="fw-bold text--white">"Undelegate"</span> to start the unbonding period.</div>
     </div>
   </div>
   <div class="body small-body-mob">

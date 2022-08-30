@@ -115,6 +115,11 @@ form.search-form-validators {
           }
         }
       }
+      .option__name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
@@ -212,8 +217,7 @@ form.search-form-validators {
     height: 34px;
   }
 }
-
-.modal {
+.modal.validator-modal {
   @media (max-width: 991.99px) {
     .modal-dialog {
       margin: 0;
@@ -224,9 +228,17 @@ form.search-form-validators {
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100vh - 62px);
+      height: 100%;
       border: none;
       border-radius: 0 !important;
+    }
+  }
+  @media (max-width: 575.98px) {
+    .box-staking.aura-form {
+      margin-bottom: 120px;
+      .delegateAction {
+        top: -50% !important;
+      }
     }
   }
 }

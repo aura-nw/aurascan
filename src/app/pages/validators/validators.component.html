@@ -360,17 +360,17 @@
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
                 *ngFor="let item of lstReValidator; let last = last"
-                [class.mb-lg-2]="!last"
+                [class.mb-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
-                <div class="d-flex option-contain align-items-center">
+                <div class="d-flex option-contain align-items-center justify-content-between">
                   <div class="option-label d-flex align-items-center" [ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
                       <div class="validator-avatar medium">
                         <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
                       </div>
                     </div>
-                    <span>{{ item.title | translate }}</span>
+                    <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label">
                     Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}
@@ -402,7 +402,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-4 mt-lg-8">
+      <div class="mt-6 mt-lg-8">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
           <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
             <div class="dropdown aura-dropdown mr-4">
@@ -420,7 +420,7 @@
                   height="24px"
                   width="24px" />
               </button>
-              <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
+              <ul class="dropdown-menu aura-dropdown-menu delegateAction" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
                   <img
                     [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
