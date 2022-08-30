@@ -375,12 +375,15 @@
           <div class="title-small fw-500">Power Events</div>
         </div>
         <div class="card-body article-1">
-          <ngx-simplebar>
+          <div *ngIf="isLoadingPower" class="m-auto mt-10">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+          <ng-container *ngIf="!isLoadingPower">
             <ng-container *ngIf="lengthPower > 0; else noValues">
               <div class="table-responsive aura-table-contain">
                 <table
                   mat-table
-                  [dataSource]="dataSourcePower.data"
+                  [dataSource]="dataSourcePower"
                   class="aura-table"
                   *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesPower; index as i">
@@ -430,7 +433,7 @@
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
                   <app-card-mob-simple
-                    *ngFor="let data of dataSourcePower.data"
+                    *ngFor="let data of dataSourcePowerMob"
                     [link]="'/blocks/id/' + data.blockId"
                     [title]="{
                       size: 'sm',
@@ -453,10 +456,10 @@
               </div>
             </ng-container>
             <ng-template #noValues>
-              <app-loading-sprint *ngIf="lengthPowerLoading"></app-loading-sprint>
-              <app-table-no-data *ngIf="!lengthPowerLoading"></app-table-no-data>
+              <app-loading-sprint *ngIf="isLoadingPower"></app-loading-sprint>
+              <app-table-no-data *ngIf="!isLoadingPower"></app-table-no-data>
             </ng-template>
-          </ngx-simplebar>
+          </ng-container>
         </div>
       </div>
     </div>
