@@ -151,6 +151,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  dataSourceMobile: any[];
 
   length: number;
   pageSize = 5;
@@ -165,6 +166,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   chartCustomOptions = chartCustomOptions;
 
   // loading param check
+  transactionLoading = true;
   accDetailLoading = true;
   chartLoading = true;
   userAddress = '';
@@ -284,46 +286,59 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     const chainId = this.environmentService.configValue.chainId;
     const address = this.currentAddress;
 
-    this.transactionService.getAccountTxFromHoroscope(chainId, address, 50, nextKey).subscribe((txResponse) => {
-      const { code, data } = txResponse;
+    this.transactionService.getAccountTxFromHoroscope(chainId, address, 50, nextKey).subscribe({
+      next: (txResponse) => {
+        const { code, data } = txResponse;
 
-      this.nextKey = data.nextKey || null;
+        this.nextKey = data.nextKey || null;
 
-      if (code === 200) {
-        const txs = _.get(data, 'transactions').map((element) => {
-          const tx_hash = _.get(element, 'tx_response.txhash');
-          const message = _.get(element, 'tx.body.messages');
+        if (code === 200) {
+          const txs = _.get(data, 'transactions').map((element) => {
+            const tx_hash = _.get(element, 'tx_response.txhash');
+            const message = _.get(element, 'tx.body.messages');
 
-          const _type = _.get(element, 'tx.body.messages[0].@type');
-          const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
+            const _type = _.get(element, 'tx.body.messages[0].@type');
+            const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
 
-          const status =
-            _.get(element, 'tx_response.code') == CodeTransaction.Success
-              ? StatusTransaction.Success
-              : StatusTransaction.Fail;
+            const status =
+              _.get(element, 'tx_response.code') == CodeTransaction.Success
+                ? StatusTransaction.Success
+                : StatusTransaction.Fail;
 
-          const amount = getAmount(
-            _.get(element, 'tx.body.messages'),
-            _type,
-            _.get(element, 'tx.body.raw_log'),
-            this.coinMinimalDenom,
-          );
+            const _amount = getAmount(
+              _.get(element, 'tx.body.messages'),
+              _type,
+              _.get(element, 'tx.body.raw_log'),
+              this.coinMinimalDenom,
+            );
 
-          const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount'), this.coinDecimals);
-          const height = _.get(element, 'tx_response.height');
-          const timestamp = _.get(element, 'tx_response.timestamp');
+            const amount = _.isNumber(_amount) ? _amount.toFixed(this.coinDecimals) : _amount;
 
-          return { tx_hash, type, status, amount, fee, height, timestamp, message };
-        });
+            const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount'), this.coinDecimals).toFixed(
+              this.coinDecimals,
+            );
+            const height = _.get(element, 'tx_response.height');
+            const timestamp = _.get(element, 'tx_response.timestamp');
 
-        if (this.dataSource.data.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...txs];
-        } else {
-          this.dataSource.data = [...txs];
+            return { tx_hash, type, status, amount, fee, height, timestamp, message };
+          });
+
+          if (this.dataSource.data.length > 0) {
+            this.dataSource.data = [...this.dataSource.data, ...txs];
+          } else {
+            this.dataSource.data = [...txs];
+          }
+          this.dataSourceMobile = this.dataSource.data.slice(0, this.pageData.pageSize);
+
+          this.pageData.length = this.dataSource.data.length;
         }
-
-        this.pageData.length = this.dataSource.data.length;
-      }
+      },
+      error: () => {
+        this.transactionLoading = false;
+      },
+      complete: () => {
+        this.transactionLoading = false;
+      },
     });
 
     /*
@@ -473,12 +488,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   paginatorEmit(e: MatPaginator): void {
     if (this.dataSource.paginator) {
-      // e.pageSize = this.dataSource.paginator.pageSize;
-
-      // this.dataSource.paginator = e;
-
-      // this.pageData.pageIndex = e.pageIndex;
-
       e.page.next({
         length: this.dataSource.paginator.length,
         pageIndex: 0,
@@ -496,11 +505,13 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
     const next = length <= (pageIndex + 2) * pageSize;
 
+    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
+
     if (next && this.nextKey) {
       this.getTxsFromHoroscope(this.nextKey);
     }
 
-    this.pageData.pageIndex = e.pageIndex;
+    this.pageData = e;
     // this.getListTransaction();
   }
 
@@ -512,27 +523,43 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     });
   }
 
+  splitDataSource(d: any[]) {
+    return d.slice(0, 5);
+  }
+
   closePopup() {
     this.modalReference.close();
   }
 
-  checkAmountValue(message: any[], txHash: string, type: string) {
-    let eTransType = TRANSACTION_TYPE_ENUM;
+  checkAmountValue(data) {
+    const { message, tx_hash, amount } = data;
+
     if (message?.length > 1) {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    } else if (message?.length === 0 || (message?.length === 1 && !_.get(message, '[0].amount'))) {
-      return '-';
-    } else {
-      // let amount = message[0]?.amount[0]?.amount;
-      let amount = _.get(message, '[0].amount[0].amount');
-      //check type is Delegate/Undelegate/Redelegate
-      if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
-        amount = _.get(message[0], 'amount.amount'); // message[0]?.amount?.amount;
-      }
-      return (
-        this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        `<span class=text--primary> ${this.denom} </span>`
-      );
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
     }
+
+    return amount + `<span class=text--primary> ${this.denom} </span>`;
+
+    // let eTransType = TRANSACTION_TYPE_ENUM;
+    // if (message?.length > 1) {
+    //   return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
+    // } else if (message?.length === 0 || (message?.length === 1 && !_.get(message, '[0].amount'))) {
+    //   return '-';
+    // } else {
+    //   // let amount = message[0]?.amount[0]?.amount;
+    //   const type = _.get(message, '[0].[@type]');
+
+    //   let amount = '-';
+    //   //check type is Delegate/Undelegate/Redelegate
+    //   if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
+    //     amount = _.get(message, '[0].amount.amount'); // message[0]?.amount?.amount;
+    //   } else {
+    //     amount = _.get(message, '[0].amount[0].amount');
+    //   }
+    //   return (
+    //     this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
+    //     `<span class=text--primary> ${this.denom} </span>`
+    //   );
+    // }
   }
 }
