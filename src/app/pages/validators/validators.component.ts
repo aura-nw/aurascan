@@ -423,11 +423,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           if (listUnDelegator) {
             this.lstUndelegate = [];
             const now = new Date();
-            listUnDelegator.data.forEach((data) => {
+            listUnDelegator.data.unbonding_responses.forEach((data) => {
               data.entries.forEach((f) => {
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
-                f.validator_name = data.validator_name;
+                f.validator_name = this.dataSource.data.find((i) => i.operator_address === f.validator_address).title;
                 let timeConvert = new Date(f.completion_time);
                 if (now < timeConvert) {
                   this.lstUndelegate.push(f);
