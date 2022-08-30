@@ -27,7 +27,7 @@
   @media (min-width: 992px) {
     border: 2px solid var(--aura-gray-9);
   }
-  @media (max-width: 413.99px) {
+  @media (max-width: 575.98px) {
     &--manage {
       max-height: 45px;
       overflow: hidden;
@@ -49,6 +49,9 @@
           transform: rotate(180deg);
         }
       }
+    }
+    &__info {
+      min-height: 40px;
     }
   }
   @media (max-width: 374.99px) {
