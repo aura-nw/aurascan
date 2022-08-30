@@ -4,16 +4,19 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
+import { fromHex, toBech32 } from '@cosmjs/encoding';
+import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { Globals } from 'src/app/global/global';
+import { getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+const marked = require('marked');
 
 @Component({
   selector: 'app-validators-detail',
@@ -61,15 +64,17 @@ export class ValidatorsDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
+  dataSourcePowerMob: any[];
 
   lengthBlockLoading = true;
-  lengthPowerLoading = true;
+  isLoadingPower = true;
   lastBlockLoading = true;
   blocksMissDetail: any;
   numberLastBlock = 100;
   timerGetUpTime: any;
   timerGetBlockMiss: any;
   consAddress: string;
+  nextKey = null;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
@@ -205,46 +210,52 @@ export class ValidatorsDetailComponent implements OnInit {
     }
   }
 
-  getListPower(): void {
-    // this.validatorService
-    //   .validatorsDetailListPower(this.pageSize, this.pageIndexPower * this.pageSize, this.currentAddress)
-    //   .subscribe((res) => {
-    //     this.lengthPowerLoading = true;
-    //     if (res.data?.length > 0) {
-    //       res.data.forEach((power) => {
-    //         power.isStakeMode = false;
-    //         if (
-    //           power.type === 'delegate' ||
-    //           (power.type === 'redelegate' && power?.messages[0]?.validator_dst_address === this.currentAddress) ||
-    //           power.type === 'create_validator'
-    //         ) {
-    //           power.isStakeMode = true;
-    //         }
-    //       });
-    //       this.dataSourcePower = res;
-    //       this.lengthPower = res.meta?.count;
-    //     }
-    //     this.lengthPowerLoading = false;
-    //   });
-  }
-
-  changePage(page: PageEvent, type: 'block' | 'delegator' | 'power'): void {
-    switch (type) {
-      case 'block':
-        this.pageIndexBlock = page.pageIndex;
-        this.getListBlockWithOperator();
-        break;
-      case 'delegator':
-        this.pageIndexDelegator = page.pageIndex;
-        this.getListDelegator();
-        break;
-      case 'power':
-        this.pageIndexPower = page.pageIndex;
-        this.getListPower();
-        break;
-      default:
-        break;
+  getListPower(nextKey = null): void {
+    if (!this.dataSourcePower.data) {
+      this.isLoadingPower = true;
     }
+    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe((res) => {
+      const { code, data } = res;
+
+      this.nextKey = data.nextKey || null;
+
+      if (code === 200) {
+        const txs = _.get(data, 'transactions').map((element) => {
+          let isStakeMode = false;
+
+          const tx_hash = _.get(element, 'tx_response.txhash');
+
+          const address = _.get(element, 'tx.body.messages[0].validator_dst_address');
+
+          const _type = _.get(element, 'tx.body.messages[0].@type');
+          if (
+            _type === TRANSACTION_TYPE_ENUM.Delegate ||
+            (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
+            _type === TRANSACTION_TYPE_ENUM.CreateValidator
+          ) {
+            isStakeMode = true;
+          }
+          const amount = getAmount(_.get(element, 'tx.body.messages'), _type, _.get(element, 'tx.body.raw_log'));
+          const height = _.get(element, 'tx_response.height');
+          const timestamp = _.get(element, 'tx_response.timestamp');
+
+          return { tx_hash, amount, isStakeMode, height, timestamp };
+        });
+        if (this.dataSourcePower.data.length > 0) {
+          this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
+        } else {
+          this.dataSourcePower.data = [...txs];
+        }
+
+        this.dataSourcePowerMob = this.dataSourcePower?.data.slice(
+          this.pageIndexPower * this.pageSize,
+          this.pageIndexPower * this.pageSize + this.pageSize,
+        );
+
+        this.lengthPower = this.dataSourcePower.data.length;
+        this.isLoadingPower = false;
+      }
+    });
   }
 
   paginatorEmit(event, type: 'block' | 'delegator' | 'power'): void {
@@ -274,8 +285,16 @@ export class ValidatorsDetailComponent implements OnInit {
         this.getListDelegator();
         break;
       case 'power':
+        this.dataSourcePowerMob = this.dataSourcePower.data.slice(
+          page.pageIndex * page.pageSize,
+          page.pageIndex * page.pageSize + page.pageSize,
+        );
+        const { length, pageIndex, pageSize } = page;
+        const next = length <= (pageIndex + 2) * pageSize;
+        if (next && this.nextKey) {
+          this.getListPower(this.nextKey);
+        }
         this.pageIndexPower = page.pageIndex;
-        this.getListPower();
         break;
       default:
         break;
