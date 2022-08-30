@@ -337,16 +337,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           return { tx_hash, type, status, amount, fee, height, timestamp };
         });
 
-        console.log('this.dataSource.data.length', this.dataSource.data.length, txs.length);
         if (this.dataSource.data.length > 0) {
-          console.log();
-
           this.dataSource.data = [...this.dataSource.data, ...txs];
         } else {
           this.dataSource.data = [...txs];
         }
-        console.log('this.dataSource.data.length', this.dataSource.data.length, txs.length);
-
         this.pageData.length = this.dataSource.data.length;
       }
     });
