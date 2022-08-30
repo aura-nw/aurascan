@@ -221,6 +221,11 @@ form.search-form-validators {
       border-radius: 0 !important;
     }
   }
+  @media (max-width: 375.99px) {
+    .modal-content {
+      overflow: unset;
+    }
+  }
 }
 .modal__title {
   display: inline-block;
