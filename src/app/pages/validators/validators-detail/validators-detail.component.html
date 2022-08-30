@@ -50,27 +50,26 @@
       </div>
       <div class="row mt-4">
         <div class="col-12 col-lg-6">
-            <div class="d-flex position-relative">
-              <h6 class="mb-0 text--gray-1">Operator Address</h6>
-              <div class="img-wrap">
-                <img
-                        class="img-question ml-1"
-                        [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
-                        alt=""
-                        matTooltip="Validator operator address at which token
+          <div class="d-flex position-relative">
+            <h6 class="mb-0 text--gray-1">Operator Address</h6>
+            <div class="img-wrap">
+              <img
+                class="img-question ml-1"
+                [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
+                alt=""
+                matTooltip="Validator operator address at which token
                                          holders delegate their voting powers to."
-                        [matTooltipPosition]="'above'"
-                        *ngIf="!breakpoint.value.matches" />
-              </div>
+                [matTooltipPosition]="'above'"
+                *ngIf="!breakpoint.value.matches" />
             </div>
-            <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
+          </div>
+          <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
         </div>
         <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-            <h6 class="mb-0 text--gray-1">Address</h6>
-            <a class="text--primary mt-1 body-01"
-              [routerLink]="['/account', currentValidatorDetail?.acc_address]">
-              {{ currentValidatorDetail?.acc_address }}
-            </a>
+          <h6 class="mb-0 text--gray-1">Address</h6>
+          <a class="text--primary mt-1 body-01" [routerLink]="['/account', currentValidatorDetail?.acc_address]">
+            {{ currentValidatorDetail?.acc_address }}
+          </a>
         </div>
       </div>
       <div class="divider divider-horizontal mt-4"></div>
@@ -90,7 +89,9 @@
           <!-- Commission -->
           <div class="row mt-3">
             <div class="col-6">Commission</div>
-            <div class="col-6 text--gray-1 text-end text-lg-start">{{ currentValidatorDetail?.commission | percent: global.formatNumber2Decimal }}</div>
+            <div class="col-6 text--gray-1 text-end text-lg-start">
+              {{ currentValidatorDetail?.commission | percent: global.formatNumber2Decimal }}
+            </div>
           </div>
           <!-- Uptime -->
           <div class="row mt-3">
@@ -110,22 +111,26 @@
             <div class="col-6 text-end text-lg-start">
               <span class="text--gray-1">{{ currentValidatorDetail?.power | number: global.formatNumberToken }}</span>
               <span class="text--primary ml-1">{{ denom }}</span>
-              <br class="d-lg-none">
+              <br class="d-lg-none" />
               <span class="text--gray-5 ml-1">({{ currentValidatorDetail?.percent_power }}%)</span>
             </div>
           </div>
           <!-- Bonded Height -->
           <div class="row mt-3">
             <div class="col-6">Bonded Height</div>
-            <div class="col-6 text--gray-1 text-end text-lg-start">{{ currentValidatorDetail?.bonded_height | number }}</div>
+            <div class="col-6 text--gray-1 text-end text-lg-start">
+              {{ currentValidatorDetail?.bonded_height | number }}
+            </div>
           </div>
           <!-- Self Bonded -->
           <div class="row mt-3">
             <div class="col-6">Self Bonded</div>
             <div class="col-6 text-end text-lg-start">
-              <span class="text--gray-1">{{ currentValidatorDetail?.self_bonded | number: global.formatNumberToken }}</span>
+              <span class="text--gray-1">{{
+                currentValidatorDetail?.self_bonded | number: global.formatNumberToken
+              }}</span>
               <span class="text--primary ml-1">{{ denom }}</span>
-              <br class="d-lg-none">
+              <br class="d-lg-none" />
               <span class="text--gray-5 ml-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
             </div>
           </div>
@@ -149,9 +154,7 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
           <h3 class="h2-mob mb-0 text--gray-1">Proposed Blocks</h3>
-          <div class="body-01 text--gray-5 mt-1 mt-lg-0">
-            Total: {{ lengthBlock || 0 | number }} blocks
-          </div>
+          <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div>
         </div>
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
@@ -203,9 +206,15 @@
                       *ngFor="let data of dataSourceBlock.data"
                       [link]="'/blocks/' + data.height"
                       [content]="[
-                        { label: data.height, class: 'body-01 text--gray-1', info: commonService.getDateValue(data.timestamp)[0] },
+                        {
+                          label: data.height,
+                          class: 'body-01 text--gray-1',
+                          info: commonService.getDateValue(data.timestamp)[0]
+                        },
                         { label: 'Txs', class: 'body-01 text--gray-1', info: data.num_txs.toString() },
-                        { label: 'Voting Start', class: 'card__date text--gray-1 body-01-mob',
+                        {
+                          label: 'Voting Start',
+                          class: 'card__date text--gray-1 body-01-mob',
                           info:
                             '<span>' +
                             (data.timestamp | customDate: 'yyyy-MM-dd') +
@@ -249,7 +258,7 @@
                 *ngIf="!breakpoint.value.matches" />
             </div>
           </div>
-          <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{numberLastBlock}} Blocks</div>
+          <div class="body-01 text--gray-5 mt-1 mt-lg-0">Last {{ numberLastBlock }} Blocks</div>
         </div>
         <div class="text-center">
           <div class="card-body article-1 uptime-content pt-4">
@@ -260,7 +269,8 @@
                   class="block-uptime tool-tip"
                   [ngStyle]="{
                     'background-color':
-                      (checkMissed(itemBlock?.height) && blocksMissDetail) || currentValidatorDetail?.status !== statusValidator.Active
+                      (checkMissed(itemBlock?.height) && blocksMissDetail) ||
+                      currentValidatorDetail?.status !== statusValidator.Active
                         ? 'none'
                         : '#5EE6D0'
                   }"
@@ -334,24 +344,28 @@
                 </table>
                 <ng-container *ngIf="breakpoint.value.matches">
                   <div class="custom-card-mob-simple">
-                    <app-card-mob-simple *ngFor="let data of dataSourceDelegator.data"
+                    <app-card-mob-simple
+                      *ngFor="let data of dataSourceDelegator.data"
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
-                      {
-                        label: data.delegator_address | cutStringPipe: 6:6,
-                        info: ''
-                      },
-                      {
-                        label: 'Amount',
-                        class: 'body-01 text--gray-1',
-                        info:
-                          (data.amount | number: global.formatNumberToken) +
-                          '<span class=text--primary> ' + denom + '</span>'
-                      }
-                    ]"></app-card-mob-simple>
+                        {
+                          label: data.delegator_address | cutStringPipe: 6:6,
+                          info: ''
+                        },
+                        {
+                          label: 'Amount',
+                          class: 'body-01 text--gray-1',
+                          info:
+                            (data.amount | number: global.formatNumberToken) +
+                            '<span class=text--primary> ' +
+                            denom +
+                            '</span>'
+                        }
+                      ]"></app-card-mob-simple>
                   </div>
                 </ng-container>
-                <app-paginator *ngIf="lengthDelegator > 0"
+                <app-paginator
+                  *ngIf="lengthDelegator > 0"
                   [length]="lengthDelegator"
                   [pageSize]="pageSize"
                   [id]="'delegator'"
@@ -373,14 +387,13 @@
           <h3 class="h2-mob mb-0 text--gray-1">Power Events</h3>
         </div>
         <div class="card-body article-1 pt-4">
-          <ngx-simplebar>
+          <div *ngIf="isLoadingPower" class="m-auto mt-10">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+          <ng-container *ngIf="!isLoadingPower">
             <ng-container *ngIf="lengthPower > 0; else noValues">
               <div class="table-responsive aura-table-contain">
-                <table
-                  mat-table
-                  [dataSource]="dataSourcePower.data"
-                  class="aura-table"
-                  *ngIf="!breakpoint.value.matches">
+                <table mat-table [dataSource]="dataSourcePower" class="aura-table" *ngIf="!breakpoint.value.matches">
                   <ng-container *ngFor="let template of templatesPower; index as i">
                     <ng-container [matColumnDef]="template.matColumnDef">
                       <th mat-header-cell *matHeaderCellDef class="{{ i === 0 ? 'col-per-20' : 'col-per-25' }}">
@@ -429,21 +442,23 @@
                 <ng-container *ngIf="breakpoint.value.matches">
                   <div class="custom-card-mob-simple">
                     <app-card-mob-simple
-                            *ngFor="let data of dataSourcePower.data"
-                            [link]="'/blocks/id/' + data.blockId"
-                            [content]="[
-                      { label: data.height, class: 'body-01 text--primary', info: data.tx_hash | cutStringPipe: 6:6 },
-                      { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
-                      { label: 'Time', class: 'card__date text--gray-1 body-01-mob',
-                        info:
-                          '<span>' +
-                          (data.timestamp | customDate: 'yyyy-MM-dd') +
-                          '</span>' +
-                          '<span>' +
-                          (data.timestamp | customDate: 'HH:mm:ss') +
-                          '</span>'
-                      }
-                    ]"></app-card-mob-simple>
+                      *ngFor="let data of dataSourcePowerMob"
+                      [link]="'/blocks/id/' + data.blockId"
+                      [content]="[
+                        { label: data.height, class: 'body-01 text--primary', info: data.tx_hash | cutStringPipe: 6:6 },
+                        { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
+                        {
+                          label: 'Time',
+                          class: 'card__date text--gray-1 body-01-mob',
+                          info:
+                            '<span>' +
+                            (data.timestamp | customDate: 'yyyy-MM-dd') +
+                            '</span>' +
+                            '<span>' +
+                            (data.timestamp | customDate: 'HH:mm:ss') +
+                            '</span>'
+                        }
+                      ]"></app-card-mob-simple>
                   </div>
                 </ng-container>
                 <app-paginator
@@ -455,11 +470,7 @@
                 </app-paginator>
               </div>
             </ng-container>
-            <ng-template #noValues>
-              <app-loading-sprint *ngIf="lengthPowerLoading"></app-loading-sprint>
-              <app-table-no-data *ngIf="!lengthPowerLoading"></app-table-no-data>
-            </ng-template>
-          </ngx-simplebar>
+          </ng-container>
         </div>
       </div>
     </div>
