@@ -307,7 +307,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewPopupDetail(staticDataModal: any, address: string, dialogMode = DIALOG_STAKE_MODE.Delegate, isOpenStaking = false) {
+  viewPopupDetail(
+    staticDataModal: any,
+    address: string,
+    dialogMode = DIALOG_STAKE_MODE.Delegate,
+    isOpenStaking = false,
+  ) {
     this.currentValidatorDialog = address;
     this.isClaimRewardLoading = true;
     const view = async () => {
@@ -352,15 +357,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getListRedelegate(operatorAddress): void {
-    let listDelegate = this.arrayDelegate?.map(a => a.validator_address);
-    let arrTemp =  this.lstValidator.filter(k => k.operator_address !== operatorAddress);
-    arrTemp.forEach((f)=>{
+    let listDelegate = this.arrayDelegate?.map((a) => a.validator_address);
+    let arrTemp = this.lstValidator.filter((k) => k.operator_address !== operatorAddress);
+    arrTemp.forEach((f) => {
       f['isStaking'] = 0;
-      if(listDelegate?.includes(f.operator_address)){
+      if (listDelegate?.includes(f.operator_address)) {
         f['isStaking'] = 1;
       }
-    })
-    
+    });
+
     let lstSort = arrTemp.sort((a, b) => {
       return b.isStaking - a.isStaking || b.power - a.power;
     });
@@ -506,7 +511,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
+        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
 
@@ -559,7 +564,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
+        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeUnStaking();
@@ -587,7 +592,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
+        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeReStaking();
@@ -646,14 +651,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (error != 'Request rejected') {
         this.toastr.error(error);
       }
+      this.resetData();
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
+        this.resetData();
       }, TIME_OUT_CALL_API);
     }
-    this.isHandleStake = false;
-    this.isLoading = false;
-    this.isClaimRewardLoading = false;
   }
 
   async checkDetailTx(id, message) {
@@ -676,5 +680,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
+  }
+
+  resetData() {
+    this.isLoading = false;
+    this.modalReference?.close();
+    this.isHandleStake = false;
+    this.isClaimRewardLoading = false;
   }
 }
