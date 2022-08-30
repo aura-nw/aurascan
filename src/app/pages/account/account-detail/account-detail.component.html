@@ -238,7 +238,7 @@
       <div class="card">
         <div class="sub-text px-4 px-lg-6 py-4 py-lg-6 header-mob">Transactions</div>
         <div class="card-body px-6 pt-0">
-          <ngx-simplebar *ngIf="dataSource && dataSource.data">
+          <ngx-simplebar *ngIf="dataSource?.data && !transactionLoading">
             <ng-container *ngIf="dataSource.data.length > 0; else noValues">
               <div class="table-responsive aura-table-contain">
                 <ng-container *ngIf="!breakpoint.value.matches">
@@ -329,7 +329,7 @@
                 </ng-container>
                 <ng-container *ngIf="breakpoint.value.matches">
                   <app-card-mob-simple
-                    *ngFor="let data of dataSource?.data"
+                    *ngFor="let data of dataSourceMobile"
                     [link]="'/transaction/' + data.tx_hash"
                     [title]="{
                       size: 'md',
@@ -338,9 +338,10 @@
                       subLabelClass: 'label__status'
                     }"
                     [content]="[
-                      { label: 'Amount', info: checkAmountValue(data.messages, data.tx_hash, data.typeOrigin) },
+                      { label: 'Amount', info: checkAmountValue(data) },
                       { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
                     ]"></app-card-mob-simple>
+                    
                 </ng-container>
                 <app-paginator
                   [length]="pageData.length"
@@ -354,7 +355,7 @@
               <app-table-no-data></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <div *ngIf="dataSource && !dataSource.data" class="">
+          <div *ngIf="transactionLoading" class="">
             <app-loading-sprint></app-loading-sprint>
           </div>
         </div>
