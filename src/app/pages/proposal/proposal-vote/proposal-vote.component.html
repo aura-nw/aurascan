@@ -2,7 +2,7 @@
     <ng-container *ngIf="!data.warning">
         <div class="d-flex">
             <img [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
-            <div class="h1 ml-3 ml-lg-0 mb-0 text--white">Your vote</div>
+            <div class="h1 ml-3 ml-md-0 mb-0 text--white">Your vote</div>
         </div>
         <div class="mt-6 body-03 body-01-mob">#{{data.id}} {{data.title}}</div>
         <form #voteForm="ngForm" class="mt-2">
@@ -17,7 +17,7 @@
                     }}</mat-radio-button>
             </mat-radio-group>
             <div class="mt-6 d-flex justify-content-center justify-content-lg-end">
-                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" (click)="closeVoteForm()" color="primary">Back</button>
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" (click)="closeVoteForm()" color="primary">Cancel</button>
                 <button class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient" color="primary" (click)="onSubmitVoteForm()"
                     [disabled]="keyVote === null">
                     <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
@@ -41,9 +41,9 @@
             </div>
 
             <div class="d-flex justify-content-center align-items-center gap-3">
-                <button class="button button-inline" *ngIf="data.warning === 'NOT_PARTICIPATE'"
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" *ngIf="data.warning === 'NOT_PARTICIPATE'"
                         (click)="dialogRef.close()"> Cancel </button>
-                <button class="button button-outline" (click)="onClick()">
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline text--white" (click)="onClick()">
                     <span class="text-gradient">
                         {{ data.warning === 'NOT_PARTICIPATE' ? 'Stake' : 'OK'}}
                     </span>
