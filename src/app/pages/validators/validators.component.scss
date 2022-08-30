@@ -221,9 +221,12 @@ form.search-form-validators {
       border-radius: 0 !important;
     }
   }
-  @media (max-width: 375.99px) {
-    .modal-content {
-      overflow: unset;
+  @media (max-width: 374.99px) {
+    .box-staking.aura-form {
+      margin-bottom: 120px;
+      .delegateAction {
+        top: -50% !important;
+      }
     }
   }
 }
