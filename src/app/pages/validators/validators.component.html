@@ -389,7 +389,7 @@
               [disableOptionCentering]="true">
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
-                *ngFor="let item of lstValidator; let last = last"
+                *ngFor="let item of lstReValidator; let last = last"
                 [class.mb-lg-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
