@@ -210,6 +210,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.getAccountDetail();
         // this.getListTransaction();
 
+        this.dataSource = new MatTableDataSource();
+        this.transactionLoading = true;
+
         this.getTxsFromHoroscope();
       }
     });
@@ -261,7 +264,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
-        this.getListTransaction();
+        // this.getListTransaction();
         break;
       case this.pageEventType.Unbonding:
         this.pageDataUnbonding.pageIndex = page.pageIndex;
@@ -328,7 +331,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           } else {
             this.dataSource.data = [...txs];
           }
-          this.dataSourceMobile = this.dataSource.data.slice(0, this.pageData.pageSize);
+          this.dataSourceMobile = this.dataSource.data.slice(
+            this.pageData.pageIndex * this.pageData.pageSize,
+            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+          );
 
           this.pageData.length = this.dataSource.data.length;
         }
@@ -507,11 +513,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
 
+    this.pageData = e;
+
     if (next && this.nextKey) {
       this.getTxsFromHoroscope(this.nextKey);
     }
 
-    this.pageData = e;
     // this.getListTransaction();
   }
 
