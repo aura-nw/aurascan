@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { INDEXER_URL } from '../constants/common.constant';
+import * as _ from 'lodash';
 import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({
@@ -32,9 +33,20 @@ export class ValidatorService extends CommonService {
   //   return this.http.get<any>(`${this.apiUrl}/validators/events/${address}?limit=${limit}&offset=${offset}`);
   // }
 
-  validatorsDetailListPowerIndexer(limit: string | number, offset: string | number, address: string): Observable<any> {
-    let url = `${INDEXER_URL}/transaction/power-event?chainid=${this.chainInfo.chainId}&address=${address}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true`;
-    return this.http.get<any>(url);
+  validatorsDetailListPower(address: string, pageLimit = 10, nextKey = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      address,
+      pageLimit,
+      nextKey,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction/power-event`, {
+      params,
+    });
   }
 
   validatorsDetailWallet(address: string): Observable<any> {
