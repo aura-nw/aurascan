@@ -30,9 +30,9 @@
     <ng-container *ngIf="data.warning">
         <div class="mx-auto mt-5">
             <div class="d-flex justify-content-center">
-                <img [src]="'assets/icons/icons-svg/color/info.svg' | imageS3" alt="">
+                <img [src]="'assets/icons/icons-svg/color/info.svg' | imageS3" alt="" width="24px" height="24px">
             </div>
-            <div class="body small-body-mob mb-5 mt-3 warning-content">
+            <div class="body-03 text--gray-1 mb-5 mt-3 warning-content">
                 {{
                 data.warning === 'NOT_PARTICIPATE' ?
                     'You don\'t have the right to vote on this proposal because you are a unbonded Aura holder. Staking now to have the right to vote on other later proposals.' :
