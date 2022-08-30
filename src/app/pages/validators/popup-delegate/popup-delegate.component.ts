@@ -12,6 +12,7 @@ import { Globals } from '../../../global/global';
 })
 export class PopupDelegateComponent implements OnInit, OnChanges {
   @Input() data: any;
+  boxNoticeShow = false;
 
   availableToken = 0;
   dialogMode = DIALOG_STAKE_MODE;
