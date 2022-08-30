@@ -32,8 +32,6 @@ export class ReadContractComponent implements OnInit {
 
         if (this.jsValidator.schemas) {
           this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
-
-          // console.log('Debug', { root: this.root, schema: this.jsValidator.schemas });
         }
       }
     } catch {}
