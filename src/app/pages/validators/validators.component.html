@@ -390,17 +390,17 @@
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
                 *ngFor="let item of lstReValidator; let last = last"
-                [class.mb-lg-2]="!last"
+                [class.mb-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
-                <div class="d-flex option-contain align-items-center">
+                <div class="d-flex option-contain align-items-center justify-content-between">
                   <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
                       <div class="validator-avatar">
                         <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
                       </div>
                     </div>
-                    <span>{{ item.title | translate }}</span>
+                    <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
                     Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}
@@ -444,7 +444,7 @@
                 aria-expanded="false">
                 <span>Select Action</span>
               </button>
-              <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
+              <ul class="dropdown-menu aura-dropdown-menu delegateAction" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
                   <img class="mr-2"
                     [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
