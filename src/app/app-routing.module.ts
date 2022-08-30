@@ -34,11 +34,11 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./pages/proposal/proposal.module').then((m) => m.ProposalModule),
   },
-  {
-    path: 'tokens',
-    component: LayoutComponent,
-    loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
-  },
+  // {
+  //   path: 'token',
+  //   component: LayoutComponent,
+  //   loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
+  // },
   {
     path: 'contracts',
     component: LayoutComponent,
