@@ -92,11 +92,8 @@ export class TokenHoldersTabComponent implements OnInit {
               k['width_chart'] = (k.quantity / this.numberTop) * 100;
             });
           }
-
-          let sortedData = res.data?.resultAsset.sort((a, b) => {
-            return this.compare(a.percent_hold, b.percent_hold, false);
-          });
-          this.dataSource = new MatTableDataSource<any>(sortedData);
+          
+          this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
         }
         this.loading = false;
       });

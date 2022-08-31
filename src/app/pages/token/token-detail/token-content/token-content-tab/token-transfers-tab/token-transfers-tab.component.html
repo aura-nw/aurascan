@@ -80,21 +80,10 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--primary txt-from-address content-transfer"
-                            href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef] &&
-                              isNFTContract
-                            ">
-                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                          </a>
-                          <a
-                            class="text--primary txt-from-address content-transfer"
-                            href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                            *ngIf="
-                              data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef] &&
-                              !isNFTContract
+                              data[template.matColumnDef]
                             ">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
@@ -124,7 +113,7 @@
                       <ng-container *ngSwitchCase="'to_address'">
                         <a
                           class="text--primary"
-                          href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                          href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                           *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>

@@ -61,6 +61,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
+  linkToken = 'token';
 
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -82,6 +83,10 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     this.getDataTable();
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
+
+    if (this.isNFTContract) {
+      this.linkToken = 'token-nft';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
