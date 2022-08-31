@@ -88,12 +88,12 @@ export class NFTDetailComponent implements OnInit {
         this.pageData.pageIndex * this.pageData.pageSize,
       )
       .subscribe((res) => {
-        if (res && res.meta?.count?.total > 0) {
+        if (res && res.meta?.count > 0) {
           res.data.forEach((trans) => {
             trans['tx_response'] = JSON.parse(trans.tx);
             trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
             this.dataSource.data = res.data;
-            this.pageData.length = res.meta?.count?.total || 0;
+            this.pageData.length = res.meta?.count || 0;
           });
         }
         this.loading = false;
