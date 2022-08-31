@@ -57,8 +57,6 @@ export class WriteContractComponent implements OnInit {
       if (this.jsValidator.schemas) {
         this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
       }
-
-      // console.log('debug', { root: this.root, schema: this.jsValidator.schemas });
     } catch {}
 
     this.walletService.wallet$.subscribe((wallet) => {

@@ -133,11 +133,10 @@
                         }}</span>
                         <span *ngIf="!data[template.matColumnDef]"> - </span>
                       </ng-container>
-                      <!-- [disabled]="data.disabled" -->
                       <ng-container *ngSwitchCase="'details'">
                         <button
                           class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                          [disabled]="false"
+                          [disabled]="data.disabled"
                           [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                           <span>View NFT</span>
                         </button>
