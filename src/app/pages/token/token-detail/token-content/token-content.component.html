@@ -12,25 +12,30 @@
         <div class="col-12 col-lg-5 py-3 py-lg-0">
           <div class="caption d-flex align-item-center mb-1 mb-lg-0">
             <img
-                    [src]="'assets/images/icons/token-holder.png' | imageS3"
-                    class="mr-2"
-                    alt=""
-                    width="18px"
-                    height="18px" />
+              [src]="'assets/images/icons/token-holder.png' | imageS3"
+              class="mr-2"
+              alt=""
+              width="18px"
+              height="18px" />
             FILTER BY TOKEN HOLDER
           </div>
           <a class="body-02 text--primary" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
         </div>
-        <div class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{ tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3' }}">
+        <div
+          class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
+            tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3'
+          }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <span *ngIf="!tokenDetail?.isNFTContract">
-                {{ infoSearch?.balance || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
-              </span>
-          <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch?.balance || 0 }}</span>
+            {{ infoSearch['balance'] || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
+          </span>
+          <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
-          - ( - {{ denom }})
+          ${{ +infoSearch['balance'] * tokenDetail.price | number: global.formatNumber2Decimal }} (
+          {{ (infoSearch['balance'] * tokenDetail.price) / global.price.aura | number: global.formatNumberToken }}
+          {{ denom }})
         </div>
       </div>
     </div>
@@ -47,8 +52,11 @@
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="changeTab(tab.key)" class="verify-contract">
             <span class="text-uppercase">{{ tab.value }}</span>
-            <img class="ml-2"
-              *ngIf="tab.key === tokenTab.Contract && tokenDetail.contract_verification !== contractVerifyType.Unverifed"
+            <img
+              class="ml-2"
+              *ngIf="
+                tab.key === tokenTab.Contract && tokenDetail.contract_verification !== contractVerifyType.Unverifed
+              "
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"
@@ -58,8 +66,12 @@
       </ng-container>
     </ul>
     <div class="d-lg-flex align-item-center justify-content-end mb-3 mb-lg-0">
-      <form class="aura-form single-input-field search-form"
-            *ngIf="!breakpoint.value.matches || (breakpoint.value.matches && (countCurrent === '' || countCurrent === tokenTab.Holders))">
+      <form
+        class="aura-form single-input-field search-form"
+        *ngIf="
+          !breakpoint.value.matches ||
+          (breakpoint.value.matches && (countCurrent === '' || countCurrent === tokenTab.Holders))
+        ">
         <div class="input-group">
           <input
             type="text"
