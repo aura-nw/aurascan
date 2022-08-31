@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { AfterViewChecked, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
@@ -17,7 +17,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy, AfterViewChe
   contractAddress = '';
   contractTxHash = '';
   versionList = CONTRACT_VERSIONS;
-  @ViewChild('version') versionSelect:any;
+  @ViewChild('version') versionSelect: any;
 
   constructor(
     private contractService: ContractService,
@@ -30,10 +30,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy, AfterViewChe
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
 
-    if (
-      this.contractAddress.trim().length === 0 ||
-      this.contractTxHash.trim().length === 0
-    ) {
+    if (this.contractAddress.trim().length === 0 || this.contractTxHash.trim().length === 0) {
       this.router.navigate(['contracts']);
     }
   }
@@ -154,6 +151,5 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy, AfterViewChe
     this.versionSelect.close();
   }
 
-  ngAfterViewChecked(): void {
-  }
+  ngAfterViewChecked(): void {}
 }
