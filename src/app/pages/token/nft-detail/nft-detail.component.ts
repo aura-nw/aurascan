@@ -74,19 +74,18 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
       this.nftDetail = res.data;
+      this.pageData.length = res.meta.count || 0;
       this.loading = false;
     });
   }
 
   getDataTable(): void {
-    let filterData = {};
-    filterData['keyWord'] = this.nftId;
     this.tokenService
-      .getListTokenTransfer(
+      .getListNFTDetail(
+        this.contractAddress,
+        this.nftId,
         this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize,
-        this.contractAddress,
-        filterData,
       )
       .subscribe((res) => {
         if (res && res.meta?.count > 0) {
@@ -94,7 +93,7 @@ export class NFTDetailComponent implements OnInit {
             trans['tx_response'] = JSON.parse(trans.tx);
             trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
             this.dataSource.data = res.data;
-            this.pageData.length = res.meta?.count;
+            this.pageData.length = res.meta?.count || 0;
           });
         }
         this.loading = false;
