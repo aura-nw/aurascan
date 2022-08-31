@@ -137,7 +137,7 @@
                                 </div>
                               </div>
                               <div *ngSwitchCase="'fee'">
-                                {{ data[template.matColumnDef] }}
+                                {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                                 <span class="text--primary">{{ denom }}</span>
                               </div>
                               <div *ngSwitchCase="'amount'">

@@ -370,9 +370,9 @@
     <div class="card">
       <h2 class="px-6 pt-4 pt-lg-6 pb-0 pb-lg-2 text--white mb-0">Proposals</h2>
       <div class="card-body">
-        <div *ngIf="proposalData && proposalData.length > 0">
+        <div *ngIf="proposalData?.data?.length > 0">
           <app-card-mob-simple
-            *ngFor="let data of proposalData"
+            *ngFor="let data of proposalData.data"
             [link]="'/votings/' + data.pro_id"
             [title]="{
               size: 'md',
@@ -410,6 +410,12 @@
                   '</span>'
               }
             ]"></app-card-mob-simple>
+<!--          <app-paginator-->
+<!--                  [length]="pageData.length"-->
+<!--                  [pageSize]="pageData.pageSize"-->
+<!--                  (paginator)="paginatorEmit($event)"-->
+<!--                  (pageEvent)="pageEvent($event)">-->
+<!--          </app-paginator>-->
         </div>
         <div *ngIf="!proposalData || (proposalData && proposalData.length === 0)">
           <app-table-no-data></app-table-no-data>
