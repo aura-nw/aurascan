@@ -72,7 +72,7 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
-    <div [ngClass]="{'card-info': breakpoint.value.matches}">
+    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
@@ -198,7 +198,9 @@
         </div>
         <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-          <div class="col-12 col-lg-9 text--gray-1">{{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span></div>
+          <div class="col-12 col-lg-9 text--gray-1">
+            {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -274,7 +276,9 @@
           </a>
         </div>
       </div>
-      <app-messages-item [label]="'Proposal Id'" [value]="transactionDetail?.tx?.logs[0].events[4].attributes[0].value"></app-messages-item>
+      <app-messages-item
+        [label]="'Proposal Id'"
+        [value]="transactionDetail?.tx?.logs[0].events[4].attributes[0].value"></app-messages-item>
       <app-messages-item
         [label]="'Proposal Type'"
         [value]="transactionDetail?.tx?.logs[0]?.events[4].attributes[1].value"></app-messages-item>
@@ -413,7 +417,9 @@
         </div>
       </div>
       <app-messages-item [label]="'Code Id'" [value]="storeCodeId"></app-messages-item>
-      <app-messages-item [label]="'Byte Code'" [value]="transactionDetail?.messages[0]?.wasm_byte_code"></app-messages-item>
+      <app-messages-item
+        [label]="'Byte Code'"
+        [value]="transactionDetail?.messages[0]?.wasm_byte_code"></app-messages-item>
     </div>
   </ng-container>
 
@@ -453,13 +459,12 @@
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Details</div>
-        <div class="col-9">
-          {{ transactionDetail?.messages[0]?.description?.details || '-' }}
-        </div>
-      </div>
-      <app-messages-item [label]="'Moniker'" [value]="transactionDetail?.messages[0]?.description?.moniker"></app-messages-item>
+      <app-messages-item
+        [label]="'Details'"
+        [value]="transactionDetail?.messages[0]?.description?.details || '-'"></app-messages-item>
+      <app-messages-item
+        [label]="'Moniker'"
+        [value]="transactionDetail?.messages[0]?.description?.moniker"></app-messages-item>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
         <div class="col-9">
@@ -471,12 +476,9 @@
           <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length === 0">-</ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Identity</div>
-        <div class="col-9">
-          {{ transactionDetail?.messages[0]?.description?.identity || '-' }}
-        </div>
-      </div>
+      <app-messages-item
+        [label]="'Identity'"
+        [value]="transactionDetail?.messages[0]?.description?.identity || '-'"></app-messages-item>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
@@ -495,12 +497,9 @@
           {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Public Key</div>
-        <div class="col-12 col-lg-9">
-          {{ transactionDetail?.messages[0]?.pubkey?.key }}
-        </div>
-      </div>
+      <app-messages-item
+        [label]="'Public Key'"
+        [value]="transactionDetail?.messages[0]?.pubkey?.key"></app-messages-item>
     </div>
   </ng-container>
 
