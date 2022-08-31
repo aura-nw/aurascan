@@ -74,7 +74,6 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
       this.nftDetail = res.data;
-      this.pageData.length = res.meta.count || 0;
       this.loading = false;
     });
   }
