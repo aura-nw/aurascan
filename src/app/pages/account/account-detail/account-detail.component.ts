@@ -232,12 +232,19 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
+
+        this.transactionLoading = true;
+        this.accDetailLoading = true;
+
+        this.dataSourceToken = new MatTableDataSource();
+        this.dataSourceDelegation = new MatTableDataSource();
+        this.dataSourceUnBonding = new MatTableDataSource();
+        this.dataSourceReDelegation = new MatTableDataSource();
+        this.dataSource = new MatTableDataSource();
+
         this.loadDataTemp();
         this.getAccountDetail();
         // this.getListTransaction();
-
-        this.dataSource = new MatTableDataSource();
-        this.transactionLoading = true;
 
         this.getTxsFromHoroscope();
       }
@@ -260,7 +267,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.accDetailLoading = false;
         this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
-        this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
+        this.dataSourceToken.data = dataAccount.balances; //new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
@@ -466,17 +473,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         });
 
         this.lstBalanceAcount = this.currentAccountDetail?.balances;
-        this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
+        this.dataSourceToken.data = this.currentAccountDetail?.balances; //new MatTableDataSource(this.currentAccountDetail?.balances);
         this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
 
-        this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
+        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations; //new MatTableDataSource(this.currentAccountDetail?.delegations);
         this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
-        this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
+        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations; //new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
         this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-        this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
+        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations; // new MatTableDataSource(this.currentAccountDetail?.redelegations);
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+
         if (this.currentAccountDetail?.vesting) {
           this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
           this.pageDataVesting.length = 1;
@@ -498,6 +506,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   searchToken(): void {
     this.searchNullData = false;
+
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
