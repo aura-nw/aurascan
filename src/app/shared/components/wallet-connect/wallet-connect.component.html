@@ -9,20 +9,20 @@
       data-bs-target="#offcanvasWallet"
       aria-controls="offcanvasWallet"
     >
-      <span class="d-lg-none body-mob fw-semibold">Connect</span>
-      <span class="d-none d-lg-block fw-semibold">Connect Wallet</span>
+      <span class="d-lg-none body-mob">Connect</span>
+      <span class="d-none d-lg-block">Connect Wallet</span>
     </button>
 
     <div class="dropdown aura-dropdown walletMenu" *ngIf="ng.wallet">
       <button
-        class="button button--lg button--sm-mob button-pill button-outline button-outline--gradient button-dropdown body-01 fw-semibold"
+        class="button button--lg button--sm-mob button-pill button-outline button-outline--gradient button-dropdown body-01 fw-semibold button-wallet-menu"
         type="button"
         id="walletMenu"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <span class="button__title d-lg-none body-mob fw-semibold">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name}}</span>
-        <span class="button__title d-none d-lg-block body-mob fw-semibold">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
+        <span class="button__title d-lg-none body-mob">{{ ng.wallet?.name?.length > 8 ? ng.wallet?.name.slice(0, 5) + '...' : ng.wallet?.name}}</span>
+        <span class="button__title d-none d-lg-block body-mob">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
       </button>
       <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
         <li class="dropdown-item small-text-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">

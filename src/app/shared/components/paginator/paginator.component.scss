@@ -6,13 +6,14 @@
 
     .page {
         margin: 0 2px;
-        width: 24px;
+        min-width: 24px;
         height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         color: var(--aura-white);
+        padding: 0 4px;
 
         &.active {
             color: var(--aura-primary);

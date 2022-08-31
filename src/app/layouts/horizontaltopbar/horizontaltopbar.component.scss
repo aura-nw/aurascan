@@ -1,7 +1,7 @@
 .navbar-header {
   .page-title {
     color: var(--aura-gray-5);
-    padding: 0 var(--spacer-2);
+    padding: 0 var(--spacer-1);
     background-color: var(--aura-gray-10);
     border-radius: 4px;
     font-size: 1rem;
@@ -10,6 +10,9 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
+    @media (min-width: 414.99px) {
+      padding: 0 var(--spacer-2);
+    }
     @media (min-width: 992px) {
       font-size: 1.4rem;
       padding: var(--spacer-2) var(--spacer-4);
@@ -51,7 +54,7 @@ form.aura-form.single-input-field {
     .nav-item {
       padding: 13.5px 16px;
       @media (min-width: 1440px) {
-        padding: 20px;
+        padding: 16px;
       }
       &:first-child {
         padding-left: 0;
@@ -106,7 +109,7 @@ form.aura-form.single-input-field {
     .nav-link__panel {
       position: absolute;
       bottom: -90%;
-      transform: translateY(98%);
+      transform: translateY(95%);
       border: 1px solid transparent;
       border-radius: 25px;
       z-index: 1500;

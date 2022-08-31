@@ -15,7 +15,7 @@ mat-expansion-panel {
       font-family: 'Font Awesome 5 Free';
       font-weight: 700;
       content: '\f077';
-      color: var(--aura-white);
+      color: var(--aura-gray-1);
     }
 
     &[aria-expanded='true']::after {
@@ -55,4 +55,7 @@ mat-expansion-panel {
 .divider.divider-vertical {
   min-height: 16px;
   margin: 0 16px;
+}
+input.form-check-input {
+  color: var(--aura-gray-1);
 }

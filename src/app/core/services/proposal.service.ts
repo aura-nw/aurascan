@@ -28,7 +28,7 @@ export class ProposalService extends CommonService {
 
   getVotes(proposalId: string | number, voter: string, limit: string | number, offset: string | number) {
     return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}`,
+      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}&order_by=ORDER_BY_DESC`,
     );
   }
 
@@ -36,9 +36,9 @@ export class ProposalService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/proposals/votes/get-by-validator`, data);
   }
 
-  getDepositors(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(
-      `${INDEXER_URL}/transaction?chainid=${this.chainInfo.chainId}&searchType=proposal_deposit&searchKey=proposal_id&searchValue=${proposalId}&countTotal=true&reverse=false`,
+  getDepositors(proposalId: string | number) {
+    return axios.get(
+      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_deposit.proposal_id%3D%27${proposalId}%27&order_by=ORDER_BY_DESC`,
     );
   }
 

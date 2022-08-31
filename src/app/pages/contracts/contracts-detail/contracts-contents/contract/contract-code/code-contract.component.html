@@ -4,16 +4,16 @@
   *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Exact_Match">
     <img [src]="'assets/images/icons/contract-verify.svg' | imageS3" alt="" width="16" height="16" />
-    <span class="ml-2 mr-1 fw-semibold">Contract Source Code Verified</span
-    ><span class="text--light-gray">(Exact Match)</span>
+    <span class="ml-2 mr-1 fw-500 text--gray-1">Contract Source Code Verified</span>
+    <span class="text--gray-5 fw-500">(Exact Match)</span>
   </ng-container>
 
   <ng-container *ngIf="contractDetailData?.contract_verification === contractVerifyType.Similar_Match">
     <img [src]="'assets/images/icons/contract-simimar.svg' | imageS3" alt="" width="16" height="16" />
-    <span class="body-02 ml-2 mr-1">Similar Match Source Code</span>
-    <div class="text--light-gray mt-1 mb-3 mt-lg-4 mb-lg-0 box-note pl-6 pl-lg-0">
-      <div class="text--gray-5 d-block d-lg-inline">Note: This contract matches the deployed ByteCode of the Source Code for Contract</div>
-      <a class="text--primary ml-lg-1 d-block d-lg-inline" href="/contracts/{{ contractDetailData?.contract_match }}">
+    <span class="body-02 ml-2 mr-1 text--gray-1">Similar Match Source Code</span>
+    <div class="body-02 caption-mob text--light-gray mt-1 mb-3 mt-lg-4 mb-lg-0 box-note pl-6 pl-lg-0">
+      <div class="fw-normal-mob text--gray-5 d-block d-lg-inline">Note: This contract matches the deployed ByteCode of the Source Code for Contract</div>
+      <a class="fw-normal-mob text--primary ml-lg-1 d-block d-lg-inline" href="/contracts/{{ contractDetailData?.contract_match }}">
         {{ contractDetailData?.contract_match }}</a>
     </div>
   </ng-container>
@@ -25,11 +25,11 @@
       <table class="aura-basic-table w-100 table-detail body-02 body-01-mob">
         <tr>
           <td class="px-0 text--gray-5 py-3 align-baseline">Contract Name:</td>
-          <td class="px-0 py-3">{{ contractDetailData?.contract_name }}</td>
+          <td class="px-0 py-3 text--gray-1">{{ contractDetailData?.contract_name }}</td>
         </tr>
         <tr>
           <td class="px-0 text--gray-5 py-3 align-baseline">Compiler Version:</td>
-          <td class="text--contract px-0 py-3">{{ contractDetailData?.compiler_version }}</td>
+          <td class="text--contract px-0 py-3 text--gray-1">{{ contractDetailData?.compiler_version }}</td>
         </tr>
       </table>
     </div>
@@ -37,11 +37,11 @@
       <table class="aura-basic-table w-100 table-detail">
         <tr>
           <td>Optimization Enabled:</td>
-          <td><span class="fw-semibold">No</span> with <span class="fw-semibold">200</span> runs</td>
+          <td><span class="fw-semibold text--gray-1">No</span> with <span class="fw-semibold">200</span> runs</td>
         </tr>
         <tr>
           <td>Other Settings:</td>
-          <td><span class="fw-semibold">default</span> evmVersion</td>
+          <td><span class="fw-semibold text--gray-1">default</span> evmVersion</td>
         </tr>
       </table>
     </div> -->
@@ -50,10 +50,10 @@
     <!-- Link Contract Source Code -->
     <div class="mt-3 mb-4 mb-lg-3 d-flex align-items-center">
       <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="16px" height="16px" />
-      <span class="text--white ml-2 body-02">Link Contract Source Code</span>
+      <span class="text--gray-1 ml-2 body-02">Link Contract Source Code</span>
     </div>
     <div class="d-flex justify-content-between align-items-center">
-      <div class="w-100 text-nowrap small-text content-info mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
+      <div class="w-100 text-nowrap body-03 content-info mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
         {{ contractDetailData?.url }}
       </div>
       <div class="d-flex justify-content-end">
@@ -72,16 +72,16 @@
     <div *ngIf="contractDetailData.s3_location">
       <div class="my-4 mt-lg-6 d-flex align-items-center">
         <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="16px" height="16px" />
-        <span class="text--white ml-2 body-02">File Contract Source Code</span>
+        <span class="text--gray-1 ml-2 body-02">File Contract Source Code</span>
       </div>
       <div class="d-flex justify-content-between align-items-center">
-        <div class="w-100 text-nowrap small-text content-info  mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
+        <div class="w-100 text-nowrap body-03 content-info  mr-6" [ngClass]="{'g-ellipsis content-info-ellipsis': breakpoint.value.matches}">
           {{ contractDetailData?.s3_location.split('/')[contractDetailData?.s3_location.split('/').length-1] }}
         </div>
         <a href="{{contractDetailData?.s3_location}}"
            class="button button-pill button--sm button-outline button-outline__in-card d-flex flex-shrink-0">
-          <img [src]="'assets/icons/icons-svg/white/download.svg' | imageS3" alt="" width="16px" height="16px" class="d-none d-lg-block">
-          <span class="ml-2 text-white">{{ breakpoint.value.matches ? 'Download' : 'Download ZIP'}}</span>
+          <img [src]="'assets/icons/icons-svg/white/download.svg' | imageS3" alt="" width="16px" height="16px" class="d-none d-lg-block mr-2">
+          <span class="text-white">{{ breakpoint.value.matches ? 'Download' : 'Download ZIP'}}</span>
         </a>
       </div>
     </div>
@@ -89,14 +89,14 @@
     <div class="d-flex justify-content-between align-items-center my-4 mt-lg-6 mb-lg-5">
       <div>
         <img [src]="'assets/icons/icons-svg/basic/menu.svg' | imageS3" alt="" width="16px" height="16px" />
-        <span class="text--white ml-2 body-02">Contract Schema</span>
+        <span class="text--gray-1 ml-2 body-02">Contract Schema</span>
       </div>
     </div>
   </ng-container>
 
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="d-flex justify-content-between align-items-center" [class.row]="breakpoint.value.matches">
-      <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.ison</span>
+      <span class="text--gray-1" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.ison</span>
       <div
         *ngIf="contractDetailData?.execute_msg_schema"
         class="d-flex align-items-center justify-content-end mt-2 mt-lg-0"
@@ -108,7 +108,7 @@
             id="delegateAction1"
             data-bs-toggle="dropdown"
             aria-expanded="false">
-            <span class="fw-semibold">Export Schema</span>
+            <span>Export Schema</span>
           </button>
           <ul class="dropdown-menu aura-dropdown-menu .border-sm border-gray-9 border-radius--sm " aria-labelledby="delegateAction1">
             <li
@@ -153,7 +153,7 @@
     >
 
     <div class="d-flex justify-content-between align-items-center mt-4 mt-lg-6" [class.row]="breakpoint.value.matches">
-      <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 2 of 3: instantiate msg.json</span>
+      <span class="text--gray-1" [class.col-12]="breakpoint.value.matches">File 2 of 3: instantiate msg.json</span>
       <div
         *ngIf="contractDetailData?.instantiate_msg_schema"
         class="d-flex align-items-center justify-content-end mt-2 mt-lg-0"
@@ -210,7 +210,7 @@
     >
 
     <div class="d-flex justify-content-between align-items-center mt-4 mt-lg-6" [class.row]="breakpoint.value.matches">
-      <span class="text--contract" [class.col-12]="breakpoint.value.matches">File 3 of 3: query msg.json</span>
+      <span class="text--gray-1" [class.col-12]="breakpoint.value.matches">File 3 of 3: query msg.json</span>
       <div
         *ngIf="contractDetailData?.query_msg_schema"
         class="d-flex align-items-center justify-content-end mt-2 mt-lg-0"
@@ -240,7 +240,6 @@
         <button class="button button-circle button--sm mx-4 mx-lg-2">
           <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="mx-6 cursor-pointer "
                 alt=""
                 width="20px" height="20px"
                 matTooltip="Copied!"
@@ -272,10 +271,10 @@
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverifed">
     <div class="mt-4 mt-lg-6">
       <img [src]="'assets/icons/icons-svg/basic/code.svg' | imageS3" alt="" width="16" height="16" />
-      <span class="text--white ml-2 fw-semibold">Contract Creation Code</span>
+      <span class="text--gray-1 ml-2 fw-semibold">Contract Creation Code</span>
     </div>
 
-    <div class="mt-4 small-text content-info caption break-word pb-3 pb-lg-0">
+    <div class="mt-4 caption fw-normal content-info break-word pb-3 pb-lg-0">
       {{ contractDetailData?.contract_hash }}
     </div>
   </ng-container>

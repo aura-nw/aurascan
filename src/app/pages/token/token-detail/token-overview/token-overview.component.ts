@@ -27,6 +27,14 @@ export class TokenOverviewComponent implements OnInit {
     });
     this.getTotalTransfer();
     this.getTotalHolder();
+
+    //set price change
+    this.tokenDetail['change'] = this.tokenDetail.price_change_percentage_24h;
+    this.tokenDetail['isValueUp'] = true;
+    if (this.tokenDetail['change'] < 0) {
+      this.tokenDetail['isValueUp'] = false;
+      this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
+    }
   }
 
   getTotalTransfer() {

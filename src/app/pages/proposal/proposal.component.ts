@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -23,6 +23,7 @@ import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
+import {PAGE_EVENT} from "src/app/core/constants/common.constant";
 
 @Component({
   selector: 'app-proposal',
@@ -45,11 +46,16 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  proposalData: any[];
+  proposalData: any;
   length: number;
   pageIndex = 0;
   lastedList: IProposal[] = [];
 
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 10,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   proposalVotes: {
     proId: number;
     vote: string | null;
@@ -88,8 +94,9 @@ export class ProposalComponent implements OnInit {
   getListProposal(): void {
     const addr = this.walletService.wallet?.bech32Address || null;
     this.proposalService.getProposalList(addr).subscribe((res) => {
+      this.proposalData = res;
+      console.log(this.proposalData)
       if (res?.data) {
-        this.proposalData = res.data;
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
         this.lastedList = [...res.data];
@@ -254,5 +261,27 @@ export class ProposalComponent implements OnInit {
       this.lastedList[index].pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
       this.lastedList[index].pro_votes_abstain = (+abstain * 100) / totalVote;
     });
+  }
+
+  paginatorEmit(e: MatPaginator): void {
+    // if (this.dataSource.paginator) {
+    //   e.page.next({
+    //     length: this.dataSource.paginator.length,
+    //     pageIndex: 0,
+    //     pageSize: this.dataSource.paginator.pageSize,
+    //     previousPageIndex: this.dataSource.paginator.pageIndex,
+    //   });
+    //   this.dataSource.paginator = e;
+    //   // this.pageData.pageIndex = e.pageIndex;
+    // } else this.dataSource.paginator = e;
+  }
+
+  pageEvent(e: PageEvent): void {
+    // const { length, pageIndex, pageSize } = e;
+    // const next = length <= (pageIndex + 2) * pageSize;
+    // if (next && this.nextKey) {
+    //   this.getTxsFromHoroscope(this.nextKey);
+    // }
+    // this.pageData.pageIndex = e.pageIndex;
   }
 }

@@ -9,7 +9,7 @@
     </div>
     <div *ngIf="!isSearchTx && isSearchAddress" class="card main-tab py-3 py-lg-4 px-4">
       <div class="row">
-        <div class="col-12 col-lg-5">
+        <div class="col-12 col-lg-5 py-3 py-lg-0">
           <div class="caption d-flex align-item-center mb-1 mb-lg-0">
             <img
                     [src]="'assets/images/icons/token-holder.png' | imageS3"
@@ -21,14 +21,14 @@
           </div>
           <a class="body-02 text--primary" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
         </div>
-        <div class="col-12 col-lg-4 px-lg-4 border-x text--gray-1">
+        <div class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{ tokenDetail?.isNFTContract ? 'no-border-bottom pb-0' : 'pb-3' }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <span *ngIf="!tokenDetail?.isNFTContract">
                 {{ infoSearch?.balance || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
               </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch?.balance || 0 }}</span>
         </div>
-        <div class="col-12 col-lg-3 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
+        <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
           - ( - {{ denom }})
         </div>
@@ -97,6 +97,7 @@
     <app-token-holders-tab
       *ngIf="countCurrent === tokenTab.Holders"
       [keyWord]="textSearch"
+      [tokenDetail]="tokenDetail"
       [isNFTContract]="tokenDetail?.isNFTContract"
       [contractAddress]="contractAddress"></app-token-holders-tab>
     <app-token-inventory-tab *ngIf="countCurrent === tokenTab.Inventory"></app-token-inventory-tab>

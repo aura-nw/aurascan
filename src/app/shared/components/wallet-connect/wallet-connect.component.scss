@@ -92,3 +92,16 @@
     }
   }
 }
+
+.button-wallet-menu {
+  @media (max-width: 991.98px) {
+    padding-right: 30px !important;
+    &:before {
+      right: 10px !important;
+    }
+  }
+  @media (max-width: 414.98px) {
+    padding: 0 14px;
+    padding-right: 25px !important;
+  }
+}

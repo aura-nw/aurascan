@@ -1,5 +1,6 @@
 .single-input-field {
-  @media (min-width: 992px) {
+  min-width: 100%;
+  @media (min-width: 1440px) {
     min-width: 410px;
   }
 }
@@ -19,10 +20,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  .nav-link {
-    font-weight: 600;
-    font-size: 14px;
-  }
 }
 
 .tab-token {
@@ -32,8 +29,15 @@
   }
 }
 .border-x {
+  border-top: 1px solid var(--aura-gray-9);
+  border-bottom: 1px solid var(--aura-gray-9);
   @media (min-width: 992px) {
     border-left: 1px solid var(--aura-gray-9);
     border-right: 1px solid var(--aura-gray-9);
+    border-top: none;
+    border-bottom: none;
   }
+}
+.no-border-bottom {
+  border-bottom: none;
 }

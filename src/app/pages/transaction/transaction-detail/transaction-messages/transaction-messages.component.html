@@ -34,7 +34,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
         </div>
@@ -72,8 +72,11 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <app-messages-item [label]="'Label'" [value]="transactionDetail?.messages[0]?.label"></app-messages-item>
+    <div [ngClass]="{'card-info': breakpoint.value.matches}">
+      <div class="row mb-3 body-02 body-01-mob">
+        <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
+        <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
+      </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
         <div class="col-12 col-lg-9">
@@ -83,7 +86,7 @@
         </div>
       </div>
       <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Messages</div>
+        <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0 text--gray-4">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
         </div>
@@ -122,7 +125,7 @@
           </div>
           <div class="row mb-3 body-02 body-01-mob">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-            <div class="col-12 col-lg-9">
+            <div class="col-12 col-lg-9 text--gray-1">
               <ng-container *ngIf="listAmountClaim[i] > 0">
                 {{ listAmountClaim[i] | number: global.formatNumberToken }}
                 <span class="text--primary">{{ denom }}</span>
@@ -156,7 +159,7 @@
         </div>
         <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-          <div class="col-12 col-lg-9">
+          <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
               {{ amountCommission || amount | number: global.formatNumberToken }}
               <span class="text--primary">{{ denom }}</span>
@@ -166,7 +169,7 @@
         </div>
         <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
-          <div class="col-12 col-lg-9">
+          <div class="col-12 col-lg-9 text--gray-1">
             {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
@@ -195,9 +198,7 @@
         </div>
         <div class="row mb-3 body-02 body-01-mob">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-          <div class="col-12 col-lg-9">
-            {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
-          </div>
+          <div class="col-12 col-lg-9 text--gray-1">{{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span></div>
         </div>
       </div>
     </ng-container>
@@ -223,7 +224,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Option</div>
-        <div class="col-9">
+        <div class="col-9 text--gray-1">
           {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
         </div>
       </div>
@@ -256,7 +257,7 @@
     <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
@@ -321,7 +322,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
@@ -330,7 +331,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
@@ -357,7 +358,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
@@ -371,7 +372,7 @@
     <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
-        <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+        <div class="col-12 col-lg-9 text--gray-1">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
@@ -388,7 +389,7 @@
     <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
-        <div class="col-12 col-lg-9">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
+        <div class="col-12 col-lg-9 text--gray-1">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
@@ -420,7 +421,7 @@
     <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Min Self Delegation</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
         </div>
       </div>
@@ -445,7 +446,7 @@
       </div>
       <div class="row mb-3 body-02 body-01-mob">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </ng-container>

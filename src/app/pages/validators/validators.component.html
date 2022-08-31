@@ -32,7 +32,7 @@
           </button>
           <button
             type="reset"
-            class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+            class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
             (click)="textSearch = ''; searchValidator()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
@@ -74,7 +74,7 @@
           </button>
           <button
                   type="reset"
-                  class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                  class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
                   (click)="textSearch = ''; searchValidator()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
@@ -247,7 +247,7 @@
                       [disabled]="clicked"
                       *ngIf="validator['status'] === statusValidator.Active"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      <span class="text--gray-1">Delegate</span>
+                      <span class="text--gray-1 body-02-mob">Delegate</span>
                     </button>
                   </div>
                 </div>
@@ -336,7 +336,7 @@
         <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
           <div class="mt-2 h6 text--white mb-0">
-            <span>Available for undelegatation</span>
+            <span>Available for undelegation</span>
             <span class="ml-3 fw-normal">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
@@ -389,18 +389,18 @@
               [disableOptionCentering]="true">
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
-                *ngFor="let item of lstValidator; let last = last"
-                [class.mb-lg-2]="!last"
+                *ngFor="let item of lstReValidator; let last = last"
+                [class.mb-2]="!last"
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
-                <div class="d-flex option-contain align-items-center">
-                  <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking }">
+                <div class="d-flex option-contain align-items-center justify-content-between">
+                  <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
-                      <div class="validator-avatar medium">
+                      <div class="validator-avatar">
                         <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
                       </div>
                     </div>
-                    <span>{{ item.title | translate }}</span>
+                    <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
                     Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}
@@ -411,7 +411,7 @@
           </mat-form-field>
           <div *ngIf="selectedValidator">
             <div class="mt-6 body-01 body-02-mob">
-              <span class="fw-500">Available for redelegatation</span>
+              <span class="fw-500">Available for redelegation</span>
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
@@ -442,9 +442,9 @@
                 id="delegateAction"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span class="fw-semibold">Select Action</span>
+                <span>Select Action</span>
               </button>
-              <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="delegateAction">
+              <ul class="dropdown-menu aura-dropdown-menu delegateAction" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
                   <img class="mr-2"
                     [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
@@ -472,7 +472,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="fw-semibold">Delegate</span>
+              <span>Delegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
@@ -490,7 +490,7 @@
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="fw-semibold">Undelegate</span>
+              <span>Undelegate</span>
             </button>
           </div>
           <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">

@@ -1,6 +1,8 @@
 .box-contract-overview {
   table.aura-basic-table {
-    min-height: 224px;
+    @media (min-width: 992px) {
+      min-height: 224px;
+    }
 
     tr,
     td {

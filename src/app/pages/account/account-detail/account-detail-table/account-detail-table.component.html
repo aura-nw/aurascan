@@ -1,5 +1,5 @@
-<ngx-simplebar style="max-height: 530px" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <ng-container *ngIf="pageData?.length > 0; else noValues">
+<ngx-simplebar *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <ng-container *ngIf="dataSource?.data.length > 0; else noValues">
     <div class="table-responsive aura-table-contain">
       <ng-container *ngIf="!breakpoint.value.matches">
         <table mat-table [dataSource]="dataSource" class="aura-table d-none d-lg-table">
@@ -18,28 +18,28 @@
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                                  [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                                  [srcImg]="getValidatorAvatar(data.validator_address)"></app-loading-image>
+                            [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                            [srcImg]="getValidatorAvatar(data.validator_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
                           <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                         </div>
                       </div>
                       <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
-                            {{ data[template.matColumnDef] }}
-                          </span>
+                        {{ data[template.matColumnDef] }}
+                      </span>
                     </a>
-                    <div *ngSwitchCase="'amount'" class="fw-normal">
+                    <div *ngSwitchCase="'amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
-                    <div *ngSwitchCase="'token_amount'" class="fw-normal">
+                    <div *ngSwitchCase="'token_amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                     </div>
-                    <div *ngSwitchCase="'token_name'" class="fw-normal text--primary">
+                    <div *ngSwitchCase="'token_name'" class=" text--primary">
                       {{ data[template.matColumnDef] }}
                     </div>
-                    <div *ngSwitchCase="'reward'" class="fw-normal">
+                    <div *ngSwitchCase="'reward'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
@@ -58,7 +58,7 @@
                         commonService.getDateValue(data['date_format'], false)[0]
                       }})
                     </div>
-                    <div *ngSwitchCase="'total_value'" class="fw-normal">
+                    <div *ngSwitchCase="'total_value'">
                       $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </div>
                     <a  *ngSwitchCase="'validator_src_name'"
@@ -67,15 +67,15 @@
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                                  [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                                  [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
+                            [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                            [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
                           <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                         </div>
                       </div>
                       <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
-                            {{ data[template.matColumnDef] }}
+                        {{ data[template.matColumnDef] }}
                       </span>
                     </a>
 
@@ -86,18 +86,18 @@
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                                  [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                                  [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
+                            [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                            [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
                         </div>
                         <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
                           <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
                         </div>
                       </div>
                       <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
-                            {{ data[template.matColumnDef] }}
+                        {{ data[template.matColumnDef] }}
                       </span>
                     </a>
-                    <div *ngSwitchDefault class="fw-normal">{{ data[template.matColumnDef] }}</div>
+                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
                   </ng-container>
                 </div>
               </td>
@@ -115,10 +115,8 @@
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
         <div class="table-mobile">
-          <ng-container *ngFor="let item of dataSource.data; let i = index">
-            <div
-              class="box-mob-table fw-normal mb-3"
-              *ngIf="i >= pageData.pageSize * currentPage && i < pageData.pageSize * (currentPage + 1)">
+          <ng-container *ngFor="let item of dataSourceMobile; let i = index">
+            <div class="box-mob-table fw-normal mb-3">
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
                   <a class="body-mob text--primary d-flex align-items-center" [routerLink]="['/validators', item['validator_address']]">
@@ -167,11 +165,11 @@
                         <span class="text--primary">{{ denom }}</span>
                       </div>
                     </div>
-                    <div class="d-flex justify-content-between body mt-3">
+                    <div class="d-flex justify-content-between body-01 mt-3">
                       <div class="text--gray-4">Completion Time</div>
                       <div class="d-flex align-items-center">
                         <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
-                        <div class="divider divider-vertical divider-lighter mx-2"></div>
+                        <div class="divider divider-vertical divider-lighter mx-1"></div>
                         <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
                       </div>
                     </div>
@@ -226,7 +224,7 @@
           </ng-container>
         </div>
       </ng-container>
-      <app-paginator *ngIf="pageData"
+      <app-paginator
         [length]="pageData.length"
         [pageSize]="pageData.pageSize"
         (paginator)="paginatorEmit($event)"
@@ -234,6 +232,7 @@
       </app-paginator>
     </div>
   </ng-container>
+
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>

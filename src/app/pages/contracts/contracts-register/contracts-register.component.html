@@ -3,7 +3,7 @@
     <h1 class="text--white mb-0">Type Smart Contract</h1>
     <button class="button button-pill button--sm button--md-mob button-outline button-outline--gradient btn-register button-fixed mt-4 mt-md-0" (click)="viewPopupDetail(modalManage, '')">
       <img [src]="'assets/icons/icons-svg/white/plus.svg' | imageS3" alt="" width="16px" height="16px" />
-      <span class="fw-semibold ml-2">Register Contract</span>
+      <span class="ml-2">Register Contract</span>
     </button>
   </div>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
@@ -13,7 +13,7 @@
         Before a user wants to register a type contract for a Code ID, the user has to claim ownership of the Code ID
         successfully
       </div>
-      <div class="body-03-mob body-02 mt-1 search__result">{{ pageData?.length }} contract{{ pageData?.length > 1 ? 's' : ''}} registered</div>
+      <div class="body-03-mob body-02 mt-1 text--gray-5">{{ pageData?.length }} contract{{ pageData?.length > 1 ? 's' : ''}} registered</div>
     </div>
     <form class="aura-form single-input-field search-form mt-4 mt-lg-0 d-none d-lg-block">
       <div class="input-group">
@@ -178,7 +178,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell g-no-data" colspan="9999">
-              <div class="d-flex justify-content-center align-items-center">
+              <div class="d-flex justify-content-center align-items-center body-01 body-02-mob">
                 <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="16px" height="16px" class="mr-2" />
                 You have yet to register any type contract
               </div>
@@ -197,7 +197,7 @@
                     type="button"
                     class="button button-outline button--sm button-outline--gradient button-pill button-outline__in-card ml-auto"
                     [disabled]="data['result'] === 'Correct'"
-                    (click)="viewPopupDetail(modalManage, data['code_id'])">
+                    (click)="viewPopupDetail(modalManage, data)">
               <img [src]="'assets/icons/icons-svg/white/edit_simple.svg' | imageS3" alt="" width="16px" height="16px" />
               <span class="ml-1">Edit</span>
             </button>
@@ -209,7 +209,7 @@
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Result Registration</span>
-            <span [ngStyle]="{color: data['result'] === 'TBD' ? '#5E84E6' : data['result'] === 'Incorrect' ? '#E65E5E' : '#5EE69D'}">{{ data.result }}</span>
+            <span [ngStyle]="{color: data['result'] === 'TBD' ? '#9DA8FF' : data['result'] === 'Incorrect' ? '#FA8684' : '#5EE69D'}">{{ data.result }}</span>
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Time Registered</span>
@@ -242,7 +242,7 @@
   <ng-template #modalManage let-modal>
     <div class="aura-form d-flex row p-3">
       <div class="col-12 d-flex justify-content-between px-0 mb-4">
-        <span class="h1 mb-0 text--white">
+        <span class="h1 h4-mob mb-0 text--white">
           <ng-container *ngIf="isEditMode">Update Type Contract</ng-container>
           <ng-container *ngIf="!isEditMode">Register Type Contract</ng-container>
         </span>
@@ -254,11 +254,12 @@
           class="mr-2 cursor-pointer"
           (click)="closeDialog(modal)" />
       </div>
+      <div class="divider divider-horizontal"></div>
       <div class="box-body-register col-12">
-        <p class="body-small" [class.input-require]="!isEditMode">Code ID</p>
+        <p class="body-02 mb-1 text--gray-1" [class.input-require]="!isEditMode">Code ID</p>
         <div class="box-input">
           <input type="text"
-            class="form-check-input col-12 mb-4"
+            class="form-check-input col-12 mb-4 text--gray-1"
             [maxlength]="50"
             [(ngModel)]="currentCodeID"
             [disabled]="isEditMode"
@@ -266,8 +267,8 @@
                  (keyup)="checkInput()"
             placeholder="Enter a Code ID" />
         </div>
-        <p class="small-text text--gray-6" *ngIf="!isEditMode">Enter a Code ID that you owned/ created (ID must be greater than 0).</p>
-        <p class="body-small input-require">Type Contract</p>
+        <p class="caption fw-normal text--gray-5 mb-4" *ngIf="!isEditMode">Enter a Code ID that you owned/ created (ID must be greater than 0).</p>
+        <p class="body-02 mb-1 text--gray-1 input-require">Type Contract</p>
         <div class="box-input">
           <mat-form-field appearance="fill" contract>
             <mat-select
