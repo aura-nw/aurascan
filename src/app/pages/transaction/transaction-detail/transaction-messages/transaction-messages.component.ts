@@ -220,6 +220,7 @@ export class TransactionMessagesComponent implements OnInit {
             packet_dst_port: this.ibcData.find((f) => f.key === 'packet_dst_port').value,
             packet_src_channel: this.ibcData.find((f) => f.key === 'packet_src_channel').value,
             packet_dst_channel: this.ibcData.find((f) => f.key === 'packet_dst_channel').value,
+            effected: this.ibcData.find((f) => f.key === 'success') ? '1' : '0',
           };
           this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCTimeout,

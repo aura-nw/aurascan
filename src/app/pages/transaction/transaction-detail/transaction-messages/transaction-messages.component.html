@@ -585,7 +585,7 @@
         </a>
       </div>
     </div>
-    <app-messages-item [label]="'Effected'" [value]="'0'"></app-messages-item>
+    <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.IBCAcknowledgement">
@@ -635,7 +635,7 @@
     <app-messages-item
       [label]="'Signer'"
       [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.signer"></app-messages-item>
-    <app-messages-item [label]="'Effected'" [value]="'0'"></app-messages-item>
+    <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.IBCTimeout">
