@@ -33,6 +33,7 @@ export class TokenService extends CommonService {
     offset: string | number,
     contractAddress: string,
     filterData: any,
+    type = 'cw20-tokens'
   ): Observable<any> {
     let payload = {
       contract_address: contractAddress,
@@ -51,7 +52,16 @@ export class TokenService extends CommonService {
         payload.token_id = filterData?.keyWord;
       }
     }
-    return this.http.post<any>(`${this.apiUrl}/cw20-tokens/transactions`, payload);
+    return this.http.post<any>(`${this.apiUrl}/${type}/transactions`, payload);
+  }
+
+  getListNFTDetail(
+    contractAddress: string,
+    tokenId: string,
+    limit: string | number,
+    offset: string | number,
+  ): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/transactions/${contractAddress}/${tokenId}/${limit}/${offset}`);
   }
 
   getListTokenNFT(contractAddress: string, payload): Observable<any> {
