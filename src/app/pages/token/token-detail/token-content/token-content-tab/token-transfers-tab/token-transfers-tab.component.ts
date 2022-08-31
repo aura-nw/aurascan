@@ -114,7 +114,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     this.tokenService
       .getListTokenTransfer(
         this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex,
         this.contractAddress,
         filterData,
         type,
