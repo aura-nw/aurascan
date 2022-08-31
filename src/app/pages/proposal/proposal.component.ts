@@ -2,9 +2,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from '../../../app/global/global';
 import {
@@ -12,7 +13,7 @@ import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
   VOTE_OPTION,
-  VOTING_STATUS
+  VOTING_STATUS,
 } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -23,7 +24,6 @@ import { WalletService } from '../../core/services/wallet.service';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { shortenAddressStartEnd } from '../../core/utils/common/shorten';
 import { ProposalVoteComponent } from './proposal-vote/proposal-vote.component';
-import {PAGE_EVENT} from "src/app/core/constants/common.constant";
 
 @Component({
   selector: 'app-proposal',
@@ -95,7 +95,6 @@ export class ProposalComponent implements OnInit {
     const addr = this.walletService.wallet?.bech32Address || null;
     this.proposalService.getProposalList(addr).subscribe((res) => {
       this.proposalData = res;
-      console.log(this.proposalData)
       if (res?.data) {
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
@@ -104,7 +103,8 @@ export class ProposalComponent implements OnInit {
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
           if (
-            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
+            index < 4 &&
+            pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD &&
             pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
           ) {
             this.getVoteResult(pro.pro_id, index);
