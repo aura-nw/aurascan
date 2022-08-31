@@ -136,7 +136,7 @@
                       <ng-container *ngSwitchCase="'details'">
                         <button
                           class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                          [disabled]="!data.token_id || data.type === 'burn'"
+                          [disabled]="data.disabled"
                           [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                           <span>View NFT</span>
                         </button>
