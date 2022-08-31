@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
@@ -13,11 +13,12 @@ import { WSService } from 'src/app/core/services/ws.service';
   templateUrl: './contracts-verify.component.html',
   styleUrls: ['./contracts-verify.component.scss'],
 })
-export class ContractsVerifyComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
   contractTxHash = '';
+  @ViewChild('version') versionSelect:any;
+
   versionList = CONTRACT_VERSIONS;
-  @ViewChild('version') versionSelect: any;
 
   constructor(
     private contractService: ContractService,
@@ -30,7 +31,10 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy, AfterViewChe
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
 
-    if (this.contractAddress.trim().length === 0 || this.contractTxHash.trim().length === 0) {
+    if (
+      this.contractAddress.trim().length === 0 ||
+      this.contractTxHash.trim().length === 0
+    ) {
       this.router.navigate(['contracts']);
     }
   }
@@ -145,11 +149,8 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy, AfterViewChe
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
   }
-
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event) {
     this.versionSelect.close();
   }
-
-  ngAfterViewChecked(): void {}
 }
