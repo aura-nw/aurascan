@@ -38,7 +38,8 @@ export class TokenOverviewComponent implements OnInit {
   }
 
   getTotalTransfer() {
-    this.tokenService.getListTokenTransfer(20, 0, this.tokenDetail?.contract_address, null).subscribe((res) => {
+    let type = this.tokenDetail?.isNFTContract ? 'cw721-tokens' : 'cw20-tokens';
+    this.tokenService.getListTokenTransfer(20, 0, this.tokenDetail?.contract_address, null, type).subscribe((res) => {
       this.tokenDetail['transfers'] = res.meta?.count || 0;
     });
   }
