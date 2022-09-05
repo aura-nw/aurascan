@@ -26,14 +26,9 @@ import {
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import {
-  CodeTransaction,
-  StatusTransaction,
-  TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
-} from '../../../core/constants/transaction.enum';
+import { CodeTransaction, StatusTransaction } from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
-import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
+import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
@@ -244,8 +239,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         this.loadDataTemp();
         this.getAccountDetail();
-        // this.getListTransaction();
-
         this.getTxsFromHoroscope();
       }
     });
@@ -293,7 +286,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
-        // this.getListTransaction();
         break;
       case this.pageEventType.Unbonding:
         this.pageDataUnbonding.pageIndex = page.pageIndex;
@@ -308,8 +300,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.pageDataToken.pageIndex = page.pageIndex;
         break;
       default:
-        // this.pageData.pageIndex = page.pageIndex;
-        // this.getListTransaction();
         break;
     }
   }
@@ -344,7 +334,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
               this.coinMinimalDenom,
             );
 
-            const amount = _.isNumber(_amount) ? _amount.toFixed(this.coinDecimals) : _amount;
+            const amount = (_.isNumber(_amount) && _amount > 0) ? _amount.toFixed(this.coinDecimals) : _amount;
 
             const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, this.coinDecimals).toFixed(
               this.coinDecimals,
@@ -375,44 +365,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.transactionLoading = false;
       },
     });
-
-    /*
-      {
-        tx_hash: '',
-        type: '',
-        status: '',
-        amount: '',
-        fee: '',
-        height: '',
-        timestamp: '',
-      }
-    */
-  }
-
-  getListTransaction(): void {
-    // this.transactionService
-    //   .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
-    //   .subscribe((res: ResponseDto) => {
-    //     if (res?.data?.length > 0) {
-    //       res.data.forEach((trans) => {
-    //         //get amount of transaction
-    //         trans.typeOrigin = trans.type;
-    //         trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-    //         const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-    //         trans.type = typeTrans?.value;
-    //         trans.status = StatusTransaction.Fail;
-    //         if (trans.code === CodeTransaction.Success) {
-    //           trans.status = StatusTransaction.Success;
-    //         }
-    //         if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-    //           trans.type = TypeTransaction.Received;
-    //         }
-    //       });
-    //       this.dataSource.data = res.data;
-    //       this.length = res.meta.count;
-    //       this.pageData.length = res.meta.count;
-    //     }
-    //   });
   }
 
   getAccountDetail(): void {
@@ -531,7 +483,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         previousPageIndex: this.dataSource.paginator.pageIndex,
       });
       this.dataSource.paginator = e;
-
       // this.pageData.pageIndex = e.pageIndex;
     } else this.dataSource.paginator = e;
   }
@@ -548,8 +499,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     if (next && this.nextKey) {
       this.getTxsFromHoroscope(this.nextKey);
     }
-
-    // this.getListTransaction();
   }
 
   viewQrAddress(staticDataModal: any): void {
@@ -566,37 +515,5 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   closePopup() {
     this.modalReference.close();
-  }
-
-  checkAmountValue(data) {
-    const { message, tx_hash, amount } = data;
-
-    if (message?.length > 1) {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
-    }
-
-    return amount + `<span class=text--primary> ${this.denom} </span>`;
-
-    // let eTransType = TRANSACTION_TYPE_ENUM;
-    // if (message?.length > 1) {
-    //   return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
-    // } else if (message?.length === 0 || (message?.length === 1 && !_.get(message, '[0].amount'))) {
-    //   return '-';
-    // } else {
-    //   // let amount = message[0]?.amount[0]?.amount;
-    //   const type = _.get(message, '[0].[@type]');
-
-    //   let amount = '-';
-    //   //check type is Delegate/Undelegate/Redelegate
-    //   if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
-    //     amount = _.get(message, '[0].amount.amount'); // message[0]?.amount?.amount;
-    //   } else {
-    //     amount = _.get(message, '[0].amount[0].amount');
-    //   }
-    //   return (
-    //     this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-    //     `<span class=text--primary> ${this.denom} </span>`
-    //   );
-    // }
   }
 }
