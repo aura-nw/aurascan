@@ -10,6 +10,7 @@ import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Globals } from '../../../global/global';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -26,8 +27,18 @@ export class TransactionDetailComponent implements OnInit {
   amount: string | number;
   isRawData = false;
   errorMessage = '';
-
+  TAB = [
+    {
+      id: 0,
+      value: 'SUMMARY'
+    },
+    {
+      id: 1,
+      value: 'JSON'
+    }
+  ]
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +49,7 @@ export class TransactionDetailComponent implements OnInit {
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
+    private layout: BreakpointObserver
   ) {}
 
   ngOnInit(): void {

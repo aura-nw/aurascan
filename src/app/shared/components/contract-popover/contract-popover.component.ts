@@ -50,7 +50,7 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
     if (isToAddress) {
       if (this.popoverData.modeExecute !== this.modeExecuteTransaction.Burn && this.popoverData?.to_address) {
         element =
-          `<a class="text--green cursor-pointer" href="` +
+          `<a class="text--primary cursor-pointer" href="` +
           url +
           this.popoverData.tokenAddress +
           '?a=' +
@@ -66,7 +66,7 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
     } else {
       if (this.popoverData.modeExecute !== this.modeExecuteTransaction.Mint && this.popoverData?.from_address) {
         element =
-          `<a class="text--green cursor-pointer" href="` +
+          `<a class="text--primary cursor-pointer" href="` +
           url +
           this.popoverData.tokenAddress +
           '?a=' +

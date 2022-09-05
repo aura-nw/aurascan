@@ -38,7 +38,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'Rank', desktopOnly: true },
     { matColumnDef: 'title', headerCellDef: 'Validator', desktopOnly: true },
-    { matColumnDef: 'power', headerCellDef: 'Voting Power', desktopOnly: true },
+    { matColumnDef: 'power', headerCellDef: 'Voting Power' },
     { matColumnDef: 'commission', headerCellDef: 'Commission' },
     { matColumnDef: 'participation', headerCellDef: 'Participation' },
     { matColumnDef: 'up_time', headerCellDef: 'Uptime' },
@@ -65,7 +65,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   validatorDetail = '';
   statusValidator = STATUS_VALIDATOR;
   typeValidator = STATUS_VALIDATOR.Active;
-  dataDelegate: DataDelegateDto;
+  dataDelegate: DataDelegateDto = {};
   dialogMode = DIALOG_STAKE_MODE;
   isOpenStaking = false;
   modalReference: any;
@@ -76,6 +76,16 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstUndelegate = [];
   numberCode = 0;
   arrBlocksMiss = [];
+  TABS = [
+    {
+      key: 3,
+      label: 'ACTIVE',
+    },
+    {
+      key: 2,
+      label: 'INACTIVE',
+    },
+  ];
 
   timerUnSub: Subscription;
   errorExceedAmount = false;
@@ -297,7 +307,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewPopupDetail(staticDataModal: any, address: string, dialogMode = '', isOpenStaking = false) {
+  viewPopupDetail(
+    staticDataModal: any,
+    address: string,
+    dialogMode = DIALOG_STAKE_MODE.Delegate,
+    isOpenStaking = false,
+  ) {
     this.currentValidatorDialog = address;
     this.isClaimRewardLoading = true;
     const view = async () => {
@@ -312,7 +327,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     };
     view();
     this.isOpenStaking = isOpenStaking;
-    this.dataDelegate.dialogMode = dialogMode;
+    this.dataDelegate = this.dataDelegate || {};
+    this.dataDelegate['dialogMode'] = dialogMode;
     this.isClaimRewardLoading = false;
   }
 
@@ -333,7 +349,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,
-          windowClass: 'modal-holder',
+          windowClass: 'modal-holder validator-modal',
         });
       },
       (error) => {},
@@ -341,15 +357,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getListRedelegate(operatorAddress): void {
-    let listDelegate = this.arrayDelegate?.map(a => a.validator_address);
-    let arrTemp =  this.lstValidator.filter(k => k.operator_address !== operatorAddress);
-    arrTemp.forEach((f)=>{
+    let listDelegate = this.arrayDelegate?.map((a) => a.validator_address);
+    let arrTemp = this.lstValidator.filter((k) => k.operator_address !== operatorAddress);
+    arrTemp.forEach((f) => {
       f['isStaking'] = 0;
-      if(listDelegate?.includes(f.operator_address)){
+      if (listDelegate?.includes(f.operator_address)) {
         f['isStaking'] = 1;
       }
-    })
-    
+    });
+
     let lstSort = arrTemp.sort((a, b) => {
       return b.isStaking - a.isStaking || b.power - a.power;
     });
@@ -371,7 +387,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
-              delegatableVesting: dataWallet?.data?.delegatable_vesting,
+              delegableVesting: dataWallet?.data?.delegable_vesting,
               delegatedToken: dataWallet?.data?.delegated,
               availableToken: dataWallet?.data?.available,
               stakingToken: dataWallet?.data?.stake_reward,
@@ -407,11 +423,11 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           if (listUnDelegator) {
             this.lstUndelegate = [];
             const now = new Date();
-            listUnDelegator.data.forEach((data) => {
+            listUnDelegator.data.unbonding_responses.forEach((data) => {
               data.entries.forEach((f) => {
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
-                f.validator_name = data.validator_name;
+                f.validator_name = this.dataSource.data.find((i) => i.operator_address === f.validator_address).title;
                 let timeConvert = new Date(f.completion_time);
                 if (now < timeConvert) {
                   this.lstUndelegate.push(f);
@@ -453,7 +469,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (this.dataDelegate.dialogMode === this.dialogMode.Delegate) {
       amountCheck = (
         +this.dataDelegate.availableToken +
-          +this.dataDelegate.delegatableVesting -
+          +this.dataDelegate.delegableVesting -
           (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT || 0
       ).toFixed(6);
     } else if (
@@ -495,7 +511,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
+        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
 
@@ -548,7 +564,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
+        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeUnStaking();
@@ -576,7 +592,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           chainId: this.walletService.chainId,
         });
 
-        this.modalReference.close();
+        // this.modalReference.close();
         this.checkStatusExecuteBlock(hash, error, '');
       };
       executeReStaking();
@@ -610,7 +626,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       //check amout for high fee
       let amountCheck = (
         Number(this.dataDelegate.availableToken) +
-        Number(this.dataDelegate.delegatableVesting) -
+        Number(this.dataDelegate.delegableVesting) -
         (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
       ).toFixed(6);
       if (Number(amountCheck) < 0) {
@@ -635,14 +651,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (error != 'Request rejected') {
         this.toastr.error(error);
       }
+      this.resetData();
     } else {
       setTimeout(() => {
         this.checkDetailTx(hash, msg);
+        this.resetData();
       }, TIME_OUT_CALL_API);
     }
-    this.isHandleStake = false;
-    this.isLoading = false;
-    this.isClaimRewardLoading = false;
   }
 
   async checkDetailTx(id, message) {
@@ -665,5 +680,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
+  }
+
+  resetData() {
+    this.isLoading = false;
+    this.modalReference?.close();
+    this.isHandleStake = false;
+    this.isClaimRewardLoading = false;
   }
 }

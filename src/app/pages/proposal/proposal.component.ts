@@ -1,12 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe, ViewportScroller } from '@angular/common';
+import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from '../../../app/global/global';
-import { DATEFORMAT } from '../../core/constants/common.constant';
 import {
   MESSAGE_WARNING,
   PROPOSAL_STATUS,
@@ -45,10 +46,16 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  proposalData: any;
   length: number;
   pageIndex = 0;
   lastedList: IProposal[] = [];
 
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 10,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   proposalVotes: {
     proId: number;
     vote: string | null;
@@ -65,13 +72,13 @@ export class ProposalComponent implements OnInit {
   constructor(
     private proposalService: ProposalService,
     public dialog: MatDialog,
-    private datePipe: DatePipe,
     public global: Globals,
     public walletService: WalletService,
     private environmentService: EnvironmentService,
     private dlgService: DialogService,
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
+    public commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -87,18 +94,17 @@ export class ProposalComponent implements OnInit {
   getListProposal(): void {
     const addr = this.walletService.wallet?.bech32Address || null;
     this.proposalService.getProposalList(addr).subscribe((res) => {
+      this.proposalData = res;
       if (res?.data) {
         this.dataSource = new MatTableDataSource<any>(res.data);
         this.length = res.data.length;
         this.lastedList = [...res.data];
         this.lastedList.forEach((pro, index) => {
-          pro.pro_voting_start_time = this.datePipe.transform(pro.pro_voting_start_time, DATEFORMAT.DATETIME_UTC);
-          pro.pro_voting_end_time = this.datePipe.transform(pro.pro_voting_end_time, DATEFORMAT.DATETIME_UTC);
-          pro.pro_submit_time = this.datePipe.transform(pro.pro_submit_time, DATEFORMAT.DATETIME_UTC);
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
           if (
-            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
+            index < 4 &&
+            pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD &&
             pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
           ) {
             this.getVoteResult(pro.pro_id, index);
@@ -250,11 +256,32 @@ export class ProposalComponent implements OnInit {
       }
       const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
       let totalVote = +yes + +no + +no_with_veto + +abstain;
-
       this.lastedList[index].pro_votes_yes = (+yes * 100) / totalVote;
       this.lastedList[index].pro_votes_no = (+no * 100) / totalVote;
       this.lastedList[index].pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
       this.lastedList[index].pro_votes_abstain = (+abstain * 100) / totalVote;
     });
+  }
+
+  paginatorEmit(e: MatPaginator): void {
+    // if (this.dataSource.paginator) {
+    //   e.page.next({
+    //     length: this.dataSource.paginator.length,
+    //     pageIndex: 0,
+    //     pageSize: this.dataSource.paginator.pageSize,
+    //     previousPageIndex: this.dataSource.paginator.pageIndex,
+    //   });
+    //   this.dataSource.paginator = e;
+    //   // this.pageData.pageIndex = e.pageIndex;
+    // } else this.dataSource.paginator = e;
+  }
+
+  pageEvent(e: PageEvent): void {
+    // const { length, pageIndex, pageSize } = e;
+    // const next = length <= (pageIndex + 2) * pageSize;
+    // if (next && this.nextKey) {
+    //   this.getTxsFromHoroscope(this.nextKey);
+    // }
+    // this.pageData.pageIndex = e.pageIndex;
   }
 }

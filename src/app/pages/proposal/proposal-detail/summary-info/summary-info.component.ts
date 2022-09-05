@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
-import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import {
   MESSAGE_WARNING,
   PROPOSAL_STATUS,
@@ -186,10 +185,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
     return {
       ...data,
-      pro_voting_start_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
-      pro_voting_end_time: this.datePipe.transform(data.pro_voting_end_time, DATEFORMAT.DATETIME_UTC),
-      pro_submit_time: this.datePipe.transform(data.pro_submit_time, DATEFORMAT.DATETIME_UTC),
-      pro_deposit_end_time: this.datePipe.transform(data.pro_deposit_end_time, DATEFORMAT.DATETIME_UTC),
       initial_deposit: balanceOf(data.initial_deposit),
       pro_total_deposits: balanceOf(data.pro_total_deposits),
       pro_type: data.pro_type.split('.').pop(),
@@ -333,15 +328,17 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  getVotedProposal() {
+  async getVotedProposal() {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
-      this.proposalService.getVotes(this.proposalId, addr, 10, 0).subscribe((res) => {
-        this.proposalVotes = this.voteConstant.find((s) => s.key === res.data?.transactions[0]?.tx?.body?.messages[0]?.option)?.voteOption;
-        this.voteValue = {
-          keyVote: res.data?.transactions[0]?.tx?.body?.messages[0]?.option,
-        };
-      });
+      const res = await this.proposalService.getVotes(this.proposalId, addr, 10, 0);
+
+      this.proposalVotes = this.voteConstant.find(
+        (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+      )?.voteOption;
+      this.voteValue = {
+        keyVote: res.data?.txs[0]?.body?.messages[0]?.option,
+      };
     } else {
       this.proposalVotes = null;
     }

@@ -76,6 +76,12 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.paginator.emit(this._paginator);
+
+    this._paginator.page.subscribe((next) => {
+      if (next.pageIndex === 0 && next.previousPageIndex !== 0) {
+        this.selectPage(0);
+      }
+    });
   }
 
   prevPage(): void {
@@ -89,12 +95,16 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   selectPage(pageIndex): void {
+    const prevPageIndex = Number(this._paginator.pageIndex);
+
     this._paginator.pageIndex = pageIndex;
     this._paginator.page.next({
       length: this._paginator.length,
       pageIndex: this._paginator.pageIndex,
       pageSize: this._paginator.pageSize,
+      previousPageIndex: prevPageIndex,
     });
+
     this.current.pageIndex = pageIndex;
     this.changePage();
 
@@ -102,6 +112,7 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
       length: this._paginator.length,
       pageIndex: this._paginator.pageIndex,
       pageSize: this._paginator.pageSize,
+      previousPageIndex: prevPageIndex,
     });
   }
 
@@ -151,7 +162,7 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
-  
+
   resetPageMax() {
     this.PAGE.max = 5;
     this.PAGE.avgIdx = 2;

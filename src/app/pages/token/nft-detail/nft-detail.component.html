@@ -1,12 +1,12 @@
-<ng-container *ngIf="nftDetail; else noValues">
+<ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
   <div class="text--white">
     <div class="row p-xl-3">
       <!-- Desktop nft-image -->
       <div class="col-4 nft-img__contain d-none d-xl-block">
         <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
           <!-- !important:
-        Default image if this ntf-detail has not image -->
-          <img *ngIf="true" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" />
+          Default image if this ntf-detail has not image -->
+          <img *ngIf="true" [src]="nftDetail?.image || defaultImgToken" />
         </div>
       </div>
       <!-- Mobile nft-image -->
@@ -16,10 +16,10 @@
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
               <!-- !important:
             Default image if this ntf-detail has not image -->
-              <img *ngIf="true" [src]="nftDetail?.image || defaultLogoToken" />
+              <img *ngIf="true" [src]="nftDetail?.image || defaultImgToken" />
             </div>
           </div>
-          <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center">
+          <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
             <h1 class="fw-semibold title-small mb-0 text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
             <div class="mb-0">
               <img
@@ -27,7 +27,7 @@
                 width="24px"
                 height="24px"
                 class="mr-1 object-fit--none" />
-              <a class="text--green" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+              <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
                 nftDetail?.name
               }}</a>
             </div>
@@ -38,13 +38,13 @@
       <div class="col-12 col-xl-8 pl-xl-7">
         <div class="d-none d-xl-block">
           <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
-          <div class="mb-6">
+          <div class="my-5">
             <img
-              [src]="'assets/images/icons/token-logo.png' | imageS3"
+              [src]="nftDetail?.image || defaultLogoToken"
               width="24px"
               height="24px"
               class="mr-1 object-fit--none" />
-            <a class="text--green" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+            <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
               nftDetail?.name
             }}</a>
           </div>
@@ -53,30 +53,30 @@
         <div class="d-none d-lg-block card py-3 px-6">
           <div class="d-flex">
             <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="body text--light-gray mb-1">Min. Price</div>
-              <div class="title-small">
+              <div class="body-01 text--gray-5 mb-1">Min. Price</div>
+              <div class="h3 mb-0 text--white">
                 <span class="fw-500">- {{ denom }}</span>
-                <span class="text--light-gray ml-2">(-)</span>
+                <span class="text--gray-5 ml-2">(-)</span>
               </div>
             </div>
             <div class="flex-shrink-0 flex-grow-1 w-auto">
               <div class="divider divider-vertical"></div>
             </div>
             <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="body text--light-gray mb-1">Last Sale (Item)</div>
-              <div class="title-small">
+              <div class="body-01 text--gray-5 mb-1">Last Sale (Item)</div>
+              <div class="h3 mb-0 text--white">
                 <span class="fw-500">N/A</span>
-                <!--              <span class="text&#45;&#45;light-gray ml-2">($32.42)</span>-->
+                <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
               </div>
             </div>
             <div class="flex-shrink-0 flex-grow-1 w-auto">
               <div class="divider divider-vertical"></div>
             </div>
             <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="body text--light-gray mb-1">Last Sale (Contract)</div>
-              <div class="title-small">
+              <div class="body-01 text--gray-5 mb-1">Last Sale (Contract)</div>
+              <div class="h3 mb-0 text--white">
                 <span class="fw-500">- {{ denom }}</span>
-                <span class="text--light-gray ml-2">(-)</span>
+                <span class="text--gray-5 ml-2">(-)</span>
               </div>
             </div>
           </div>
@@ -84,41 +84,39 @@
         <!-- Mobile card info -->
         <div class="d-lg-none">
           <div class="card px-6 py-3 mb-4">
-            <div class="body text--light-gray mb-1">Min. Price</div>
-            <div class="title-small">
+            <div class="body-02 text--gray-5 mb-1">Min. Price</div>
+            <div class="h3 mb-0 text--white">
               <span class="fw-500">- {{ denom }}</span>
-              <span class="text--light-gray ml-2">(-)</span>
+              <span class="text--gray-5 ml-2">(-)</span>
             </div>
           </div>
           <div class="card px-6 py-3 mb-4">
-            <div class="body text--light-gray mb-1">Last Sale (Item)</div>
-            <div class="title-small">
+            <div class="body-02 text--gray-5 mb-1">Last Sale (Item)</div>
+            <div class="h3 mb-0 text--white">
               <span class="fw-500">N/A</span>
-              <!--              <span class="text&#45;&#45;light-gray ml-2">($32.42)</span>-->
+              <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
             </div>
           </div>
           <div class="card px-6 py-3 mb-4">
-            <div class="body text--light-gray mb-1">Last Sale (Contract)</div>
-            <div class="title-small">
+            <div class="body-02 text--gray-5 mb-1">Last Sale (Contract)</div>
+            <div class="h3 mb-0 text--white">
               <span class="fw-500">- {{ denom }}</span>
-              <span class="text--light-gray ml-2">(-)</span>
+              <span class="text--gray-5 ml-2">(-)</span>
             </div>
           </div>
         </div>
         <!-- End card info -->
         <div class="card card__ntf-detail mb-0">
-          <div class="body card__ntf-detail-item" id="popupCopy">Details</div>
-          <div class="card__ntf-detail-item">
-            <div class="label-detail">Owner:</div>
+          <h4 class="mb-0 text--white card__ntf-detail-item" id="popupCopy">Details</h4>
+          <div class="card__ntf-detail-item body-02">
+            <div class="label-detail text--gray-5">Owner:</div>
             <div class="d-flex align-items-center position-relative">
-              <a class="text--green g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
-                {{ nftDetail?.owner }}</a
-              >
+              <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
+                {{ nftDetail?.owner }}
+              </a>
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                 class="ml-2 cursor-pointer btn-copy"
-                width="16px"
-                height="16px"
                 alt=""
                 matTooltip="Copied!"
                 #owner="matTooltip"
@@ -127,24 +125,20 @@
                 (click)="copyData(nftDetail?.owner); owner.toggle()" />
             </div>
           </div>
-          <div class="card__ntf-detail-item">
-            <div class="label-detail">Contract Address:</div>
+          <div class="card__ntf-detail-item body-02">
+            <div class="label-detail text--gray-5">Contract Address:</div>
             <div class="d-flex align-items-center position-relative">
               <img
                 *ngIf="contractType !== contractVerifyType.Unverifed"
                 [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                 class="mr-2"
-                alt="contract_verification"
-                width="16px"
-                height="16px" />
-              <a class="text--green g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
+                alt="contract_verification"/>
+              <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
                 {{ nftDetail?.contract_address }}</a
               >
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
                 class="ml-2 cursor-pointer btn-copy"
-                width="16px"
-                height="16px"
                 alt=""
                 matTooltip="Copied!"
                 #address="matTooltip"
@@ -153,17 +147,15 @@
                 (click)="copyData(nftDetail?.contract_address); address.toggle()" />
             </div>
           </div>
-          <div class="card__ntf-detail-item">
-            <div class="label-detail">Creator:</div>
+          <div class="card__ntf-detail-item body-02">
+            <div class="label-detail text--gray-5">Creator:</div>
             <div class="d-flex align-items-center">
-              <a class="text--green g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
+              <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
                 {{ nftDetail?.creator }}</a
               >
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="ml-2 cursor-pointer"
-                width="16px"
-                height="16px"
+                class="ml-2 cursor-pointer btn-copy"
                 alt=""
                 matTooltip="Copied!"
                 #creator="matTooltip"
@@ -172,15 +164,13 @@
                 (click)="copyData(nftDetail?.creator); creator.toggle()" />
             </div>
           </div>
-          <div class="card__ntf-detail-item">
-            <div class="label-detail">Token ID:</div>
+          <div class="card__ntf-detail-item body-02">
+            <div class="label-detail text--gray-5">Token ID:</div>
             <div class="d-flex align-items-center">
-              <span>{{ nftDetail?.token_id }}</span>
+              <span class="text--gray-1 fw-normal-mob">{{ nftDetail?.token_id }}</span>
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="ml-2 cursor-pointer"
-                width="16px"
-                height="16px"
+                class="ml-2 cursor-pointer btn-copy"
                 alt=""
                 matTooltip="Copied!"
                 #tokenId="matTooltip"
@@ -189,21 +179,21 @@
                 (click)="copyData(nftDetail?.token_id); tokenId.toggle()" />
             </div>
           </div>
-          <div class="card__ntf-detail-item">
-            <div class="label-detail">Token Standard:</div>
-            <div>CW-721</div>
+          <div class="card__ntf-detail-item body-02">
+            <div class="label-detail text--gray-5">Token Standard:</div>
+            <div class="text--gray-1 fw-normal-mob">CW-721</div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="card card-body mt-4 mt-lg-3">
-    <span class="body text--white mb-2">Item Activity</span>
-    <div class="divider divider-horizontal"></div>
-    <div class="text--light-gray small-body mt-3">
+    <h2 class="text--white mb-0">Item Activity</h2>
+    <div class="divider divider-horizontal d-none d-lg-block mt-2"></div>
+    <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
       A total of {{ pageData?.length }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
-    <div class="table-responsive aura-table-contain">
+    <div class="table-responsive aura-table-contain mt-2 mt-lg-3">
       <table mat-table [dataSource]="dataSource" class="aura-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
@@ -227,7 +217,7 @@
                   </ng-template>
                 </ng-container>
                 <ng-container *ngSwitchCase="'tx_hash'">
-                  <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                  <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                 </ng-container>
@@ -241,7 +231,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'from_address'">
                   <a
-                    class="text--green content-transfer"
+                    class="text--primary content-transfer"
                     [routerLink]="['/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
@@ -258,7 +248,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
                   <a
-                    class="text--green"
+                    class="text--primary"
                     [routerLink]="['/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
@@ -287,13 +277,13 @@
           </td>
         </tr>
       </table>
-      <app-paginator
-        [length]="pageData?.length"
-        [pageSize]="pageData?.pageSize"
-        (paginator)="paginatorEmit($event)"
-        (pageEvent)="handlePageEvent($event)">
-      </app-paginator>
     </div>
+    <app-paginator
+            [length]="pageData?.length"
+            [pageSize]="pageData?.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="handlePageEvent($event)">
+    </app-paginator>
     <ng-template #noValues> </ng-template>
   </div>
 </ng-container>

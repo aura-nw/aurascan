@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { Schema, Validator } from 'jsonschema';
+import * as _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
+import { WalletService } from 'src/app/core/services/wallet.service';
 @Component({
   selector: 'app-read-contract',
   templateUrl: './read-contract.component.html',
@@ -11,23 +14,27 @@ export class ReadContractComponent implements OnInit {
   @Input() contractDetailData: any;
 
   isExpand = false;
-  jsonReadContract: any;
-  dataResponse = null;
-  errorInput = false;
-  isLoading = false;
-  currentFrom = null;
-  objQuery = [];
 
   chainInfo = this.environmentService.configValue.chain_info;
+
+  jsValidator = new Validator();
+
+  root: any[];
 
   constructor(public walletService: WalletService, private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
     try {
-      this.jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
+      const jsonReadContract = JSON.parse(this.contractDetailData?.query_msg_schema);
+
+      if (jsonReadContract) {
+        this.jsValidator.addSchema(jsonReadContract);
+
+        if (this.jsValidator.schemas) {
+          this.root = this.makeSchemaInput(this.jsValidator.schemas['/'].oneOf);
+        }
+      }
     } catch {}
-    //auto execute query without params
-    this.handleQueryContract();
   }
 
   expandMenu(closeAll = false): void {
@@ -50,15 +57,129 @@ export class ReadContractComponent implements OnInit {
   }
 
   reloadData() {
-    for (let i = 0; i < document.getElementsByClassName('form-check-input').length; i++) {
-      (<HTMLInputElement>document.getElementsByClassName('form-check-input')[i]).value = '';
-    }
     this.expandMenu(true);
-    this.dataResponse = null;
-    this.errorInput = false;
+    this.clearAllError(true);
+    this.isExpand = false;
   }
 
-  querySmartContract(name: string, currentFrom: number) {
+  clearAllError(all = false) {
+    this.root?.forEach((msg) => {
+      this.resetError(msg, all);
+      if (msg.fieldList && msg.fieldList.length && all) msg.dataResponse = '';
+    });
+  }
+
+  query(query, msg) {
+    msg.isLoading = true;
+    SigningCosmWasmClient.connect(this.chainInfo.rpc)
+      .then((client) => client.queryContractSmart(this.contractDetailData.contract_address, query))
+      .then((config) => {
+        if (config) {
+          msg.dataResponse = config;
+        }
+        msg.isLoading = false;
+      })
+      .catch((err) => {
+        msg.dataResponse = 'No Data';
+        msg.isLoading = false;
+      });
+  }
+
+  handleQueryContract(query): void {
+    this.clearAllError();
+    if (query) {
+      const { fieldList, fieldName } = query;
+
+      const msgQuery = {
+        [fieldName]: {},
+      };
+
+      fieldList.forEach((item) => {
+        const isError = item.isRequired && !item.value;
+
+        if (!isError) {
+          item.value &&
+            _.assign(msgQuery[fieldName], {
+              [item.fieldName]: parseValue(item),
+            });
+          return;
+        }
+
+        _.assign(item, { isError });
+        msgQuery[fieldName] = null;
+      });
+
+      if (msgQuery[fieldName]) {
+        this.query(msgQuery, query);
+      }
+    }
+  }
+
+  getProperties(schema: Schema) {
+    const fieldName = _.first(Object.keys(schema.properties));
+
+    const { $ref: ref } = schema.properties[fieldName];
+
+    let props = ref ? getRef(this.jsValidator.schemas, ref) : schema.properties[fieldName];
+
+    const childProps = props?.properties;
+
+    let fieldList = [];
+
+    if (childProps) {
+      fieldList = Object.keys(childProps).map((e) => ({
+        fieldName: e,
+        isRequired: (props.required as string[])?.includes(e),
+        ...getType(this.jsValidator.schemas, childProps[e]),
+      }));
+    }
+
+    return {
+      resType: schema.type,
+      fieldName,
+      properties: props,
+      fieldList,
+    };
+  }
+
+  makeSchemaInput(schemas: Schema[]): any[] {
+    return schemas
+      .map((msg) => {
+        try {
+          const properties = this.getProperties(msg);
+          if (properties.fieldList && !properties.fieldList.length) {
+            this.handleQueryContract(properties);
+          }
+
+          return properties;
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter((list) => list && list?.fieldName !== 'download_logo'); // ignore case download_logo - CW20
+  }
+
+  resetError(msg, all = false) {
+    if (msg) {
+      const { fieldList } = msg;
+      fieldList.forEach((item) => {
+        _.assign(
+          item,
+          all
+            ? {
+                isError: false,
+                value: '',
+              }
+            : {
+                isError: false,
+              },
+        );
+      });
+    }
+  }
+
+  /*
+    querySmartContract(name: string, currentFrom: number) {
     this.currentFrom = currentFrom;
     let queryData = {};
     this.dataResponse = null;
@@ -87,7 +208,7 @@ export class ReadContractComponent implements OnInit {
         }
 
         //convert number if integer field
-        if (type === 'integer' || type[0] === 'integer' && element?.value) {
+        if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
           objReadContract[contract] = Number(element?.value);
         }
       });
@@ -105,6 +226,9 @@ export class ReadContractComponent implements OnInit {
     this.executeQuery(queryData);
   }
 
+  resetCheck() {
+    this.errorInput = false;
+  }
   async executeQuery(queryData, saveResponse = false) {
     const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
     try {
@@ -124,24 +248,9 @@ export class ReadContractComponent implements OnInit {
     this.isLoading = false;
   }
 
-  handleQueryContract(): void {
-    this.jsonReadContract?.oneOf.forEach((contract) => {
-      let key = Object.keys(contract.properties)[0];
-      let queryData = {};
-      if (!contract.properties[key].hasOwnProperty('properties')) {
-        queryData = {
-          [key]: {},
-        };
-        this.executeQuery(queryData, true);
-      }
-    });
-  }
-
-  resetCheck() {
-    this.errorInput = false;
-  }
-
   objectKeys(obj) {
     return obj ? Object.keys(obj) : [];
   }
+
+  */
 }

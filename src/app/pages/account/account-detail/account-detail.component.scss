@@ -1,6 +1,6 @@
 section.account-detail {
   .qr-code {
-    border-right: 1px solid #363843;
+    border-right: 1px solid var(--aura-gray-9);
     vertical-align: middle;
   }
   form.search-form {
@@ -18,26 +18,9 @@ section.account-detail {
       @media (min-width: 1440px) {
         width: 405px;
       }
-      &::placeholder {
-        color: var(--aura-neutrals-4);
-      }
     }
-  }
-  .asset-type .select-input-field {
-    background-color: var(--aura-bg-form);
-    width: 100%;
-    min-width: 182px;
-    @media (min-width: 992px) {
-      width: 186px;
-    }
-  }
-  .list-token {
-    width: 150px;
   }
   @media (max-width: 991.98px) {
-    .mob-price {
-      color: var(--aura-neutrals-4);
-    }
     .row-eq-height {
       flex-direction: column-reverse;
     }
@@ -55,26 +38,24 @@ section.account-detail {
       border-radius: 50%;
     }
   }
-  .article-1 {
-    @media (min-width: 1440px) {
-      min-height: 675px;
-    }
-  }
   .article-2 {
     min-height: 500px;
   }
 }
 .chart-legend-item {
-  border-bottom: 1px solid var(--aura-dark-gray);
+  border-bottom: 1px solid var(--aura-gray-9);
   &:last-of-type {
     border-bottom: none;
   }
 
   .item-color-balance {
-    width: 24px;
-    height: 24px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    margin: 0.2rem 1rem 0 0;
+    @media (min-width: 992px) {
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 .button {
@@ -144,4 +125,13 @@ section.account-detail {
 }
 .account__tab-item {
   min-width: 160px;
+}
+
+.aura-table.transaction-table th.mat-header-cell {
+  min-width: 150px;
+}
+.aura-table.transaction-table th.mat-header-cell:nth-child(1),
+.aura-table.transaction-table th.mat-header-cell:nth-child(2),
+.aura-table.transaction-table th.mat-header-cell:nth-child(7) {
+  min-width: 200px;
 }

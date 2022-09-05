@@ -22,66 +22,6 @@
         padding: 0;
     }
 
-    .navbar-nav {
-        
-        .nav-link {
-            font-size: 14.4px;
-            position: relative;
-            padding: 1rem 1.3rem;
-            color: $menu-item-color;
-            font-weight: $font-weight-medium;
-            i{
-                font-size: 15px;
-            }
-            svg {
-                height: 16px;
-                width: 16px;
-                color: $menu-item-color;
-                fill: rgba($menu-item-color,0.2);
-                margin-right: 7px;
-                margin-top: -3px;
-            }
-            &:focus, &:hover{
-                color: $menu-item-active-color;
-                background-color: transparent;
-                svg {
-                    color: $menu-item-active-color;
-                    fill: rgba($menu-item-active-color,0.2);
-                }
-            }
-        }
-        
-        .dropdown-item{
-            color: $menu-item-color;
-            &.active, &:hover{
-                color: $menu-item-active-color;
-            }
-        }
-        
-        .nav-item{
-            .nav-link.active{
-                color: $menu-item-active-color;
-                svg {
-                    color: $menu-item-active-color;
-                    fill: rgba($menu-item-active-color,0.2);
-                }
-            }
-        }
-
-        .dropdown{
-            &.active{
-              >a {
-                    color: $menu-item-active-color;
-                    background-color: transparent;
-                    svg {
-                        color: $menu-item-active-color;
-                        fill: rgba($menu-item-active-color,0.2);
-                    }
-                }
-            }
-        }
-    }
-
     .menu-title{
         padding: 12px 24px !important;
         @media (max-width: 991.98px) {
@@ -203,19 +143,6 @@
 }
 
 @include media-breakpoint-down(lg) {
-
-    .navbar-brand-box{
-        .logo-dark {
-            display: $display-block;
-            span.logo-sm{
-                display: $display-block;
-            }
-        }
-    
-        .logo-light {
-            display: $display-none;
-        }
-    }
     
     .topnav {
         max-height: 360px;
@@ -269,14 +196,6 @@ body[data-layout="horizontal"][data-topbar="colored"] {
     #page-topbar{
         background-color: $primary;
         box-shadow: none;
-    }
-
-    .logo-dark {
-        display: none;
-    }
-
-    .logo-light {
-        display: flex;
     }
 
     .app-search {
@@ -344,7 +263,7 @@ body[data-layout="horizontal"][data-topbar="colored"] {
 
 body[data-layout-mode="dark"] {
     .topnav {
-        background-color: var(--aura-dark-gray);
+        background-color: var(--aura-gray-10);
 
         .navbar-nav{
             .nav-link{

@@ -1,43 +1,61 @@
 @import "../spacer";
 :root {
   /* Single Basic color */
-  --aura-light-gray: #777E91;
-  --aura-dark-gray: #38383D;
   --aura-white: #FFFFFF;
-  --aura-white-2: #FCFCFD;
-  --aura-white-3: #e3e3e3;
-  --aura-black: #141416;
-  --aura-black-1: #444444;
-  --aura-green: #5EE6D0;
-  --aura-bg-form: #1c1c1f;
-  --aura-greyscale-1: #E6E7E8;
-  --aura-greyscale-4: #666769;
-  --aura-bg-contract: #20262b;
-  --aura-contract: #E6E7E8;
-  --aura-select-label: #121212;
-  --aura-dark-blue: #00AAFF;
+  --aura-black: #131419;
   /* Level Basic color */
-  --aura-primary-4: #45B36B;
-  --aura-neutrals-2: #23262F;
-  --aura-neutrals-3: #353945;
-  --aura-neutrals-4: #777E90;
-  --aura-neutrals-6: #E6E8EC;
-  --aura-neutrals-8: #52529b;
+  --aura-gray-light: #F2F3F5;
+  --aura-gray-1: #E5E7EA;
+  --aura-gray-2: #CCD0D5;
+  --aura-gray-3: #B4B8C0;
+  --aura-gray-4: #9DA1AC;
+  --aura-gray-5: #868A97;
+  --aura-gray-6: #717582;
+  --aura-gray-7: #5C606D;
+  --aura-gray-8: #494C58;
+  --aura-gray-9: #363843;
+  --aura-gray-10: #24262E;
+
+  --aura-aqua-1: #A4F1E4;
+  --aura-aqua-2: #82ECDA;
+  --aura-aqua-3: #5EE6D0;
+  --aura-aqua-4: #38E0C4;
+  --aura-aqua-5: #1CB69C;
+
+  --aura-yellow-1: #FEDCA2;
+  --aura-yellow-2: #FFCD76;
+  --aura-yellow-3: #F5B73C;
+  --aura-yellow-4: #BC872A;
+  --aura-yellow-5: #89662A;
+
+  --aura-blue-1: #B0E2FF;
+  --aura-blue-2: #7DC8FA;
+  --aura-blue-3: #22AEF5;
+  --aura-blue-4: #0F82C5;
+  --aura-blue-5: #18699E;
+
+  --aura-red-1: #FAB6B4;
+  --aura-red-2: #FA8684;
+  --aura-red-3: #D5625E;
+  --aura-red-4: #AF4F4C;
+  --aura-red-5: #904242;
+
+  --aura-green-1: #C5E5D3;
+  --aura-green-2: #9EDBB8;
+  --aura-green-3: #67C091;
+  --aura-green-4: #49996F;
+  --aura-green-5: #397856;
   /* Custom Aura theme color */
-  --aura-green-disabled: #5C6663;
   --aura-primary: #5EE6D0;
-  --aura-danger: #E65E5E;
-  --aura-danger-background: #e65e5e33;
-  --aura-info: #5E84E6;
-  --aura-secondary: #E3E65E;
-  --aura-active: #5EE69D;
-  --aura-active-background: #5ee69d33;
-  --aura-voted: #ABC3FF;
-  /* Custom Aura mobile color */
-  --aura-address-color: #D1D5DB;
+  --aura-secondary: #9DA8FF;
+  --aura-danger: #D5625E;
+  --aura-info: #7DC8FA;
+  --aura-warning: #FFCD76;
+  --aura-bg-form: #131419;
 
   /* Gradient color */
-  --aura-gradient-simple: linear-gradient(108.46deg, #5EE6D0 12.51%, #BFC6FF 51.13%, #FFBA69 87.49%);
-  --aura-gradient-bw: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.64) 50.17%, #000000 100%);
+  --aura-gradient-general: linear-gradient(108.46deg, #5EE6D0 12.51%, #BFC6FF 51.13%, #FFBA69 87.49%);
+  --aura-gradient-artaverse: linear-gradient(108.46deg, #00FFFF 12.51%, #A070FF 51.13%, #FFB35C 87.49%);
+  --aura-gradient-planet: linear-gradient(180deg, #3573D0 0%, #CC2ACF 100%);
   @include spacer-variables();
 }

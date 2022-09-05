@@ -37,7 +37,7 @@ export class TokenDetailComponent implements OnInit {
 
     this.tokenService.getTokenCW20Detail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.tokenDetail = res.data;
-      if (this.tokenDetail.type === ContractRegisterType.CW721) {
+      if (this.tokenDetail?.type === ContractRegisterType.CW721) {
         this.tokenDetail.isNFTContract = true;
       }
     });

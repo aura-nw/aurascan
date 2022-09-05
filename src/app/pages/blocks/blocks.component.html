@@ -16,19 +16,19 @@
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <a
                         *ngSwitchCase="'height'"
-                        class="text--green cursor-pointer block-link"
+                        class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data[template.matColumnDef]]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <a
                         *ngSwitchCase="'block_hash'"
-                        class="text--green cursor-pointer block-link"
+                        class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks', data['height']]">
                         {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                       <a
                         *ngSwitchCase="'proposer'"
-                        class="text-clamp text--green cursor-pointer validator-link"
+                        class="text-clamp text--primary cursor-pointer validator-link"
                         [routerLink]="['/validators', data['operator_address']]">
                         {{ data[template.matColumnDef] }}
                       </a>
@@ -55,11 +55,19 @@
           <app-card-mob-simple
             *ngFor="let data of dataBlock"
             [link]="'/blocks/' + data.height"
-            [title]="{ size: 'md', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0] }"
+            [title]="{ size: 'md', titleClass: 'h6-mob', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0], subLabelClass: 'text--gray-1 h6-mob'}"
             [content]="[
-              { label: 'Proposer', info: '<span class=text--green>' + data.proposer + '</span>' },
-              { label: 'Txs', info: data.num_txs.toString() },
-              { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+              { label: 'Proposer', info: '<span class=text--primary>' + data.proposer + '</span>' },
+              { label: 'Txs', class: 'body-01-mob text--gray-1', info: data.num_txs.toString() },
+              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
+                info:
+                  '<span>' +
+                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.timestamp | customDate: 'HH:mm:ss') +
+                  '</span>'
+              }
             ]"></app-card-mob-simple>
         </div>
       </div>

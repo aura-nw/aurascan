@@ -1,8 +1,11 @@
 .modal {
   .modal-dialog {
     max-width: 720px;
+    @media (max-width: 768px) {
+      margin: auto var(--spacer-8);
+    }
     @media (max-width: 414px) {
-      margin: 0.5rem auto;
+      margin: auto var(--spacer-4);
     }
 
     .modal-content {
@@ -11,19 +14,13 @@
       box-shadow: 0 10px 30px 20px rgba(0, 0, 0, 0.24);
       border-radius: 12px;
       color: var(--aura-white);
-      @media (max-width: 414px) {
+      @media (max-width: 575.98px) {
         overflow-y: auto;
-        //padding-bottom: 120px;
+        padding-bottom: 120px;
       }
       @media (min-width: 992px) {
         padding: var(--spacer-6);
       }
-      .box-staking.aura-form {
-        @media (max-width: 414px) {
-          min-height: 725px;
-        }
-      }
-
     }
   }
 

@@ -22,28 +22,30 @@
                       </div>
                       <a
                         *ngSwitchCase="'tx_hash'"
-                        class="text--green cursor-pointer hash-link"
+                        class="text--primary cursor-pointer hash-link"
                         [routerLink]="['/transaction', data['tx_hash']]">
                         {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                       </a>
                       <a
                         *ngSwitchCase="'height'"
-                        class="text--green cursor-pointer block-link"
+                        class="text--primary cursor-pointer block-link"
                         [routerLink]="['/blocks/id', data['blockId']]">
                         {{ data[template.matColumnDef] }}
                       </a>
-                      <div *ngSwitchCase="'type'" class="text--green">
-                        {{ data[template.matColumnDef] }}
+                      <div *ngSwitchCase="'type'" class="aura-status">
+                        <div class="status">
+                          {{ data[template.matColumnDef] }}
+                        </div>
                       </div>
                       <div *ngSwitchCase="'status'">
-                        <div [ngSwitch]="data[template.matColumnDef]">
-                          <div *ngSwitchCase="'Success'" class="text--primary">
+                        <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                          <div *ngSwitchCase="'Success'" class="text--green-3">
                             {{ data[template.matColumnDef] }}
                           </div>
-                          <div *ngSwitchCase="'Fail'" class="text--danger">
+                          <div *ngSwitchCase="'Fail'" class="text--red-3">
                             {{ data[template.matColumnDef] }}
                           </div>
-                          <div *ngSwitchCase="'Pending'" class="text--warning">
+                          <div *ngSwitchCase="'Pending'" class="text--yellow-3">
                             {{ data[template.matColumnDef] }}
                           </div>
                         </div>
@@ -88,6 +90,7 @@
             [link]="'/transaction/' + data.tx_hash"
             [title]="{
               size: 'md',
+              titleClass: 'h6-mob',
               label: data.tx_hash | cutStringPipe: 6:6,
               subLabelContent: data.type,
               subLabelClass: 'label__status',
@@ -96,6 +99,7 @@
             [content]="[
               {
                 label: 'Amount',
+                class: 'body-01-mob text--gray-1',
                 info:
                   data.amount > 0
                     ? (data.amount | number: global.formatNumberToken) +
@@ -104,8 +108,16 @@
                       '</span>'
                     : checkAmountValue(data.amount, data.tx_hash)
               },
-              { label: 'Fee', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
-              { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+              { label: 'Fee', class: 'body-01-mob text--gray-1', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
+              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
+                info:
+                  '<span>' +
+                  (data.timestamp | customDate: 'yyyy-MM-dd') +
+                  '</span>' +
+                  '<span>' +
+                  (data.timestamp | customDate: 'HH:mm:ss') +
+                  '</span>'
+              }
             ]"></app-card-mob-simple>
         </div>
       </div>

@@ -1,21 +1,24 @@
 <div class="row">
-  <div class="col-12">
-    <!-- <button class="button button-outline button-outline__in-card">
-      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />
-      <span class="ml-1">Token Holders Chart</span>
-    </button> -->
-  </div>
-  <div class="col-12 mt-3">
-    <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder"
-      >Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holders)</span
-    >
-    <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder"
-      >A total of {{ pageData?.length || 0 }} token holders</span
-    >
+<!--  <div class="col-12">-->
+<!--     <button class="button button-outline button-outline__in-card">-->
+<!--      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />-->
+<!--      <span class="ml-1">Token Holders Chart</span>-->
+<!--    </button>-->
+<!--  </div>-->
+  <div class="col-12 mb-lg-3">
+    <div class="body-03 caption-mob fw-normal-mob text--gray-5">
+        <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder">
+          Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holder{{pageData?.length > 1 ? 's' : ''}})
+        </span>
+      <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder">
+          A total of {{ pageData?.length || 0 }} token holder{{pageData?.length > 1 ? 's' : ''}}
+        </span>
+    </div>
   </div>
 </div>
+<div class="divider divider-horizontal my-4 d-lg-none"></div>
 <!-- Table -->
-<div class="row mt-4">
+<div class="row">
   <div class="col-12">
     <div *ngIf="loading" class="m-auto">
       <app-loading-sprint></app-loading-sprint>
@@ -25,9 +28,29 @@
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'id'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'owner'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'quantity'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase pl-8 pl-lg-0"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'percent_hold'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
               <ng-container *ngSwitchDefault>
                 <th mat-header-cell *matHeaderCellDef>
-                  <div [innerHTML]="template.headerCellDef | translate" class="text-capitalize"></div>
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
                 </th>
               </ng-container>
               <td mat-cell *matCellDef="let data; index as i">
@@ -40,15 +63,11 @@
                       <a
                         *ngIf="isNFTContract"
                         href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp"
-                        >{{ data[template.matColumnDef] }}</a
-                      >
+                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
                       <a
                         *ngIf="!isNFTContract"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp"
-                        >{{ data[template.matColumnDef] }}</a
-                      >
+                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
@@ -57,7 +76,7 @@
                       {{ data[template.matColumnDef] || 0 }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'quantity'">
-                      {{ data[template.matColumnDef] || 0 }}
+                      <div class="pl-8 pl-lg-0">{{ data[template.matColumnDef] || 0 }}</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'percent_hold'">
                       <span *ngIf="!isNFTContract"
@@ -71,7 +90,7 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="'value'">
-                      ${{ data['balance'] * data[template.matColumnDef] | number: global.formatNumber2Decimal }}
+                      ${{ data['balance'] * tokenDetail?.price || 0 | number: global.formatNumber2Decimal }}
                     </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] }}
@@ -90,13 +109,13 @@
             </td>
           </tr>
         </table>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
       </div>
+      <app-paginator
+              [length]="pageData.length"
+              [pageSize]="pageData.pageSize"
+              (paginator)="paginatorEmit($event)"
+              (pageEvent)="pageEvent($event)">
+      </app-paginator>
     </ng-container>
     <ng-template #noValues>
       <app-table-no-data *ngIf="!loading"></app-table-no-data>
