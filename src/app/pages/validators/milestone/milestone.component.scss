@@ -1,0 +1,25 @@
+.nft-item {
+  text-align: center;
+  padding: 0 16px;
+  &__img {
+    width: 93px;
+    height: 93px;
+    padding: 6px;
+    background: linear-gradient(136.06deg, #D9D9D9 -2.78%, #838383 100.93%);
+    border-radius: 17px;
+    &-contain {
+      background: linear-gradient(125.66deg, #C4C4C4 18.29%, rgba(255, 255, 255, 0.7) 81.75%);
+      border-radius: 17px;
+      padding: 7px;
+      img {
+        background: linear-gradient(122.11deg, rgba(5, 5, 5, 0.5) 30.25%, rgba(63, 58, 58, 0.25) 95.11%);
+        border: 2px solid #D9D9D9;
+        border-radius: 50%;
+        padding: 7px;
+      }
+    }
+  }
+  &__title {
+    max-width: 125px;
+  }
+}
