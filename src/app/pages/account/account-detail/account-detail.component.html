@@ -1,4 +1,6 @@
-<app-pagetitle title="Account Details"></app-pagetitle>
+<div class="mb-4 mb-md-6">
+  <app-pagetitle title="Account Details"></app-pagetitle>
+</div>
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
   <div class="card">
@@ -73,6 +75,8 @@
       <app-token-table [address]="currentAddress" (totalValue)="totalValueToken = $event"></app-token-table>
       <!-- NFT -->
       <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
+      <!-- Soulbound Tokens -->
+      <app-soulbound-token></app-soulbound-token>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === tabsData.Transactions">

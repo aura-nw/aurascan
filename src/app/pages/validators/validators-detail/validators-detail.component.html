@@ -1,5 +1,9 @@
-<app-pagetitle title="Validator Details" [displayInfo]="true"></app-pagetitle>
+<div class="d-flex align-items-center mb-4 mb-md-6">
+  <app-pagetitle title="Validator Details" [displayInfo]="true" class="flex-grow-1"></app-pagetitle>
+  <button class="button button-pill button-flat button--lg ml-6 fw-semibold">Delegate</button>
+</div>
 <section *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <!-- Summary info -->
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob pb-0">
       <div class="d-flex align-items-center">
@@ -148,7 +152,9 @@
   <div class="card py-10" *ngIf="!currentValidatorDetail">
     <app-loading-sprint></app-loading-sprint>
   </div>
-
+  <!-- Aura Marking Milestone -->
+  <app-milestone></app-milestone>
+  <!-- Proposed Blocks + Uptime -->
   <div class="row">
     <div class="col-xl-6">
       <div class="card text--white">
@@ -289,7 +295,7 @@
       </div>
     </div>
   </div>
-
+  <!-- Delegators + Power Events -->
   <div class="row mt-1">
     <div class="col-xl-6">
       <div class="card text--white">
