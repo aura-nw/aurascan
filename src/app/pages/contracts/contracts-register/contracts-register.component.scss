@@ -1,27 +1,9 @@
-.aura-table-contain {
-  tr {
-    height: 60px;
-  }
-}
-
-.btn-register {
-  width: 205px;
-  span {
-    letter-spacing: 0 !important;
-  }
-  @media (max-width: 414px) {
-    width: 100%;
-  }
-}
-
 .search-form {
   min-width: 350px;
   &.single-input-field {
     .input-group {
       &.textbox_search {
         width: 97%;
-        padding: var(--spacer-1) var(--spacer-4) var(--spacer-4) var(--spacer-4);
-
         input {
           padding-left: 0;
           width: 90%;
@@ -46,8 +28,8 @@
 ::ng-deep {
   .mat-form-field[contract] {
     width: 100%;
-    background: var(--aura-dark-gray);
-    border-radius: 8px;
+    background-color: var(--aura-gray-9);
+    border-radius: 4px;
     display: flex;
     height: 40px;
     .mat-form-field-wrapper {
@@ -64,9 +46,12 @@
     .mat-select-placeholder,
     mat-select-trigger {
       position: relative;
-      color: var(--aura-neutrals-4);
+      color: var(--aura-gray-5);
       font-size: 1.4rem;
       line-height: 1.6rem;
+    }
+    .mat-select-value {
+      color: var(--aura-gray-1);
     }
     .mat-form-field-underline {
       display: none;
@@ -89,10 +74,12 @@
     transform: translate3D(5px, 35px, 0) !important;
     padding: var(--spacer-3) 0 !important;
     border-radius: 8px;
-
     @media (min-width: 992px) {
       padding: var(--spacer-4) 0 !important;
     }
+  }
+  .mat-option, .mat-option.mat-active {
+    color: var(--aura-gray-1);
   }
 }
 
@@ -101,24 +88,17 @@
     border-bottom: 1px solid var(--aura-dark-gray);
   }
   .search-form {
-    min-width: 350px;
+    min-width: 410px;
   }
-}
-.card-info {
-  background-color: var(--aura-dark-gray);
-  border-radius: 8px;
-  padding: var(--spacer-4);
-  color: var(--aura-white);
-  &:not(:last-child) {
-    margin-bottom: var(--spacer-2);
-  }
-}
-.button-edit {
-  box-shadow: 2px 1000px 1px var(--aura-dark-gray) inset;
 }
 @media (max-width: 414px) {
   ::ng-deep .contract-modal.modal .modal-dialog .modal-content {
     overflow-y: auto;
     padding-bottom: 0;
+  }
+}
+.button-outline__in-card {
+  @media (max-width: 991.98px) {
+    box-shadow: 2px 1000px 1px var(--aura-gray-9) inset !important;
   }
 }

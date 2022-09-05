@@ -1,111 +1,81 @@
-<ng-container *ngIf="jsonReadContract; else noValues">
-  <div class="d-flex justify-content-between">
-    <div>
-      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="14" height="17" />
-      <span class="small-text text--white ml-2">Read Contract Information</span>
+<ng-container *ngIf="root; else noValues">
+  <div class="d-flex justify-content-between contract__title">
+    <div class="d-flex align-items-center">
+      <img [src]="'assets/images/icons/token-contract.svg' | imageS3" alt="" width="18px" height="18px" />
+      <span class="body-02 text--gray-1 ml-2">Read Contract Information</span>
     </div>
-    <div class="small-text">
-      <span class="cursor-pointer text--green mr-6" (click)="expandMenu()">
+    <div class="caption fw-normal-mob d-flex align-items-center">
+      <span class="cursor-pointer text--primary" (click)="expandMenu()">
         <ng-container *ngIf="!isExpand">Expand all</ng-container>
         <ng-container *ngIf="isExpand">Collapse all</ng-container>
       </span>
-      <span class="cursor-pointer text--green" (click)="reloadData()">Reset</span>
+      <div class="divider divider-vertical mx-2 mx-lg-4"></div>
+      <span class="cursor-pointer text--primary" (click)="reloadData()">Reset</span>
     </div>
   </div>
-  <div class="box-content text--white mt-3">
-    <ng-container *ngFor="let readContract of jsonReadContract?.oneOf; index as i">
-      <!-- skip logo function -->
-      <ng-container *ngIf="!readContract?.required?.toString().includes('_logo')">
-        <mat-expansion-panel hideToggle>
-          <mat-expansion-panel-header class="content-contract">
-            <mat-panel-title class="item-content"> {{ i + 1 }}. {{ readContract?.required }} </mat-panel-title>
-            <mat-panel-description> </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="d-flex row p-3">
-            <ng-container
-              *ngFor="let item of objectKeys(readContract?.properties[readContract?.required[0]]?.properties); index as idx">
-              <p
-                class="px-0"
-                [class.input-require]="readContract?.properties[readContract?.required[0]].required?.includes(item)">
-                {{ item }} ({{
-                  readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
-                    readContract?.properties[readContract?.required[0]]?.properties[item]?.$ref ||
-                    'any'
-                }})
-              </p>
-              <input
-                [class.error-null]="
-                  readContract?.properties[readContract?.required[0]]?.checkErr &&
-                  readContract?.properties[readContract?.required[0]]?.checkErr[item] &&
-                  errorInput &&
-                  currentFrom === i
-                "
-                [class.input-require]="readContract?.properties[readContract?.required[0]].required?.includes(item)"
-                class="form-check-input {{ readContract.required }} {{ item }} col-12 mb-4"
-                [type]="
-                  readContract?.properties[readContract?.required[0]]?.properties[item]?.type === 'integer'
-                    ? 'number'
-                    : 'string'
-                "
-                (keyup)="resetCheck()"
-                placeholder="{{ item }} ({{
-                  readContract?.properties[readContract?.required[0]]?.properties[item]?.type ||
-                    readContract?.properties[readContract?.required[0]]?.properties[item]?.$ref ||
-                    'any'
-                }})" />
-            </ng-container>
-            <div class="w-100 mb-2 px-0">
-              <button
-                *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('properties')"
-                class="button button-chart button-outline button-outline__in-card body btn-contract"
-                [disabled]="currentFrom === i && (errorInput || isLoading)"
-                type="button"
-                (click)="querySmartContract(readContract.required[0], i)">
-                <img
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  width="20"
-                  height="20"
-                  *ngIf="isLoading && currentFrom === i" />
-                <span class="ml-1 text-gradient">Query</span>
-              </button>
-            </div>
-            <div class="col-12">
-              <ng-container *ngIf="!readContract?.properties[readContract?.required[0]]?.hasOwnProperty('properties')">
-                <div class="mb-2">
-                  {{ readContract.required }}
-                  <span class="ml-1 font-italic text--light-gray small-body">{{
-                    readContract?.properties[readContract?.required[0]]?.type
-                  }}</span>
-                </div>
-                <div class="d-flex" *ngIf="objQuery[readContract?.required]">
-                  <div class="">Response:</div>
-                  <div class="">
-                    <pre
-                      id="json"
-                      class="raw-content text--white pl-2"
-                      [innerHtml]="objQuery[readContract?.required] | appJson"></pre>
-                  </div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="readContract?.properties[readContract?.required[0]]?.hasOwnProperty('properties')">
-                <p>
-                  {{ readContract?.required }}
-                  <span class="ml-1 font-italic text--light-gray small-body">{{ readContract?.type }}</span>
-                </p>
-              </ng-container>
-              <ng-container *ngIf="dataResponse && currentFrom === i">
-                <div class="d-flex">
-                  <div class="">Response:</div>
-                  <div class="">
-                    <pre id="json" class="raw-content text--white ml-2" [innerHtml]="dataResponse | appJson"></pre>
-                  </div>
-                </div>
-              </ng-container>
-            </div>
+  <div class="box-content text--white mt-4">
+    <ng-container *ngFor="let msg of root; index as index">
+      <!-- {{ child | json }} -->
+      <mat-expansion-panel hideToggle *ngIf="msg.fieldName">
+        <mat-expansion-panel-header class="content-contract">
+          <mat-panel-title class="item-content body-02 text--gray-1">
+            {{ index + 1 }}. {{ msg.fieldName }}
+          </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
+          <ng-container *ngFor="let item of msg.fieldList">
+            <p class="px-0 mb-2 body-02" [class.input-require]="item.isRequired">
+              {{ item.fieldName }} ({{ item.type }})
+            </p>
+
+            <input
+              [class.error-null]="item.isError"
+              [class.input-require]="item.isRequired"
+              class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
+              [type]="item.type"
+              (keyup)="resetError(msg)"
+              [(ngModel)]="item.value"
+              placeholder="{{ item.fieldName }} ({{ item.type }})" />
+          </ng-container>
+
+          <div class="w-100 mb-2 px-0">
+            <button
+              *ngIf="msg.fieldList.length > 0"
+              class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
+              [disabled]="msg.isLoading"
+              (click)="handleQueryContract(msg)"
+              type="button">
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                class="mr-2"
+                width="20"
+                height="20"
+                *ngIf="msg.isLoading" />
+              <span>Query</span>
+            </button>
           </div>
-        </mat-expansion-panel>
-      </ng-container>
+
+          <div class="px-0">
+            <ng-container *ngIf="true">
+              <div class="mb-0">
+                {{ msg.fieldName }}
+                <span class="ml-1 font-italic text--gray-light small-body">
+                  {{ msg.resType }}                  
+                </span>
+              </div>
+              <div class="d-flex" *ngIf="msg.dataResponse">
+                <div class="">Response:</div>
+                <div class="overflow-scroll-x">
+                  <pre id="json" class="raw-content text--white pl-2" [innerHtml]="msg.dataResponse | appJson"></pre>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </mat-expansion-panel>
     </ng-container>
   </div>
 </ng-container>

@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { EnvironmentService } from '../data-services/environment.service';
+import {DatePipe, formatDate} from "@angular/common";
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -38,6 +39,17 @@ export class PipeCutString implements PipeTransform {
   }
 }
 
+@Pipe({ name: 'stringEllipsis' })
+export class StringEllipsis implements PipeTransform {
+  transform(value: string, limit: number): string {
+    if (value && value.length > limit) {
+      let firstChar = limit ? value.substring(0, limit) : value.substring(0, 16);
+      value = firstChar + '...';
+    }
+    return value;
+  }
+}
+
 @Pipe({ name: 'imageS3' })
 export class ImageURL implements PipeTransform {
   constructor(private environmentService: EnvironmentService) {
@@ -47,6 +59,15 @@ export class ImageURL implements PipeTransform {
     value = value.replace(replacePath, '');
     const replaceLink = /assets\//gi;
     value = value.replace(replaceLink, this.environmentService.configValue.image_s3);
+    return value;
+  }
+}
+
+@Pipe({ name: 'customDate' })
+export class CustomDate implements PipeTransform {
+  transform(value: string, format: string) {
+    const date = new Date(value);
+    value = formatDate(date, format, 'en-US');
     return value;
   }
 }

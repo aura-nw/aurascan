@@ -16,7 +16,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
-    height: 72px;
+    height: 52px;
     padding: 0 16px;
     @media (min-width: 992px) {
         padding: 0 40px;
@@ -35,32 +35,6 @@
     border-right: 1px solid $sidebar-border-color;
     box-shadow: 0px 2px 2px $sidebar-bg;
 }
-
-.logo {
-    width: 148px;
-    height: 50px;
-    @media (min-width: 992px) {
-        width: 180px;
-        height: 60px;
-    }
-    line-height: 69px;
-    color: inherit !important;
-    .logo-sm {
-        display: none;
-    }
-}
-
-.logo-txt {
-    font-weight: 700;
-    font-size: 18px;
-    vertical-align: middle;
-    margin-left: 5px;
-}
-
-.logo-light {
-    display: none;
-}
-
 body:not([data-sidebar-size="sm"]) {
     #vertical-menu-btn {
         margin-left: -52px;
@@ -228,19 +202,13 @@ body[data-topbar="dark"] {
             color: $header-dark-item-color;
         }
     }
-    .logo-dark {
-        display: none;
-    }
-    .logo-light {
-        display: flex;
-    }
 }
 
 @media (max-width: 576px) {
     .navbar-header {
         .dropdown {
             .dropdown-menu {
-                left: -36px !important;
+                left: -65px !important;
                 right: 0 !important;
                 li.dropdown-item {
                     font-size: 1.4rem;
@@ -260,9 +228,9 @@ body[data-layout="horizontal"] {
     }
     .page-content {
         margin-top: $header-height;
-        padding: 138px calc(#{$grid-gutter-width} / 2) 0 calc(#{$grid-gutter-width} / 2);
+        padding: 110px calc(#{$grid-gutter-width} / 2) 0 calc(#{$grid-gutter-width} / 2);
         @media (min-width: 992px) {
-            padding: 87px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
+            padding: 88px calc(#{$grid-gutter-width} / 2) $footer-height calc(#{$grid-gutter-width} / 2);
         }
     }
     .navbar-header {
@@ -337,12 +305,6 @@ body[data-layout-mode="dark"][data-topbar="light"] {
         .logo {
             color: $dark !important;
         }
-    }
-    .logo-light {
-        display: none;
-    }
-    .logo-dark {
-        display: flex;
     }
     #vertical-menu-btn {
         color: $dark !important;

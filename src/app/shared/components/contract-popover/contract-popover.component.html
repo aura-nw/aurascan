@@ -25,7 +25,7 @@
           <img class="d-inline" width="20px" [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="aura" />
           {{ popoverData?.amount | number: FORMAT.PRICE_6 }}
           (${{ popoverData?.amount * popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
-          <a class="text--green" [routerLink]="['/tokens/token', popoverData.tokenAddress]">
+          <a class="text--primary" [routerLink]="['/tokens/token', popoverData.tokenAddress]">
             {{ popoverData.symbol }}
           </a>
         </div>
@@ -47,7 +47,7 @@
               width="24px"
               height="24px"
               class="mr-1 object-fit--none" />
-            <a class="text--green" [routerLink]="['/tokens/token-nft', popoverData?.nftDetail?.contract_address]"
+            <a class="text--primary" [routerLink]="['/tokens/token-nft', popoverData?.nftDetail?.contract_address]"
               >({{ popoverData?.nftDetail?.name }})</a
             >
             From
@@ -59,8 +59,10 @@
         </div>
         <div class="mt-2" *ngIf="popoverData?.nftDetail?.token_id">
           1 of TokenID [<a
-            class="text--green"
-            href="/tokens/token-nft/{{ popoverData?.nftDetail?.contract_address }}?a={{ popoverData?.nftDetail?.token_id }}"
+            class="text--primary"
+            href="/tokens/token-nft/{{ popoverData?.nftDetail?.contract_address }}?a={{
+              popoverData?.nftDetail?.token_id
+            }}"
             >{{ popoverData?.nftDetail?.token_id }}</a
           >]
         </div>
@@ -92,7 +94,7 @@
     </div>
     <hr />
     <a
-      class="small-text text--green cursor-pointer d-flex align-items-center gap-2"
+      class="small-text text--primary cursor-pointer d-flex align-items-center gap-2"
       [routerLink]="['/transaction', popoverData?.tx_hash]"
       target="_blank">
       See more details <img class="d-inline" [src]="'assets/icons/icons-svg/color/share.svg' | imageS3" alt="share" />

@@ -11,24 +11,26 @@ import { BlockDetailComponent } from './block-detail/block-detail.component';
 import { SharedModule } from '../../../app/shared/shared.module';
 import { BlockService } from '../../../app/core/services/block.service';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
+import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
     BlocksComponent,
     BlockDetailComponent
   ],
-  imports: [
-    CommonModule,
-    BlocksRoutingModule,
-    MaterialModule,
-    NgxMaskModule,
-    CommonPipeModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    SharedModule,
-    TableNoDataModule
-  ],
+    imports: [
+        CommonModule,
+        BlocksRoutingModule,
+        MaterialModule,
+        NgxMaskModule,
+        CommonPipeModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        SharedModule,
+        TableNoDataModule,
+        NgbNavModule
+    ],
   providers: [BlockService]
 })
 export class BlocksModule { }

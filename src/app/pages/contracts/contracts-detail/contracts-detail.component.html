@@ -1,29 +1,29 @@
-<div class="d-flex justify-content-between justify-content-lg-start mb-2 mb-lg-5">
-  <h1 class="title-small fw-500 mb-0 text--white" id="ttiopa123">Contract</h1>
-  <div class="d-flex align-items-center ml-2">
-    <span class="d-none d-lg-block text--light-gray body fw-normal ml-1">{{ contractAddress }}</span>
-    <img
-      [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-      class="ml-2 cursor-pointer"
-      alt=""
-      width="16"
-      height="16"
-      matTooltip="Copied!"
-      #tooltip="matTooltip"
-      (mouseenter)="$event.stopImmediatePropagation()"
-      (mouseleave)="$event.stopImmediatePropagation()"
-      (click)="copyData(); tooltip.toggle()" />
-    <img
-      [src]="'assets/icons/icons-svg/basic/qrcode-scan.svg' | imageS3"
-      class="ml-2 cursor-pointer"
-      alt=""
-      width="16"
-      height="16"
-      (click)="viewQrAddress(modalManage)" />
+<div class="d-flex justify-content-between justify-content-lg-start mb-4 mb-lg-5">
+  <div class="d-lg-flex align-items-center">
+    <h1 class="mb-0 text--white" id="ttiopa123">Contract</h1>
+    <span class="text--gray-5 body-01 body-02-mob ml-lg-2 break-word mt-2 mt-lg-0">{{ contractAddress }}</span>
   </div>
-</div>
-<div class="d-lg-none mb-4">
-  <span class="text--light-gray small-body fw-500 break-word">{{ contractAddress }}</span>
+  <div class="d-flex align-items-center ml-10 ml-lg-2">
+    <button class="button button--xxs button--sm-mob button-circle">
+      <img
+            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+            class="button__icon"
+            alt=""
+            matTooltip="Copied!"
+            #tooltip="matTooltip"
+            (mouseenter)="$event.stopImmediatePropagation()"
+            (mouseleave)="$event.stopImmediatePropagation()"
+            (click)="copyData(); tooltip.toggle()" />
+
+    </button>
+    <button class="button button--xxs button--sm-mob button-circle ml-4 ml-lg-2">
+      <img
+            [src]="'assets/icons/icons-svg/basic/qr-code.svg' | imageS3"
+            alt=""
+            class="button__icon"
+            (click)="viewQrAddress(modalManage)" />
+    </button>
+  </div>
 </div>
 <div class="row">
   <div class="col-12 col-lg-6">

@@ -1,9 +1,8 @@
 <ng-container *ngIf="!loading">
-  <div class="col-12 mb-4 mb-lg-3">
-    <span class="small-body text--light-gray"
-      >A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }} found</span
-    >
+  <div class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
+    A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
   </div>
+  <div class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="transfer-table-container aura-table-contain table-responsive">
     <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
       <ng-container>
@@ -26,7 +25,7 @@
                 </th>
               </ng-container>
               <ng-container *ngSwitchCase="'from_address'">
-                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                <th mat-header-cell *matHeaderCellDef>
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
               </ng-container>
@@ -73,29 +72,18 @@
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'tx_hash'">
-                        <a class="text--green" [routerLink]="['/transaction', data.tx_hash]">
+                        <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
                       </ng-container>
                       <ng-container *ngSwitchCase="'from_address'">
                         <div class="d-flex align-items-center">
                           <a
-                            class="text--green txt-from-address content-transfer"
-                            href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            class="text--primary txt-from-address content-transfer"
+                            href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef] &&
-                              isNFTContract
-                            ">
-                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                          </a>
-                          <a
-                            class="text--green txt-from-address content-transfer"
-                            href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                            *ngIf="
-                              data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef] &&
-                              !isNFTContract
+                              data[template.matColumnDef]
                             ">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
@@ -124,8 +112,8 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'to_address'">
                         <a
-                          class="text--green"
-                          href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                          class="text--primary"
+                          href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                           *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
@@ -136,18 +124,18 @@
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
                         <button
-                          class="button button-chart button-outline button-outline__in-card px-5 button-view-nft"
-                          [disabled]="!data.token_id"
+                          class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
+                          [disabled]="data.disabled"
                           [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
-                          <span class="text-gradient">View NFT</span>
+                          <span>View NFT</span>
                         </button>
                       </ng-container>
                       <ng-container *ngSwitchCase="'token_id'">
                         <a
-                          class="text--green"
+                          class="text--primary"
                           href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}"
                           *ngIf="data['token_id']?.length > 0">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] | stringEllipsis : 16 }}
                         </a>
                         <span *ngIf="data['token_id']?.length === 0"> - </span>
                       </ng-container>
@@ -174,7 +162,6 @@
               </td>
             </ng-container>
           </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
@@ -185,15 +172,15 @@
         </table>
       </ng-container>
     </ng-container>
-    <app-paginator
-      [length]="pageData?.length"
-      [pageSize]="pageData?.pageSize"
-      (paginator)="paginatorEmit($event)"
-      (pageEvent)="pageEvent($event)"></app-paginator>
     <ng-template #noValues>
       <app-table-no-data></app-table-no-data>
     </ng-template>
   </div>
+  <app-paginator
+          [length]="pageData?.length"
+          [pageSize]="pageData?.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)"></app-paginator>
 </ng-container>
 
 <div *ngIf="loading">

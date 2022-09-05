@@ -1,34 +1,39 @@
 <div class="card box-contract-info">
   <div>
     <div class="table-responsive">
-      <table class="aura-basic-table w-100">
+      <table class="aura-basic-table w-100 body-02 body-mob">
         <tr>
-          <td colspan="2" class="body fw-semibold">More Info</td>
+          <td colspan="2" class="h6 h3-mob mb-0">More Info</td>
           <td>
-            <!-- <div class="d-flex justify-content-end">
-              <img [src]="'assets/icons/icons-svg/basic/icon-love.svg' | imageS3" alt="" width="16px" />
-              <button class="ml-3 button button-chart button-outline button-outline__in-card -small">
-                <span class="ml-2 small-text">More</span>
-                <img [src]="'assets/images/icons/arrow-move-down.svg' | imageS3" alt="" width="24px" />
+            <div class="d-flex justify-content-end">
+              <button class="button button--sm button-circle">
+                <img [src]="'assets/icons/icons-svg/basic/heart.svg' | imageS3" alt="" width="16px" height="16px" />
               </button>
-            </div> -->
+              <button class="ml-3 button button--sm button-pill button-outline button-outline__in-card button-dropdown">
+                <span>More</span>
+              </button>
+            </div>
           </td>
         </tr>
 
         <tr>
-          <td>My Name Tag:</td>
-          <td colspan="2">Not Available, <span class="text--green ml-1">Update?</span></td>
+          <td class="text--gray-5 body-02-mob">My Name Tag:</td>
+<!--          <td colspan="2">-->
+<!--            <span class="mr-2">Not Available, </span>-->
+<!--            <img [src]="'assets/icons/icons-svg/basic/edit.svg' | imageS3" alt="" width="16px" height="16px" />-->
+<!--          </td>-->
+          <td colspan="2">Not Available, <span class="text--primary ml-1">Update?</span></td>
         </tr>
 
         <tr class="d-lg-none">
           <td colspan="3">
-            <div>Contract Creator:</div>
+            <div class="text--gray-5 body-02-mob mb-1">Contract Creator:</div>
             <div>
-              <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+              <a class="text--primary mr-1 mr-lg-2" [routerLink]="['/account', contractDetail?.creator_address]">
                 {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
               </a>
               at txn
-              <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+              <a class="text--primary ml-1 ml-lg-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
                 {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
               </a>
             </div>
@@ -36,31 +41,30 @@
         </tr>
 
         <tr class="d-none d-lg-table-row">
-          <td>Contract Creator:</td>
+          <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
-            <a class="text--green mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+            <a class="text--primary mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
               {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
             </a>
             at txn
-            <a class="text--green ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+            <a class="text--primary ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
               {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
             </a>
           </td>
         </tr>
 
         <tr>
-          <td>Token Tracker:</td>
+          <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
             <ng-container *ngIf="contractDetail?.token_tracker">
-              <a
+              <a class="text--primary" [routerLink]="['/token', contractDetail?.contract_address]"
                 *ngIf="!(contractDetail.token_tracker?.type === 'CW721')"
-                class="text--green"
                 [routerLink]="['/tokens/token', contractDetail?.contract_address]">
                 {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
               </a>
               <a
                 *ngIf="contractDetail.token_tracker?.type === 'CW721'"
-                class="text--green"
+                class="text--primary"
                 [routerLink]="['/tokens/token-nft', contractDetail?.contract_address]">
                 {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
               </a>

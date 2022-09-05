@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonService } from '../../../../core/services/common.service';
@@ -8,8 +8,8 @@ import { Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import {ValidatorService} from "src/app/core/services/validator.service";
-import {STATUS_VALIDATOR} from "src/app/core/constants/validator.enum";
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 
 @Component({
   selector: 'app-account-table',
@@ -31,6 +31,9 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   statusValidator = STATUS_VALIDATOR;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+
+  dataSourceMobile: any[];
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
@@ -46,6 +49,11 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   ngOnChanges(): void {
     if (this.dataSource) {
+      this.dataSourceMobile = this.dataSource.data?.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+
       this.dataSource.data.forEach((f) => {
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
@@ -61,20 +69,26 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     }
   }
 
-  handlePageEvent(event: any): void {
-    if (this.pageData.pageSize !== event.pageSize) {
-      event.pageIndex = 0;
-    }
-    this.pageData.pageIndex = event.pageIndex;
-    this.pageData.pageSize = event.pageSize;
-    event.pageEventType = this.pageEventType;
-    this.pageEvent.emit(event);
-  }
+  // handlePageEvent(event: any): void {
+  //   if (this.pageData.pageSize !== event.pageSize) {
+  //     event.pageIndex = 0;
+  //   }
+  //   this.pageData.pageIndex = event.pageIndex;
+  //   this.pageData.pageSize = event.pageSize;
+  //   event.pageEventType = this.pageEventType;
+  //   this.pageEvent.emit(event);
+  // }
 
-  paginatorEmit(event): void {
+  paginatorEmit(event: MatPaginator): void {
     this.dataSource.paginator = event;
   }
-  paginatorEvent(event: PageEvent): void {}
+
+  paginatorEvent(event: PageEvent): void {
+    this.dataSourceMobile = this.dataSource.data?.slice(
+      event.pageIndex * event.pageSize,
+      event.pageIndex * event.pageSize + event.pageSize,
+    );
+  }
 
   showPageEvent(event): void {
     this.currentPage = event?.target.innerText - 1;

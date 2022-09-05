@@ -1,42 +1,31 @@
-<div *ngIf="assetsLoading" class="mt-14">
-  <app-loading-sprint></app-loading-sprint>
-</div>
-
-<section *ngIf="!assetsLoading">
-  <div class="sub-text fw-semibold">Coins & Tokens ({{ assetCW20?.length || 0 }})</div>
-  <div class="mt-4">
-    <div class="card mt-5">
+<section>
+  <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ pageData?.length || 0 }})</h2>
+  <div class="card">
       <div class="card-body">
         <!-- Title -->
-        <div class="d-lg-flex justify-content-between">
-          <div>
-            <div class="mb-4 mb-lg-0 d-flex justify-content-between d-lg-block">
-              <div class="sub-text text-gradient fw-semibold">
-                $ {{ total || 0 | number: global.formatNumber2Decimal }}
-              </div>
-            </div>
-          </div>
+        <div class="d-lg-flex justify-content-between align-items-center">
+          <div class="h1 mb-0 text-gradient">$ {{ total || 0 | number: global.formatNumber2Decimal }}</div>
           <div class="position-relative">
-            <form class="aura-form single-input-field search-form account-search-form mt-2 mt-lg-0" #searchForm>
-              <div class="input-group small-input">
+            <form class="aura-form single-input-field search-form account-search-form mt-4 mt-lg-0" #searchForm>
+              <div class="input-group">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Search for Token Name or Address"
                   [(ngModel)]="textSearch"
                   [maxLength]="maxLengthSearch"
+                  (keyup)="checkSearch()"
                   (keyup.enter)="searchToken()"
                   name="search"
                   autocomplete="off" />
-                <button
-                  type="submit"
-                  class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                  (click)="searchToken()">
+                <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
                   <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                 </button>
                 <button
                   type="reset"
-                  class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                  class="btn-reset cursor-pointer {{
+                    !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                  }}"
                   (click)="resetSearch()">
                   <img
                     [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
@@ -50,7 +39,7 @@
         </div>
         <ng-container *ngIf="pageData?.length > 0; else noValues">
           <!-- Table -->
-          <div class="table-responsive aura-table-contain mt-4 table-token">
+          <div class="table-responsive mt-4 table-token" *ngIf="!assetsLoading">
             <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
               <!-- Asset Column -->
               <ng-container matColumnDef="asset">
@@ -61,14 +50,14 @@
                     [routerLink]="['/tokens/token', element.contract_address]"
                     *ngIf="element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
-                    <div class="ml-2">
-                      {{ element.name }}
+                    <div class="ml-2 body-03 fw-semibold">
+                      {{ element.name | stringEllipsis: 19 }}
                     </div>
                   </a>
                   <div class="d-flex align-items-center" *ngIf="!element.contract_address">
                     <img [src]="element.image" width="24px" height="24px" />
-                    <div class="ml-2">
-                      {{ element.name }}
+                    <div class="ml-2 body-03 fw-semibold">
+                      {{ element.name | stringEllipsis: 19 }}
                     </div>
                   </div>
                 </td>
@@ -91,7 +80,7 @@
                     [routerLink]="['/contracts', element.contract_address]"
                     *ngIf="element.contract_address">
                     <img [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3" width="24px" height="24px" />
-                    <div class="ml-2 text--green">
+                    <div class="ml-2 text--primary">
                       {{ element.contract_address | cutStringPipe: 8:8 }}
                     </div>
                   </a>
@@ -112,13 +101,18 @@
                 <th mat-header-cell *matHeaderCellDef class="">PRICE</th>
                 <td mat-cell *matCellDef="let element">
                   <ng-container *ngIf="element.contract_address">
-                    <span *ngIf="element.price; else defaultValues"
-                      >${{ element.price | number: global.formatNumber2Decimal }}</span
+                    <span *ngIf="element.price > 0; else defaultValues"
+                      >${{ element.price | number: global.formatNumberToken }}</span
                     >
+                    <span *ngIf="global.price.aura" class="text--gray-5">
+                      &nbsp;{{ '(' + (element.price / global.price.aura | number: global.formatNumberToken) }}&nbsp;{{
+                        denom + ')'
+                      }}
+                    </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
-                    <span *ngIf="element.price; else defaultValues"
-                      >${{ global.tokenPrice | number: global.formatNumber2Decimal }}</span
+                    <span *ngIf="element.price > 0; else defaultValues"
+                      >${{ global.price.aura | number: global.formatNumberToken }}</span
                     >
                   </ng-container>
                 </td>
@@ -128,9 +122,18 @@
               <ng-container matColumnDef="chance">
                 <th mat-header-cell *matHeaderCellDef class="">CHANGE (24H)</th>
                 <td mat-cell *matCellDef="let element">
-                  <!-- <div class="aura__change {{ element.chance > 0 ? 'aura__change--asc' : 'aura__change--desc' }} ">
-          {{ math.abs(element.chance) }}
-        </div> -->-
+                  <div
+                    [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }"
+                    class="d-flex"
+                    *ngIf="element.change; else defaultValues">
+                    <ng-container *ngIf="element.isValueUp">
+                      <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
+                    </ng-container>
+                    <ng-container *ngIf="!element.isValueUp">
+                      <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
+                    </ng-container>
+                    <span class="ml-1">{{ element.change | number: global.formatNumber2Decimal }}</span> %
+                  </div>
                 </td>
               </ng-container>
 
@@ -139,13 +142,19 @@
                 <th mat-header-cell *matHeaderCellDef>VALUE</th>
                 <td mat-cell *matCellDef="let element">
                   <ng-container *ngIf="element.contract_address">
-                    <span *ngIf="element.price; else defaultValues"
+                    <span *ngIf="element.price > 0; else defaultValues"
                       >${{ element.price * element.balance | number: global.formatNumber2Decimal }}</span
                     >
+                    <span *ngIf="global.price.aura" class="text--gray-5">
+                      &nbsp;{{
+                        '(' +
+                          ((element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal)
+                      }}&nbsp;{{ denom + ')' }}
+                    </span>
                   </ng-container>
                   <ng-container *ngIf="!element.contract_address">
-                    <span *ngIf="element.price; else defaultValues"
-                      >${{ global.tokenPrice * element.balance | number: global.formatNumber2Decimal }}</span
+                    <span *ngIf="element.price > 0; else defaultValues"
+                      >${{ global.price.aura * element.balance | number: global.formatNumber2Decimal }}</span
                     >
                   </ng-container>
                 </td>
@@ -161,20 +170,22 @@
                 </td>
               </tr>
             </table>
-            <app-paginator
-              [length]="pageData.length"
-              [pageSize]="pageData.pageSize"
-              (paginator)="paginatorEmit($event)"
-              (pageEvent)="handlePageEvent($event)">
-            </app-paginator>
           </div>
+          <div *ngIf="assetsLoading" class="mt-14">
+            <app-loading-sprint></app-loading-sprint>
+          </div>
+          <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="handlePageEvent($event)">
+          </app-paginator>
         </ng-container>
         <ng-template #noValues>
-          <div class="card">
-            <app-table-no-data [textNull]="'No coin & tokens'"></app-table-no-data>
+          <div class="card" *ngIf="!assetsLoading">
+            <app-table-no-data [textNull]="'No coins & tokens'"></app-table-no-data>
           </div>
         </ng-template>
       </div>
-    </div>
   </div>
 </section>

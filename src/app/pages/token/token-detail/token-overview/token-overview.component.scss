@@ -18,13 +18,12 @@
     min-height: 280px;
     tr,
     td {
-      color: var(--aura-contract);
+      color: var(--aura-gray-5);
       height: 56px;
       padding: 0px var(--spacer-4);
     }
-    tr:first-child td:first-child {
-      width: 60%;
-      color: var(--aura-white);
-    }
   }
+}
+.fixed-col {
+  min-width: 135px;
 }

@@ -48,6 +48,7 @@ export class NFTDetailComponent implements OnInit {
   modeExecuteTransaction = ModeExecuteTransaction;
 
   image_s3 = this.environmentService.configValue.image_s3;
+  defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -78,28 +79,24 @@ export class NFTDetailComponent implements OnInit {
   }
 
   getDataTable(): void {
-    let filterData = {};
-    filterData['keyWord'] = this.nftId;
     this.tokenService
-    .getListTokenTransfer(
-      this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.contractAddress,
-      filterData,
-    )
-    .subscribe(
-      (res) => {
+      .getListNFTDetail(
+        this.contractAddress,
+        this.nftId,
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+      )
+      .subscribe((res) => {
         if (res && res.meta?.count > 0) {
           res.data.forEach((trans) => {
             trans['tx_response'] = JSON.parse(trans.tx);
             trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
             this.dataSource.data = res.data;
-            this.pageData.length = res.meta?.count;
+            this.pageData.length = res.meta?.count || 0;
           });
         }
         this.loading = false;
-      },
-    );
+      });
   }
 
   paginatorEmit(event): void {
@@ -108,6 +105,7 @@ export class NFTDetailComponent implements OnInit {
 
   handlePageEvent(e: any) {
     this.pageData = e;
+    this.getDataTable();
   }
 
   copyData(text: string) {
@@ -140,7 +138,7 @@ export class NFTDetailComponent implements OnInit {
       gas_used: data?.tx_response?.gas_used,
       gas_wanted: data?.tx_response?.gas_wanted,
       nftDetail: this.nftDetail,
-      modeExecute: data?.modeExecute
+      modeExecute: data?.modeExecute,
     };
   }
 }

@@ -25,9 +25,12 @@
 
 .card-header {
     padding: var(--spacer-4);
-    background-color: var(--aura-dark-gray);
+    background-color: var(--aura-gray-10);
     border-radius: 12px 12px 0 0 !important;
     border-bottom: none !important;
+    &-gray {
+        background-color: var(--aura-gray-9);
+    }
 }
 
 .card-header-tabs {
@@ -51,8 +54,8 @@ body[data-layout-mode="dark"] {
     .card-header.card-header-dark,
     .modal-content,
     .offcanvas {
-        background-color: #20262B;
-        border-color: #20262B;
+        background-color: var(--aura-gray-10);
+        border-color: var(--aura-gray-10);
     }
 
     .card-title-desc {
@@ -72,7 +75,7 @@ body[data-layout-mode="dark"] {
 
     body[data-layout-mode="dark"] {
         .card-header.card-header-gray-des {
-            background-color: var(--aura-dark-gray);
+            background-color: var(--aura-gray-9);
         }
     }
 }

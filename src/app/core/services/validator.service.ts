@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { INDEXER_URL } from '../constants/common.constant';
+import * as _ from 'lodash';
 import { LCD_COSMOS } from '../constants/url.constant';
-import axios from "axios";
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +29,24 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
   }
 
-  validatorsDetailListPower(limit: string | number, offset: string | number, address: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators/events/${address}?limit=${limit}&offset=${offset}`);
+  // validatorsDetailListPower(limit: string | number, offset: string | number, address: string): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/validators/events/${address}?limit=${limit}&offset=${offset}`);
+  // }
+
+  validatorsDetailListPower(address: string, pageLimit = 10, nextKey = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      address,
+      pageLimit,
+      nextKey,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction/power-event`, {
+      params,
+    });
   }
 
   validatorsDetailWallet(address: string): Observable<any> {
@@ -38,8 +55,7 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsListUndelegateWallet(address: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/validators/${address}/unbonding-delegations`);
+    return this.http.get<any>(`${INDEXER_URL}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`);
   }
 
   // validatorsListRedelegate(delegatorAddress: string, operatorAddress: string): Observable<any> {

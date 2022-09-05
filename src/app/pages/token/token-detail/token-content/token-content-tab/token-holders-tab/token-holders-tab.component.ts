@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
@@ -18,8 +18,9 @@ export class TokenHoldersTabComponent implements OnInit {
   @Input() keyWord = '';
   @Input() contractAddress: string;
   @Input() isNFTContract: boolean;
-  loading = true;
+  @Input() tokenDetail: any;
 
+  loading = true;
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank' },
     { matColumnDef: 'owner', headerCellDef: 'address' },
@@ -91,11 +92,8 @@ export class TokenHoldersTabComponent implements OnInit {
               k['width_chart'] = (k.quantity / this.numberTop) * 100;
             });
           }
-
-          let sortedData = res.data?.resultAsset.sort((a, b) => {
-            return this.compare(a.percent_hold, b.percent_hold, false);
-          });
-          this.dataSource = new MatTableDataSource<any>(sortedData);
+          
+          this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
         }
         this.loading = false;
       });

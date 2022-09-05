@@ -1,12 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -118,6 +119,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
+  nextKey = null;
 
   pageDataToken: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -151,12 +153,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
+  dataSourceMobile: any[];
 
   typeTransaction = TYPE_TRANSACTION;
   pageEventType = PageEventType;
   assetsType = TYPE_ACCOUNT;
   isCopy = false;
-  tokenPrice = 0;
   selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
@@ -164,6 +166,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   assetCW721: any[] = [];
 
   // loading param check
+  transactionLoading = true;
   accDetailLoading = true;
   chartLoading = true;
   userAddress = '';
@@ -175,6 +178,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   TABS = TABS_TITLE_ACCOUNT;
@@ -228,9 +232,21 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
+
+        this.transactionLoading = true;
+        this.accDetailLoading = true;
+
+        this.dataSourceToken = new MatTableDataSource();
+        this.dataSourceDelegation = new MatTableDataSource();
+        this.dataSourceUnBonding = new MatTableDataSource();
+        this.dataSourceReDelegation = new MatTableDataSource();
+        this.dataSource = new MatTableDataSource();
+
         this.loadDataTemp();
         this.getAccountDetail();
-        this.getListTransaction();
+        // this.getListTransaction();
+
+        this.getTxsFromHoroscope();
       }
     });
   }
@@ -251,7 +267,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.accDetailLoading = false;
         this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
-        this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
+        this.dataSourceToken.data = dataAccount.balances; //new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
@@ -277,7 +293,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
-        this.getListTransaction();
+        // this.getListTransaction();
         break;
       case this.pageEventType.Unbonding:
         this.pageDataUnbonding.pageIndex = page.pageIndex;
@@ -292,35 +308,111 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.pageDataToken.pageIndex = page.pageIndex;
         break;
       default:
-        this.pageData.pageIndex = page.pageIndex;
-        this.getListTransaction();
+        // this.pageData.pageIndex = page.pageIndex;
+        // this.getListTransaction();
         break;
     }
   }
 
-  getListTransaction(): void {
-    this.transactionService
-      .txsWithAddress(this.pageData.pageSize, this.pageData.pageIndex * this.pageData.pageSize, this.currentAddress)
-      .subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((trans) => {
-            //get amount of transaction
-            trans.typeOrigin = trans.type;
-            trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-            const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-            trans.type = typeTrans?.value;
-            trans.status = StatusTransaction.Fail;
-            if (trans.code === CodeTransaction.Success) {
-              trans.status = StatusTransaction.Success;
-            }
-            if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-              trans.type = TypeTransaction.Received;
-            }
+  getTxsFromHoroscope(nextKey = null): void {
+    const chainId = this.environmentService.configValue.chainId;
+    const address = this.currentAddress;
+
+    this.transactionService.getAccountTxFromHoroscope(chainId, address, 100, nextKey).subscribe({
+      next: (txResponse) => {
+        const { code, data } = txResponse;
+
+        this.nextKey = data.nextKey || null;
+
+        if (code === 200) {
+          const txs = _.get(data, 'transactions').map((element) => {
+            const tx_hash = _.get(element, 'tx_response.txhash');
+            const message = _.get(element, 'tx.body.messages');
+
+            const _type = _.get(element, 'tx.body.messages[0].@type');
+            const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
+
+            const status =
+              _.get(element, 'tx_response.code') == CodeTransaction.Success
+                ? StatusTransaction.Success
+                : StatusTransaction.Fail;
+
+            const _amount = getAmount(
+              _.get(element, 'tx.body.messages'),
+              _type,
+              _.get(element, 'tx.body.raw_log'),
+              this.coinMinimalDenom,
+            );
+
+            const amount = _.isNumber(_amount) ? _amount.toFixed(this.coinDecimals) : _amount;
+
+            const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, this.coinDecimals).toFixed(
+              this.coinDecimals,
+            );
+            const height = _.get(element, 'tx_response.height');
+            const timestamp = _.get(element, 'tx_response.timestamp');
+
+            return { tx_hash, type, status, amount, fee, height, timestamp, message };
           });
-          this.dataSource.data = res.data;
-          this.pageData.length = res.meta.count;
+
+          if (this.dataSource.data.length > 0) {
+            this.dataSource.data = [...this.dataSource.data, ...txs];
+          } else {
+            this.dataSource.data = [...txs];
+          }
+          this.dataSourceMobile = this.dataSource.data.slice(
+            this.pageData.pageIndex * this.pageData.pageSize,
+            this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+          );
+
+          this.pageData.length = this.dataSource.data.length;
         }
-      });
+      },
+      error: () => {
+        this.transactionLoading = false;
+      },
+      complete: () => {
+        this.transactionLoading = false;
+      },
+    });
+
+    /*
+      {
+        tx_hash: '',
+        type: '',
+        status: '',
+        amount: '',
+        fee: '',
+        height: '',
+        timestamp: '',
+      }
+    */
+  }
+
+  getListTransaction(): void {
+    // this.transactionService
+    //   .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
+    //   .subscribe((res: ResponseDto) => {
+    //     if (res?.data?.length > 0) {
+    //       res.data.forEach((trans) => {
+    //         //get amount of transaction
+    //         trans.typeOrigin = trans.type;
+    //         trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
+    //         const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
+    //         trans.type = typeTrans?.value;
+    //         trans.status = StatusTransaction.Fail;
+    //         if (trans.code === CodeTransaction.Success) {
+    //           trans.status = StatusTransaction.Success;
+    //         }
+    //         if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
+    //           trans.type = TypeTransaction.Received;
+    //         }
+    //       });
+    //       this.dataSource.data = res.data;
+    //       this.length = res.meta.count;
+    //       this.pageData.length = res.meta.count;
+    //     }
+    //   });
   }
 
   getAccountDetail(): void {
@@ -357,8 +449,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             case ACCOUNT_WALLET_COLOR_ENUM.Unbonding:
               f.amount = this.currentAccountDetail.unbonding;
               break;
-            case ACCOUNT_WALLET_COLOR_ENUM.DelegatableVesting:
-              f.amount = this.currentAccountDetail?.delegatable_vesting;
+            case ACCOUNT_WALLET_COLOR_ENUM.DelegableVesting:
+              f.amount = this.currentAccountDetail?.delegable_vesting;
               break;
             default:
               break;
@@ -374,7 +466,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
           }
           token.total_value = token.price * Number(token.amount);
         });
-        this.tokenPrice = 0;
 
         this.currentAccountDetail?.balances?.forEach((f) => {
           f.token_amount = f.amount;
@@ -382,17 +473,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         });
 
         this.lstBalanceAcount = this.currentAccountDetail?.balances;
-        this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
+        this.dataSourceToken.data = this.currentAccountDetail?.balances; //new MatTableDataSource(this.currentAccountDetail?.balances);
         this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
 
-        this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
+        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations; //new MatTableDataSource(this.currentAccountDetail?.delegations);
         this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
-        this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
+        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations; //new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
         this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-        this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
+        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations; // new MatTableDataSource(this.currentAccountDetail?.redelegations);
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+
         if (this.currentAccountDetail?.vesting) {
           this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
           this.pageDataVesting.length = 1;
@@ -414,6 +506,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   searchToken(): void {
     this.searchNullData = false;
+
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
@@ -429,43 +522,81 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  paginatorEmit(e): void {
-    this.dataSource.paginator = e;
+  paginatorEmit(e: MatPaginator): void {
+    if (this.dataSource.paginator) {
+      e.page.next({
+        length: this.dataSource.paginator.length,
+        pageIndex: 0,
+        pageSize: this.dataSource.paginator.pageSize,
+        previousPageIndex: this.dataSource.paginator.pageIndex,
+      });
+      this.dataSource.paginator = e;
+
+      // this.pageData.pageIndex = e.pageIndex;
+    } else this.dataSource.paginator = e;
   }
 
   pageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
-    this.getListTransaction();
+    const { length, pageIndex, pageSize } = e;
+
+    const next = length <= (pageIndex + 2) * pageSize;
+
+    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
+
+    this.pageData = e;
+
+    if (next && this.nextKey) {
+      this.getTxsFromHoroscope(this.nextKey);
+    }
+
+    // this.getListTransaction();
   }
 
   viewQrAddress(staticDataModal: any): void {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
-      windowClass: 'modal-holder',
+      windowClass: 'modal-holder contact-qr-modal',
     });
+  }
+
+  splitDataSource(d: any[]) {
+    return d.slice(0, 5);
   }
 
   closePopup() {
     this.modalReference.close();
   }
 
-  checkAmountValue(message: any[], txHash: string, type: string) {
-    let eTransType = TRANSACTION_TYPE_ENUM;
+  checkAmountValue(data) {
+    const { message, tx_hash, amount } = data;
+
     if (message?.length > 1) {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    } else if (message?.length === 0 || (message.length === 1 && !message[0]?.amount)) {
-      return '-';
-    } else {
-      let amount = message[0]?.amount[0]?.amount;
-      //check type is Delegate/Undelegate/Redelegate
-      if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
-        amount = message[0]?.amount?.amount;
-      }
-      return (
-        this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        `<span class=text--primary> ${this.denom} </span>`
-      );
+      return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
     }
+
+    return amount + `<span class=text--primary> ${this.denom} </span>`;
+
+    // let eTransType = TRANSACTION_TYPE_ENUM;
+    // if (message?.length > 1) {
+    //   return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
+    // } else if (message?.length === 0 || (message?.length === 1 && !_.get(message, '[0].amount'))) {
+    //   return '-';
+    // } else {
+    //   // let amount = message[0]?.amount[0]?.amount;
+    //   const type = _.get(message, '[0].[@type]');
+
+    //   let amount = '-';
+    //   //check type is Delegate/Undelegate/Redelegate
+    //   if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
+    //     amount = _.get(message, '[0].amount.amount'); // message[0]?.amount?.amount;
+    //   } else {
+    //     amount = _.get(message, '[0].amount[0].amount');
+    //   }
+    //   return (
+    //     this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
+    //     `<span class=text--primary> ${this.denom} </span>`
+    //   );
+    // }
   }
 }

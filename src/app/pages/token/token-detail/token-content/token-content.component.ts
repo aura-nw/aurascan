@@ -1,9 +1,10 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { TokenService } from 'src/app/core/services/token.service';
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
 import { TokenTab } from '../../../../core/constants/token.enum';
@@ -28,18 +29,20 @@ export class TokenContentComponent implements OnInit {
   resultSearch = 0;
   tokenTab = TokenTab;
   tabsBackup: any;
-  infoSearch: any;
+  infoSearch = {};
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
     private route: ActivatedRoute,
-    private tokenService: TokenService,
     private environmentService: EnvironmentService,
     public global: Globals,
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
@@ -117,22 +120,22 @@ export class TokenContentComponent implements OnInit {
     }
   }
 
-  getInfoAddress(address: string) {
-    const payload = {
-      account_address: address,
-      limit: 0,
-      offset: 0,
-      keyword: this.contractAddress,
-    };
-
-    let type = 'cw20-tokens';
-    if (this.tokenDetail?.isNFTContract) {
-      type = 'cw721-tokens';
+  async getInfoAddress(address: string) {
+    let queryData = {};
+    if (this.tokenDetail.isNFTContract) {
+      queryData = {
+        tokens: { owner: address },
+      };
+    } else {
+      queryData = {
+        balance: { address: address },
+      };
     }
-
-    this.tokenService.getBalanceAddress(payload, type).subscribe((res) => {
-      this.infoSearch = res.data;
-      this.infoSearch['balance'] = this.tokenDetail?.isNFTContract ? res.meta.count : res.data[0].balance;
-    });
+    const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
+    try {
+      const data = await client.queryContractSmart(this.contractAddress, queryData);
+      this.infoSearch['balance'] = this.tokenDetail.isNFTContract ? data?.tokens?.length : data?.balance;
+      this.infoSearch['balance'] = this.infoSearch['balance'] || 0;
+    } catch (error) {}
   }
 }

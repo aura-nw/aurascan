@@ -24,7 +24,7 @@ export class TokenCw20Component implements OnInit {
     { matColumnDef: 'price', headerCellDef: 'price' },
     { matColumnDef: 'change', headerCellDef: 'change' },
     { matColumnDef: 'volume', headerCellDef: 'volume' },
-    { matColumnDef: 'circulatingMarketCap', headerCellDef: 'circulatingMarketCap' },
+    { matColumnDef: 'circulating_market_cap', headerCellDef: 'circulatingMarketCap' },
     { matColumnDef: 'onChainMarketCap', headerCellDef: 'onChainMarketCap' },
     { matColumnDef: 'holders', headerCellDef: 'holders' },
   ];
@@ -45,6 +45,7 @@ export class TokenCw20Component implements OnInit {
   dataSearch: any;
   enterSearch = '';
 
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
@@ -72,11 +73,17 @@ export class TokenCw20Component implements OnInit {
     };
     this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
       res.data.forEach((data) => {
-        data['isValueUp'] = true;
-        if (data.change < 0) {
-          data['isValueUp'] = false;
-          data.change = Number(data.change.toString().substring(1));
-        }
+        Object.assign(data, {
+          ...data,
+          circulating_market_cap: +data.circulating_market_cap || 0,
+          onChainMarketCap: +data.circulating_market_cap || 0,
+          volume: +data.volume_24h,
+          price: +data.price,
+          isValueUp: data.price_change_percentage_24h < 0 ? false : true,
+          change: Number(data.price_change_percentage_24h.toString().substring(1)),
+          isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
+          holders: +data.holders,
+        });
       });
 
       this.dataSource = new MatTableDataSource<any>(res.data);
@@ -111,6 +118,13 @@ export class TokenCw20Component implements OnInit {
   }
 
   sortData(sort: Sort) {
+    this.dataSource.data.forEach((data) => {
+      data.circulating_market_cap = +data.circulating_market_cap;
+      data.volume = +data.volume_24h;
+      data.price = +data.price;
+      data.holders = +data.holders;
+    });
+
     let data = this.dataSource.data.slice();
     if (!sort.active || sort.direction === '') {
       this.sortedData = data;
@@ -124,8 +138,10 @@ export class TokenCw20Component implements OnInit {
           return this.compare(a.price, b.price, isAsc);
         case 'volume':
           return this.compare(a.volume, b.volume, isAsc);
-        case 'circulatingMarketCap':
-          return this.compare(a.circulatingMarketCap, b.circulatingMarketCap, isAsc);
+        case 'circulating_market_cap':
+          return this.compare(a.circulating_market_cap, b.circulating_market_cap, isAsc);
+        case 'onChainMarketCap':
+          return this.compare(a.onChainMarketCap, b.onChainMarketCap, isAsc);
         default:
           return 0;
       }
@@ -137,15 +153,25 @@ export class TokenCw20Component implements OnInit {
         ?.sort((a, b) => this.compare(a.change, b.change, isAsc));
       let lstDown = this.sortedData
         .filter((data) => !data.isValueUp)
-        .sort((a, b) => this.compare(a.change, b.change, isAsc));
-      this.sortedData = lstUp.concat(lstDown);
+        .sort((a, b) => this.compare(a.change, b.change, !isAsc));
+      this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
+    }
+
+    if (sort.active === 'holders') {
+      let lstUp = this.sortedData
+        .filter((data) => data.isValueUp)
+        ?.sort((a, b) => this.compare(a.holders, b.holders, isAsc));
+      let lstDown = this.sortedData
+        .filter((data) => !data.isValueUp)
+        .sort((a, b) => this.compare(a.holders, b.holders, !isAsc));
+      this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
 
     let dataFilter = this.sortedData;
     this.pageData = {
-      length: dataFilter.length,
+      length: this.pageData.length,
       pageSize: this.pageData.pageSize,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
+      pageIndex: this.pageData.pageIndex,
     };
     this.dataSource = new MatTableDataSource<any>(dataFilter);
   }

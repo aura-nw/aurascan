@@ -1,6 +1,6 @@
 footer {
   background-color: var(--aura-black);
-  border-top: 1px solid var(--aura-neutrals-3);
+  border-top: 1px solid var(--aura-gray-9);
 
   .footer {
     &__menu {
@@ -35,16 +35,16 @@ footer {
 
   .footer__contact {
     margin-left: 8px;
-    border-bottom: 1px solid var(--aura-neutrals-3);
+    border-bottom: 1px solid var(--aura-gray-9);
     @media (min-width: 992px) {
       margin-left: 32px;
       padding: var(--spacer-14) var(--spacer-15);
-      border-left: 1px solid var(--aura-neutrals-3);
-      border-right: 1px solid var(--aura-neutrals-3);
+      border-left: 1px solid var(--aura-gray-9);
+      border-right: 1px solid var(--aura-gray-9);
       border-bottom: none;
     }
     a {
-      color: var(--aura-light-gray) !important;
+      color: var(--aura-gray-5) !important;
       text-decoration: none;
       transition: color 0.35s ease-in-out;
       &:hover {
@@ -121,13 +121,13 @@ footer {
     }
   }
   .bottom-bar {
-    border-top: 1px solid var(--aura-neutrals-3);
+    border-top: 1px solid var(--aura-gray-9);
     padding-bottom: 82px;
     .caption-2 {
       font-size: 12px;
       line-height: 20px;
-      color: var(--aura-light-gray);
-      font-family: SFProDisplay;
+      color: var(--aura-gray-5);
+      font-family: SFPro;
     }
     i.icon {
       margin: 0 var(--spacer-3);
@@ -138,7 +138,7 @@ footer {
     outline: none;
     background: transparent;
     padding: 0;
-    color: var(--aura-light-gray);
+    color: var(--aura-gray-5);
     transition: color 0.35s ease-in-out;
     &:hover {
       color: var(--aura-white);
@@ -154,7 +154,7 @@ footer {
     .menu-item {
       padding: 12px 4px;
       .menu-link {
-        color: var(--aura-light-gray);
+        color: var(--aura-gray-5);
         &.active {
           color: var(--aura-white);
         }
@@ -162,12 +162,6 @@ footer {
       i.icon {
         font-size: 2.4rem;
       }
-      //@media (min-width: 414px) {
-      //  padding: 12px;
-      //  i.icon {
-      //    font-size: 2rem;
-      //  }
-      //}
     }
   }
 }
@@ -182,17 +176,29 @@ footer {
   right: 0 !important;
   transform: translate3D(-10px, -8px, 0) !important;
   .popover-body {
-    background-color: #1F1F22;
-    border-color: #1F1F22;
+    overflow: hidden;
+    background-color: var(--aura-gray-10);
     box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
     font-size: 1.4rem;
     border-radius: 8px;
     padding: 0;
     .menu-item {
-      padding: var(--spacer-3) !important;
+      .menu-link {
+        color: var(--aura-white) !important;
+      }
     }
     .box-menu {
       min-width: 240px;
+      li.dropdown-item.menu-link {
+        color: var(--aura-gray-1);
+        &.active, &:hover {
+          background: rgba(54, 56, 67, 0.5);
+          color: var(--aura-white);
+        }
+      }
+      a.menu-link.active {
+        background: rgba(54, 56, 67, 0.5);
+      }
     }
   }
   .arrow {
@@ -207,6 +213,51 @@ footer {
     bottom: -8px;
     z-index: -1;
     background-color: var(--aura-black);
-    opacity: .6;
+    opacity: .9;
   }
+}
+.menu-token {
+  background: rgba(19, 20, 25, 0.5);
+  padding-left: 0px !important;
+  .menu-token__button {
+    background-color: var(--aura-gray-10);
+    max-width: 200px;
+    position: relative;
+    &:after, &:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      background-size: contain;
+      right: 12px;
+      top: 18px;
+      width: 14px;
+      height: 14px;
+    }
+    &:before {
+      opacity: 1;
+    }
+    &:after {
+      transform: rotate(180deg);
+      opacity: 0;
+    }
+    &[aria-expanded="true"]{
+      &:before {
+        opacity: 0;
+      }
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+  .dropdown-item.menu-link:active,
+  .dropdown-item.menu-link:focus {
+    background: transparent;
+  }
+}
+.h4-heading {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 4rem;
+  font-family: BigShouldersDisplay;
 }
