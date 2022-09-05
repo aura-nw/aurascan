@@ -346,7 +346,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
             const amount = _.isNumber(_amount) ? _amount.toFixed(this.coinDecimals) : _amount;
 
-            const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount'), this.coinDecimals).toFixed(
+            const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, this.coinDecimals).toFixed(
               this.coinDecimals,
             );
             const height = _.get(element, 'tx_response.height');
