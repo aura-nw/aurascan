@@ -59,7 +59,7 @@
       [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label">
+          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label; currentStake = stakeMode.Delegations">
             <span
               class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}"
               >{{ tab.label }}</span>
