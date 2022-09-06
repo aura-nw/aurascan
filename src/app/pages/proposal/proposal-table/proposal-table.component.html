@@ -116,7 +116,7 @@
           <ng-container *ngIf="type === 'VOTES'">
             <app-card-mob-simple
               [content]="[
-                { label: 'Voter', class: 'h5 mb-0 text--gray-1', info: data.voter ? shortenAddress(data.voter) : '-' },
+                { label: 'Voter', class: 'h5 mb-0 text--primary', info: data.voter ? shortenAddress(data.voter) : '-' },
                 {
                   label: 'TxHash',
                   class: 'body-01',
@@ -187,7 +187,7 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: 'h5 mb-0 text--gray-1',
+                  class: 'h5 mb-0 text--primary',
                   info: data.depositor ? shortenAddress(data.depositor) : '-'
                 },
                 {
