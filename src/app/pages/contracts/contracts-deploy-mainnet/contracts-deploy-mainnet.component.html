@@ -1,11 +1,131 @@
 <section>
     <div class="container">
         <div class="row">
-            <div class="col py-8 px-10">
+            <div class="col px-10">
                 <h1 class="text--white">Register Contracts to Deploy on Mainnet</h1>
                 <div class="card">
                     <div class="card-body">
-                        form deploy here!
+                        <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form single-input-field" *ngIf="contractForm">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <!-- code_id -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label required text--gray-1 body-02">Code ID</label>
+                                        <input
+                                          formControlName="code_id"
+                                          type="text"
+                                          class="form-control form-check-input form-control--error"
+                                          placeholder="Select one of many Code IDs" />
+                                          <div class="text--gray-3 caption fw-normal mt-2">Please select one or many Code IDs that were verified contract source code of the project.</div>
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('code_id').hasError('required') && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)">
+                                            Code id is required!
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">                                    
+                                    <!-- project_name -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label text--gray-1 body-02">Project Name</label>
+                                        <input
+                                          formControlName="project_name"
+                                          type="text"
+                                          class="form-check-input"
+                                          placeholder="Select one of many Code IDs" />
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('project_name').hasError('required') && (contractForm.get('project_name').dirty || contractForm.get('project_name').touched)">
+                                            Code id is required!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-md-6">
+                                <div class="col-12 col-md-6">
+                                    <!-- Official Project Website -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label required text--gray-1 body-02">Official Project Website</label>
+                                        <input
+                                          formControlName="official_project_website"
+                                          type="text"
+                                          class="form-check-input"
+                                          placeholder="Select one of many Code IDs" />
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('official_project_website').hasError('required') && (contractForm.get('official_project_website').dirty || contractForm.get('official_project_website').touched)">
+                                            official_project_website is required!
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">     
+                                    <!-- Official Project Email Address -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label required text--gray-1 body-02">Official Project Email Address</label>
+                                        <input
+                                          formControlName="official_project_email_address"
+                                          type="text"
+                                          class="form-check-input"/>
+                                          <div class="text--gray-3 caption fw-normal mt-2">Please make sure the email provided has the project official domain as its suffix.</div>
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('official_project_email_address').hasError('required') && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)">
+                                            official_project_email_address is required!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-md-6">
+                                <div class="col-12 col-md-6">
+                                    <!-- Requester Name -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label required text--gray-1 body-02">Requester Name</label>
+                                        <input
+                                          formControlName="requester_name"
+                                          type="text"
+                                          class="form-check-input"/>
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('requester_name').hasError('required') && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)">
+                                            requester_name is required!
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">     
+                                    <!-- Requester Email Address -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label required text--gray-1 body-02">Requester Email Address</label>
+                                        <input
+                                          formControlName="requester_email_address"
+                                          type="text"
+                                          class="form-check-input"/>
+                                          <div class="text--gray-3 caption fw-normal mt-2">Please make sure that you provide an email account of the project’s official domain. If the contact email is using public domains (eg. Gmail) do publish on the website for acknowledgement/verification.</div>
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('requester_email_address').hasError('required') && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)">
+                                            requester_email_address is required!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-md-6">
+                                <div class="col-12">
+                                    <!-- Project Description -->
+                                    <div class="form-group">
+                                        <label for="address" class="form-label required text--gray-1 body-02">Project Description (Max 300 characters)</label>
+                                        <textarea
+                                          formControlName="project_description"
+                                          type="text"
+                                          class="form-check-input"></textarea>
+                                        <div class="text--gray-3 caption fw-normal mt-2">Please introduce or summarize the project's operation/mechanism/ goals in a maximum of 300 characters. The short description should be written in a neutral point of view and must exclude unsubstantiated claims (“first”, ”most”, “best”, and etc) unless proven otherwise.</div>
+                                        <div class="error" 
+                                            *ngIf="contractForm.get('project_description').hasError('required') && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)">
+                                            project_description is required!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divider divider-horizontal my-6"></div>
+                            <h3 class="text--white mb-2">Social Profiles</h3>
+                            <div class="body-01 text--gray-1">Please check that all the links and information provided are exactly true, working and safe to visit before submitting</div>
+                            <div class="row mt-6">
+
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
