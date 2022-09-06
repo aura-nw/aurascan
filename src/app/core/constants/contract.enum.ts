@@ -15,11 +15,18 @@ export enum ContractVerifyType {
 export enum ContractTransactionType {
   IN = 'IN',
   CREATION = 'CREATION',
-  OUT = 'OUT'
+  OUT = 'OUT',
 }
-
 
 export enum ContractRegisterType {
   CW20 = 'CW20',
-  CW721 = 'CW721'
+  CW721 = 'CW721',
+}
+
+export enum ContractMainnetStatus {
+  TBD = 'TBD',
+  Not_Registered = 'Not Registered',
+  Unverified = 'Unverified',
+  Deployed = 'Deployed',
+  Rejected = 'Rejected',
 }

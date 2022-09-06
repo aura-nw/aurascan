@@ -1,5 +1,5 @@
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { ContractRegisterType, ContractTab } from './contract.enum';
+import { ContractMainnetStatus, ContractRegisterType, ContractTab } from './contract.enum';
 
 export const CONTRACT_TAB = [
   {
@@ -27,8 +27,8 @@ export const CONTRACT_TAB = [
 export const CONTRACT_RESULT = {
   TBD: 'TBD',
   CORRECT: 'Correct',
-  INCORRECT: 'Incorrect'
-}
+  INCORRECT: 'Incorrect',
+};
 
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
