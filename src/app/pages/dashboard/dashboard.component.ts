@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInfoData();
-    const halftime = 6000;
+    const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
   }
 
