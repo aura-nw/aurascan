@@ -50,6 +50,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
@@ -108,7 +109,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       gas_used: data?.gas_used,
       gas_wanted: data?.gas_wanted,
       nftDetail: undefined,
-      modeExecute: data?.modeExecute
+      modeExecute: data?.modeExecute,
     };
   }
 
@@ -125,6 +126,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   getListContractTransaction(): void {
+    this.isLoading = true;
     this.contractInfo.count = this.dataList?.meta?.count || 0;
     const ret = this.dataList?.data.map((contract) => {
       let value = 0;
@@ -179,5 +181,13 @@ export class ContractTableComponent implements OnInit, OnChanges {
       return tableDta;
     });
     this.transactionTableData = ret;
+
+    if (ret) {
+      this.isLoading = false;
+    } else {
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000);
+    }
   }
 }

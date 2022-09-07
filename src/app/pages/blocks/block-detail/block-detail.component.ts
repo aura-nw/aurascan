@@ -67,6 +67,9 @@ export class BlockDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('height');
     this.blockId = this.route.snapshot.paramMap.get('blockId');
+      if(this.id === 'null' || this.blockId === 'null') {
+          this.router.navigate(['/']);
+      }
     this.getDetail();
   }
 

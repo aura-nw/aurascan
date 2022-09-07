@@ -1,7 +1,7 @@
 <div class="d-lg-flex align-items-center justify-content-between" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div>
     <h1 class="mb-0 text--white">Contracts</h1>
-    <div class="text--gray-5 body-02 d-none d-lg-block">A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
+    <div class="text--gray-5 body-02 d-none d-lg-block">A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
     <div class="input-group px-6">
@@ -57,7 +57,7 @@
       <div class="card-body">
         <div class="d-lg-none">
           <div class="d-flex justify-content-between align-items-center" *ngIf="!searchMobVisible">
-            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
+            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
             <button class="button">
               <img src="assets/icons/icons-svg/white/search.svg" alt="" width="24px" height="24px" (click)="searchMobVisible = true;">
             </button>
