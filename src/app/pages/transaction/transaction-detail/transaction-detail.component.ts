@@ -54,6 +54,9 @@ export class TransactionDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.txHash = this.route.snapshot.paramMap.get('id');
+    if(!this.txHash || this.txHash === 'null') {
+      this.router.navigate(['/']);
+    }
     this.getDetail();
   }
 
