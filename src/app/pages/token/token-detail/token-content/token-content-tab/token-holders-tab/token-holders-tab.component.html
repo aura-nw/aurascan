@@ -8,10 +8,10 @@
   <div class="col-12 mb-lg-3">
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
         <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder">
-          Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holder{{pageData?.length > 1 ? 's' : ''}})
+          Top {{ numberTopHolder | number }} holders (From a total of {{ pageData?.length || 0 | number }} holder{{pageData?.length > 1 ? 's' : ''}})
         </span>
       <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder">
-          A total of {{ pageData?.length || 0 }} token holder{{pageData?.length > 1 ? 's' : ''}}
+          A total of {{ pageData?.length || 0 | number }} token holder{{pageData?.length > 1 ? 's' : ''}}
         </span>
     </div>
   </div>

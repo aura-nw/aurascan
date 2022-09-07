@@ -116,7 +116,7 @@
           <ng-container *ngIf="type === 'VOTES'">
             <app-card-mob-simple
               [content]="[
-                { label: 'Voter', class: 'h5 mb-0 text--gray-1', info: data.voter ? shortenAddress(data.voter) : '-' },
+                { label: 'Voter', class: 'h5 mb-0 text--primary', info: data.voter ? shortenAddress(data.voter) : '-' },
                 {
                   label: 'TxHash',
                   class: 'body-01',
@@ -157,11 +157,10 @@
                   label: 'TxHash',
                   class: 'body-01',
                   info:
-                    '<a class=text--primary href=' +
+                    data.tx_hash ? ('<a class=text--primary href=' +
                     ('/transaction/' + data.tx_hash) +
-                    '>' +
-                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
-                    '</a>'
+                    '>' + shortenAddress(data.tx_hash) +
+                    '</a>') : '<span class=text--gray-1>-</span>'
                 },
                 { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
                 {
@@ -187,18 +186,21 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: 'h5 mb-0 text--gray-1',
-                  info: data.depositor ? shortenAddress(data.depositor) : '-'
+                  class: 'h5 mb-0',
+                  info:
+                    data.depositors ? ('<a class=text--primary href=' +
+                    ('/account/' + data.depositors) +
+                    '>' + shortenAddress(data.depositors) +
+                    '</a>') : '<span class=text--gray-1>-</span>'
                 },
                 {
                   label: 'TxHash',
                   class: 'body-01',
                   info:
-                    '<a class=text--primary href=' +
-                    ('/transaction/' + data.tx_hash) +
-                    '>' +
-                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
-                    '</a>'
+                    data.txhash ? ('<a class=text--primary href=' +
+                    ('/transaction/' + data.txhash) +
+                    '>' + shortenAddress(data.txhash) +
+                    '</a>') : '<span class=text--gray-1>-</span>'
                 },
                 {
                   label: 'Amount',
