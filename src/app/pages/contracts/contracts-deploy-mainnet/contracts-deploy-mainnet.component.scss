@@ -26,3 +26,23 @@ section.contracts-deploy {
     }
   }
 }
+::ng-deep.aura-optional-contract-deploy {
+  min-width: calc(100% + 36px) !important;
+  transform: translate3d(22px, 36px, 0) !important;
+  .mat-pseudo-checkbox {display: none;}
+  .mat-option-text {
+    color: var(--aura-gray-1);
+  }
+  .mat-option {
+    &.mat-active {
+      background: var(--aura-bg-form);
+    }
+    &[aria-selected="true"] {
+      background: var(--aura-gray-8);
+    }
+  }
+  .aura-optional__item:hover {
+    background: var(--aura-gray-8);
+  }
+  
+}

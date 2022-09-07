@@ -13,12 +13,22 @@
                                     <!-- code_id -->
                                     <div class="form-group">
                                         <label for="code_id" class="form-label required text--gray-1 body-02">Code ID</label>
-                                        <input id="code_id"
+                                        
+                                            <mat-select formControlName="code_id" class="form-control form-check-input"
+                                            [class.form-control--error]="contractForm.get('code_id').invalid && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)"
+                                             multiple [disableOptionCentering]="true" panelClass="aura-optional-panel aura-optional-contract-deploy">
+                                              <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>
+                                            </mat-select>
+
+
+                                        <!-- <input id="code_id"
                                           formControlName="code_id"
                                           type="text"
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('code_id').invalid && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)"
-                                          placeholder="Select one of many Code IDs" />
+                                          placeholder="Select one of many Code IDs" /> -->
+
+
                                           <div class="text--gray-3 caption fw-normal mt-2">Please select one or many Code IDs that were verified contract source code of the project.</div>
                                         <div class="error" 
                                             *ngIf="contractForm.get('code_id').hasError('required') && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)">
@@ -428,7 +438,7 @@
                             <div class="row mt-6">
                                 <div class="col-12">
                                     <div class="form-group d-flex align-items-start">
-                                        <input type="checkbox" id="agree" class="check-box check-box--dark">
+                                        <input type="checkbox" id="agree" class="check-box check-box--dark" formControlName="agree">
                                         <label for="agree" class="text--gray-1 ml-2 mb-0 text-justify">By clicking “Submit”, you are agreeing that you have provided all the details and information required for the smart contract register to the mainnet process. Should any details or information submitted are  found to be incomplete, false or fraudulent, we reserve the right to reject your smart contract registration process and we will explain our reason for rejection sent to your email address. If your submission is completed, our team will get back to you with further instructions as soon as possible. Please do not submit duplicate submissions within this period of time.</label>
                                     </div>
                                 </div>

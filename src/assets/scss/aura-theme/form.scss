@@ -209,6 +209,7 @@
         left: -24px;
         width: 20px;
         height: 20px;
+        transition: opacity .15s ease-in-out;
       }
       &::before {
         opacity: 1;
@@ -231,7 +232,7 @@
           background: url(../../images/icons/check-box--dark.svg) center no-repeat;
         }
         &::after {
-          background: url(../../images/icons/check-box--dark.svg) center no-repeat;
+          background: url(../../images/icons/check-box--dark-checked.svg) center no-repeat;
         }
 
       }
@@ -242,20 +243,20 @@
 .aura-optional-panel {
   min-width: calc(100% + 46px) !important;
   transform: translate3d(-8px, -12px, 0) !important;
-  border-radius: 25px !important;
+  border-radius: 8px !important;
   mat-option {
     padding: var(--spacer-3) var(--spacer-6);
     background-color: var(--aura-bg-form);
     &.mat-active {
-      background-color: var(--aura-dark-gray) !important;
+      // background-color: var(--aura-dark-gray) !important;
     }
     &:first-child {
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
     }
     &:last-child {
-      border-bottom-left-radius: 25px;
-      border-bottom-right-radius: 25px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
   }
   &--flat {

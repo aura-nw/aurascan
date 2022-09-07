@@ -11,6 +11,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 export class ContractsDeployMainnetComponent implements OnInit {  
   contractForm;
   websitePattern = /https:\/\/w+/;
+  listID = ['sdas','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41']
   constructor(
     private fb: FormBuilder,
     private toastr: NgxToastrService,
@@ -38,7 +39,8 @@ export class ContractsDeployMainnetComponent implements OnInit {
         slack: ['', [Validators.pattern(this.websitePattern)]],
         facebook: ['', [Validators.pattern(this.websitePattern)]],
         twitter: ['', [Validators.pattern(this.websitePattern)]],
-        bit_coin_talk: ['', [Validators.pattern(this.websitePattern)]]
+        bit_coin_talk: ['', [Validators.pattern(this.websitePattern)]],
+        agree: ['',[Validators.required]]
       }
     );
   }
