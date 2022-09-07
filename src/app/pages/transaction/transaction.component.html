@@ -1,6 +1,6 @@
 <app-pagetitle title="Transactions" [displayInfo]="true"></app-pagetitle>
 <section *ngIf="!loading">
-  <ng-container *ngIf="length > 0; else noValues">
+  <ng-container *ngIf="dataTx?.length > 0; else noValues">
     <div class="card">
       <div class="card-body">
         <div class="table-responsive d-none d-lg-block">
@@ -29,7 +29,7 @@
                       <a
                         *ngSwitchCase="'height'"
                         class="text--primary cursor-pointer block-link"
-                        [routerLink]="['/blocks/id', data['blockId']]">
+                        [routerLink]="['/blocks', data['height']]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'type'" class="aura-status">

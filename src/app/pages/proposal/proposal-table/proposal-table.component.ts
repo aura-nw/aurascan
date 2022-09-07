@@ -154,9 +154,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
     if (!(this.dataSource?.paginator && this.dataSource?.data)) {
       return [];
     }
-    if(this.type === 'DEPOSITORS') {
-      console.log(this.dataSource)
-    }
     return this.dataSource.data.slice(
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize,
       this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize + this.dataSource.paginator.pageSize,
