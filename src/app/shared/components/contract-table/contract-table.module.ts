@@ -12,6 +12,7 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { ContractTableComponent } from './contract-table.component';
+import { SharedModule } from '../../shared.module';
 
 @NgModule({
   declarations: [ContractTableComponent],
@@ -27,7 +28,8 @@ import { ContractTableComponent } from './contract-table.component';
     NgxMaskModule,
     DropdownModule,
     RouterModule,
-    ContractPopoverModule
+    ContractPopoverModule,
+    SharedModule
   ],
   exports: [ContractTableComponent],
 })

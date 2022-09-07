@@ -8,10 +8,10 @@
   <div class="col-12 mb-lg-3">
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
         <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder">
-          Top {{ numberTopHolder }} holders (From a total of {{ pageData?.length || 0 }} holder{{pageData?.length > 1 ? 's' : ''}})
+          Top {{ numberTopHolder | number }} holders (From a total of {{ pageData?.length || 0 | number }} holder{{pageData?.length > 1 ? 's' : ''}})
         </span>
       <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder">
-          A total of {{ pageData?.length || 0 }} token holder{{pageData?.length > 1 ? 's' : ''}}
+          A total of {{ pageData?.length || 0 | number }} token holder{{pageData?.length > 1 ? 's' : ''}}
         </span>
     </div>
   </div>
@@ -28,7 +28,22 @@
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'id'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
               <ng-container *ngSwitchCase="'owner'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'quantity'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase pl-8 pl-lg-0"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'percent_hold'">
                 <th mat-header-cell *matHeaderCellDef class="col-per-25">
                   <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
                 </th>
@@ -48,11 +63,11 @@
                       <a
                         *ngIf="isNFTContract"
                         href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp">{{ data[template.matColumnDef] | cutStringPipe: 19}}</a>
+                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
                       <a
                         *ngIf="!isNFTContract"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp">{{ data[template.matColumnDef] | cutStringPipe: 19}}</a>
+                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
@@ -61,7 +76,7 @@
                       {{ data[template.matColumnDef] || 0 }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'quantity'">
-                      {{ data[template.matColumnDef] || 0 }}
+                      <div class="pl-8 pl-lg-0">{{ data[template.matColumnDef] || 0 }}</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'percent_hold'">
                       <span *ngIf="!isNFTContract"

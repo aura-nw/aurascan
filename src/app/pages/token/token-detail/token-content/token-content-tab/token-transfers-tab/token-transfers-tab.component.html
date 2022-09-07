@@ -1,6 +1,6 @@
 <ng-container *ngIf="!loading">
   <div class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
-    A total of {{ pageData?.length }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
+    A total of {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="transfer-table-container aura-table-contain table-responsive">
@@ -80,21 +80,10 @@
                         <div class="d-flex align-items-center">
                           <a
                             class="text--primary txt-from-address content-transfer"
-                            href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                             *ngIf="
                               data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef] &&
-                              isNFTContract
-                            ">
-                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                          </a>
-                          <a
-                            class="text--primary txt-from-address content-transfer"
-                            href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                            *ngIf="
-                              data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef] &&
-                              !isNFTContract
+                              data[template.matColumnDef]
                             ">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
@@ -124,7 +113,7 @@
                       <ng-container *ngSwitchCase="'to_address'">
                         <a
                           class="text--primary"
-                          href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                          href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                           *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
@@ -136,7 +125,7 @@
                       <ng-container *ngSwitchCase="'details'">
                         <button
                           class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                          [disabled]="data.disabled"
+                          [disabled]="data.disabled || !data.token_id"
                           [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                           <span>View NFT</span>
                         </button>

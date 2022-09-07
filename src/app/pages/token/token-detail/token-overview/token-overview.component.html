@@ -95,7 +95,7 @@
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Holders:</div>
             <div class="body-02 text--gray-1">
-              {{ tokenDetail?.holder }}
+              {{ tokenDetail?.holder || 0 }}
               <!-- <span class="text-danger ml-1" *ngIf="!isNFTContract"
                   >(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span
                 > -->
@@ -108,7 +108,7 @@
         <td colspan="2">
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
-            <div class="body-02 text--gray-1">{{ tokenDetail.transfers }}</div>
+            <div class="body-02 text--gray-1">{{ tokenDetail.transfers || 0 }}</div>
           </div>
         </td>
       </tr>

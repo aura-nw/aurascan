@@ -42,9 +42,11 @@
 
             <div class="d-flex justify-content-center align-items-center gap-3">
                 <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" *ngIf="data.warning === 'NOT_PARTICIPATE'"
-                        (click)="dialogRef.close()"> Cancel </button>
+                        (click)="dialogRef.close()">
+                    <span>Cancel</span>
+                </button>
                 <button class="button button--sm button--md-mob button-fixed button-pill button-outline text--white" (click)="onClick()">
-                    <span class="text-gradient">
+                    <span>
                         {{ data.warning === 'NOT_PARTICIPATE' ? 'Stake' : 'OK'}}
                     </span>
                 </button>

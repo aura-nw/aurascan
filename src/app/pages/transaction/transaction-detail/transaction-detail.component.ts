@@ -1,16 +1,14 @@
-import { DatePipe } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DATEFORMAT, NUMBER_CONVERT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TypeTransaction } from '../../../core/constants/transaction.enum';
-import { ResponseDto } from '../../../core/models/common.model';
+import { CodeTransaction } from '../../../core/constants/transaction.enum';
 import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { Globals } from '../../../global/global';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { convertDataTransaction, Globals } from '../../../global/global';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -22,62 +20,64 @@ export class TransactionDetailComponent implements OnInit {
   transaction = null;
   codeTransaction = CodeTransaction;
   typeTransaction = TYPE_TRANSACTION;
-  transactionDetailType: TypeTransaction;
-  dateFormat: string;
-  amount: string | number;
   isRawData = false;
   errorMessage = '';
   TAB = [
     {
       id: 0,
-      value: 'SUMMARY'
+      value: 'SUMMARY',
     },
     {
       id: 1,
-      value: 'JSON'
-    }
-  ]
-  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+      value: 'JSON',
+    },
+  ];
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+
+  chainId = this.environmentService.configValue.chainId;
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private transactionService: TransactionService,
-    private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver
+    private layout: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
     this.txHash = this.route.snapshot.paramMap.get('id');
+    if (!this.txHash || this.txHash === 'null') {
+      this.router.navigate(['/']);
+    }
     this.getDetail();
   }
 
   getDetail(): void {
-    this.transactionService.txsDetail(this.txHash).subscribe(
-      (res: ResponseDto) => {
-        if (res?.data) {
-          res.data.status = StatusTransaction.Fail;
-          if (res?.data?.code === CodeTransaction.Success) {
-            res.data.status = StatusTransaction.Success;
-          }
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === res?.data?.type.toLowerCase());
-          this.transactionDetailType = typeTrans?.value;
-          this.transaction = res?.data;
-
-          if (this.transaction.raw_log && this.transaction.code !== CodeTransaction.Success) {
+    this.transactionService.txsIndexer(1, 0, this.txHash).subscribe(
+      (res) => {
+        const { code, data } = res;
+        if (code === 200) {
+          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          this.transaction = txs[0];
+          this.transaction = {
+            ...this.transaction,
+            chainid: this.chainId,
+            gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
+            gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
+            raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
+            type: _.get(res?.data.transactions[0], 'tx.body.messages[0].@type'),
+            tx: _.get(res?.data.transactions[0], 'tx_response'),
+          };
+          
+          if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
             this.errorMessage = this.transaction.raw_log;
             this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
-          }
-          this.dateFormat = this.datePipe.transform(this.transaction?.timestamp, DATEFORMAT.DATETIME_UTC);
-          //check exit amount of transaction
-          if (this.transaction.messages && this.transaction.messages[0]?.amount) {
-            let amount = this.transaction.messages[0]?.amount[0]?.amount / NUMBER_CONVERT;
-            this.amount = this.transaction.messages?.length === 1 ? amount : 'More';
           }
         }
       },

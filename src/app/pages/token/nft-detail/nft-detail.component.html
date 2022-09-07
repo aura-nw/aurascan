@@ -191,7 +191,7 @@
     <h2 class="text--white mb-0">Item Activity</h2>
     <div class="divider divider-horizontal d-none d-lg-block mt-2"></div>
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
-      A total of {{ pageData?.length }} record{{ pageData?.length > 1 ? 's' : '' }} found
+      A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
     <div class="table-responsive aura-table-contain mt-2 mt-lg-3">
       <table mat-table [dataSource]="dataSource" class="aura-table">

@@ -7,13 +7,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
-import { balanceOf } from '../../../../app/core/utils/common/parsing';
 import local from '../../../../app/core/utils/storage/local';
 import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
@@ -26,18 +24,12 @@ import {
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import {
-  CodeTransaction,
-  StatusTransaction,
-  TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
-} from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
-import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
+import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { getAmount, Globals } from '../../../global/global';
+import { convertDataTransaction, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -232,13 +224,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
+
+        this.transactionLoading = true;
+        this.accDetailLoading = true;
+
+        this.dataSourceToken = new MatTableDataSource();
+        this.dataSourceDelegation = new MatTableDataSource();
+        this.dataSourceUnBonding = new MatTableDataSource();
+        this.dataSourceReDelegation = new MatTableDataSource();
+        this.dataSource = new MatTableDataSource();
+
         this.loadDataTemp();
         this.getAccountDetail();
-        // this.getListTransaction();
-
-        this.dataSource = new MatTableDataSource();
-        this.transactionLoading = true;
-
         this.getTxsFromHoroscope();
       }
     });
@@ -260,7 +257,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.accDetailLoading = false;
         this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
-        this.dataSourceToken = new MatTableDataSource(dataAccount.balances);
+        this.dataSourceToken.data = dataAccount.balances; //new MatTableDataSource(dataAccount.balances);
         this.pageDataToken.length = dataAccount.balances.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
@@ -286,7 +283,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     switch (page.pageEventType) {
       case this.pageEventType.Delegation:
         this.pageDataDelegation.pageIndex = page.pageIndex;
-        // this.getListTransaction();
         break;
       case this.pageEventType.Unbonding:
         this.pageDataUnbonding.pageIndex = page.pageIndex;
@@ -301,8 +297,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.pageDataToken.pageIndex = page.pageIndex;
         break;
       default:
-        // this.pageData.pageIndex = page.pageIndex;
-        // this.getListTransaction();
         break;
     }
   }
@@ -318,35 +312,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.nextKey = data.nextKey || null;
 
         if (code === 200) {
-          const txs = _.get(data, 'transactions').map((element) => {
-            const tx_hash = _.get(element, 'tx_response.txhash');
-            const message = _.get(element, 'tx.body.messages');
-
-            const _type = _.get(element, 'tx.body.messages[0].@type');
-            const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
-
-            const status =
-              _.get(element, 'tx_response.code') == CodeTransaction.Success
-                ? StatusTransaction.Success
-                : StatusTransaction.Fail;
-
-            const _amount = getAmount(
-              _.get(element, 'tx.body.messages'),
-              _type,
-              _.get(element, 'tx.body.raw_log'),
-              this.coinMinimalDenom,
-            );
-
-            const amount = _.isNumber(_amount) ? _amount.toFixed(this.coinDecimals) : _amount;
-
-            const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount'), this.coinDecimals).toFixed(
-              this.coinDecimals,
-            );
-            const height = _.get(element, 'tx_response.height');
-            const timestamp = _.get(element, 'tx_response.timestamp');
-
-            return { tx_hash, type, status, amount, fee, height, timestamp, message };
-          });
+          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
 
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
@@ -368,44 +334,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.transactionLoading = false;
       },
     });
-
-    /*
-      {
-        tx_hash: '',
-        type: '',
-        status: '',
-        amount: '',
-        fee: '',
-        height: '',
-        timestamp: '',
-      }
-    */
-  }
-
-  getListTransaction(): void {
-    // this.transactionService
-    //   .txsWithAddress(this.pageSize, this.pageData.pageIndex * this.pageSize, this.currentAddress)
-    //   .subscribe((res: ResponseDto) => {
-    //     if (res?.data?.length > 0) {
-    //       res.data.forEach((trans) => {
-    //         //get amount of transaction
-    //         trans.typeOrigin = trans.type;
-    //         trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-    //         const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-    //         trans.type = typeTrans?.value;
-    //         trans.status = StatusTransaction.Fail;
-    //         if (trans.code === CodeTransaction.Success) {
-    //           trans.status = StatusTransaction.Success;
-    //         }
-    //         if (trans.type === TypeTransaction.Send && trans?.messages[0]?.from_address !== this.currentAddress) {
-    //           trans.type = TypeTransaction.Received;
-    //         }
-    //       });
-    //       this.dataSource.data = res.data;
-    //       this.length = res.meta.count;
-    //       this.pageData.length = res.meta.count;
-    //     }
-    //   });
   }
 
   getAccountDetail(): void {
@@ -466,17 +394,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         });
 
         this.lstBalanceAcount = this.currentAccountDetail?.balances;
-        this.dataSourceToken = new MatTableDataSource(this.currentAccountDetail?.balances);
+        this.dataSourceToken.data = this.currentAccountDetail?.balances; //new MatTableDataSource(this.currentAccountDetail?.balances);
         this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
 
-        this.dataSourceDelegation = new MatTableDataSource(this.currentAccountDetail?.delegations);
+        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations; //new MatTableDataSource(this.currentAccountDetail?.delegations);
         this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
-        this.dataSourceUnBonding = new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
+        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations; //new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
         this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-        this.dataSourceReDelegation = new MatTableDataSource(this.currentAccountDetail?.redelegations);
+        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations; // new MatTableDataSource(this.currentAccountDetail?.redelegations);
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
+
         if (this.currentAccountDetail?.vesting) {
           this.dataSourceVesting = new MatTableDataSource([this.currentAccountDetail?.vesting]);
           this.pageDataVesting.length = 1;
@@ -498,6 +427,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   searchToken(): void {
     this.searchNullData = false;
+
     if (this.textSearch.length > 0) {
       const data = this.dataSourceTokenBk.data.filter(
         (f) => f.name.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
@@ -522,7 +452,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         previousPageIndex: this.dataSource.paginator.pageIndex,
       });
       this.dataSource.paginator = e;
-
       // this.pageData.pageIndex = e.pageIndex;
     } else this.dataSource.paginator = e;
   }
@@ -539,8 +468,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     if (next && this.nextKey) {
       this.getTxsFromHoroscope(this.nextKey);
     }
-
-    // this.getListTransaction();
   }
 
   viewQrAddress(staticDataModal: any): void {
@@ -557,37 +484,5 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   closePopup() {
     this.modalReference.close();
-  }
-
-  checkAmountValue(data) {
-    const { message, tx_hash, amount } = data;
-
-    if (message?.length > 1) {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
-    }
-
-    return amount + `<span class=text--primary> ${this.denom} </span>`;
-
-    // let eTransType = TRANSACTION_TYPE_ENUM;
-    // if (message?.length > 1) {
-    //   return `<a class="text--primary" [routerLink]="['/transaction', ` + tx_hash + `]">More</a>`;
-    // } else if (message?.length === 0 || (message?.length === 1 && !_.get(message, '[0].amount'))) {
-    //   return '-';
-    // } else {
-    //   // let amount = message[0]?.amount[0]?.amount;
-    //   const type = _.get(message, '[0].[@type]');
-
-    //   let amount = '-';
-    //   //check type is Delegate/Undelegate/Redelegate
-    //   if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
-    //     amount = _.get(message, '[0].amount.amount'); // message[0]?.amount?.amount;
-    //   } else {
-    //     amount = _.get(message, '[0].amount[0].amount');
-    //   }
-    //   return (
-    //     this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-    //     `<span class=text--primary> ${this.denom} </span>`
-    //   );
-    // }
   }
 }
