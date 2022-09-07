@@ -313,7 +313,7 @@
                             <a
                               *ngSwitchCase="'height'"
                               class="text--primary cursor-pointer block-link"
-                              [routerLink]="['/blocks/id', data['blockId']]">
+                              [routerLink]="['/blocks', data['height']]">
                               {{ data[template.matColumnDef] }}
                             </a>
                             <div *ngSwitchCase="'type'">

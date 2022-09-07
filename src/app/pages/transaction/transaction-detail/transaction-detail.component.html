@@ -64,7 +64,7 @@
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">Height</div>
         <div class="col-auto col-lg-9">
-          <a class="text--primary" routerLink="/blocks/id/{{ transaction?.blockId }}">
+          <a class="text--primary" routerLink="/blocks/{{ transaction?.height }}">
             {{ transaction?.height | number }}
           </a>
         </div>
