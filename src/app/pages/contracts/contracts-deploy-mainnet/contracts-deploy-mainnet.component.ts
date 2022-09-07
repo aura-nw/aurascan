@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Component({
   selector: 'app-contracts-deploy-mainnet',
@@ -7,13 +9,16 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./contracts-deploy-mainnet.component.scss']
 })
 export class ContractsDeployMainnetComponent implements OnInit {  
-  formBuilder = new FormBuilder;
-  contractForm: FormGroup;
+  contractForm;
   websitePattern = /https:\/\/w+/;
-  constructor() { }
+  constructor(
+    private fb: FormBuilder,
+    private toastr: NgxToastrService,
+    public translate: TranslateService,
+    ) { }
 
   ngOnInit(): void {
-    this.contractForm = this.formBuilder.group (
+    this.contractForm = this.fb.group (
       {
         code_id: ['', [Validators.required]],
         project_name: ['', [Validators.required, Validators.maxLength(200)]],
@@ -42,6 +47,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
     
     if (this.contractForm.valid) {
       // Do action
+        this.toastr.success(this.translate.instant('NOTICE.SUBMIT_FORM_SUCCESS'));
     }
   }
 

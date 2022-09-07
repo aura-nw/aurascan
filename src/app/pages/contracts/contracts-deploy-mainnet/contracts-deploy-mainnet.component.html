@@ -1,12 +1,14 @@
 <section class="contracts-deploy">
     <div class="container">
         <div class="row">
-            <div class="col px-10">
+            <div class="col px-md-10">
                 <h1 class="text--white">Register Contracts to Deploy on Mainnet</h1>
                 <div class="card">
                     <div class="card-body">
                         <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form single-input-field" *ngIf="contractForm">
-                            <div class="row">
+                            <h3 class="text--white mb-2">Basic Information</h3>
+                            <div class="body-01 body-02-mob text--gray-1">Please check that all the links and information provided are exactly true, working and safe to visit before submitting</div>
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- code_id -->
                                     <div class="form-group">
@@ -24,7 +26,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">                                    
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- project_name -->
                                     <div class="form-group">
                                         <label for="project_name" class="form-label text--gray-1 body-02">Project Name</label>
@@ -44,7 +46,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Official Project Website -->
                                     <div class="form-group">
@@ -68,7 +70,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Official Project Email Address -->
                                     <div class="form-group">
                                         <label for="official_project_email_address" class="form-label required text--gray-1 body-02">Official Project Email Address</label>
@@ -89,7 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Requester Name -->
                                     <div class="form-group">
@@ -109,7 +111,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Requester Email Address -->
                                     <div class="form-group">
                                         <label for="requester_email_address" class="form-label required text--gray-1 body-02">Requester Email Address</label>
@@ -130,7 +132,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12">
                                     <!-- Project Description -->
                                     <div class="form-group">
@@ -154,8 +156,8 @@
                             </div>
                             <div class="divider divider-horizontal my-6"></div>
                             <h3 class="text--white mb-2">Social Profiles</h3>
-                            <div class="body-01 text--gray-1">Please check that all the links and information provided are exactly true, working and safe to visit before submitting</div>
-                            <div class="row mt-md-6">
+                            <div class="body-01 body-02-mob text--gray-1">Please check that all the links and information provided are exactly true, working and safe to visit before submitting</div>
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Whitepaper -->
                                     <div class="form-group">
@@ -177,7 +179,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Medium -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
@@ -199,7 +201,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- GitHub -->
                                     <div class="form-group">
@@ -221,7 +223,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Reddit -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
@@ -243,7 +245,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Telegram -->
                                     <div class="form-group">
@@ -265,7 +267,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Slack -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
@@ -287,7 +289,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Wechat -->
                                     <div class="form-group">
@@ -309,7 +311,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Facebook -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
@@ -331,7 +333,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Linkedin -->
                                     <div class="form-group">
@@ -353,7 +355,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Twitter -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
@@ -375,7 +377,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12 col-md-6">
                                     <!-- Discord -->
                                     <div class="form-group">
@@ -397,7 +399,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">     
+                                <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Bitcointalk -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
@@ -423,18 +425,18 @@
                             <div class="caption fw-normal text--gray-3">
                                 <span class="text--red-3 mr-1">*</span>denotes required fields
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6">
                                 <div class="col-12">
                                     <div class="form-group d-flex align-items-start">
                                         <input type="checkbox" id="agree" class="check-box check-box--dark">
-                                        <label for="agree" class="text--gray-1 ml-2 text-justify">By clicking “Submit”, you are agreeing that you have provided all the details and information required for the smart contract register to the mainnet process. Should any details or information submitted are  found to be incomplete, false or fraudulent, we reserve the right to reject your smart contract registration process and we will explain our reason for rejection sent to your email address. If your submission is completed, our team will get back to you with further instructions as soon as possible. Please do not submit duplicate submissions within this period of time.</label>
+                                        <label for="agree" class="text--gray-1 ml-2 mb-0 text-justify">By clicking “Submit”, you are agreeing that you have provided all the details and information required for the smart contract register to the mainnet process. Should any details or information submitted are  found to be incomplete, false or fraudulent, we reserve the right to reject your smart contract registration process and we will explain our reason for rejection sent to your email address. If your submission is completed, our team will get back to you with further instructions as soon as possible. Please do not submit duplicate submissions within this period of time.</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-md-6">
+                            <div class="row mt-6 mb-2">
                                 <div class="col-12 d-flex justify-content-end align-item-center">
                                     <button type="reset" class="button button-pill button-outline button--md"><span>Reset</span></button>
-                                    <button type="submit" class="button button-pill button-flat button--md ml-4" [disabled]="contractForm.valid">Submit</button>                                    
+                                    <button type="submit" class="button button-pill button-flat button--md ml-4" [disabled]="!contractForm.valid"><span>Submit</span></button>
                                 </div>
                             </div>
                         </form>
