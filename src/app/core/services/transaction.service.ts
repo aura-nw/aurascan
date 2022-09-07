@@ -18,15 +18,31 @@ export class TransactionService extends CommonService {
     super(http, environmentService);
   }
 
-  txs(limit: string | number, offset: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/transactions?limit=${limit}&offset=${offset}`);
+  // txs(limit: string | number, offset: string | number): Observable<any> {
+  //   this.setURL();
+  //   return this.http.get<any>(`${this.apiUrl}/transactions?limit=${limit}&offset=${offset}`);
+  // }
+
+  txsIndexer(pageLimit: string | number, offset: string | number, txHash = ''): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit,
+      offset,
+      txHash,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+      params,
+    });
   }
 
-  txsDetail(txhash: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/transactions/${txhash}`);
-  }
+  // txsDetail(txhash: string): Observable<any> {
+  //   this.setURL();
+  //   return this.http.get<any>(`${this.apiUrl}/transactions/${txhash}`);
+  // }
 
   txsDetailLcd(txhash: string) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
