@@ -427,14 +427,14 @@
                                 <div class="col-12">
                                     <div class="form-group d-flex align-items-start">
                                         <input type="checkbox" id="agree" class="check-box check-box--dark">
-                                        <label for="agree" class="text--gray-1 ml-2">By clicking “Submit”, you are agreeing that you have provided all the details and information required for the smart contract register to the mainnet process. Should any details or information submitted are  found to be incomplete, false or fraudulent, we reserve the right to reject your smart contract registration process and we will explain our reason for rejection sent to your email address. If your submission is completed, our team will get back to you with further instructions as soon as possible. Please do not submit duplicate submissions within this period of time.</label>
+                                        <label for="agree" class="text--gray-1 ml-2 text-justify">By clicking “Submit”, you are agreeing that you have provided all the details and information required for the smart contract register to the mainnet process. Should any details or information submitted are  found to be incomplete, false or fraudulent, we reserve the right to reject your smart contract registration process and we will explain our reason for rejection sent to your email address. If your submission is completed, our team will get back to you with further instructions as soon as possible. Please do not submit duplicate submissions within this period of time.</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mt-md-6">
-                                <div class="col-12  d-flex justify-content-end align-item-center">
+                                <div class="col-12 d-flex justify-content-end align-item-center">
                                     <button type="reset" class="button button-pill button-outline button--md"><span>Reset</span></button>
-                                    <button type="submit" class="button button-pill button-flat button--md ml-4">Submit</button>                                    
+                                    <button type="submit" class="button button-pill button-flat button--md ml-4" [disabled]="contractForm.valid">Submit</button>                                    
                                 </div>
                             </div>
                         </form>
