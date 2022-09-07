@@ -47,7 +47,7 @@
       <div class="row mb-3">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Height</div>
         <div class="col-12 col-lg-6">
-          <a class="text--green" routerLink="/blocks/id/{{ transaction?.blockId }}">
+          <a class="text--green" routerLink="/blocks/id/{{ transaction?.height }}">
             {{ transaction?.height | number }}
           </a>
         </div>
@@ -55,7 +55,7 @@
       <div class="row mb-3">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0">Time</div>
         <div class="col-12 col-lg-6">
-          {{ commonService.getDateValue(transaction?.timestamp)[0] }} {{ commonService.getDateValue(dateFormat)[1] }}
+          {{ commonService.getDateValue(transaction?.timestamp)[0] }} {{ commonService.getDateValue(transaction?.timestamp)[1] }}
         </div>
       </div>
       <div class="row mb-3">
