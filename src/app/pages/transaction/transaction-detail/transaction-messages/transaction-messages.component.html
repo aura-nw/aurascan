@@ -763,7 +763,7 @@
             </ng-container>
           </div>
         </div>
-        <ng-container *ngIf="!ibcData['time_out']">
+        <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
           <div class="row col-12 mt-5">
             <div class="col-lg-2">
               <img
@@ -805,7 +805,7 @@
             </div>
           </div>
         </ng-container>
-        <ng-container *ngIf="ibcData['time_out']">
+        <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
           <div class="row col-12 mt-5">
             <div class="col-lg-2">
               <img
