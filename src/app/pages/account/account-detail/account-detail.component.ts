@@ -313,6 +313,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         if (code === 200) {
           const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          txs.forEach((element) => {
+            if (element.type === 'Send' && element.messages[0]?.to_address === this.currentAddress) {
+              element.type = 'Receive';
+            }
+          });
 
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
