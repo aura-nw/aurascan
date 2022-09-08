@@ -9,6 +9,7 @@ import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../.
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonService } from 'src/app/core/services/common.service';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -44,6 +45,34 @@ export class TransactionMessagesComponent implements OnInit {
   };
   pipeTypeData = pipeTypeData;
 
+  listIBCProgress = [
+    {
+      tx: '0EE4B7440D69CB4D81304278492B4962896FB96E8414D5923698A2E49A909551',
+      time: '2022-09-01T06:53:17.687Z',
+      type: '/ibc.applications.transfer.v1.MsgTransfer',
+    },
+    {
+      tx: 'C51F7C868FDFC7600459CE76BBB1369E22FF4F2DDF9B4BC92FC11E5E42065871',
+      time: '2022-09-01T06:53:17.687Z',
+      type: '/ibc.core.channel.v1.MsgRecvPacket',
+    },
+    {
+      tx: 'CBCFCD0274AD95DCB4DD09E15016688F4898D7B1249B3CBACEA0206270B5DADB',
+      time: '2022-09-01T06:53:17.687Z',
+      type: '/ibc.core.channel.v1.MsgRecvPacket',
+    },
+    {
+      tx: 'B35862D6F7E7344D7E514AC3CC41843EDACB6DCE4511FDDEBBEC75B27BFACD45',
+      time: '2022-09-01T06:53:17.687Z',
+      type: '/ibc.core.channel.v1.MsgRecvPacket',
+    },
+    {
+      tx: '0AEF20E04837B8D22D7C11923A52D9EB9ABBCA4BC4E228473479F75280009146',
+      time: '2022-09-01T06:53:17.687Z',
+      type: '/ibc.core.channel.v1.MsgAcknowledgement',
+    },
+  ];
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -53,6 +82,7 @@ export class TransactionMessagesComponent implements OnInit {
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -255,5 +285,11 @@ export class TransactionMessagesComponent implements OnInit {
       if (element.hasOwnProperty('delegator_address')) count++;
     });
     return count;
+  }
+
+  filterIBCType(type){
+    let arr = [];
+    arr = this.listIBCProgress.filter((f) => f.type === type);
+    return arr
   }
 }

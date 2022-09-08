@@ -586,6 +586,7 @@
       </div>
     </div>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
+    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.IBCAcknowledgement">
@@ -636,6 +637,7 @@
       [label]="'Signer'"
       [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.signer"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
+    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.IBCTimeout">
@@ -677,6 +679,7 @@
       [label]="'Next Sequence Recv'"
       [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
     <app-messages-item [label]="'Signer'" [value]="ibcData?.time_out?.signer"></app-messages-item>
+    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
   </ng-container>
 
   <ng-template #ibcUpdateClient>
@@ -734,5 +737,97 @@
     <app-messages-item
       [label]="'proposer_address'"
       [value]="ibcData?.update_client?.header?.signed_header?.header?.proposer_address"></app-messages-item>
+  </ng-template>
+
+  <ng-template #ibcProgress>
+    <div class="row mb-3 body-02 body-01-mob border-ibc pt-3">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">IBC Progress</div>
+      <div class="col-12 col-lg-9">
+        <div class="row col-12">
+          <div class="col-lg-2">
+            <img
+              [src]="'assets/icons/icons-svg/color/success.svg' | imageS3"
+              width="20px"
+              height="20px"
+              class="mr-1" />Transfer
+          </div>
+          <div class="col-lg-8 text-right">
+            <ng-container *ngFor="let item of filterIBCType(eTransType.IBCTransfer)">
+              <a class="text--primary" [routerLink]="['/transaction', item.tx]"> {{ item.tx }} </a>
+              <div class="mb-3">
+                {{ commonService.getDateValue(item.time)[0] }}
+                (<span>{{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                <span>{{ item.time | customDate: 'HH:mm:ss' }}</span
+                >)
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <ng-container *ngIf="!ibcData['time_out']">
+          <div class="row col-12 mt-5">
+            <div class="col-lg-2">
+              <img
+                [src]="'assets/icons/icons-svg/color/success.svg' | imageS3"
+                width="20px"
+                height="20px"
+                class="mr-1" />Receive
+            </div>
+            <div class="col-lg-8 text-right">
+              <ng-container *ngFor="let item of filterIBCType(eTransType.IBCReceived)">
+                <a class="text--primary" [routerLink]="['/transaction', item.tx]"> {{ item.tx }} </a>
+                <div class="mb-3">
+                  {{ commonService.getDateValue(item.time)[0] }}
+                  (<span>{{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                  <span>{{ item.time | customDate: 'HH:mm:ss' }}</span
+                  >)
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row col-12 mt-5">
+            <div class="col-lg-2">
+              <img
+                [src]="'assets/icons/icons-svg/color/success.svg' | imageS3"
+                width="20px"
+                height="20px"
+                class="mr-1" />Acknowledgement
+            </div>
+            <div class="col-lg-8 text-right">
+              <ng-container *ngFor="let item of filterIBCType(eTransType.IBCAcknowledgement)">
+                <a class="text--primary" [routerLink]="['/transaction', item.tx]"> {{ item.tx }} </a>
+                <div class="mb-3">
+                  {{ commonService.getDateValue(item.time)[0] }}
+                  (<span>{{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                  <span>{{ item.time | customDate: 'HH:mm:ss' }}</span
+                  >)
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="ibcData['time_out']">
+          <div class="row col-12 mt-5">
+            <div class="col-lg-2">
+              <img
+                [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3"
+                width="20px"
+                height="20px"
+                class="mr-1" />Timeout
+            </div>
+            <div class="col-lg-8 text-right">
+              <ng-container *ngFor="let item of filterIBCType(eTransType.IBCTimeout)">
+                <a class="text--primary" [routerLink]="['/transaction', item.tx]"> {{ item.tx }} </a>
+                <div class="mb-3">
+                  {{ commonService.getDateValue(item.time)[0] }}
+                  (<span>{{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                  <span>{{ item.time | customDate: 'HH:mm:ss' }}</span
+                  >)
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </ng-template>
 </div>
