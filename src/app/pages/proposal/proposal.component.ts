@@ -102,13 +102,14 @@ export class ProposalComponent implements OnInit {
         this.lastedList.forEach((pro, index) => {
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
-          if (index < 4) {
+          if (
+            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
+            pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
+          ) {
             this.getVoteResult(pro.pro_id, index);
-            if (pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-              const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
-              if (expiredTime < 0) {
-                this.getProposalDetailFromNode(pro.pro_id, index);
-              }
+            const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
+            if (expiredTime < 0) {
+              this.getProposalDetailFromNode(pro.pro_id, index);
             }
             pro.vote_option = this.voteConstant.find((s) => s.key === pro.vote_option)?.voteOption;
           }
