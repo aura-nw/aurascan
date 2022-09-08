@@ -103,8 +103,7 @@ export class ProposalComponent implements OnInit {
           pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
 
           if (
-            index < 4 &&
-            pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD &&
+            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
             pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
           ) {
             this.getVoteResult(pro.pro_id, index);
@@ -112,8 +111,8 @@ export class ProposalComponent implements OnInit {
             if (expiredTime < 0) {
               this.getProposalDetailFromNode(pro.pro_id, index);
             }
+            pro.vote_option = this.voteConstant.find((s) => s.key === pro.vote_option)?.voteOption;
           }
-          pro.vote_option = this.voteConstant.find((s) => s.key === pro.vote_option)?.voteOption;
         });
       }
     });
@@ -251,7 +250,7 @@ export class ProposalComponent implements OnInit {
 
   getVoteResult(pro_id, index) {
     this.proposalService.getProposalTally(pro_id).subscribe((res) => {
-      if (!res.data.proposalVoteTally.tally) {
+      if (!res.data?.proposalVoteTally?.tally) {
         return;
       }
       const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
