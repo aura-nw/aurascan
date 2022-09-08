@@ -100,7 +100,9 @@ export function getDataInfo(arrayMsg, addressContract) {
       fromAddress = itemMessage.sender;
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
-        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner;
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender || 
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
       tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
