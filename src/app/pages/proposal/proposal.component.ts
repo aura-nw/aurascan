@@ -249,7 +249,7 @@ export class ProposalComponent implements OnInit {
 
   getVoteResult(pro_id, index) {
     this.proposalService.getProposalTally(pro_id).subscribe((res) => {
-      if (!res.data.proposalVoteTally.tally) {
+      if (!res.data?.proposalVoteTally?.tally) {
         return;
       }
       const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
