@@ -40,14 +40,14 @@ export class NftListComponent implements OnChanges {
     this.loading = true;
     const payload = {
       account_address: this.address,
-      limit: 0,
-      offset: 0,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.searchValue,
     };
     this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
-        this.assetCW721 = res?.data;
-        this.assetCW721.length = res.data.length;
+        this.showedData = res?.data;
+        this.pageData.length = res.meta.count;
 
         res?.data.forEach((element) => {
           if (!this.searchValue) {
@@ -55,14 +55,6 @@ export class NftListComponent implements OnChanges {
           }
         });
         this.totalValueNft.emit(this.totalValue);
-
-        if (this.pageData) {
-          this.pageData.length = this.assetCW721?.length || 0;
-          const { pageIndex, pageSize } = this.pageData;
-          const start = pageIndex * pageSize;
-          const end = start + pageSize;
-          this.showedData = this.assetCW721.slice(start, end);
-        }
       } else {
         this.showedData.length = 0;
       }
