@@ -91,11 +91,11 @@
       </tr>
 
       <tr>
-        <td colspan="2">
+        <td colspan="2" [ngClass]="params ? 'border_none' : ''">
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Holders:</div>
             <div class="body-02 text--gray-1">
-              {{ tokenDetail?.holder }}
+              {{ tokenDetail?.holder || 0 }}
               <!-- <span class="text-danger ml-1" *ngIf="!isNFTContract"
                   >(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span
                 > -->
@@ -104,11 +104,11 @@
         </td>
       </tr>
 
-      <tr *ngIf="!params">
-        <td colspan="2">
+      <tr>
+        <td colspan="2" *ngIf="!params">
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
-            <div class="body-02 text--gray-1">{{ tokenDetail.transfers }}</div>
+            <div class="body-02 text--gray-1">{{ tokenDetail.transfers || 0 }}</div>
           </div>
         </td>
       </tr>

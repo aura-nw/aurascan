@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
-import { ModeExecuteTransaction, TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
+import { CodeTransaction, ModeExecuteTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
+import { balanceOf } from '../core/utils/common/parsing';
 
 Injectable();
 
@@ -97,7 +100,9 @@ export function getDataInfo(arrayMsg, addressContract) {
       fromAddress = itemMessage.sender;
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
-        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner;
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender || 
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
       tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
@@ -134,4 +139,38 @@ export function getDataInfo(arrayMsg, addressContract) {
       break;
   }
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
+}
+
+export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
+  const txs = _.get(data, 'transactions').map((element) => {
+    const code = _.get(element, 'tx_response.code');
+    const tx_hash = _.get(element, 'tx_response.txhash');
+    const messages = _.get(element, 'tx.body.messages');
+
+    const _type = _.get(element, 'tx.body.messages[0].@type');
+    const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
+
+    const status =
+      _.get(element, 'tx_response.code') == CodeTransaction.Success
+        ? StatusTransaction.Success
+        : StatusTransaction.Fail;
+
+    const _amount = getAmount(
+      _.get(element, 'tx.body.messages'),
+      _type,
+      _.get(element, 'tx.body.raw_log'),
+      coinMinimalDenom,
+    );
+
+    const amount = (_.isNumber(_amount) && _amount > 0) ? _amount.toFixed(coinDecimals) : _amount;
+
+    const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
+      coinDecimals,
+    );
+    const height = _.get(element, 'tx_response.height');
+    const timestamp = _.get(element, 'tx_response.timestamp');
+
+    return { code, tx_hash, type, status, amount, fee, height, timestamp, messages };
+  });
+  return txs;
 }
