@@ -258,7 +258,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
         this.dataSourceToken.data = dataAccount.balances; //new MatTableDataSource(dataAccount.balances);
-        this.pageDataToken.length = dataAccount.balances.length;
+        this.pageDataToken.length = dataAccount?.balances?.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
