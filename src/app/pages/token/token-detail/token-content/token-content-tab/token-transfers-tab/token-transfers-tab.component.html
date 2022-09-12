@@ -4,7 +4,7 @@
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="transfer-table-container aura-table-contain table-responsive">
-    <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+    <ng-container *ngIf="pageData?.length > 0; else noValues">
       <ng-container>
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of template; index as i">
@@ -81,10 +81,7 @@
                           <a
                             class="text--primary txt-from-address content-transfer"
                             href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                            *ngIf="
-                              data.modeExecute !== modeExecuteTransaction.Mint &&
-                              data[template.matColumnDef]
-                            ">
+                            *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
                           <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
@@ -125,7 +122,7 @@
                       <ng-container *ngSwitchCase="'details'">
                         <button
                           class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                          [disabled]="data.disabled || !data.token_id"
+                          [disabled]="!data.token_id"
                           [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                           <span>View NFT</span>
                         </button>
@@ -135,7 +132,7 @@
                           class="text--primary"
                           href="/tokens/token/{{ contractAddress }}?a={{ data['token_id'] }}"
                           *ngIf="data['token_id']?.length > 0">
-                          {{ data[template.matColumnDef] | stringEllipsis : 16 }}
+                          {{ data[template.matColumnDef] | stringEllipsis: 16 }}
                         </a>
                         <span *ngIf="data['token_id']?.length === 0"> - </span>
                       </ng-container>
@@ -173,14 +170,14 @@
       </ng-container>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data></app-table-no-data>
+      <app-table-no-data *ngIf="loading"></app-table-no-data>
     </ng-template>
   </div>
   <app-paginator
-          [length]="pageData?.length"
-          [pageSize]="pageData?.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)"></app-paginator>
+    [length]="pageData?.length"
+    [pageSize]="pageData?.pageSize"
+    (paginator)="paginatorEmit($event)"
+    (pageEvent)="pageEvent($event)"></app-paginator>
 </ng-container>
 
 <div *ngIf="loading">

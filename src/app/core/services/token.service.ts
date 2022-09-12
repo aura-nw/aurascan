@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { INDEXER_URL, LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -33,7 +34,7 @@ export class TokenService extends CommonService {
     offset: string | number,
     contractAddress: string,
     filterData: any,
-    type = 'cw20-tokens'
+    type = 'cw20-tokens',
   ): Observable<any> {
     let payload = {
       contract_address: contractAddress,
@@ -55,13 +56,49 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/${type}/transactions`, payload);
   }
 
+  getListTokenTransferIndexer(
+    pageLimit: string | number,
+    contractAddress: string,
+    filterData: any,
+    nextKey = null,
+  ): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      searchType: 'execute',
+      searchKey: '_contract_address',
+      searchValue: contractAddress,
+      pageLimit,
+      nextKey,
+      countTotal: true,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    if (filterData?.keyWord) {
+      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
+        params['txHash'] = filterData?.keyWord;
+      } else if (filterData['isSearchWallet']) {
+        params['addressInContract'] = filterData?.keyWord;
+      } else {
+        params['query'] = 'wasm.token_id=' + filterData?.keyWord;
+      }
+    }
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+      params,
+    });
+  }
+
   getListNFTDetail(
     contractAddress: string,
     tokenId: string,
     limit: string | number,
     offset: string | number,
   ): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/transactions/${contractAddress}/${tokenId}/${limit}/${offset}`);
+    return this.http.get<any>(
+      `${this.apiUrl}/cw721-tokens/transactions/${contractAddress}/${tokenId}/${limit}/${offset}`,
+    );
   }
 
   getListTokenNFT(contractAddress: string, payload): Observable<any> {
