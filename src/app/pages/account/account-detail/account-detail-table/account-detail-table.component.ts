@@ -49,12 +49,12 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
 
   ngOnChanges(): void {
     if (this.dataSource) {
-      this.dataSourceMobile = this.dataSource.data?.slice(
+      this.dataSourceMobile = this.dataSource?.data?.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
 
-      this.dataSource.data.forEach((f) => {
+      this.dataSource?.data?.forEach((f) => {
         if (f.vesting_schedule) {
           f.date_format = new Date(Number(f.vesting_schedule) * 1000);
           if (f.type.toLowerCase().indexOf('continuous') > -1) {
