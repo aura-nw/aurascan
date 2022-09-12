@@ -7,35 +7,27 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
-import { balanceOf } from '../../../../app/core/utils/common/parsing';
 import local from '../../../../app/core/utils/storage/local';
 import { ACCOUNT_WALLET_COLOR, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
   ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
-import {
-  CodeTransaction,
-  StatusTransaction,
-  TRANSACTION_TYPE_ENUM,
-  TypeTransaction,
-} from '../../../core/constants/transaction.enum';
 import { IAccountDetail } from '../../../core/models/account.model';
-import { ResponseDto, TableTemplate } from '../../../core/models/common.model';
+import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
 import { CommonService } from '../../../core/services/common.service';
 import { TransactionService } from '../../../core/services/transaction.service';
-import { getAmount, Globals } from '../../../global/global';
+import { convertDataTransaction, Globals } from '../../../global/global';
 import { chartCustomOptions, ChartOptions, CHART_OPTION } from './chart-options';
 
 @Component({
@@ -303,35 +295,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.nextKey = data.nextKey || null;
 
         if (code === 200) {
-          const txs = _.get(data, 'transactions').map((element) => {
-            const tx_hash = _.get(element, 'tx_response.txhash');
-            const message = _.get(element, 'tx.body.messages');
-
-            const _type = _.get(element, 'tx.body.messages[0].@type');
-            const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
-
-            const status =
-              _.get(element, 'tx_response.code') == CodeTransaction.Success
-                ? StatusTransaction.Success
-                : StatusTransaction.Fail;
-
-            const _amount = getAmount(
-              _.get(element, 'tx.body.messages'),
-              _type,
-              _.get(element, 'tx.body.raw_log'),
-              this.coinMinimalDenom,
-            );
-
-            const amount = _.isNumber(_amount) ? _amount.toFixed(this.coinDecimals) : _amount;
-
-            const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount'), this.coinDecimals).toFixed(
-              this.coinDecimals,
-            );
-            const height = _.get(element, 'tx_response.height');
-            const timestamp = _.get(element, 'tx_response.timestamp');
-
-            return { tx_hash, type, status, amount, fee, height, timestamp, message };
-          });
+          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
 
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];

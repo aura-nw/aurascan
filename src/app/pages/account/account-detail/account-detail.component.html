@@ -272,8 +272,8 @@
                               </a>
                               <a
                                 *ngSwitchCase="'height'"
-                                class="text--green cursor-pointer block-link"
-                                [routerLink]="['/blocks/id', data['blockId']]">
+                                class="text--primary cursor-pointer block-link"
+                                [routerLink]="['/blocks', data['height']]">
                                 {{ data[template.matColumnDef] }}
                               </a>
                               <div *ngSwitchCase="'type'">
@@ -352,7 +352,7 @@
               </div>
             </ng-container>
             <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
+              <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
           <div *ngIf="transactionLoading" class="">
