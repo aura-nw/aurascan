@@ -20,7 +20,7 @@
                                               <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>
                                             </mat-select>
                                       <div class="text--gray-3 caption fw-normal mt-2">Please select one or many Code IDs that were verified contract source code of the project.</div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('code_id').hasError('required') && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)">
                                             Code id is required!
                                         </div>
@@ -35,11 +35,11 @@
                                           type="text"
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('project_name').invalid && (contractForm.get('project_name').dirty || contractForm.get('project_name').touched)"/>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('project_name').hasError('required') && (contractForm.get('project_name').dirty || contractForm.get('project_name').touched)">
                                             Project Name is required!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('project_name').hasError('maxlength') && (contractForm.get('project_name').dirty || contractForm.get('project_name').touched)">
                                             Content is longer than limit!
                                         </div>
@@ -56,15 +56,15 @@
                                           type="text"
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('official_project_website').invalid && (contractForm.get('official_project_website').dirty || contractForm.get('official_project_website').touched)"/>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('official_project_website').hasError('required') && (contractForm.get('official_project_website').dirty || contractForm.get('official_project_website').touched)">
                                             Official Project Website is required!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('official_project_website').hasError('maxlength') && (contractForm.get('official_project_website').dirty || contractForm.get('official_project_website').touched)">
                                             Content is longer than limit!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('official_project_website').hasError('pattern') && (contractForm.get('official_project_website').dirty || contractForm.get('official_project_website').touched)">
                                             Invalid Official Project Website!
                                         </div>
@@ -80,11 +80,11 @@
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('official_project_email_address').invalid && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)"/>
                                           <div class="text--gray-3 caption fw-normal mt-2">Please make sure the email provided has the project official domain as its suffix.</div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('official_project_email_address').hasError('required') && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)">
                                             Official Project Email Address is required!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('official_project_email_address').hasError('maxlength') && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)">
                                             Content is longer than limit!
                                         </div>
@@ -101,11 +101,11 @@
                                           type="text"
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('requester_name').invalid && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)"/>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('requester_name').hasError('required') && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)">
                                             Requester Name is required!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('requester_name').hasError('maxlength') && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)">
                                             Content is longer than limit!
                                         </div>
@@ -121,11 +121,11 @@
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('requester_email_address').invalid && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)"/>
                                           <div class="text--gray-3 caption fw-normal mt-2">Please make sure that you provide an email account of the project’s official domain. If the contact email is using public domains (eg. Gmail) do publish on the website for acknowledgement/verification.</div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('requester_email_address').hasError('required') && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)">
                                             Requester Email Address is required!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('requester_email_address').hasError('maxlength') && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)">
                                             Content is longer than limit!
                                         </div>
@@ -143,11 +143,11 @@
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('project_description').invalid && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)"></textarea>
                                         <div class="text--gray-3 caption fw-normal mt-2">Please introduce or summarize the project's operation/mechanism/ goals in a maximum of 300 characters. The short description should be written in a neutral point of view and must exclude unsubstantiated claims (“first”, ”most”, “best”, and etc) unless proven otherwise.</div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('project_description').hasError('required') && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)">
                                             Project Description is required!
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('project_description').hasError('maxlength') && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)">
                                             Content is longer than limit!
                                         </div>
@@ -162,7 +162,7 @@
                                     <!-- Whitepaper -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('whitepaper').invalid && (contractForm.get('whitepaper').dirty || contractForm.get('whitepaper').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('whitepaper').invalid && (contractForm.get('whitepaper').dirty || contractForm.get('whitepaper').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="whitepaper">
                                                 <img src="assets/icons/icons-svg/white/FilePdf.svg" alt="">
                                             </label>
@@ -173,7 +173,7 @@
                                                 class="form-control"
                                                 placeholder="Whitepaper"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('whitepaper').hasError('pattern') && (contractForm.get('whitepaper').dirty || contractForm.get('whitepaper').touched)">
                                             Invalid Whitepaper!
                                         </div>
@@ -183,7 +183,7 @@
                                     <!-- Medium -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('medium').invalid && (contractForm.get('medium').dirty || contractForm.get('medium').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('medium').invalid && (contractForm.get('medium').dirty || contractForm.get('medium').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="medium">
                                                 <img src="assets/icons/icons-svg/white/Medium.svg" alt="">
                                             </label>
@@ -194,7 +194,7 @@
                                                 class="form-control"
                                                 placeholder="Medium"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('medium').hasError('pattern') && (contractForm.get('medium').dirty || contractForm.get('medium').touched)">
                                             Invalid Medium!
                                         </div>
@@ -206,7 +206,7 @@
                                     <!-- GitHub -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('github').invalid && (contractForm.get('github').dirty || contractForm.get('github').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('github').invalid && (contractForm.get('github').dirty || contractForm.get('github').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="github">
                                                 <img src="assets/icons/icons-svg/white/Github.svg" alt="">
                                             </label>
@@ -217,7 +217,7 @@
                                                 class="form-control"
                                                 placeholder="github"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('github').hasError('pattern') && (contractForm.get('github').dirty || contractForm.get('github').touched)">
                                             Invalid GitHub!
                                         </div>
@@ -227,7 +227,7 @@
                                     <!-- Reddit -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('reddit').invalid && (contractForm.get('reddit').dirty || contractForm.get('reddit').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('reddit').invalid && (contractForm.get('reddit').dirty || contractForm.get('reddit').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="reddit">
                                                 <img src="assets/icons/icons-svg/white/Reddit.svg" alt="">
                                             </label>
@@ -238,7 +238,7 @@
                                                 class="form-control"
                                                 placeholder="reddit"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('reddit').hasError('pattern') && (contractForm.get('reddit').dirty || contractForm.get('reddit').touched)">
                                             Invalid Reddit!
                                         </div>
@@ -250,7 +250,7 @@
                                     <!-- Telegram -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('telegram').invalid && (contractForm.get('telegram').dirty || contractForm.get('telegram').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('telegram').invalid && (contractForm.get('telegram').dirty || contractForm.get('telegram').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="telegram">
                                                 <img src="assets/icons/icons-svg/white/Telegram.svg" alt="">
                                             </label>
@@ -261,7 +261,7 @@
                                                 class="form-control"
                                                 placeholder="telegram"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('telegram').hasError('pattern') && (contractForm.get('telegram').dirty || contractForm.get('telegram').touched)">
                                             Invalid Telegram!
                                         </div>
@@ -271,7 +271,7 @@
                                     <!-- Slack -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('slack').invalid && (contractForm.get('slack').dirty || contractForm.get('slack').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('slack').invalid && (contractForm.get('slack').dirty || contractForm.get('slack').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="slack">
                                                 <img src="assets/icons/icons-svg/white/Slack.svg" alt="">
                                             </label>
@@ -282,7 +282,7 @@
                                                 class="form-control"
                                                 placeholder="slack"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('slack').hasError('pattern') && (contractForm.get('slack').dirty || contractForm.get('slack').touched)">
                                             Invalid Slack!
                                         </div>
@@ -294,7 +294,7 @@
                                     <!-- Wechat -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('weChat').invalid && (contractForm.get('weChat').dirty || contractForm.get('weChat').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('weChat').invalid && (contractForm.get('weChat').dirty || contractForm.get('weChat').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="weChat">
                                                 <img src="assets/icons/icons-svg/white/WeChat.svg" alt="">
                                             </label>
@@ -305,7 +305,7 @@
                                                 class="form-control"
                                                 placeholder="weChat"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('weChat').hasError('pattern') && (contractForm.get('weChat').dirty || contractForm.get('weChat').touched)">
                                             Invalid Wechat!
                                         </div>
@@ -315,7 +315,7 @@
                                     <!-- Facebook -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('facebook').invalid && (contractForm.get('facebook').dirty || contractForm.get('facebook').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('facebook').invalid && (contractForm.get('facebook').dirty || contractForm.get('facebook').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="facebook">
                                                 <img src="assets/icons/icons-svg/white/Facebook.svg" alt="">
                                             </label>
@@ -326,7 +326,7 @@
                                                 class="form-control"
                                                 placeholder="facebook"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('facebook').hasError('pattern') && (contractForm.get('facebook').dirty || contractForm.get('facebook').touched)">
                                             Invalid Facebook!
                                         </div>
@@ -338,7 +338,7 @@
                                     <!-- Linkedin -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('linkedin').invalid && (contractForm.get('linkedin').dirty || contractForm.get('linkedin').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('linkedin').invalid && (contractForm.get('linkedin').dirty || contractForm.get('linkedin').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="linkedin">
                                                 <img src="assets/icons/icons-svg/white/LinkedIn.svg" alt="">
                                             </label>
@@ -349,7 +349,7 @@
                                                 class="form-control"
                                                 placeholder="linkedin"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('linkedin').hasError('pattern') && (contractForm.get('linkedin').dirty || contractForm.get('linkedin').touched)">
                                             Invalid Linkedin!
                                         </div>
@@ -359,7 +359,7 @@
                                     <!-- Twitter -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('twitter').invalid && (contractForm.get('twitter').dirty || contractForm.get('twitter').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('twitter').invalid && (contractForm.get('twitter').dirty || contractForm.get('twitter').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="twitter">
                                                 <img src="assets/icons/icons-svg/white/Twitter.svg" alt="">
                                             </label>
@@ -370,7 +370,7 @@
                                                 class="form-control"
                                                 placeholder="twitter"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('twitter').hasError('pattern') && (contractForm.get('twitter').dirty || contractForm.get('twitter').touched)">
                                             Invalid Twitter!
                                         </div>
@@ -382,7 +382,7 @@
                                     <!-- Discord -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('discord').invalid && (contractForm.get('discord').dirty || contractForm.get('discord').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('discord').invalid && (contractForm.get('discord').dirty || contractForm.get('discord').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="discord">
                                                 <img src="assets/icons/icons-svg/white/Discord.svg" alt="">
                                             </label>
@@ -393,7 +393,7 @@
                                                 class="form-control"
                                                 placeholder="discord"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('discord').hasError('pattern') && (contractForm.get('discord').dirty || contractForm.get('discord').touched)">
                                             Invalid Discord!
                                         </div>
@@ -403,7 +403,7 @@
                                     <!-- Bitcointalk -->
                                     <div class="form-group">
                                         <div class="input-group form-check-input"
-                                        [class.form-control--error]="contractForm.get('bit_coin_talk').invalid && (contractForm.get('bit_coin_talk').dirty || contractForm.get('bit_coin_talk').touched)">                                            
+                                        [class.form-control--error]="contractForm.get('bit_coin_talk').invalid && (contractForm.get('bit_coin_talk').dirty || contractForm.get('bit_coin_talk').touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="bit_coin_talk">
                                                 <img src="assets/icons/icons-svg/white/Bitcoin.svg" alt="">
                                             </label>
@@ -414,7 +414,7 @@
                                                 class="form-control"
                                                 placeholder="bit_coin_talk"/>
                                         </div>
-                                        <div class="error" 
+                                        <div class="error"
                                             *ngIf="contractForm.get('bit_coin_talk').hasError('pattern') && (contractForm.get('bit_coin_talk').dirty || contractForm.get('bit_coin_talk').touched)">
                                             Invalid Bitcointalk!
                                         </div>

@@ -1,36 +1,38 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {TableTemplate} from "src/app/core/models/common.model";
-import {PageEvent} from "@angular/material/paginator";
-import {DATEFORMAT, PAGE_EVENT} from "src/app/core/constants/common.constant";
-import {MatTableDataSource} from "@angular/material/table";
-import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {REGISTER_CONTRACT} from "src/app/core/constants/contract.constant";
-import {TranslateService} from "@ngx-translate/core";
-import {Globals} from "src/app/global/global";
-import {Router} from "@angular/router";
-import {ContractService} from "src/app/core/services/contract.service";
-import {DatePipe} from "@angular/common";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
-import {WalletService} from "src/app/core/services/wallet.service";
-import {from} from "rxjs";
-import {delay, mergeMap} from "rxjs/operators";
-import {MESSAGES_CODE} from "src/app/core/constants/messages.constant";
+import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { from } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
+import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { ContractMainnetStatus } from 'src/app/core/constants/contract.enum';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-contracts-smart-list',
   templateUrl: './contracts-smart-list.component.html',
-  styleUrls: ['./contracts-smart-list.component.scss']
+  styleUrls: ['./contracts-smart-list.component.scss'],
 })
 export class ContractsSmartListComponent implements OnInit {
   textSearch = '';
   templates: Array<TableTemplate> = [
+    { matColumnDef: 'address', headerCellDef: 'Address' },
+    { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
-    { matColumnDef: 'result', headerCellDef: 'Result registration' },
-    { matColumnDef: 'updated_at', headerCellDef: 'Time Registered' },
-    { matColumnDef: 'action', headerCellDef: '' },
+    { matColumnDef: 'version', headerCellDef: 'Version' },
+    { matColumnDef: 'verified', headerCellDef: 'Verified' },
+    { matColumnDef: 'status', headerCellDef: 'Status' },
+    { matColumnDef: 'code_mainnet', headerCellDef: 'Code ID On Mainnet' },
+    { matColumnDef: 'contract_mainnet', headerCellDef: 'Contract On Mainnet' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -43,47 +45,112 @@ export class ContractsSmartListComponent implements OnInit {
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  modalReference: any;
-  currentCodeID: number;
-  isEditMode = false;
-  selectedTypeContract: string;
-  lstTypeContract = REGISTER_CONTRACT;
   userAddress = '';
   walletAccount: any;
   loading = true;
   isHideSearch = false;
-  isDisable = true;
-  pageLength = 0;
-  isProcess = false;
   currentType = '';
+  ContractMainnetStatus = ContractMainnetStatus;
+  currentStatus: any;
+
+  statusColor = {
+    TBD: '#2CB1F5',
+    'Not Registered': '#F5B73C',
+    Unverified: '#E5E7EA',
+    Deployed: '#67C091',
+    Rejected: '#D5625E',
+  };
+
+  mockData = [
+    {
+      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
+      contract_name: 'Aura',
+      code_id: 34,
+      type: 'CW20',
+      version: '0.9.3',
+      verified: '2022-09-01T06:53:17.687Z',
+      status: 'Unverified',
+      code_mainnet: '89',
+      symbol: 'AURA',
+      contract_mainnet: 'aura1206t3say4u6p5dnwpagzjz77qmt0uyx2dsew4sncm9j7w7lxjjxs4xheh9',
+    },
+    {
+      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
+      contract_name: 'BNB',
+      code_id: 232,
+      type: 'CW721',
+      version: '0.9.3',
+      verified: '2022-09-05T06:53:17.687Z',
+      status: 'Not Registered',
+      code_mainnet: '',
+      symbol: '',
+      contract_mainnet: '',
+    },
+    {
+      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
+      contract_name: 'Cosmos',
+      code_id: 43,
+      type: 'CW721',
+      version: '0.9.3',
+      verified: '2022-08-22T06:53:17.687Z',
+      status: 'TBD',
+      code_mainnet: '',
+      symbol: 'ATOM',
+      contract_mainnet: '',
+    },
+    {
+      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
+      contract_name: 'Juno',
+      code_id: 22,
+      type: 'CW20',
+      version: '0.9.3',
+      verified: '2022-08-17T06:53:17.687Z',
+      status: 'Deployed',
+      code_mainnet: '',
+      symbol: '',
+      contract_mainnet: '',
+    },
+    {
+      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
+      contract_name: 'Terra',
+      code_id: 33,
+      type: 'CW20',
+      version: '0.9.3',
+      verified: '2022-08-05T06:53:17.687Z',
+      status: 'Rejected',
+      code_mainnet: '',
+      symbol: '',
+      contract_mainnet: '',
+    },
+  ];
 
   constructor(
-      public translate: TranslateService,
-      public global: Globals,
-      private router: Router,
-      private contractService: ContractService,
-      private datePipe: DatePipe,
-      private layout: BreakpointObserver,
-      private modalService: NgbModal,
-      private toastr: NgxToastrService,
-      public walletService: WalletService,
-  ) {}
+    public translate: TranslateService,
+    public global: Globals,
+    private router: Router,
+    private contractService: ContractService,
+    private datePipe: DatePipe,
+    private layout: BreakpointObserver,
+    public walletService: WalletService,
+    public commonService: CommonService
+  ) {
+  }
 
   ngOnInit(): void {
     from([1])
-        .pipe(
-            delay(600),
-            mergeMap((_) => this.walletService.wallet$),
-        )
-        .subscribe((wallet) => {
-          if (wallet) {
-            this.userAddress = wallet.bech32Address;
-            this.getListContract();
-          } else {
-            this.userAddress = null;
-            this.router.navigate(['/']);
-          }
-        });
+      .pipe(
+        delay(600),
+        mergeMap((_) => this.walletService.wallet$),
+      )
+      .subscribe((wallet) => {
+        if (wallet) {
+          this.userAddress = wallet.bech32Address;
+          this.getListContract();
+        } else {
+          this.userAddress = null;
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   getListContract() {
@@ -96,30 +163,29 @@ export class ContractsSmartListComponent implements OnInit {
     };
 
     this.contractService.getListTypeContract(payload).subscribe(
-        (res) => {
-          if (res) {
-            this.pageData = {
-              length: res?.meta?.count,
-              pageSize: this.pageData.pageSize,
-              pageIndex: PAGE_EVENT.PAGE_INDEX,
-            };
-            this.pageLength = this.pageData?.length;
+      (res) => {
+        if (res) {
+          this.pageData = {
+            length: this.mockData.length,
+            pageSize: this.pageData.pageSize,
+            pageIndex: PAGE_EVENT.PAGE_INDEX,
+          };
 
-            res.data?.forEach((item) => {
-              item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-            });
-            this.dataSource = new MatTableDataSource<any>(res.data);
-            this.dataBk = res.data || [];
-          }
-        },
-        () => {},
-        () => {
-          this.loading = false;
-        },
+          res.data?.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          });
+          this.dataSource = new MatTableDataSource<any>(this.mockData);
+          this.dataBk = this.mockData || [];
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
     );
   }
 
-  searchCode(): void {
+  searchContract(): void {
     this.filterSearchData = null;
     this.isHideSearch = false;
     if (this.textSearch.length > 0) {
@@ -146,7 +212,7 @@ export class ContractsSmartListComponent implements OnInit {
   clearSearch(): void {
     this.filterSearchData = null;
     this.dataSource = new MatTableDataSource<any>(this.dataBk);
-    this.pageData.length = this.pageLength;
+    this.pageData.length = this.dataBk.length;
   }
 
   replacePageList(item: any): void {
@@ -167,88 +233,17 @@ export class ContractsSmartListComponent implements OnInit {
     this.getListContract();
   }
 
-  handleButtonContract(isEditMode: boolean) {
-    this.isProcess = true;
-    if (isEditMode) {
-      this.handleUpdate(this.currentCodeID);
-    } else {
-      this.handleRegister();
-    }
-  }
-
   connectWallet(): void {
     this.walletAccount = this.walletService.getAccount();
   }
 
-  handleRegister() {
-    this.connectWallet();
-    if (this.walletAccount) {
-      const payload = {
-        code_id: Number(this.currentCodeID),
-        type: this.selectedTypeContract,
-        account_address: this.userAddress,
-      };
-      this.contractService.registerContractType(payload).subscribe(
-          (res) => {
-            if (res) {
-              this.handleCloseDialog(res);
-              this.isProcess = false;
-            }
-          },
-          (error) => {},
-      );
-    }
-  }
-
-  handleUpdate(codeID = undefined) {
-    this.contractService.updateContractType(Number(codeID), this.selectedTypeContract).subscribe(
-        (res) => {
-          if (res) {
-            this.handleCloseDialog(res);
-            this.isProcess = false;
-          }
-        },
-        (error) => {},
-    );
-  }
-
-  handleCloseDialog(res: any) {
-    this.modalReference.close();
-    this.getListContract();
-    this.selectedTypeContract = '';
-    this.isEditMode = false;
-    if (res?.data?.Message) {
-      let msgError = res?.data?.Message.toString() || 'Error';
-      this.toastr.error(msgError);
-    } else {
-      this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
-    }
-  }
-
-  closeDialog(modal: any) {
-    this.selectedTypeContract = '';
-    this.currentCodeID = null;
-    this.isDisable = true;
-    modal.close('Close click');
-  }
-
-  checkInput(): void {
-    this.isDisable = true;
-    if ((this.currentCodeID && this.currentCodeID > 0) && this.selectedTypeContract) {
-      this.isDisable = false;
-    }
-    if(this.isEditMode && this.currentType === this.selectedTypeContract) {
-      this.isDisable = true;
-    }
-  }
-
   validateCurrentCodeID(event: any) {
-    const regex = new RegExp(/[0-9]/g);
-    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    if (!regex.test(key)) {
-      event.preventDefault();
-      return;
-    }
-    this.currentCodeID = event.target.value;
+    // const regex = new RegExp(/[0-9]/g);
+    // let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    // if (!regex.test(key)) {
+    //   event.preventDefault();
+    //   return;
+    // }
+    // this.currentCodeID = event.target.value;
   }
 }
