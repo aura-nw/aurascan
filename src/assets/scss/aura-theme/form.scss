@@ -132,14 +132,14 @@
     }
     .input-group-prepend {
       padding: var(--spacer-2) var(--spacer-4);
-      border-right: 2px solid var(--aura-gray-9);
+      border-right: 2px solid var(--aura-gray-8);
       @media (min-width: 992px) {
         padding-right: var(--spacer-6);
       }
     }
     .input-group-append {
       padding-left: var(--spacer-4);
-      border-left: 2px solid var(--aura-gray-9);
+      border-left: 2px solid var(--aura-gray-8);
       @media (min-width: 992px) {
         padding-left: var(--spacer-6);
       }

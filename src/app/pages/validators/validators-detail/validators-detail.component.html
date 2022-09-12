@@ -108,11 +108,12 @@
           <!-- Voting Power -->
           <div class="row mt-3">
             <div class="col-6">Voting Power</div>
-            <div class="col-6 text-end text-lg-start">
-              <span class="text--gray-1">{{ currentValidatorDetail?.power | number: global.formatNumberToken }}</span>
-              <span class="text--primary ml-1">{{ denom }}</span>
-              <br class="d-lg-none" />
-              <span class="text--gray-5 ml-1">({{ currentValidatorDetail?.percent_power }}%)</span>
+            <div class="col-6 text-end text-lg-start d-xl-flex">
+              <div>
+                <span class="text--gray-1">{{ currentValidatorDetail?.power | number: global.formatNumberToken }}</span>
+                <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+              </div>
+              <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
             </div>
           </div>
           <!-- Bonded Height -->
@@ -125,13 +126,14 @@
           <!-- Self Bonded -->
           <div class="row mt-3">
             <div class="col-6">Self Bonded</div>
-            <div class="col-6 text-end text-lg-start">
+            <div class="col-6 text-end text-lg-start d-xl-flex">
+              <div>
               <span class="text--gray-1">{{
                 currentValidatorDetail?.self_bonded | number: global.formatNumberToken
-              }}</span>
-              <span class="text--primary ml-1">{{ denom }}</span>
-              <br class="d-lg-none" />
-              <span class="text--gray-5 ml-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
+                }}</span>
+                <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+              </div>
+              <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
             </div>
           </div>
         </div>
@@ -148,7 +150,6 @@
   <div class="card py-10" *ngIf="!currentValidatorDetail">
     <app-loading-sprint></app-loading-sprint>
   </div>
-
   <div class="row">
     <div class="col-xl-6">
       <div class="card text--white">
@@ -289,7 +290,6 @@
       </div>
     </div>
   </div>
-
   <div class="row mt-1">
     <div class="col-xl-6">
       <div class="card text--white">

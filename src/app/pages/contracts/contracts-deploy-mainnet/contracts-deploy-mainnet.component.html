@@ -13,23 +13,13 @@
                                     <!-- code_id -->
                                     <div class="form-group">
                                         <label for="code_id" class="form-label required text--gray-1 body-02">Code ID</label>
-                                        
                                             <mat-select formControlName="code_id" class="form-control form-check-input"
+                                            id="code_id"
                                             [class.form-control--error]="contractForm.get('code_id').invalid && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)"
                                              multiple [disableOptionCentering]="true" panelClass="aura-optional-panel aura-optional-contract-deploy">
                                               <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>
                                             </mat-select>
-
-
-                                        <!-- <input id="code_id"
-                                          formControlName="code_id"
-                                          type="text"
-                                          class="form-control form-check-input"
-                                          [class.form-control--error]="contractForm.get('code_id').invalid && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)"
-                                          placeholder="Select one of many Code IDs" /> -->
-
-
-                                          <div class="text--gray-3 caption fw-normal mt-2">Please select one or many Code IDs that were verified contract source code of the project.</div>
+                                      <div class="text--gray-3 caption fw-normal mt-2">Please select one or many Code IDs that were verified contract source code of the project.</div>
                                         <div class="error" 
                                             *ngIf="contractForm.get('code_id').hasError('required') && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)">
                                             Code id is required!
