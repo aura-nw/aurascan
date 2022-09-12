@@ -423,7 +423,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           if (listUnDelegator) {
             this.lstUndelegate = [];
             const now = new Date();
-            listUnDelegator.data.unbonding_responses.forEach((data) => {
+            listUnDelegator.data.account_unbonding.forEach((data) => {
               data.entries.forEach((f) => {
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;

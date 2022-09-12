@@ -64,7 +64,7 @@
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
             <div>Gas</div>
-            <div class='ml-md-1'>(used / wanted)</div>
+            <div class="ml-md-1">(used / wanted)</div>
           </div>
           <div class="col-auto col-lg-9 mb-0 text--gray-1">
             {{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}
@@ -198,6 +198,12 @@
             { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
           ]"></app-card-mob-simple>
       </div>
+      <app-paginator
+        [length]="length"
+        [pageSize]="pageData.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="handlePageEvent($event)">
+      </app-paginator>
     </ng-container>
   </div>
 </div>
