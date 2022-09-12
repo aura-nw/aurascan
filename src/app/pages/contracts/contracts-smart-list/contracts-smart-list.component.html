@@ -1,16 +1,11 @@
 <div class="contract-register-mainnet" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="d-md-flex justify-content-between box-title-register">
+  <div class="d-flex justify-content-between align-items-center">
     <h1 class="text--white mb-0">Smart contracts list</h1>
-    <div class="col-12 col-lg-8 mt-1 mt-lg-0 d-flex align-items-center justify-content-center justify-content-lg-end">
-      <button
-        class="button button-outline button--sm button-pill button-flat d-flex text--black"
-        type="button"
-        [disabled]="pageData?.length === 0"
-        href="/contracts/contracts-deploy-mainnet">
-        <img [src]="'assets/icons/icons-svg/white/plus.svg' | imageS3" alt="" width="16px" height="16px" />
-        <span class="ml-2 text--black">Register Contract</span>
-      </button>
-    </div>
+    <a href="/contracts/contracts-deploy-mainnet"
+       class="button button-outline button--md button-pill button-flat d-none d-lg-flex">
+      <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+      <span class="ml-2 text--black">Register Contract</span>
+    </a>
   </div>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
   <div class="d-lg-flex justify-content-between mt-4 mt-lg-0">
@@ -18,17 +13,20 @@
       <div class="text--gray-1 body-01">
         Users can register smart contracts that ware verified source code to deploy on mainnet.
       </div>
-      <div class="body-03-mob body-02 mt-1 text--gray-5">
+      <div class="body-03-mob body-02 mt-2 mt-lg-1 text--gray-5">
         A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' : '' }} that you created
       </div>
+      <a href="/contracts/contracts-deploy-mainnet"
+         class="button button-outline button--md button-pill button-flat d-flex d-lg-none mt-4">
+        <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+        <span class="ml-2 text--black">Register Contract</span>
+      </a>
     </div>
-    {{ currentStatus?.key }}
-    <div class="d-flex align-items-center">
-      <div class="dropdown aura-dropdown mr-4 btn-item" [style.width]="'180px'">
+    <div class="d-flex mt-4 mt-md-0">
+      <div class="dropdown aura-dropdown mr-4 btn-status d-none d-lg-block">
         <button
-          class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-dropdown w-100"
+          class="button button--md button-pill button-outline button-outline--gradient button-dropdown w-100"
           type="button"
-          id="selectStatus"
           data-bs-toggle="dropdown"
           aria-expanded="false">
           <span>{{ currentStatus?.value || 'Status' }}</span>
@@ -41,7 +39,7 @@
           </ng-container>
         </ul>
       </div>
-      <form class="aura-form single-input-field search-form mt-4 mt-lg-0 d-none d-lg-block">
+      <form class="aura-form single-input-field search-form mt-4 mt-md-0 d-none d-lg-block position-relative">
         <div class="input-group">
           <input
             type="text"
@@ -68,7 +66,7 @@
           </button>
         </div>
         <ng-container *ngIf="textSearch?.length > 0">
-          <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
+          <div class="box-search-data w-100 text-white" [style.display]="isHideSearch ? 'none' : 'block'">
             <ng-container *ngIf="filterSearchData?.length === 0">
               <span> There are no matching contracts </span>
             </ng-container>
@@ -101,41 +99,59 @@
 
 <section>
   <div class="card mt-4 mt-lg-6">
-    <form class="aura-form single-input-field search-form mt-4 px-4 d-lg-none">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search for Code ID"
-          [(ngModel)]="textSearch"
-          [maxLength]="maxLengthSearch"
-          (keyup)="searchContract()"
-          name="search"
-          autocomplete="off" />
-        <button
-          type="submit"
-          class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
-          (click)="searchContract()">
-          <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-        </button>
-        <button
-          type="reset"
-          class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-          (click)="clearSearch()">
-          <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-        </button>
-      </div>
-      <ng-container *ngIf="textSearch?.length > 0">
-        <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
-          <ng-container *ngIf="filterSearchData?.length === 0">
-            <span> There are no matching contracts </span>
-          </ng-container>
-          <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-            <div class="txt-title-search">Smart Contract</div>
-            <ng-container *ngFor="let item of filterSearchData">
-              <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
-                <div class="ml-1">
-                  <div class="d-flex align-items-center">
+    <div class="card-body">
+      <div class='d-flex d-lg-none mt-4'>
+        <div class="dropdown aura-dropdown btn-status btn-status--mob">
+          <button
+            class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card button-dropdown w-100"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span>{{ currentStatus?.value || 'Status' }}</span>
+          </button>
+          <ul class="dropdown-menu aura-dropdown-menu">
+            <ng-container *ngFor="let item of ContractMainnetStatus | keyvalue">
+              <li class="py-1 px-2 dropdown-item cursor-pointer" (click)="currentStatus = item; searchContract()">
+                <button type="button" class="button p-0 body-02 text-start">{{ item.value }}</button>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+        <form class="aura-form single-input-field search-form pl-4">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for Code ID"
+              [(ngModel)]="textSearch"
+              [maxLength]="maxLengthSearch"
+              (keyup)="searchContract()"
+              name="search"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
+              (click)="searchContract()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+              (click)="clearSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+          <ng-container *ngIf="textSearch?.length > 0">
+            <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
+              <ng-container *ngIf="filterSearchData?.length === 0">
+                <span> There are no matching contracts </span>
+              </ng-container>
+              <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+                <div class="txt-title-search">Smart Contract</div>
+                <ng-container *ngFor="let item of filterSearchData">
+                  <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
+                    <div class="ml-1">
+                      <div class="d-flex align-items-center">
                     <span class="text-clamp">
                       {{ item.code_id }} - {{ item.type }} Contract -
                       <span
@@ -145,19 +161,19 @@
                         {{ item.result }}
                       </span>
                     </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
           </ng-container>
-        </div>
-      </ng-container>
-    </form>
-    <div class="card-body">
+        </form>
+      </div>
       <div *ngIf="loading" class="m-auto mt-10">
         <app-loading-sprint></app-loading-sprint>
       </div>
-      <div class="table-responsive d-none d-lg-block" *ngIf="!loading">
+      <div class="table-responsive mt-4" *ngIf="!loading">
         <table
           mat-table
           matSort
