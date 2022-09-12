@@ -48,7 +48,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   ngAfterViewInit(): void {}
 
   ngOnChanges(): void {
-    if (this.dataSource) {
+    if (this.dataSource?.data) {
       this.dataSourceMobile = this.dataSource.data?.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
