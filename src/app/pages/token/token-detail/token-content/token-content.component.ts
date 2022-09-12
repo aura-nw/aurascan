@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
@@ -17,6 +17,8 @@ import { TokenTab } from '../../../../core/constants/token.enum';
 export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
+  @Output() resultLength = new EventEmitter<any>();
+
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = [];
@@ -106,6 +108,7 @@ export class TokenContentComponent implements OnInit {
 
   getLength(result: string) {
     this.resultSearch = Number(result) || 0;
+    this.resultLength.emit(this.resultSearch);
   }
 
   resetSearch() {
