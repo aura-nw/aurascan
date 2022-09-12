@@ -7,7 +7,7 @@
             <h6 class="h3-mob mb-0 text--white">Contract Overview</h6>
             <div class="justify-content-end">
               <div class="d-flex justify-content-end">
-                <ng-container *ngIf="contractDetail?.token_tracker">
+                <!-- <ng-container *ngIf="contractDetail?.token_tracker">
                   <button
                     class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card">
                     <img [src]="'assets/images/icons/chart-line-up.svg' | imageS3" alt="" width="16px" height="16px" />
@@ -17,7 +17,7 @@
                       {{ contractDetail?.token_tracker?.symbol + ': ' + contractDetail?.token_tracker?.name }}
                     </span>
                   </button>
-                </ng-container>
+                </ng-container> -->
               </div>
             </div>
           </div>
@@ -36,7 +36,7 @@
         <td class="text--gray-5 body-02-mob border_none">Aura Value:</td>
         <td class="border_none">
           ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
-          <span class="text--gray-5 ml-1 caption-mob fw-normal">
+          <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
             >(@ ${{ global.price.aura | number: global.formatNumberToken }}/{{ denom | uppercase }})
           </span>
         </td>

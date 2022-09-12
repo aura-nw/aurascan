@@ -149,35 +149,37 @@
         <div class="proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idex">
           <div class="card mb-0 h-100">
             <div class="card-body px-3 py-3">
-              <div class="border-bottom-mobile d-flex justify-content-between pb-4">
-                <div>
-                  <h2 class="mb-0 h3 title-mob" [routerLink]="[lastedItem.pro_id]">
-                    <span class="text--gray-3 mr-2">#{{ lastedItem.pro_id }}</span>
-                    <span class="text--white pr-3">{{ lastedItem.pro_title }}</span>
-                  </h2>
-                  <div class="text-start text--gray-5" *ngIf="lastedItem.vote_option">
-                    You voted "{{ lastedItem.vote_option }}" for this proposal
+              <div class='border-bottom-mobile pb-4'>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h2 class="mb-0 h3 title-mob" [routerLink]="[lastedItem.pro_id]">
+                      <span class="text--gray-3 mr-2">#{{ lastedItem.pro_id }}</span>
+                      <span class="text--white pr-3">{{ lastedItem.pro_title }}</span>
+                    </h2>
                   </div>
-                </div>
-                <div
-                  *ngIf="getStatus(lastedItem.pro_status)"
-                  class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
+                  <div
+                    *ngIf="getStatus(lastedItem.pro_status)"
+                    class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
                     getStatus(lastedItem.pro_status).key
                   }}">
-                  <span class="status">{{ getStatus(lastedItem.pro_status).value }}</span>
+                    <span class="status">{{ getStatus(lastedItem.pro_status).value }}</span>
+                  </div>
+                </div>
+                <div class="text-start text--gray-5" *ngIf="lastedItem.vote_option">
+                  You voted "{{ lastedItem.vote_option }}" for this proposal
                 </div>
               </div>
               <div class="mt-3 proposal-lasted__content">
                 <div class="w-100 body-01">
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Proposer</div>
-                    <div class="text--primary fw-500">
+                    <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--primary fw-500">
                       {{
-                        lastedItem.pro_proposer
-                          ? lastedItem.pro_proposer
-                          : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
+                      lastedItem.pro_proposer
+                        ? lastedItem.pro_proposer
+                        : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
                       }}
-                    </div>
+                    </a>
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Voting Start</div>

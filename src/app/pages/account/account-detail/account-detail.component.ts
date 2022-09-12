@@ -258,7 +258,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
         this.dataSourceToken.data = dataAccount.balances; //new MatTableDataSource(dataAccount.balances);
-        this.pageDataToken.length = dataAccount.balances.length;
+        this.pageDataToken.length = dataAccount?.balances?.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
       }
@@ -313,6 +313,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
         if (code === 200) {
           const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          txs.forEach((element) => {
+            if (element.type === 'Send' && element.messages[0]?.to_address === this.currentAddress) {
+              element.type = 'Receive';
+            }
+          });
 
           if (this.dataSource.data.length > 0) {
             this.dataSource.data = [...this.dataSource.data, ...txs];
