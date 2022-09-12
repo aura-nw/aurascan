@@ -6,7 +6,7 @@
                 <span>{{title.label}}</span>
             </div>
             <div class="d-flex align-items-center">
-                <div *ngIf="title.status && title.status !== statusTransaction.Success " class="mr-2">
+                <div *ngIf="title.status && +title.status !== statusTransaction.Success " class="mr-2">
                     <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px">
                 </div>
                 <div *ngIf="title.subLabelContent" class="sub-label body {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
