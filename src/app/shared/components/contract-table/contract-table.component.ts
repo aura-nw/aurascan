@@ -59,8 +59,10 @@ export class ContractTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    this.getListContractTransaction();
-    this.loadTableData();
+    if (this.dataList?.data) {
+      this.getListContractTransaction();
+      this.loadTableData();
+    }
   }
 
   ngOnInit(): void {
@@ -69,7 +71,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   loadTableData() {
     this.pageData = {
-      length: this.dataList?.data?.length,
+      length: this.dataList.count,
       pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
@@ -127,8 +129,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   getListContractTransaction(): void {
     this.isLoading = true;
-    this.contractInfo.count = this.dataList?.meta?.count || 0;
-    const ret = this.dataList?.data.map((contract) => {
+    this.contractInfo.count = this.dataList?.count || 0;
+    const ret = this.dataList?.data?.map((contract) => {
       let value = 0;
       let from = '';
       let to = '';

@@ -41,8 +41,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
     headerCellDef: 'Block',
     type: 'hash-url',
     headerWidth: 6,
-    isUrl: '/blocks/id',
-    paramField: 'blockId',
+    isUrl: '/blocks'
   },
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account' },
