@@ -173,13 +173,13 @@
                 <div class="w-100 body-01">
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Proposer</div>
-                    <div class="text--primary fw-500">
+                    <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--primary fw-500">
                       {{
-                        lastedItem.pro_proposer
-                          ? lastedItem.pro_proposer
-                          : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
+                      lastedItem.pro_proposer
+                        ? lastedItem.pro_proposer
+                        : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
                       }}
-                    </div>
+                    </a>
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Voting Start</div>

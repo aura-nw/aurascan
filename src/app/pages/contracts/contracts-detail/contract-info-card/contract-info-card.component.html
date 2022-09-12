@@ -45,11 +45,11 @@
         <tr class="d-none d-lg-table-row">
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
-            <a class="text--primary mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+            <a class="text--primary" [routerLink]="['/account', contractDetail?.creator_address]">
               {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
             </a>
             at txn
-            <a class="text--primary ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+            <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
               {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
             </a>
           </td>
