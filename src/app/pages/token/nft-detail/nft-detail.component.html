@@ -20,7 +20,8 @@
             </div>
           </div>
           <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
-            <h1 class="fw-semibold title-small mb-0 text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <h1 class="fw-semibold title-small mb-0 body-01-mob text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <span class="burnt-tag my-1" *ngIf="nftDetail?.is_burned">Burnt</span>
             <div class="mb-0">
               <img
                 [src]="nftDetail?.image || defaultLogoToken"
@@ -37,7 +38,10 @@
       <!-- End nft-image -->
       <div class="col-12 col-xl-8 pl-xl-7">
         <div class="d-none d-xl-block">
-          <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+          <div class="d-flex align-items-center">
+            <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
+          </div>
           <div class="my-5">
             <img
               [src]="nftDetail?.image || defaultLogoToken"
@@ -110,7 +114,7 @@
           <h4 class="mb-0 text--white card__ntf-detail-item" id="popupCopy">Details</h4>
           <div class="card__ntf-detail-item body-02">
             <div class="label-detail text--gray-5">Owner:</div>
-            <div class="d-flex align-items-center position-relative">
+            <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
               <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
                 {{ nftDetail?.owner }}
               </a>
@@ -132,7 +136,7 @@
                 *ngIf="contractType !== contractVerifyType.Unverifed"
                 [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                 class="mr-2"
-                alt="contract_verification"/>
+                alt="contract_verification" />
               <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
                 {{ nftDetail?.contract_address }}</a
               >
@@ -279,10 +283,10 @@
       </table>
     </div>
     <app-paginator
-            [length]="pageData?.length"
-            [pageSize]="pageData?.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+      [length]="pageData?.length"
+      [pageSize]="pageData?.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="handlePageEvent($event)">
     </app-paginator>
     <ng-template #noValues> </ng-template>
   </div>

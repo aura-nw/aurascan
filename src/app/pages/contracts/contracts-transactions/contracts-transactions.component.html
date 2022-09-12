@@ -3,19 +3,19 @@
     <h1 class="mb-2 text--white">Transactions</h1>
     <div class="body-02 text--gray-5 d-flex">
       for
-      <a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractInfo.contractsAddress]">
-        {{ contractInfo.contractsAddress }}
+      <a class="text--primary ml-1 text-break" [routerLink]="['/contracts', contractAddress]">
+        {{ contractAddress }}
       </a>
     </div>
   </div>
   <section>
     <div class="card mt-6">
-      <div class="card-body" *ngIf="contract$ | async as contract">
+      <div class="card-body" *ngIf="contractTransaction['data']">
         <app-contract-table
-          [length]="contractInfo?.count"
+          [length]="contractTransaction['count']"
           [pageSize]="pageSize"
-          [label]="queryParams?.label?.toString()"
-          [dataList]="contract"
+          [label]="label?.toString()"
+          [dataList]="contractTransaction"
           [templates]="templates"
           [contractInfo]="contractInfo"
           (onChangePage)="onChangePage($event)"
