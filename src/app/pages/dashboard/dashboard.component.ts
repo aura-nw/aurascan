@@ -12,7 +12,7 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
-import { Globals } from '../../global/global';
+import { convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
@@ -45,13 +45,15 @@ export class DashboardComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
-  dataSourceTx: MatTableDataSource<any>;
+  dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
 
   typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   constructor(
     public commonService: CommonService,
@@ -96,16 +98,19 @@ export class DashboardComponent implements OnInit {
   }
 
   getListTransaction(): void {
-    this.transactionService.txs(this.PAGE_SIZE, 0).subscribe((res) => {
-      if (res?.data?.length > 0) {
-        res.data.forEach((trans) => {
-          trans.typeOrigin = trans.type;
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-          trans.type = typeTrans?.value;
-        });
-        this.dataSourceTx = new MatTableDataSource(res.data);
-        this.dataTx = res.data;
-      }
+    this.transactionService.txsIndexer(this.PAGE_SIZE, 0).subscribe((res) => {
+      this.dataSourceTx.data = [];
+      const { code, data } = res;
+        if (code === 200) {
+          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+
+          if (this.dataSourceTx.data.length > 0) {
+            this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
+          } else {
+            this.dataSourceTx.data = [...txs];
+          }
+          this.dataTx = txs;
+        }
     });
   }
 

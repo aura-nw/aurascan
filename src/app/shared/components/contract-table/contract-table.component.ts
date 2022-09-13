@@ -50,6 +50,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
@@ -58,8 +59,10 @@ export class ContractTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    this.getListContractTransaction();
-    this.loadTableData();
+    if (this.dataList?.data) {
+      this.getListContractTransaction();
+      this.loadTableData();
+    }
   }
 
   ngOnInit(): void {
@@ -68,7 +71,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
 
   loadTableData() {
     this.pageData = {
-      length: this.dataList?.data?.length,
+      length: this.dataList.count,
       pageSize: this.pageSize,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
@@ -108,7 +111,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       gas_used: data?.gas_used,
       gas_wanted: data?.gas_wanted,
       nftDetail: undefined,
-      modeExecute: data?.modeExecute
+      modeExecute: data?.modeExecute,
     };
   }
 
@@ -125,8 +128,9 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   getListContractTransaction(): void {
-    this.contractInfo.count = this.dataList?.meta?.count || 0;
-    const ret = this.dataList?.data.map((contract) => {
+    this.isLoading = true;
+    this.contractInfo.count = this.dataList?.count || 0;
+    const ret = this.dataList?.data?.map((contract) => {
       let value = 0;
       let from = '';
       let to = '';
@@ -179,5 +183,13 @@ export class ContractTableComponent implements OnInit, OnChanges {
       return tableDta;
     });
     this.transactionTableData = ret;
+
+    if (ret) {
+      this.isLoading = false;
+    } else {
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000);
+    }
   }
 }

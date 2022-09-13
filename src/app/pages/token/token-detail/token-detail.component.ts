@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
@@ -14,19 +14,21 @@ export class TokenDetailComponent implements OnInit {
   loading = true;
   contractAddress = '';
   tokenDetail: any;
-
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     private router: ActivatedRoute,
+    private route: Router,
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
-    
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
+    if(this.contractAddress === 'null') {
+      this.route.navigate(['/']);
+    }
     this.getTokenDetail();
   }
 
@@ -42,5 +44,9 @@ export class TokenDetailComponent implements OnInit {
       }
     });
     this.loading = false;
+  }
+
+  getLength(result: string) {
+    this.tokenDetail['totalTransfer'] = Number(result) || 0;
   }
 }

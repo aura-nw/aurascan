@@ -6,14 +6,14 @@
         <!-- Title -->
         <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
           <div class="caption-mob fw-normal-mob body-03 text--gray-5 mt-4 mt-lg-0">
-            A total of {{ pageData?.length }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
+            A total of {{ pageData?.length | number }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
           </div>
           <form class="aura-form single-input-field search-form mt-2 mt-lg-0" #searchForm>
             <div class="input-group">
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search by Address, Block Height, Tx Hash,..."
+                placeholder="Search for Token Name or Address"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearch"
                 (ngModelChange)="searchToken()"

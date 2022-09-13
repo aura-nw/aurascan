@@ -1,13 +1,5 @@
 node_modules
 dist
 .DS_Store
-.idea/explorer.iml
-.idea/modules.xml
 .idea/vcs.xml
-.idea/watcherTasks.xml
 .idea/workspace.xml
-.idea/shelf/Uncommitted_changes_before_Checkout_at_8_29_2022_9_50_AM__Changes_.xml
-.idea/shelf/Uncommitted_changes_before_Checkout_at_9_6_2022_9_19_AM__Changes_.xml
-.idea/shelf/Uncommitted_changes_before_Checkout_at_8_29_2022_9_50_AM_[Changes]/shelved.patch
-.idea/shelf/Uncommitted_changes_before_Checkout_at_8_29_2022_9_50_AM_[Changes]1/shelved.patch
-.idea/shelf/Uncommitted_changes_before_Checkout_at_9_6_2022_9_19_AM_[Changes]1/shelved.patch

@@ -64,7 +64,7 @@
       <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
         <div class="col-auto col-lg-3 text--gray-4">Height</div>
         <div class="col-auto col-lg-9">
-          <a class="text--primary" routerLink="/blocks/id/{{ transaction?.blockId }}">
+          <a class="text--primary" routerLink="/blocks/{{ transaction?.height }}">
             {{ transaction?.height | number }}
           </a>
         </div>
@@ -89,7 +89,10 @@
         </div>
       </div>
       <div class="row body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Gas (used / wanted)</div>
+        <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
+          <div>Gas</div>
+          <div class='ml-md-1'>(used / wanted)</div>
+        </div>
         <div class="col-auto col-lg-9 text--gray-1">
           {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
         </div>

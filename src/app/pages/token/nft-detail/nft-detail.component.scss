@@ -9,6 +9,14 @@
   }
 }
 
+.burnt-tag {
+  padding: var(--spacer-1) var(--spacer-3);
+  background-color: var(--aura-red-3);
+  border-radius: 4px;
+  margin-left: var(--spacer-2);
+  width: fit-content;
+}
+
 .content-transfer {
   min-width: 170px;
   display: inline-block;
@@ -80,7 +88,7 @@
   width: 24px;
   height: 24px;
   padding: 4px;
-  @media(min-width: 992px) {
+  @media (min-width: 992px) {
     width: 16px;
     height: 16px;
   }

@@ -1,4 +1,4 @@
-<h2 class="mb-0 text--white">NFT Assets ({{ assetCW721?.length || 0 }})</h2>
+<h2 class="mb-0 text--white">NFT Assets ({{ pageData.length || 0 }})</h2>
 <div class="card mt-3">
   <div class="card-body">
     <div *ngIf="loading" class="m-auto mt-10">
@@ -44,18 +44,18 @@
                 [routerLink]="['/tokens/token-nft/' + item.contract_address + '/' + item.token_id]"
                 class="nft-cards__item">
                 <div class="nft-cards__img">
-                  <img *ngIf="item.uri" src="{{ item.uri }}" alt="" />
-                  <img *ngIf="!item.uri" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
+                  <img *ngIf="item.uri_s3" src="{{ item.uri_s3 }}" alt="" />
+                  <img *ngIf="!item.uri_s3" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
                   <div class="nft-cards__label">
                     <span class="text-gradient">CW-721</span>
                   </div>
                 </div>
-                <div class="mt-3 nft__info ">
+                <div class="mt-3 nft__info">
                   <span class="mr-1 text--gray-1">Token:</span>
                   <span
                     class="text--primary hover-link"
                     (click)="handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address])"
-                    >{{ item.contract_name }}</span
+                    >{{ item.token_name }}</span
                   >
                 </div>
                 <div class="mt-1 nft__info">
