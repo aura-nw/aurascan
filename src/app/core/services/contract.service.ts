@@ -7,6 +7,8 @@ import { IContractsResponse } from 'src/app/core/models/contract.model';
 import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
+import axios from 'axios';
+import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 
 @Injectable()
 export class ContractService extends CommonService {
@@ -97,5 +99,13 @@ export class ContractService extends CommonService {
       type: typeContract
     }
     return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
+  }
+
+  getListSmartContract(creatorAddress: string, limit: number, offset: number){
+    return axios.get(`${this.apiUrl}/contracts/get-contract-by-creator/${creatorAddress}/${limit}/${offset}`);
+  }
+
+  getSmartContractStatus(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/get-smart-contract-status`);
   }
 }

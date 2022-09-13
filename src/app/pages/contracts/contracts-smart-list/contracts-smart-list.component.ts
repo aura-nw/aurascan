@@ -24,15 +24,15 @@ import { Globals } from 'src/app/global/global';
 export class ContractsSmartListComponent implements OnInit {
   textSearch = '';
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'Address' },
+    { matColumnDef: 'contract_address', headerCellDef: 'Address' },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
-    { matColumnDef: 'version', headerCellDef: 'Version' },
-    { matColumnDef: 'verified', headerCellDef: 'Verified' },
+    { matColumnDef: 'height', headerCellDef: 'Type Contract' },
+    { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
+    { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
     { matColumnDef: 'status', headerCellDef: 'Status' },
-    { matColumnDef: 'code_mainnet', headerCellDef: 'Code ID On Mainnet' },
-    { matColumnDef: 'contract_mainnet', headerCellDef: 'Contract On Mainnet' },
+    { matColumnDef: 'mainnet_code_id', headerCellDef: 'Code ID On Mainnet' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'Contract On Mainnet' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageData: PageEvent = {
@@ -61,69 +61,6 @@ export class ContractsSmartListComponent implements OnInit {
     Rejected: '#D5625E',
   };
 
-  mockData = [
-    {
-      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
-      contract_name: 'Aura',
-      code_id: 34,
-      type: 'CW20',
-      version: '0.9.3',
-      verified: '2022-09-01T06:53:17.687Z',
-      status: 'Unverified',
-      code_mainnet: '89',
-      symbol: 'AURA',
-      contract_mainnet: 'aura1206t3say4u6p5dnwpagzjz77qmt0uyx2dsew4sncm9j7w7lxjjxs4xheh9',
-    },
-    {
-      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
-      contract_name: 'BNB',
-      code_id: 232,
-      type: 'CW721',
-      version: '0.9.3',
-      verified: '2022-09-05T06:53:17.687Z',
-      status: 'Not Registered',
-      code_mainnet: '',
-      symbol: '',
-      contract_mainnet: '',
-    },
-    {
-      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
-      contract_name: 'Cosmos',
-      code_id: 43,
-      type: 'CW721',
-      version: '0.9.3',
-      verified: '2022-08-22T06:53:17.687Z',
-      status: 'TBD',
-      code_mainnet: '',
-      symbol: 'ATOM',
-      contract_mainnet: '',
-    },
-    {
-      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
-      contract_name: 'Juno',
-      code_id: 22,
-      type: 'CW20',
-      version: '0.9.3',
-      verified: '2022-08-17T06:53:17.687Z',
-      status: 'Deployed',
-      code_mainnet: '',
-      symbol: '',
-      contract_mainnet: '',
-    },
-    {
-      address: 'aura1v3p0qxvefqp36rrfy0wt4ws6sksgddxa59axv2hm9pampuxgex7qp4y6ja',
-      contract_name: 'Terra',
-      code_id: 33,
-      type: 'CW20',
-      version: '0.9.3',
-      verified: '2022-08-05T06:53:17.687Z',
-      status: 'Rejected',
-      code_mainnet: '',
-      symbol: '',
-      contract_mainnet: '',
-    },
-  ];
-
   constructor(
     public translate: TranslateService,
     public global: Globals,
@@ -142,10 +79,10 @@ export class ContractsSmartListComponent implements OnInit {
         delay(600),
         mergeMap((_) => this.walletService.wallet$),
       )
-      .subscribe((wallet) => {
+      .subscribe(async (wallet) => {
         if (wallet) {
           this.userAddress = wallet.bech32Address;
-          this.getListContract();
+          await this.getListContract();
         } else {
           this.userAddress = null;
           this.router.navigate(['/']);
@@ -153,7 +90,7 @@ export class ContractsSmartListComponent implements OnInit {
       });
   }
 
-  getListContract() {
+  async getListContract() {
     this.loading = true;
     let payload = {
       account_address: this.userAddress,
@@ -161,28 +98,20 @@ export class ContractsSmartListComponent implements OnInit {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
     };
-
-    this.contractService.getListTypeContract(payload).subscribe(
-      (res) => {
-        if (res) {
-          this.pageData = {
-            length: this.mockData.length,
-            pageSize: this.pageData.pageSize,
-            pageIndex: PAGE_EVENT.PAGE_INDEX,
-          };
-
-          res.data?.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.dataSource = new MatTableDataSource<any>(this.mockData);
-          this.dataBk = this.mockData || [];
-        }
-      },
-      () => {},
-      () => {
-        this.loading = false;
-      },
-    );
+    const listSmartContract = await this.contractService.getListSmartContract(payload.account_address, payload.limit, payload.offset);
+    if(listSmartContract) {
+      this.pageData = {
+        length: listSmartContract.data['meta'].count,
+        pageSize: this.pageData.pageSize,
+        pageIndex: PAGE_EVENT.PAGE_INDEX,
+      };
+      // listSmartContract.data['data'].forEach((item) => {
+      //   item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+      // });
+      this.dataSource = new MatTableDataSource<any>(listSmartContract.data['data']);
+      this.dataBk = listSmartContract.data;
+      this.loading = false;
+    }
   }
 
   searchContract(): void {
@@ -212,7 +141,7 @@ export class ContractsSmartListComponent implements OnInit {
   clearSearch(): void {
     this.filterSearchData = null;
     this.dataSource = new MatTableDataSource<any>(this.dataBk);
-    this.pageData.length = this.dataBk.length;
+    this.pageData.length = this.dataBk['data'].length;
   }
 
   replacePageList(item: any): void {

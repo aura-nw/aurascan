@@ -173,28 +173,28 @@
       <div *ngIf="loading" class="m-auto mt-10">
         <app-loading-sprint></app-loading-sprint>
       </div>
-      <div class="table-responsive mt-4" *ngIf="!loading">
+      <div class="table-responsive mt-4" *ngIf="!loading && dataSource">
         <table
           mat-table
           matSort
           [dataSource]="dataSource"
           class="aura-table"
           *ngIf="dataSource.data.length > 0; else noValues">
-          <ng-container *ngFor="let template of templates; index as i">
+          <ng-container  *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>
                 <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
-              <ng-container *ngIf="pageData?.length > 0">
+              <ng-container >
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef">
-                    <ng-container *ngSwitchCase="'address'">
+                    <ng-container *ngSwitchCase="'contract_address'">
                       <a
                         [routerLink]="['/contracts/', data[template.matColumnDef]]"
                         class="text-clamp"
-                        *ngIf="data[template.matColumnDef]"
-                        >{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</a
-                      >
+                        *ngIf="data[template.matColumnDef]">
+                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                      </a>
                       <span *ngIf="!data[template.matColumnDef]">-</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'contract_mainnet'">
@@ -210,14 +210,15 @@
                       >{{ data[template.matColumnDef] }}
                       <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'type'"> {{ data[template.matColumnDef] }} </ng-container>
-                    <ng-container *ngSwitchCase="'verified'">
-                      <div *ngIf="data[template.matColumnDef]">
-                        <div class="body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'MM/dd/yyyy' }}</span>
-                        </div>
-                      </div>
-                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                    <ng-container *ngSwitchCase="'type'"> - </ng-container>
+                    <ng-container *ngSwitchCase="'contract_verification'">
+<!--                      <div *ngIf="data[template.matColumnDef]">-->
+<!--                        <div class="body-02 d-flex align-items-center">-->
+<!--                          <span>{{ data[template.matColumnDef] | customDate: 'MM/dd/yyyy' }}</span>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div *ngIf="!data[template.matColumnDef]">-</div>-->
+                      <div>-</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
                       <div
@@ -227,6 +228,7 @@
                         {{ data[template.matColumnDef] }}
                       </div>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'tx_hash'"> - </ng-container>
                     <ng-container *ngSwitchDefault>
                       {{ data[template.matColumnDef] || '-' }}
                     </ng-container>
