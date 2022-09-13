@@ -29,33 +29,6 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
   }
 
-  getListTokenTransfer(
-    limit: string | number,
-    offset: string | number,
-    contractAddress: string,
-    filterData: any,
-    type = 'cw20-tokens',
-  ): Observable<any> {
-    let payload = {
-      contract_address: contractAddress,
-      account_address: '',
-      tx_hash: '',
-      token_id: '',
-      limit: limit,
-      offset: offset,
-    };
-    if (filterData?.keyWord) {
-      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
-        payload.tx_hash = filterData?.keyWord;
-      } else if (filterData['isSearchWallet']) {
-        payload.account_address = filterData?.keyWord;
-      } else {
-        payload.token_id = filterData?.keyWord;
-      }
-    }
-    return this.http.post<any>(`${this.apiUrl}/${type}/transactions`, payload);
-  }
-
   getListTokenTransferIndexer(
     pageLimit: string | number,
     contractAddress: string,
@@ -90,19 +63,23 @@ export class TokenService extends CommonService {
     });
   }
 
-  getListNFTDetail(
-    contractAddress: string,
-    tokenId: string,
-    limit: string | number,
-    offset: string | number,
-  ): Observable<any> {
-    return this.http.get<any>(
-      `${this.apiUrl}/cw721-tokens/transactions/${contractAddress}/${tokenId}/${limit}/${offset}`,
-    );
-  }
-
-  getListTokenNFT(contractAddress: string, payload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nfts`, payload);
+  getListTokenNFTFromIndexer(payload): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      owner: payload.owner,
+      tokenId: payload.token_id,
+      contractAddress: payload.contractAddress,
+      pageLimit: payload.pageLimit,
+      nextKey: payload.nextKey,
+      countTotal: true,
+      contractType: 'CW721'
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+    return this.http.get<any>(`${INDEXER_URL}/asset/getByOwner`, {
+      params,
+    });
   }
 
   getListTokenHolder(
@@ -122,10 +99,6 @@ export class TokenService extends CommonService {
   getNFTDetail(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
   }
-
-  // getBalanceAddress(payload, type = 'cw20-tokens'): Observable<any> {
-  //   return this.http.post<any>(`${this.apiUrl}/${type}/get-by-owner`, payload);
-  // }
 
   getPriceToken(tokenId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);

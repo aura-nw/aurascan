@@ -58,17 +58,17 @@
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
-            <ng-container *ngIf="contractDetail?.token_tracker">
+            <ng-container *ngIf="contractDetail?.is_minted">
               <a class="text--primary" [routerLink]="['/token', contractDetail?.contract_address]"
-                *ngIf="!(contractDetail.token_tracker?.type === 'CW721')"
+                *ngIf="!(contractDetail.type === 'CW721')"
                 [routerLink]="['/tokens/token', contractDetail?.contract_address]">
-                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+                {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
               </a>
               <a
-                *ngIf="contractDetail.token_tracker?.type === 'CW721'"
+                *ngIf="contractDetail.type === 'CW721'"
                 class="text--primary"
                 [routerLink]="['/tokens/token-nft', contractDetail?.contract_address]">
-                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+                {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
               </a>
               <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->
             </ng-container>
