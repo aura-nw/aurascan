@@ -443,9 +443,12 @@
                   <div class="custom-card-mob-simple">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourcePowerMob"
-                      [link]="'/blocks/id/' + data.blockId"
+                      [link]="'/blocks/' + data.height"
                       [content]="[
-                        { label: data.height, class: 'body-01 text--primary', info: data.tx_hash | cutStringPipe: 6:6 },
+                        { label: data.height, 
+                          class: 'body-01 text--primary', 
+                          info: '<a class=text--primary href=/transaction/' + data.tx_hash + '>' + (data.tx_hash | cutStringPipe: 6:6) + '</a>' 
+                        },
                         { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
                         {
                           label: 'Time',
