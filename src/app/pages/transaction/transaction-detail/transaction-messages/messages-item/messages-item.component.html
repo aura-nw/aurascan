@@ -1,6 +1,6 @@
 <div class="row mb-3 body-02 body-01-mob">
-  <div class="col-3 mb-2 mb-lg-0 text--gray-4">{{ label }}</div>
-  <div class="col-9">
+  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">{{ label }}</div>
+  <div class="col-12 col-lg-9">
     <ng-container [ngSwitch]="pipeType">
       <ng-container *ngSwitchCase="pipeTypeData.Number">{{ value | number }}</ng-container>
       <ng-container *ngSwitchDefault>{{ value }}</ng-container>

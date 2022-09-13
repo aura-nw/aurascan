@@ -11,6 +11,7 @@ import { getAmount, Globals } from '../../../../global/global';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -52,33 +53,7 @@ export class TransactionMessagesComponent implements OnInit {
     Transfer: 'send_packet',
   };
 
-  listIBCProgress = [
-    {
-      tx: '0EE4B7440D69CB4D81304278492B4962896FB96E8414D5923698A2E49A909551',
-      time: '2022-09-01T06:53:17.687Z',
-      type: '/ibc.applications.transfer.v1.MsgTransfer',
-    },
-    {
-      tx: 'C51F7C868FDFC7600459CE76BBB1369E22FF4F2DDF9B4BC92FC11E5E42065871',
-      time: '2022-09-01T06:53:17.687Z',
-      type: '/ibc.core.channel.v1.MsgRecvPacket',
-    },
-    {
-      tx: 'CBCFCD0274AD95DCB4DD09E15016688F4898D7B1249B3CBACEA0206270B5DADB',
-      time: '2022-09-01T06:53:17.687Z',
-      type: '/ibc.core.channel.v1.MsgRecvPacket',
-    },
-    {
-      tx: 'B35862D6F7E7344D7E514AC3CC41843EDACB6DCE4511FDDEBBEC75B27BFACD45',
-      time: '2022-09-01T06:53:17.687Z',
-      type: '/ibc.core.channel.v1.MsgRecvPacket',
-    },
-    {
-      tx: '0AEF20E04837B8D22D7C11923A52D9EB9ABBCA4BC4E228473479F75280009146',
-      time: '2022-09-01T06:53:17.687Z',
-      type: '/ibc.core.channel.v1.MsgAcknowledgement',
-    },
-  ];
+  listIBCProgress = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -118,8 +93,10 @@ export class TransactionMessagesComponent implements OnInit {
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
     ) {
-      this.getListIBCSequence(299);
       this.getDataIBC();
+      setTimeout(() => {
+        this.getListIBCSequence(this.ibcData?.packet_sequence);
+      }, 2000);
     }
 
     //get amount of transaction
@@ -256,7 +233,6 @@ export class TransactionMessagesComponent implements OnInit {
           }
         });
         if (this.ibcOrigin) {
-          console.log(this.ibcOrigin);
           this.ibcData = {
             ...this.ibcOrigin,
             packet_sequence: this.ibcOrigin.find((f) => f.key === 'packet_sequence').value,
@@ -268,15 +244,12 @@ export class TransactionMessagesComponent implements OnInit {
           };
 
           if (type === this.ibcListMapping.Receive) {
-            console.log(this.ibcOrigin);
-
             let dataReceive = this.ibcOrigin?.find((f) => f.key === 'packet_data')?.value;
             try {
               dataReceive = JSON.parse(dataReceive);
             } catch (e) {
               dataReceive = dataReceive;
             }
-            console.log(dataReceive);
             this.ibcData = {
               ...this.ibcData,
               amount: dataReceive?.amount,
@@ -285,8 +258,6 @@ export class TransactionMessagesComponent implements OnInit {
               denom: dataReceive?.denom,
             };
           }
-
-          // this.getListIBCSequence(this.ibcData.packet_sequence);
 
           this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCTimeout,
@@ -303,44 +274,33 @@ export class TransactionMessagesComponent implements OnInit {
             };
           }
         }
-        // this.getListIBCSequence(this.ibcData?.packet_sequence);
       }
-
-      // if (jsonData && jsonData[0]) {
-      //   const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.SendPacket);
-      //   if (temp) {
-      //     this.ibcData = temp[0]?.attributes;
-      //     const sequence = this.ibcData.find((f) => f.key === 'packet_sequence').value;
-      //     this.getListIBCSequence(sequence);
-
-      //   }
-      // }
     } catch (e) {}
   }
 
   getListIBCSequence(sequence): void {
     this.transactionService.getListIBCSequence(sequence).subscribe((res) => {
       const { code, data } = res;
-      console.log(res);
+      if (code === 200) {
+        this.listIBCProgress = [];
+        const txs = _.get(data, 'transactions').map((element) => {
+          const tx_hash = _.get(element, 'tx_response.txhash');
+          const time = _.get(element, 'tx_response.timestamp');
+          const type = _.get(element, 'tx.body.messages[0].@type');
+          const denom =
+            _.get(element, 'tx.body.messages[0].token.denom') ||
+            this.ibcOrigin?.find((f) => f.key === 'packet_data')?.value;
 
-      // if (code === 200) {
-      //   const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
-      //   this.transaction = txs[0];
-      //   this.transaction = {
-      //     ...this.transaction,
-      //     chainid: this.chainId,
-      //     gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
-      //     gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
-      //     raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
-      //     type: _.get(res?.data.transactions[0], 'tx.body.messages[0].@type'),
-      //     tx: _.get(res?.data.transactions[0], 'tx_response'),
-      //   };
+          let effected = 0;
+          try {
+            const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+            effected = jsonData.toLowerCase().indexOf('success') > -1 ? 1 : 0;
+          } catch (e) {}
 
-      //   if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
-      //     this.errorMessage = this.transaction.raw_log;
-      //     this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
-      //   }
-      // }
+          return { tx_hash, type, denom, time, effected };
+        });
+        this.listIBCProgress = txs;
+      }
     });
   }
 
@@ -364,5 +324,10 @@ export class TransactionMessagesComponent implements OnInit {
     let arr = [];
     arr = this.listIBCProgress.filter((f) => f.type === type);
     return arr;
+  }
+
+  displayTitle(type) {
+    const typeTrans = this.typeTransaction?.find((f) => f.label.toLowerCase() === type.toLowerCase());
+    return typeTrans?.value;
   }
 }
