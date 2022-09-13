@@ -46,10 +46,12 @@ export class ProposalComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSourceMobile: any[];
   proposalData: any;
   length: number;
   pageIndex = 0;
   lastedList: IProposal[] = [];
+  nextKey = null;
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -82,38 +84,52 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => this.getListProposal());
+    this.walletService.wallet$.subscribe((wallet) => wallet && this.getListProposal());
   }
 
-  changePage(page: PageEvent): void {
-    this.dataSource = null;
-    this.pageIndex = page.pageIndex;
-    this.getListProposal();
-  }
-
-  getListProposal(): void {
+  getListProposal(nextKey = null) {
     const addr = this.walletService.wallet?.bech32Address || null;
-    this.proposalService.getProposalList(addr).subscribe((res) => {
-      this.proposalData = res;
-      if (res?.data) {
-        this.dataSource = new MatTableDataSource<any>(res.data);
-        this.length = res.data.length;
-        this.lastedList = [...res.data];
-        this.lastedList.forEach((pro, index) => {
-          pro.pro_total_deposits = balanceOf(pro.pro_total_deposits);
+    this.proposalService.getProposalList(20, nextKey).subscribe((res) => {
+      this.nextKey = res.data.nextKey ? res.data.nextKey : null;
 
-          if (
-            (index < 4 && pro?.pro_status !== VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD) ||
-            pro?.pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD
-          ) {
-            this.getVoteResult(pro.pro_id, index);
-            const expiredTime = +moment(pro.pro_voting_end_time).format('x') - +moment().format('x');
-            if (expiredTime < 0) {
-              this.getProposalDetailFromNode(pro.pro_id, index);
+      if (res?.data?.proposals) {
+        this.proposalData = res.data.proposals;
+        const dataFiltered = res.data.proposals;
+
+        if (this.dataSource.data.length > 0) {
+          this.dataSource.data = [...this.dataSource.data, ...dataFiltered];
+        } else {
+          this.dataSource.data = [...dataFiltered];
+        }
+
+        this.dataSourceMobile = this.dataSource.data.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
+
+        this.length = this.dataSource.data.length;
+        if (this.lastedList.length === 0) {
+          this.lastedList = [...res?.data?.proposals];
+          this.lastedList.forEach((pro, index) => {
+            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+            if (index < 4 && pro?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+              this.getVoteResult(pro.proposal_id, index);
+              const expiredTime = +moment(pro.voting_end_time).format('x') - +moment().format('x');
+              if (expiredTime < 0) {
+                this.getProposalDetailFromNode(pro.proposal_id, index);
+              }
+              const getVoted = async () => {
+                if (addr) {
+                  const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
+                  pro.vote_option = this.voteConstant.find(
+                    (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+                  )?.voteOption;
+                }
+              };
+              getVoted();
             }
-            pro.vote_option = this.voteConstant.find((s) => s.key === pro.vote_option)?.voteOption;
-          }
-        });
+          });
+        }
       }
     });
   }
@@ -121,7 +137,7 @@ export class ProposalComponent implements OnInit {
   getProposalDetailFromNode(pro_id, index) {
     this.proposalService.getProposalDetailFromNode(pro_id).subscribe((res) => {
       if (res?.data) {
-        this.lastedList[index].pro_status = res.data.status;
+        this.lastedList[index].status = res.data.status;
         this.dataSource.data[index].pro_status = res.data.status;
       }
     });
@@ -172,9 +188,9 @@ export class ProposalComponent implements OnInit {
   }
 
   openVoteDialog(item: IProposal, index: number) {
-    const id = item.pro_id;
-    const title = item.pro_title;
-    const expiredTime = +moment(item.pro_voting_end_time).format('x') - +moment().format('x');
+    const id = item.proposal_id;
+    const title = item.content.title;
+    const expiredTime = +moment(item.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
@@ -185,7 +201,7 @@ export class ProposalComponent implements OnInit {
 
           const { created_at } = data.result ? data.result : { created_at: null };
           warning = created_at
-            ? +moment(created_at).format('x') < +moment(item.pro_voting_start_time).format('x')
+            ? +moment(created_at).format('x') < +moment(item.voting_start_time).format('x')
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
@@ -214,7 +230,7 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getVoteResult(data.id, data.idx);
-        let votedValue = this.lastedList.find((s) => s.pro_id === data.id);
+        let votedValue = this.lastedList.find((s) => s.proposal_id === data.id);
         votedValue.vote_option = result.keyVote;
       }
       this.scrollToTop();
@@ -255,32 +271,35 @@ export class ProposalComponent implements OnInit {
       }
       const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
       let totalVote = +yes + +no + +no_with_veto + +abstain;
-      this.lastedList[index].pro_votes_yes = (+yes * 100) / totalVote;
-      this.lastedList[index].pro_votes_no = (+no * 100) / totalVote;
-      this.lastedList[index].pro_votes_no_with_veto = (+no_with_veto * 100) / totalVote;
-      this.lastedList[index].pro_votes_abstain = (+abstain * 100) / totalVote;
+
+      this.lastedList[index].tally.yes = (+yes * 100) / totalVote;
+      this.lastedList[index].tally.no = (+no * 100) / totalVote;
+      this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+      this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
     });
   }
 
   paginatorEmit(e: MatPaginator): void {
-    // if (this.dataSource.paginator) {
-    //   e.page.next({
-    //     length: this.dataSource.paginator.length,
-    //     pageIndex: 0,
-    //     pageSize: this.dataSource.paginator.pageSize,
-    //     previousPageIndex: this.dataSource.paginator.pageIndex,
-    //   });
-    //   this.dataSource.paginator = e;
-    //   // this.pageData.pageIndex = e.pageIndex;
-    // } else this.dataSource.paginator = e;
+    if (this.dataSource.paginator) {
+      e.page.next({
+        length: this.dataSource.paginator.length,
+        pageIndex: 0,
+        pageSize: this.dataSource.paginator.pageSize,
+        previousPageIndex: this.dataSource.paginator.pageIndex,
+      });
+      this.dataSource.paginator = e;
+    } else this.dataSource.paginator = e;
   }
 
   pageEvent(e: PageEvent): void {
-    // const { length, pageIndex, pageSize } = e;
-    // const next = length <= (pageIndex + 2) * pageSize;
-    // if (next && this.nextKey) {
-    //   this.getTxsFromHoroscope(this.nextKey);
-    // }
-    // this.pageData.pageIndex = e.pageIndex;
+    const { length, pageIndex, pageSize } = e;
+
+    this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
+
+    const next = length <= (pageIndex + 2) * pageSize;
+    if (next && this.nextKey) {
+      this.getListProposal(this.nextKey);
+    }
+    this.pageData.pageIndex = e.pageIndex;
   }
 }

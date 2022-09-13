@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
@@ -15,11 +16,6 @@ export class ProposalService extends CommonService {
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
-  }
-
-  getProposal(): Observable<IResponsesTemplates<IProposal[]>> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/proposals`);
   }
 
   getProposalDetail(proposalId: string | number): Observable<any> {
@@ -59,8 +55,24 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
   }
 
-  getProposalList(address: string): Observable<IResponsesTemplates<IProposal[]>> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/proposals/list/get-by-address/${address}`);
+  // getProposalList(address: string): Observable<IResponsesTemplates<IProposal[]>> {
+  //   this.setURL();
+  //   return this.http.get<any>(`${this.apiUrl}/proposals/list/get-by-address/${address}`);
+  // }
+
+  getProposalList(pageLimit = 20, nextKey = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit,
+      nextKey,
+      reverse: false,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/proposal`, {
+      params,
+    });
   }
 }

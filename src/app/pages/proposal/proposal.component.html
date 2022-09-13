@@ -7,14 +7,14 @@
           <div class="card mb-0 h-100">
             <div class="card-body pb-0">
               <div class="d-flex justify-content-between align-items-start">
-                <a [routerLink]="[lastedItem.pro_id]" class="fw-semibold">
-                  <div class="text--gray-3 h2 d-block mb-0">#{{ lastedItem.pro_id }}</div>
-                  <div class="text--white h2 d-block mb-0 pr-3">{{ lastedItem.pro_title }}</div>
+                <a [routerLink]="[lastedItem.proposal_id]" class="fw-semibold">
+                  <div class="text--gray-3 h2 d-block mb-0">#{{ lastedItem.proposal_id }}</div>
+                  <div class="text--white h2 d-block mb-0 pr-3">{{ lastedItem.content.title }}</div>
                 </a>
                 <div
-                  *ngIf="getStatus(lastedItem.pro_status)"
-                  class="proposal-status flex-shrink-0 proposal-status__{{ getStatus(lastedItem.pro_status).key }}">
-                  <span>{{ getStatus(lastedItem.pro_status).value }}</span>
+                  *ngIf="getStatus(lastedItem.status)"
+                  class="proposal-status flex-shrink-0 proposal-status__{{ getStatus(lastedItem.status).key }}">
+                  <span>{{ getStatus(lastedItem.status).value }}</span>
                 </div>
               </div>
               <div class="d-flex justify-content-between mt-6 proposal-lasted__content small-body">
@@ -32,17 +32,17 @@
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting Start</div>
                     <div class="text--gray-1 body-02 d-flex align-items-center">
-                      <span>{{ lastedItem.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
-                      <span>{{ lastedItem.pro_voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting End</div>
                     <div class="text--gray-1 body-02 d-flex align-items-center">
-                      <span>{{ lastedItem.pro_voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
-                      <span>{{ lastedItem.pro_voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -52,28 +52,28 @@
                   <ul>
                     <li
                       class="primary"
-                      [style.width]="lastedItem.pro_votes_yes + '%'"
-                      matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
+                      [style.width]="lastedItem.tally?.yes + '%'"
+                      matTooltip="Yes {{ lastedItem.tally?.yes | number: global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
                     <li
                       class="danger"
-                      *ngIf="lastedItem.pro_votes_no"
-                      [style.width]="lastedItem.pro_votes_no + '%'"
-                      matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
+                      *ngIf="lastedItem.tally?.no"
+                      [style.width]="lastedItem.tally?.no + '%'"
+                      matTooltip="No {{ lastedItem.tally?.no | number: global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
                     <li
                       class="info"
-                      *ngIf="lastedItem.pro_votes_no_with_veto"
-                      [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
+                      *ngIf="lastedItem.tally?.no_with_veto"
+                      [style.width]="lastedItem.tally?.no_with_veto + '%'"
                       matTooltip="No with veto {{
-                        lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal
+                        lastedItem.tally?.no_with_veto | number: global.formatNumber2Decimal
                       }}%"
                       [matTooltipPosition]="'above'"></li>
                     <li
                       class="secondary"
-                      *ngIf="lastedItem.pro_votes_abstain"
-                      [style.width]="lastedItem.pro_votes_abstain + '%'"
-                      matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
+                      *ngIf="lastedItem.tally?.abstain"
+                      [style.width]="lastedItem.tally?.abstain + '%'"
+                      matTooltip="Abstain {{ lastedItem.tally?.abstain | number: global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
                   </ul>
                 </div>
@@ -82,27 +82,27 @@
                   <div
                     class="body-02 value {{
                       getHighestVote(
-                        lastedItem.pro_votes_yes,
-                        lastedItem.pro_votes_no,
-                        lastedItem.pro_votes_no_with_veto,
-                        lastedItem.pro_votes_abstain
+                        lastedItem.tally?.yes,
+                        lastedItem.tally?.no,
+                        lastedItem.tally?.no_with_veto,
+                        lastedItem.tally?.abstain
                       ).class
                     }}">
                     {{
                       getHighestVote(
-                        lastedItem.pro_votes_yes,
-                        lastedItem.pro_votes_no,
-                        lastedItem.pro_votes_no_with_veto,
-                        lastedItem.pro_votes_abstain
+                        lastedItem.tally?.yes,
+                        lastedItem.tally?.no,
+                        lastedItem.tally?.no_with_veto,
+                        lastedItem.tally?.abstain
                       ).name
                     }}
                     <span class="h4 mb-0 text--gray-1 ml-4">
                       {{
                         getHighestVote(
-                          lastedItem.pro_votes_yes,
-                          lastedItem.pro_votes_no,
-                          lastedItem.pro_votes_no_with_veto,
-                          lastedItem.pro_votes_abstain
+                          lastedItem.tally?.yes,
+                          lastedItem.tally?.no,
+                          lastedItem.tally?.no_with_veto,
+                          lastedItem.tally?.abstain
                         ).value | number: global.formatNumber2Decimal
                       }}% </span
                     >&nbsp;
@@ -122,17 +122,17 @@
                   <div class="d-flex">
                     <button
                       class="button button--sm button-pill button-outline body mr-3"
-                      [routerLink]="[lastedItem.pro_id]">
+                      [routerLink]="[lastedItem.proposal_id]">
                       <span>Details</span>
                     </button>
                     <button
-                      [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                      [disabled]="lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                       (click)="openVoteDialog(lastedItem, idx)"
                       class="button button--sm button-pill button-outline button-outline--gradient button-outline__in-card body">
                       <span>
                         {{
-                          lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                          lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                          lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                          lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                             ? 'Voting Ended'
                             : 'Vote'
                         }}
@@ -149,20 +149,20 @@
         <div class="proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idex">
           <div class="card mb-0 h-100">
             <div class="card-body px-3 py-3">
-              <div class='border-bottom-mobile pb-4'>
+              <div class="border-bottom-mobile pb-4">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <h2 class="mb-0 h3 title-mob" [routerLink]="[lastedItem.pro_id]">
-                      <span class="text--gray-3 mr-2">#{{ lastedItem.pro_id }}</span>
-                      <span class="text--white pr-3">{{ lastedItem.pro_title }}</span>
+                    <h2 class="mb-0 h3 title-mob" [routerLink]="[lastedItem.proposal_id]">
+                      <span class="text--gray-3 mr-2">#{{ lastedItem.proposal_id }}</span>
+                      <span class="text--white pr-3">{{ lastedItem.content.title }}</span>
                     </h2>
                   </div>
                   <div
-                    *ngIf="getStatus(lastedItem.pro_status)"
+                    *ngIf="getStatus(lastedItem.status)"
                     class="proposal-status-mobile flex-shrink-0 fw-semibold proposal-status__{{
-                    getStatus(lastedItem.pro_status).key
-                  }}">
-                    <span class="status">{{ getStatus(lastedItem.pro_status).value }}</span>
+                      getStatus(lastedItem.status).key
+                    }}">
+                    <span class="status">{{ getStatus(lastedItem.status).value }}</span>
                   </div>
                 </div>
                 <div class="text-start text--gray-5" *ngIf="lastedItem.vote_option">
@@ -175,26 +175,26 @@
                     <div class="text--gray-4">Proposer</div>
                     <a href="/account/{{ lastedItem.pro_proposer_address }}" class="text--primary fw-500">
                       {{
-                      lastedItem.pro_proposer
-                        ? lastedItem.pro_proposer
-                        : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
+                        lastedItem.pro_proposer
+                          ? lastedItem.pro_proposer
+                          : (lastedItem.pro_proposer_address | cutStringPipe: 8:8)
                       }}
                     </a>
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Voting Start</div>
                     <div class="text--white d-flex align-items-center">
-                      <span>{{ lastedItem.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ lastedItem.pro_voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between small-body">
                     <div class="text--gray-4">Voting End</div>
                     <div class="text--white d-flex align-items-center">
-                      <span>{{ lastedItem.pro_voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ lastedItem.pro_voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate: 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -203,28 +203,28 @@
                     <ul class="mt-4 ul-mobile">
                       <li
                         class="primary"
-                        [style.width]="lastedItem.pro_votes_yes + '%'"
-                        matTooltip="Yes {{ lastedItem.pro_votes_yes | number: global.formatNumber2Decimal }}%"
+                        [style.width]="lastedItem.tally?.yes + '%'"
+                        matTooltip="Yes {{ lastedItem.tally?.yes | number: global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
                       <li
                         class="danger"
-                        *ngIf="lastedItem.pro_votes_no"
-                        [style.width]="lastedItem.pro_votes_no + '%'"
-                        matTooltip="No {{ lastedItem.pro_votes_no | number: global.formatNumber2Decimal }}%"
+                        *ngIf="lastedItem.tally?.no"
+                        [style.width]="lastedItem.tally?.no + '%'"
+                        matTooltip="No {{ lastedItem.tally?.no | number: global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
                       <li
                         class="info"
-                        *ngIf="lastedItem.pro_votes_no_with_veto"
-                        [style.width]="lastedItem.pro_votes_no_with_veto + '%'"
+                        *ngIf="lastedItem.tally?.no_with_veto"
+                        [style.width]="lastedItem.tally?.no_with_veto + '%'"
                         matTooltip="No with veto {{
-                          lastedItem.pro_votes_no_with_veto | number: global.formatNumber2Decimal
+                          lastedItem.tally?.no_with_veto | number: global.formatNumber2Decimal
                         }}%"
                         [matTooltipPosition]="'above'"></li>
                       <li
                         class="secondary"
-                        *ngIf="lastedItem.pro_votes_abstain"
-                        [style.width]="lastedItem.pro_votes_abstain + '%'"
-                        matTooltip="Abstain {{ lastedItem.pro_votes_abstain | number: global.formatNumber2Decimal }}%"
+                        *ngIf="lastedItem.tally.abstain"
+                        [style.width]="lastedItem.tally.abstain + '%'"
+                        matTooltip="Abstain {{ lastedItem.tally.abstain | number: global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
                     </ul>
                   </div>
@@ -233,27 +233,27 @@
                     <div
                       class="body-02 value {{
                         getHighestVote(
-                          lastedItem.pro_votes_yes,
-                          lastedItem.pro_votes_no,
-                          lastedItem.pro_votes_no_with_veto,
-                          lastedItem.pro_votes_abstain
+                          lastedItem.tally?.yes,
+                          lastedItem.tally?.no,
+                          lastedItem.tally?.no_with_veto,
+                          lastedItem.tally.abstain
                         ).class
                       }}">
                       {{
                         getHighestVote(
-                          lastedItem.pro_votes_yes,
-                          lastedItem.pro_votes_no,
-                          lastedItem.pro_votes_no_with_veto,
-                          lastedItem.pro_votes_abstain
+                          lastedItem.tally?.yes,
+                          lastedItem.tally?.no,
+                          lastedItem.tally?.no_with_veto,
+                          lastedItem.tally.abstain
                         ).name
                       }}
                       <span class="h4 h6-mob mb-0 text--white ml-2">
                         {{
                           getHighestVote(
-                            lastedItem.pro_votes_yes,
-                            lastedItem.pro_votes_no,
-                            lastedItem.pro_votes_no_with_veto,
-                            lastedItem.pro_votes_abstain
+                            lastedItem.tally?.yes,
+                            lastedItem.tally?.no,
+                            lastedItem.tally?.no_with_veto,
+                            lastedItem.tally.abstain
                           ).value | number: global.formatNumber2Decimal
                         }}%
                       </span>
@@ -263,17 +263,19 @@
               </div>
             </div>
             <div class="card-footer card-footer-mobile d-flex justify-content-around">
-              <button class="button button-pill button--md button-outline button-fixed" [routerLink]="[lastedItem.pro_id]">
+              <button
+                class="button button-pill button--md button-outline button-fixed"
+                [routerLink]="[lastedItem.proposal_id]">
                 <span>Details</span>
               </button>
               <button
                 class="button button-pill button--md button-outline button-outline--gradient button-outline__in-card button-fixed ml-4"
-                [disabled]="lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
+                [disabled]="lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD'"
                 (click)="openVoteDialog(lastedItem, idex)">
                 <span>
                   {{
-                    lastedItem.pro_status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
-                    lastedItem.pro_status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
+                    lastedItem.status != 'PROPOSAL_STATUS_VOTING_PERIOD' &&
+                    lastedItem.status != 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
                       ? 'Voting Ended'
                       : 'Vote'
                   }}
@@ -297,14 +299,14 @@
           <!-- ID Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>#ID</th>
-            <td mat-cell *matCellDef="let element">#{{ element.pro_id }}</td>
+            <td mat-cell *matCellDef="let element">#{{ element.proposal_id }}</td>
           </ng-container>
 
           <!-- Title Column -->
           <ng-container matColumnDef="title">
             <th mat-header-cell *matHeaderCellDef>Title</th>
             <td mat-cell *matCellDef="let element" class="title-cell">
-              <a [routerLink]="[element.pro_id]" class="text-clamp">{{ element.pro_title }}</a>
+              <a [routerLink]="[element.proposal_id]" class="text-clamp">{{ element.content.title }}</a>
             </td>
           </ng-container>
 
@@ -313,9 +315,9 @@
             <th mat-header-cell *matHeaderCellDef>Status</th>
             <td mat-cell *matCellDef="let element">
               <div
-                class="aura-status-inline {{ getStatus(element.pro_status).class }} text-capitalize"
-                *ngIf="getStatus(element.pro_status)">
-                <span class="status">{{ getStatus(element.pro_status).value }}</span>
+                class="aura-status-inline {{ getStatus(element.status).class }} text-capitalize"
+                *ngIf="getStatus(element.status)">
+                <span class="status">{{ getStatus(element.status).value }}</span>
               </div>
             </td>
           </ng-container>
@@ -325,9 +327,9 @@
             <th mat-header-cell *matHeaderCellDef>Voting Start</th>
             <td mat-cell *matCellDef="let element">
               <div class="body-02 d-flex align-items-center">
-                <span>{{ element.pro_voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+                <span>{{ element.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
-                <span>{{ element.pro_voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                <span>{{ element.voting_start_time | customDate: 'HH:mm:ss' }}</span>
               </div>
             </td>
           </ng-container>
@@ -337,9 +339,9 @@
             <th mat-header-cell *matHeaderCellDef>Submit Time</th>
             <td mat-cell *matCellDef="let element">
               <div class="body-02 d-flex align-items-center">
-                <span>{{ element.pro_submit_time | customDate: 'yyyy-MM-dd' }}</span>
+                <span>{{ element.submit_time | customDate: 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
-                <span>{{ element.pro_submit_time | customDate: 'HH:mm:ss' }}</span>
+                <span>{{ element.submit_time | customDate: 'HH:mm:ss' }}</span>
               </div>
             </td>
           </ng-container>
@@ -361,6 +363,12 @@
             </td>
           </tr>
         </table>
+        <app-paginator
+          [length]="length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
       </div>
     </div>
     <div *ngIf="!(dataSource?.data?.length > 0)">
@@ -372,32 +380,32 @@
     <div class="card">
       <h2 class="px-6 pt-4 pt-lg-6 pb-0 pb-lg-2 text--white mb-0">Proposals</h2>
       <div class="card-body">
-        <div *ngIf="proposalData?.data?.length > 0">
+        <div *ngIf="dataSourceMobile?.length > 0">
           <app-card-mob-simple
             *ngFor="let data of proposalData.data"
-            [link]="'/votings/' + data.pro_id"
+            [link]="'/votings/' + data.proposal_id"
             [title]="{
               size: 'md',
-              label: '#' + data.pro_id,
+              label: '#' + data.proposal_id,
               titleClass: 'text--white h5 mb-0',
-              subLabelContent: data.pro_title,
+              subLabelContent: data.content.title,
               subLabelClass: 'text--primary g-ellipsis h5-mob mb-0'
             }"
             [content]="[
               {
                 label: 'Status',
-                class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.pro_status).class,
-                info: '<span class=status>' + getStatus(data.pro_status).value + '</span>'
+                class: 'aura-status-inline text-capitalize body-02-mob ' + getStatus(data.status).class,
+                info: '<span class=status>' + getStatus(data.status).value + '</span>'
               },
               {
                 label: 'Voting Start',
                 class: 'card__date text--gray-1 body-01',
                 info:
                   '<span>' +
-                  (data.pro_voting_start_time | customDate: 'yyyy-MM-dd') +
+                  (data.voting_start_time | customDate: 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.pro_voting_start_time | customDate: 'HH:mm:ss') +
+                  (data.voting_start_time | customDate: 'HH:mm:ss') +
                   '</span>'
               },
               {
@@ -405,20 +413,20 @@
                 class: 'card__date text--gray-1 body-01',
                 info:
                   '<span>' +
-                  (data.pro_voting_end_time | customDate: 'yyyy-MM-dd') +
+                  (data.voting_end_time | customDate: 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.pro_voting_end_time | customDate: 'HH:mm:ss') +
+                  (data.voting_end_time | customDate: 'HH:mm:ss') +
                   '</span>'
               }
             ]"></app-card-mob-simple>
-<!--          <app-paginator-->
-<!--                  [length]="pageData.length"-->
-<!--                  [pageSize]="pageData.pageSize"-->
-<!--                  (paginator)="paginatorEmit($event)"-->
-<!--                  (pageEvent)="pageEvent($event)">-->
-<!--          </app-paginator>-->
         </div>
+        <app-paginator
+          [length]="length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
         <div *ngIf="!proposalData || (proposalData && proposalData.length === 0)">
           <app-table-no-data></app-table-no-data>
         </div>
