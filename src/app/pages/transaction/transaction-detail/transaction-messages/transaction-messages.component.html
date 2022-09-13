@@ -5,14 +5,19 @@
     <div class="label__status body body-02-mob">{{ transactionDetailType }}</div>
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
-  <div class="row mb-3 d-none d-lg-flex">
-    <div class="col-12 col-lg-3">
-      <div class="card-text header-title">
-        <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-        {{ transactionDetailType }}
+  <ng-container [ngTemplateOutlet]="titleHeader" *ngIf="transactionDetail?.type.toLowerCase().indexOf('ibc') <= -1">
+  </ng-container>
+
+  <ng-template #titleHeader>
+    <div class="row mb-3 d-none d-lg-flex">
+      <div class="col-12 col-lg-3">
+        <div class="card-text header-title">
+          <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+          {{ transactionDetailType }}
+        </div>
       </div>
     </div>
-  </div>
+  </ng-template>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
@@ -503,7 +508,33 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCTransfer">
+  <ng-container *ngIf="transactionDetail?.type.toLowerCase().indexOf('ibc') > -1">
+    <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
+      <ng-container [ngTemplateOutlet]="titleHeader" *ngIf="transactionDetail?.type.toLowerCase().indexOf('ibc') > -1">
+      </ng-container>
+      <ng-container [ngSwitch]="item['@type']">
+        <div *ngSwitchCase="eTransType.IBCTransfer">
+          <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+        </div>
+        <div *ngSwitchCase="eTransType.IBCReceived">
+          <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+        </div>
+        <div *ngSwitchCase="eTransType.IBCAcknowledgement">
+          <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+        </div>
+        <div *ngSwitchCase="eTransType.IBCUpdateClient">
+          <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+        </div>
+        <div *ngSwitchCase="eTransType.IBCTimeout">
+          <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+  </ng-container>
+
+  <ng-template #ibcTransfer let-data="data">
+    {{ getDataIBC(ibcListMapping.Transfer) }}
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
       <div class="col-12 col-lg-9">
@@ -542,55 +573,59 @@
     <app-messages-item
       [label]="'Origin Denom'"
       [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
-  </ng-container>
+  </ng-template>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCReceived">
-    <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container>
+  <ng-template #ibcReceive let-data="data">
+    {{ getDataIBC(ibcListMapping.Receive) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="data?.packet?.sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf }}
+        {{ ibcData?.amount | balanceOf }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [value]="ibcData?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item
-      [label]="'Origin Denom'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
+    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.denom"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
-    <app-messages-item [label]="'Signer'" [value]="ibcData?.update_client?.signer"></app-messages-item>
+    <div class="row mb-3 body-02 body-01-mob">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Signer</div>
+      <div class="col-12 col-lg-9">
+        <a class="text--primary" [routerLink]="['/account', ibcData?.update_client?.signer]">
+          {{ ibcData?.update_client?.signer }}
+        </a>
+      </div>
+    </div>
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Receiver</div>
       <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.receiver]">
-          {{ transactionDetail?.messages[0]?.receiver }}
+        <a class="text--primary" [routerLink]="['/account', ibcData?.receiver]">
+          {{ ibcData?.receiver }}
         </a>
       </div>
     </div>
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Sender</div>
       <div class="col-12 col-lg-9">
-        <a class="text--primary" [routerLink]="['/account', transactionDetail?.messages[0]?.sender]">
-          {{ transactionDetail?.messages[0]?.sender }}
+        <a class="text--primary" [routerLink]="['/account', ibcData?.sender]">
+          {{ ibcData?.sender }}
         </a>
       </div>
     </div>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
-    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-  </ng-container>
+  </ng-template>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCAcknowledgement">
-    <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container>
+  <ng-template #ibcAck let-data="data">
+    <!-- <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container> -->
     <app-messages-item
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
@@ -637,11 +672,11 @@
       [label]="'Signer'"
       [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.signer"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
-    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-  </ng-container>
+  </ng-template>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.IBCTimeout">
-    <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container>
+  <!-- <ng-container *ngIf="transactionDetail?.type === eTransType.IBCTimeout"> -->
+  <ng-template #ibcTimeout let-data="data">
+    <!-- <ng-container *ngTemplateOutlet="ibcUpdateClient"> </ng-container> -->
     <app-messages-item
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
@@ -679,68 +714,54 @@
       [label]="'Next Sequence Recv'"
       [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
     <app-messages-item [label]="'Signer'" [value]="ibcData?.time_out?.signer"></app-messages-item>
-    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
-  </ng-container>
+  </ng-template>
 
-  <ng-template #ibcUpdateClient>
-    <app-messages-item [label]="'Signer'" [value]="ibcData?.update_client?.signer"></app-messages-item>
-    <app-messages-item [label]="'Client ID'" [value]="ibcData?.update_client?.client_id"></app-messages-item>
+  <ng-template #ibcUpdateClient let-data="data">
+    <!-- {{ data | appJson }} -->
+    <app-messages-item [label]="'Signer'" [value]="data?.signer"></app-messages-item>
+    <app-messages-item [label]="'Client ID'" [value]="data?.client_id"></app-messages-item>
     <app-messages-item
       [label]="'block'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.version?.block"></app-messages-item>
-    <app-messages-item
-      [label]="'app'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.version?.app"></app-messages-item>
-    <app-messages-item
-      [label]="'chain_id'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.chain_id"></app-messages-item>
-    <app-messages-item
-      [label]="'height'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.height"></app-messages-item>
-    <app-messages-item
-      [label]="'time'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.time"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.version?.block"></app-messages-item>
+    <app-messages-item [label]="'app'" [value]="data?.header?.signed_header?.header?.version?.app"></app-messages-item>
+    <app-messages-item [label]="'chain_id'" [value]="data?.header?.signed_header?.header?.chain_id"></app-messages-item>
+    <app-messages-item [label]="'height'" [value]="data?.header?.signed_header?.header?.height"></app-messages-item>
+    <app-messages-item [label]="'time'" [value]="data?.header?.signed_header?.header?.time"></app-messages-item>
     <app-messages-item
       [label]="'hash'"
-      [value]="
-        ibcData?.update_client?.header?.signed_header?.header?.last_block_id?.part_set_header?.hash
-      "></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.last_block_id?.part_set_header?.hash"></app-messages-item>
     <app-messages-item
       [label]="'total'"
-      [value]="
-        ibcData?.update_client?.header?.signed_header?.header?.last_block_id?.part_set_header?.total
-      "></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.last_block_id?.part_set_header?.total"></app-messages-item>
     <app-messages-item
       [label]="'last_commit_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.last_commit_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.last_commit_hash"></app-messages-item>
     <app-messages-item
       [label]="'data_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.data_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.data_hash"></app-messages-item>
     <app-messages-item
       [label]="'validators_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.validators_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.validators_hash"></app-messages-item>
     <app-messages-item
       [label]="'next_validators_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.next_validators_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.next_validators_hash"></app-messages-item>
     <app-messages-item
       [label]="'consensus_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.consensus_hash"></app-messages-item>
-    <app-messages-item
-      [label]="'app_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.app_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.consensus_hash"></app-messages-item>
+    <app-messages-item [label]="'app_hash'" [value]="data?.header?.signed_header?.header?.app_hash"></app-messages-item>
     <app-messages-item
       [label]="'last_results_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.last_results_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.last_results_hash"></app-messages-item>
     <app-messages-item
       [label]="'evidence_hash'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.evidence_hash"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.evidence_hash"></app-messages-item>
     <app-messages-item
       [label]="'proposer_address'"
-      [value]="ibcData?.update_client?.header?.signed_header?.header?.proposer_address"></app-messages-item>
+      [value]="data?.header?.signed_header?.header?.proposer_address"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcProgress>
-    <div class="row mb-3 body-02 body-01-mob border-ibc pt-3">
+    <div class="row mb-3 body-02 body-01-mob border-ibc pt-3" *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">IBC Progress</div>
       <div class="col-12 col-lg-9">
         <div class="row col-12">
