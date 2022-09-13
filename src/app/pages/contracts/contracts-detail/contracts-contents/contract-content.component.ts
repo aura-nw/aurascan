@@ -121,11 +121,11 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         const { code, data } = dataExecute;
         if (code === 200) {
           const txsExecute = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
-          if (dataExecute.data.count > 0) {
+          if (dataExecute?.data.count > 0 || dataInstantiate?.data.count > 0) {
             const { code, data } = dataInstantiate;
             const txsInstantiate = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
             this.contractTransaction['data'] = txsExecute;
-            this.contractTransaction['count'] = dataExecute.data.count + dataExecute.data.count + txsInstantiate?.length || 0;
+            this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
 
             //check data < 25 record
             if (dataExecute.data.count < this.limit) {
