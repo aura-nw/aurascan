@@ -13,7 +13,7 @@ import {
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
   VOTE_OPTION,
-  VOTING_STATUS,
+  VOTING_STATUS
 } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
@@ -108,28 +108,40 @@ export class ProposalComponent implements OnInit {
         );
 
         this.length = this.dataSource.data.length;
-        if (this.lastedList.length === 0) {
-          this.lastedList = [...res?.data?.proposals];
-          this.lastedList.forEach((pro, index) => {
-            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-            if (index < 4 && pro?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-              this.getVoteResult(pro.proposal_id, index);
-              const expiredTime = +moment(pro.voting_end_time).format('x') - +moment().format('x');
-              if (expiredTime < 0) {
-                this.getProposalDetailFromNode(pro.proposal_id, index);
-              }
-              const getVoted = async () => {
-                if (addr) {
-                  const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
-                  pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
-                  )?.voteOption;
-                }
-              };
-              getVoted();
+        this.lastedList = [...res?.data?.proposals];
+        this.lastedList.forEach((pro, index) => {
+          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+          if (index < 4 && pro?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+            const { yes, no, no_with_veto, abstain } = pro.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+
+            this.lastedList[index].tally.yes = (+yes * 100) / totalVote;
+            this.lastedList[index].tally.no = (+no * 100) / totalVote;
+            this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
+            const expiredTime = +moment(pro.voting_end_time).format('x') - +moment().format('x');
+            if (expiredTime < 0) {
+              this.getProposalDetailFromNode(pro.proposal_id, index);
             }
-          });
-        }
+            const getVoted = async () => {
+              if (addr) {
+                const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
+                pro.vote_option = this.voteConstant.find(
+                  (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+                )?.voteOption;
+              }
+            };
+            getVoted();
+          } else {
+            const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+            this.lastedList[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+            this.lastedList[index].tally.yes = (+yes * 100) / totalVote;
+            this.lastedList[index].tally.no = (+no * 100) / totalVote;
+            this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
+          }
+        });
       }
     });
   }
@@ -217,7 +229,6 @@ export class ProposalComponent implements OnInit {
       }
     } else {
       this.getProposalDetailFromNode(id, index);
-      this.getVoteResult(id, index);
     }
   }
 
@@ -229,11 +240,13 @@ export class ProposalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.getVoteResult(data.id, data.idx);
         let votedValue = this.lastedList.find((s) => s.proposal_id === data.id);
         votedValue.vote_option = result.keyVote;
       }
       this.scrollToTop();
+      setTimeout(() => {
+        this.getListProposal();
+      }, 3000);
     });
   }
 
@@ -261,21 +274,6 @@ export class ProposalComponent implements OnInit {
     this.dlgService.showDialog({
       content: 'Please set up override Keplr in settings of Coin98 wallet',
       title: '',
-    });
-  }
-
-  getVoteResult(pro_id, index) {
-    this.proposalService.getProposalTally(pro_id).subscribe((res) => {
-      if (!res.data?.proposalVoteTally?.tally) {
-        return;
-      }
-      const { yes, no, no_with_veto, abstain } = res.data.proposalVoteTally.tally;
-      let totalVote = +yes + +no + +no_with_veto + +abstain;
-
-      this.lastedList[index].tally.yes = (+yes * 100) / totalVote;
-      this.lastedList[index].tally.no = (+no * 100) / totalVote;
-      this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-      this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
     });
   }
 

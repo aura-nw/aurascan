@@ -22,8 +22,8 @@ export interface IListVotes {}
 
 export interface IProposal {
   proposal_id: number;
-  pro_proposer: string;
-  pro_proposer_address: string;
+  proposer_name: string;
+  proposer_address: string;
   status: string;
   submit_time: string;
   content: {
@@ -31,6 +31,12 @@ export interface IProposal {
   };
   total_deposit: { amount: number; denom: string };
   tally: {
+    abstain: number;
+    no: number;
+    no_with_veto: number;
+    yes: number;
+  };
+  final_tally_result: {
     abstain: number;
     no: number;
     no_with_veto: number;
