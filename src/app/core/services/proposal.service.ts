@@ -60,12 +60,13 @@ export class ProposalService extends CommonService {
   //   return this.http.get<any>(`${this.apiUrl}/proposals/list/get-by-address/${address}`);
   // }
 
-  getProposalList(pageLimit = 20, nextKey = null): Observable<any> {
+  getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       pageLimit,
       nextKey,
       reverse: false,
+      proposalId: proposalId,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)

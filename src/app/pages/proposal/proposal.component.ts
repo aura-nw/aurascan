@@ -119,10 +119,6 @@ export class ProposalComponent implements OnInit {
             this.lastedList[index].tally.no = (+no * 100) / totalVote;
             this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
             this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
-            const expiredTime = +moment(pro.voting_end_time).format('x') - +moment().format('x');
-            if (expiredTime < 0) {
-              this.getProposalDetailFromNode(pro.proposal_id, index);
-            }
             const getVoted = async () => {
               if (addr) {
                 const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
@@ -142,15 +138,6 @@ export class ProposalComponent implements OnInit {
             this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
           }
         });
-      }
-    });
-  }
-
-  getProposalDetailFromNode(pro_id, index) {
-    this.proposalService.getProposalDetailFromNode(pro_id).subscribe((res) => {
-      if (res?.data) {
-        this.lastedList[index].status = res.data.status;
-        this.dataSource.data[index].pro_status = res.data.status;
       }
     });
   }
@@ -228,7 +215,7 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getProposalDetailFromNode(id, index);
+      this.getListProposal();
     }
   }
 

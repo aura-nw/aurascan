@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
@@ -13,7 +13,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE,
+  VOTING_SUBTITLE
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { IResponsesTemplates } from '../../../../core/models/common.model';
@@ -49,7 +49,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private proposalService: ProposalService,
-    private datePipe: DatePipe,
     public global: Globals,
     private walletService: WalletService,
     public dialog: MatDialog,
