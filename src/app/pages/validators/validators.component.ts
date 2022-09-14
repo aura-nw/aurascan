@@ -351,6 +351,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,
+          size: 'lg',
           windowClass: 'modal-holder validator-modal',
         });
       },

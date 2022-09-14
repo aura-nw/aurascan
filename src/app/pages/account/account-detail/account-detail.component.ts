@@ -479,6 +479,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
+      size: 'sm',
       windowClass: 'modal-holder contact-qr-modal',
     });
   }
