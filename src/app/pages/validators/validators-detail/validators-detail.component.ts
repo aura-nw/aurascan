@@ -226,9 +226,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
           const tx_hash = _.get(element, 'tx_response.txhash');
 
-          const address = _.get(element, 'tx.body.messages[0].validator_dst_address');
+          const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
 
-          const _type = _.get(element, 'tx.body.messages[0].@type');
+          const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
           if (
             _type === TRANSACTION_TYPE_ENUM.Delegate ||
             (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
@@ -236,7 +236,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           ) {
             isStakeMode = true;
           }
-          const amount = getAmount(_.get(element, 'tx.body.messages'), _type, _.get(element, 'tx.body.raw_log'));
+          const amount = getAmount(_.get(element, 'tx_response.tx.body.messages'), _type, _.get(element, 'tx_response.tx.body.raw_log'));
           const height = _.get(element, 'tx_response.height');
           const timestamp = _.get(element, 'tx_response.timestamp');
 
