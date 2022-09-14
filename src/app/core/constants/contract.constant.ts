@@ -1,5 +1,5 @@
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { ContractMainnetStatus, ContractRegisterType, ContractTab } from './contract.enum';
+import { ContractRegisterType, ContractTab } from './contract.enum';
 
 export const CONTRACT_TAB = [
   {

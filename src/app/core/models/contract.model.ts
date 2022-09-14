@@ -89,3 +89,34 @@ export const DROPDOWN_ELEMENT = [
     key: '2',
   },
 ];
+
+export interface SmartContractStatus {
+  key: string;
+  label: string
+}
+
+export interface SmartContractListReq {
+  creatorAddress: string;
+  codeId?: string;
+  status?: string;
+  limit: number;
+  offset: number;
+}
+
+export interface DeployContractListReq {
+  requester_address: string,
+  code_ids: number[],
+  project_name: string,
+  official_project_website: string,
+  official_project_email: string,
+  name: string,
+  email: string,
+  contract_description: string,
+  project_sector?: string, // can hoi lai
+  whitepaper: string,
+  github: string,
+  telegram: string,
+  discord: string,
+  facebook: string,
+  twitter: string
+}

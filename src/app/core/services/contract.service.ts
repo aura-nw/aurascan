@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IResponsesSuccess, IResponsesTemplates } from 'src/app/core/models/common.model';
-import { IContractsResponse } from 'src/app/core/models/contract.model';
+import { IContractsResponse, SmartContractListReq } from 'src/app/core/models/contract.model';
 import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -101,11 +101,16 @@ export class ContractService extends CommonService {
     return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
   }
 
-  getListSmartContract(creatorAddress: string, limit: number, offset: number){
-    return axios.get(`${this.apiUrl}/contracts/get-contract-by-creator/${creatorAddress}/${limit}/${offset}`);
+  getListSmartContract(params: SmartContractListReq){
+    return axios.get(`
+    ${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`);
   }
 
-  getSmartContractStatus(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/get-smart-contract-status`);
+  getSmartContractStatus() {
+    return axios.get(`${this.apiUrl}/contracts/get-smart-contract-status`);
+  }
+
+  getContractIdList(creator: string) {
+    return axios.get(`${this.apiUrl}/contracts/get-code-ids/${creator}`);
   }
 }

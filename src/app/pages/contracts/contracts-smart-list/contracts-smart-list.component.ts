@@ -8,13 +8,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { ContractMainnetStatus } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
+import { SmartContractListReq, SmartContractStatus } from '../../../core/models/contract.model';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 
 @Component({
   selector: 'app-contracts-smart-list',
@@ -35,9 +36,11 @@ export class ContractsSmartListComponent implements OnInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'Contract On Mainnet' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+  pageLimit = 20;
+  contractVerifyType = ContractVerifyType;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 20,
+    pageSize: this.pageLimit,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -49,16 +52,15 @@ export class ContractsSmartListComponent implements OnInit {
   walletAccount: any;
   loading = true;
   isHideSearch = false;
-  currentType = '';
-  ContractMainnetStatus = ContractMainnetStatus;
-  currentStatus: any;
+  contractMainnetStatus: SmartContractStatus[] = [];
+  currentStatus: SmartContractStatus;
 
   statusColor = {
-    TBD: '#2CB1F5',
-    'Not Registered': '#F5B73C',
-    Unverified: '#E5E7EA',
-    Deployed: '#67C091',
-    Rejected: '#D5625E',
+    "UNVERIFIED": "#E5E7EA",
+    "NOT REGISTERD": "#F5B73C",
+    "TBD": "#2CB1F5",
+    "DEPLOYED": "#67C091",
+    "REJECTED": "#D5625E",
   };
 
   constructor(
@@ -73,69 +75,59 @@ export class ContractsSmartListComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     from([1])
       .pipe(
         delay(600),
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe(async (wallet) => {
-        if (wallet) {
-          this.userAddress = wallet.bech32Address;
-          await this.getListContract();
-        } else {
+        if (!wallet) {
           this.userAddress = null;
           this.router.navigate(['/']);
+        } else {
+          await this.getContractStatus();
+          this.userAddress = wallet.bech32Address;
+          await this.getListContract();
         }
       });
   }
 
-  async getListContract() {
+  async getListContract(status?: SmartContractStatus) {
+    this.currentStatus = status;
     this.loading = true;
-    let payload = {
-      account_address: this.userAddress,
+    const payload: SmartContractListReq = {
+      creatorAddress: this.userAddress,
+      codeId: this.textSearch,
+      status: (this.currentStatus && this.currentStatus.key !== 'ALL') && this.currentStatus.label ? this.currentStatus.label : '',
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.textSearch,
     };
-    const listSmartContract = await this.contractService.getListSmartContract(payload.account_address, payload.limit, payload.offset);
+    const listSmartContract = await this.contractService.getListSmartContract(payload);
     if(listSmartContract) {
       this.pageData = {
         length: listSmartContract.data['meta'].count,
         pageSize: this.pageData.pageSize,
-        pageIndex: PAGE_EVENT.PAGE_INDEX,
+        pageIndex: this.pageData.pageIndex,
       };
-      // listSmartContract.data['data'].forEach((item) => {
-      //   item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-      // });
       this.dataSource = new MatTableDataSource<any>(listSmartContract.data['data']);
       this.dataBk = listSmartContract.data;
       this.loading = false;
     }
   }
 
+  resetPageEvent() {
+    this.pageData = {
+      length: PAGE_EVENT.LENGTH,
+      pageSize: this.pageLimit,
+      pageIndex: 0,
+    };
+  }
+
   searchContract(): void {
-    this.filterSearchData = null;
-    this.isHideSearch = false;
-    if (this.textSearch.length > 0) {
-      let payload = {
-        account_address: this.userAddress,
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-      this.filterSearchData = [];
-      this.contractService.getListTypeContract(payload).subscribe((res) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.filterSearchData = res.data;
-        }
-      });
-    } else {
-      this.clearSearch();
-    }
+    setTimeout(() => {
+      this.getListContract();
+    }, 2000)
   }
 
   clearSearch(): void {
@@ -159,20 +151,17 @@ export class ContractsSmartListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListContract();
+    this.getListContract(this.currentStatus);
   }
 
-  connectWallet(): void {
-    this.walletAccount = this.walletService.getAccount();
-  }
-
-  validateCurrentCodeID(event: any) {
-    // const regex = new RegExp(/[0-9]/g);
-    // let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    // if (!regex.test(key)) {
-    //   event.preventDefault();
-    //   return;
-    // }
-    // this.currentCodeID = event.target.value;
+  async getContractStatus() {
+    const req = await this.contractService.getSmartContractStatus();
+    if(req) {
+      this.contractMainnetStatus = req.data['data'];
+      this.contractMainnetStatus.unshift({
+        key: 'ALL',
+        label: 'All'
+      })
+    }
   }
 }

@@ -5,23 +5,24 @@
                 <h1 class="text--white">Register Contracts to Deploy on Mainnet</h1>
                 <div class="card">
                     <div class="card-body">
-                        <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form single-input-field" *ngIf="contractForm">
+                        <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" *ngIf="contractForm"
+                              class="aura-form single-input-field" autocomplete="off">
                             <h3 class="text--white mb-2">Basic Information</h3>
                             <div class="body-01 body-02-mob text--gray-1">Please check that all the links and information provided are exactly true, working and safe to visit before submitting</div>
                             <div class="row mt-6">
                                 <div class="col-12 col-md-6">
-                                    <!-- code_id -->
+                                    <!-- code_ids -->
                                     <div class="form-group">
-                                        <label for="code_id" class="form-label required text--gray-1 body-02">Code ID</label>
-                                            <mat-select formControlName="code_id" class="form-control form-check-input"
-                                            id="code_id"
-                                            [class.form-control--error]="contractForm.get('code_id').invalid && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)"
+                                        <label for="code_ids" class="form-label required text--gray-1 body-02">Code ID</label>
+                                            <mat-select formControlName="code_ids" class="form-control form-check-input"
+                                            id="code_ids"
+                                            [class.form-control--error]="contractForm.get('code_ids').invalid && (contractForm.get('code_ids').dirty || contractForm.get('code_ids').touched)"
                                              multiple [disableOptionCentering]="true" panelClass="aura-optional-panel aura-optional-contract-deploy">
                                               <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>
                                             </mat-select>
                                       <div class="text--gray-3 caption fw-normal mt-2">Please select one or many Code IDs that were verified contract source code of the project.</div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('code_id').hasError('required') && (contractForm.get('code_id').dirty || contractForm.get('code_id').touched)">
+                                            *ngIf="contractForm.get('code_ids').hasError('required') && (contractForm.get('code_ids').dirty || contractForm.get('code_ids').touched)">
                                             Code id is required!
                                         </div>
                                     </div>
@@ -73,19 +74,23 @@
                                 <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Official Project Email Address -->
                                     <div class="form-group">
-                                        <label for="official_project_email_address" class="form-label required text--gray-1 body-02">Official Project Email Address</label>
-                                        <input id="official_project_email_address"
-                                          formControlName="official_project_email_address"
+                                        <label for="official_project_email" class="form-label required text--gray-1 body-02">Official Project Email Address</label>
+                                        <input id="official_project_email"
+                                          formControlName="official_project_email"
                                           type="text"
                                           class="form-control form-check-input"
-                                          [class.form-control--error]="contractForm.get('official_project_email_address').invalid && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)"/>
+                                          [class.form-control--error]="contractForm.get('official_project_email').invalid && (contractForm.get('official_project_email').dirty || contractForm.get('official_project_email').touched)"/>
                                           <div class="text--gray-3 caption fw-normal mt-2">Please make sure the email provided has the project official domain as its suffix.</div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('official_project_email_address').hasError('required') && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)">
+                                            *ngIf="contractForm.get('official_project_email').hasError('required') && (contractForm.get('official_project_email').dirty || contractForm.get('official_project_email').touched)">
                                             Official Project Email Address is required!
                                         </div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('official_project_email_address').hasError('maxlength') && (contractForm.get('official_project_email_address').dirty || contractForm.get('official_project_email_address').touched)">
+                                             *ngIf="contractForm.get('official_project_email').hasError('pattern') && (contractForm.get('official_project_email').dirty || contractForm.get('official_project_email').touched)">
+                                            Invalid Email!
+                                        </div>
+                                        <div class="error"
+                                            *ngIf="contractForm.get('official_project_email').hasError('maxlength') && (contractForm.get('official_project_email').dirty || contractForm.get('official_project_email').touched)">
                                             Content is longer than limit!
                                         </div>
                                     </div>
@@ -95,18 +100,18 @@
                                 <div class="col-12 col-md-6">
                                     <!-- Requester Name -->
                                     <div class="form-group">
-                                        <label for="requester_name" class="form-label required text--gray-1 body-02">Requester Name</label>
-                                        <input id="requester_name"
-                                          formControlName="requester_name"
+                                        <label for="name" class="form-label required text--gray-1 body-02">Requester Name</label>
+                                        <input id="name"
+                                          formControlName="name"
                                           type="text"
                                           class="form-control form-check-input"
-                                          [class.form-control--error]="contractForm.get('requester_name').invalid && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)"/>
+                                          [class.form-control--error]="contractForm.get('name').invalid && (contractForm.get('name').dirty || contractForm.get('name').touched)"/>
                                         <div class="error"
-                                            *ngIf="contractForm.get('requester_name').hasError('required') && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)">
+                                            *ngIf="contractForm.get('name').hasError('required') && (contractForm.get('name').dirty || contractForm.get('name').touched)">
                                             Requester Name is required!
                                         </div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('requester_name').hasError('maxlength') && (contractForm.get('requester_name').dirty || contractForm.get('requester_name').touched)">
+                                            *ngIf="contractForm.get('name').hasError('maxlength') && (contractForm.get('name').dirty || contractForm.get('name').touched)">
                                             Content is longer than limit!
                                         </div>
                                     </div>
@@ -114,19 +119,23 @@
                                 <div class="col-12 col-md-6 mt-6 mt-md-0">
                                     <!-- Requester Email Address -->
                                     <div class="form-group">
-                                        <label for="requester_email_address" class="form-label required text--gray-1 body-02">Requester Email Address</label>
-                                        <input id="requester_email_address"
-                                          formControlName="requester_email_address"
+                                        <label for="email" class="form-label required text--gray-1 body-02">Requester Email Address</label>
+                                        <input id="email"
+                                          formControlName="email"
                                           type="text"
                                           class="form-control form-check-input"
-                                          [class.form-control--error]="contractForm.get('requester_email_address').invalid && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)"/>
+                                          [class.form-control--error]="contractForm.get('email').invalid && (contractForm.get('email').dirty || contractForm.get('email').touched)"/>
                                           <div class="text--gray-3 caption fw-normal mt-2">Please make sure that you provide an email account of the project’s official domain. If the contact email is using public domains (eg. Gmail) do publish on the website for acknowledgement/verification.</div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('requester_email_address').hasError('required') && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)">
+                                            *ngIf="contractForm.get('email').hasError('required') && (contractForm.get('email').dirty || contractForm.get('email').touched)">
                                             Requester Email Address is required!
                                         </div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('requester_email_address').hasError('maxlength') && (contractForm.get('requester_email_address').dirty || contractForm.get('requester_email_address').touched)">
+                                             *ngIf="contractForm.get('email').hasError('pattern') && (contractForm.get('email').dirty || contractForm.get('email').touched)">
+                                            Invalid Email!
+                                        </div>
+                                        <div class="error"
+                                            *ngIf="contractForm.get('email').hasError('maxlength') && (contractForm.get('email').dirty || contractForm.get('email').touched)">
                                             Content is longer than limit!
                                         </div>
                                     </div>
@@ -136,19 +145,19 @@
                                 <div class="col-12">
                                     <!-- Project Description -->
                                     <div class="form-group">
-                                        <label for="project_description" class="form-label required text--gray-1 body-02">Project Description (Max 300 characters)</label>
-                                        <textarea id="project_description"
-                                          formControlName="project_description"
+                                        <label for="contract_description" class="form-label required text--gray-1 body-02">Project Description (Max 300 characters)</label>
+                                        <textarea id="contract_description"
+                                          formControlName="contract_description"
                                           type="text"
                                           class="form-control form-check-input"
-                                          [class.form-control--error]="contractForm.get('project_description').invalid && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)"></textarea>
+                                          [class.form-control--error]="contractForm.get('contract_description').invalid && (contractForm.get('contract_description').dirty || contractForm.get('contract_description').touched)"></textarea>
                                         <div class="text--gray-3 caption fw-normal mt-2">Please introduce or summarize the project's operation/mechanism/ goals in a maximum of 300 characters. The short description should be written in a neutral point of view and must exclude unsubstantiated claims (“first”, ”most”, “best”, and etc) unless proven otherwise.</div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('project_description').hasError('required') && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)">
+                                            *ngIf="contractForm.get('contract_description').hasError('required') && (contractForm.get('contract_description').dirty || contractForm.get('contract_description').touched)">
                                             Project Description is required!
                                         </div>
                                         <div class="error"
-                                            *ngIf="contractForm.get('project_description').hasError('maxlength') && (contractForm.get('project_description').dirty || contractForm.get('project_description').touched)">
+                                            *ngIf="contractForm.get('contract_description').hasError('maxlength') && (contractForm.get('contract_description').dirty || contractForm.get('contract_description').touched)">
                                             Content is longer than limit!
                                         </div>
                                     </div>
@@ -436,7 +445,8 @@
                             <div class="row mt-6 mb-2">
                                 <div class="col-12 d-flex justify-content-end align-item-center">
                                     <button type="reset" class="button button-pill button-outline button--md"><span>Reset</span></button>
-                                    <button type="submit" class="button button-pill button-flat button--md ml-4" [disabled]="!contractForm.valid"><span>Submit</span></button>
+                                    <button type="submit" class="button button-pill button-flat button--md ml-4"
+                                            [disabled]="!contractForm.valid || (contractForm.valid && contractForm.get('agree').value === false)"><span>Submit</span></button>
                                 </div>
                             </div>
                         </form>

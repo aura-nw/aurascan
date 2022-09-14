@@ -23,18 +23,18 @@
       </a>
     </div>
     <div class="d-flex mt-4 mt-md-0">
-      <div class="dropdown aura-dropdown mr-4 btn-status d-none d-lg-block">
+      <div class="dropdown aura-dropdown mr-4 btn-status d-none d-lg-block" *ngIf="contractMainnetStatus.length > 0">
         <button
           class="button button--md button-pill button-outline button-outline--gradient button-dropdown w-100"
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false">
-          <span>{{ currentStatus?.value || 'Status' }}</span>
+          <span class='text-capitalize'>{{ currentStatus ? currentStatus.label : 'Status' }}</span>
         </button>
         <ul class="dropdown-menu aura-dropdown-menu">
-          <ng-container *ngFor="let item of ContractMainnetStatus | keyvalue">
-            <li class="dropdown-item cursor-pointer" (click)="currentStatus = item; searchContract()">
-              <button type="button" class="button p-0">{{ item.value }}</button>
+          <ng-container *ngFor="let item of contractMainnetStatus">
+            <li class="dropdown-item cursor-pointer" (click)="resetPageEvent(); getListContract(item)">
+              <button type="button" class="button p-0 text-capitalize">{{ item.label | lowercase}}</button>
             </li>
           </ng-container>
         </ul>
@@ -47,6 +47,7 @@
             placeholder="Search for Code ID"
             [(ngModel)]="textSearch"
             [maxLength]="maxLengthSearch"
+            (ngModelChange)='searchContract()'
             (keyup)="searchContract()"
             name="search"
             autocomplete="off" />
@@ -101,18 +102,18 @@
   <div class="card mt-4 mt-lg-6">
     <div class="card-body">
       <div class='d-flex d-lg-none mt-4'>
-        <div class="dropdown aura-dropdown btn-status btn-status--mob">
+        <div class="dropdown aura-dropdown btn-status btn-status--mob" *ngIf="contractMainnetStatus.length > 0">
           <button
             class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card button-dropdown w-100"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false">
-            <span>{{ currentStatus?.value || 'Status' }}</span>
+            <span class='text-capitalize caption fw-normal'>{{ currentStatus?.label || 'Status' }}</span>
           </button>
           <ul class="dropdown-menu aura-dropdown-menu">
-            <ng-container *ngFor="let item of ContractMainnetStatus | keyvalue">
-              <li class="py-1 px-2 dropdown-item cursor-pointer" (click)="currentStatus = item; searchContract()">
-                <button type="button" class="button p-0 body-02 text-start">{{ item.value }}</button>
+            <ng-container *ngFor="let item of contractMainnetStatus">
+              <li class="py-1 px-2 dropdown-item cursor-pointer" (click)="resetPageEvent(); getListContract(item)">
+                <button type="button" class="button p-0 body-02 text-start text-capitalize">{{ item.label | lowercase}}</button>
               </li>
             </ng-container>
           </ul>
@@ -124,6 +125,7 @@
               class="form-control"
               placeholder="Search for Code ID"
               [(ngModel)]="textSearch"
+              (ngModelChange)='searchContract()'
               [maxLength]="maxLengthSearch"
               (keyup)="searchContract()"
               name="search"
@@ -179,7 +181,7 @@
           matSort
           [dataSource]="dataSource"
           class="aura-table"
-          *ngIf="dataSource.data.length > 0; else noValues">
+          *ngIf="this.dataBk && this.dataBk['data']?.length > 0; else noValues">
           <ng-container  *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>
@@ -189,12 +191,19 @@
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'contract_address'">
-                      <a
-                        [routerLink]="['/contracts/', data[template.matColumnDef]]"
-                        class="text-clamp"
-                        *ngIf="data[template.matColumnDef]">
-                        {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                      </a>
+                      <div class="d-flex align-items-center gap-2">
+                        <img
+                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
+                          [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+                          alt="contract_verification" class="mr-2"
+                          width="16px"
+                          height="16px" />
+                        <a
+                          [routerLink]="['/contracts/', data[template.matColumnDef]]"
+                          [class.disabled-link]="!data[template.matColumnDef]">
+                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                        </a>
+                      </div>
                       <span *ngIf="!data[template.matColumnDef]">-</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'contract_mainnet'">
@@ -210,7 +219,8 @@
                       >{{ data[template.matColumnDef] }}
                       <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'type'"> - </ng-container>
+                    <!-- Type contract -->
+                    <ng-container *ngSwitchCase="'height'"> - </ng-container>
                     <ng-container *ngSwitchCase="'contract_verification'">
 <!--                      <div *ngIf="data[template.matColumnDef]">-->
 <!--                        <div class="body-02 d-flex align-items-center">-->
@@ -221,11 +231,11 @@
                       <div>-</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
-                      <div
+                      <div class='text-capitalize'
                         [ngStyle]="{
                           color: statusColor[data[template.matColumnDef]]
                         }">
-                        {{ data[template.matColumnDef] }}
+                        {{ data[template.matColumnDef] | lowercase}}
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'"> - </ng-container>
@@ -264,7 +274,7 @@
       <ng-template #noValues>
         <div class="d-flex justify-content-center align-items-center text-white">
           <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="24" height="24" class="mr-2" />
-          <span>You have yet to deploy any contract</span>
+          <span>No Data</span>
         </div>
       </ng-template>
     </div>
