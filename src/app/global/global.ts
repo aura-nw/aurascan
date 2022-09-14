@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
-import { CodeTransaction, ModeExecuteTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  ModeExecuteTransaction,
+  StatusTransaction,
+  TRANSACTION_TYPE_ENUM,
+} from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
 
@@ -16,8 +21,8 @@ export class Globals {
   maxNumberInput = 100000000000000;
   price = {
     aura: 0,
-    btc: 0
-  }
+    btc: 0,
+  };
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
@@ -101,7 +106,7 @@ export function getDataInfo(arrayMsg, addressContract) {
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
-        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender || 
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
       tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       if (method === ModeExecuteTransaction.Burn) {
@@ -162,15 +167,27 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
       coinMinimalDenom,
     );
 
-    const amount = (_.isNumber(_amount) && _amount > 0) ? _amount.toFixed(coinDecimals) : _amount;
+    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinDecimals) : _amount;
 
-    const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
-      coinDecimals,
-    );
+    const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(coinDecimals);
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
 
     return { code, tx_hash, type, status, amount, fee, height, timestamp, messages };
   });
   return txs;
+}
+
+export function convertDataBlock(data) {
+  const block = _.get(data, 'blocks').map((element) => {
+    const height = _.get(element, 'block.header.height');
+    const block_hash = _.get(element, 'block_id.hash');
+    const num_txs = _.get(element, 'block.data.txs.length');
+    const proposer = _.get(element, 'validator_name');
+    const operator_address = _.get(element, 'operator_address');
+    const timestamp = _.get(element, 'block.header.time');
+
+    return { height, block_hash, num_txs, proposer, operator_address, timestamp }; 
+  });
+  return block;
 }
