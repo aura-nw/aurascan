@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IResponsesSuccess, IResponsesTemplates } from 'src/app/core/models/common.model';
 import { IContractsResponse } from 'src/app/core/models/contract.model';
+import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -10,6 +12,7 @@ import { CommonService } from './common.service';
 export class ContractService extends CommonService {
   private contract$ = new BehaviorSubject<any>(null);
   contractObservable: Observable<any>;
+  chainInfo = this.environmentService.configValue.chain_info;
 
   get contract() {
     return this.contract$.value;
@@ -33,6 +36,25 @@ export class ContractService extends CommonService {
     offset: number;
   }): Observable<IResponsesSuccess<IContractsResponse[]>> {
     return this.http.post<any>(`${this.apiUrl}/contracts/search-transactions`, payload);
+  }
+
+  getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = ''): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      searchType: type,
+      searchKey: '_contract_address',
+      searchValue: contractAddress,
+      pageLimit,
+      nextKey,
+      countTotal: true,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+      params,
+    });
   }
 
   getContractDetail(contractAddress): Observable<any> {

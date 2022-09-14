@@ -1,37 +1,48 @@
 .card {
-  .button-outline {
-    &__in-card {
-      box-shadow: 2px 1000px 1px #20262B inset !important;
-    }
-  }
-
-  &__status {
-    .proposal-status-mobile {
-      border-radius: 8px;
-      text-transform: capitalize;
-      height: 33px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 var(--spacer-3);
-    }
+  .divider.divider-vertical {
+    max-height: 32px;
   }
 }
 
 .editorial-container {
   max-height: 360px;
   overflow-y: scroll;
-  background-color: var(--bs-gray-700);
-  border-radius: 4px;
+  background: rgba(19, 20, 25, 0.5);
+  border-radius: 8px;
+
   ::ng-deep {
     & * {
-      color: var(--aura-white) !important;
+      color: var(--aura-gray-3) !important;
+      margin-top: var(--spacer-1);
     }
+
+    h1,
+    .h1,
+    h2,
+    .h2,
+    h3,
+    .h3,
+    h4,
+    .h4,
+    h5,
+    .h5,
+    h6,
+    .h6 {
+      color: var(--aura-gray-1) !important;
+      margin-top: var(--spacer-3);
+    }
+
+    h1,
+    .h1 {
+      margin-top: 0;
+    }
+
     a {
-      color: var(--aura-green) !important;
+      color: var(--aura-primary) !important;
     }
   }
 }
+
 ::ng-deep.proposal__summary-total {
   color: var(--aura-white);
 
@@ -42,7 +53,7 @@
     position: relative;
 
     ul.vote-bar-ul {
-      background-color: var(--aura-white-3);
+      background-color: var(--aura-gray-8);
       border-radius: 4px;
       overflow: hidden;
 
@@ -56,21 +67,12 @@
         }
 
         &--info {
-          background-color: var(--aura-info);
+          background-color: var(--aura-secondary);
         }
 
         &--secondary {
-          background-color: var(--aura-light-gray);
+          background-color: var(--aura-gray-8);
         }
-
-        &--blue {
-          background-color: var(--aura-dark-blue);
-        }
-
-        &--voted {
-          background-color: var(--aura-voted);
-        }
-
       }
 
       li:last-child {
@@ -87,18 +89,17 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      transform: translate(-50%, -100%);
+      transform: translate(-50%, -130%);
 
       &:before {
         content: '';
         position: absolute;
         left: 50%;
-        top: 90%;
+        top: 120%;
         transform: translateX(-50%);
         height: 120%;
         width: 4px;
         background-color: var(--aura-white);
-
         border-radius: 2px;
       }
 
@@ -106,34 +107,33 @@
         content: '';
         position: absolute;
         left: 50%;
-        bottom: 10px;
+        bottom: -4px;
         transform: translateX(-50%);
-
         width: 0;
         height: 0;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
-        border-top: 10px solid var(--aura-light-gray);
+        border-top: 10px solid #777E91;
       }
     }
   }
 
   .vote-bar-mobile {
     margin-top: 12px;
-    height: 38px;
+    height: 20px;
   }
 
   .vote-legend {
     ul {
-      margin-top: 2rem;
+      margin-top: var(--spacer-4);
       display: grid;
       grid-template-rows: 7rem;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       padding: 0;
 
       li {
-        padding: 0px 16px;
-        padding-left: 40px;
+        padding: 0 16px;
+        padding-left: 24px;
         height: 5rem;
         position: relative;
 
@@ -142,7 +142,6 @@
           display: flex;
           align-items: center;
           position: relative;
-          font-family: 'SF Pro Display';
           font-size: 20px;
           line-height: 24px;
           letter-spacing: 0.02em;
@@ -151,23 +150,23 @@
         &[data-style] .item-box::before {
           position: absolute;
           content: '';
-          width: 32px;
-          height: 32px;
-          left: -40px;
-          top: 0px;
+          width: 16px;
+          height: 16px;
+          left: -24px;
+          top: 8px;
           border-radius: 100rem;
         }
 
         &[data-style='primary'] .item-box::before {
-          background-color: #5ee6d0;
+          background-color: var(--aura-primary);
         }
 
         &[data-style='danger'] .item-box::before {
-          background-color: #e65e5e;
+          background-color: var(--aura-danger);
         }
 
         &[data-style='info'] .item-box::before {
-          background-color: #5e84e6;
+          background-color: var(--aura-secondary);
         }
 
         &[data-style='secondary'] .item-box::before {
@@ -177,19 +176,22 @@
         .item {
           font-size: 16px;
           font-weight: 600;
+          color: var(--aura-gray-1);
 
           &-label {
             margin-right: 32px;
           }
 
           &-amount {
-            margin-top: 8px;
             font-size: 14px;
             font-weight: 400;
+            line-height: 16px;
           }
 
           &-percent {
-            font-size: 16px;
+            font-size: 22px;
+            line-height: 26px;
+            font-weight: 600;
           }
         }
       }
@@ -207,10 +209,12 @@
         .item-label {
           font-size: 16px;
           font-weight: 700;
+          color: var(--aura-gray-1);
         }
 
         .item-amount {
           font-size: 14px;
+          color: var(--aura-gray-1);
         }
       }
     }
@@ -222,8 +226,14 @@
   }
 
   .vote {
-    width: 24px;
-    height: 24px;
+    width: 8px;
+    height: 8px;
+
+    @media (min-width: 992px) {
+      width: 16px;
+      height: 16px;
+    }
+
     display: inline-block;
     margin-right: 8px;
 
@@ -242,7 +252,11 @@
     }
 
     &.status--info {
-      background-color: var(--aura-info);
+      background-color: var(--aura-secondary);
+    }
+
+    &.status--secondary {
+      background-color: var(--aura-gray-7);
     }
   }
 }
@@ -261,4 +275,26 @@
   @media (min-width: 992px) {
     min-height: 48px;
   }
+}
+
+.border-right {
+  border-right: 1px solid var(--aura-gray-9);
+}
+
+.g-ellipsis__type {
+  @media (max-width: 991.99px) {
+    width: 200px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+}
+
+.v-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }

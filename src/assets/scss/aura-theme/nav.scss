@@ -1,9 +1,17 @@
 .aura-nav-tabs.nav-tabs-custom {
+    overflow-x: scroll;
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
     .nav-item {
         .nav-link {
             &::after {
                 color: var(--aura-white);
-                background: var(--aura-white);
+                background: var(--aura-gray-6);
             }
 
             &.active {
@@ -16,18 +24,27 @@
 body[data-layout-mode="dark"] {
     .aura-nav-tabs.nav-tabs {
         .nav-link {
-            color: var(--aura-green-disabled);
-            font-family: "SF Pro Display";
-            font-style: normal;
-            font-weight: 500;
-            font-size: 20px;
-            line-height: 24px;
+            > * {
+                color: var(--aura-gray-4) !important;
+            }
+            color: var(--aura-gray-4);
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
             letter-spacing: 0.02em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            padding: 0;
 
             &.active {
                 background-color: transparent;
-                border-color: var(--aura-white);
+                border-color: var(--aura-gray-6);
                 color: var(--aura-white);
+                > * {
+                    color: var(--aura-white) !important;
+                }
             }
         }
     }

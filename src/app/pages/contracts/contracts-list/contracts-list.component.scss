@@ -1,22 +1,12 @@
-.search-form {
-  min-width: 350px;
-
-  &.single-input-field {
-    .input-group {
-      &.textbox_search {
-        width: 97%;
-        padding: var(--spacer-1) var(--spacer-4) var(--spacer-4) var(--spacer-4);
-
-        input {
-          width: 90%;
-        }
-      }
-    }
+.search-form.contract-search-form {
+    width: 100%;
+  @media (min-width: 992px) {
+    width: 410px;
   }
-}
-
-@media (min-width: 992px) {
-  .search-form {
-    min-width: 350px;
+  .box-search-data {
+    width: 93%;
+    @media (min-width: 992px) {
+      width: 400px;
+    }
   }
 }

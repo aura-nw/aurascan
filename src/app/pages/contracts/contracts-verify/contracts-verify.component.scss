@@ -4,13 +4,26 @@
     padding-bottom: 56px;
   }
   .divider {
-    background-color: var(--aura-dark-gray);
+    background-color: var(--aura-gray-10);
   }
   ul.aura-nav-tabs li {
     min-width: 100px;
     text-align: center;
     @media (min-width: 992px) {
       min-width: 200px;
+    }
+  }
+  .aura-form .form-group {
+    input.form-control, .select-input--flat {
+      background-color: var(--aura-gray-9);
+      height: 32px;
+      color: var(--aura-gray-1);
+    }
+    .select-input--flat {
+      padding: 3px 16px;
+    }
+    ::ng-deep.mat-select-placeholder {
+      color: var(--aura-gray-5);
     }
   }
 }

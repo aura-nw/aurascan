@@ -1,28 +1,14 @@
-<h1 class="title-medium sub-text-mob mb-0 text--white fw-bold">Token Tracker</h1>
+<h1 class="mb-0 text--white">CW-20 Tokens</h1>
 <section>
   <ng-container *ngIf="pageData?.length > 0; else noValues">
-    <div class="card mt-5">
+    <div class="card mt-4 mt-lg-5">
       <div class="card-body">
         <!-- Title -->
-        <div class="d-lg-flex justify-content-between">
-          <div>
-            <div class="mb-3 mb-lg-0 d-flex justify-content-between d-lg-block">
-              <div class="title-medium sub-text-mob text--white fw-bold">CW-20 Tokens</div>
-              <button
-                class="button d-lg-none p-0"
-                (click)="
-                  searchForm.classList.contains('show')
-                    ? searchForm.classList.remove('show')
-                    : searchForm.classList.add('show')
-                ">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24px" height="24px" />
-              </button>
-            </div>
-            <div class="mall-body small-text-mob text--light-gray">
-              A total of {{ pageData?.length }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
-            </div>
+        <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
+          <div class="caption-mob fw-normal-mob body-03 text--gray-5 mt-4 mt-lg-0">
+            A total of {{ pageData?.length | number }} Token Contract{{ pageData?.length > 1 ? 's' : '' }} found
           </div>
-          <form class="aura-form single-input-field search-form mt-2 mt-lg-0" #searchForm>
+          <form class="aura-form single-input-field search-form" #searchForm>
             <div class="input-group">
               <input
                 type="text"
@@ -31,7 +17,8 @@
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="searchToken()"
-                (keyup.enter)="handleLink()"
+                (keyup.enter)="setPageList()"
+                [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button
@@ -42,40 +29,35 @@
               </button>
               <button
                 type="reset"
-                class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="textSearch = ''; searchToken()">
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0">
-              <div class="box-search-data box-search-token text-white">
-                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
-                  <span> There are no matching tokens </span>
+            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
+              <div class="box-search-data text-white">
+                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
+                  <span> There are no matching contracts </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search mb-3">Tokens (CW-20)</div>
+                  <div class="txt-title-search mb-2">CW-20 Tokens</div>
                   <ng-container *ngFor="let item of filterSearchData">
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.hashCode]">
-                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
-                      <div class="ml-2" style="flex: 0 0 95%">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <div class="d-flex">
-                            <span class="text-clamp small-body" style="max-width: 65%; height: 18px">{{
-                              item.name
-                            }}</span>
-                            <div class="box-price small-text">
-                              ${{ item.price | number: global.formatNumber2Decimal }}
-                            </div>
+                      [routerLink]="['/tokens/token', item.contract_address]">
+                      <img [src]="item.image || defaultLogoToken" class="logo-token" />
+                      <div class="ml-3">
+                        <div class="d-flex align-items-center">
+                          <div class="text-clamp">
+                            {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
                           </div>
-                          <img
-                            [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                            alt="icon"
-                            class="icon ml-4 mr-2"
-                            width="16px" />
+                          <div class="box-price">${{ item.price | number: global.formatNumber2Decimal }}</div>
                         </div>
-                        <div class="pr-5 small-text text--light-gray">{{ item.hashCode }}</div>
+                        <span class="text-clamp small-body text--primary">{{
+                          item.contract_address | cutStringPipe: 8:8
+                        }}</span>
                       </div>
                     </div>
                   </ng-container>
@@ -84,13 +66,13 @@
             </ng-container>
           </form>
         </div>
-        <div class="divider divider-horizontal d-lg-none mt-4"></div>
+        <div class="divider divider-horizontal d-lg-none my-4"></div>
         <!-- Table -->
-        <div class="table-responsive aura-table-contain mt-4 mt-lg-6 table-token">
+        <div class="table-responsive aura-table-contain mt-4">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef style="min-width: 50px">#</th>
+              <th mat-header-cell *matHeaderCellDef>#</th>
               <td mat-cell *matCellDef="let element; let i = index" class="vertical-align-top py-4">
                 <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
               </td>
@@ -101,11 +83,12 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img [src]="'assets/images/icons/token-logo.png' | imageS3" width="18" height="18" />
+                  <img [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
-                    <a [routerLink]="['/tokens/token', element.hashCode]">{{ element.name }}</a
-                    ><br class="d-none d-lg-block" />
-                    <div class="pr-5 d-none d-lg-block">{{ element.desc }}</div>
+                    <a [routerLink]="['/tokens/token', element.contract_address]" class="text--primary">
+                      {{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span>
+                    </a>
+                    <div class="h6 caption-mob mb-0 text--gray-6 pr-5 desc">{{ element.description }}</div>
                   </div>
                 </div>
               </td>
@@ -115,72 +98,83 @@
             <ng-container matColumnDef="price">
               <th mat-header-cell *matHeaderCellDef class="">Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <div>
-                  <!-- <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
-                  <div class="small-text text--light-gray">{{ element.btc }} Btc</div>
-                  <div class="small-text text--light-gray">{{ element.eth }} Eth</div> -->
-                  -
-                </div>
+                <ng-container *ngIf="element.price; else noData">
+                  <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
+                  <div class="caption text--gray-5" *ngIf="global.price.btc">
+                    {{ element.price / global.price.btc || 0 | number: global.formatNumberToken }} Btc
+                  </div>
+                  <div class="caption text--gray-5" *ngIf="global.price.aura">
+                    {{ element.price / global.price.aura || 0 | number: global.formatNumberToken }} {{ denom }}
+                  </div>
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- Change Column -->
             <ng-container matColumnDef="change">
-              <th mat-header-cell *matHeaderCellDef class="">Change (%)</th>
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Change (%)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex">
+                <div
+                  [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }"
+                  class="d-flex"
+                  *ngIf="element.change; else noData">
                   <ng-container *ngIf="element.isValueUp">
                     <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
                   <ng-container *ngIf="!element.isValueUp">
                     <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
-                  <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
-                </span> -->
-                -
+                  <span class="ml-1">{{ element.change | number: global.formatNumber2Decimal }}%</span>
+                </div>
               </td>
             </ng-container>
 
             <!-- Volume Column -->
             <ng-container matColumnDef="volume">
-              <th mat-header-cell *matHeaderCellDef class="">Volume (24H)</th>
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Volume (24H)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- ${{ element.volume | number: global.formatNumber2Decimal }} -->
-                -
+                <ng-container *ngIf="element.volume; else noData">
+                  ${{ element.volume | number: global.formatNumber2Decimal }}
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- Circulating Market Cap Column -->
-            <ng-container matColumnDef="circulatingMarketCap">
-              <th mat-header-cell *matHeaderCellDef class="">Circulating Market Cap</th>
+            <ng-container matColumnDef="circulating_market_cap">
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Circulating Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- ${{ element.circulatingMarketCap | number: global.formatNumber2Decimal }} -->
-                -
+                <ng-container *ngIf="element.circulating_market_cap >= 0; else noData">
+                  ${{ element.circulating_market_cap | number: global.formatNumber2Decimal }}
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- On-Chain Market Cap Column -->
             <ng-container matColumnDef="onChainMarketCap">
-              <th mat-header-cell *matHeaderCellDef class="">On-Chain Market Cap</th>
+              <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>On-Chain Market Cap</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
-                <!-- ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }} -->
-                -
+                <ng-container *ngIf="element.onChainMarketCap >= 0; else noData">
+                  ${{ element.onChainMarketCap | number: global.formatNumber2Decimal }}
+                </ng-container>
               </td>
             </ng-container>
 
             <!-- Holders Column -->
             <ng-container matColumnDef="holders">
-              <th mat-header-cell *matHeaderCellDef class="col-per-13">Holders</th>
+              <th mat-header-cell *matHeaderCellDef class="col-per-13" mat-sort-header>Holders</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
-                <span [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
-                  <ng-container *ngIf="element.isValueUp">
+                <span [ngStyle]="{ color: element.isHolderUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
+                  <ng-container *ngIf="element.isHolderUp">
                     <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
-                  <ng-container *ngIf="!element.isValueUp">
+                  <ng-container *ngIf="!element.isHolderUp">
                     <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
                   </ng-container>
-                  <span class="ml-1">{{ element.change | percent: global.formatNumber2Decimal }}</span>
+                  <span class="ml-1">{{
+                    element.holders_change_percentage_24h | number: global.formatNumber2Decimal
+                  }}</span
+                  >%
                 </span>
               </td>
             </ng-container>
@@ -197,7 +191,7 @@
             [length]="pageData.length"
             [pageSize]="pageData.pageSize"
             (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+            (pageEvent)="pageEvent($event)">
           </app-paginator>
         </div>
       </div>
@@ -206,4 +200,5 @@
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>
+  <ng-template #noData> - </ng-template>
 </section>

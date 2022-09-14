@@ -35,10 +35,10 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     this.contractService.loadContractDetail(this.contractAddress);
 
     this.subscription = this.contractService.contractObservable.subscribe((res: ResponseDto) => {
-      if (res) {
+      if (res?.data) {
         this.contractDetail = res?.data;
-        this.contractDetail.balance = balanceOf(this.contractDetail.balance);
-        this.contractDetail.price = this.contractDetail.balance * this.priceToken || 0;
+        this.contractDetail.balance = balanceOf(this.contractDetail?.balance);
+        this.contractDetail.price = this.contractDetail?.balance * this.priceToken || 0;
       }
     });
   }
@@ -46,8 +46,8 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   getContractDetail(): void {
     this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.contractDetail = res?.data;
-      this.contractDetail.balance = balanceOf(this.contractDetail.balance);
-      this.contractDetail.price = this.contractDetail.balance * this.priceToken || 0;
+      this.contractDetail.balance = balanceOf(this.contractDetail?.balance);
+      this.contractDetail.price = this.contractDetail?.balance * this.priceToken || 0;
     });
   }
 
@@ -70,7 +70,8 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
-      windowClass: 'modal-holder fit-modal contact-qr-modal',
+      size: 'sm',
+      windowClass: 'modal-holder contact-qr-modal',
     });
   }
 

@@ -426,14 +426,6 @@ body[data-sidebar="dark"] {
         }
     }
 
-    .logo-dark {
-        display: none;
-    }
-
-    .logo-light {
-        display: block;
-    }
-
     .vertical-menu {
         background: $sidebar-dark-bg;
         border-color: $sidebar-dark-bg;
@@ -696,12 +688,6 @@ body[data-sidebar="brand"] {
     .navbar-brand-box{
         background-color: $primary;
         box-shadow: 0px 1px 0px $primary;
-        .logo-dark{
-            display: none;
-        }
-        .logo-light{
-            display: flex;
-        }
 
         .logo{
             color: $white !important;

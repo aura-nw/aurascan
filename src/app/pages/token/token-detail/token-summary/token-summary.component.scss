@@ -1,6 +1,8 @@
 .box-token-info {
   table.aura-basic-table {
-    min-height: 280px;
+    @media (min-width: 992px) {
+      min-height: 280px;
+    }
 
     tr,
     td {
@@ -22,11 +24,15 @@
 }
 .social-group {
   a {
-    color: var(--aura-light-gray) !important;
+    color: var(--aura-gray-light) !important;
     &:hover {
-      color: var(--aura-white) !important;
+      color: var(--aura-gray-1) !important;
     }
   }
+}
+.token-summary-more {
+  min-width: 130px;
+  margin-top: 5px !important;
 }
 .g-ellipsis {
   width: 160px;

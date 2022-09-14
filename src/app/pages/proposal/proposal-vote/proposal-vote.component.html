@@ -2,26 +2,26 @@
     <ng-container *ngIf="!data.warning">
         <div class="d-flex">
             <img [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
-            <div class="sub-text sub-text-mob fw-500 ml-3 ml-lg-0">Your vote</div>
+            <div class="h1 ml-3 ml-md-0 mb-0 text--white">Your vote</div>
         </div>
-        <div class="mt-4 small-body">#{{data.id}} {{data.title}}</div>
-        <form #voteForm="ngForm">
+        <div class="mt-6 body-03 body-01-mob">#{{data.id}} {{data.title}}</div>
+        <form #voteForm="ngForm" class="mt-2">
             <mat-radio-group class="vote-group" aria-label="Select an option" [(ngModel)]="keyVote" name="inputVote">
-                <mat-radio-button class="small-body" color="primary" value="Yes">{{ 'PAGES.PROPOSAL.yes' | translate }}
+                <mat-radio-button class="body-03" color="primary" value="Yes">{{ 'PAGES.PROPOSAL.yes' | translate }}
                 </mat-radio-button>
-                <mat-radio-button class="small-body" color="primary" value="No">{{ 'PAGES.PROPOSAL.no' | translate }}
+                <mat-radio-button class="body-03" color="primary" value="No">{{ 'PAGES.PROPOSAL.no' | translate }}
                 </mat-radio-button>
-                <mat-radio-button class="small-body" color="primary" value="NoWithVeto">{{ 'PAGES.PROPOSAL.noWithVeto' |
+                <mat-radio-button class="body-03" color="primary" value="NoWithVeto">{{ 'PAGES.PROPOSAL.noWithVeto' |
                     translate }}</mat-radio-button>
-                <mat-radio-button class="small-body" color="primary" value="Abstain">{{ 'PAGES.PROPOSAL.abstain' | translate
+                <mat-radio-button class="body-03" color="primary" value="Abstain">{{ 'PAGES.PROPOSAL.abstain' | translate
                     }}</mat-radio-button>
             </mat-radio-group>
-            <div class="mt-4 d-flex justify-content-end">
-                <button class="btn button-inline body mr-3" (click)="closeVoteForm()" color="primary">Cancel</button>
-                <button class="button button-outline body" color="primary" (click)="onSubmitVoteForm()"
+            <div class="mt-6 d-flex justify-content-center justify-content-lg-end">
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" (click)="closeVoteForm()" color="primary">Cancel</button>
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient" color="primary" (click)="onSubmitVoteForm()"
                     [disabled]="keyVote === null">
                     <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" width="20" height="20" *ngIf="isLoading" />
-                    <span class="text-gradient">Confirm</span>
+                    <span>Confirm</span>
                 </button>
             </div>
         </form>
@@ -30,9 +30,9 @@
     <ng-container *ngIf="data.warning">
         <div class="mx-auto mt-5">
             <div class="d-flex justify-content-center">
-                <img [src]="'assets/icons/icons-svg/color/info.svg' | imageS3" alt="">
+                <img [src]="'assets/icons/icons-svg/color/info.svg' | imageS3" alt="" width="24px" height="24px">
             </div>
-            <div class="body small-body-mob mb-5 mt-3 warning-content">
+            <div class="body-03 text--gray-1 mb-5 mt-3 warning-content">
                 {{
                 data.warning === 'NOT_PARTICIPATE' ?
                     'You don\'t have the right to vote on this proposal because you are a unbonded Aura holder. Staking now to have the right to vote on other later proposals.' :
@@ -41,10 +41,12 @@
             </div>
 
             <div class="d-flex justify-content-center align-items-center gap-3">
-                <button class="button button-inline" *ngIf="data.warning === 'NOT_PARTICIPATE'"
-                        (click)="dialogRef.close()"> Cancel </button>
-                <button class="button button-outline" (click)="onClick()">
-                    <span class="text-gradient">
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" *ngIf="data.warning === 'NOT_PARTICIPATE'"
+                        (click)="dialogRef.close()">
+                    <span>Cancel</span>
+                </button>
+                <button class="button button--sm button--md-mob button-fixed button-pill button-outline text--white" (click)="onClick()">
+                    <span>
                         {{ data.warning === 'NOT_PARTICIPATE' ? 'Stake' : 'OK'}}
                     </span>
                 </button>

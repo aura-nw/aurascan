@@ -24,17 +24,23 @@
 
   .account-button {
     white-space: nowrap;
-
-    @media (max-width: 991.99px) {
-      height: 40px;
-    }
-
     @media (min-width: 992px) {
       width: 192px;
     }
   }
 
   .walletMenu {
+    &.aura-dropdown .dropdown-menu.aura-dropdown-menu {
+      background-color: var(--aura-gray-10) !important;
+      border: 1px solid var(--aura-gray-9);
+      li.dropdown-item {
+        background-color: var(--aura-gray-10) !important;
+        transition: background-color .35s ease-in-out;
+        &:hover {
+          background-color: var(--aura-gray-9) !important;
+        }
+      }
+    }
     .button__title {
       @media (min-width: 576px) {
         min-width: 100px;
@@ -43,16 +49,6 @@
 
     li {
       cursor: pointer;
-    }
-  }
-
-  #walletMenu {
-    @media (min-width: 992px) {
-      font-weight: 600;
-    }
-    @media (max-width: 414px) {
-      padding: 8px 12px;
-      height: 30px;
     }
   }
 
@@ -94,5 +90,18 @@
         padding: 20px;
       }
     }
+  }
+}
+
+.button-wallet-menu {
+  @media (max-width: 991.98px) {
+    padding-right: 30px !important;
+    &:before {
+      right: 10px !important;
+    }
+  }
+  @media (max-width: 414.98px) {
+    padding: 0 14px;
+    padding-right: 25px !important;
   }
 }

@@ -1,43 +1,28 @@
 .contract-table {
-  .total-text {
-    color: var(--aura-light-gray);
-  }
-
   .aura-status {
-    display: flex;
-    align-items: center;
-
-    .status {
-      padding: 8px 16px;
-      border-radius: 4px;
-
-      background-color: #7b7b7b33;
-      color: var(--aura-white);
-    }
-
     .TO,
     .IN {
-      background: var(--aura-active-background);
-      color: var(--aura-active);
+      background: rgba(84, 206, 140, 0.2);
+      color: var(--aura-green-3);
     }
 
     .OUT {
-      background: var(--aura-danger-background);
-      color: var(--aura-danger);
+      background: rgba(213, 98, 94, 0.2);
+      color: var(--aura-red-3);
     }
 
     .TO,
     .IN,
     .OUT,
     .CREATION {
-      font-weight: 600;
+      font-weight: 500;
     }
   }
 }
 
 :host::ng-deep table.aura-table {
   td.mat-cell:first-of-type {
-    padding-left: 0;
+    padding-left: var(--spacer-4);
   }
 
   @media (max-width: 991.99px) {

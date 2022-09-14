@@ -37,10 +37,10 @@ export class BlockService extends CommonService {
 
   getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    //let character = this.http.get<any>(`${this.apiUrl}/metrics/blocks?range=${type}`);
-    //let characterHomeWorld =
-    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}`);
+    const date = new Date();
+    return this.http.get<any>(
+      `${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`,
+    );
   }
 
   getLastBlock(validator_address): Observable<any> {
@@ -55,8 +55,6 @@ export class BlockService extends CommonService {
   }
 
   getBlockMissByConsAddress(cons_address: string) {
-    return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos/${cons_address}`,
-    );
+    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos/${cons_address}`);
   }
 }

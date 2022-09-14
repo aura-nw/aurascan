@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import {from, Subscription} from 'rxjs';
+import {from} from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
@@ -16,7 +16,6 @@ import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant'
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
 import { ContractService } from '../../../core/services/contract.service';
-import { shortenAddress } from '../../../core/utils/common/shorten';
 import { Globals } from '../../../global/global';
 
 @Component({
@@ -172,13 +171,6 @@ export class ContractsRegisterComponent implements OnInit {
     this.getListContract();
   }
 
-  shortenAddress(address: string): string {
-    if (address) {
-      return shortenAddress(address, 8);
-    }
-    return '';
-  }
-
   viewPopupDetail(staticDataModal: any, data: any) {
     this.isDisable = true;
     this.isEditMode = false;
@@ -197,6 +189,7 @@ export class ContractsRegisterComponent implements OnInit {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
+      size: 'md',
       windowClass: 'modal-holder contract-modal',
     });
   }

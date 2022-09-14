@@ -62,10 +62,10 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'depositor', headerCellDef: 'Depositors', isUrl: '/account', isShort: true, desktopOnly: true },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
+    { matColumnDef: 'depositors', headerCellDef: 'Depositors', isUrl: '/account', isShort: true, desktopOnly: true },
+    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true },
     { matColumnDef: 'amount', headerCellDef: 'Amount' },
-    { matColumnDef: 'created_at', headerCellDef: 'Time' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
 
   displayedColumns: string[];

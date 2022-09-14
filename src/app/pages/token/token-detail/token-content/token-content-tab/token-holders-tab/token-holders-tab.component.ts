@@ -1,7 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { TableTemplate } from '../../../../../../core/models/common.model';
 import { Globals } from '../../../../../../global/global';
 
@@ -10,131 +14,117 @@ import { Globals } from '../../../../../../global/global';
   templateUrl: './token-holders-tab.component.html',
   styleUrls: ['./token-holders-tab.component.scss'],
 })
-export class TokenHoldersTabComponent implements OnInit, OnChanges {
+export class TokenHoldersTabComponent implements OnInit {
   @Input() keyWord = '';
+  @Input() contractAddress: string;
+  @Input() isNFTContract: boolean;
+  @Input() tokenDetail: any;
+
   loading = true;
-  mockData = [
-    {
-      id: 1,
-      address: 'Curve.fi: BUSD v2',
-      quantity: 4500000,
-      percentage: 52.015,
-      value: 3819141264.83,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 2,
-      address: 'aurae77482e45F1F44dE...',
-      quantity: 500000,
-      percentage: 27.1419,
-      value: 9141264.83,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 3,
-      address: 'aurag49482e45F1F472F...',
-      quantity: 250000,
-      percentage: 3.5523,
-      value: 9341264.83,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 4,
-      address: 'FTX Exchange',
-      quantity: 211336.9,
-      percentage: 81.2747,
-      value: 93592357.81,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 5,
-      address: 'Binance 12',
-      quantity: 200000,
-      percentage: 17.2063,
-      value: 88571714.46,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 6,
-      address: 'Harmony: BUSD Bridge',
-      quantity: 134445,
-      percentage: 0.8109,
-      value: 59540120.75,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 7,
-      address: 'Curve fi: BUSD v2',
-      quantity: 100000,
-      percentage: 30.6032,
-      value: 44285857.23,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 8,
-      address: 'aurae77482e45F1F44dE...',
-      quantity: 92169.99,
-      percentage: 10.5559,
-      value: 40818270.18,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 9,
-      address: 'aurag49482e45F1F472F...',
-      quantity: 88029.62000609,
-      percentage: 0.3318,
-      value: 24361100.65,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
-    {
-      id: 10,
-      address: 'Binance 20',
-      quantity: 23528.169876785489362031,
-      percentage: 43.1419,
-      value: 10419651.72,
-      hashCode: '0xb4b3351918a9bedc7d386c6a685c42e69920b34d',
-    },
+  CW20Templates: Array<TableTemplate> = [
+    { matColumnDef: 'id', headerCellDef: 'rank' },
+    { matColumnDef: 'owner', headerCellDef: 'address' },
+    { matColumnDef: 'balance', headerCellDef: 'amount' },
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
+    { matColumnDef: 'value', headerCellDef: 'value' },
   ];
-  templates: Array<TableTemplate> = [
-    { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'address', headerCellDef: 'address' },
-    { matColumnDef: 'quantity', headerCellDef: 'quantity' },
-    { matColumnDef: 'percentage', headerCellDef: 'percentage' },
+
+  CW721Templates: Array<TableTemplate> = [
+    { matColumnDef: 'id', headerCellDef: 'rank' },
+    { matColumnDef: 'owner', headerCellDef: 'address' },
+    { matColumnDef: 'quantity', headerCellDef: 'amount' },
+    { matColumnDef: 'percent_hold', headerCellDef: 'percentage' },
   ];
-  displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
+
+  template: Array<TableTemplate> = [];
+  displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  tokenType = ContractRegisterType.CW20;
+  numberTopHolder = 100;
+  totalQuantity = 0;
+  numberTop = 0;
+  chainInfo = this.environmentService.configValue.chain_info;
 
-  constructor(public global: Globals) {}
+  constructor(
+    public global: Globals,
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
-    this.getTokenData();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.mockData) {
-      const filterData = this.mockData.filter(
-        (data) => data.address.includes(this.keyWord) || data.hashCode.includes(this.keyWord),
-      );
-      if (filterData.length > 0) {
-        this.pageData.length = filterData.length;
-        this.dataSource = new MatTableDataSource<any>(filterData);
-      }
+    if (this.isNFTContract) {
+      this.tokenType = ContractRegisterType.CW721;
+      this.getQuantity();
+    } else {
+      this.getListTokenHolder(this.tokenType);
     }
+    this.template = this.getTemplate();
+    this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
-  getTokenData() {
-    this.pageData.length = this.mockData.length;
+  getListTokenHolder(tokenType: string) {
     this.loading = true;
-    this.dataSource = new MatTableDataSource<any>(this.mockData);
-    this.loading = false;
+    this.tokenService
+      .getListTokenHolder(
+        this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize,
+        tokenType,
+        this.contractAddress,
+      )
+      .subscribe((res) => {
+        if (res && res.data?.resultAsset?.length > 0) {
+          this.pageData.length = res.data?.resultCount;
+
+          let topHolder = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
+          this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
+          res.data?.resultAsset.forEach((element) => {
+            element['value'] = 0;
+          });
+
+          if (this.totalQuantity) {
+            res.data?.resultAsset.forEach((k) => {
+              k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
+              k['width_chart'] = (k.quantity / this.numberTop) * 100;
+            });
+          }
+          
+          this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
+        }
+        this.loading = false;
+      });
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  getTemplate(): Array<TableTemplate> {
+    return this.isNFTContract ? this.CW721Templates : this.CW20Templates;
   }
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListTokenHolder(this.tokenType);
+  }
+
+  async getQuantity() {
+    let queryData = {
+      num_tokens: {},
+    };
+    const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
+    try {
+      const config = await client.queryContractSmart(this.contractAddress, queryData);
+      this.totalQuantity = config?.count || 0;
+      this.getListTokenHolder(this.tokenType);
+    } catch (error) {}
   }
 }

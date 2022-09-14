@@ -1,6 +1,6 @@
 <div class="card" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card-body">
-    <div class="card__title" [class.card__title-mobile]="breakpoint.value.matches">Depositors</div>
+    <div class="h2 mb-0 text--white mb-6">Depositors</div>
     <div class="mt-8" *ngIf="loading">
       <app-loading-sprint></app-loading-sprint>
     </div>

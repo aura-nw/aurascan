@@ -1,13 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromHex, toBech32 } from '@cosmjs/encoding';
-import * as _ from 'lodash';
+import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
-import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -16,6 +16,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
+import * as _ from 'lodash';
 const marked = require('marked');
 
 @Component({
@@ -23,7 +24,7 @@ const marked = require('marked');
   templateUrl: './validators-detail.component.html',
   styleUrls: ['./validators-detail.component.scss'],
 })
-export class ValidatorsDetailComponent implements OnInit {
+export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentAddress: string;
   currentValidatorDetail: any;
 
@@ -225,9 +226,9 @@ export class ValidatorsDetailComponent implements OnInit {
 
           const tx_hash = _.get(element, 'tx_response.txhash');
 
-          const address = _.get(element, 'tx.body.messages[0].validator_dst_address');
+          const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
 
-          const _type = _.get(element, 'tx.body.messages[0].@type');
+          const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
           if (
             _type === TRANSACTION_TYPE_ENUM.Delegate ||
             (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
@@ -235,7 +236,7 @@ export class ValidatorsDetailComponent implements OnInit {
           ) {
             isStakeMode = true;
           }
-          const amount = getAmount(_.get(element, 'tx.body.messages'), _type, _.get(element, 'tx.body.raw_log'));
+          const amount = getAmount(_.get(element, 'tx_response.tx.body.messages'), _type, _.get(element, 'tx_response.tx.body.raw_log'));
           const height = _.get(element, 'tx_response.height');
           const timestamp = _.get(element, 'tx_response.timestamp');
 
@@ -318,5 +319,12 @@ export class ValidatorsDetailComponent implements OnInit {
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
+  }
+  ngAfterViewChecked(): void {
+    const editor = document.getElementById('marked');
+    if (editor) {
+      editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
+      return;
+    }
   }
 }

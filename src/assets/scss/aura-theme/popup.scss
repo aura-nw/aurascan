@@ -1,8 +1,10 @@
 .modal {
   .modal-dialog {
-    max-width: 720px;
+    @media (max-width: 768px) {
+      margin: auto var(--spacer-8);
+    }
     @media (max-width: 414px) {
-      margin: 0.5rem auto;
+      margin: auto var(--spacer-4);
     }
 
     .modal-content {

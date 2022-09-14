@@ -1,41 +1,34 @@
 .editorial {
   > * {
-    @include mono-font-size(1.4, 1.6, 0.01, "SFProDisplay");
-    font-weight: 400 !important;
+    @include mono-font-size(1.6, 2, 400);
   }
   h1,
   .h1 {
-    @include mono-font-size(3.2, 3.6, 0, "SFProDisplay");
-    font-weight: 800 !important;
+    @include mono-font-size(2, 2.6, 600);
   }
   h2,
   .h2 {
-    @include mono-font-size(2.8, 3.4, 0, "SFProDisplay");
-    font-weight: 700 !important;
+    @include mono-font-size(1.6, 2, 600);
   }
   h3,
   .h3 {
-    @include mono-font-size(2.4, 3, 0, "SFProDisplay");
-    font-weight: 700 !important;
+    @include mono-font-size(1.6, 2, 400);
   }
   h4,
   .h4 {
-    @include mono-font-size(2.2, 2.8, 0.02, "SFProDisplay");
-    font-weight: 700 !important;
+    @include mono-font-size(1.4, 1.6, 500);
   }
   h5,
   .h5 {
-    @include mono-font-size(1.8, 2.2, 0, "SFProDisplay");
-    font-weight: 700 !important;
+    @include mono-font-size(1.2, 1.6, 500);
   }
   h6,
   .h6 {
-    @include mono-font-size(1.6, 2, 0.02, "SFProDisplay");
-    font-weight: 700 !important;
+    @include mono-font-size(1.2, 1.6, 400);
   }
   h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5,h6,.h6, p {
-    margin-bottom: var(--spacer-2) !important;
     display: block;
+    margin-bottom: 0 !important;
   }
   ul {
     list-style: unset !important;

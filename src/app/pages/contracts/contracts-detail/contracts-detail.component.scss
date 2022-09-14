@@ -1,3 +1,13 @@
 ::ng-deep .contact-qr-modal .modal-content {
-  padding-bottom: 16px !important;
+  padding-bottom: 48px !important;
+}
+
+
+.button__icon{
+  @media (max-width: 991.99px) {
+    width: 20px;
+  height: 20px;
+  }
+  width: 15px;
+  height: 15px;
 }
