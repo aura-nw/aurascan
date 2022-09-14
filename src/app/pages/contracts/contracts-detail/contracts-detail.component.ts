@@ -70,6 +70,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
+      size: 'sm',
       windowClass: 'modal-holder contact-qr-modal',
     });
   }
