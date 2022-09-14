@@ -71,7 +71,7 @@ export class TransactionDetailComponent implements OnInit {
             gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
             gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
             raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
-            type: _.get(res?.data.transactions[0], 'tx.body.messages[0].@type'),
+            type: _.get(res?.data.transactions[0], 'tx_response.tx.body.messages[0].@type'),
             tx: _.get(res?.data.transactions[0], 'tx_response'),
           };
           
