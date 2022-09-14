@@ -49,6 +49,7 @@ export class TokenInventoryComponent implements OnInit {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       token_id: '',
       owner: '',
+      contractAddress: this.contractAddress
     };
 
     if (this.keyWord) {
@@ -59,10 +60,10 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
-    this.tokenService.getListTokenNFT(this.contractAddress, payload).subscribe((res) => {
-      if (res && res.data?.length > 0) {
-        this.nftData.data = res.data;
-        this.pageData.length = res.meta?.count;
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
+      if (res && res.data?.assets?.CW721?.asset?.length > 0) {
+        this.nftData.data = res.data?.assets.CW721.asset;
+        this.pageData.length = res.data?.assets?.CW721?.count;
       }
       this.loading = false;
     });
