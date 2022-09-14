@@ -43,11 +43,11 @@
             <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
           </div>
           <div class="my-5">
-            <img
+            <!-- <img
               [src]="nftDetail?.image || defaultLogoToken"
               width="24px"
               height="24px"
-              class="mr-1 object-fit--none" />
+              class="mr-1 object-fit--none" /> -->
             <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
               nftDetail?.name
             }}</a>
