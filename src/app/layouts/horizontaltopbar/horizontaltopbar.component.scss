@@ -41,6 +41,9 @@ form.aura-form.single-input-field {
     padding: 0;
   }
   @media (min-width: 992px) {
+    min-width: 300px;
+  }
+  @media (min-width: 1200px) {
     min-width: 504px;
   }
   .input-group {
