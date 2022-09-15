@@ -48,10 +48,10 @@ export class WalletService implements OnDestroy {
     const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
     const currentTimestamp = moment().subtract(1, 'd').toDate().getTime();
 
-    if (lastProvider && currentTimestamp < lastProvider.timestamp) {
+    if (lastProvider && currentTimestamp < lastProvider?.timestamp) {
       const { provider, chainId } = lastProvider;
       this.connect(provider, chainId);
-    } else if (currentTimestamp > lastProvider.timestamp) {
+    } else if (currentTimestamp > lastProvider?.timestamp) {
       local.removeItem(LAST_USED_PROVIDER);
     }
 
