@@ -1,6 +1,6 @@
-<span class="body-02 caption-mob fw-normal-mob text--gray-5"
-  >A total of {{ pageData?.length | number }} token{{ pageData?.length > 1 ? 's' : '' }} found</span
->
+<span class="body-02 caption-mob fw-normal-mob text--gray-5">
+  More than {{ pageData?.length | number }} token{{ pageData?.length > 1 ? 's' : '' }} found
+</span>
 
 <div *ngIf="loading" class="m-auto mt-10">
   <app-loading-sprint></app-loading-sprint>
@@ -13,7 +13,7 @@
       <div
         class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
         *ngIf="!loading">
-        <div class="nft-cards__col col" *ngFor="let item of nftData?.data">
+        <div class="nft-cards__col col" *ngFor="let item of dataSourceMobile">
           <div class="nft-cards__item-border">
             <a href="/tokens/token-nft/{{ item.contract_address }}/{{ item.token_id }}" class="nft-cards__item">
               <div class="nft-cards__img">
@@ -26,7 +26,8 @@
                 <a
                   class="small-text text--primary hover-link"
                   href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.token_id }}">
-                  {{ item.token_id }}</a>
+                  {{ item.token_id }}</a
+                >
               </div>
               <div class="mt-1 nft__info">
                 <span class="small-text mr-1 text--gray-1">Owner:</span>
@@ -45,14 +46,14 @@
           </div>
         </div>
       </div>
-      <app-paginator
-        [length]="pageData?.length"
-        [pageSize]="pageData?.pageSize"
-        (paginator)="paginatorEmit($event)"
-        (pageEvent)="pageEvent($event)">
-      </app-paginator>
     </div>
   </ng-container>
+  <app-paginator
+    [length]="pageData?.length"
+    [pageSize]="pageData?.pageSize"
+    (paginator)="paginatorEmit($event)"
+    (pageEvent)="pageEvent($event)">
+  </app-paginator>
   <ng-template #noValues>
     <app-table-no-data *ngIf="!loading"></app-table-no-data>
   </ng-template>
