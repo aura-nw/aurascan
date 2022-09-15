@@ -1,16 +1,24 @@
 <div class="row">
-  <div class="col-12">
-    <button class="button button-outline button-outline__in-card">
-      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />
-      <span class="ml-1">Token Holders Chart</span>
-    </button>
-  </div>
-  <div class="col-12 mt-3">
-    <span class="small-body text--light-gray">Top 1,000 holders (From a total of 322,259 holders)</span>
+<!--  <div class="col-12">-->
+<!--     <button class="button button-outline button-outline__in-card">-->
+<!--      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />-->
+<!--      <span class="ml-1">Token Holders Chart</span>-->
+<!--    </button>-->
+<!--  </div>-->
+  <div class="col-12 mb-lg-3">
+    <div class="body-03 caption-mob fw-normal-mob text--gray-5">
+        <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder">
+          Top {{ numberTopHolder | number }} holders (From a total of {{ pageData?.length || 0 | number }} holder{{pageData?.length > 1 ? 's' : ''}})
+        </span>
+      <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder">
+          A total of {{ pageData?.length || 0 | number }} token holder{{pageData?.length > 1 ? 's' : ''}}
+        </span>
+    </div>
   </div>
 </div>
+<div class="divider divider-horizontal my-4 d-lg-none"></div>
 <!-- Table -->
-<div class="row mt-4">
+<div class="row">
   <div class="col-12">
     <div *ngIf="loading" class="m-auto">
       <app-loading-sprint></app-loading-sprint>
@@ -18,37 +26,79 @@
     <ng-container *ngIf="pageData?.length > 0; else noValues">
       <div class="table-responsive aura-table-contain">
         <table mat-table [dataSource]="dataSource" class="aura-table">
-          <!-- Rank Column -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>Rank</th>
-            <td mat-cell *matCellDef="let element">
-              <span class="token-id">{{ element.id }}</span>
-            </td>
-          </ng-container>
-
-          <!-- Address Column -->
-          <ng-container matColumnDef="address">
-            <th mat-header-cell *matHeaderCellDef>Address</th>
-            <td mat-cell *matCellDef="let element" class="title-cell py-4">
-              <a [routerLink]="['/tokens/token', element.hashCode]" class="text-clamp">{{ element.address }}</a>
-            </td>
-          </ng-container>
-
-          <!-- quantity Column -->
-          <ng-container matColumnDef="quantity">
-            <th mat-header-cell *matHeaderCellDef>Quantity</th>
-            <td mat-cell *matCellDef="let element">{{ element.quantity}}</td>
-          </ng-container>
-
-          <!-- Percentage Column -->
-          <ng-container matColumnDef="percentage">
-            <th mat-header-cell *matHeaderCellDef>Percentage</th>
-            <td mat-cell *matCellDef="let element">
-              <div>{{ element.percentage }}%</div>
-              <div class="percentage-bar mt-4">
-                <div class="percentage-bar__process" [style.width]="element.percentage + '%'"></div>
-              </div>
-            </td>
+          <ng-container *ngFor="let template of template; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
+              <ng-container *ngSwitchCase="'id'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'owner'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'quantity'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase pl-8 pl-lg-0"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'percent_hold'">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
+                </th>
+              </ng-container>
+              <td mat-cell *matCellDef="let data; index as i">
+                <div [classList]="[template.cssClass]">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'id'">
+                      <span class="token-id">{{ pageData?.pageIndex * 20 + i + 1 }}</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'owner'">
+                      <a
+                        *ngIf="isNFTContract"
+                        href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
+                      <a
+                        *ngIf="!isNFTContract"
+                        href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'balance'">
+                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'amount'">
+                      {{ data[template.matColumnDef] || 0 }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'quantity'">
+                      <div class="pl-8 pl-lg-0">{{ data[template.matColumnDef] || 0 }}</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'percent_hold'">
+                      <span *ngIf="!isNFTContract"
+                        >{{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}%</span
+                      >
+                      <ng-container *ngIf="isNFTContract">
+                        <span>{{ data.percent_hold || 0 | number: global.formatNumber2Decimal }} %</span>
+                        <div class="percentage-bar mt-2">
+                          <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'value'">
+                      ${{ data['balance'] * tokenDetail?.price || 0 | number: global.formatNumber2Decimal }}
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{ data[template.matColumnDef] }}
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -59,12 +109,16 @@
             </td>
           </tr>
         </table>
-        <app-paginator [length]="pageData.length" [pageSize]="pageData.pageSize" (paginator)="paginatorEmit($event)">
-        </app-paginator>
       </div>
+      <app-paginator
+              [length]="pageData.length"
+              [pageSize]="pageData.pageSize"
+              (paginator)="paginatorEmit($event)"
+              (pageEvent)="pageEvent($event)">
+      </app-paginator>
     </ng-container>
     <ng-template #noValues>
-      <app-table-no-data></app-table-no-data>
+      <app-table-no-data *ngIf="!loading"></app-table-no-data>
     </ng-template>
   </div>
 </div>

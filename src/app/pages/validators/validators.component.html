@@ -12,52 +12,78 @@
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
   <div class="card box-validators">
-    <div class="card-header card-header-dark d-flex align-items-center justify-content-between header-mob">
-      <div class="sub-text text--white" [class.fw-500]="breakpoint.value.matches">Validators</div>
-      <div class="d-flex align-item-center">
-        <form class="aura-form single-input-field search-form-validators mr-6" *ngIf="!breakpoint.value.matches">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search validator"
-              [(ngModel)]="textSearch"
-              (ngModelChange)="searchValidator()"
-              name="search"
-              autocomplete="off" />
-            <button
-              type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-              (click)="searchValidator()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-            <button
-              type="reset"
-              class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-              (click)="textSearch = ''; searchValidator()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-          </div>
-        </form>
-        <div class="button-switch-stage">
+    <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
+      <h2 class="h3-mob mb-0 text--white">Validators</h2>
+      <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search validator"
+            [(ngModel)]="textSearch"
+            (ngModelChange)="searchValidator()"
+            name="search"
+            autocomplete="off" />
           <button
-            [class.active]="typeValidator === statusValidator.Active"
-            (click)="changeType(statusValidator.Active)">
-            Active
+            type="submit"
+            class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+            (click)="searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
-            [class.active]="typeValidator === statusValidator.Inactive"
-            (click)="changeType(statusValidator.Inactive)">
-            Inactive
+            type="reset"
+            class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+            (click)="textSearch = ''; searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
-      </div>
+      </form>
     </div>
 
-    <div class="card-body pt-4">
+    <div class="card-body pt-0">
+      <!-- tab -->
+      <ul ngbNav
+          #customNav="ngbNav"
+          [activeId]="0"
+          class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
+          [class.mobile-tab]="breakpoint.value.matches">
+        <ng-container *ngFor="let tab of TABS; index as index">
+          <li [ngbNavItem]="index">
+            <a ngbNavLink (click)="changeType(tab.key)">
+              <span class="h5 mb-0" [class.text--white]="customNav.activeId === index">{{ tab.label }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+      <!-- Search mobile -->
+      <form class="aura-form single-input-field search-form-validators my-4" *ngIf="breakpoint.value.matches">
+        <div class="input-group">
+          <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search validator"
+                  [(ngModel)]="textSearch"
+                  (ngModelChange)="searchValidator()"
+                  name="search"
+                  autocomplete="off" />
+          <button
+                  type="submit"
+                  class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                  (click)="searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+          <button
+                  type="reset"
+                  class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                  (click)="textSearch = ''; searchValidator()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+        </div>
+      </form>
+      <!-- validator -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
         <ng-container *ngIf="!breakpoint.value.matches">
-          <div class="table-responsive">
+          <div class="table-responsive mt-6">
             <table
               mat-table
               matSort
@@ -105,7 +131,7 @@
                   <td mat-cell *matCellDef="let data" style="max-width: 300px">
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef">
-                        <div *ngSwitchCase="'operator_address'" class="text--green cursor-pointer">
+                        <div *ngSwitchCase="'operator_address'" class="text--primary cursor-pointer">
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'commission'" class="">
@@ -113,7 +139,7 @@
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4">
                           {{ data[template.matColumnDef] | number }}<br />
-                          <span class="percent-vote">{{ data['percent_power'] + '%' }}</span>
+                          <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
                         </div>
                         <div *ngSwitchCase="'participation'">
                           {{ data[template.matColumnDef] }}
@@ -126,7 +152,7 @@
                         </div>
                         <a
                           *ngSwitchCase="'title'"
-                          class="text--green cursor-pointer text-clamp box-title-validator pl-5"
+                          class="text--primary cursor-pointer text-clamp box-title-validator pl-5"
                           [routerLink]="['/validators', data.operator_address]">
                           <div class="avatar-wrapper validator-avatar-wrapper pl-5">
                             <div class="validator-avatar">
@@ -154,11 +180,11 @@
                         <div *ngSwitchCase="'action'">
                           <button
                             type="button"
-                            class="button button-outline button-outline__in-card ml-auto"
+                            class="button button--sm button-pill  button-outline button-outline__in-card ml-auto"
                             [disabled]="clicked"
                             *ngIf="data['status'] === statusValidator.Active"
                             (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
-                            <span class="text-gradient">Delegate</span>
+                            <span class="fw-500 body-02 text--gray-1">Delegate</span>
                           </button>
                         </div>
                         <div *ngSwitchDefault class="text-center">{{ data[template.matColumnDef] }}</div>
@@ -183,9 +209,9 @@
               <div class="table-mobile__item small-body body-mob">
                 <div class="table-header">
                   <div class="cursor-pointer table-header__title">
-                    <div class="d-flex body-mob text--green fw-semibold">
+                    <div class="d-flex body-mob text--primary fw-semibold">
                       <a
-                        class="box-title-validator text--green g-flex-start-center"
+                        class="box-title-validator text--primary g-flex-start-center"
                         [routerLink]="['/validators', validator.operator_address]">
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">
@@ -208,50 +234,53 @@
                             </div>
                           </div>
                         </div>
-                        <span [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
+                        <h5 class="text--primary mb-0" [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
-                        </span>
+                        </h5>
                       </a>
-                    </div>
-                    <div class="sub-title small-body-mob fw-semibold">
-                      <span class="mr-2 text--white">
-                        {{ validator.power | number: globals.formatNumberOnlyDecimal }}</span
-                      >
-                      <span class="percent-vote text--light-gray">{{ validator['percent_power'] + '%' }}</span>
                     </div>
                   </div>
                   <div class="table-header__action">
                     <button
                       type="button"
-                      class="button button-outline button-outline__in-card ml-auto"
+                      class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
                       [disabled]="clicked"
                       *ngIf="validator['status'] === statusValidator.Active"
                       (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
-                      <span class="text-gradient">Delegate</span>
+                      <span class="text--gray-1 body-02-mob">Delegate</span>
                     </button>
                   </div>
                 </div>
-                <div class="table-body table-body__revert small-body-mob pb-0">
+                <div class="table-body body-01 pb-0">
                   <ng-container *ngFor="let template of templates; index as idx">
                     <div
-                      class="table-body__item d-flex justify-content-between text--white mb-3"
+                      class="table-body__item d-flex justify-content-between text--gray-4 mb-3"
                       *ngIf="!template?.desktopOnly">
+
                       <span>{{ template['headerCellDef'] }}</span>
 
-                      <span class="">
+                      <div class="body-01 text--gray-4 text-end">
                         <ng-container [ngSwitch]="template['headerCellDef']">
+                          <ng-container *ngSwitchCase="'Voting Power'">
+                            <h5 class="mb-1 text--gray-1">{{ validator.power | number: globals.formatNumberOnlyDecimal }}</h5>
+                            <div>{{ validator['percent_power'] + '%' }}</div>
+                          </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
-                            {{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                            <div class="text--gray-1">{{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}</div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
                             <ng-container *ngIf="validator['status'] === statusValidator.Active">
-                              {{ calculatorUpTime(validator['cons_address']) }}%
+                              <div class="text--gray-1">{{ calculatorUpTime(validator['cons_address']) }}%</div>
                             </ng-container>
-                            <ng-container *ngIf="validator['status'] !== statusValidator.Active"> 0.00% </ng-container>
+                            <ng-container *ngIf="validator['status'] !== statusValidator.Active">
+                              <div class="text--gray-1">0.00%</div>
+                            </ng-container>
                           </ng-container>
-                          <ng-container *ngSwitchDefault>{{ validator[template.matColumnDef] }}</ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <div class="text--gray-1">{{ validator[template.matColumnDef] }}</div>
+                          </ng-container>
                         </ng-container>
-                      </span>
+                      </div>
                     </div>
                   </ng-container>
                 </div>
@@ -277,27 +306,27 @@
         width="24px"
         height="24px"
         (click)="closeDialog(modal)" />
-      <div class="mb-4 mb-xl-8">
+      <div class="mb-4 mb-xl-6">
         <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
               <app-loading-image [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
             </div>
           </div>
-          <div>
-            <div class="title title-medium-mob text-gradient fw-bolder d-inline-block">
-              <span>{{ dataModal?.title }}</span>
+          <div class="ml-2">
+            <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
+              <span class="modal__title">{{ dataModal?.title }}</span>
             </div>
-            <div class="body small-body-mob text--white">
+            <div class="h6 body-02-mob mb-0 text--gray-1">
               Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
             </div>
           </div>
         </div>
-        <div class="body small-body-mob text--greyscale-3">
+        <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
             <span>({{ dataModal?.power | number: globals.formatNumberToken }}</span>
-            <span class="text--green ml-1">{{ denom }}</span
+            <span class="text--primary ml-1">{{ denom }}</span
             >)
           </div>
           <div>Delegators - {{ totalDelegator }}</div>
@@ -306,12 +335,12 @@
       <div>
         <popup-delegate [data]="dataDelegate"></popup-delegate>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Undelegate">
-          <div class="mt-2 body small-body-mob">
-            <span>Available for undelegatation</span>
-            <span class="ml-3">
+          <div class="mt-2 h6 text--white mb-0">
+            <span>Available for undelegation</span>
+            <span class="ml-3 fw-normal">
               {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
             </span>
-            <span class="text--green"> {{ denom }} </span>
+            <span class="text--primary fw-normal"> {{ denom }} </span>
           </div>
           <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
@@ -322,13 +351,13 @@
               (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
-                class="button button-primary active button-max body small-body-mob fw-semibold"
+                class="button button-flat button--xs button--sm-mob button-max body-02"
                 type="button"
                 (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append body small-body-mob fw-semibold">{{ denom }}</div>
+            <div class="input-group-append h6 mb-0 text--primary">{{ denom }}</div>
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
@@ -336,20 +365,21 @@
             <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-2 mr-4">
               <button
-                class="button button-primary active button-max fw-semibold"
+                class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                 type="button"
                 (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
               </button>
             </div>
-            <div class="input-group-append fw-semibold">{{ denom }}</div>
+            <div class="input-group-append fw-500 text--primary">{{ denom }}</div>
           </div>
           <div *ngIf="errorExceedAmount" class="text--danger mt-3">
             Insufficient available balance for transaction fee
           </div>
         </ng-container>
         <div *ngIf="dataDelegate.dialogMode === dialogMode.Redelegate">
-          <div class="small-body mb-2">Redelegate to:</div>
+          <div class="divider divider-horizontal mb-6"></div>
+          <div class="h6 body-02-mob mb-3 text--white">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
               class="list-token"
@@ -364,15 +394,15 @@
                 [value]="item.operator_address"
                 (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain align-items-center justify-content-between">
-                  <div class="option-label d-flex align-items-center" [ngClass]="{ active: item.isStaking === 1 }">
+                  <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
-                      <div class="validator-avatar medium">
+                      <div class="validator-avatar">
                         <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
                       </div>
                     </div>
                     <span class="option__name">{{ item.title | translate }}</span>
                   </div>
-                  <div class="option-label">
+                  <div class="option-label text--gray-1">
                     Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}
                   </div>
                 </div>
@@ -380,49 +410,43 @@
             </mat-select>
           </mat-form-field>
           <div *ngIf="selectedValidator">
-            <div class="mt-6 body small-body-mob">
-              <span>Available for redelegatation</span>
+            <div class="mt-6 body-01 body-02-mob">
+              <span class="fw-500">Available for redelegation</span>
               <span class="ml-3">
                 {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
               </span>
-              <span class="text--green"> {{ denom }} </span>
+              <span class="text--primary"> {{ denom }} </span>
             </div>
             <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-2 mr-4">
                 <button
-                  class="button button-primary active button-max fw-semibold"
+                  class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX
                 </button>
               </div>
-              <div class="input-group-append fw-semibold">{{ denom }}</div>
+              <div class="input-group-append fw-500 text--primary">{{ denom }}</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="mt-6 mt-lg-8">
+      <div class="mt-6">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
-          <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-end">
-            <div class="dropdown aura-dropdown mr-4">
+          <div *ngSwitchCase="dialogMode.Manage" class="d-flex justify-content-between justify-content-sm-end button-group-selection">
+            <div class="dropdown aura-dropdown mr-4 btn-item">
               <button
-                class="button button-outline d-flex align-items-center"
+                class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-dropdown w-100"
                 type="button"
                 id="delegateAction"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span class="text-gradient">Select Action</span>
-                <img
-                  class="flex-shrink-0"
-                  [src]="'assets/icons/icons-svg/color/chevron-down.svg' | imageS3"
-                  alt="wallet-avatar"
-                  height="24px"
-                  width="24px" />
+                <span>Select Action</span>
               </button>
               <ul class="dropdown-menu aura-dropdown-menu delegateAction" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
-                  <img
+                  <img class="mr-2"
                     [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                     alt=""
                     width="20"
@@ -431,7 +455,7 @@
                   <button type="button" class="button p-0">Undelegate</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
-                  <img
+                  <img class="mr-2"
                     [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                     alt=""
                     width="20"
@@ -441,79 +465,72 @@
                 </li>
               </ul>
             </div>
-            <button type="button" class="button body button-outline" (click)="changeTypePopup(dialogMode.Delegate)">
-              <img
+            <button type="button" class="button button--sm button--md-mob button-pill button-outline button-outline--gradient d-flex btn-item" (click)="changeTypePopup(dialogMode.Delegate)">
+              <img class="mr-2"
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="text-gradient">Delegate</span>
+              <span>Delegate</span>
             </button>
           </div>
-          <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">
-              Back
+          <div *ngSwitchCase="dialogMode.Undelegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            <button type="button" class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4" (click)="changeTypePopup(dialogMode.Manage)">
+              <span>Back</span>
             </button>
             <button
               type="button"
-              class="button body button-outline"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
               (click)="handleUndelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img
+              <img class="mr-2"
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="text-gradient">Undelegate</span>
+              <span>Undelegate</span>
             </button>
           </div>
-          <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-end">
+          <div *ngSwitchCase="dialogMode.Delegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
             <button
               type="button"
-              class="button body mr-2 text--white"
-              (click)="changeTypePopup(dialogMode.Manage)"
+              class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4"
+              (click)="!isOpenStaking ? changeTypePopup(dialogMode.Manage) : closeDialog(modal)"
               *ngIf="!isOpenStaking">
-              Back
+              <span>Back</span>
             </button>
             <button
               type="button"
-              class="button body mr-2 text--white"
-              (click)="closeDialog(modal)"
-              *ngIf="isOpenStaking">
-              Back
-            </button>
-            <button
-              type="button"
-              class="button body button-outline"
+              class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
               (click)="handleStaking()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img
+              <img class="mr-2"
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="text-gradient">Delegate</span>
+              <span>Delegate</span>
             </button>
           </div>
-          <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-end">
-            <button type="button" class="button body mr-2 text--white" (click)="changeTypePopup(dialogMode.Manage)">
-              Back
+          <div *ngSwitchCase="dialogMode.Redelegate" class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            <button type="button" class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4" (click)="changeTypePopup(dialogMode.Manage)">
+              <span>Back</span>
             </button>
             <button
               type="button"
-              class="button body button-outline"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
               (click)="handleRedelegate()"
               [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
-              <img
+              <img class="mr-2"
                 [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
                 alt=""
                 width="20"
                 height="20"
                 *ngIf="isLoading" />
-              <span class="text-gradient">Redelegate</span>
+              <span>Redelegate</span>
             </button>
           </div>
         </ng-container>

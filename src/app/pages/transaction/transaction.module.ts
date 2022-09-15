@@ -14,23 +14,25 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
 import { TransactionMessagesComponent } from './transaction-detail/transaction-messages/transaction-messages.component';
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
+import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent],
-  imports: [
-    CommonModule,
-    TransactionRoutingModule,
-    MaterialModule,
-    NgxMaskModule,
-    CommonPipeModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    SharedModule,
-    NgxJsonViewerModule,
-    TableNoDataModule,
-    CommonPipeModule
-  ],
+    imports: [
+        CommonModule,
+        TransactionRoutingModule,
+        MaterialModule,
+        NgxMaskModule,
+        CommonPipeModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        SharedModule,
+        NgxJsonViewerModule,
+        TableNoDataModule,
+        CommonPipeModule,
+        NgbNavModule
+    ],
   providers: [TransactionService, MappingErrorService],
 })
 export class TransactionModule {}

@@ -1,12 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import {AfterViewChecked, Component, Input, OnInit} from '@angular/core';
+import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
-import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import {
   MESSAGE_WARNING,
   PROPOSAL_STATUS,
@@ -23,14 +22,14 @@ import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
 import { balanceOf } from '../../../../core/utils/common/parsing';
 import { ProposalVoteComponent } from '../../proposal-vote/proposal-vote.component';
-const marked = require('marked')
+const marked = require('marked');
 
 @Component({
   selector: 'app-summary-info',
   templateUrl: './summary-info.component.html',
   styleUrls: ['./summary-info.component.scss'],
 })
-export class SummaryInfoComponent implements OnInit, AfterViewChecked{
+export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   @Input() proposalId: number;
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
@@ -135,7 +134,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
 
             if (pro_turnout >= quorum) {
               if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
-                if (pro_votes_no_with_veto < (pro_total_vote) / 3) {
+                if (pro_votes_no_with_veto < pro_total_vote / 3) {
                   this.finalSubTitle = VOTING_SUBTITLE.PASS;
                 } else {
                   this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
@@ -145,7 +144,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
                       .toString(),
                   );
                 }
-              } else if (pro_votes_no_with_veto < (pro_total_vote) / 3) {
+              } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
               } else {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
@@ -186,10 +185,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
 
     return {
       ...data,
-      pro_voting_start_time: this.datePipe.transform(data.pro_voting_start_time, DATEFORMAT.DATETIME_UTC),
-      pro_voting_end_time: this.datePipe.transform(data.pro_voting_end_time, DATEFORMAT.DATETIME_UTC),
-      pro_submit_time: this.datePipe.transform(data.pro_submit_time, DATEFORMAT.DATETIME_UTC),
-      pro_deposit_end_time: this.datePipe.transform(data.pro_deposit_end_time, DATEFORMAT.DATETIME_UTC),
       initial_deposit: balanceOf(data.initial_deposit),
       pro_total_deposits: balanceOf(data.pro_total_deposits),
       pro_type: data.pro_type.split('.').pop(),
@@ -198,6 +193,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
+      request_amount: balanceOf(data.request_amount),
     };
   }
 
@@ -306,7 +302,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
             id,
             title,
             warning,
-            voteValue: this.voteConstant.find((s) => s.key === this.voteValue.keyVote)?.voteOption || null,
+            voteValue: this.voteConstant?.find((s) => s.key === this.voteValue?.keyVote)?.voteOption || null,
           });
         });
       }
@@ -327,20 +323,22 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
           keyVote: this.voteConstant.find((s) => s.voteOption === result.keyVote)?.key,
         };
         this.proposalVotes = result.keyVote;
-        this.getProposalTally();        
+        this.getProposalTally();
       }
     });
   }
 
-  getVotedProposal() {
+  async getVotedProposal() {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
-      this.proposalService.getVotes(this.proposalId, addr).subscribe((res) => {
-        this.proposalVotes = this.voteConstant.find((s) => s.key === res.data.proposalVote?.option)?.voteOption;
-        this.voteValue = {
-          keyVote: res.data.proposalVote?.option,
-        };
-      });
+      const res = await this.proposalService.getVotes(this.proposalId, addr, 10, 0);
+
+      this.proposalVotes = this.voteConstant.find(
+        (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+      )?.voteOption;
+      this.voteValue = {
+        keyVote: res.data?.txs[0]?.body?.messages[0]?.option,
+      };
     } else {
       this.proposalVotes = null;
     }
@@ -447,7 +445,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked{
 
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
-    if(editor) {
+    if (editor) {
       editor.innerHTML = marked.parse(this.proposalDetail.pro_description);
       return;
     }

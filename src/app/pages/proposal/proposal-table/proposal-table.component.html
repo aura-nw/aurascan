@@ -1,4 +1,4 @@
-<div class="proposal-table-container aura-table-contain" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="proposal-table-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="data.length > 0; else noValues">
     <ng-container *ngIf="!breakpoint.value.matches">
       <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
@@ -8,7 +8,7 @@
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
 
-            <td mat-cell *matCellDef="let data">
+            <td mat-cell *matCellDef="let data; index as j">
               <div [classList]="[template.cssClass]" ngClass="d-flex align-items-center">
                 <span *ngIf="template.prefix" class="cursor-pointer">
                   <ng-container *ngIf="template.prefix === 'operator_address'">
@@ -40,9 +40,8 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
                       {{
-                        (template.isShort
-                          ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
+                        (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
+                          | number: global.formatNumberToken || '-'
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
@@ -50,17 +49,40 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span>{{ data[template.matColumnDef] }}</span>
+                      <span [class.label-circle]="j <= 2">{{ data[template.matColumnDef] }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'updated_at'">
-                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                      <br />
-                      {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'created_at'">
-                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                      <br />
-                      {{ commonService.getDateValue(data[template.matColumnDef])[1] }}
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'timestamp'">
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div>{{ commonService.getDateValue(data[template.matColumnDef])[0] }}</div>
+                        <div class="text--gray-5 body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
+                          <div class="divider divider-vertical mx-2"></div>
+                          <span>{{ data[template.matColumnDef] | customDate: 'HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
                     </ng-container>
 
                     <ng-container *ngSwitchDefault>
@@ -87,154 +109,141 @@
       </table>
     </ng-container>
     <ng-container *ngIf="breakpoint.value.matches">
-      <div class="table-mobile">
+      <div>
         <ng-container *ngFor="let data of getListData(); index as i">
+          <!-- VOTES -->
           <ng-container *ngIf="type === 'VOTES'">
-            <div class="box-mob-table fw-normal mb-3">
-              <div class="table-header mb-2">
-                <div class="d-flex justify-content-between">
-                  <div>
-                    <a class="text--green body" [routerLink]="['/account', data['voter'] || data['voter']]">
-                      {{ shortenAddress(data['voter']) || '-' }}
-                    </a>
-                  </div>
-                  <div class="text--white body">
-                    {{ getVoteValue(data['option']) }}
-                  </div>
-                </div>
-              </div>
-              <div class="table-body">
-                <ng-container *ngFor="let template of template; index as idx">
-                  <div
-                    class="table-body__item d-flex justify-content-between text--white mb-2"
-                    *ngIf="template?.desktopOnly">
-                    <span>{{ template['headerCellDef'] }}</span>
-                    <ng-container *ngIf="template.matColumnDef === 'updated_at'">
-                      {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
-                    </ng-container>
-                    <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
-                      <a
-                        class="text--green small-body"
-                        [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                        {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-'
-                        }}
-                      </a>
-                    </ng-container>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
+            <app-card-mob-simple
+              [content]="[
+                {
+                  label: 'Voter',
+                  class: 'h5 mb-0 text--primary',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/account/' + data.voter) +
+                    '>' +
+                    (data.voter ? shortenAddress(data.voter) : '-') +
+                    '</a>'
+                },
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/transaction/' + data.tx_hash) +
+                    '>' +
+                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
+                    '</a>'
+                },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info:
+                    '<div class=text-end>' +
+                    commonService.getDateValue(data.created_at, false)[0] +
+                    '</div><div class=text--gray-5><span>' +
+                    (data.created_at | customDate: 'yyyy-MM-dd') +
+                    '</span>' +
+                    '<span>' +
+                    (data.created_at | customDate: 'HH:mm:ss') +
+                    '</span></div>'
+                }
+              ]"></app-card-mob-simple>
           </ng-container>
+          <!-- VALIDATORS_VOTES -->
           <ng-container *ngIf="type === 'VALIDATORS_VOTES'">
-            <div class="table-mobile__item fw-normal mb-3">
-              <div class="table-header">
-                <div class="d-flex justify-content-between">
-                  <div class="d-flex">
-                    <div class="">
-                      <a
-                        class="text--green body fw-semibold"
-                        [routerLink]="['/validators', data['operator_address'] || data['validator_name']]">
-                        <!-- <span class="text--white mr-1">{{ data['rank'] }}</span>  -->
-                        <div class="g-flex-start-center">
-                          <div class="avatar-wrapper">
-                            <span class="validator-avatar">
-                              <app-loading-image [srcImg]="getValidatorAvatar(data['operator_address'])">
-                              </app-loading-image>
-                            </span>
-                            <div class="rank-wrapper _small">
-                              <div class="box-rank _small _fill">
-                                <span> {{ data['rank'] }} </span>
-                              </div>
-                            </div>
-                          </div>
-                          {{ data['validator_name'] || '-' }}
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="text--white body">
-                    {{ getVoteValue(data['option']) }}
-                  </div>
-                </div>
-              </div>
-              <div class="table-body">
-                <ng-container *ngFor="let template of template; index as idx">
-                  <div
-                    class="table-body__item d-flex justify-content-between text--white mb-2"
-                    *ngIf="template?.desktopOnly">
-                    <span>{{ template['headerCellDef'] }}</span>
-                    <ng-container *ngIf="template.matColumnDef === 'updated_at'">
-                      {{ commonService.getDateValue(data[template.matColumnDef], false)[1] || '-' }}
-                    </ng-container>
-                    <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
-                      <a
-                        class="item-link small-body"
-                        [class.disabled-link]="!data[template.matColumnDef]"
-                        [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                        {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-'
-                        }}
-                      </a>
-                    </ng-container>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
+            <app-card-mob-simple
+              [validatorData]="{
+                imgUrl: getValidatorAvatar(data.operator_address),
+                validatorName: data.validator_name,
+                validatorAddress: data.validator_address,
+                validatorNumber: data.rank
+              }"
+              [content]="[
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info: data.tx_hash
+                    ? '<a class=text--primary href=' +
+                      ('/transaction/' + data.tx_hash) +
+                      '>' +
+                      shortenAddress(data.tx_hash) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
+                },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info: data.created_at
+                    ? '<div class=text-end>' +
+                      commonService.getDateValue(data.created_at, false)[0] +
+                      '</div>' +
+                      '<div class=text--gray-5><span>' +
+                      (data.created_at | customDate: 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.created_at | customDate: 'HH:mm:ss') +
+                      '</span></div>'
+                    : '-'
+                }
+              ]"></app-card-mob-simple>
           </ng-container>
-
+          <!-- DEPOSITORS -->
           <ng-container *ngIf="type === 'DEPOSITORS'">
-            <div class="box-mob-table fw-normal mb-3">
-              <div class="table-header mb-2">
-                <div class="d-flex justify-content-between">
-                  <a
-                    class="text--green body fw-500"
-                    [routerLink]="['/account', data['depositor'] || data['depositor']]">
-                    {{ shortenAddress(data['depositor']) }}
-                  </a>
-                </div>
-              </div>
-              <div class="table-body">
-                <ng-container *ngFor="let template of template; index as idx">
-                  <div
-                    class="table-body__item d-flex justify-content-between text--white mb-2"
-                    *ngIf="!template?.desktopOnly">
-                    <span>{{ template['headerCellDef'] }}</span>
-                    <ng-container *ngIf="template.matColumnDef === 'created_at'">
-                      {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
-                    </ng-container>
-                    <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
-                      <a
-                        class="text--green small-body"
-                        [class.disabled-link]="!data[template.matColumnDef]"
-                        [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
-                        {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-'
-                        }}
-                      </a>
-                    </ng-container>
-                    <ng-container *ngIf="template.matColumnDef === 'amount'">
-                      <div class="d-flex justify-content-around">
-                        {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-' | number: global.formatNumberToken
-                        }}
-                        <span class="text--primary ml-1">{{ denom }}</span>
-                      </div>
-                    </ng-container>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
+            <app-card-mob-simple
+              [content]="[
+                {
+                  label: 'Depositor',
+                  class: 'h5 mb-0',
+                  info: data.depositors
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.depositors) +
+                      '>' +
+                      shortenAddress(data.depositors) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
+                },
+                {
+                  label: 'TxHash',
+                  class: 'body-01',
+                  info: data.txhash
+                    ? '<a class=text--primary href=' +
+                      ('/transaction/' + data.txhash) +
+                      '>' +
+                      shortenAddress(data.txhash) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
+                },
+                {
+                  label: 'Amount',
+                  class: 'h6 mb-0 text--gray-1',
+                  info: data.amount
+                    ? '<span class=mr-1>' +
+                      (data.amount | number: global.formatNumberToken) +
+                      '</span><span class=text--primary>' +
+                      denom +
+                      '</span>'
+                    : '-'
+                },
+                {
+                  label: 'Time',
+                  class: 'card__date text--gray-1 body-01',
+                  info: data.timestamp
+                    ? '<div class=text-end>' +
+                      commonService.getDateValue(data.timestamp, false)[0] +
+                      '</div>' +
+                      '<div class=text--gray-5><span>' +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
+                      '</span>' +
+                      '<span>' +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
+                      '</span></div>'
+                    : '-'
+                }
+              ]"></app-card-mob-simple>
           </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
@@ -246,11 +255,6 @@
       </div>
     </ng-container>
   </ng-container>
-  <!-- <mat-paginator class="d-none" #paginator [length]="length" [pageSize]="pageSize" >
-  </mat-paginator>
-  <mat-paginator [class.d-none]="length === 0" #paginator2 [length]="length" [pageSize]="pageSize"
-    (page)="pageEvent($event)">
-  </mat-paginator> -->
   <app-paginator
     [length]="length"
     [pageSize]="pageSize"

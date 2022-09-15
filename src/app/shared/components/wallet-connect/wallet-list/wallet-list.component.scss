@@ -12,7 +12,6 @@
 
   .wallet-title {
     margin-left: -24px;
-
     @media (min-width: 992px) {
       margin-left: 0px;
     }
@@ -32,7 +31,7 @@
       border-radius: 8px;
 
       &:hover {
-        background-color: var(--aura-dark-gray);
+        background-color: var(--aura-gray-10);
       }
 
       .wallet-icon {

@@ -1,16 +1,10 @@
-<div class="d-lg-flex justify-content-between" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="d-lg-flex align-items-center justify-content-between" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div>
-    <ng-container *ngIf="!breakpoint.value.matches">
-      <p class="title-medium mb-2 text--white fw-bold">Contracts</p>
-      <div class="body text--light-gray">A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
-    </ng-container>
-    <ng-container *ngIf="breakpoint.value.matches">
-      <p class="title-medium mb-2 text--white title-small fw-500">Contracts</p>
-      <div class="text--light-gray small-body-mob fw-500">A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
-    </ng-container>
+    <h1 class="mb-0 text--white">Contracts</h1>
+    <div class="text--gray-5 body-02 d-none d-lg-block">A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
   </div>
-  <form class="aura-form single-input-field search-form mt-4">
-    <div class="input-group small-input" [class.textbox_search]="breakpoint.value.matches">
+  <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
+    <div class="input-group px-6">
       <input
         type="text"
         class="form-control pl-0"
@@ -29,7 +23,7 @@
       </button>
       <button
         type="reset"
-        class="btn-reset {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+        class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
         (click)="textSearch = ''; searchToken()">
         <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
@@ -61,7 +55,55 @@
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-4 mt-lg-6">
       <div class="card-body">
-        <div class="table-responsive aura-table-contain">
+        <div class="d-lg-none">
+          <div class="d-flex justify-content-between align-items-center" *ngIf="!searchMobVisible">
+            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
+            <button class="button">
+              <img src="assets/icons/icons-svg/white/search.svg" alt="" width="24px" height="24px" (click)="searchMobVisible = true;">
+            </button>
+          </div>
+          <form class="aura-form single-input-field search-form contract-search-form" *ngIf="searchMobVisible">
+            <div class="input-group px-6">
+              <input
+                      type="text"
+                      class="form-control pl-0"
+                      placeholder="Search for Contract Name"
+                      [(ngModel)]="textSearch"
+                      [maxLength]="maxLengthSearch"
+                      (keyup)="searchToken()"
+                      (keyup.enter)="handleLink()"
+                      name="search"
+                      autocomplete="off" />
+              <button
+                      type="reset"
+                      class="btn-reset cursor-pointer"
+                      (click)="textSearch = ''; searchToken(); searchMobVisible = false;">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+            </div>
+            <ng-container *ngIf="textSearch?.length > 0">
+              <div class="box-search-data text-white">
+                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
+                  <span> There are no matching contracts </span>
+                </ng-container>
+                <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+                  <div class="txt-title-search">Contracts</div>
+                  <ng-container *ngFor="let item of filterSearchData">
+                    <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
+                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+                      <div class="ml-3">
+                        <div class="d-flex align-items-center">
+                          <span class="text-clamp">{{ item.contract_name }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </form>
+        </div>
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-0">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -99,7 +141,7 @@
                     {{ data[template.matColumnDef] !== contractVerifyType.Unverifed ? data['updated_at'] : '-' }}
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
-                    {{ (data[template.matColumnDef] | cutStringPipe: 20) || '-' }}
+                    {{ (data[template.matColumnDef] | cutStringPipe: 16) || '-' }}
                   </ng-container>
                   <ng-container
                     *ngIf="

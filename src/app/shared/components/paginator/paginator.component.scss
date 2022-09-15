@@ -6,9 +6,14 @@
 
     .page {
         margin: 0 2px;
-        padding: 3.5px 7.5px;
+        min-width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         color: var(--aura-white);
+        padding: 0 4px;
 
         &.active {
             color: var(--aura-primary);

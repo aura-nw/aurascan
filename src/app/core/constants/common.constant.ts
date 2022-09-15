@@ -46,8 +46,6 @@ export const VALIDATOR_ADDRESS_PREFIX = 'auravaloper';
 
 export const ADDRESS_PREFIX = 'aura';
 
-// export const AURA_DENOM = 'utaura';
-
 export const DATE_TIME_WITH_MILLISECOND = 24 * 60 * 60;
 
 export const VALIDATOR_AVATAR_DF = 'https://validator-logos.s3.ap-southeast-1.amazonaws.com/validator-default.svg';
@@ -73,3 +71,8 @@ export const LENGTH_CHARACTER = {
 };
 
 export const NULL_ADDRESS = "0".repeat(LENGTH_CHARACTER.ADDRESS);
+
+export const TOKEN_ID_GET_PRICE = {
+  AURA: 'aura-network',
+  BTC: 'bitcoin'
+};

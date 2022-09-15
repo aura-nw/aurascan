@@ -1,0 +1,107 @@
+.nft-cards {
+  &__col {
+    overflow: hidden;
+    margin-bottom: var(--spacer-4);
+    @media (min-width: 992px) {
+      margin-bottom: var(--spacer-6);
+    }
+  }
+  &__item-border {
+    display: block;
+    border: solid 1px var(--aura-dark-gray);
+    border-radius: var(--spacer-2);
+    box-shadow: 2px 1000px 1px #141416 inset;
+    transition: border-color .35s ease-in-out;
+    padding: 1px;
+    &:hover {
+      padding: 0;
+      background-image: linear-gradient(#000, #000), linear-gradient( 108deg, rgba(94, 230, 208, 1) 12.51%, rgba(191, 198, 255, 1) 51.13%, rgba(255, 186, 105, 1) 87.49%);
+      background-origin: border-box;
+      background-clip: content-box, border-box;
+      border: solid 1px transparent;
+    }
+  }
+  &__item {
+    display: block;
+    padding: var(--spacer-3);
+    border-radius: var(--spacer-2);
+    background-color: var(--aura-black);
+    width: 100%;
+    height: auto;
+  }
+  &__img {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--spacer-1);
+    width: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+    }
+    &::before {
+      content: "";
+      display: block;
+      padding-top: 113.8332296204107%;
+      @media (min-width: 992px) {
+        padding-top: 120.3938599131444%;
+      }
+    }
+  }
+  &__label {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    height: 16px;
+    background-color: var(--aura-gray-10);
+    border: 1px solid var(--aura-gray-9);
+    padding: 0 var(--spacer-2);
+    border-radius: var(--spacer-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    @media (min-width: 992px) {
+      height: 32px;
+      span {
+        font-weight: 600;
+        font-size: 1.4rem;
+      }
+    }
+  }
+  .token-id {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .nft__info {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--aura-primary);
+    font-size: 1.2rem;
+    font-weight: 400;
+    @media (min-width: 992px) {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+.card-info {
+  background-color: var(--aura-gray-9);
+  border-radius: 8px;
+  padding: var(--spacer-3);
+  color: var(--aura-gray-1);
+  &:not(:last-child) {
+    margin-bottom: var(--spacer-2);
+  }
+  .divider.divider-horizontal {
+    background-color: var(--aura-gray-8);
+  }
+}

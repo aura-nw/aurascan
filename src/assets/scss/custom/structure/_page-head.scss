@@ -3,7 +3,10 @@
  */
 
 .page-title-box {
-    padding-bottom: $grid-gutter-width;
+    padding-bottom: var(--spacer-4);
+    @media (min-width: 992px) {
+        padding-bottom: var(--spacer-6);
+    }
 
     .breadcrumb {
         background-color: transparent;

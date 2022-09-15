@@ -6,7 +6,7 @@ import { CodeTransaction, ModeExecuteTransaction, StatusTransaction, TRANSACTION
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
 
-Injectable()
+Injectable();
 
 export class Globals {
   dataHeader = new CommonDataDto();
@@ -14,6 +14,10 @@ export class Globals {
   formatNumber2Decimal = '1.2-2';
   formatNumberOnlyDecimal = '1.0-0';
   maxNumberInput = 100000000000000;
+  price = {
+    aura: 0,
+    btc: 0
+  }
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
@@ -21,31 +25,38 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;
   let itemMessage = arrayMsg[0];
-  
-  if (itemMessage?.amount && (type === eTransType.Undelegate 
-    || type === eTransType.Delegate || type === eTransType.Redelegate)) {
-    amount = itemMessage?.amount.amount;
-  } else if (itemMessage?.amount) {
-    amount = itemMessage?.amount[0].amount;
-  } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
-    amount = itemMessage?.funds[0].amount;
-  } else if (type === eTransType.SubmitProposalTx){
-    amount = itemMessage?.initial_deposit[0]?.amount || 0;
-  } else if (type === eTransType.CreateValidator){
-    amount = itemMessage?.value?.amount || 0;
-  } else if (type === eTransType.GetReward && arrayMsg.length === 1) {
-    //check error with rawlog
-    try {
-      const jsonData = JSON.parse(rawRog);
-      amount = jsonData[0].events[0].attributes[1].value.replace(coinMinimalDenom,'');
-    } catch {
+
+  try {
+    if (
+      itemMessage?.amount &&
+      (type === eTransType.Undelegate || type === eTransType.Delegate || type === eTransType.Redelegate)
+    ) {
+      amount = itemMessage?.amount.amount;
+    } else if (itemMessage?.amount) {
+      amount = itemMessage?.amount[0].amount;
+    } else if (itemMessage?.funds && itemMessage?.funds.length > 0) {
+      amount = itemMessage?.funds[0].amount;
+    } else if (type === eTransType.SubmitProposalTx) {
+      amount =
+        itemMessage?.initial_deposit[0]?.amount ||
+        itemMessage?.content?.amount[0].amount ||
+        itemMessage?.amount[0].amount ||
+        0;
+    } else if (type === eTransType.CreateValidator) {
+      amount = itemMessage?.value?.amount || 0;
+    } else if (type === eTransType.GetReward && arrayMsg.length === 1) {
+      //check error with rawlog
+      try {
+        const jsonData = JSON.parse(rawRog);
+        amount = jsonData[0].events[0].attributes[1].value.replace(coinMinimalDenom, '');
+      } catch {}
     }
-  }
+  } catch {}
 
   if (itemMessage && amount >= 0) {
-    amount = (amount / NUMBER_CONVERT) || 0;
-    amountFormat = (arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward) ? amount : 'More';
-    if(arrayMsg.length > 1 && type === TRANSACTION_TYPE_ENUM.GetReward){
+    amount = amount / NUMBER_CONVERT || 0;
+    amountFormat = arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward ? amount : 'More';
+    if (arrayMsg.length > 1 && type === TRANSACTION_TYPE_ENUM.GetReward) {
       amountFormat = 'More';
     }
   }
@@ -89,7 +100,9 @@ export function getDataInfo(arrayMsg, addressContract) {
       fromAddress = itemMessage.sender;
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
-        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner;
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender || 
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
       tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
@@ -132,9 +145,9 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
   const txs = _.get(data, 'transactions').map((element) => {
     const code = _.get(element, 'tx_response.code');
     const tx_hash = _.get(element, 'tx_response.txhash');
-    const messages = _.get(element, 'tx.body.messages');
+    const messages = _.get(element, 'tx_response.tx.body.messages');
 
-    const _type = _.get(element, 'tx.body.messages[0].@type');
+    const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
     const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
 
     const status =
@@ -143,15 +156,15 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
         : StatusTransaction.Fail;
 
     const _amount = getAmount(
-      _.get(element, 'tx.body.messages'),
+      _.get(element, 'tx_response.tx.body.messages'),
       _type,
-      _.get(element, 'tx.body.raw_log'),
+      _.get(element, 'tx_response.tx.body.raw_log'),
       coinMinimalDenom,
     );
 
     const amount = (_.isNumber(_amount) && _amount > 0) ? _amount.toFixed(coinDecimals) : _amount;
 
-    const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
+    const fee = balanceOf(_.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
       coinDecimals,
     );
     const height = _.get(element, 'tx_response.height');

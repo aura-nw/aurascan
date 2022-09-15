@@ -1,28 +1,107 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { INDEXER_URL, LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class TokenService extends CommonService {
+  chainInfo = this.environmentService.configValue.chain_info;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
 
-  getListTokenTransfer(token: string): Observable<any>{
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/proposals`);
-    return this.http.get('../../assets/mock-data/token-list-transfer.json');
+  getListToken(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/cw20-tokens`, payload);
   }
 
-  getListTokenHolder(token: string): Observable<any>{
-    this.setURL();
-    // return this.http.get<any>(`${this.apiUrl}/proposals`);
-    return this.http.get('../../assets/mock-data/token-list-transfer.json');
+  getListCW721Token(payload): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
   }
 
-  getTokenDetail(tokenAddress): Observable<any> {
+  getTokenCW20Detail(address): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/${address}`);
+  }
+
+  getTokenCW721Detail(address): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
+  }
+
+  getListTokenTransferIndexer(
+    pageLimit: string | number,
+    contractAddress: string,
+    filterData: any,
+    nextKey = null,
+  ): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      searchType: 'execute',
+      searchKey: '_contract_address',
+      searchValue: contractAddress,
+      pageLimit,
+      nextKey,
+      countTotal: true,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    if (filterData?.keyWord) {
+      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
+        params['txHash'] = filterData?.keyWord;
+      } else if (filterData['isSearchWallet']) {
+        params['addressInContract'] = filterData?.keyWord;
+      } else {
+        params['query'] = 'wasm.token_id=' + filterData?.keyWord;
+      }
+    }
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+      params,
+    });
+  }
+
+  getListTokenNFTFromIndexer(payload): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      owner: payload.owner,
+      tokenId: payload.token_id,
+      contractAddress: payload.contractAddress,
+      pageLimit: payload.pageLimit,
+      nextKey: payload.nextKey,
+      countTotal: true,
+      contractType: 'CW721',
+      isBurned: false,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+    return this.http.get<any>(`${INDEXER_URL}/asset/getByOwner`, {
+      params,
+    });
+  }
+
+  getListTokenHolder(
+    limit: string | number,
+    offset: string | number,
+    contractType: string,
+    contractAddress: string,
+  ): Observable<any> {
+    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    return this.http.get<any>(url);
+  }
+
+  getContractDetail(tokenAddress): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${tokenAddress}`);
+  }
+
+  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${contractAddress}/nft/${tokenId}`);
+  }
+
+  getPriceToken(tokenId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
   }
 }
