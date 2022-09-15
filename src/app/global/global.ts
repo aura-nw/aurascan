@@ -174,8 +174,10 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
     );
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
+    const gas_used = _.get(element, 'tx_response.gas_used');
+    const gas_wanted = _.get(element, 'tx_response.gas_wanted');
 
-    return { code, tx_hash, type, status, amount, fee, height, timestamp, messages };
+    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, messages };
   });
   return txs;
 }
