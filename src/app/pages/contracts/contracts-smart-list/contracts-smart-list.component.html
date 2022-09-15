@@ -1,0 +1,282 @@
+<div class="contract-register-mainnet" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="text--white mb-0">Smart contracts list</h1>
+    <a href="/contracts/contracts-deploy-mainnet"
+       class="button button-outline button--md button-pill button-flat d-none d-lg-flex">
+      <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+      <span class="ml-2 text--black">Register Contract</span>
+    </a>
+  </div>
+  <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
+  <div class="d-lg-flex justify-content-between mt-4 mt-lg-0">
+    <div>
+      <div class="text--gray-1 body-01">
+        Users can register smart contracts that ware verified source code to deploy on mainnet.
+      </div>
+      <div class="body-03-mob body-02 mt-2 mt-lg-1 text--gray-5">
+        A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' : '' }} that you created
+      </div>
+      <a href="/contracts/contracts-deploy-mainnet"
+         class="button button-outline button--md button-pill button-flat d-flex d-lg-none mt-4">
+        <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+        <span class="ml-2 text--black">Register Contract</span>
+      </a>
+    </div>
+    <div class="d-flex mt-4 mt-md-0">
+      <div class="dropdown aura-dropdown mr-4 btn-status d-none d-lg-block" *ngIf="contractMainnetStatus.length > 0">
+        <button
+          class="button button--md button-pill button-outline button-outline--gradient button-dropdown w-100"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <span class='text-capitalize'>{{ currentStatus ? currentStatus.label : 'Status' }}</span>
+        </button>
+        <ul class="dropdown-menu aura-dropdown-menu">
+          <ng-container *ngFor="let item of contractMainnetStatus">
+            <li class="dropdown-item cursor-pointer" (click)="resetPageEvent(); getListContract(item)">
+              <button type="button" class="button p-0 text-capitalize">{{ item.label | lowercase}}</button>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+      <form class="aura-form single-input-field search-form mt-4 mt-md-0 d-none d-lg-block position-relative">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for Code ID"
+            [(ngModel)]="textSearch"
+            [maxLength]="maxLengthSearch"
+            (ngModelChange)='searchContract()'
+            (keyup)="searchContract()"
+            name="search"
+            autocomplete="off" />
+          <button
+            type="submit"
+            class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
+            (click)="searchContract()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+          <button
+            type="reset"
+            class="btn-reset cursor-pointer {{
+              !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+            }}"
+            (click)="clearSearch()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+        </div>
+        <ng-container *ngIf="textSearch?.length > 0">
+          <div class="box-search-data w-100 text-white" [style.display]="isHideSearch ? 'none' : 'block'">
+            <ng-container *ngIf="filterSearchData?.length === 0">
+              <span> There are no matching contracts </span>
+            </ng-container>
+            <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+              <div class="txt-title-search">Smart Contract</div>
+              <ng-container *ngFor="let item of filterSearchData">
+                <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
+                  <div class="ml-1">
+                    <div class="d-flex align-items-center">
+                      <span class="text-clamp">
+                        {{ item.code_id }} - {{ item.type }} Contract -
+                        <span
+                          [ngStyle]="{
+                            color: statusColor[item.status]
+                          }">
+                          {{ item.result }}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+      </form>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="card mt-4 mt-lg-6">
+    <div class="card-body">
+      <div class='d-flex d-lg-none mt-4'>
+        <div class="dropdown aura-dropdown btn-status btn-status--mob" *ngIf="contractMainnetStatus.length > 0">
+          <button
+            class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card button-dropdown w-100"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span class='text-capitalize caption fw-normal'>{{ currentStatus?.label || 'Status' }}</span>
+          </button>
+          <ul class="dropdown-menu aura-dropdown-menu">
+            <ng-container *ngFor="let item of contractMainnetStatus">
+              <li class="py-1 px-2 dropdown-item cursor-pointer" (click)="resetPageEvent(); getListContract(item)">
+                <button type="button" class="button p-0 body-02 text-start text-capitalize">{{ item.label | lowercase}}</button>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+        <form class="aura-form single-input-field search-form pl-4">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for Code ID"
+              [(ngModel)]="textSearch"
+              (ngModelChange)='searchContract()'
+              [maxLength]="maxLengthSearch"
+              (keyup)="searchContract()"
+              name="search"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
+              (click)="searchContract()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+              (click)="clearSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+          <ng-container *ngIf="textSearch?.length > 0">
+            <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
+              <ng-container *ngIf="filterSearchData?.length === 0">
+                <span> There are no matching contracts </span>
+              </ng-container>
+              <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+                <div class="txt-title-search">Smart Contract</div>
+                <ng-container *ngFor="let item of filterSearchData">
+                  <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
+                    <div class="ml-1">
+                      <div class="d-flex align-items-center">
+                    <span class="text-clamp">
+                      {{ item.code_id }} - {{ item.type }} Contract -
+                      <span
+                        [ngStyle]="{
+                          color: statusColor[item.status]
+                        }">
+                        {{ item.result }}
+                      </span>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+        </form>
+      </div>
+      <div *ngIf="loading" class="m-auto mt-10">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+      <div class="table-responsive mt-4" *ngIf="!loading && dataSource">
+        <table
+          mat-table
+          matSort
+          [dataSource]="dataSource"
+          class="aura-table"
+          *ngIf="this.dataBk && this.dataBk['data']?.length > 0; else noValues">
+          <ng-container  *ngFor="let template of templates; index as i">
+            <ng-container [matColumnDef]="template.matColumnDef">
+              <th mat-header-cell *matHeaderCellDef>
+                <div [innerHTML]="template.headerCellDef | translate"></div>
+              </th>
+              <ng-container >
+                <td mat-cell *matCellDef="let data">
+                  <ng-container [ngSwitch]="template.matColumnDef">
+                    <ng-container *ngSwitchCase="'contract_address'">
+                      <div class="d-flex align-items-center gap-2">
+                        <img
+                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
+                          [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+                          alt="contract_verification" class="mr-2"
+                          width="16px"
+                          height="16px" />
+                        <a
+                          [routerLink]="['/contracts/', data[template.matColumnDef]]"
+                          [class.disabled-link]="!data[template.matColumnDef]">
+                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                        </a>
+                      </div>
+                      <span *ngIf="!data[template.matColumnDef]">-</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'contract_mainnet'">
+                      <a
+                        [routerLink]="['/contracts/', data[template.matColumnDef]]"
+                        class="text-clamp"
+                        *ngIf="data[template.matColumnDef]"
+                        >{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</a
+                      >
+                      <span *ngIf="!data[template.matColumnDef]">-</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'contract_name'"
+                      >{{ data[template.matColumnDef] }}
+                      <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
+                    </ng-container>
+                    <!-- Type contract -->
+                    <ng-container *ngSwitchCase="'height'"> - </ng-container>
+                    <ng-container *ngSwitchCase="'contract_verification'">
+<!--                      <div *ngIf="data[template.matColumnDef]">-->
+<!--                        <div class="body-02 d-flex align-items-center">-->
+<!--                          <span>{{ data[template.matColumnDef] | customDate: 'MM/dd/yyyy' }}</span>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div *ngIf="!data[template.matColumnDef]">-</div>-->
+                      <div>-</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'status'">
+                      <div class='text-capitalize'
+                        [ngStyle]="{
+                          color: statusColor[data[template.matColumnDef]]
+                        }">
+                        {{ data[template.matColumnDef] | lowercase}}
+                      </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'tx_hash'"> - </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{ data[template.matColumnDef] || '-' }}
+                    </ng-container>
+                  </ng-container>
+                </td>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell g-no-data" colspan="9999">
+              <div class="d-flex justify-content-center align-items-center body-01 body-02-mob">
+                <img
+                  [src]="'assets/icons/icons-svg/white/info.svg' | imageS3"
+                  alt=""
+                  width="16px"
+                  height="16px"
+                  class="mr-2" />
+                You have yet to deploy any contract
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <app-paginator
+        *ngIf="pageData"
+        [length]="pageData.length"
+        [pageSize]="pageData.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="pageEvent($event)">
+      </app-paginator>
+      <ng-template #noValues>
+        <div class="d-flex justify-content-center align-items-center text-white">
+          <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="24" height="24" class="mr-2" />
+          <span>No Data</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</section>

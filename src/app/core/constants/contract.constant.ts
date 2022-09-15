@@ -27,8 +27,8 @@ export const CONTRACT_TAB = [
 export const CONTRACT_RESULT = {
   TBD: 'TBD',
   CORRECT: 'Correct',
-  INCORRECT: 'Incorrect'
-}
+  INCORRECT: 'Incorrect',
+};
 
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
