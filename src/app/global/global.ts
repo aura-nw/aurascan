@@ -176,9 +176,9 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
   const txs = _.get(data, 'transactions').map((element) => {
     const code = _.get(element, 'tx_response.code');
     const tx_hash = _.get(element, 'tx_response.txhash');
-    const messages = _.get(element, 'tx.body.messages');
+    const messages = _.get(element, 'tx_response.tx.body.messages');
 
-    const _type = _.get(element, 'tx.body.messages[0].@type');
+    const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
     const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
 
     const status =
@@ -187,15 +187,17 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
         : StatusTransaction.Fail;
 
     const _amount = getAmount(
-      _.get(element, 'tx.body.messages'),
+      _.get(element, 'tx_response.tx.body.messages'),
       _type,
-      _.get(element, 'tx.body.raw_log'),
+      _.get(element, 'tx_response.tx.body.raw_log'),
       coinMinimalDenom,
     );
 
     const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinDecimals) : _amount;
 
-    const fee = balanceOf(_.get(element, 'tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(coinDecimals);
+    const fee = balanceOf(_.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
+      coinDecimals,
+    );
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
 
