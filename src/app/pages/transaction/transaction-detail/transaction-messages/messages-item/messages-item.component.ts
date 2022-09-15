@@ -11,6 +11,7 @@ import { Globals } from 'src/app/global/global';
 export class MessagesItemComponent implements OnInit {
   @Input() label: string;
   @Input() value: any;
+  @Input() dataLink: any;
   @Input() pipeType: string = '';
 
   pipeTypeData = pipeTypeData;
