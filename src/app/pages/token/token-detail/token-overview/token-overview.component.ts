@@ -25,7 +25,6 @@ export class TokenOverviewComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.params = params?.a || '';
     });
-    this.getTotalTransfer();
     this.getTotalHolder();
 
     //set price change
@@ -35,13 +34,6 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail['isValueUp'] = false;
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
-  }
-
-  getTotalTransfer() {
-    let type = this.tokenDetail?.isNFTContract ? 'cw721-tokens' : 'cw20-tokens';
-    this.tokenService.getListTokenTransfer(20, 0, this.tokenDetail?.contract_address, null, type).subscribe((res) => {
-      this.tokenDetail['transfers'] = res.meta?.count || 0;
-    });
   }
 
   getTotalHolder() {

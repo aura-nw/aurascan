@@ -75,11 +75,16 @@ export class ContractsTransactionsComponent implements OnInit {
       if (code === 200) {
         const txsExecute = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
 
-        if (dataExecute.data.count > 0) {
+        if (dataExecute.data.count > 0 || dataInstantiate?.data.count > 0) {
           const { code, data } = dataInstantiate;
           const txsInstantiate = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          if (txsInstantiate.length > 0) {
+            txsInstantiate[0]['type'] = dataInstantiate.data?.transactions[0]?.tx?.body.messages[0]['@type'];
+            txsInstantiate[0]['contract_address'] = this.contractAddress;
+          }
+
           this.contractTransaction['data'] = txsExecute;
-          this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
+          this.contractTransaction['count'] = dataExecute.data.count;
 
           if (+this.label == 2) {
             this.contractTransaction['data'] = txsInstantiate;
@@ -89,10 +94,12 @@ export class ContractsTransactionsComponent implements OnInit {
 
           if (this.label == 0) {
             this.contractTransaction['count'] = 0;
-          } else if (txsInstantiate?.length > 0) {
-            txsInstantiate[0]['type'] = dataInstantiate.data?.transactions[0]?.tx?.body.messages[0]['@type'];
-            txsInstantiate[0]['contract_address'] = this.contractAddress;
+            return;
+          }
+
+          if (txsInstantiate?.length > 0 && !this.label) {
             this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsInstantiate];
+            this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
           }
         }
       }

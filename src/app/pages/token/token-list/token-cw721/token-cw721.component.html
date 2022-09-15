@@ -47,8 +47,8 @@
                     <div
                       class="d-flex p-3 cursor-pointer search-result"
                       [routerLink]="['/tokens/token-nft', item.contract_address]">
-                      <img [src]="item.image || defaultLogoToken" class="logo-token" />
-                      <div class="ml-3">
+                      <!-- <img [src]="item.image || defaultLogoToken" class="logo-token" /> -->
+                      <div>
                         <div class="d-flex align-items-center">
                           <div class="text-clamp">
                             {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
@@ -83,8 +83,8 @@
               <th mat-header-cell *matHeaderCellDef>Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img [src]="element.image || defaultLogoToken" width="18" height="18" />
-                  <div class="ml-3">
+                  <!-- <img [src]="element.image || defaultLogoToken" width="18" height="18" /> -->
+                  <div>
                     <a [routerLink]="['/tokens/token-nft', element.contract_address]" class="text--primary">
                       {{ element.name | stringEllipsis: 16 }} <span *ngIf="element.symbol">({{ element.symbol }})</span>
                     </a>
@@ -128,10 +128,10 @@
           </table>
         </div>
         <app-paginator
-                [length]="pageData.length"
-                [pageSize]="pageData.pageSize"
-                (paginator)="paginatorEmit($event)"
-                (pageEvent)="pageEvent($event)">
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
         </app-paginator>
       </div>
     </div>

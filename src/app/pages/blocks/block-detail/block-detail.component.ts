@@ -1,10 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DATEFORMAT } from '../../../../app/core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
@@ -19,17 +21,23 @@ import { getAmount, Globals } from '../../../../app/global/global';
 export class BlockDetailComponent implements OnInit {
   id: string | number;
   blockId: string | number;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+
   item = undefined;
-    TAB = [
-        {
-            id: 0,
-            value: 'SUMMARY'
-        },
-        {
-            id: 1,
-            value: 'JSON'
-        }
-    ]
+  TAB = [
+    {
+      id: 0,
+      value: 'SUMMARY',
+    },
+    {
+      id: 1,
+      value: 'JSON',
+    },
+  ];
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
@@ -41,14 +49,26 @@ export class BlockDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
   length = 0;
   typeTransaction = TYPE_TRANSACTION;
   dateFormat;
   loading = true;
   isRawData = false;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  isCurrentMobile;
+
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
+    tap((data) => {
+      this.isCurrentMobile = data.matches;
+
+      if (this.isCurrentMobile) {
+        this.pageData.pageSize = 5;
+      } else {
+        this.pageData.pageSize = 20;
+      }
+    }),
+  );
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -67,9 +87,10 @@ export class BlockDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('height');
     this.blockId = this.route.snapshot.paramMap.get('blockId');
-      if(this.id === 'null' || this.blockId === 'null') {
-          this.router.navigate(['/']);
-      }
+    if (this.id === 'null' || this.blockId === 'null') {
+      this.router.navigate(['/']);
+    }
+
     this.getDetail();
   }
 
@@ -100,9 +121,14 @@ export class BlockDetailComponent implements OnInit {
         });
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
-        this.dataSource = new MatTableDataSource(res.data?.txs);
-        this.dataTxs = res.data?.txs;
-        this.length = res.data?.txs.length;
+        this.dataSource.data = res.data.txs;
+        this.length = res.data.txs.length;
+
+        this.pageData.length = this.length;
+        const { pageIndex, pageSize } = this.pageData;
+        const start = pageIndex * pageSize;
+        const end = start + pageSize;
+        this.dataTxs = this.dataSource.data.slice(start, end);
         this.loading = false;
       },
       (error) => {
@@ -131,9 +157,14 @@ export class BlockDetailComponent implements OnInit {
         });
         this.item = res.data;
         this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
-        this.dataSource = new MatTableDataSource(res.data?.txs);
-        this.dataTxs = res.data?.txs;
-        this.length = res.data?.txs.length;
+        this.dataSource.data = res.data.txs;
+        this.length = res.data.txs.length;
+
+        this.pageData.length = this.length;
+        const { pageIndex, pageSize } = this.pageData;
+        const start = pageIndex * pageSize;
+        const end = start + pageSize;
+        this.dataTxs = this.dataSource.data.slice(start, end);
         this.loading = false;
       },
       (error) => {
@@ -152,5 +183,19 @@ export class BlockDetailComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isRawData = type;
+  }
+
+  handlePageEvent(e: any) {
+    this.pageData.pageIndex = e.pageIndex;
+    if (this.pageData) {
+      const { pageIndex, pageSize } = this.pageData;
+      const start = pageIndex * pageSize;
+      const end = start + pageSize;
+      this.dataTxs = this.dataSource.data.slice(start, end);
+    }
+  }
+
+  paginatorEmit(event): void {
+    this.dataSource.paginator = event;
   }
 }

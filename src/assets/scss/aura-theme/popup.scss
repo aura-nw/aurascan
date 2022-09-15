@@ -1,6 +1,5 @@
 .modal {
   .modal-dialog {
-    max-width: 720px;
     @media (max-width: 768px) {
       margin: auto var(--spacer-8);
     }
