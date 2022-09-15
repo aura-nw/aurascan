@@ -8,6 +8,7 @@ export interface IWalletInfo {
 export type WalletStorage = {
   provider: WALLET_PROVIDER;
   chainId: string;
+  timestamp: number
 };
 export interface IBalances {
   balance: string;

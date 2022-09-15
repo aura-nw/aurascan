@@ -55,11 +55,27 @@
           <app-card-mob-simple
             *ngFor="let data of dataBlock"
             [link]="'/blocks/' + data.height"
-            [title]="{ size: 'md', titleClass: 'h6-mob', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0], subLabelClass: 'text--gray-1 h6-mob'}"
+            [title]="{
+              size: 'md',
+              titleClass: 'h6-mob',
+              label: data.height,
+              subLabelContent: commonService.getDateValue(data.timestamp)[0],
+              subLabelClass: 'text--gray-1 h6-mob'
+            }"
             [content]="[
-              { label: 'Proposer', info: '<span class=text--primary>' + data.proposer + '</span>' },
+              {
+                label: 'Proposer',
+                info:
+                  '<a class=text--primary href=' +
+                  ('/validators/' + data.operator_address) +
+                  '>' +
+                  data.proposer +
+                  '</a>'
+              },
               { label: 'Txs', class: 'body-01-mob text--gray-1', info: data.num_txs.toString() },
-              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
+              {
+                label: 'Time',
+                class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
                   (data.timestamp | customDate: 'yyyy-MM-dd') +
