@@ -99,7 +99,7 @@
         <div class="card-body">
           <div class="row mb-2">
             <div class="col-12">
-              <span class="h3 text--white ">Height</span>
+              <span class="h3 text--white">Height</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
@@ -120,7 +120,7 @@
         <div class="card-body">
           <div class="row mb-2">
             <div class="col-12">
-              <span class="h3 text--white ">Transactions</span>
+              <span class="h3 text--white">Transactions</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
@@ -141,7 +141,7 @@
         <div class="card-body">
           <div class="row mb-2">
             <div class="col-12">
-              <span class="h3 text--white ">Bonded Tokens</span>
+              <span class="h3 text--white">Bonded Tokens</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
@@ -164,7 +164,7 @@
         <div class="card-body">
           <div class="row mb-2">
             <div class="col-12">
-              <span class="h3 text--white ">Validators</span>
+              <span class="h3 text--white">Validators</span>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between flex-wrap">
@@ -247,11 +247,27 @@
                   [link]="'/blocks/' + data.height"
                   [content]="[
                     { label: 'Height', class: 'text--primary', info: data.height },
-                    { label: 'Proposer', class: 'text--primary', info: data.proposer },
+                    {
+                      label: 'Proposer',
+                      class: 'text--primary',
+                      info:
+                        '<a class=text--primary href=' +
+                        ('/validators/' + data.operator_address) +
+                        '>' +
+                        data.proposer +
+                        '</a>'
+                    },
                     { label: 'Txs', info: data.num_txs.toString() },
-                    { label: 'Time',
+                    {
+                      label: 'Time',
                       class: 'card__date text--gray-1 body-01',
-                      info: '<span>'+(data.timestamp | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.timestamp | customDate: 'HH:mm:ss')+'</span>'
+                      info:
+                        '<span>' +
+                        (data.timestamp | customDate: 'yyyy-MM-dd') +
+                        '</span>' +
+                        '<span>' +
+                        (data.timestamp | customDate: 'HH:mm:ss') +
+                        '</span>'
                     }
                   ]"></app-card-mob-simple>
               </div>
@@ -348,10 +364,21 @@
                     status: data.code
                   }"
                   [content]="[
-                    { label: 'Height', class: 'text--primary', info: data.height},
-                    { label: 'Time',
+                    {
+                      label: 'Height',
+                      class: 'text--primary',
+                      info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+                    },
+                    {
+                      label: 'Time',
                       class: 'card__date text--gray-1 body-01',
-                      info: '<span>'+(data.timestamp | customDate: 'yyyy-MM-dd')+'</span>' + '<span>'+(data.timestamp | customDate: 'HH:mm:ss')+'</span>'
+                      info:
+                        '<span>' +
+                        (data.timestamp | customDate: 'yyyy-MM-dd') +
+                        '</span>' +
+                        '<span>' +
+                        (data.timestamp | customDate: 'HH:mm:ss') +
+                        '</span>'
                     }
                   ]"></app-card-mob-simple>
               </div>
