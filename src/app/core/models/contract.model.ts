@@ -113,10 +113,16 @@ export interface DeployContractListReq {
   email: string,
   contract_description: string,
   project_sector?: string, // can hoi lai
-  whitepaper: string,
-  github: string,
-  telegram: string,
-  discord: string,
-  facebook: string,
-  twitter: string
+  whitepaper?: string,
+  github?: string,
+  telegram?: string,
+  wechat?: string,
+  linkedin?: string,
+  discord?: string,
+  medium?: string,
+  reddit?: string,
+  slack?: string,
+  facebook?: string,
+  twitter?: string
+  bitcointalk?: string,
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IResponsesSuccess, IResponsesTemplates } from 'src/app/core/models/common.model';
-import { IContractsResponse, SmartContractListReq } from 'src/app/core/models/contract.model';
+import { DeployContractListReq, IContractsResponse, SmartContractListReq } from 'src/app/core/models/contract.model';
 import { INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -112,5 +112,9 @@ export class ContractService extends CommonService {
 
   getContractIdList(creator: string) {
     return axios.get(`${this.apiUrl}/contracts/get-code-ids/${creator}`);
+  }
+
+  createContractRequest(data: DeployContractListReq) {
+    return this.http.post<any>(`https://contract-deployer.dev.aura.network/api/v1/request/create`, data);
   }
 }

@@ -18,8 +18,9 @@ export class ContractsDeployMainnetComponent implements OnInit {
   userAddress;
   contractForm;
   emailPattern = /\S+@\S+\.\S+/;
-  websitePattern = /https:\/\/w+/;
-  listID = ['sdas','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41','sda11231','123adqwd','aad41']
+  websitePattern = /(https?:\/\/)?([\w\d]+\.)?[\w\d]+\.\w+\/?.+/;
+  listID = ['sdas', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41']
+
   constructor(
     private fb: FormBuilder,
     private toastr: NgxToastrService,
@@ -27,7 +28,8 @@ export class ContractsDeployMainnetComponent implements OnInit {
     public translate: TranslateService,
     private walletService: WalletService,
     private router: Router,
-    ) { }
+  ) {
+  }
 
   ngOnInit() {
     from([1])
@@ -48,7 +50,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
   }
 
   formInit() {
-    this.contractForm = this.fb.group (
+    this.contractForm = this.fb.group(
       {
         code_ids: ['', [Validators.required]],
         project_name: ['', [Validators.required, Validators.maxLength(200)]],
@@ -76,7 +78,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
 
   async getCodeID(user: string) {
     const req = await this.contractService.getContractIdList(user);
-    if(req && req.data) {
+    if (req && req.data) {
       this.listID = req.data['data'];
     } else {
       this.listID.push('- No Data -');
@@ -101,15 +103,26 @@ export class ContractsDeployMainnetComponent implements OnInit {
         discord: this.contractForm.controls['discord'].value,
         facebook: this.contractForm.controls['facebook'].value,
         twitter: this.contractForm.controls['twitter'].value,
+        wechat: this.contractForm.controls['weChat'].value,
+        medium: this.contractForm.controls['medium'].value,
+        reddit: this.contractForm.controls['reddit'].value,
+        slack: this.contractForm.controls['slack'].value,
+        linkedin: this.contractForm.controls['linkedin'].value,
+        bitcointalk: this.contractForm.controls['bit_coin_talk'].value,
+        project_sector: ''
       }
-      if(true) {
-        console.log(dataDeploy);
-        this.toastr.success(this.translate.instant('NOTICE.SUBMIT_FORM_SUCCESS'));
-        this.contractForm.reset();
-        this.router.navigate(['/contracts/smart-contract-list']);
-      } else {
-        this.toastr.error('FAIL!');
-      }
+      this.contractService.createContractRequest(dataDeploy).subscribe(res => {
+        if (res) {
+          if (res.code === 200) {
+            // console.log(res);
+            this.toastr.success(this.translate.instant('NOTICE.SUBMIT_FORM_SUCCESS'));
+            this.contractForm.reset();
+            this.router.navigate(['/contracts/smart-contract-list']);
+          } else {
+            this.toastr.error('FAIL!');
+          }
+        }
+      });
     }
   }
 }
