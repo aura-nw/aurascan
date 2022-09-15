@@ -89,13 +89,13 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <app-paginator
-        [length]="length || dataList.length"
-        [pageSize]="pageData.pageSize"
-        (paginator)="paginatorEmit($event)"
-        (pageEvent)="pageEvent($event)">
-      </app-paginator>
     </div>
+    <app-paginator
+      [length]="length || dataList.length"
+      [pageSize]="pageData.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="pageEvent($event)">
+    </app-paginator>
   </ng-container>
   <ng-template #noValues>
     <app-table-no-data *ngIf="!isLoading"></app-table-no-data>

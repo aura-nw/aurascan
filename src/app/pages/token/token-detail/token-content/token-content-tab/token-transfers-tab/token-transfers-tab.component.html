@@ -29,6 +29,11 @@
                   <div [innerHTML]="template.headerCellDef | translate"></div>
                 </th>
               </ng-container>
+              <ng-container *ngSwitchCase="'to_address'">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate" class='pl-4 pl-lg-0'></div>
+                </th>
+              </ng-container>
               <ng-container *ngSwitchCase="'details'">
                 <th mat-header-cell *matHeaderCellDef class="col-per-15">
                   <div [innerHTML]="template.headerCellDef | translate"></div>
@@ -87,7 +92,7 @@
                           <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                             data[template.matColumnDef] | cutStringPipe: 8:8
                           }}</span>
-                          <span *ngIf="!data[template.matColumnDef]"> - </span>
+                          <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
                           <ng-container *ngIf="!isSearchAddress">
                             <img
                               [src]="'assets/images/icons/arrow-right.png' | imageS3"
@@ -108,16 +113,18 @@
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to_address'">
-                        <a
-                          class="text--primary"
-                          href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                          *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
-                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                        </a>
-                        <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                          data[template.matColumnDef] | cutStringPipe: 8:8
-                        }}</span>
-                        <span *ngIf="!data[template.matColumnDef]"> - </span>
+                        <div class='pl-4 pl-lg-0'>
+                          <a
+                            class="text--primary"
+                            href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                          </a>
+                          <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
+                            data[template.matColumnDef] | cutStringPipe: 8:8
+                            }}</span>
+                          <span *ngIf="!data[template.matColumnDef]"> - </span>
+                        </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
                         <button
