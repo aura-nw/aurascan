@@ -1,6 +1,6 @@
 <ng-container *ngIf="!loading">
   <div class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
-    A total of {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
+    More than {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="transfer-table-container aura-table-contain table-responsive">
@@ -27,6 +27,11 @@
               <ng-container *ngSwitchCase="'from_address'">
                 <th mat-header-cell *matHeaderCellDef>
                   <div [innerHTML]="template.headerCellDef | translate"></div>
+                </th>
+              </ng-container>
+              <ng-container *ngSwitchCase="'to_address'">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div [innerHTML]="template.headerCellDef | translate" class="pl-4 pl-lg-0"></div>
                 </th>
               </ng-container>
               <ng-container *ngSwitchCase="'details'">
@@ -87,7 +92,7 @@
                           <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                             data[template.matColumnDef] | cutStringPipe: 8:8
                           }}</span>
-                          <span *ngIf="!data[template.matColumnDef]"> - </span>
+                          <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
                           <ng-container *ngIf="!isSearchAddress">
                             <img
                               [src]="'assets/images/icons/arrow-right.png' | imageS3"
@@ -108,16 +113,18 @@
                         </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'to_address'">
-                        <a
-                          class="text--primary"
-                          href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                          *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
-                          {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                        </a>
-                        <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                          data[template.matColumnDef] | cutStringPipe: 8:8
-                        }}</span>
-                        <span *ngIf="!data[template.matColumnDef]"> - </span>
+                        <div class="pl-4 pl-lg-0">
+                          <a
+                            class="text--primary"
+                            href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                            *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                          </a>
+                          <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
+                            data[template.matColumnDef] | cutStringPipe: 8:8
+                          }}</span>
+                          <span *ngIf="!data[template.matColumnDef]"> - </span>
+                        </div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'details'">
                         <button
