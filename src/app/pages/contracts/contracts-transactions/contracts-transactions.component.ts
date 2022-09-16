@@ -79,7 +79,7 @@ export class ContractsTransactionsComponent implements OnInit {
           const { code, data } = dataInstantiate;
           const txsInstantiate = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
           if (txsInstantiate.length > 0) {
-            txsInstantiate[0]['type'] = dataInstantiate.data?.transactions[0]?.tx?.body.messages[0]['@type'];
+            txsInstantiate[0]['type'] = dataInstantiate.data?.transactions[0]?.tx_response?.tx?.body.messages[0]['@type'];
             txsInstantiate[0]['contract_address'] = this.contractAddress;
           }
 
