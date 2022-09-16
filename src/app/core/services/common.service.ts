@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { formatDistanceToNowStrict } from 'date-fns';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DATEFORMAT } from '../constants/common.constant';
+import { DATEFORMAT, INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 @Injectable()
@@ -11,6 +12,7 @@ export class CommonService {
   apiUrl = '';
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
+  chainInfo = this._environmentService.configValue.chain_info;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -30,6 +32,20 @@ export class CommonService {
   status(): Observable<any> {
     this.setURL();
     return this._http.get<any>(`${this.apiUrl}/status`);
+  }
+
+  getParamFromIndexer(){
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      module: 'gov'
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this._http.get<any>(`${INDEXER_URL}/param`, {
+      params,
+    });
   }
 
   setURL() {

@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { Observable, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import {
@@ -13,7 +13,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE
+  VOTING_SUBTITLE,
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { IResponsesTemplates } from '../../../../core/models/common.model';
@@ -60,6 +60,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.getProposalDetail();
+    this.xgetProposalDetail();
     this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 
@@ -72,56 +73,90 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  getProposalDetail(): void {
+  xgetProposalDetail(): void {
     this.proposalService
-      .getProposalDetail(this.proposalId)
+      .getProposalList(1, null, this.proposalId)
       .pipe(
-        mergeMap(({ data }: IResponsesTemplates<any>) => {
-          if (data) {
-            this.proposalDetail = this.makeProposalDataDetail(data);
+        map((dta) => dta.data),
+        mergeMap((data) => {
+          if (data?.count > 0) {
+            this.proposalDetail = this.makeProposalDataDetail(data.proposals[0]);
 
-            let { pro_status, pro_voting_end_time } = this.proposalDetail;
+            const { status: pro_status } = this.proposalDetail;
+            this.proposalDetail['pro_status'] = pro_status;
 
-            if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-              const expiredTime = moment(pro_voting_end_time).diff(moment());
+            return this.commonService.status().pipe(
+              mergeMap((res) => {
+                if (res.data) {
+                  this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+                  this.proposalDetail.pro_turnout =
+                    (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+                }
+                return this.commonService.getParamFromIndexer();
+              }),
+            );
 
-              return this.commonService.status().pipe(
-                mergeMap((res) => {
-                  if (res?.data) {
-                    this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
-                  }
+            // if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+            //   return this.commonService.status().pipe(
+            //     mergeMap((res) => {
+            //       if (res.data) {
+            //         this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+            //         const pro_turnout =
+            //           (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+            //         const yesPercent =
+            //           (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
+            //         const noPercent =
+            //           (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
+            //         const noWithVetoPercent =
+            //           (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
+            //         const abstainPercent =
+            //           (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
+            //         const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+            //         const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
 
-                  this.votingBarLoading = true;
+            //         this.proposalDetail = {
+            //           ...this.proposalDetail,
+            //           pro_turnout,
+            //           yesPercent,
+            //           noPercent,
+            //           noWithVetoPercent,
+            //           abstainPercent,
+            //           voted_percent,
+            //           voted,
+            //         };
+            //       }
 
-                  if (!(expiredTime < 0)) {
-                    return this.getProposalTally();
-                  }
+            //       return this.commonService.getParamFromIndexer();
+            //     }),
+            //   );
+            // }
+          }
 
-                  return this.proposalService.getProposalDetailFromNode(this.proposalId).pipe(
-                    tap((_) => {}),
-                    mergeMap((res: IResponsesTemplates<any>) => {
-                      pro_status = res.data.status;
-                      return this.getProposalTally();
-                    }),
-                  );
-                }),
-              );
-            }
+          return this.commonService.getParamFromIndexer();
+        }),
+        map((paramFromIndexer) => paramFromIndexer.data?.result[0]),
+        map((result) => {
+          if (!result) {
+            return;
+          }
+          const { quorum, threshold, veto_threshold } = result.params?.tallying_param;
 
-            const {
-              pro_votes_yes,
-              pro_total_vote,
-              pro_votes_no,
-              pro_votes_no_with_veto,
-              pro_votes_abstain,
-              pro_turnout,
-              quorum,
-            } = this.proposalDetail;
+          const { pro_status, pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } =
+            this.proposalDetail;
 
-            const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
-            const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
-            const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
-            const abstainPercent = (pro_votes_abstain * 100) / pro_total_vote || 0;
+          this.proposalDetail['quorum'] = quorum;
+          this.proposalDetail['threshold'] = threshold;
+          this.proposalDetail['veto_threshold'] = veto_threshold;
+
+          if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+            const yesPercent = (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
+            const noPercent = (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
+            const noWithVetoPercent =
+              (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
+            const abstainPercent =
+              (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
+            const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+            const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
 
             this.proposalDetail = {
               ...this.proposalDetail,
@@ -129,22 +164,83 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               noPercent,
               noWithVetoPercent,
               abstainPercent,
+              voted_percent,
+              voted,
             };
+          }
+          // if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+          //   return this.commonService.status().pipe(
+          //     mergeMap((res) => {
+          //       if (res.data) {
+          //         this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+          //         const pro_turnout =
+          //           (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+          //         const yesPercent =
+          //           (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
+          //         const noPercent =
+          //           (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
+          //         const noWithVetoPercent =
+          //           (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
+          //         const abstainPercent =
+          //           (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
+          //         const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+          //         const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
 
-            if (pro_turnout >= quorum) {
-              if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
-                if (pro_votes_no_with_veto < pro_total_vote / 3) {
-                  this.finalSubTitle = VOTING_SUBTITLE.PASS;
-                } else {
-                  this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
-                    '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe
-                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
-                      .toString(),
-                  );
-                }
-              } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
-                this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
+          //         this.proposalDetail = {
+          //           ...this.proposalDetail,
+          //           pro_turnout,
+          //           yesPercent,
+          //           noPercent,
+          //           noWithVetoPercent,
+          //           abstainPercent,
+          //           voted_percent,
+          //           voted,
+          //         };
+          //       }
+
+          //       return this.commonService.getParamFromIndexer();
+          //     }),
+          //   );
+          // }
+
+          // if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+          //   return this.commonService.status().pipe(
+          //     mergeMap((res) => {
+          //       if (res.data) {
+          //         this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+          //         const pro_turnout =
+          //           (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+          //         const yesPercent =
+          //           (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
+          //         const noPercent = (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
+          //         const noWithVetoPercent =
+          //           (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
+          //         const abstainPercent =
+          //           (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
+          //         const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+          //         const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
+
+          //         this.proposalDetail = {
+          //           ...this.proposalDetail,
+          //           pro_turnout,
+          //           yesPercent,
+          //           noPercent,
+          //           noWithVetoPercent,
+          //           abstainPercent,
+          //           voted_percent,
+          //           voted,
+          //         };
+          //       }
+
+          //       return this.commonService.getParamFromIndexer();
+          //     }),
+          //   );
+          // }
+
+          if (this.proposalDetail.pro_turnout >= quorum) {
+            if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
+              if (pro_votes_no_with_veto < pro_total_vote / 3) {
+                this.finalSubTitle = VOTING_SUBTITLE.PASS;
               } else {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
@@ -153,9 +249,77 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
                     .toString(),
                 );
               }
+            } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
+              this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
             } else {
-              this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
+              this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                '{{proposalDetail.noWithVetoPercent}}',
+                this.numberPipe
+                  .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                  .toString(),
+              );
             }
+          } else {
+            this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
+          }
+        }),
+      )
+      .subscribe({
+        complete: () => {
+          this.votingBarLoading = false;
+        },
+      });
+  }
+
+  getProposalDetail(): void {
+    this.proposalService
+      .getProposalDetail(this.proposalId)
+      .pipe(
+        mergeMap(({ data }: IResponsesTemplates<any>) => {
+          if (data) {
+            // this.proposalDetail =
+            // let { pro_status, pro_voting_end_time } = this.proposalDetail;
+            // if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+            //   const expiredTime = moment(pro_voting_end_time).diff(moment());
+            //   return this.commonService.status().pipe(
+            //     mergeMap((res) => {
+            //       if (res?.data) {
+            //         this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+            //       }
+            //       this.votingBarLoading = true;
+            //       if (!(expiredTime < 0)) {
+            //         return this.getProposalTally();
+            //       }
+            //       return this.proposalService.getProposalDetailFromNode(this.proposalId).pipe(
+            //         tap((_) => {}),
+            //         mergeMap((res: IResponsesTemplates<any>) => {
+            //           pro_status = res.data.status;
+            //           return this.getProposalTally();
+            //         }),
+            //       );
+            //     }),
+            //   );
+            // }
+            // const {
+            //   pro_votes_yes,
+            //   pro_total_vote,
+            //   pro_votes_no,
+            //   pro_votes_no_with_veto,
+            //   pro_votes_abstain,
+            //   pro_turnout,
+            //   quorum,
+            // } = this.proposalDetail;
+            // const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
+            // const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
+            // const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
+            // const abstainPercent = (pro_votes_abstain * 100) / pro_total_vote || 0;
+            // this.proposalDetail = {
+            //   ...this.proposalDetail,
+            //   yesPercent,
+            //   noPercent,
+            //   noWithVetoPercent,
+            //   abstainPercent,
+            // };
           }
           return of(null);
         }),
@@ -175,18 +339,24 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   makeProposalDataDetail(data) {
-    const pro_votes_yes = balanceOf(+data.pro_votes_yes);
-    const pro_votes_no = balanceOf(+data.pro_votes_no);
-    const pro_votes_no_with_veto = balanceOf(+data.pro_votes_no_with_veto);
-    const pro_votes_abstain = balanceOf(+data.pro_votes_abstain);
+    let pro_votes_yes = balanceOf(+data.final_tally_result.yes);
+    let pro_votes_no = balanceOf(+data.final_tally_result.no);
+    let pro_votes_no_with_veto = balanceOf(+data.final_tally_result.no_with_veto);
+    let pro_votes_abstain = balanceOf(+data.final_tally_result.abstain);
+    if (data.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+      pro_votes_yes = balanceOf(+data.tally.yes);
+      pro_votes_no = balanceOf(+data.tally.no);
+      pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
+      pro_votes_abstain = balanceOf(+data.tally.abstain);
+    }
 
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
 
     return {
       ...data,
-      initial_deposit: balanceOf(data.initial_deposit),
-      pro_total_deposits: balanceOf(data.pro_total_deposits),
-      pro_type: data.pro_type.split('.').pop(),
+      initial_deposit: balanceOf(data.initial_deposit[0].amount),
+      pro_total_deposits: balanceOf(data.total_deposit[0].amount),
+      pro_type: data.content['@type'].split('.').pop(),
       pro_votes_yes,
       pro_votes_no,
       pro_votes_no_with_veto,
@@ -350,61 +520,46 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     const pro_votes_abstain = balanceOf(+data.tally.abstain);
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
 
-    const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
-    const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
-    const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
-    const abstainPercent = (pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
-    const voted = pro_total_vote - pro_votes_abstain;
-    const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
-
     return {
       pro_votes_yes,
       pro_votes_no,
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
-      yesPercent,
-      noPercent,
-      noWithVetoPercent,
-      abstainPercent,
-      voted_percent,
-      voted,
     };
   }
 
   updateVoteResultFromNode(nodeData) {
-    if (!nodeData?.proposalVoteTally?.tally) {
-      return;
-    }
-
-    const {
-      pro_votes_yes,
-      pro_votes_no,
-      pro_votes_no_with_veto,
-      pro_votes_abstain,
-      pro_total_vote,
-      yesPercent,
-      noPercent,
-      noWithVetoPercent,
-      abstainPercent,
-      voted_percent,
-      voted,
-    } = this.calculatePercentVote(nodeData.proposalVoteTally);
-
-    this.proposalDetail = {
-      ...this.proposalDetail,
-      pro_votes_yes,
-      pro_votes_no,
-      pro_votes_no_with_veto,
-      pro_votes_abstain,
-      pro_total_vote,
-      yesPercent,
-      noPercent,
-      noWithVetoPercent,
-      abstainPercent,
-      voted_percent,
-      voted,
-    };
+    // if (!nodeData?.proposalVoteTally?.tally) {
+    //   return;
+    // }
+    // const {
+    //   pro_votes_yes,
+    //   pro_votes_no,
+    //   pro_votes_no_with_veto,
+    //   pro_votes_abstain,
+    //   pro_total_vote,
+    //   yesPercent,
+    //   noPercent,
+    //   noWithVetoPercent,
+    //   abstainPercent,
+    //   voted_percent,
+    //   voted,
+    // } = this.calculatePercentVote(nodeData.proposalVoteTally);
+    // this.proposalDetail = {
+    //   ...this.proposalDetail,
+    //   pro_votes_yes,
+    //   pro_votes_no,
+    //   pro_votes_no_with_veto,
+    //   pro_votes_abstain,
+    //   pro_total_vote,
+    //   yesPercent,
+    //   noPercent,
+    //   noWithVetoPercent,
+    //   abstainPercent,
+    //   voted_percent,
+    //   voted,
+    // };
   }
 
   formatNumber(number: number, args?: any): any {

@@ -7,7 +7,7 @@ import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
-import { IListVoteQuery, IListVotesRes, IProposal, IVotingInfo } from '../models/proposal.model';
+import { IListVoteQuery, IListVotesRes, IVotingInfo } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -63,7 +63,7 @@ export class ProposalService extends CommonService {
   getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
-      pageLimit,
+      pageLimit: pageLimit,
       nextKey,
       reverse: false,
       proposalId: proposalId,
