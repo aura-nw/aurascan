@@ -151,9 +151,9 @@
                         <span class="text--primary">{{ denom }}</span>
                       </ng-container>
                       <ng-template #displayNonNumber>
-                        <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                        <span *ngIf="!data[template.matColumnDef]"> - </span>
                         <a
-                          *ngIf="data[template.matColumnDef] !== 0"
+                          *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data['tx_hash']]">
                           More

@@ -29,6 +29,32 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   let amount = 0;
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;
+
+  //check is ibc
+  if (type.indexOf('ibc') > -1) {
+    arrayMsg.forEach((element) => {
+      if (element['@type'] != eTransType.IBCUpdateClient) {
+        switch (element['@type']) {
+          case eTransType.IBCReceived:
+            let dataEncode = atob(element?.packet?.data);
+            try {
+              const data = JSON.parse(dataEncode);
+              amountFormat = balanceOf(data.amount);
+            } catch (e) {
+              amountFormat = null;
+            }
+            break;
+          case eTransType.IBCTransfer:
+            amountFormat = balanceOf(element.token.amount);
+            break;
+          default:
+            return amountFormat;
+        }
+      }
+    });
+    return amountFormat;
+  }
+
   let itemMessage = arrayMsg[0];
 
   try {
