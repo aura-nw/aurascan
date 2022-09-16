@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -21,6 +22,9 @@ export class TokenInventoryComponent implements OnInit {
   nftData: MatTableDataSource<any> = new MatTableDataSource();
   contractAddress = '';
   keyWord = '';
+  nextKey = null;
+
+  dataSourceMobile: any[];
 
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
@@ -45,10 +49,11 @@ export class TokenInventoryComponent implements OnInit {
   getNftData() {
     this.loading = true;
     let payload = {
-      limit: this.pageData.pageSize,
-      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      pageLimit: 100,
       token_id: '',
       owner: '',
+      contractAddress: this.contractAddress,
+      nextKey: this.nextKey,
     };
 
     if (this.keyWord) {
@@ -59,21 +64,63 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
-    this.tokenService.getListTokenNFT(this.contractAddress, payload).subscribe((res) => {
-      if (res && res.data?.length > 0) {
-        this.nftData.data = res.data;
-        this.pageData.length = res.meta?.count;
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
+      this.nextKey = res.data.nextKey;
+
+      const cw721Asset = _.get(res, 'data.assets.CW721');
+
+      if (this.nftData.data.length > 0) {
+        this.nftData.data = [...this.nftData.data, ...cw721Asset.asset];
+      } else {
+        this.nftData.data = [...cw721Asset.asset];
       }
+
+      this.dataSourceMobile = this.nftData.data.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+
+      this.pageData.length = cw721Asset.count;
+
       this.loading = false;
     });
   }
 
-  pageEvent(e: PageEvent): void {
+  xpageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getNftData();
   }
 
-  paginatorEmit(e): void {
+  pageEvent(e: PageEvent): void {
+    const { length, pageIndex, pageSize } = e;
+
+    const next = length <= (pageIndex + 2) * pageSize;
+
+    this.pageData = e;
+
+    this.dataSourceMobile = this.nftData.data.slice(
+      this.pageData.pageIndex * this.pageData.pageSize,
+      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+    );
+
+    if (next && this.nextKey) {
+      this.getNftData();
+    }
+  }
+
+  paginatorEmit(e: MatPaginator): void {
+    if (this.nftData.paginator) {
+      e.page.next({
+        length: this.nftData.paginator.length,
+        pageIndex: 0,
+        pageSize: this.nftData.paginator.pageSize,
+        previousPageIndex: this.nftData.paginator.pageIndex,
+      });
+      this.nftData.paginator = e;
+    } else this.nftData.paginator = e;
+  }
+
+  xpaginatorEmit(e): void {
     this.nftData.paginator = e;
   }
 

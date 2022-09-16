@@ -356,6 +356,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             color: WalletAcount.Commission,
             amount: '0.000000',
           });
+        } else {
+          this.chartCustomOptions = chartCustomOptions;
         }
 
         this.chartCustomOptions.forEach((f) => {
@@ -479,6 +481,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
+      size: 'sm',
       windowClass: 'modal-holder contact-qr-modal',
     });
   }

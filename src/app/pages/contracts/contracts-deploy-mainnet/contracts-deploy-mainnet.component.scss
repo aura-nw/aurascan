@@ -1,0 +1,48 @@
+section.contracts-deploy {
+  .form-group {
+    .input-group.form-check-input {
+      border-radius: 12px;
+      padding: 0;
+      padding-right: var(--spacer-6);
+      align-items: flex-start;
+      justify-content: start;
+      &.form-control--error {
+        border-color: var(--aura-red-3) !important;
+      }
+      input {
+        height: 38px;
+        padding-left: 14px;
+      }
+      .input-group-prepend {
+        height: 38px;
+        padding: 0 var(--spacer-4);
+        background-color: var(--aura-gray-8);
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+      }
+    }
+    textarea.form-control.form-check-input {
+      height: 124px;
+    }
+  }
+}
+::ng-deep.aura-optional-contract-deploy {
+  min-width: calc(100% + 36px) !important;
+  transform: translate3d(22px, 36px, 0) !important;
+  .mat-pseudo-checkbox {display: none;}
+  .mat-option-text {
+    color: var(--aura-gray-1);
+  }
+  .mat-option {
+    &.mat-active {
+      background: var(--aura-bg-form);
+    }
+    &[aria-selected="true"] {
+      background: var(--aura-gray-8);
+    }
+  }
+  .aura-optional__item:hover {
+    background: var(--aura-gray-8);
+  }
+  
+}
