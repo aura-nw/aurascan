@@ -323,6 +323,9 @@ export class TransactionMessagesComponent implements OnInit {
   filterIBCType(type) {
     let arr = [];
     arr = this.listIBCProgress.filter((f) => f.type === type);
+    arr.forEach((k) => {
+      k.denom = k.denom === this.denom ? 'AURA' : k?.denom;
+    });
     return arr;
   }
 

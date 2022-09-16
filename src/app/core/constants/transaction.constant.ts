@@ -9,6 +9,7 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.IBCChannelOpenInit, value: TypeTransaction.IBCChannelOpenInit },
   { label: TRANSACTION_TYPE_ENUM.IBCConnectionOpenInit, value: TypeTransaction.IBCConnectionOpenInit },
   { label: TRANSACTION_TYPE_ENUM.IBCCreateClient, value: TypeTransaction.IBCCreateClient },
+  { label: TRANSACTION_TYPE_ENUM.IBCChannelOpenAck, value: TypeTransaction.IBCChannelOpenAck },
   { label: TRANSACTION_TYPE_ENUM.Send, value: TypeTransaction.Send },
   { label: TRANSACTION_TYPE_ENUM.MultiSend, value: TypeTransaction.MultiSend },
   { label: TRANSACTION_TYPE_ENUM.Delegate, value: TypeTransaction.Delegate },
