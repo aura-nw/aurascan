@@ -1,11 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
+import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
-import session from '../utils/storage/session';
+import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
 
 @Injectable({
@@ -44,15 +45,19 @@ export class WalletService implements OnDestroy {
 
     this._wallet$ = new BehaviorSubject(null);
     this.wallet$ = this._wallet$.asObservable();
-    const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
+    const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+    const currentTimestamp = moment().subtract(1, 'd').toDate().getTime();
 
-    if (lastProvider) {
+    if (lastProvider && currentTimestamp < lastProvider?.timestamp) {
       const { provider, chainId } = lastProvider;
       this.connect(provider, chainId);
+    } else if (currentTimestamp > lastProvider?.timestamp) {
+      local.removeItem(LAST_USED_PROVIDER);
     }
 
     window.addEventListener('keplr_keystorechange', () => {
-      const lastProvider = session.getItem<WalletStorage>(LAST_USED_PROVIDER);
+      const lastProvider = local.getItem<WalletStorage>(LAST_USED_PROVIDER);
+
       if (lastProvider) {
         this.connect(lastProvider.provider, lastProvider.chainId);
       }
@@ -91,8 +96,7 @@ export class WalletService implements OnDestroy {
 
   disconnect(): void {
     this.setWallet(null);
-
-    session.removeItem(LAST_USED_PROVIDER);
+    local.removeItem(LAST_USED_PROVIDER);
   }
 
   private async connectKeplr(chainInfo: ChainInfo): Promise<void> {
@@ -103,14 +107,15 @@ export class WalletService implements OnDestroy {
         if (keplr) {
           await keplrSuggestChain(chainInfo);
           await keplr.enable(chainInfo.chainId);
-
           const account = await keplr.getKey(chainInfo.chainId);
 
           if (account) {
             this.setWallet(account);
-            session.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+            const timestamp = new Date().getTime();
+            local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
               provider: WALLET_PROVIDER.KEPLR,
               chainId: chainInfo.chainId,
+              timestamp,
             });
           }
         } else {
@@ -136,9 +141,11 @@ export class WalletService implements OnDestroy {
 
         if (account) {
           this.setWallet(account);
-          session.setItem<WalletStorage>(LAST_USED_PROVIDER, {
+          const timestamp = new Date().getTime();
+          local.setItem<WalletStorage>(LAST_USED_PROVIDER, {
             provider: WALLET_PROVIDER.KEPLR,
             chainId: chainInfo.chainId,
+            timestamp,
           });
         }
       } catch (e: any) {

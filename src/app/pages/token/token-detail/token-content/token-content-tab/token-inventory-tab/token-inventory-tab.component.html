@@ -1,6 +1,6 @@
-<span class="body-02 caption-mob fw-normal-mob text--gray-5"
-  >A total of {{ pageData?.length | number }} token{{ pageData?.length > 1 ? 's' : '' }} found</span
->
+<span class="body-02 caption-mob fw-normal-mob text--gray-5">
+  More than {{ pageData?.length | number }} token{{ pageData?.length > 1 ? 's' : '' }} found
+</span>
 
 <div *ngIf="loading" class="m-auto mt-10">
   <app-loading-sprint></app-loading-sprint>

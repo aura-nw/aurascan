@@ -155,7 +155,7 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
           <h3 class="h2-mob mb-0 text--gray-1">Proposed Blocks</h3>
-          <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div>
+          <!-- <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div> -->
         </div>
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
@@ -204,7 +204,7 @@
                 <ng-container *ngIf="breakpoint.value.matches">
                   <div *ngIf="dataSourceBlock" class="custom-card-mob-simple">
                     <app-card-mob-simple
-                      *ngFor="let data of dataSourceBlock.data"
+                      *ngFor="let data of dataSourceBlockMob"
                       [link]="'/blocks/' + data.height"
                       [content]="[
                         {

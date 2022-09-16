@@ -200,8 +200,24 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
     );
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
+    const gas_used = _.get(element, 'tx_response.gas_used');
+    const gas_wanted = _.get(element, 'tx_response.gas_wanted');
 
-    return { code, tx_hash, type, status, amount, fee, height, timestamp, messages };
+    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, messages };
   });
   return txs;
+}
+
+export function convertDataBlock(data) {
+  const block = _.get(data, 'blocks').map((element) => {
+    const height = _.get(element, 'block.header.height');
+    const block_hash = _.get(element, 'block_id.hash');
+    const num_txs = _.get(element, 'block.data.txs.length');
+    const proposer = _.get(element, 'validator_name');
+    const operator_address = _.get(element, 'operator_address');
+    const timestamp = _.get(element, 'block.header.time');
+
+    return { height, block_hash, num_txs, proposer, operator_address, timestamp };
+  });
+  return block;
 }
