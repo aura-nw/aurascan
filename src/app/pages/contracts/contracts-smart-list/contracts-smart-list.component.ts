@@ -28,9 +28,9 @@ export class ContractsSmartListComponent implements OnInit {
     { matColumnDef: 'contract_address', headerCellDef: 'Address' },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'height', headerCellDef: 'Type Contract' },
+    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
-    { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
+    { matColumnDef: 'verified_at', headerCellDef: 'Verified' },
     { matColumnDef: 'status', headerCellDef: 'Status' },
     { matColumnDef: 'mainnet_code_id', headerCellDef: 'Code ID On Mainnet' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Contract On Mainnet' },
@@ -162,6 +162,19 @@ export class ContractsSmartListComponent implements OnInit {
         key: 'ALL',
         label: 'All'
       })
+      // remove EXACT_MATCH
+      this.removeStatusItem('EXACT_MATCH');
+      // remove SIMILAR_MATCH
+      this.removeStatusItem('SIMILAR_MATCH');
+    }
+  }
+
+  removeStatusItem(status: string) {
+    const indexOfObject = this.contractMainnetStatus.findIndex((object) => {
+      return object.key === status;
+    });
+    if (indexOfObject !== -1) {
+      this.contractMainnetStatus.splice(indexOfObject, 1);
     }
   }
 }

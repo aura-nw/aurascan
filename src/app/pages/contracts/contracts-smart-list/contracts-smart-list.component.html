@@ -112,7 +112,8 @@
           </button>
           <ul class="dropdown-menu aura-dropdown-menu">
             <ng-container *ngFor="let item of contractMainnetStatus">
-              <li class="py-1 px-2 dropdown-item cursor-pointer" (click)="resetPageEvent(); getListContract(item)">
+              <li class="py-1 px-2 dropdown-item cursor-pointer"
+                  (click)="resetPageEvent(); getListContract(item)">
                 <button type="button" class="button p-0 body-02 text-start text-capitalize">{{ item.label | lowercase}}</button>
               </li>
             </ng-container>
@@ -206,29 +207,20 @@
                       </div>
                       <span *ngIf="!data[template.matColumnDef]">-</span>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'contract_mainnet'">
-                      <a
-                        [routerLink]="['/contracts/', data[template.matColumnDef]]"
-                        class="text-clamp"
-                        *ngIf="data[template.matColumnDef]"
-                        >{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</a
-                      >
-                      <span *ngIf="!data[template.matColumnDef]">-</span>
-                    </ng-container>
                     <ng-container *ngSwitchCase="'contract_name'"
                       >{{ data[template.matColumnDef] }}
                       <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'type'">{{ data[template.matColumnDef] }}</ng-container>
                     <!-- Type contract -->
                     <ng-container *ngSwitchCase="'height'"> - </ng-container>
-                    <ng-container *ngSwitchCase="'contract_verification'">
-<!--                      <div *ngIf="data[template.matColumnDef]">-->
-<!--                        <div class="body-02 d-flex align-items-center">-->
-<!--                          <span>{{ data[template.matColumnDef] | customDate: 'MM/dd/yyyy' }}</span>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div *ngIf="!data[template.matColumnDef]">-</div>-->
-                      <div>-</div>
+                    <ng-container *ngSwitchCase="'verified_at'">
+                      <div *ngIf="data[template.matColumnDef]">
+                        <div class="body-02 d-flex align-items-center">
+                          <span>{{ data[template.matColumnDef] | customDate: 'MM/dd/yyyy' }}</span>
+                        </div>
+                      </div>
+                      <div *ngIf="!data[template.matColumnDef]">-</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
                       <div class='text-capitalize'
