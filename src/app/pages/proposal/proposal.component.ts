@@ -84,7 +84,7 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => wallet && this.getListProposal());
+    this.walletService.wallet$.subscribe((wallet) => this.getListProposal());
   }
 
   getListProposal(nextKey = null) {
