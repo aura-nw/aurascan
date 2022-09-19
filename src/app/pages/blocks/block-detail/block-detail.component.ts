@@ -158,20 +158,26 @@ export class BlockDetailComponent implements OnInit {
         for (const key in data.blocks[0]?.block?.data?.txs) {
           const element = data.blocks[0].block?.data?.txs[key];
           const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
-          this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => txs.push(res.data.transactions[0]));
+          this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => {
+            if (res.data.transactions[0]) {
+              txs.push(res.data.transactions[0]);
+            }
+          });
         }
 
         await Promise.all(txs);
         setTimeout(() => {
-          let dataTempTx = {};
-          dataTempTx['transactions'] = txs;
-          if (txs.length > 0) {
-            txs = convertDataTransaction(dataTempTx, this.coinDecimals, this.coinMinimalDenom);
-            txs.forEach((k) => {
-              this.item['gas_used'] += +k.gas_used;
-              this.item['gas_wanted'] += +k.gas_wanted;
-            });
-            this.dataSource.data = txs;
+          if (txs?.length > 0) {
+            let dataTempTx = {};
+            dataTempTx['transactions'] = txs;
+            if (txs.length > 0) {
+              txs = convertDataTransaction(dataTempTx, this.coinDecimals, this.coinMinimalDenom);
+              txs.forEach((k) => {
+                this.item['gas_used'] += +k.gas_used;
+                this.item['gas_wanted'] += +k.gas_wanted;
+              });
+              this.dataSource.data = txs;
+            }
           }
           this.loading = false;
         }, 1000);
