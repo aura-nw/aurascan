@@ -42,8 +42,31 @@ export class ProposalService extends CommonService {
     return this.http.post<IResponsesTemplates<IListVotesRes>>(`${this.apiUrl}/proposals/votes/get-by-option`, payload);
   }
 
-  getProposalTally(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/tally`);
+  getListVoteFromIndexer(payload, option): Observable<any> {
+    let queryVote = 'proposal_vote.proposal_id=' + payload.proposalId + ';';
+    if (option !== null) {
+      queryVote =
+        'proposal_vote.proposal_id=' +
+        payload.proposalId +
+        ';proposal_vote.option={"option":' +
+        option +
+        ',"weight":"1.000000000000000000"}';
+    }
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      nextKey: payload.nextKey,
+      reverse: false,
+      query: queryVote,
+      pageLimit: payload.pageLimit,
+      countTotal: true
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+      params,
+    });
   }
 
   getStakeInfo(delegatorAddress: string): Observable<IResponsesTemplates<IVotingInfo>> {
@@ -54,11 +77,6 @@ export class ProposalService extends CommonService {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
   }
-
-  // getProposalList(address: string): Observable<IResponsesTemplates<IProposal[]>> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/proposals/list/get-by-address/${address}`);
-  // }
 
   getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
     const params = _({

@@ -63,45 +63,45 @@ export class ValidatorsVotesComponent implements OnInit {
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {}
 
   ngOnInit(): void {
-    if (this.proposalId) {
-      const payloads: IListVoteQuery[] = this.TABS.map((vote) => ({
-        limit: this.LIMIT_DEFAULT,
-        offset: 0,
-        option: vote.key,
-        proposalId: this.proposalId,
-      }));
+    // if (this.proposalId) {
+    //   const payloads: IListVoteQuery[] = this.TABS.map((vote) => ({
+    //     limit: this.LIMIT_DEFAULT,
+    //     offset: 0,
+    //     option: vote.key,
+    //     proposalId: this.proposalId,
+    //   }));
 
-      this.query = payloads;
+    //   this.query = payloads;
 
-      merge(
-        this.proposalService.getValidatorVotes(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[5]).pipe(map((item) => ({ didNotVote: item.data.result }))),
-      ).subscribe((res) => {
-        this.voteDataListLoading = true;
-        res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
-        res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
-        res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
-        res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
-        res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
-        res['didNotVote'] && ((dta) => (this.voteData.didNotVote = dta))(res['didNotVote']);
+    //   merge(
+    //     this.proposalService.getValidatorVotes(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
+    //     this.proposalService.getValidatorVotes(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
+    //     this.proposalService.getValidatorVotes(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
+    //     this.proposalService.getValidatorVotes(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
+    //     this.proposalService.getValidatorVotes(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
+    //     this.proposalService.getValidatorVotes(payloads[5]).pipe(map((item) => ({ didNotVote: item.data.result }))),
+    //   ).subscribe((res) => {
+    //     this.voteDataListLoading = true;
+    //     res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
+    //     res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
+    //     res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
+    //     res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
+    //     res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
+    //     res['didNotVote'] && ((dta) => (this.voteData.didNotVote = dta))(res['didNotVote']);
 
-        if (res['all']) {
-          this.voteDataList = [...this.voteData.all.proposalVotes];
+    //     if (res['all']) {
+    //       this.voteDataList = [...this.voteData.all.proposalVotes];
 
-          this.countVote.set('', this.voteData.all.countTotal);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.all.countNoWithVeto);
-          this.countVote.set('null', this.voteData.all.countDidNotVote);
-        }
-        this.voteDataListLoading = false;
-      });
-    }
+    //       this.countVote.set('', this.voteData.all.countTotal);
+    //       this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
+    //       this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
+    //       this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
+    //       this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.all.countNoWithVeto);
+    //       this.countVote.set('null', this.voteData.all.countDidNotVote);
+    //     }
+    //     this.voteDataListLoading = false;
+    //   });
+    // }
   }
 
   changeTab(tabId): void {

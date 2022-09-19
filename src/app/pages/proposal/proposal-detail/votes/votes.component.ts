@@ -57,20 +57,17 @@ export class VotesComponent implements OnInit {
   ngOnInit(): void {
     if (this.proposalId) {
       const payloads: IListVoteQuery[] = this.TABS.map((vote) => ({
-        limit: this.LIMIT_DEFAULT,
-        offset: 0,
-        option: vote.key,
+        pageLimit: 5,
         proposalId: this.proposalId,
       }));
-
       this.query = payloads;
 
       merge(
-        this.proposalService.getListVote(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
-        this.proposalService.getListVote(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService.getListVote(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
-        this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
+        this.proposalService.getListVoteFromIndexer(payloads[0], null).pipe(map((item) => ({ all: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[1], 1).pipe(map((item) => ({ yes: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[2], 2).pipe(map((item) => ({ no: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[3], 3).pipe(map((item) => ({ noWithVeto: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[4], 4).pipe(map((item) => ({ abstain: item.data }))),
       ).subscribe((res) => {
         this.voteDataListLoading = true;
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
@@ -78,10 +75,10 @@ export class VotesComponent implements OnInit {
         res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
         res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
         res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
-
+        
         if (res['all']) {
-          this.voteDataList = [...this.voteData.all.proposalVotes];
-          this.countVote.set('', this.voteData.all.countTotal);
+          this.voteDataList = [...this.voteData.all?.transactions];
+          this.countVote.set('', this.voteData.all?.count);
           this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
           this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
           this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
@@ -96,19 +93,19 @@ export class VotesComponent implements OnInit {
     this.countCurrent = tabId;
     switch (tabId) {
       case '':
-        this.voteDataList = this.voteData.all.proposalVotes;
+        this.voteDataList = this.voteData.all.data.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_YES:
-        this.voteDataList = this.voteData.yes.proposalVotes;
+        this.voteDataList = this.voteData.yes.data.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
-        this.voteDataList = this.voteData.abstain.proposalVotes;
+        this.voteDataList = this.voteData.abstain.data.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO:
-        this.voteDataList = this.voteData.no.proposalVotes;
+        this.voteDataList = this.voteData.no.data.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
-        this.voteDataList = this.voteData.noWithVeto.proposalVotes;
+        this.voteDataList = this.voteData.noWithVeto.data.transactions;
         break;
     }
   }

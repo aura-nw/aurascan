@@ -2,9 +2,7 @@ import { MESSAGE_WARNING } from '../constants/proposal.constant';
 
 export interface IListVoteQuery {
   proposalId: number;
-  option: string;
-  limit: number;
-  offset: number;
+  pageLimit: number;
 }
 
 export interface IListVotesRes {
