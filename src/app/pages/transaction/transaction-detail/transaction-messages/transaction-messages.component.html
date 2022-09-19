@@ -103,8 +103,8 @@
     ">
     <ng-container
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
-      <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
-        <div [ngClass]="{'card-info': breakpoint.value.matches}">
+      <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
+        <div>
           <div class="row mb-3 body-02 body-01-mob">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Delegator Address</div>
             <div class="col-12 col-lg-9">
@@ -135,6 +135,7 @@
             </div>
           </div>
         </div>
+        <div class='divider divider-horizontal my-3 d-none d-lg-block' *ngIf='!isLast'></div>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
@@ -178,6 +179,7 @@
     </ng-container>
     <ng-container *ngIf="commissionAutoClaim > 0">
       <div [ngClass]="{'card-info': breakpoint.value.matches}">
+<!--        <div class="label__status body body-02-mob">Get Commission</div>-->
         <div class="row mb-3 mt-5 d-none d-lg-flex">
           <div class="col-12">
             <div class="card-text header-title">
