@@ -5,10 +5,13 @@ import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { DATEFORMAT } from '../../../../core/constants/common.constant';
 import { PROPOSAL_VOTE } from '../../../../core/constants/proposal.constant';
 import { TYPE_TRANSACTION } from '../../../../core/constants/transaction.constant';
-import { TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
+import { pipeTypeData, TRANSACTION_TYPE_ENUM, TypeTransaction } from '../../../../core/constants/transaction.enum';
 import { ValidatorService } from '../../../../core/services/validator.service';
 import { getAmount, Globals } from '../../../../global/global';
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonService } from 'src/app/core/services/common.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -34,12 +37,23 @@ export class TransactionMessagesComponent implements OnInit {
   listValidator: any[];
   listAmountClaim = [];
   objMsgContract: any;
+  ibcData: any;
   typeGetData = {
     Transfer: 'transfer',
     WithdrawRewards: 'withdraw_rewards',
     WithdrawCommission: 'withdraw_commission',
     StoreCode: 'store_code',
+    SendPacket: 'send_packet',
   };
+  pipeTypeData = pipeTypeData;
+  ibcOrigin: any;
+
+  ibcListMapping = {
+    Receive: 'recv_packet',
+    Transfer: 'send_packet',
+  };
+
+  listIBCProgress = [];
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -49,7 +63,9 @@ export class TransactionMessagesComponent implements OnInit {
     private datePipe: DatePipe,
     private validatorService: ValidatorService,
     private environmentService: EnvironmentService,
-    private layout: BreakpointObserver
+    private layout: BreakpointObserver,
+    public commonService: CommonService,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +89,16 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
     ) {
       this.displayMsgRaw();
+    } else if (
+      //get data if type = IBC
+      this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
+    ) {
+      this.getDataIBC();
+      setTimeout(() => {
+        this.getListIBCSequence(this.ibcData?.packet_sequence);
+      }, 2000);
     }
+
     //get amount of transaction
     this.amount = getAmount(
       this.transactionDetail?.messages,
@@ -197,6 +222,88 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (e) {}
   }
 
+  getDataIBC(type = ''): void {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      if (type && jsonData.length > 0) {
+        jsonData.forEach((k) => {
+          this.ibcOrigin = k.events.find((f) => f.type === type)?.attributes;
+          if (k.events.type === type) {
+            this.ibcData = k.events.type;
+          }
+        });
+        if (this.ibcOrigin) {
+          this.ibcData = {
+            ...this.ibcOrigin,
+            packet_sequence: this.ibcOrigin.find((f) => f.key === 'packet_sequence').value,
+            packet_src_port: this.ibcOrigin.find((f) => f.key === 'packet_src_port').value,
+            packet_dst_port: this.ibcOrigin.find((f) => f.key === 'packet_dst_port').value,
+            packet_src_channel: this.ibcOrigin.find((f) => f.key === 'packet_src_channel').value,
+            packet_dst_channel: this.ibcOrigin.find((f) => f.key === 'packet_dst_channel').value,
+            effected: this.transactionDetail?.raw_log.toLowerCase().indexOf('success') > -1 ? '1' : '0',
+          };
+
+          if (type === this.ibcListMapping.Receive) {
+            let dataReceive = this.ibcOrigin?.find((f) => f.key === 'packet_data')?.value;
+            try {
+              dataReceive = JSON.parse(dataReceive);
+            } catch (e) {
+              dataReceive = dataReceive;
+            }
+            this.ibcData = {
+              ...this.ibcData,
+              amount: dataReceive?.amount,
+              receiver: dataReceive?.receiver,
+              sender: dataReceive?.sender,
+              denom: dataReceive?.denom,
+            };
+          }
+
+          this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
+            (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCTimeout,
+          );
+          this.ibcData['update_client'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
+            (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCUpdateClient,
+          );
+          if (this.ibcData['time_out']) {
+            this.ibcData['time_out']['data'] = {
+              amount: this.ibcData.find((f) => f.key === 'receiver').value,
+              denom: this.ibcData.find((f) => f.key === 'refund_denom').value,
+              receiver: this.ibcData.find((f) => f.key === 'refund_denom').value,
+              sender: this.ibcData.find((f) => f.key === 'sender').value,
+            };
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  getListIBCSequence(sequence): void {
+    this.transactionService.getListIBCSequence(sequence).subscribe((res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        this.listIBCProgress = [];
+        const txs = _.get(data, 'transactions').map((element) => {
+          const tx_hash = _.get(element, 'tx_response.txhash');
+          const time = _.get(element, 'tx_response.timestamp');
+          const type = _.get(element, 'tx.body.messages[0].@type');
+          const denom =
+            _.get(element, 'tx.body.messages[0].token.denom') ||
+            this.ibcOrigin?.find((f) => f.key === 'packet_data')?.value;
+
+          let effected = 0;
+          try {
+            const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+            effected = jsonData.toLowerCase().indexOf('success') > -1 ? 1 : 0;
+          } catch (e) {}
+
+          return { tx_hash, type, denom, time, effected };
+        });
+        this.listIBCProgress = txs;
+      }
+    });
+  }
+
   parsingOptionVote(option) {
     const statusObj = this.voteConstant.find((s) => s.key === option);
     if (statusObj !== undefined) {
@@ -211,5 +318,19 @@ export class TransactionMessagesComponent implements OnInit {
       if (element.hasOwnProperty('delegator_address')) count++;
     });
     return count;
+  }
+
+  filterIBCType(type) {
+    let arr = [];
+    arr = this.listIBCProgress.filter((f) => f.type === type);
+    arr.forEach((k) => {
+      k.denom = k.denom === this.denom ? 'AURA' : k?.denom;
+    });
+    return arr;
+  }
+
+  displayTitle(type) {
+    const typeTrans = this.typeTransaction?.find((f) => f.label.toLowerCase() === type.toLowerCase());
+    return typeTrans?.value;
   }
 }
