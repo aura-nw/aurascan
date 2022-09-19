@@ -5,6 +5,13 @@ export interface IListVoteQuery {
   pageLimit: number;
 }
 
+export interface IListVoteValidatorQuery {
+  proposalId: number;
+  option: string;
+  limit: number;
+  offset: number;
+}
+
 export interface IListVotesRes {
   result: {
     countAbstain: number;

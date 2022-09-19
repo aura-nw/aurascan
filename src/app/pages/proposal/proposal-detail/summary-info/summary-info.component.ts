@@ -88,8 +88,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             return;
           }
           const { quorum, threshold, veto_threshold } = result.params?.tallying_param;
-          const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } =
-            this.proposalDetail;
+          const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
 
           this.proposalDetail['quorum'] = quorum * 100;
           this.proposalDetail['threshold'] = threshold * 100;
