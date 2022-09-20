@@ -1,4 +1,4 @@
-<div class="d-lg-flex align-items-center justify-content-between" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="d-lg-flex align-items-center justify-content-between">
   <div>
     <h1 class="mb-0 text--white">Contracts</h1>
     <div class="text--gray-5 body-02 d-none d-lg-block">A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' :'' }} found</div>
@@ -8,10 +8,10 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract Name"
+        placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
-        (keyup)="searchToken()"
+        (ngModelChange)="searchToken()"
         (keyup.enter)="handleLink()"
         name="search"
         autocomplete="off" />
@@ -40,7 +40,7 @@
               <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
               <div class="ml-3">
                 <div class="d-flex align-items-center">
-                  <span class="text-clamp">{{ item.contract_name }}</span>
+                  <span class="text-clamp">{{ item.contract_name || '-' }}</span>
                 </div>
               </div>
             </div>
@@ -67,10 +67,10 @@
               <input
                       type="text"
                       class="form-control pl-0"
-                      placeholder="Search for Contract Name"
+                      placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
                       [(ngModel)]="textSearch"
                       [maxLength]="maxLengthSearch"
-                      (keyup)="searchToken()"
+                      (ngModelChange)="searchToken()"
                       (keyup.enter)="handleLink()"
                       name="search"
                       autocomplete="off" />
@@ -93,7 +93,7 @@
                       <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
-                          <span class="text-clamp">{{ item.contract_name }}</span>
+                          <span class="text-clamp">{{ item.contract_name || '-' }}</span>
                         </div>
                       </div>
                     </div>

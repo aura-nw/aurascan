@@ -30,6 +30,8 @@ import { ContractsOverviewCardComponent } from './contracts-detail/contracts-ove
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
+import { ContractsDeployMainnetComponent } from './contracts-deploy-mainnet/contracts-deploy-mainnet.component';
+import { ContractsSmartListComponent } from './contracts-smart-list/contracts-smart-list.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ContractsVerifyComponent,
     CompilerOutputComponent,
     ContractsRegisterComponent,
+    ContractsDeployMainnetComponent,
+    ContractsSmartListComponent,
   ],
   imports: [
     CommonModule,

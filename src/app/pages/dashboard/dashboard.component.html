@@ -241,9 +241,9 @@
                   </tr>
                 </table>
               </div>
-              <div class="d-lg-none" *ngIf="dataBlock && dataBlock.length > 0">
+              <div class="d-lg-none" *ngIf="dataSourceBlock?.data?.length > 0">
                 <app-card-mob-simple
-                  *ngFor="let data of dataBlock"
+                  *ngFor="let data of dataSourceBlock.data"
                   [link]="'/blocks/' + data.height"
                   [content]="[
                     { label: 'Height', class: 'text--primary', info: data.height },

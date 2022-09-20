@@ -356,6 +356,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             color: WalletAcount.Commission,
             amount: '0.000000',
           });
+        } else {
+          this.chartCustomOptions = chartCustomOptions;
         }
 
         this.chartCustomOptions.forEach((f) => {
