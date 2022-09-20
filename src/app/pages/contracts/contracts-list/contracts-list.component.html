@@ -93,7 +93,7 @@
                       <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
-                          <span class="text-clamp">{{ item.contract_name }}</span>
+                          <span class="text-clamp">{{ item.contract_name || '-' }}</span>
                         </div>
                       </div>
                     </div>
