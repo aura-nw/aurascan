@@ -114,7 +114,6 @@ export class ContractsDeployMainnetComponent implements OnInit {
       this.contractService.createContractRequest(dataDeploy).subscribe(res => {
         if (res) {
           if (res.code === 200) {
-            // console.log(res);
             this.toastr.success(this.translate.instant('NOTICE.SUBMIT_FORM_SUCCESS'));
             this.contractForm.reset();
             this.router.navigate(['/contracts/smart-contract-list']);
