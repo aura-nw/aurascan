@@ -72,7 +72,7 @@ export class TransactionService extends CommonService {
     const params = _({
       chainid: this.chainInfo.chainId,
       pageLimit: 10,
-      query: 'send_packet.packet_sequence=' + sequence,
+      sequenceIBC: sequence,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)

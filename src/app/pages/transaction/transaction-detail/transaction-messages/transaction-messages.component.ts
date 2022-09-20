@@ -286,9 +286,9 @@ export class TransactionMessagesComponent implements OnInit {
         const txs = _.get(data, 'transactions').map((element) => {
           const tx_hash = _.get(element, 'tx_response.txhash');
           const time = _.get(element, 'tx_response.timestamp');
-          const type = _.get(element, 'tx.body.messages[0].@type');
+          const type = _.get(element, 'tx_response.tx.body.messages[0].@type');
           const denom =
-            _.get(element, 'tx.body.messages[0].token.denom') ||
+            _.get(element, 'tx_response.tx.body.messages[0].token.denom') ||
             this.ibcOrigin?.find((f) => f.key === 'packet_data')?.value;
 
           let effected = 0;

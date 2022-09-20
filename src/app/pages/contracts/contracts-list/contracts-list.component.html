@@ -11,7 +11,7 @@
         placeholder="Search for Contract Name"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
-        (keyup)="searchToken()"
+        (ngModelChange)="searchToken()"
         (keyup.enter)="handleLink()"
         name="search"
         autocomplete="off" />
