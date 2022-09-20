@@ -7,6 +7,7 @@ export interface CardMobSimpleValidatorAddress {
   validatorName: string;
   validatorAddress: string;
   validatorNumber: string;
+  validatorIdentity: string;
 }
 
 export interface CardMobSimpleTitle {
@@ -40,7 +41,9 @@ export class CardMobSimpleComponent implements OnInit {
 
   constructor(private validatorService: ValidatorService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.validatorData);
+  }
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);

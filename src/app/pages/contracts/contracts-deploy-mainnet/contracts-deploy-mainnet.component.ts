@@ -118,7 +118,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
             this.contractForm.reset();
             this.router.navigate(['/contracts/smart-contract-list']);
           } else {
-            this.toastr.error('FAIL!');
+            this.toastr.error(res.message);
           }
         }
       });

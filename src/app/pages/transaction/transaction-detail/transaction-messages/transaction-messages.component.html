@@ -1,14 +1,17 @@
 <h2 class="card-header mb-0 pb-0 text--white d-none d-lg-block">Message</h2>
-<div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+<div class="card-body body pt-lg-0" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-flex justify-content-between align-items-center d-lg-none">
     <h2 class="mb-0 text--white">Messages</h2>
     <div class="label__status body body-02-mob">{{ transactionDetailType }}</div>
   </div>
-  <div class="divider divider-horizontal my-4 d-lg-none"></div>
-  <ng-container [ngTemplateOutlet]="titleHeader" *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') <= -1">
+
+
+  <ng-container [ngTemplateOutlet]="titleHeader"
+                *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') <= -1">
   </ng-container>
 
   <ng-template #titleHeader let-title="title">
+    <div class="divider divider-horizontal my-6"></div>
     <div class="row mb-3 d-none d-lg-flex box-header">
       <div class="col-12 col-lg-3">
         <div class="card-text header-title">
@@ -87,7 +90,7 @@
     ">
     <ng-container
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
-      <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
+      <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
         <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
           <app-messages-item
             [label]="'Delegator Address'"
@@ -115,6 +118,7 @@
             </div>
           </div>
         </div>
+        <div class='divider divider-horizontal my-3 d-none d-lg-block' *ngIf='!isLast'></div>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
@@ -453,21 +457,61 @@
       </ng-container>
       <ng-container [ngSwitch]="item['@type']">
         <div *ngSwitchCase="eTransType.IBCTransfer">
+          <div class="row mb-3 d-lg-none box-header">
+            <div class="col-12 col-lg-3">
+              <div class="card-text header-title">
+                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+                IBC Transfer
+              </div>
+            </div>
+          </div>
           <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
         <div *ngSwitchCase="eTransType.IBCReceived">
+          <div class="row mb-3 d-lg-none box-header">
+            <div class="col-12 col-lg-3">
+              <div class="card-text header-title">
+                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+                IBC Received
+              </div>
+            </div>
+          </div>
           <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
         <div *ngSwitchCase="eTransType.IBCAcknowledgement">
           <!-- <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container> -->
         </div>
         <div *ngSwitchCase="eTransType.IBCUpdateClient">
+          <div class="row mb-3 d-lg-none box-header">
+            <div class="col-12 col-lg-3">
+              <div class="card-text header-title">
+                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+                IBC Update Client
+              </div>
+            </div>
+          </div>
           <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
         <div *ngSwitchCase="eTransType.IBCTimeout">
+          <div class="row mb-3 d-lg-none box-header">
+            <div class="col-12 col-lg-3">
+              <div class="card-text header-title">
+                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+                IBC Timeout
+              </div>
+            </div>
+          </div>
           <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
         <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
+          <div class="row mb-3 d-lg-none box-header">
+            <div class="col-12 col-lg-3">
+              <div class="card-text header-title">
+                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+                IBC Channel Open Init
+              </div>
+            </div>
+          </div>
           <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
       </ng-container>

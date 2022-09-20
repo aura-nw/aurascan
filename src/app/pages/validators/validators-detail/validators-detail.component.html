@@ -5,7 +5,9 @@
       <div class="d-flex align-items-center">
         <div class="avatar-wrapper flex-shrink-0 mr-2" *ngIf="!breakpoint.value.matches">
           <div class="validator-avatar medium">
-            <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+            <app-loading-image
+              [identity]='currentValidatorDetail.identity'
+              [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
             </app-loading-image>
           </div>
           <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
@@ -19,7 +21,9 @@
             <div class="d-flex align-items-center">
               <div class="avatar-wrapper flex-shrink-0 mr-3" *ngIf="breakpoint.value.matches">
                 <div class="validator-avatar small">
-                  <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+                  <app-loading-image
+                    [identity]='currentValidatorDetail.identity'
+                    [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
                   </app-loading-image>
                 </div>
                 <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
