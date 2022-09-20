@@ -1,6 +1,6 @@
 <app-pagetitle title="Blocks" [displayInfo]="true"></app-pagetitle>
 <section *ngIf="!loading">
-  <ng-container *ngIf="length > 0; else noValues">
+  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
     <div class="card">
       <div class="card-body">
         <div class="table-responsive d-none d-lg-block">
@@ -51,9 +51,9 @@
             </tr>
           </table>
         </div>
-        <div class="d-lg-none" *ngIf="dataBlock && dataBlock.length > 0">
+        <div class="d-lg-none" *ngIf="dataSource && dataSource?.data?.length > 0">
           <app-card-mob-simple
-            *ngFor="let data of dataBlock"
+            *ngFor="let data of dataSource?.data"
             [link]="'/blocks/' + data.height"
             [title]="{
               size: 'md',

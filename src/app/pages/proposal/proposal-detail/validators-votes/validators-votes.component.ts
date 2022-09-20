@@ -100,6 +100,7 @@ export class ValidatorsVotesComponent implements OnInit {
           this.countVote.set('null', this.voteData.all.countDidNotVote);
         }
         this.voteDataListLoading = false;
+        console.log(this.voteDataList);
       });
     }
   }

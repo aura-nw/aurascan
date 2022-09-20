@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DATEFORMAT } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import axios from 'axios';
 @Injectable()
 export class CommonService {
   apiUrl = '';
@@ -69,5 +70,9 @@ export class CommonService {
     } else {
       return ['-', ''];
     }
+  }
+
+  getValidatorImg(identity: string) {
+    return axios.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
   }
 }

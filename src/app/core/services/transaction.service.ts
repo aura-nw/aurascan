@@ -67,4 +67,19 @@ export class TransactionService extends CommonService {
       params,
     });
   }
+
+  getListIBCSequence(sequence = ''): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit: 10,
+      query: 'send_packet.packet_sequence=' + sequence,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+      params,
+    });
+  }
 }
