@@ -481,10 +481,7 @@
       [label]="'Sender'"
       [value]="transactionDetail?.messages[0]?.sender"
       [dataLink]="{ url: '/account' }"></app-messages-item>
-    <app-messages-item
-      [label]="'Receiver'"
-      [value]="transactionDetail?.messages[0]?.receiver"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+    <app-messages-item [label]="'Receiver'" [value]="transactionDetail?.messages[0]?.receiver"></app-messages-item>
     <app-messages-item
       [label]="'Source Channel'"
       [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
@@ -539,10 +536,7 @@
       [label]="'Receiver'"
       [value]="ibcData?.receiver"
       [dataLink]="{ url: '/account' }"></app-messages-item>
-    <app-messages-item
-      [label]="'Sender'"
-      [value]="ibcData?.sender"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+    <app-messages-item [label]="'Sender'" [value]="ibcData?.sender"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
@@ -628,7 +622,7 @@
   </ng-template>
 
   <ng-template #ibcUpdateClient let-data="data">
-    <app-messages-item [label]="'Receiver'" [value]="data?.signer" [dataLink]="{ url: '/account' }"></app-messages-item>
+    <app-messages-item [label]="'Signer'" [value]="data?.signer" [dataLink]="{ url: '/account' }"></app-messages-item>
     <app-messages-item [label]="'Client ID'" [value]="data?.client_id"></app-messages-item>
     <app-messages-item
       [label]="'block'"
