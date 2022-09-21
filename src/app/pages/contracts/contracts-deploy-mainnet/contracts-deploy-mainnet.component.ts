@@ -15,6 +15,7 @@ import { DeployContractListReq } from 'src/app/core/models/contract.model';
   styleUrls: ['./contracts-deploy-mainnet.component.scss']
 })
 export class ContractsDeployMainnetComponent implements OnInit {
+  submitting = false;
   userAddress;
   contractForm;
   emailPattern = /\S+@\S+\.\S+/;
@@ -87,6 +88,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
 
   onSubmit() {
     if (this.contractForm.valid) {
+      this.submitting = true;
       // Do action
       const dataDeploy: DeployContractListReq = {
         requester_address: this.userAddress,
@@ -118,11 +120,10 @@ export class ContractsDeployMainnetComponent implements OnInit {
             this.toastr.success(this.translate.instant('NOTICE.SUBMIT_FORM_SUCCESS'));
             this.contractForm.reset();
             this.router.navigate(['/contracts/smart-contract-list']);
-          } else {
-            this.toastr.error(res.message);
           }
         }
       });
+      this.submitting = false;
     }
   }
 }
