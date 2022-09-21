@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -41,6 +41,8 @@ export class ContractsListComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  urlParam = '';
+  showBoxSearch = false;
 
   constructor(
     public translate: TranslateService,
@@ -49,9 +51,16 @@ export class ContractsListComponent implements OnInit {
     private contractService: ContractService,
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+          this.urlParam = params.param;
+        }
+    );
+    this.textSearch = this.urlParam ? this.urlParam : '';
+    this.showBoxSearch = this.textSearch !== '';
     this.getListContract();
   }
 
@@ -77,6 +86,9 @@ export class ContractsListComponent implements OnInit {
             item.type = CONTRACT_RESULT.TBD;
           }
         });
+        if(this.textSearch) {
+          this.filterSearchData = res.data;
+        }
         this.dataSource = res.data;
         this.dataSearch = res.data;
       }
@@ -85,7 +97,8 @@ export class ContractsListComponent implements OnInit {
 
   searchToken(): void {
     this.filterSearchData = null;
-    if (this.textSearch.length > 0) {
+    this.showBoxSearch = this.textSearch !== '';
+    if (this.textSearch && this.textSearch.length > 0) {
       let payload = {
         limit: 0,
         offset: 0,
@@ -109,6 +122,10 @@ export class ContractsListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
+    if(!this.urlParam) {
+      this.textSearch = '';
+      this.showBoxSearch = false;
+    }
     this.getListContract();
   }
 
@@ -121,5 +138,16 @@ export class ContractsListComponent implements OnInit {
       return shortenAddress(address, 8);
     }
     return '';
+  }
+
+  resetFilterSearch() {
+    this.textSearch = '';
+    this.showBoxSearch = false;
+    if(this.urlParam) {
+      this.router.navigate(['/contracts']);
+      this.getListContract();
+    } else {
+      this.searchToken();
+    }
   }
 }
