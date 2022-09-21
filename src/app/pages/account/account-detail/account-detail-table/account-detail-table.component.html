@@ -32,7 +32,7 @@
                     </a>
                     <div *ngSwitchCase="'amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                      <span class="text--primary">{{ denom }}</span>
+                      <span class="text--primary">{{ data?.denom }}</span>
                     </div>
                     <div *ngSwitchCase="'token_amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}

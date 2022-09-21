@@ -36,8 +36,7 @@ export class TransactionDetailComponent implements OnInit {
 
   chainId = this.environmentService.configValue.chainId;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     private route: ActivatedRoute,
@@ -63,7 +62,7 @@ export class TransactionDetailComponent implements OnInit {
       (res) => {
         const { code, data } = res;
         if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txs = convertDataTransaction(data, this.coinInfo);
           this.transaction = txs[0];
           this.transaction = {
             ...this.transaction,

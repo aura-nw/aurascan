@@ -169,9 +169,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   TABS = TABS_TITLE_ACCOUNT;
   tabsData = TabsAccount;
@@ -312,7 +311,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.nextKey = data.nextKey || null;
 
         if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txs = convertDataTransaction(data, this.coinInfo);
           txs.forEach((element) => {
             if (element.type === 'Send' && element.messages[0]?.to_address === this.currentAddress) {
               element.type = 'Receive';
