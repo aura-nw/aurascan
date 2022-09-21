@@ -97,11 +97,9 @@ export class ContractsListComponent implements OnInit {
           res.data.forEach((item) => {
             item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
           });
-          this.dataSearch = res.data;
+          this.filterSearchData = res.data;
         }
       });
-      let keyWord = this.textSearch.toLowerCase();
-      this.filterSearchData = this.dataSearch?.filter((data) => data.contract_name.toLowerCase().includes(keyWord));
     }
   }
 
