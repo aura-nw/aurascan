@@ -44,7 +44,6 @@ export class ContractsSmartListComponent implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataBk: any[];
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -98,7 +97,7 @@ export class ContractsSmartListComponent implements OnInit {
     this.loading = true;
     const payload: SmartContractListReq = {
       creatorAddress: this.userAddress,
-      codeId: this.textSearch,
+      codeId: this.textSearch ? this.textSearch : '',
       status: (this.currentStatus && this.currentStatus.key !== 'ALL') && this.currentStatus.label ? this.currentStatus.label : '',
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
@@ -110,35 +109,37 @@ export class ContractsSmartListComponent implements OnInit {
         pageSize: this.pageData.pageSize,
         pageIndex: this.pageData.pageIndex,
       };
-      this.dataSource = new MatTableDataSource<any>(listSmartContract.data['data']);
-      this.dataBk = listSmartContract.data;
+      this.dataSource.data = listSmartContract.data['data'];
       this.loading = false;
     }
   }
 
   resetPageEvent() {
-    this.pageData = {
-      length: PAGE_EVENT.LENGTH,
-      pageSize: this.pageLimit,
+    this.dataSource.paginator.page.next({
+      length: this.dataSource.paginator.length,
       pageIndex: 0,
-    };
+      pageSize: this.dataSource.paginator.pageSize,
+      previousPageIndex: -1,
+    })
   }
 
   searchContract(): void {
     setTimeout(() => {
       this.getListContract();
+      this.resetPageEvent();
     }, 2000)
   }
 
   clearSearch(): void {
+    this.textSearch = '';
     this.filterSearchData = null;
-    this.dataSource = new MatTableDataSource<any>(this.dataBk);
-    this.pageData.length = this.dataBk['data'].length;
+    this.getListContract();
+    this.resetPageEvent();
   }
 
   replacePageList(item: any): void {
     this.textSearch = item.code_id;
-    this.dataSource = new MatTableDataSource<any>([item]);
+    this.dataSource.data = item;
     this.isHideSearch = true;
     this.pageData.length = 1;
   }
