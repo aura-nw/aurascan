@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
-import { CodeTransaction, ModeExecuteTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from '../core/constants/transaction.enum';
+import {
+  CodeTransaction,
+  ModeExecuteTransaction,
+  StatusTransaction,
+  TRANSACTION_TYPE_ENUM,
+} from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
 
@@ -16,14 +21,40 @@ export class Globals {
   maxNumberInput = 100000000000000;
   price = {
     aura: 0,
-    btc: 0
-  }
+    btc: 0,
+  };
 }
 
 export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   let amount = 0;
   let amountFormat;
   let eTransType = TRANSACTION_TYPE_ENUM;
+
+  //check is ibc
+  if (type.indexOf('ibc') > -1) {
+    arrayMsg.forEach((element) => {
+      if (element['@type'] != eTransType.IBCUpdateClient) {
+        switch (element['@type']) {
+          case eTransType.IBCReceived:
+            let dataEncode = atob(element?.packet?.data);
+            try {
+              const data = JSON.parse(dataEncode);
+              amountFormat = balanceOf(data.amount);
+            } catch (e) {
+              amountFormat = null;
+            }
+            break;
+          case eTransType.IBCTransfer:
+            amountFormat = balanceOf(element.token.amount);
+            break;
+          default:
+            return amountFormat;
+        }
+      }
+    });
+    return amountFormat;
+  }
+
   let itemMessage = arrayMsg[0];
 
   try {
@@ -101,7 +132,7 @@ export function getDataInfo(arrayMsg, addressContract) {
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
-        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender || 
+        itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
       tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       if (method === ModeExecuteTransaction.Burn) {
@@ -162,15 +193,31 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
       coinMinimalDenom,
     );
 
-    const amount = (_.isNumber(_amount) && _amount > 0) ? _amount.toFixed(coinDecimals) : _amount;
+    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinDecimals) : _amount;
 
     const fee = balanceOf(_.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
       coinDecimals,
     );
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
+    const gas_used = _.get(element, 'tx_response.gas_used');
+    const gas_wanted = _.get(element, 'tx_response.gas_wanted');
 
-    return { code, tx_hash, type, status, amount, fee, height, timestamp, messages };
+    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, messages };
   });
   return txs;
+}
+
+export function convertDataBlock(data) {
+  const block = _.get(data, 'blocks').map((element) => {
+    const height = _.get(element, 'block.header.height');
+    const block_hash = _.get(element, 'block_id.hash');
+    const num_txs = _.get(element, 'block.data.txs.length');
+    const proposer = _.get(element, 'validator_name');
+    const operator_address = _.get(element, 'operator_address');
+    const timestamp = _.get(element, 'block.header.time');
+
+    return { height, block_hash, num_txs, proposer, operator_address, timestamp };
+  });
+  return block;
 }

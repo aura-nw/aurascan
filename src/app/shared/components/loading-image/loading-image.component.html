@@ -15,22 +15,18 @@
     </div>
   </div>
 </div>
-<div class="d-flex justify-content-center align-items-center h-100">
+<div class="d-flex justify-content-center align-items-center h-100" *ngIf='!isLoading'>
   <img
     *ngIf="!isError"
     class="image"
-    [src]="srcImg"
-    alt="aura"
-    (load)="load()"
-    [ngClass]="appClass"
-    (error)="error()"
-    [ngStyle]="{ visibility: isLoading ? 'hidden' : '' }" />
+    [src]="identity ? imgByIdentity : srcImg"
+    alt="{{ identity ? imgByIdentity : srcImg }}"
+    [ngClass]="appClass"/>
 
   <img
     *ngIf="isError"
     class="image"
     [src]="df"
     alt="aura"
-    [ngClass]="appClass"
-    [ngStyle]="{ visibility: isLoading ? 'hidden' : '' }" />
+    [ngClass]="appClass" />
 </div>

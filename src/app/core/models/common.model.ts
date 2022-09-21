@@ -147,6 +147,7 @@ export interface DataDelegateDto {
   stakingCurrentValidate?: string;
   dialogMode?: string;
   validatorDetail?: any;
+  identity?: string;
 }
 
 

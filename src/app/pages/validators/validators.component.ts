@@ -395,6 +395,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               availableToken: dataWallet?.data?.available,
               stakingToken: dataWallet?.data?.stake_reward,
               historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
+              identity: listDelegator?.data?.identity
             };
           }
 
@@ -410,12 +411,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             }
             if (listDelegator?.data?.delegations.length > 0) {
               listDelegator?.data?.delegations.forEach((f) => {
+                f.identity = f.identity;
                 f.amount_staked = f.amount_staked / NUMBER_CONVERT;
                 f.pending_reward = f.pending_reward / NUMBER_CONVERT;
                 f.reward = f.reward / NUMBER_CONVERT;
               });
               //check amount staked > 0
               this.arrayDelegate = listDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
+              // console.log(this.arrayDelegate);
               dataInfoWallet['arrayDelegate'] = JSON.stringify(this.arrayDelegate);
             } else {
               this.arrayDelegate = null;
@@ -428,6 +431,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             const now = new Date();
             listUnDelegator.data.account_unbonding.forEach((data) => {
               data.entries.forEach((f) => {
+                f.identity = f.identity;
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
                 f.validator_name = this.lstValidatorOrigin.find(

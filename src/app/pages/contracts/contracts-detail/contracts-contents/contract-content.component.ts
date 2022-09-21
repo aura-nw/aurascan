@@ -128,7 +128,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
             this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
 
             //check data < 25 record
-            if (dataExecute.data.count < this.limit) {
+            if (dataExecute.data.count < this.limit && dataInstantiate?.data?.transactions?.length > 0) {
               txsInstantiate[0]['type'] = dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
               txsInstantiate[0]['contract_address'] = this.contractsAddress;
               this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsInstantiate];

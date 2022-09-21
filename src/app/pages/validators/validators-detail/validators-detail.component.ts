@@ -14,7 +14,7 @@ import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { getAmount, Globals } from 'src/app/global/global';
+import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 import * as _ from 'lodash';
 const marked = require('marked');
@@ -37,7 +37,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   pageIndexDelegator = 0;
   pageIndexPower = 0;
 
-  arrayUpTime = new Array(100);
   statusValidator = STATUS_VALIDATOR;
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
@@ -66,6 +65,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   ];
   displayedColumnsPower: string[] = this.templatesPower.map((dta) => dta.matColumnDef);
   dataSourcePowerMob: any[];
+  dataSourceBlockMob: any[];
 
   lengthBlockLoading = true;
   isLoadingPower = true;
@@ -76,7 +76,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   timerGetBlockMiss: any;
   consAddress: string;
   nextKey = null;
+  nextKeyBlock = null;
 
+  arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -139,24 +141,41 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  getListBlockWithOperator(): void {
-    this.blockService
-      .blockWithOperator(this.pageSize, this.pageIndexBlock * this.pageSize, this.currentAddress)
-      .subscribe((res) => {
-        this.lengthBlockLoading = true;
-        if (res?.data?.length > 0 && res?.meta) {
-          this.lengthBlock = res.meta?.count;
-          this.dataSourceBlock.data = res.data;
+  getListBlockWithOperator(nextKeyBlock = null): void {
+    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe((res) => {
+      const { code, data } = res;
+      this.nextKeyBlock = data.nextKey || null;
+      if (code === 200) {
+        const blocks = convertDataBlock(data);
+        if (this.dataSourceBlock.data.length > 0) {
+          this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
+        } else {
+          this.dataSourceBlock.data = [...blocks];
         }
-        this.lengthBlockLoading = false;
-      });
+
+        this.dataSourceBlockMob = this.dataSourceBlock?.data.slice(
+          this.pageIndexPower * this.pageSize,
+          this.pageIndexPower * this.pageSize + this.pageSize,
+        );
+
+        this.lengthBlock = this.dataSourceBlock.data.length;
+        this.isLoadingPower = false;
+      }
+      this.lengthBlockLoading = false;
+    });
   }
 
   getListUpTime(): void {
-    this.blockService.getLastBlock(this.currentAddress).subscribe((res) => {
-      this.lastBlockLoading = true;
-      if (res?.data?.length > 0) {
-        this.arrayUpTime = res.data;
+    this.blockService.blocksIndexer(this.numberLastBlock).subscribe((res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        const block = _.get(data, 'blocks').map((element) => {
+          const height = _.get(element, 'block.header.height');
+          const block_hash = _.get(element, 'block_id.hash');
+          const isMissed = 0
+          return { height, block_hash, isMissed };
+        });
+        this.arrayUpTime = block;
       }
       this.lastBlockLoading = false;
     });
@@ -236,7 +255,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           ) {
             isStakeMode = true;
           }
-          const amount = getAmount(_.get(element, 'tx_response.tx.body.messages'), _type, _.get(element, 'tx_response.tx.body.raw_log'));
+          const amount = getAmount(
+            _.get(element, 'tx_response.tx.body.messages'),
+            _type,
+            _.get(element, 'tx_response.tx.body.raw_log'),
+          );
           const height = _.get(element, 'tx_response.height');
           const timestamp = _.get(element, 'tx_response.timestamp');
 
@@ -278,8 +301,15 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   pageEvent(page: PageEvent, type: 'block' | 'delegator' | 'power'): void {
     switch (type) {
       case 'block':
-        this.pageIndexBlock = page.pageIndex;
-        this.getListBlockWithOperator();
+        this.dataSourceBlockMob = this.dataSourceBlock.data.slice(
+          page.pageIndex * page.pageSize,
+          page.pageIndex * page.pageSize + page.pageSize,
+        );
+        const nextBlock = page.length <= (page.pageIndex + 2) * page.pageSize;
+        if (nextBlock && this.nextKeyBlock) {
+          this.getListBlockWithOperator(this.nextKeyBlock);
+        }
+        this.pageIndexPower = page.pageIndex;
         break;
       case 'delegator':
         this.pageIndexDelegator = page.pageIndex;
