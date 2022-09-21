@@ -446,7 +446,7 @@
                                 <div class="col-12 d-flex justify-content-end align-item-center">
                                     <button type="reset" class="button button-pill button-outline button--md"><span>Reset</span></button>
                                     <button type="submit" class="button button-pill button-flat button--md ml-4"
-                                            [disabled]="!contractForm.valid || (contractForm.valid && contractForm.get('agree').value === false)"><span>Submit</span></button>
+                                            [disabled]="!contractForm.valid || (contractForm.valid && contractForm.get('agree').value === false) || submitting"><span>Submit</span></button>
                                 </div>
                             </div>
                         </form>
