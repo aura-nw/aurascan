@@ -31,15 +31,6 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
-  getTransactions(payload: {
-    contract_address: string;
-    label: string;
-    limit: number;
-    offset: number;
-  }): Observable<IResponsesSuccess<IContractsResponse[]>> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/search-transactions`, payload);
-  }
-
   getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = ''): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
@@ -70,10 +61,6 @@ export class ContractService extends CommonService {
   getMatchCreationCode(contractAddress: string): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/contracts/match-creation-code/${contractAddress}`);
-  }
-
-  readContract(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/read`, data);
   }
 
   checkVerified(contractAddress: string): Observable<IResponsesTemplates<any>> {

@@ -41,9 +41,7 @@ export class CardMobSimpleComponent implements OnInit {
 
   constructor(private validatorService: ValidatorService) {}
 
-  ngOnInit(): void {
-    console.log(this.validatorData);
-  }
+  ngOnInit(): void {}
 
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);

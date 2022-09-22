@@ -10,6 +10,7 @@ import axios from 'axios';
 @Injectable()
 export class CommonService {
   apiUrl = '';
+  coins = this._environmentService.configValue.coins;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
 
@@ -74,5 +75,11 @@ export class CommonService {
 
   getValidatorImg(identity: string) {
     return axios.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
+  }
+
+  mappingNameIBC(value) {
+    let temp = value.slice(value.indexOf('ibc'));
+    let result = this.coins.find((k) => k.denom === temp)?.display || '';
+    return result;
   }
 }

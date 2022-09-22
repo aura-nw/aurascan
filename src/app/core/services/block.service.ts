@@ -48,36 +48,11 @@ export class BlockService extends CommonService {
     });
   }
 
-  // blocksLastest(limit: string | number): Observable<any> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/blocks/get-blocks-latest?limit=${limit}`);
-  // }
-
-  blockDetailById(blockId: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/id/${blockId}`);
-  }
-
-  // blockDetail(height: string | number): Observable<any> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/blocks/${height}`);
-  // }
-
-  // blockWithOperator(limit: string | number, offset: string | number, operator_address: string): Observable<any> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/blocks/${operator_address}/validator?limit=${limit}&offset=${offset}`);
-  // }
-
   getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
     const date = new Date();
     return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
   }
-
-  // getLastBlock(validator_address): Observable<any> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/blocks/${validator_address}/latest`);
-  // }
 
   getBlockMiss(limit: number) {
     return axios.get(

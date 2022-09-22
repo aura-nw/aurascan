@@ -418,7 +418,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               });
               //check amount staked > 0
               this.arrayDelegate = listDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
-              // console.log(this.arrayDelegate);
               dataInfoWallet['arrayDelegate'] = JSON.stringify(this.arrayDelegate);
             } else {
               this.arrayDelegate = null;
