@@ -68,7 +68,7 @@
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                            [identity]='data.validator_identity'
+                            [identity]='data.validator_src_identity'
                             [appClass]="data?.jailed ? 'validator-jailed' : ''"
                             [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
                         </div>
@@ -87,7 +87,7 @@
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                            [identity]='data.validator_identity'
+                            [identity]='data.validator_dst_identity'
                             [appClass]="data?.jailed ? 'validator-jailed' : ''"
                             [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
                         </div>
