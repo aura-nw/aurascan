@@ -9,7 +9,7 @@
                 <div *ngIf="title.status && +title.status !== statusTransaction.Success " class="mr-2">
                     <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px">
                 </div>
-                <div *ngIf="title.subLabelContent" class="sub-label body text-end {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
+                <div *ngIf="title.subLabelContent" class="sub-label body {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
             </div>
         </div>
         <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
@@ -39,7 +39,7 @@
                 <div *ngIf="title.status && title.status !== statusTransaction.Success " class="mr-2">
                     <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px">
                 </div>
-                <div *ngIf="title.subLabelContent" class="sub-label body text-end {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
+                <div *ngIf="title.subLabelContent" class="sub-label body {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
             </div>
         </div>
         <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">

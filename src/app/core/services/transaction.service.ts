@@ -53,10 +53,9 @@ export class TransactionService extends CommonService {
     });
   }
 
-  getListIBCSequence(sequence, chainid2 = this.chainInfo.chainId): Observable<any> {
+  getListIBCSequence(sequence): Observable<any> {
     const params = _({
-      chainid1: this.chainInfo.chainId,
-      chainid2,
+      chainid: this.chainInfo.chainId,
       pageLimit: 20,
       sequenceIBC: sequence,
     })
@@ -64,7 +63,7 @@ export class TransactionService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction/ibc`, {
+    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
       params,
     });
   }

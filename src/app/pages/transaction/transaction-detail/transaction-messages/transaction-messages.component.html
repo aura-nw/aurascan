@@ -447,11 +447,7 @@
       <ng-container
         [ngTemplateOutlet]="titleHeader"
         [ngTemplateOutletContext]="{ title: displayTitle(item['@type']) }"
-        *ngIf="
-          transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1 &&
-          transactionDetail?.messages &&
-          item['@type'] !== eTransType.IBCAcknowledgement
-        ">
+        *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1 && transactionDetail?.messages">
       </ng-container>
       <ng-container [ngSwitch]="item['@type']">
         <div *ngSwitchCase="eTransType.IBCTransfer">
@@ -477,7 +473,7 @@
           <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
         <div *ngSwitchCase="eTransType.IBCAcknowledgement">
-          <!-- <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container> -->
+          <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
         </div>
         <div *ngSwitchCase="eTransType.IBCUpdateClient">
           <div class="row mb-3 d-lg-none box-header">
@@ -558,7 +554,7 @@
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | number: global.formatNumberToken }}
-        <span class="text--primary">{{ ibcData?.denom }}</span>
+        <span class="text--primary">{{ ibcData?.receive?.denom }}</span>
       </div>
     </div>
     <app-messages-item
@@ -583,6 +579,7 @@
   </ng-template>
 
   <ng-template #ibcAck let-data="data">
+    {{ getDataIBC(ibcListMapping.Ack) }}
     <app-messages-item
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
@@ -590,36 +587,28 @@
     <div class="row mb-3 body-02 body-01-mob">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | number: global.formatNumberToken }}
+        {{ ibcData?.acknowledgement?.amount | balanceOf | number: global.formatNumberToken }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [value]="ibcData?.acknowledgement?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item
-      [label]="'Origin Denom'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
-    <app-messages-item
-      [label]="'Receiver'"
-      [value]="transactionDetail?.messages[0]?.receiver"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.acknowledgement?.denom"></app-messages-item>
+    <app-messages-item [label]="'Receiver'" [value]="ibcData?.acknowledgement?.receiver"></app-messages-item>
     <app-messages-item
       [label]="'Sender'"
-      [value]="transactionDetail?.messages[0]?.sender"
+      [value]="ibcData?.acknowledgement?.sender"
       [dataLink]="{ url: '/account' }"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Port'"
-      [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Channel'"
-      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
+    <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.signer"></app-messages-item>
+      [value]="ibcData?.acknowledgement?.signer"
+      [dataLink]="{ url: '/account' }"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 

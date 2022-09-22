@@ -10,7 +10,7 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
-
+import { toBase64, toUtf8, fromBase64, fromUtf8 } from '@cosmjs/encoding';
 Injectable();
 
 export class Globals {
@@ -183,7 +183,7 @@ export function convertDataTransaction(data, coinInfo) {
     let denom = coinInfo.coinDenom;
     if (lstType?.length > 1) {
       lstType.forEach((type) => {
-        if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'] !== TRANSACTION_TYPE_ENUM.IBCAcknowledgement) {
+        if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
           _type = type['@type'];
           let dataEncode = atob(type?.packet?.data);
             try {
