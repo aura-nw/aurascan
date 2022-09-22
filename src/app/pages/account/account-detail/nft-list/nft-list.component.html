@@ -44,8 +44,8 @@
                 [routerLink]="['/tokens/token-nft/' + item.contract_address + '/' + item.token_id]"
                 class="nft-cards__item">
                 <div class="nft-cards__img">
-                  <img *ngIf="item.media_info.media_link" src="{{ item.media_info.media_link }}" alt="" />
-                  <img *ngIf="!item.media_info.media_link" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
+                  <img *ngIf="item.media_info[0]?.media_link" src="{{ item.media_info[0]?.media_link }}" alt="" />
+                  <img *ngIf="!item.media_info[0]?.media_link" [src]="'assets/images/aura__ntf-default-img.png' | imageS3" alt="" />
                   <div class="nft-cards__label">
                     <span class="text-gradient">CW-721</span>
                   </div>

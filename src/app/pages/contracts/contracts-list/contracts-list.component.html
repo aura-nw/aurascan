@@ -8,10 +8,10 @@
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract Name"
+        placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
-        (keyup)="searchToken()"
+        (ngModelChange)="searchToken()"
         (keyup.enter)="handleLink()"
         name="search"
         autocomplete="off" />
@@ -24,13 +24,13 @@
       <button
         type="reset"
         class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-        (click)="textSearch = ''; searchToken()">
+        (click)="resetFilterSearch()">
         <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
     </div>
-    <ng-container *ngIf="textSearch?.length > 0">
-      <div class="box-search-data text-white">
-        <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
+    <ng-container *ngIf="showBoxSearch === true">
+      <div class="box-search-data text-white" (clickOutside)="showBoxSearch = false;">
+        <ng-container *ngIf="filterSearchData && filterSearchData?.length === 0">
           <span> There are no matching contracts </span>
         </ng-container>
         <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
@@ -40,7 +40,7 @@
               <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
               <div class="ml-3">
                 <div class="d-flex align-items-center">
-                  <span class="text-clamp">{{ item.contract_name }}</span>
+                  <span class="text-clamp">{{ item.contract_name || '-' }}</span>
                 </div>
               </div>
             </div>
@@ -67,10 +67,10 @@
               <input
                       type="text"
                       class="form-control pl-0"
-                      placeholder="Search for Contract Name"
+                      placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
                       [(ngModel)]="textSearch"
                       [maxLength]="maxLengthSearch"
-                      (keyup)="searchToken()"
+                      (ngModelChange)="searchToken()"
                       (keyup.enter)="handleLink()"
                       name="search"
                       autocomplete="off" />
@@ -81,9 +81,9 @@
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0">
-              <div class="box-search-data text-white">
-                <ng-container *ngIf="!filterSearchData || filterSearchData && filterSearchData?.length === 0">
+            <ng-container *ngIf="showBoxSearch === true">
+              <div class="box-search-data text-white" (clickOutside)='showBoxSearch = false'>
+                <ng-container *ngIf="filterSearchData && filterSearchData?.length === 0">
                   <span> There are no matching contracts </span>
                 </ng-container>
                 <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
@@ -93,7 +93,7 @@
                       <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
-                          <span class="text-clamp">{{ item.contract_name }}</span>
+                          <span class="text-clamp">{{ item.contract_name || '-' }}</span>
                         </div>
                       </div>
                     </div>

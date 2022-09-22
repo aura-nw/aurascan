@@ -7,7 +7,6 @@
             <th mat-header-cell *matHeaderCellDef>
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
-
             <td mat-cell *matCellDef="let data; index as j">
               <div [classList]="[template.cssClass]" ngClass="d-flex align-items-center">
                 <span *ngIf="template.prefix" class="cursor-pointer">
@@ -16,7 +15,9 @@
                       <span
                         class="validator-avatar d-inline-flex"
                         [routerLink]="[template.isUrl, data['operator_address']]">
-                        <app-loading-image [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
+                        <app-loading-image
+                          [identity]="data['validator_identity']"
+                          [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
                       </span>
                     </div>
                   </ng-container>
@@ -158,7 +159,8 @@
                 imgUrl: getValidatorAvatar(data.operator_address),
                 validatorName: data.validator_name,
                 validatorAddress: data.validator_address,
-                validatorNumber: data.rank
+                validatorNumber: data.rank,
+                validatorIdentity: data.validator_identity
               }"
               [content]="[
                 {
