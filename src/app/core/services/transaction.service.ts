@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { INDEXER_URL } from 'src/app/core/constants/common.constant';
+import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import axios from 'axios';
-import { LCD_COSMOS } from '../constants/url.constant';
-import { INDEXER_URL } from 'src/app/core/constants/common.constant';
-import * as _ from 'lodash';
-import { IResponsesSuccess, ResponseTemplate } from 'src/app/core/models/common.model';
 
 @Injectable()
 export class TransactionService extends CommonService {
@@ -17,11 +16,6 @@ export class TransactionService extends CommonService {
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
-
-  // txs(limit: string | number, offset: string | number): Observable<any> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/transactions?limit=${limit}&offset=${offset}`);
-  // }
 
   txsIndexer(pageLimit: string | number, offset: string | number, txHash = ''): Observable<any> {
     const params = _({
@@ -39,17 +33,8 @@ export class TransactionService extends CommonService {
     });
   }
 
-  // txsDetail(txhash: string): Observable<any> {
-  //   this.setURL();
-  //   return this.http.get<any>(`${this.apiUrl}/transactions/${txhash}`);
-  // }
-
   txsDetailLcd(txhash: string) {
     return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs/${txhash}`);
-  }
-
-  txsWithAddress(limit: string | number, offset: string | number, address: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/account/${address}/transaction?limit=${limit}&offset=${offset}`);
   }
 
   getAccountTxFromHoroscope(chainId: string, address: string, pageLimit = 10, nextKey = null): Observable<any> {
@@ -68,10 +53,10 @@ export class TransactionService extends CommonService {
     });
   }
 
-  getListIBCSequence(sequence = ''): Observable<any> {
+  getListIBCSequence(sequence): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
-      pageLimit: 10,
+      pageLimit: 20,
       sequenceIBC: sequence,
     })
       .omitBy(_.isNull)

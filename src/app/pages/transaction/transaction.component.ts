@@ -31,8 +31,7 @@ export class TransactionComponent implements OnInit {
   loading = true;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     private transactionService: TransactionService,
@@ -51,7 +50,7 @@ export class TransactionComponent implements OnInit {
 
       const { code, data } = res;
       if (code === 200) {
-        const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+        const txs = convertDataTransaction(data, this.coinInfo);
         if (this.dataSource.data.length > 0) {
           this.dataSource.data = [...this.dataSource.data, ...txs];
         } else {
