@@ -5,7 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { from } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -43,6 +43,7 @@ export class ContractsSmartListComponent implements OnInit {
     pageSize: this.pageLimit,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
+  preIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -53,6 +54,7 @@ export class ContractsSmartListComponent implements OnInit {
   isHideSearch = false;
   contractMainnetStatus: SmartContractStatus[] = [];
   currentStatus: SmartContractStatus;
+  subscription: Subscription
 
   statusColor = {
     "UNVERIFIED": "#E5E7EA",
@@ -70,7 +72,7 @@ export class ContractsSmartListComponent implements OnInit {
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     public walletService: WalletService,
-    public commonService: CommonService
+    public commonService: CommonService,
   ) {
   }
 
@@ -92,7 +94,7 @@ export class ContractsSmartListComponent implements OnInit {
       });
   }
 
-  async getListContract(status?: SmartContractStatus) {
+  getListContract(status?: SmartContractStatus) {
     this.currentStatus = status;
     this.loading = true;
     const payload: SmartContractListReq = {
@@ -102,16 +104,16 @@ export class ContractsSmartListComponent implements OnInit {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
-    const listSmartContract = await this.contractService.getListSmartContract(payload);
-    if(listSmartContract) {
+    this.subscription = this.contractService.getListSmartContract(payload).subscribe(res => {
       this.pageData = {
-        length: listSmartContract.data['meta'].count,
+        length: res.meta.count,
         pageSize: this.pageData.pageSize,
         pageIndex: this.pageData.pageIndex,
       };
-      this.dataSource.data = listSmartContract.data['data'];
+      this.preIndex = this.pageData.pageIndex;
+      this.dataSource.data = res.data;
       this.loading = false;
-    }
+    });
   }
 
   resetPageEvent() {
@@ -124,10 +126,8 @@ export class ContractsSmartListComponent implements OnInit {
   }
 
   searchContract(): void {
-    setTimeout(() => {
       this.getListContract();
       this.resetPageEvent();
-    }, 2000)
   }
 
   clearSearch(): void {
@@ -152,7 +152,9 @@ export class ContractsSmartListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    this.getListContract(this.currentStatus);
+    if(e.pageIndex !== this.preIndex) {
+      this.getListContract(this.currentStatus);
+    }
   }
 
   async getContractStatus() {
