@@ -59,7 +59,7 @@
 
       li.bg {
         &--primary {
-          background-color: var(--aura-primary);
+          background-color: var(--aura-green-3);
         }
 
         &--danger {
@@ -67,7 +67,7 @@
         }
 
         &--info {
-          background-color: var(--aura-secondary);
+          background-color: var(--aura-red-2);
         }
 
         &--secondary {
@@ -166,7 +166,7 @@
         }
 
         &[data-style='info'] .item-box::before {
-          background-color: var(--aura-secondary);
+          background-color: var(--aura-red-2);
         }
 
         &[data-style='secondary'] .item-box::before {
@@ -252,7 +252,7 @@
     }
 
     &.status--info {
-      background-color: var(--aura-secondary);
+      background-color: var(--aura-red-2);
     }
 
     &.status--secondary {
