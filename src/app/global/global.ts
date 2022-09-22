@@ -10,7 +10,7 @@ import {
 } from '../core/constants/transaction.enum';
 import { CommonDataDto } from '../core/models/common.model';
 import { balanceOf } from '../core/utils/common/parsing';
-
+import { toBase64, toUtf8, fromBase64, fromUtf8 } from '@cosmjs/encoding';
 Injectable();
 
 export class Globals {
@@ -172,13 +172,30 @@ export function getDataInfo(arrayMsg, addressContract) {
   return [fromAddress, toAddress, value, method, tokenId, modeExecute];
 }
 
-export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
+export function convertDataTransaction(data, coinInfo) {
   const txs = _.get(data, 'transactions').map((element) => {
     const code = _.get(element, 'tx_response.code');
     const tx_hash = _.get(element, 'tx_response.txhash');
     const messages = _.get(element, 'tx_response.tx.body.messages');
 
-    const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
+    let _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
+    let lstType = _.get(element, 'tx_response.tx.body.messages');
+    let denom = coinInfo.coinDenom;
+    if (lstType?.length > 1) {
+      lstType.forEach((type) => {
+        if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
+          _type = type['@type'];
+          let dataEncode = atob(type?.packet?.data);
+            try {
+              const data = JSON.parse(dataEncode);
+              denom = data.denom;
+            } catch (e) {
+              denom = coinInfo.coinDenom;
+            }
+          return;
+        }
+      });
+    }
     const type = _.find(TYPE_TRANSACTION, { label: _type })?.value;
 
     const status =
@@ -190,20 +207,20 @@ export function convertDataTransaction(data, coinDecimals, coinMinimalDenom) {
       _.get(element, 'tx_response.tx.body.messages'),
       _type,
       _.get(element, 'tx_response.tx.body.raw_log'),
-      coinMinimalDenom,
+      coinInfo.coinMinimalDenom,
     );
 
-    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinDecimals) : _amount;
+    const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
 
-    const fee = balanceOf(_.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0, coinDecimals).toFixed(
-      coinDecimals,
+    const fee = balanceOf(_.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
+      coinInfo.coinDecimals,
     );
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
     const gas_used = _.get(element, 'tx_response.gas_used');
     const gas_wanted = _.get(element, 'tx_response.gas_wanted');
 
-    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, messages };
+    return { code, tx_hash, type, status, amount, fee, height, timestamp, gas_used, gas_wanted, denom, messages };
   });
   return txs;
 }

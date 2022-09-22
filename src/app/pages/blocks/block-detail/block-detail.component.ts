@@ -75,8 +75,7 @@ export class BlockDetailComponent implements OnInit {
   );
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     private route: ActivatedRoute,
@@ -103,43 +102,7 @@ export class BlockDetailComponent implements OnInit {
   getDetail(): void {
     if (this.id) {
       this.getDetailByHeight();
-    } else if (this.blockId) {
-      this.getDetailById();
-    }
-  }
-
-  getDetailById() {
-    this.blockService.blockDetailById(this.blockId).subscribe(
-      (res) => {
-        this.loading = true;
-        if (res.status === 404) {
-          this.router.navigate(['/']);
-          return;
-        }
-        res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-          trans.type = typeTrans?.value;
-          trans.status = StatusTransaction.Fail;
-          if (trans.code === CodeTransaction.Success) {
-            trans.status = StatusTransaction.Success;
-          }
-        });
-        this.item = res.data;
-        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
-        this.dataSource.data = res.data.txs;
-
-        this.pageData.length = res.data.txs.length;
-        const { pageIndex, pageSize } = this.pageData;
-        const start = pageIndex * pageSize;
-        const end = start + pageSize;
-        this.dataTxs = this.dataSource.data.slice(start, end);
-        this.loading = false;
-      },
-      (error) => {
-        this.router.navigate(['/']);
-      },
-    );
+    } 
   }
 
   getDetailByHeight() {
@@ -171,7 +134,7 @@ export class BlockDetailComponent implements OnInit {
             let dataTempTx = {};
             dataTempTx['transactions'] = txs;
             if (txs.length > 0) {
-              txs = convertDataTransaction(dataTempTx, this.coinDecimals, this.coinMinimalDenom);
+              txs = convertDataTransaction(dataTempTx, this.coinInfo);
               txs.forEach((k) => {
                 this.item['gas_used'] += +k.gas_used;
                 this.item['gas_wanted'] += +k.gas_wanted;

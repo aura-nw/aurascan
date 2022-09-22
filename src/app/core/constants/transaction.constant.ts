@@ -3,7 +3,7 @@ import { TRANSACTION_TYPE_ENUM, TypeTransaction } from './transaction.enum';
 export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.IBCTransfer, value: TypeTransaction.IBCTransfer },
   { label: TRANSACTION_TYPE_ENUM.IBCReceived, value: TypeTransaction.IBCReceived },
-  // { label: TRANSACTION_TYPE_ENUM.IBCAcknowledgement, value: TypeTransaction.IBCAcknowledgement },
+  { label: TRANSACTION_TYPE_ENUM.IBCAcknowledgement, value: TypeTransaction.IBCAcknowledgement },
   { label: TRANSACTION_TYPE_ENUM.IBCUpdateClient, value: TypeTransaction.IBCUpdateClient },
   { label: TRANSACTION_TYPE_ENUM.IBCTimeout, value: TypeTransaction.IBCTimeout },
   { label: TRANSACTION_TYPE_ENUM.IBCChannelOpenInit, value: TypeTransaction.IBCChannelOpenInit },
