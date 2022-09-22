@@ -187,7 +187,7 @@
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'contract_address'">
-                      <div class="d-flex align-items-center gap-2">
+                      <div class="d-flex align-items-center">
                         <img
                           *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
@@ -196,6 +196,7 @@
                           height="16px" />
                         <a
                           [routerLink]="['/contracts/', data[template.matColumnDef]]"
+                          [class.ml-6]='data["contract_verification"] === contractVerifyType.Unverifed'
                           [class.disabled-link]="!data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
