@@ -47,6 +47,7 @@ export class NFTDetailComponent implements OnInit {
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;
+  currentKey: string;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -82,19 +83,19 @@ export class NFTDetailComponent implements OnInit {
   getDataTable(nextKey = null) {
     let filterData = {};
     filterData['keyWord'] = this.nftId;
-    this.tokenService
-      .getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey)
-      .subscribe((res) => {
-        const { code, data } = res;
-        if (code === 200) {
-          res.data.transactions.forEach((trans) => {
-            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-          });
-          this.dataSource.data = res.data.transactions;
-          this.pageData.length = res.data?.count;
-        }
-        this.loading = false;
-      });
+    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey).subscribe((res) => {
+      const { code, data } = res;
+      this.nextKey = data.nextKey || null;
+
+      if (code === 200) {
+        res.data.transactions.forEach((trans) => {
+          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+        });
+        this.dataSource.data = res.data.transactions;
+        this.pageData.length = res.data?.count;
+      }
+      this.loading = false;
+    });
   }
 
   paginatorEmit(event): void {
@@ -105,8 +106,9 @@ export class NFTDetailComponent implements OnInit {
     const { length, pageIndex, pageSize } = e;
     const next = length <= (pageIndex + 2) * pageSize;
     this.pageData = e;
-    if (next && this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getDataTable(this.nextKey);
+      this.currentKey = this.nextKey;
     }
   }
 

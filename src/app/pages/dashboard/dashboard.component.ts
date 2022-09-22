@@ -51,8 +51,7 @@ export class DashboardComponent implements OnInit {
   timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public commonService: CommonService,
@@ -102,7 +101,7 @@ export class DashboardComponent implements OnInit {
       this.dataSourceTx.data = [];
       const { code, data } = res;
         if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txs = convertDataTransaction(data, this.coinInfo);
 
           if (this.dataSourceTx.data.length > 0) {
             this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];

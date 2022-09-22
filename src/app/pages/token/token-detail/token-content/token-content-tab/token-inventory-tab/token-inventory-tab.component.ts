@@ -23,6 +23,7 @@ export class TokenInventoryComponent implements OnInit {
   contractAddress = '';
   keyWord = '';
   nextKey = null;
+  currentKey = null;
 
   dataSourceMobile: any[];
 
@@ -103,8 +104,9 @@ export class TokenInventoryComponent implements OnInit {
       this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
     );
 
-    if (next && this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getNftData();
+      this.currentKey = this.nextKey;
     }
   }
 

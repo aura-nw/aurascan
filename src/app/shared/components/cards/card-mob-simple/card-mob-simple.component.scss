@@ -7,11 +7,23 @@
     color: var(--aura-white);
   }
   .title {
-    &-sm { font-weight: 400;}
-    &-md { font-weight: 500;}
-    &-lg { font-weight: 600;}
+    &-sm {
+      font-weight: 400;
+    }
+    &-md {
+      font-weight: 500;
+    }
+    &-lg {
+      font-weight: 600;
+    }
   }
   .sub-label {
+    width: 120px;
+    text-align: center;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
     font-weight: 500;
     &.label__status {
       font-weight: 600;
@@ -54,6 +66,10 @@
   }
   .divider.divider-horizontal {
     background-color: var(--aura-gray-8);
+  }
+  .w-time {
+    width: 180px;
+    text-align: right;
   }
 }
 
