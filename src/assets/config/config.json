@@ -1,16 +1,21 @@
 {
   "fabric": "",
-  "cosmos": "https://explorer-api.dev.aura.network/api/v1",
-  "chainId": "aura-testnet",
-  "timeStaking": "1814400",
-  "urlSocket": "https://explorer-api.dev.aura.network",
+  "cosmos": "https://serenity-api.aurascan.io/api/v1",
+  "chainId": "serenity-testnet-001",
+  "timeStaking": "86400",
+  "urlSocket": "https://serenity-api.aurascan.io",
+  "env": "serenity",
   "validator_s3": "https://validator-logos.s3.ap-southeast-1.amazonaws.com",
-  "coins": [{"decimal": 6, "denom": "ibc/40CA5EF447F368B7F2276A689383BE3C427B15395D4BF6639B605D36C0846A20", "display": "AURA"}],
+  "coins":[
+    {"display": "TAURA",
+      "denom": "ibc/6DF434CD72825125ACECEA86BF4A15DCF7CA0DE257C7683AF2A550D2BE34F79D",
+      "decimal": 6}
+  ],
   "chain_info": {
-    "chainId": "aura-testnet",
-    "chainName": "aura testnet",
-    "rpc": "https://rpc.dev.aura.network",
-    "rest": "https://lcd.dev.aura.network",
+    "chainId": "serenity-testnet-001",
+    "chainName": "Aura serenity testnet",
+    "rpc": "https://rpc.serenity.aura.network",
+    "rest": "https://lcd.serenity.aura.network",
     "bip44": { "coinType": 118 },
     "bech32Config": {
       "bech32PrefixAccAddr": "aura",
@@ -20,15 +25,15 @@
       "bech32PrefixConsAddr": "auravalcons",
       "bech32PrefixConsPub": "auravalconspub"
     },
-    "currencies": [{ "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 }],
-    "feeCurrencies": [{ "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 }],
-    "stakeCurrency": { "coinDenom": "TAURA", "coinMinimalDenom": "utaura", "coinDecimals": 6 },
+    "currencies": [{ "coinDenom": "AURA", "coinMinimalDenom": "uaura", "coinDecimals": 6 }],
+    "feeCurrencies": [{ "coinDenom": "AURA", "coinMinimalDenom": "uaura", "coinDecimals": 6 }],
+    "stakeCurrency": { "coinDenom": "AURA", "coinMinimalDenom": "uaura", "coinDecimals": 6 },
     "coinType": 118,
-    "gasPriceStep": { "low": 0.0001, "average": 0.00025, "high": 0.0004 },
-    "features": ["no-legacy-stdTx"],
-    "walletUrlForStaking": "https://explorer.dev.aura.network/validators",
+    "gasPriceStep": { "low": 0.001, "average": 0.0025, "high": 0.004 },
+    "features": ["ibc-transfer"],
+    "walletUrlForStaking": "https://serenity.aurascan.io/validators",
     "logo": "https://i.imgur.com/zi0mTYb.png",
-    "explorer": "https://explorer.dev.aura.network/"
+    "explorer": "https://serenity.aurascan.io/"
   },
-  "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/"
+  "image_s3": "https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/serenity-assets/"
 }
