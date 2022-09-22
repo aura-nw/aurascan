@@ -33,7 +33,7 @@
         </button>
         <ul class="dropdown-menu aura-dropdown-menu">
           <ng-container *ngFor="let item of contractMainnetStatus">
-            <li class="dropdown-item cursor-pointer" (click)="resetPageEvent(); getListContract(item)">
+            <li class="dropdown-item cursor-pointer" (click)="getListContract(item); resetPageEvent();">
               <button type="button" class="button p-0 text-capitalize">{{ item.label | lowercase}}</button>
             </li>
           </ng-container>
@@ -113,7 +113,7 @@
           <ul class="dropdown-menu aura-dropdown-menu">
             <ng-container *ngFor="let item of contractMainnetStatus">
               <li class="py-1 px-2 dropdown-item cursor-pointer"
-                  (click)="resetPageEvent(); getListContract(item)">
+                  (click)="getListContract(item); resetPageEvent();">
                 <button type="button" class="button p-0 body-02 text-start text-capitalize">{{ item.label | lowercase}}</button>
               </li>
             </ng-container>
@@ -182,7 +182,7 @@
           matSort
           [dataSource]="dataSource"
           class="aura-table"
-          *ngIf="this.dataBk && this.dataBk['data']?.length > 0; else noValues">
+          *ngIf="this.dataSource && this.dataSource.data?.length > 0; else noValues">
           <ng-container  *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>

@@ -76,7 +76,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   timerGetBlockMiss: any;
   consAddress: string;
   nextKey = null;
+  currentNextKey = null;
   nextKeyBlock = null;
+  currentNextKeyBlock = null;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -306,8 +308,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           page.pageIndex * page.pageSize + page.pageSize,
         );
         const nextBlock = page.length <= (page.pageIndex + 2) * page.pageSize;
-        if (nextBlock && this.nextKeyBlock) {
+        if (nextBlock && this.nextKeyBlock && this.currentNextKeyBlock !== this.nextKeyBlock) {
           this.getListBlockWithOperator(this.nextKeyBlock);
+          this.currentNextKeyBlock = this.nextKeyBlock;
         }
         this.pageIndexPower = page.pageIndex;
         break;
@@ -322,8 +325,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         );
         const { length, pageIndex, pageSize } = page;
         const next = length <= (pageIndex + 2) * pageSize;
-        if (next && this.nextKey) {
+        if (next && this.nextKey && this.currentNextKey !== this.nextKey) {
           this.getListPower(this.nextKey);
+          this.currentNextKey =  this.nextKey;
         }
         this.pageIndexPower = page.pageIndex;
         break;
