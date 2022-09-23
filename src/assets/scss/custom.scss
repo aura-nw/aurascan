@@ -98,7 +98,7 @@ body {
 
         li {
             &.primary {
-                background-color: var(--aura-primary);
+                background-color: var(--aura-green-3);
             }
 
             &.danger {
@@ -106,11 +106,11 @@ body {
             }
 
             &.info {
-                background-color: var(--aura-secondary);
+                background-color: var(--aura-red-2);
             }
 
             &.secondary {
-                background-color: #777e91;
+                background-color: var(--aura-gray-8);
             }
         }
     }

@@ -20,7 +20,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
   contractForm;
   emailPattern = /\S+@\S+\.\S+/;
   websitePattern = /(https?:\/\/)?([\w\d]+\.)?[\w\d]+\.\w+\/?.+/;
-  listID = ['sdas', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41']
+  listID = []
 
   constructor(
     private fb: FormBuilder,

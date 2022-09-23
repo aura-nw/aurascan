@@ -95,7 +95,7 @@ export class CommonService {
 
   mappingNameIBC(value) {
     let temp = value.slice(value.indexOf('ibc'));
-    let result = this.coins.find((k) => k.denom === temp)?.display || '';
+    let result = this.coins.find((k) => k.denom === temp) || {};
     return result;
   }
 }
