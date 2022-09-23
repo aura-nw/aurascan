@@ -1,4 +1,4 @@
-@import "../../../../../assets/scss/color.scss";
+@import '../../../../../assets/scss/color.scss';
 
 .msg-image {
   width: auto;
@@ -6,14 +6,14 @@
   filter: $filter-purple-icon;
 }
 
-.header-title{
+.header-title {
   font-size: 18px;
 }
 
 .tx-detail {
   .label__status {
     @media (max-width: 375px) {
-      max-width: 175px !important; 
+      max-width: 175px !important;
     }
   }
 }

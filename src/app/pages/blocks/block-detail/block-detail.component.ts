@@ -1,16 +1,23 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
+import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DATEFORMAT } from '../../../../app/core/constants/common.constant';
+import { DATEFORMAT, PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
-import { ResponseDto, TableTemplate } from '../../../../app/core/models/common.model';
+import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { getAmount, Globals } from '../../../../app/global/global';
+import { convertDataBlock, convertDataTransaction, getAmount, Globals } from '../../../../app/global/global';
+import { sha256 } from 'js-sha256';
+import { Buffer } from 'buffer';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+
 @Component({
   selector: 'app-block-detail',
   templateUrl: './block-detail.component.html',
@@ -19,17 +26,23 @@ import { getAmount, Globals } from '../../../../app/global/global';
 export class BlockDetailComponent implements OnInit {
   id: string | number;
   blockId: string | number;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
+
   item = undefined;
-    TAB = [
-        {
-            id: 0,
-            value: 'SUMMARY'
-        },
-        {
-            id: 1,
-            value: 'JSON'
-        }
-    ]
+  TAB = [
+    {
+      id: 0,
+      value: 'SUMMARY',
+    },
+    {
+      id: 1,
+      value: 'JSON',
+    },
+  ];
 
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
@@ -41,17 +54,28 @@ export class BlockDetailComponent implements OnInit {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
-  length = 0;
   typeTransaction = TYPE_TRANSACTION;
   dateFormat;
   loading = true;
   isRawData = false;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  isCurrentMobile;
+
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
+    tap((data) => {
+      this.isCurrentMobile = data.matches;
+
+      if (this.isCurrentMobile) {
+        this.pageData.pageSize = 5;
+      } else {
+        this.pageData.pageSize = 20;
+      }
+    }),
+  );
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     private route: ActivatedRoute,
@@ -62,81 +86,66 @@ export class BlockDetailComponent implements OnInit {
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
+    private transactionService: TransactionService,
   ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('height');
     this.blockId = this.route.snapshot.paramMap.get('blockId');
+    if (this.id === 'null' || this.blockId === 'null') {
+      this.router.navigate(['/']);
+    }
+
     this.getDetail();
   }
 
   getDetail(): void {
     if (this.id) {
       this.getDetailByHeight();
-    } else if (this.blockId) {
-      this.getDetailById();
-    }
-  }
-
-  getDetailById() {
-    this.blockService.blockDetailById(this.blockId).subscribe(
-      (res) => {
-        this.loading = true;
-        if (res.status === 404) {
-          this.router.navigate(['/']);
-          return;
-        }
-        res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.coinMinimalDenom);
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-          trans.type = typeTrans?.value;
-          trans.status = StatusTransaction.Fail;
-          if (trans.code === CodeTransaction.Success) {
-            trans.status = StatusTransaction.Success;
-          }
-        });
-        this.item = res.data;
-        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
-        this.dataSource = new MatTableDataSource(res.data?.txs);
-        this.dataTxs = res.data?.txs;
-        this.length = res.data?.txs.length;
-        this.loading = false;
-      },
-      (error) => {
-        this.router.navigate(['/']);
-      },
-    );
+    } 
   }
 
   getDetailByHeight() {
-    this.blockService.blockDetail(this.id).subscribe(
-      (res: ResponseDto) => {
-        this.loading = true;
-        if (res.status === 404) {
-          this.router.navigate(['/']);
-          return;
+    this.blockService.blocksIndexer(1, this.id).subscribe(async (res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        const block = convertDataBlock(data)[0];
+        block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
+        block['chainid'] = _.get(data.blocks[0], 'custom_info.chain_id');
+        block['json_data'] = _.get(data.blocks[0], 'block');
+        block['gas_used'] = block['gas_wanted'] = 0;
+        this.item = block;
+
+        //get list tx detail
+        let txs = [];
+        for (const key in data.blocks[0]?.block?.data?.txs) {
+          const element = data.blocks[0].block?.data?.txs[key];
+          const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
+          this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => {
+            if (res.data.transactions[0]) {
+              txs.push(res.data.transactions[0]);
+            }
+          });
         }
 
-        res.data?.txs.forEach((trans) => {
-          trans.amount = getAmount(trans.messages, trans.type, trans.raw_log, this.denom);
-          const typeTrans = this.typeTransaction.find((f) => f.label.toLowerCase() === trans.type.toLowerCase());
-          trans.type = typeTrans?.value;
-          trans.status = StatusTransaction.Fail;
-          if (trans.code === CodeTransaction.Success) {
-            trans.status = StatusTransaction.Success;
+        await Promise.all(txs);
+        setTimeout(() => {
+          if (txs?.length > 0) {
+            let dataTempTx = {};
+            dataTempTx['transactions'] = txs;
+            if (txs.length > 0) {
+              txs = convertDataTransaction(dataTempTx, this.coinInfo);
+              txs.forEach((k) => {
+                this.item['gas_used'] += +k.gas_used;
+                this.item['gas_wanted'] += +k.gas_wanted;
+              });
+              this.dataSource.data = txs;
+            }
           }
-        });
-        this.item = res.data;
-        this.dateFormat = this.datePipe.transform(this.item?.timestamp, DATEFORMAT.DATETIME_UTC);
-        this.dataSource = new MatTableDataSource(res.data?.txs);
-        this.dataTxs = res.data?.txs;
-        this.length = res.data?.txs.length;
-        this.loading = false;
-      },
-      (error) => {
-        this.router.navigate(['/']);
-      },
-    );
+          this.loading = false;
+        }, 1000);
+      }
+    });
   }
 
   checkAmountValue(amount: number, txHash: string) {
@@ -149,5 +158,19 @@ export class BlockDetailComponent implements OnInit {
 
   changeType(type: boolean): void {
     this.isRawData = type;
+  }
+
+  handlePageEvent(e: any) {
+    this.pageData.pageIndex = e.pageIndex;
+    if (this.pageData) {
+      const { pageIndex, pageSize } = this.pageData;
+      const start = pageIndex * pageSize;
+      const end = start + pageSize;
+      this.dataTxs = this.dataSource.data.slice(start, end);
+    }
+  }
+
+  paginatorEmit(event): void {
+    this.dataSource.paginator = event;
   }
 }

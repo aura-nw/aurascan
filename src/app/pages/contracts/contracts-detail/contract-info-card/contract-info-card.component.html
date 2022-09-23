@@ -5,14 +5,14 @@
         <tr>
           <td colspan="2" class="h6 h3-mob mb-0">More Info</td>
           <td>
-            <div class="d-flex justify-content-end">
+            <!-- <div class="d-flex justify-content-end">
               <button class="button button--sm button-circle">
                 <img [src]="'assets/icons/icons-svg/basic/heart.svg' | imageS3" alt="" width="16px" height="16px" />
               </button>
               <button class="ml-3 button button--sm button-pill button-outline button-outline__in-card button-dropdown">
                 <span>More</span>
               </button>
-            </div>
+            </div> -->
           </td>
         </tr>
 
@@ -22,7 +22,9 @@
 <!--            <span class="mr-2">Not Available, </span>-->
 <!--            <img [src]="'assets/icons/icons-svg/basic/edit.svg' | imageS3" alt="" width="16px" height="16px" />-->
 <!--          </td>-->
-          <td colspan="2">Not Available, <span class="text--primary ml-1">Update?</span></td>
+          <td colspan="2">Not Available
+            <!-- , <span class="text--primary ml-1">Update?</span> -->
+          </td>
         </tr>
 
         <tr class="d-lg-none">
@@ -43,11 +45,11 @@
         <tr class="d-none d-lg-table-row">
           <td class="text--gray-5 body-02-mob">Contract Creator:</td>
           <td colspan="2">
-            <a class="text--primary mr-2" [routerLink]="['/account', contractDetail?.creator_address]">
+            <a class="text--primary" [routerLink]="['/account', contractDetail?.creator_address]">
               {{ contractDetail?.creator_address | cutStringPipe: 8:8 }}
             </a>
             at txn
-            <a class="text--primary ml-2" [routerLink]="['/transaction', contractDetail?.tx_hash]">
+            <a class="text--primary" [routerLink]="['/transaction', contractDetail?.tx_hash]">
               {{ contractDetail?.tx_hash | cutStringPipe: 8:8 }}
             </a>
           </td>
@@ -56,17 +58,17 @@
         <tr>
           <td class="text--gray-5">Token Tracker:</td>
           <td colspan="2">
-            <ng-container *ngIf="contractDetail?.token_tracker">
+            <ng-container *ngIf="contractDetail.token_name && contractDetail.token_symbol">
               <a class="text--primary" [routerLink]="['/token', contractDetail?.contract_address]"
-                *ngIf="!(contractDetail.token_tracker?.type === 'CW721')"
+                *ngIf="!(contractDetail.type === 'CW721')"
                 [routerLink]="['/tokens/token', contractDetail?.contract_address]">
-                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+                {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
               </a>
               <a
-                *ngIf="contractDetail.token_tracker?.type === 'CW721'"
+                *ngIf="contractDetail.type === 'CW721'"
                 class="text--primary"
                 [routerLink]="['/tokens/token-nft', contractDetail?.contract_address]">
-                {{ contractDetail?.token_tracker?.name }} ({{ contractDetail?.token_tracker?.symbol }})
+                {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
               </a>
               <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->
             </ng-container>

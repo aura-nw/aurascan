@@ -135,10 +135,10 @@
             </div>
           </div>
         </div>
-        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.requestAmount">
+        <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.request_amount">
           <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
           <div class="col-auto col-md-10 mt-0">
-            {{ proposalDetail.requestAmount }}
+            {{ proposalDetail.request_amount }}
             <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
@@ -156,7 +156,7 @@
           <div class="col-6 col-md-10 body-02 text-end text-md-start">
             <div
               class="aura-status-inline
-                 {{ getStatus(proposalDetail.pro_status)?.value === 'rejected' ? 'text--red-3' : 'text--green-2' }}">
+                 {{ getStatus(proposalDetail.pro_status)?.value === 'rejected' ? 'text--red-3' : 'text--green-3' }}">
               <span class="status">{{ getStatus(proposalDetail.pro_status)?.value | titlecase }}</span>
             </div>
           </div>
@@ -207,7 +207,7 @@
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proposalDetail.yesPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 body-02-mob text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}
               </div>
             </div>
@@ -221,7 +221,7 @@
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proposalDetail.noPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}
               </div>
             </div>
@@ -235,7 +235,7 @@
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proposalDetail.noWithVetoPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
               </div>
             </div>
@@ -249,7 +249,7 @@
               <div class="col-3 col-lg-3 body-02-mob text-end mb-0 text--gray-1">
                 {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
               </div>
-              <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
+              <div class="col-5 col-lg-4 body-02-mob flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5">
                 {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
               </div>
             </div>

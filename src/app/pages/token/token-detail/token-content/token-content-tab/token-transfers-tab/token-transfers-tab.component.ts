@@ -12,7 +12,7 @@ import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { Globals } from '../../../../../../global/global';
+import { convertDataTransaction, Globals } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -62,7 +62,10 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   modeExecuteTransaction = ModeExecuteTransaction;
   nftDetail: any;
   linkToken = 'token';
+  nextKey = null;
+  currentKey = null;
 
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -80,7 +83,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
       this.keyWord = params?.a || '';
     });
 
-    this.getDataTable();
+    this.getListTransactionToken();
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
@@ -95,12 +98,10 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     }
   }
 
-  getDataTable(): void {
-    this.loading = true;
-    this.getListTransactionToken();
-  }
-
-  getListTransactionToken(dataSearch = '') {
+  getListTransactionToken(dataSearch = '', nextKey = null) {
+    if (!this.dataSource.data) {
+      this.loading = true;
+    }
     let filterData = {};
     filterData['keyWord'] = this.keyWord || dataSearch;
     if (
@@ -110,24 +111,22 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
       filterData['isSearchWallet'] = true;
     }
 
-    let type = this.isNFTContract ? 'cw721-tokens' : 'cw20-tokens';
     this.tokenService
-      .getListTokenTransfer(
-        this.pageData.pageSize,
-        this.pageData.pageIndex,
-        this.contractAddress,
-        filterData,
-        type,
-      )
+      .getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey)
       .subscribe((res) => {
-        if (res && res.data?.length > 0) {
-          this.dataSource.data = res.data;
-          res.data.forEach((trans) => {
-            trans['tx_response'] = JSON.parse(trans.tx);
+        const { code, data } = res;
+        this.nextKey = data.nextKey || null;
+        if (code === 200) {
+          res.data.transactions.forEach((trans) => {
             trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-            this.dataSource.data = res.data;
           });
-          this.pageData.length = res.meta?.count;
+          if (this.dataSource.data.length > 0 && nextKey) {
+            this.dataSource.data = [...this.dataSource.data, ...res.data.transactions];
+          } else {
+            this.dataSource.data = [...res.data.transactions];
+          }
+          this.pageData.length = res.data?.count;
+          this.resultLength.emit(this.pageData.length);
         }
         this.loading = false;
       });
@@ -149,8 +148,13 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   }
 
   pageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
-    this.getListTransactionToken();
+    const { length, pageIndex, pageSize } = e;
+    const next = length <= (pageIndex + 2) * pageSize;
+    this.pageData = e;
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
+      this.getListTransactionToken(null, this.nextKey);
+      this.currentKey = this.nextKey;
+    }
   }
 
   paginatorEmit(event): void {

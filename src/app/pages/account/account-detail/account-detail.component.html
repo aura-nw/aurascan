@@ -61,7 +61,7 @@
       [class.mobile-tab]="breakpoint.value.matches">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label">
+          <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label; currentStake = stakeMode.Delegations">
             <span
               class="h5 fw-semibold mb-0 {{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}"
               >{{ tab.label }}</span>
@@ -117,7 +117,7 @@
                               <a
                                 *ngSwitchCase="'height'"
                                 class="text--primary cursor-pointer block-link"
-                                [routerLink]="['/blocks/id', data['blockId']]">
+                                [routerLink]="['/blocks', data['height']]">
                                 {{ data[template.matColumnDef] }}
                               </a>
                               <div *ngSwitchCase="'type'">
@@ -147,12 +147,12 @@
                               <div *ngSwitchCase="'amount'">
                                 <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                                   {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                                  <span class="text--primary">{{ denom }}</span>
+                                  <span class="text--primary">{{ data?.denom }}</span>
                                 </ng-container>
                                 <ng-template #displayNonNumber>
-                                  <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                                  <span *ngIf="!data[template.matColumnDef]"> - </span>
                                   <a
-                                    *ngIf="data[template.matColumnDef] !== 0"
+                                    *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
                                     class="text--primary cursor-pointer"
                                     [routerLink]="['/transaction', data['tx_hash']]">
                                     More
@@ -184,10 +184,10 @@
               </app-paginator>
             </ng-container>
             <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
+              <app-table-no-data *ngIf="!transactionLoading"></app-table-no-data>
             </ng-template>
           </ngx-simplebar>
-          <div *ngIf="dataSource && !dataSource.data" class="">
+          <div *ngIf="transactionLoading" class="">
             <app-loading-sprint></app-loading-sprint>
           </div>
         </div>

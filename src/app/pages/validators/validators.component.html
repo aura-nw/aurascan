@@ -11,6 +11,8 @@
       [isLoading]="isClaimRewardLoading"
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
+
+
   <div class="card box-validators">
     <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
       <h2 class="h3-mob mb-0 text--white">Validators</h2>
@@ -158,6 +160,7 @@
                             <div class="validator-avatar">
                               <app-loading-image
                                 [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                                [identity]='data.identity'
                                 [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
                             </div>
                             <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
@@ -216,6 +219,7 @@
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">
                             <app-loading-image
+                              [identity]='validator["identity"]'
                               [appClass]="validator?.jailed ? 'validator-jailed' : ''"
                               [srcImg]="getValidatorAvatar(validator['operator_address'])">
                             </app-loading-image>
@@ -294,6 +298,7 @@
       </ng-template>
     </div>
   </div>
+
 </div>
 
 <div class="col-lg-6">
@@ -310,7 +315,9 @@
         <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
-              <app-loading-image [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
+              <app-loading-image
+                [identity]='dataModal.identity'
+                [srcImg]="getValidatorAvatar(dataModal.operator_address)"> </app-loading-image>
             </div>
           </div>
           <div class="ml-2">
@@ -397,7 +404,9 @@
                   <div class="option-label d-flex align-items-center text--gray-1"[ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
                       <div class="validator-avatar">
-                        <app-loading-image [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
+                        <app-loading-image
+                          [identity]='item.identity'
+                          [srcImg]="getValidatorAvatar(item.operator_address)"> </app-loading-image>
                       </div>
                     </div>
                     <span class="option__name">{{ item.title | translate }}</span>

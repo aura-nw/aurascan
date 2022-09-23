@@ -6,7 +6,7 @@
         <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
           <!-- !important:
           Default image if this ntf-detail has not image -->
-          <img *ngIf="true" [src]="nftDetail?.image || defaultImgToken" />
+          <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
         </div>
       </div>
       <!-- Mobile nft-image -->
@@ -16,17 +16,18 @@
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
               <!-- !important:
             Default image if this ntf-detail has not image -->
-              <img *ngIf="true" [src]="nftDetail?.image || defaultImgToken" />
+              <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
             </div>
           </div>
           <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
-            <h1 class="fw-semibold title-small mb-0 text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <h1 class="fw-semibold title-small mb-0 body-01-mob text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <span class="burnt-tag my-1" *ngIf="nftDetail?.is_burned">Burnt</span>
             <div class="mb-0">
-              <img
+              <!-- <img
                 [src]="nftDetail?.image || defaultLogoToken"
                 width="24px"
                 height="24px"
-                class="mr-1 object-fit--none" />
+                class="mr-1 object-fit--none" /> -->
               <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
                 nftDetail?.name
               }}</a>
@@ -37,13 +38,16 @@
       <!-- End nft-image -->
       <div class="col-12 col-xl-8 pl-xl-7">
         <div class="d-none d-xl-block">
-          <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+          <div class="d-flex align-items-center">
+            <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
+          </div>
           <div class="my-5">
-            <img
+            <!-- <img
               [src]="nftDetail?.image || defaultLogoToken"
               width="24px"
               height="24px"
-              class="mr-1 object-fit--none" />
+              class="mr-1 object-fit--none" /> -->
             <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
               nftDetail?.name
             }}</a>
@@ -114,7 +118,7 @@
           <h4 class="mb-0 text--white card__ntf-detail-item" id="popupCopy">Details</h4>
           <div class="card__ntf-detail-item body-02">
             <div class="label-detail text--gray-5">Owner:</div>
-            <div class="d-flex align-items-center position-relative">
+            <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
               <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
                 {{ nftDetail?.owner }}
               </a>
@@ -136,7 +140,7 @@
                 *ngIf="contractType !== contractVerifyType.Unverifed"
                 [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                 class="mr-2"
-                alt="contract_verification"/>
+                alt="contract_verification" />
               <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
                 {{ nftDetail?.contract_address }}</a
               >
@@ -199,7 +203,7 @@
     <h2 class="text--white mb-0">Item Activity</h2>
     <div class="divider divider-horizontal d-none d-lg-block mt-2"></div>
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
-      A total of {{ pageData?.length }} record{{ pageData?.length > 1 ? 's' : '' }} found
+      A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
     <div class="table-responsive aura-table-contain mt-2 mt-lg-3">
       <table mat-table [dataSource]="dataSource" class="aura-table">
@@ -287,10 +291,10 @@
       </table>
     </div>
     <app-paginator
-            [length]="pageData?.length"
-            [pageSize]="pageData?.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="handlePageEvent($event)">
+      [length]="pageData?.length"
+      [pageSize]="pageData?.pageSize"
+      (paginator)="paginatorEmit($event)"
+      (pageEvent)="handlePageEvent($event)">
     </app-paginator>
     <ng-template #noValues> </ng-template>
   </div>

@@ -9,7 +9,9 @@
       <div class="d-flex align-items-center">
         <div class="avatar-wrapper flex-shrink-0 mr-2" *ngIf="!breakpoint.value.matches">
           <div class="validator-avatar medium">
-            <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+            <app-loading-image
+              [identity]='currentValidatorDetail.identity'
+              [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
             </app-loading-image>
           </div>
           <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
@@ -23,7 +25,9 @@
             <div class="d-flex align-items-center">
               <div class="avatar-wrapper flex-shrink-0 mr-3" *ngIf="breakpoint.value.matches">
                 <div class="validator-avatar small">
-                  <app-loading-image [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+                  <app-loading-image
+                    [identity]='currentValidatorDetail.identity'
+                    [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
                   </app-loading-image>
                 </div>
                 <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
@@ -112,11 +116,12 @@
           <!-- Voting Power -->
           <div class="row mt-3">
             <div class="col-6">Voting Power</div>
-            <div class="col-6 text-end text-lg-start">
-              <span class="text--gray-1">{{ currentValidatorDetail?.power | number: global.formatNumberToken }}</span>
-              <span class="text--primary ml-1">{{ denom }}</span>
-              <br class="d-lg-none" />
-              <span class="text--gray-5 ml-1">({{ currentValidatorDetail?.percent_power }}%)</span>
+            <div class="col-6 text-end text-lg-start d-xl-flex">
+              <div>
+                <span class="text--gray-1">{{ currentValidatorDetail?.power | number: global.formatNumberToken }}</span>
+                <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+              </div>
+              <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
             </div>
           </div>
           <!-- Bonded Height -->
@@ -129,13 +134,14 @@
           <!-- Self Bonded -->
           <div class="row mt-3">
             <div class="col-6">Self Bonded</div>
-            <div class="col-6 text-end text-lg-start">
+            <div class="col-6 text-end text-lg-start d-xl-flex">
+              <div>
               <span class="text--gray-1">{{
                 currentValidatorDetail?.self_bonded | number: global.formatNumberToken
-              }}</span>
-              <span class="text--primary ml-1">{{ denom }}</span>
-              <br class="d-lg-none" />
-              <span class="text--gray-5 ml-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
+                }}</span>
+                <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+              </div>
+              <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
             </div>
           </div>
         </div>
@@ -160,7 +166,7 @@
       <div class="card text--white">
         <div class="card-header d-lg-flex align-items-center justify-content-between header-mob pb-0">
           <h3 class="h2-mob mb-0 text--gray-1">Proposed Blocks</h3>
-          <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div>
+          <!-- <div class="body-01 text--gray-5 mt-1 mt-lg-0">Total: {{ lengthBlock || 0 | number }} blocks</div> -->
         </div>
         <div class="card-body article-1 pt-4">
           <ngx-simplebar>
@@ -209,7 +215,7 @@
                 <ng-container *ngIf="breakpoint.value.matches">
                   <div *ngIf="dataSourceBlock" class="custom-card-mob-simple">
                     <app-card-mob-simple
-                      *ngFor="let data of dataSourceBlock.data"
+                      *ngFor="let data of dataSourceBlockMob"
                       [link]="'/blocks/' + data.height"
                       [content]="[
                         {
@@ -449,9 +455,12 @@
                   <div class="custom-card-mob-simple">
                     <app-card-mob-simple
                       *ngFor="let data of dataSourcePowerMob"
-                      [link]="'/blocks/id/' + data.blockId"
+                      [link]="'/blocks/' + data.height"
                       [content]="[
-                        { label: data.height, class: 'body-01 text--primary', info: data.tx_hash | cutStringPipe: 6:6 },
+                        { label: data.height, 
+                          class: 'body-01 text--primary', 
+                          info: '<a class=text--primary href=/transaction/' + data.tx_hash + '>' + (data.tx_hash | cutStringPipe: 6:6) + '</a>' 
+                        },
                         { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
                         {
                           label: 'Time',

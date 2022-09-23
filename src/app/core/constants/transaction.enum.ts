@@ -5,6 +5,10 @@ export enum TypeTransaction {
   IBCAcknowledgement = 'IBC Acknowledgement',
   IBCUpdateClient = 'IBC Update Client',
   IBCTimeout = 'IBC Timeout',
+  IBCChannelOpenInit = 'IBC Channel Open Init',
+  IBCConnectionOpenInit = 'IBC Connect Open Init',
+  IBCCreateClient = 'IBC Create Client',
+  IBCChannelOpenAck = 'IBC Channel Open Ack',
   Send = 'Send',
   Received = 'Receive',
   MultiSend = 'Multi Send',
@@ -39,6 +43,10 @@ export enum TRANSACTION_TYPE_ENUM {
   IBCAcknowledgement = '/ibc.core.channel.v1.MsgAcknowledgement',
   IBCUpdateClient = '/ibc.core.client.v1.MsgUpdateClient',
   IBCTimeout = '/ibc.core.channel.v1.MsgTimeout',
+  IBCChannelOpenInit = '/ibc.core.channel.v1.MsgChannelOpenInit',
+  IBCConnectionOpenInit = '/ibc.core.connection.v1.MsgConnectionOpenInit',
+  IBCCreateClient = '/ibc.core.client.v1.MsgCreateClient',
+  IBCChannelOpenAck = '/ibc.core.channel.v1.MsgChannelOpenAck',
   Send = '/cosmos.bank.v1beta1.MsgSend',
   MultiSend = '/cosmos.bank.v1beta1.MsgMultiSend',
   Delegate = '/cosmos.staking.v1beta1.MsgDelegate',
@@ -80,4 +88,8 @@ export enum ModeExecuteTransaction {
   Default = 'default',
   Mint = 'mint',
   Burn = 'burn'
+}
+
+export enum pipeTypeData {
+  Number = 'number',
 }

@@ -76,6 +76,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   lstUndelegate = [];
   numberCode = 0;
   arrBlocksMiss = [];
+  lstValidatorOrigin = [];
   TABS = [
     {
       key: 3,
@@ -177,6 +178,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getList(): void {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
+        this.lstValidatorOrigin = res.data;
         this.rawData = res.data;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
@@ -349,6 +351,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.modalReference = this.modalService.open(modal, {
           keyboard: false,
           centered: true,
+          size: 'lg',
           windowClass: 'modal-holder validator-modal',
         });
       },
@@ -392,6 +395,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               availableToken: dataWallet?.data?.available,
               stakingToken: dataWallet?.data?.stake_reward,
               historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
+              identity: listDelegator?.data?.identity
             };
           }
 
@@ -407,6 +411,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             }
             if (listDelegator?.data?.delegations.length > 0) {
               listDelegator?.data?.delegations.forEach((f) => {
+                f.identity = f.identity;
                 f.amount_staked = f.amount_staked / NUMBER_CONVERT;
                 f.pending_reward = f.pending_reward / NUMBER_CONVERT;
                 f.reward = f.reward / NUMBER_CONVERT;
@@ -423,11 +428,14 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           if (listUnDelegator) {
             this.lstUndelegate = [];
             const now = new Date();
-            listUnDelegator.data.unbonding_responses.forEach((data) => {
+            listUnDelegator.data.account_unbonding.forEach((data) => {
               data.entries.forEach((f) => {
+                f['validator_identity'] = data.validator_description.identity;
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
-                f.validator_name = this.dataSource.data.find((i) => i.operator_address === f.validator_address).title;
+                f.validator_name = this.lstValidatorOrigin.find(
+                  (i) => i.operator_address === f.validator_address,
+                )?.title;
                 let timeConvert = new Date(f.completion_time);
                 if (now < timeConvert) {
                   this.lstUndelegate.push(f);

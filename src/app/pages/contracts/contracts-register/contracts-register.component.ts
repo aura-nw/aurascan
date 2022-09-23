@@ -189,6 +189,7 @@ export class ContractsRegisterComponent implements OnInit {
     this.modalReference = this.modalService.open(staticDataModal, {
       keyboard: false,
       centered: true,
+      size: 'md',
       windowClass: 'modal-holder contract-modal',
     });
   }

@@ -2,7 +2,7 @@
   <app-pagetitle title="Blocks" [displayInfo]="true"></app-pagetitle>
 </div>
 <section *ngIf="!loading">
-  <ng-container *ngIf="length > 0; else noValues">
+  <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
     <div class="card">
       <div class="card-body">
         <div class="table-responsive d-none d-lg-block">
@@ -53,15 +53,31 @@
             </tr>
           </table>
         </div>
-        <div class="d-lg-none" *ngIf="dataBlock && dataBlock.length > 0">
+        <div class="d-lg-none" *ngIf="dataSource && dataSource?.data?.length > 0">
           <app-card-mob-simple
-            *ngFor="let data of dataBlock"
+            *ngFor="let data of dataSource?.data"
             [link]="'/blocks/' + data.height"
-            [title]="{ size: 'md', titleClass: 'h6-mob', label: data.height, subLabelContent: commonService.getDateValue(data.timestamp)[0], subLabelClass: 'text--gray-1 h6-mob'}"
+            [title]="{
+              size: 'md',
+              titleClass: 'h6-mob',
+              label: data.height,
+              subLabelContent: commonService.getDateValue(data.timestamp)[0],
+              subLabelClass: 'text--gray-1 h6-mob w-time'
+            }"
             [content]="[
-              { label: 'Proposer', info: '<span class=text--primary>' + data.proposer + '</span>' },
+              {
+                label: 'Proposer',
+                info:
+                  '<a class=text--primary href=' +
+                  ('/validators/' + data.operator_address) +
+                  '>' +
+                  data.proposer +
+                  '</a>'
+              },
               { label: 'Txs', class: 'body-01-mob text--gray-1', info: data.num_txs.toString() },
-              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
+              {
+                label: 'Time',
+                class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
                   (data.timestamp | customDate: 'yyyy-MM-dd') +

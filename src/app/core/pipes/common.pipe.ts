@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { EnvironmentService } from '../data-services/environment.service';
-import {DatePipe, formatDate} from "@angular/common";
+import { DatePipe, formatDate } from '@angular/common';
+import BigNumber from 'bignumber.js';
 
 @Pipe({ name: 'calDate' })
 export class pipeCalDate implements PipeTransform {
@@ -52,8 +53,7 @@ export class StringEllipsis implements PipeTransform {
 
 @Pipe({ name: 'imageS3' })
 export class ImageURL implements PipeTransform {
-  constructor(private environmentService: EnvironmentService) {
-  }
+  constructor(private environmentService: EnvironmentService) {}
   transform(value: string): string {
     const replacePath = /\..\//gi;
     value = value.replace(replacePath, '');
@@ -69,5 +69,12 @@ export class CustomDate implements PipeTransform {
     const date = new Date(value);
     value = formatDate(date, format, 'en-US');
     return value;
+  }
+}
+
+@Pipe({ name: 'balanceOf' })
+export class BalanceOf implements PipeTransform {
+  transform(amount: string | number, decimal = 6) {
+    return +(new BigNumber(amount).toNumber() / Math.pow(10, 6)).toFixed(decimal);
   }
 }

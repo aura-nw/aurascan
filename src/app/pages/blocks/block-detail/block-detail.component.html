@@ -64,7 +64,10 @@
           <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.num_txs }}</div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Gas (used / wanted)</div>
+          <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
+            <div>Gas</div>
+            <div class="ml-md-1">(used / wanted)</div>
+          </div>
           <div class="col-auto col-lg-9 mb-0 text--gray-1">
             {{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}
           </div>
@@ -98,7 +101,7 @@
 <div class="card text--gray-1" *ngIf="!isRawData">
   <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
   <div class="card-body body">
-    <ng-container *ngIf="length > 0; else noValues">
+    <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
       <div class="table-responsive d-none d-lg-block">
         <table mat-table [dataSource]="dataSource" class="aura-table">
           <ng-container *ngFor="let template of templates; index as i">
@@ -147,12 +150,12 @@
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                         {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                        <span class="text--primary">{{ denom }}</span>
+                        <span class="text--primary">{{ data?.denom }}</span>
                       </ng-container>
                       <ng-template #displayNonNumber>
-                        <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                        <span *ngIf="!data[template.matColumnDef]"> - </span>
                         <a
-                          *ngIf="data[template.matColumnDef] !== 0"
+                          *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data['tx_hash']]">
                           More
@@ -175,9 +178,9 @@
           </tr>
         </table>
       </div>
-      <div class="d-lg-none" *ngIf="dataTxs && dataTxs.length > 0">
+      <div class="d-lg-none" *ngIf="dataSource?.data?.length > 0">
         <app-card-mob-simple
-          *ngFor="let data of dataTxs"
+          *ngFor="let data of dataSource.data"
           [link]="'/transaction/' + data.tx_hash"
           [title]="{
             size: 'md',
@@ -197,10 +200,17 @@
             { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
           ]"></app-card-mob-simple>
       </div>
+      <app-paginator
+        [length]="pageData.length"
+        [pageSize]="pageData.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="handlePageEvent($event)">
+      </app-paginator>
     </ng-container>
   </div>
 </div>
 
 <ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
+  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+  <app-table-no-data *ngIf="!loading"></app-table-no-data>
 </ng-template>

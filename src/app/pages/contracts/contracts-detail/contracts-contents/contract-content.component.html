@@ -28,7 +28,7 @@
   <div class="mt-5">
     <app-contract-table
       [length]="limit"
-      *ngIf="countCurrent === contractTab.Transactions"
+      *ngIf="countCurrent === contractTab.Transactions && contractTransaction['data']"
       [dataList]="contractTransaction"
       [templates]="templates"
       [contractInfo]="contractInfo"

@@ -7,7 +7,6 @@
             <th mat-header-cell *matHeaderCellDef>
               <div [innerHTML]="template.headerCellDef | translate"></div>
             </th>
-
             <td mat-cell *matCellDef="let data; index as j">
               <div [classList]="[template.cssClass]" ngClass="d-flex align-items-center">
                 <span *ngIf="template.prefix" class="cursor-pointer">
@@ -16,7 +15,9 @@
                       <span
                         class="validator-avatar d-inline-flex"
                         [routerLink]="[template.isUrl, data['operator_address']]">
-                        <app-loading-image [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
+                        <app-loading-image
+                          [identity]="data['validator_identity']"
+                          [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
                       </span>
                     </div>
                   </ng-container>
@@ -40,9 +41,8 @@
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'amount'">
                       {{
-                        (template.isShort
-                          ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) | number: global.formatNumberToken || '-' 
+                        (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
+                          | number: global.formatNumberToken || '-'
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
@@ -116,7 +116,16 @@
           <ng-container *ngIf="type === 'VOTES'">
             <app-card-mob-simple
               [content]="[
-                { label: 'Voter', class: 'h5 mb-0 text--gray-1', info: data.voter ? shortenAddress(data.voter) : '-' },
+                {
+                  label: 'Voter',
+                  class: 'h5 mb-0 text--primary',
+                  info:
+                    '<a class=text--primary href=' +
+                    ('/account/' + data.voter) +
+                    '>' +
+                    (data.voter ? shortenAddress(data.voter) : '-') +
+                    '</a>'
+                },
                 {
                   label: 'TxHash',
                   class: 'body-01',
@@ -150,18 +159,20 @@
                 imgUrl: getValidatorAvatar(data.operator_address),
                 validatorName: data.validator_name,
                 validatorAddress: data.validator_address,
-                validatorNumber: data.rank
+                validatorNumber: data.rank,
+                validatorIdentity: data.validator_identity
               }"
               [content]="[
                 {
                   label: 'TxHash',
                   class: 'body-01',
-                  info:
-                    '<a class=text--primary href=' +
-                    ('/transaction/' + data.tx_hash) +
-                    '>' +
-                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
-                    '</a>'
+                  info: data.tx_hash
+                    ? '<a class=text--primary href=' +
+                      ('/transaction/' + data.tx_hash) +
+                      '>' +
+                      shortenAddress(data.tx_hash) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
                 },
                 { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
                 {
@@ -187,18 +198,25 @@
               [content]="[
                 {
                   label: 'Depositor',
-                  class: 'h5 mb-0 text--gray-1',
-                  info: data.depositor ? shortenAddress(data.depositor) : '-'
+                  class: 'h5 mb-0',
+                  info: data.depositors
+                    ? '<a class=text--primary href=' +
+                      ('/account/' + data.depositors) +
+                      '>' +
+                      shortenAddress(data.depositors) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
                 },
                 {
                   label: 'TxHash',
                   class: 'body-01',
-                  info:
-                    '<a class=text--primary href=' +
-                    ('/transaction/' + data.tx_hash) +
-                    '>' +
-                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
-                    '</a>'
+                  info: data.txhash
+                    ? '<a class=text--primary href=' +
+                      ('/transaction/' + data.txhash) +
+                      '>' +
+                      shortenAddress(data.txhash) +
+                      '</a>'
+                    : '<span class=text--gray-1>-</span>'
                 },
                 {
                   label: 'Amount',

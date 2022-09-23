@@ -1,6 +1,6 @@
 <app-pagetitle title="Transactions" [displayInfo]="true"></app-pagetitle>
 <section *ngIf="!loading" class="mt-4 mt-md-6">
-  <ng-container *ngIf="length > 0; else noValues">
+  <ng-container *ngIf="dataTx?.length > 0; else noValues">
     <div class="card">
       <div class="card-body">
         <div class="table-responsive d-none d-lg-block">
@@ -29,7 +29,7 @@
                       <a
                         *ngSwitchCase="'height'"
                         class="text--primary cursor-pointer block-link"
-                        [routerLink]="['/blocks/id', data['blockId']]">
+                        [routerLink]="['/blocks', data['height']]">
                         {{ data[template.matColumnDef] }}
                       </a>
                       <div *ngSwitchCase="'type'" class="aura-status">
@@ -56,12 +56,12 @@
                       <div *ngSwitchCase="'amount'">
                         <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                           {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                          <span class="text--primary">{{ denom }}</span>
+                          <span class="text--primary">{{ data?.denom }}</span>
                         </ng-container>
                         <ng-template #displayNonNumber>
-                          <span *ngIf="data[template.matColumnDef] === 0"> - </span>
+                          <span *ngIf="!data[template.matColumnDef]"> - </span>
                           <a
-                            *ngIf="data[template.matColumnDef] !== 0"
+                            *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
                             class="text--primary cursor-pointer"
                             [routerLink]="['/transaction', data['tx_hash']]">
                             More
