@@ -71,12 +71,12 @@
     </ul>
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
+      <!-- Soulbound Tokens -->
+      <app-soulbound-token></app-soulbound-token>
       <!-- Coin & Token-->
       <app-token-table [address]="currentAddress" (totalValue)="totalValueToken = $event"></app-token-table>
       <!-- NFT -->
       <app-nft-list [address]="currentAddress" (totalValueNft)="totalValueNft = $event"></app-nft-list>
-      <!-- Soulbound Tokens -->
-      <app-soulbound-token></app-soulbound-token>
     </ng-container>
     <!-- Transaction -->
     <ng-container *ngIf="currentTab === tabsData.Transactions">

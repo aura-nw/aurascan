@@ -1,11 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {PAGE_EVENT} from "src/app/core/constants/common.constant";
-import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
-import {AccountService} from "src/app/core/services/account.service";
-import {Router} from "@angular/router";
-import {Globals} from "src/app/global/global";
-import {ResponseDto} from "src/app/core/models/common.model";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { Router } from "@angular/router";
+import { PAGE_EVENT } from "src/app/core/constants/common.constant";
+import { MAX_LENGTH_SEARCH_TOKEN } from "src/app/core/constants/token.constant";
+import { Globals } from "src/app/global/global";
 
 @Component({
   selector: 'app-soulbound-token',
@@ -26,18 +24,13 @@ export class SoulboundTokenComponent implements OnInit {
   };
   showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  totalValue = 2182.64;
   paginator: MatPaginator;
 
-  constructor(private accountService: AccountService, private router: Router, public global: Globals) { }
+  constructor(private router: Router, public global: Globals) { }
 
   ngOnInit(): void {
     this.getNftData();
   }
-
-  // ngOnChanges(): void {
-  //   this.getNftData();
-  // }
 
   getNftData() {
     this.loading = true;
@@ -49,15 +42,15 @@ export class SoulboundTokenComponent implements OnInit {
     };
     this.assetSoulBound = [
       {
-        contract_address: '',
-        token_id: '',
+        contract_address: 'aura1206t3say4u6p5dnwpagzjz77qmt0uyx2dsew4sncm9j7w7lxjjxs4xheh9',
+        token_id: 'ID16909',
         uri: '',
         name: 'Euphoria Companion',
         status: 'On-chain',
       },
       {
-        contract_address: '',
-        token_id: '',
+        contract_address: 'aura1206t3say4u6p5dnwpagzjz77qmt0uyx2dsew4sncm9j7w7lxjjxs4xheh9',
+        token_id: 'ID16909',
         uri: '',
         name: 'Euphoria Companion',
         status: 'On-chain',
