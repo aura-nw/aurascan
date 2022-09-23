@@ -101,6 +101,7 @@ export class ContractService extends CommonService {
   }
 
   createContractRequest(data: DeployContractListReq) {
-    return this.http.post<any>(`https://contract-deployer.dev.aura.network/api/v1/request/create`, data);
+    const api_url = this.environmentService.configValue.env === 'serenity' ? 'https://contract-deployer.serenity.aurascan.io/api/v1' : 'https://contract-deployer.dev.aura.network/admin/v1'
+    return this.http.post<any>(api_url + `/request/create`, data);
   }
 }
