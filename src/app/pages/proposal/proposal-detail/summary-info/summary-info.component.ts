@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
-import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { map, mergeMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE,
+  VOTING_SUBTITLE
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { CommonService } from '../../../../core/services/common.service';
@@ -29,6 +29,7 @@ const marked = require('marked');
 })
 export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   @Input() proposalId: number;
+  @Output() proposalDtl = new EventEmitter();
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
   currentStatusConstant = VOTING_FINAL_STATUS;
@@ -144,6 +145,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       .subscribe({
         complete: () => {
           this.votingBarLoading = false;
+          this.proposalDtl.emit(this.proposalDetail);
         },
       });
   }
@@ -171,6 +173,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
+      count_vote: data.total_vote,
       request_amount: balanceOf(data.request_amount),
     };
   }
