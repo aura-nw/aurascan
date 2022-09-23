@@ -39,7 +39,8 @@
           </ng-container>
         </ul>
       </div>
-      <form class="aura-form single-input-field search-form mt-4 mt-md-0 d-none d-lg-block position-relative">
+      <form class="aura-form single-input-field search-form mt-4 mt-md-0 d-none d-lg-block position-relative"
+        (ngSubmit)='searchContract()'>
         <div class="input-group">
           <input
             type="text"
@@ -47,14 +48,11 @@
             placeholder="Search for Code ID"
             [(ngModel)]="textSearch"
             [maxLength]="maxLengthSearch"
-            (ngModelChange)='searchContract()'
-            (keyup)="searchContract()"
             name="search"
             autocomplete="off" />
           <button
             type="submit"
-            class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
-            (click)="searchContract()">
+            class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
@@ -100,7 +98,7 @@
 
 <section>
   <div class="card mt-4 mt-lg-6">
-    <div class="card-body">
+    <div class="card-body card__info">
       <div class='d-flex d-lg-none mt-4'>
         <div class="dropdown aura-dropdown btn-status btn-status--mob" *ngIf="contractMainnetStatus.length > 0">
           <button
@@ -119,22 +117,19 @@
             </ng-container>
           </ul>
         </div>
-        <form class="aura-form single-input-field search-form pl-4">
+        <form class="aura-form single-input-field search-form pl-4" (ngSubmit)='searchContract()'>
           <div class="input-group">
             <input
               type="text"
               class="form-control"
               placeholder="Search for Code ID"
               [(ngModel)]="textSearch"
-              (ngModelChange)='searchContract()'
               [maxLength]="maxLengthSearch"
-              (keyup)="searchContract()"
               name="search"
               autocomplete="off" />
             <button
               type="submit"
-              class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
-              (click)="searchContract()">
+              class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
@@ -192,7 +187,7 @@
                 <td mat-cell *matCellDef="let data">
                   <ng-container [ngSwitch]="template.matColumnDef">
                     <ng-container *ngSwitchCase="'contract_address'">
-                      <div class="d-flex align-items-center gap-2">
+                      <div class="d-flex align-items-center">
                         <img
                           *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
@@ -201,6 +196,7 @@
                           height="16px" />
                         <a
                           [routerLink]="['/contracts/', data[template.matColumnDef]]"
+                          [class.ml-6]='data["contract_verification"] === contractVerifyType.Unverifed'
                           [class.disabled-link]="!data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>
@@ -264,10 +260,7 @@
         (pageEvent)="pageEvent($event)">
       </app-paginator>
       <ng-template #noValues>
-        <div class="d-flex justify-content-center align-items-center text-white">
-          <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="24" height="24" class="mr-2" />
-          <span>No Data</span>
-        </div>
+        <app-table-no-data></app-table-no-data>
       </ng-template>
     </div>
   </div>
