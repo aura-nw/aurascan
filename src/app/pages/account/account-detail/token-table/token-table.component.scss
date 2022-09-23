@@ -6,7 +6,8 @@
   line-height: 1.8rem;
   font-weight: 500;
 
-  &--desc,&--asc {
+  &--desc,
+  &--asc {
     &::after {
       top: -3px;
       left: 0;
@@ -43,6 +44,12 @@
       }
     }
   }
+}
+
+.image-token {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
 }
 
 @media (max-width: 991.99px) {
