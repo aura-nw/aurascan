@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -58,6 +60,7 @@ export class TokenTableComponent implements OnChanges {
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
+    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -77,24 +80,38 @@ export class TokenTableComponent implements OnChanges {
       keyword: this.textSearch,
     };
     this.accountService.getAssetCW20ByOwner(payload).subscribe((res: ResponseDto) => {
+      let data: any;
       if (res?.data?.length > 0) {
-        res?.data.forEach((element) => {
+        let lstToken = _.get(res, 'data').map((element) => {
+          data = element;
           if (element.name.toLowerCase() === this.denom?.toLowerCase()) {
-            element.balance = element.balance;
-            element.contract_address = '';
-            element.name = this.stableTokenName;
-            element.symbol = this.denom;
+            data.contract_address = '';
+            data.name = this.stableTokenName;
+            data.symbol = this.denom;
+          } else if (data.symbol.startsWith('ibc')) {
+            let dataIBCToken = this.commonService.mappingNameIBC(data.symbol);
+            if (dataIBCToken?.name) {
+              data.contract_address = '';
+              data.name = dataIBCToken.name || '';
+              data.symbol = dataIBCToken.display || '';
+              data.image = dataIBCToken.logo || this.defaultLogoAura;
+            } else {
+              data = null;
+            }
           }
-
-          element['change'] = element.price_change_percentage_24h;
-          element['isValueUp'] = true;
-          if (element.change < 0) {
-            element['isValueUp'] = false;
-            element.change = Number(element.change.toString().substring(1));
+          if (data) {
+            data.change = data.price_change_percentage_24h;
+            data.isValueUp = true;
+            if (data.change !== '-' && data.change < 0) {
+              data.isValueUp = false;
+              data.change = Number(data.change.toString().substring(1));
+            }
           }
+          return data;
         });
 
-        this.dataSource = new MatTableDataSource<any>(res?.data);
+        lstToken = lstToken.filter((k) => k?.symbol);
+        this.dataSource = new MatTableDataSource<any>(lstToken);
         this.pageData.length = res.meta.count;
       } else {
         this.pageData.length = 0;

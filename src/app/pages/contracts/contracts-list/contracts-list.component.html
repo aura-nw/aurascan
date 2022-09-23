@@ -28,7 +28,7 @@
         <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
     </div>
-    <ng-container *ngIf="showBoxSearch === true">
+    <ng-container *ngIf="showBoxSearch">
       <div class="box-search-data text-white" (clickOutside)="showBoxSearch = false;">
         <ng-container *ngIf="filterSearchData && filterSearchData?.length === 0">
           <span> There are no matching contracts </span>

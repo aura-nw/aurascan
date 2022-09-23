@@ -88,9 +88,8 @@ export class ContractService extends CommonService {
     return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
   }
 
-  getListSmartContract(params: SmartContractListReq){
-    return axios.get(`
-    ${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`);
+  getListSmartContract(params: SmartContractListReq): Observable<IResponsesTemplates<any>>{
+    return this.http.get<any>(`${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`);
   }
 
   getSmartContractStatus() {
