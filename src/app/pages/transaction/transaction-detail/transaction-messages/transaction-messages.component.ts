@@ -303,7 +303,7 @@ export class TransactionMessagesComponent implements OnInit {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
             let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp) || '';
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }
@@ -323,7 +323,7 @@ export class TransactionMessagesComponent implements OnInit {
         let txs = _.get(data, 'transactions').map((element) => {
           const tx_hash = _.get(element, 'tx_response.txhash');
           const time = _.get(element, 'tx_response.timestamp');
-          const effected = _.get(element, 'tx_response.effected') || 0;
+          const effected = _.get(element, 'indexes.fungible_token_packet_success')?.length > 0 ? 1 : 0;
 
           typeTx = _.get(element, 'tx_response.tx.body.messages[0].@type');
           const lstType = _.get(element, 'tx_response.tx.body.messages');
