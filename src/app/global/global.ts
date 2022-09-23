@@ -36,13 +36,7 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
       if (element['@type'] != eTransType.IBCUpdateClient) {
         switch (element['@type']) {
           case eTransType.IBCReceived:
-            let dataEncode = atob(element?.packet?.data);
-            try {
-              const data = JSON.parse(dataEncode);
-              amountFormat = balanceOf(data.amount);
-            } catch (e) {
-              amountFormat = null;
-            }
+            amountFormat = 'More';
             break;
           case eTransType.IBCTransfer:
             amountFormat = balanceOf(element.token.amount);
@@ -186,12 +180,12 @@ export function convertDataTransaction(data, coinInfo) {
         if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
           _type = type['@type'];
           let dataEncode = atob(type?.packet?.data);
-            try {
-              const data = JSON.parse(dataEncode);
-              denom = data.denom;
-            } catch (e) {
-              denom = coinInfo.coinDenom;
-            }
+          try {
+            const data = JSON.parse(dataEncode);
+            denom = data.denom;
+          } catch (e) {
+            denom = coinInfo.coinDenom;
+          }
           return;
         }
       });
@@ -212,9 +206,10 @@ export function convertDataTransaction(data, coinInfo) {
 
     const amount = _.isNumber(_amount) && _amount > 0 ? _amount.toFixed(coinInfo.coinDecimals) : _amount;
 
-    const fee = balanceOf(_.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0, coinInfo.coinDecimals).toFixed(
+    const fee = balanceOf(
+      _.get(element, 'tx_response.tx.auth_info.fee.amount[0].amount') || 0,
       coinInfo.coinDecimals,
-    );
+    ).toFixed(coinInfo.coinDecimals);
     const height = _.get(element, 'tx_response.height');
     const timestamp = _.get(element, 'tx_response.timestamp');
     const gas_used = _.get(element, 'tx_response.gas_used');

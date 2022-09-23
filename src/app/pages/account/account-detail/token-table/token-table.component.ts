@@ -7,6 +7,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -58,6 +59,7 @@ export class TokenTableComponent implements OnChanges {
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -80,15 +82,17 @@ export class TokenTableComponent implements OnChanges {
       if (res?.data?.length > 0) {
         res?.data.forEach((element) => {
           if (element.name.toLowerCase() === this.denom?.toLowerCase()) {
-            element.balance = element.balance;
             element.contract_address = '';
             element.name = this.stableTokenName;
             element.symbol = this.denom;
+          } else if (element.symbol.startsWith('ibc')) {
+            element.name = element.symbol = this.commonService.mappingNameIBC(element.symbol) || '';
+            element.contract_address = '';
           }
 
           element['change'] = element.price_change_percentage_24h;
           element['isValueUp'] = true;
-          if (element.change < 0) {
+          if (element.change !== '-' && element.change < 0) {
             element['isValueUp'] = false;
             element.change = Number(element.change.toString().substring(1));
           }

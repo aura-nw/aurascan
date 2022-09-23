@@ -323,8 +323,9 @@ export class TransactionMessagesComponent implements OnInit {
         let txs = _.get(data, 'transactions').map((element) => {
           const tx_hash = _.get(element, 'tx_response.txhash');
           const time = _.get(element, 'tx_response.timestamp');
-          typeTx = _.get(element, 'tx_response.tx.body.messages[0].@type');
+          const effected = _.get(element, 'tx_response.effected') || 0;
 
+          typeTx = _.get(element, 'tx_response.tx.body.messages[0].@type');
           const lstType = _.get(element, 'tx_response.tx.body.messages');
           if (lstType?.length > 0) {
             lstType.forEach((type) => {
@@ -337,13 +338,12 @@ export class TransactionMessagesComponent implements OnInit {
 
           let temp = _.get(element, 'tx_response.tx.auth_info.fee.amount[0].denom') || this.coinMinimalDenom;
           const denom = temp === this.coinMinimalDenom ? this.denom : temp;
-          let effected = this.transactionDetail?.raw_log.toLowerCase().indexOf('success') > -1 ? 1 : 0;
           return { tx_hash, typeTx, denom, time, effected };
         });
-        if (this.ibcData['typeProgress'] === this.eTransType.IBCTransfer) {
-          txs = txs.filter((k) => k.typeTx === this.eTransType.IBCTransfer);
+        if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
+          txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
         } else {
-          txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCTransfer);
+          txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
         }
         this.listIBCProgress = txs;
       }
