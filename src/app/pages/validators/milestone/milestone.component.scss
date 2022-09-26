@@ -9,8 +9,8 @@
   }
   .nft-item {
     text-align: center;
-    padding: 0 12px;
-    margin-right: 20px;
+    padding: 0 var(--spacer-3);
+    min-width: 120px;
     &__img {
       width: 77px;
       height: 77px;
@@ -33,7 +33,7 @@
       max-width: 125px;
     }
     @media (max-width: 991.99px) {
-      padding: 0 8px;
+      padding: 0 var(--spacer-1);
       margin-right: 0px;
       min-width: 100px;
       &__img {
