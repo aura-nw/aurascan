@@ -101,7 +101,18 @@ export class ContractService extends CommonService {
   }
 
   createContractRequest(data: DeployContractListReq) {
-    const api_url = (this.environmentService.configValue.env == 'serenity') ? 'https://contract-deployer.serenity.aurascan.io/api/v1' : 'https://contract-deployer.dev.aura.network/admin/v1'
+    let api_url = '';
+    switch (this.apiUrl) {
+      case 'https://serenity-api.aurascan.io/api/v1':
+        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
+        break;
+      case 'https://euphoria-api.aurascan.io/api/v1':
+        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
+        break;
+      default:
+        api_url = 'https://contract-deployer.dev.aura.network/admin/v1';
+        break;
+    }
     return this.http.post<any>(api_url + `/request/create`, data);
   }
 }
