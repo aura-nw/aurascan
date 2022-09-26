@@ -15,7 +15,7 @@
                                     <div class="form-group">
                                         <label for="code_ids" class="form-label required text--gray-1 body-02">Code ID</label>
                                             <mat-select formControlName="code_ids" class="form-control form-check-input"
-                                            id="code_ids"
+                                            id="code_ids" [placeholder]='"Select one or many Code IDs"'
                                             [class.form-control--error]="contractForm.get('code_ids')?.invalid && (contractForm.get('code_ids')?.dirty || contractForm.get('code_ids')?.touched)"
                                              multiple [disableOptionCentering]="true" panelClass="aura-optional-panel aura-optional-contract-deploy">
                                               <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>
@@ -36,10 +36,6 @@
                                           type="text"
                                           class="form-control form-check-input"
                                           [class.form-control--error]="contractForm.get('project_name')?.invalid && (contractForm.get('project_name')?.dirty || contractForm.get('project_name')?.touched)"/>
-                                        <div class="error"
-                                            *ngIf="contractForm.get('project_name')?.hasError('required') && (contractForm.get('project_name')?.dirty || contractForm.get('project_name')?.touched)">
-                                            Project Name is required!
-                                        </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('project_name')?.hasError('maxlength') && (contractForm.get('project_name')?.dirty || contractForm.get('project_name')?.touched)">
                                             Content is longer than limit!
@@ -224,7 +220,7 @@
                                                 formControlName="github"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="github"/>
+                                                placeholder="GitHub"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('github')?.hasError('pattern') && (contractForm.get('github')?.dirty || contractForm.get('github')?.touched)">
@@ -245,7 +241,7 @@
                                                 formControlName="reddit"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="reddit"/>
+                                                placeholder="Reddit"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('reddit')?.hasError('pattern') && (contractForm.get('reddit')?.dirty || contractForm.get('reddit')?.touched)">
@@ -268,7 +264,7 @@
                                                 formControlName="telegram"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="telegram"/>
+                                                placeholder="Telegram"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('telegram')?.hasError('pattern') && (contractForm.get('telegram')?.dirty || contractForm.get('telegram')?.touched)">
@@ -289,7 +285,7 @@
                                                 formControlName="slack"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="slack"/>
+                                                placeholder="Slack"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('slack')?.hasError('pattern') && (contractForm.get('slack')?.dirty || contractForm.get('slack')?.touched)">
@@ -312,7 +308,7 @@
                                                 formControlName="weChat"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="weChat"/>
+                                                placeholder="WeChat"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('weChat')?.hasError('pattern') && (contractForm.get('weChat')?.dirty || contractForm.get('weChat')?.touched)">
@@ -333,7 +329,7 @@
                                                 formControlName="facebook"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="facebook"/>
+                                                placeholder="Facebook"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('facebook')?.hasError('pattern') && (contractForm.get('facebook')?.dirty || contractForm.get('facebook')?.touched)">
@@ -356,7 +352,7 @@
                                                 formControlName="linkedin"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="linkedin"/>
+                                                placeholder="Linkedin"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('linkedin')?.hasError('pattern') && (contractForm.get('linkedin')?.dirty || contractForm.get('linkedin')?.touched)">
@@ -377,7 +373,7 @@
                                                 formControlName="twitter"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="twitter"/>
+                                                placeholder="Twitter"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('twitter')?.hasError('pattern') && (contractForm.get('twitter')?.dirty || contractForm.get('twitter')?.touched)">
@@ -400,7 +396,7 @@
                                                 formControlName="discord"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="discord"/>
+                                                placeholder="Discord"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('discord')?.hasError('pattern') && (contractForm.get('discord')?.dirty || contractForm.get('discord')?.touched)">
@@ -421,7 +417,7 @@
                                                 formControlName="bit_coin_talk"
                                                 type="text"
                                                 class="form-control"
-                                                placeholder="bit_coin_talk"/>
+                                                placeholder="Bitcointalk"/>
                                         </div>
                                         <div class="error"
                                             *ngIf="contractForm.get('bit_coin_talk')?.hasError('pattern') && (contractForm.get('bit_coin_talk')?.dirty || contractForm.get('bit_coin_talk')?.touched)">
@@ -432,7 +428,7 @@
                             </div>
                             <div class="divider divider-horizontal my-6"></div>
                             <div class="caption fw-normal text--gray-3">
-                                <span class="text--red-3 mr-1">*</span>denotes required fields
+                                <span class="text--red-3 mr-1">*</span>Denotes required fields
                             </div>
                             <div class="row mt-6">
                                 <div class="col-12">

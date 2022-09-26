@@ -138,7 +138,12 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
-                    {{ data[template.matColumnDef] !== contractVerifyType.Unverifed ? data['updated_at'] : '-' }}
+                    <div class="d-flex align-items-center ml-1" *ngIf='data[template.matColumnDef] !== contractVerifyType.Unverifed'>
+                      <span>{{ data['verified_at'] | customDate: 'yyyy-MM-dd' }}</span>
+                      <div class="divider divider-vertical divider-lighter mx-2"></div>
+                      <span>{{ data['verified_at'] | customDate: 'HH:mm:ss' }}</span>
+                    </div>
+                    <div *ngIf='data[template.matColumnDef] === contractVerifyType.Unverifed'>-</div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
                     {{ (data[template.matColumnDef] | cutStringPipe: 16) || '-' }}

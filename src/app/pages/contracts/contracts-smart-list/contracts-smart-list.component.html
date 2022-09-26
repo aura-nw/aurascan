@@ -29,12 +29,19 @@
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false">
-          <span class='text-capitalize'>{{ currentStatus ? currentStatus.label : 'Status' }}</span>
+          <span *ngIf='!currentStatus'>
+              {{ currentStatus?.label || 'Status' }}
+            </span>
+          <span *ngIf='currentStatus' class='text-capitalize'>
+              {{ currentStatus?.label === "UNVERIFIED" ? (currentStatus.label | lowercase) : currentStatus.label }}
+            </span>
         </button>
         <ul class="dropdown-menu aura-dropdown-menu">
           <ng-container *ngFor="let item of contractMainnetStatus">
             <li class="dropdown-item cursor-pointer" (click)="getListContract(item); resetPageEvent();">
-              <button type="button" class="button p-0 text-capitalize">{{ item.label | lowercase}}</button>
+              <button type="button" class="button p-0" [class.text-capitalize]='item.label === "UNVERIFIED"'>
+                {{ item.label === "UNVERIFIED" ? (item.label | lowercase) : item.label }}
+              </button>
             </li>
           </ng-container>
         </ul>
@@ -102,22 +109,29 @@
       <div class='d-flex d-lg-none mt-4'>
         <div class="dropdown aura-dropdown btn-status btn-status--mob" *ngIf="contractMainnetStatus.length > 0">
           <button
-            class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card button-dropdown w-100"
+            class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card button-dropdown"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false">
-            <span class='text-capitalize caption fw-normal'>{{ currentStatus?.label || 'Status' }}</span>
+            <span class='caption fw-normal' *ngIf='!currentStatus'>
+              {{ currentStatus?.label || 'Status' }}
+            </span>
+            <span class='caption fw-normal text-capitalize' *ngIf='currentStatus'>
+              {{ currentStatus?.label === "UNVERIFIED" ? (currentStatus.label | lowercase) : currentStatus.label }}
+            </span>
           </button>
           <ul class="dropdown-menu aura-dropdown-menu">
             <ng-container *ngFor="let item of contractMainnetStatus">
               <li class="py-1 px-2 dropdown-item cursor-pointer"
                   (click)="getListContract(item); resetPageEvent();">
-                <button type="button" class="button p-0 body-02 text-start text-capitalize">{{ item.label | lowercase}}</button>
+                <button type="button" class="button p-0 body-02 text-start" [class.text-capitalize]='item.label === "UNVERIFIED"'>
+                  {{ item.label === "UNVERIFIED" ? (item.label | lowercase) : item.label }}
+                </button>
               </li>
             </ng-container>
           </ul>
         </div>
-        <form class="aura-form single-input-field search-form pl-4" (ngSubmit)='searchContract()'>
+        <form class="aura-form single-input-field search-form search-form--mob ml-4" (ngSubmit)='searchContract()'>
           <div class="input-group">
             <input
               type="text"
@@ -213,17 +227,17 @@
                     <ng-container *ngSwitchCase="'verified_at'">
                       <div *ngIf="data[template.matColumnDef]">
                         <div class="body-02 d-flex align-items-center">
-                          <span>{{ data[template.matColumnDef] | customDate: 'MM/dd/yyyy' }}</span>
+                          <span>{{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}</span>
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'status'">
-                      <div class='text-capitalize'
+                      <div
                         [ngStyle]="{
                           color: statusColor[data[template.matColumnDef]]
                         }">
-                        {{ data[template.matColumnDef] | lowercase}}
+                        {{ data[template.matColumnDef] }}
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'"> - </ng-container>
