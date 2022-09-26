@@ -110,7 +110,7 @@ export class ContractService extends CommonService {
         api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
         break;
       default:
-        api_url = 'https://contract-deployer.dev.aura.network/admin/v1';
+        api_url = 'https://contract-deployer.dev.aura.network/api/v1';
         break;
     }
     return this.http.post<any>(api_url + `/request/create`, data);
