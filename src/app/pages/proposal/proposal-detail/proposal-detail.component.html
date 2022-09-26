@@ -1,9 +1,9 @@
 <app-pagetitle title="Voting Details"></app-pagetitle>
 <section class="summary">
-    <app-summary-info [proposalId]="proposalId"></app-summary-info>
+    <app-summary-info [proposalId]="proposalId" (proposalDtl)="getProposalDetail($event)"></app-summary-info>
 </section>
 <section class="votes">
-    <app-votes [proposalId]="proposalId"></app-votes>
+    <app-votes [proposalDetail]="proposalDetail"></app-votes>
 </section>
 <section class="validator-votes">
     <app-validators-votes [proposalId]="proposalId"></app-validators-votes>

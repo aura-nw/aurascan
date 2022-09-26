@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
@@ -19,8 +19,8 @@ export interface IVotes {
   templateUrl: './votes.component.html',
   styleUrls: ['./votes.component.scss'],
 })
-export class VotesComponent implements OnInit {
-  @Input() proposalId: number = null;
+export class VotesComponent implements OnChanges {
+  @Input() proposalDetail;
 
   TABS = PROPOSAL_VOTE.filter((vote) =>
     [
@@ -39,7 +39,6 @@ export class VotesComponent implements OnInit {
   voteDataList: IVotes[] = [];
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
-  LIMIT_DEFAULT = 10000;
   voteDataListLoading = true;
   query = [];
 
@@ -50,43 +49,73 @@ export class VotesComponent implements OnInit {
     no: null,
     noWithVeto: null,
   };
+
+  countTotal = {
+    all: 0,
+    yes: 0,
+    abstain: 0,
+    no: 0,
+    noWithVeto: 0,
+  };
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {}
 
-  ngOnInit(): void {
-    if (this.proposalId) {
+  ngOnChanges(): void {
+    if (this.proposalDetail?.proposal_id) {
       const payloads: IListVoteQuery[] = this.TABS.map((vote) => ({
-        limit: this.LIMIT_DEFAULT,
-        offset: 0,
-        option: vote.key,
-        proposalId: this.proposalId,
+        pageLimit: 5,
+        proposalId: this.proposalDetail.proposal_id,
       }));
-
       this.query = payloads;
+      this.proposalDetail?.total_vote.forEach((f) => {
+        this.countTotal.all += f.count;
+        switch (f.answer) {
+          case VOTE_OPTION.VOTE_OPTION_YES:
+            this.countTotal.yes = f.count;
+            break;
+          case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
+            this.countTotal.no = f.count;
+            break;
+          case VOTE_OPTION.VOTE_OPTION_NO:
+            this.countTotal.abstain = f.count;
+            break;
+          case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
+            this.countTotal.noWithVeto = f.count;
+            break;
+        }
+      });
 
       merge(
-        this.proposalService.getListVote(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
-        this.proposalService.getListVote(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService.getListVote(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService.getListVote(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
-        this.proposalService.getListVote(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
+        this.proposalService.getListVoteFromIndexer(payloads[0], null).pipe(map((item) => ({ all: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[1], 1).pipe(map((item) => ({ yes: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[2], 3).pipe(map((item) => ({ no: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[3], 4).pipe(map((item) => ({ noWithVeto: item.data }))),
+        this.proposalService.getListVoteFromIndexer(payloads[4], 2).pipe(map((item) => ({ abstain: item.data }))),
       ).subscribe((res) => {
         this.voteDataListLoading = true;
         res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
         res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
-        res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
         res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
         res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
+        res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
 
-        if (res['all']) {
-          this.voteDataList = [...this.voteData.all.proposalVotes];
-          this.countVote.set('', this.voteData.all.countTotal);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.all.countNoWithVeto);
+        if (this.voteData?.all?.transactions) {
+          this.voteDataList = [...this.voteData?.all?.transactions];
         }
+        if (this.voteDataList) {
+          this.voteDataList.forEach((item: any) => {
+            item.voter = item.tx_response?.tx?.body?.messages[0]?.voter;
+            item.tx_hash = item.tx_response?.txhash;
+            item.option = item.tx_response?.tx?.body?.messages[0]?.option;
+            item.updated_at = item.tx_response?.timestamp;
+          });
+        }
+        this.countVote.set('', this.countTotal?.all);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.countTotal?.yes);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.countTotal?.abstain);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.countTotal?.no);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.countTotal?.noWithVeto);
         this.voteDataListLoading = false;
       });
     }
@@ -96,20 +125,29 @@ export class VotesComponent implements OnInit {
     this.countCurrent = tabId;
     switch (tabId) {
       case '':
-        this.voteDataList = this.voteData.all.proposalVotes;
+        this.voteDataList = this.voteData.all.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_YES:
-        this.voteDataList = this.voteData.yes.proposalVotes;
+        this.voteDataList = this.voteData.yes.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
-        this.voteDataList = this.voteData.abstain.proposalVotes;
+        this.voteDataList = this.voteData.abstain.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO:
-        this.voteDataList = this.voteData.no.proposalVotes;
+        this.voteDataList = this.voteData.no.transactions;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
-        this.voteDataList = this.voteData.noWithVeto.proposalVotes;
+        this.voteDataList = this.voteData.noWithVeto.transactions;
         break;
+    }
+
+    if (this.voteDataList) {
+      this.voteDataList.forEach((item: any) => {
+        item.voter = item.tx_response?.tx?.body?.messages[0]?.voter;
+        item.tx_hash = item.tx_response?.txhash;
+        item.option = item.tx_response?.tx?.body?.messages[0]?.option;
+        item.updated_at = item.tx_response?.timestamp;
+      });
     }
   }
 }
