@@ -68,6 +68,7 @@ export class NftListComponent implements OnChanges {
 
   resetSearch(): void {
     this.searchValue = '';
+    this.pageData.pageIndex = 0;
     this.getNftData();
   }
 
