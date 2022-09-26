@@ -46,6 +46,9 @@
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'answer'">
+                      {{ getVoteValue(data[template.matColumnDef]) }}
+                    </ng-container>
                     <ng-container *ngSwitchCase="'option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>

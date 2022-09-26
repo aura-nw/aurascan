@@ -32,6 +32,20 @@ export class ProposalService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/proposals/votes/get-by-validator`, data);
   }
 
+  getValidatorVotesFromIndexer(proposalid): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      proposalid: proposalid
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/votes/validators`, {
+      params,
+    });
+  }
+
   getDepositors(proposalId: string | number) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_deposit.proposal_id%3D%27${proposalId}%27&order_by=ORDER_BY_DESC`,

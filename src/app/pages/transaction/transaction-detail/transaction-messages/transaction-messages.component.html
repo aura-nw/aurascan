@@ -750,7 +750,7 @@
         <ng-container *ngFor="let item of filterIBCType(type)">
           <div
             class="d-flex col-lg-9 justify-content-between py-2"
-            [ngStyle]="{ 'background-color': item.effected ? '#363843' : '' }">
+            [ngStyle]="{ 'border-radius': '5px', 'background-color': item.effected ? '#363843' : '' }">
             <div>{{ item.denom }}</div>
             <div class="text-right">
               <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">

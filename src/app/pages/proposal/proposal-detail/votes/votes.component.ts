@@ -126,6 +126,8 @@ export class VotesComponent implements OnChanges {
     switch (tabId) {
       case '':
         this.voteDataList = this.voteData.all.transactions;
+        console.log(this.voteData.all.transactions);
+        
         break;
       case VOTE_OPTION.VOTE_OPTION_YES:
         this.voteDataList = this.voteData.yes.transactions;
