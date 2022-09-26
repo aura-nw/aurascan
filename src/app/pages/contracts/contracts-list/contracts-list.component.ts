@@ -51,16 +51,14 @@ export class ContractsListComponent implements OnInit {
     private contractService: ContractService,
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-          this.urlParam = params.param;
-        }
-    );
+    this.route.queryParams.subscribe((params) => {
+      this.urlParam = params.param;
+    });
     this.textSearch = this.urlParam ? this.urlParam : '';
-    this.showBoxSearch = this.textSearch !== '';
     this.getListContract();
   }
 
@@ -86,7 +84,7 @@ export class ContractsListComponent implements OnInit {
             item.type = CONTRACT_RESULT.TBD;
           }
         });
-        if(this.textSearch) {
+        if (this.textSearch) {
           this.filterSearchData = res.data;
         }
         this.dataSource = res.data;
@@ -96,9 +94,10 @@ export class ContractsListComponent implements OnInit {
   }
 
   searchToken(): void {
-    this.filterSearchData = null;
-    this.showBoxSearch = this.textSearch !== '';
+    this.filterSearchData = [];
+    this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
+      this.showBoxSearch = true;
       let payload = {
         limit: 0,
         offset: 0,
@@ -122,7 +121,7 @@ export class ContractsListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
-    if(!this.urlParam) {
+    if (!this.urlParam) {
       this.textSearch = '';
       this.showBoxSearch = false;
     }
@@ -130,7 +129,9 @@ export class ContractsListComponent implements OnInit {
   }
 
   handleLink(): void {
-    this.router.navigate(['/contracts/', this.filterSearchData[0]?.contract_address]);
+    if (this.filterSearchData[0]?.contract_address) {
+      this.router.navigate(['/contracts/', this.filterSearchData[0]?.contract_address]);
+    }
   }
 
   shortenAddress(address: string): string {
@@ -143,7 +144,8 @@ export class ContractsListComponent implements OnInit {
   resetFilterSearch() {
     this.textSearch = '';
     this.showBoxSearch = false;
-    if(this.urlParam) {
+    this.filterSearchData = [];
+    if (this.urlParam) {
       this.router.navigate(['/contracts']);
       this.getListContract();
     } else {
