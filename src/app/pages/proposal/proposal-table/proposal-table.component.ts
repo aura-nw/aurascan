@@ -57,8 +57,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       prefix: 'operator_address',
     },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'updated_at', headerCellDef: 'Time', desktopOnly: true },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
