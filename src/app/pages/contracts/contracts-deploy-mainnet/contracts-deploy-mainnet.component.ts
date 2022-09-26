@@ -19,7 +19,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
   userAddress;
   contractForm;
   emailPattern = /\S+@\S+\.\S+/;
-  websitePattern = /(https?:\/\/)?([\w\d]+\.)?[\w\d]+\.\w+\/?.+/;
+  websitePattern = /(https:\/\/)[\w\d]+\.\w+\/?.+/;
   listID = []
 
   constructor(
@@ -54,7 +54,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
     this.contractForm = this.fb.group(
       {
         code_ids: ['', [Validators.required]],
-        project_name: ['', [Validators.required, Validators.maxLength(200)]],
+        project_name: ['', [Validators.maxLength(200)]],
         official_project_website: ['', [Validators.required, Validators.maxLength(500), Validators.pattern(this.websitePattern)]],
         official_project_email: ['', [Validators.required, Validators.maxLength(200), Validators.pattern(this.emailPattern)]],
         name: ['', [Validators.required, Validators.maxLength(200)]],
