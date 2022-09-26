@@ -221,7 +221,9 @@
                       >{{ data[template.matColumnDef] }}
                       <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'type'">{{ data[template.matColumnDef] }}</ng-container>
+                    <ng-container *ngSwitchCase="'type'">
+                      {{ data[template.matColumnDef] }}
+                    </ng-container>
                     <!-- Type contract -->
                     <ng-container *ngSwitchCase="'height'"> - </ng-container>
                     <ng-container *ngSwitchCase="'verified_at'">

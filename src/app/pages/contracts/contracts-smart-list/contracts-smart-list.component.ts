@@ -112,9 +112,9 @@ export class ContractsSmartListComponent implements OnInit {
         pageIndex: this.pageData.pageIndex,
       };
       res.data.forEach((item) => {
-        if (item.status === CONTRACT_RESULT.INCORRECT || !item.type) {
+        if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
           item.type = '-';
-        } else if (item.status === CONTRACT_RESULT.TBD) {
+        } else if (item.result === CONTRACT_RESULT.TBD) {
           item.type = CONTRACT_RESULT.TBD;
         }
       });
