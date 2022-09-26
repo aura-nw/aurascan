@@ -740,7 +740,7 @@
 
     <ng-template #ibcItem let-type="type" let-title="title">
       <div class="row col-12">
-        <div class="col-lg-2">
+        <div class="col-lg-3">
           <img [src]="'assets/icons/icons-svg/color/success.svg' | imageS3" width="20px" height="20px" class="mr-1" />{{
             title
           }}
@@ -749,10 +749,10 @@
       <div class="row ml-6 p-3">
         <ng-container *ngFor="let item of filterIBCType(type)">
           <div
-            class="d-flex col-lg-9 justify-content-between py-2"
+            class="d-flex col-lg-10 justify-content-between py-2"
             [ngStyle]="{ 'border-radius': '5px', 'background-color': item.effected ? '#363843' : '' }">
             <div>{{ item.denom }}</div>
-            <div class="text-right">
+            <div class="txt-right">
               <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
                 {{ item.tx_hash }}
               </a>
