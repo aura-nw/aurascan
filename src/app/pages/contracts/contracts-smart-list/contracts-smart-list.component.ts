@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { from, Subscription } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
-import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -16,6 +16,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
 import { SmartContractListReq, SmartContractStatus } from '../../../core/models/contract.model';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 
 @Component({
   selector: 'app-contracts-smart-list',
@@ -110,6 +111,13 @@ export class ContractsSmartListComponent implements OnInit {
         pageSize: this.pageData.pageSize,
         pageIndex: this.pageData.pageIndex,
       };
+      res.data.forEach((item) => {
+        if (item.status === CONTRACT_RESULT.INCORRECT || !item.type) {
+          item.type = '-';
+        } else if (item.status === CONTRACT_RESULT.TBD) {
+          item.type = CONTRACT_RESULT.TBD;
+        }
+      });
       this.preIndex = this.pageData.pageIndex;
       this.dataSource.data = res.data;
       this.loading = false;
