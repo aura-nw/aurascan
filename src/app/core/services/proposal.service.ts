@@ -7,7 +7,7 @@ import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
-import { IListVoteQuery, IListVotesRes, IVotingInfo } from '../models/proposal.model';
+import { IVotingInfo } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -18,18 +18,10 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getProposalDetail(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
-  }
-
   getVotes(proposalId: string | number, voter: string, limit: string | number, offset: string | number) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}&order_by=ORDER_BY_DESC`,
     );
-  }
-
-  getValidatorVotes(data): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/proposals/votes/get-by-validator`, data);
   }
 
   getValidatorVotesFromIndexer(proposalid): Observable<any> {
@@ -50,10 +42,6 @@ export class ProposalService extends CommonService {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_deposit.proposal_id%3D%27${proposalId}%27&order_by=ORDER_BY_DESC`,
     );
-  }
-
-  getListVote(payload: IListVoteQuery): Observable<IResponsesTemplates<IListVotesRes>> {
-    return this.http.post<IResponsesTemplates<IListVotesRes>>(`${this.apiUrl}/proposals/votes/get-by-option`, payload);
   }
 
   getListVoteFromIndexer(payload, option): Observable<any> {
@@ -85,11 +73,6 @@ export class ProposalService extends CommonService {
 
   getStakeInfo(delegatorAddress: string): Observable<IResponsesTemplates<IVotingInfo>> {
     return this.http.get<IResponsesTemplates<IVotingInfo>>(`${this.apiUrl}/proposals/delegations/${delegatorAddress}`);
-  }
-
-  getProposalDetailFromNode(proposalId: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
   }
 
   getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {

@@ -12,7 +12,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE
+  VOTING_SUBTITLE,
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { CommonService } from '../../../../core/services/common.service';
@@ -70,6 +70,9 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         mergeMap((data) => {
           if (data?.count > 0) {
             this.proposalDetail = this.makeProposalDataDetail(data.proposals[0]);
+            if (this.proposalDetail?.content?.amount) {
+              this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
+            }
             return this.commonService.status().pipe(
               mergeMap((res) => {
                 if (res.data) {

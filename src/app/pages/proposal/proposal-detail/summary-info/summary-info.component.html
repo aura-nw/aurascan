@@ -138,7 +138,7 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob" *ngIf="proposalDetail.request_amount">
           <div class="col-auto col-md-2 text--gray-5">Request Amount</div>
           <div class="col-auto col-md-10 mt-0">
-            {{ proposalDetail.request_amount }}
+            {{ proposalDetail.request_amount | number: global.formatNumberToken }}
             <span class="text--primary"> {{ denom }}</span>
           </div>
         </div>
