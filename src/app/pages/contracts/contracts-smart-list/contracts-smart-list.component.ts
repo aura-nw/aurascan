@@ -58,10 +58,10 @@ export class ContractsSmartListComponent implements OnInit {
 
   statusColor = {
     "UNVERIFIED": "#E5E7EA",
-    "NOT REGISTERD": "#F5B73C",
+    "Not registered": "#F5B73C",
     "TBD": "#2CB1F5",
-    "DEPLOYED": "#67C091",
-    "REJECTED": "#D5625E",
+    "Deployed": "#67C091",
+    "Rejected": "#D5625E",
   };
 
   constructor(
@@ -126,14 +126,14 @@ export class ContractsSmartListComponent implements OnInit {
   }
 
   searchContract(): void {
-      this.getListContract();
+      this.getListContract(this.currentStatus);
       this.resetPageEvent();
   }
 
   clearSearch(): void {
     this.textSearch = '';
     this.filterSearchData = null;
-    this.getListContract();
+    this.getListContract(this.currentStatus);
     this.resetPageEvent();
   }
 
@@ -165,10 +165,6 @@ export class ContractsSmartListComponent implements OnInit {
         key: 'ALL',
         label: 'All'
       })
-      // remove EXACT_MATCH
-      this.removeStatusItem('EXACT_MATCH');
-      // remove SIMILAR_MATCH
-      this.removeStatusItem('SIMILAR_MATCH');
     }
   }
 
