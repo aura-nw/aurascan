@@ -1,6 +1,11 @@
-import { MESSAGE_WARNING } from "../constants/proposal.constant";
+import { MESSAGE_WARNING } from '../constants/proposal.constant';
 
 export interface IListVoteQuery {
+  proposalId: number;
+  pageLimit: number;
+}
+
+export interface IListVoteValidatorQuery {
   proposalId: number;
   option: string;
   limit: number;
@@ -21,22 +26,32 @@ export interface IListVotesRes {
 export interface IListVotes {}
 
 export interface IProposal {
-  pro_id: number;
-  pro_proposer: string;
-  pro_proposer_address: string;
-  pro_status: string;
-  pro_submit_time: string;
-  pro_title: string;
-  pro_total_deposits: number;
-  pro_votes_abstain: number;
-  pro_votes_no: number;
-  pro_votes_no_with_veto: number;
-  pro_votes_yes: number;
-  pro_voting_end_time: string;
-  pro_voting_start_time: string;
+  proposal_id: number;
+  proposer_name: string;
+  proposer_address: string;
+  status: string;
+  submit_time: string;
+  content: {
+    title: string;
+  };
+  total_deposit: { amount: number; denom: string };
+  tally: {
+    abstain: number;
+    no: number;
+    no_with_veto: number;
+    yes: number;
+  };
+  final_tally_result: {
+    abstain: number;
+    no: number;
+    no_with_veto: number;
+    yes: number;
+  };
+  voting_end_time: string;
+  voting_start_time: string;
   pro_vote_total?: number;
   pro_turnout: string;
-  quorum: number,
+  quorum: number;
   vote_option: string;
 }
 
