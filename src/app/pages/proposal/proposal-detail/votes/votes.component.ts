@@ -159,63 +159,75 @@ export class VotesComponent implements OnChanges {
     switch ($event.tabId) {
       case VOTE_OPTION.VOTE_OPTION_YES:
         payloads.nextKey = this.voteData.yes.nextKey;
-        this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_YES).subscribe((res) => {
-          if (res.data.votes) {
-            this.voteData.yes = {
-              nextKey: res.data.nextKey,
-              votes: [...this.voteData.yes.votes, ...res.data.votes],
-            };
-            this.voteDataList = this.voteData?.yes.votes;
-          }
-        });
+        if (payloads.nextKey) {
+          this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_YES).subscribe((res) => {
+            if (res.data.votes) {
+              this.voteData.yes = {
+                nextKey: res.data.nextKey,
+                votes: [...this.voteData.yes.votes, ...res.data.votes],
+              };
+              this.voteDataList = this.voteData?.yes.votes;
+            }
+          });
+        }
         break;
       case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
         payloads.nextKey = this.voteData.abstain.nextKey;
-        this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN).subscribe((res) => {
-          if (res.data.votes) {
-            this.voteData.abstain = {
-              nextKey: res.data.nextKey,
-              votes: [...this.voteData.abstain.votes, ...res.data.votes],
-            };
-            this.voteDataList = this.voteData?.abstain.votes;
-          }
-        });
+        if (payloads.nextKey) {
+          this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN).subscribe((res) => {
+            if (res.data.votes) {
+              this.voteData.abstain = {
+                nextKey: res.data.nextKey,
+                votes: [...this.voteData.abstain.votes, ...res.data.votes],
+              };
+              this.voteDataList = this.voteData?.abstain.votes;
+            }
+          });
+        }
         break;
       case VOTE_OPTION.VOTE_OPTION_NO:
         payloads.nextKey = this.voteData.no.nextKey;
-        this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO).subscribe((res) => {
-          if (res.data.votes) {
-            this.voteData.no = {
-              nextKey: res.data.nextKey,
-              votes: [...this.voteData.no.votes, ...res.data.votes],
-            };
-            this.voteDataList = this.voteData?.no.votes;
-          }
-        });
+        if (payloads.nextKey) {
+          this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO).subscribe((res) => {
+            if (res.data.votes) {
+              this.voteData.no = {
+                nextKey: res.data.nextKey,
+                votes: [...this.voteData.no.votes, ...res.data.votes],
+              };
+              this.voteDataList = this.voteData?.no.votes;
+            }
+          });
+        }
         break;
       case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
         payloads.nextKey = this.voteData.noWithVeto.nextKey;
-        this.proposalService.getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO).subscribe((res) => {
-          if (res.data.votes) {
-            this.voteData.noWithVeto = {
-              nextKey: res.data.nextKey,
-              votes: [...this.voteData.noWithVeto.votes, ...res.data.votes],
-            };
-            this.voteDataList = this.voteData?.noWithVeto.votes;
-          }
-        });
+        if (payloads.nextKey) {
+          this.proposalService
+            .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO)
+            .subscribe((res) => {
+              if (res.data.votes) {
+                this.voteData.noWithVeto = {
+                  nextKey: res.data.nextKey,
+                  votes: [...this.voteData.noWithVeto.votes, ...res.data.votes],
+                };
+                this.voteDataList = this.voteData?.noWithVeto.votes;
+              }
+            });
+        }
         break;
       default:
         payloads.nextKey = this.voteData.all.nextKey;
-        this.proposalService.getListVoteFromIndexer(payloads, null).subscribe((res) => {
-          if (res.data.votes) {
-            this.voteData.all = {
-              nextKey: res.data.nextKey,
-              votes: [...this.voteData.all.votes, ...res.data.votes],
-            };
-            this.voteDataList = this.voteData?.all.votes;
-          }
-        });
+        if (payloads.nextKey) {
+          this.proposalService.getListVoteFromIndexer(payloads, null).subscribe((res) => {
+            if (res.data.votes) {
+              this.voteData.all = {
+                nextKey: res.data.nextKey,
+                votes: [...this.voteData.all.votes, ...res.data.votes],
+              };
+              this.voteDataList = this.voteData?.all.votes;
+            }
+          });
+        }
         break;
     }
   }
