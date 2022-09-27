@@ -122,7 +122,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           };
           this.parsingProposalStatus(this.proposalDetail);
 
-          if (this.proposalDetail.pro_turnout >= quorum) {
+          if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
             if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
               if (pro_votes_no_with_veto < pro_total_vote / 3) {
                 this.finalSubTitle = VOTING_SUBTITLE.PASS;
