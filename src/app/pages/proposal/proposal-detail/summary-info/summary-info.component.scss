@@ -73,6 +73,10 @@
         &--secondary {
           background-color: var(--aura-gray-8);
         }
+
+        &--purple {
+          background-color: var(--aura-secondary);
+        }
       }
 
       li:last-child {
@@ -244,7 +248,7 @@
     }
 
     &.status--primary {
-      background-color: var(--aura-primary);
+      background-color: var(--aura-green-3);
     }
 
     &.status--danger {
