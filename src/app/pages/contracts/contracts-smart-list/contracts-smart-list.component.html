@@ -46,14 +46,14 @@
           </ng-container>
         </ul>
       </div>
-      <form class="aura-form single-input-field search-form mt-4 mt-md-0 d-none d-lg-block position-relative"
-        (ngSubmit)='searchContract()'>
+      <form class="aura-form single-input-field search-form mt-4 mt-md-0 d-none d-lg-block position-relative">
         <div class="input-group">
           <input
             type="text"
             class="form-control"
             placeholder="Search for Code ID"
             [(ngModel)]="textSearch"
+            (keyup.enter)='textSearchCache = textSearch; searchContract()'
             [maxLength]="maxLengthSearch"
             name="search"
             autocomplete="off" />
@@ -71,33 +71,6 @@
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
-        <ng-container *ngIf="textSearch?.length > 0">
-          <div class="box-search-data w-100 text-white" [style.display]="isHideSearch ? 'none' : 'block'">
-            <ng-container *ngIf="filterSearchData?.length === 0">
-              <span> There are no matching contracts </span>
-            </ng-container>
-            <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-              <div class="txt-title-search">Smart Contract</div>
-              <ng-container *ngFor="let item of filterSearchData">
-                <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
-                  <div class="ml-1">
-                    <div class="d-flex align-items-center">
-                      <span class="text-clamp">
-                        {{ item.code_id }} - {{ item.type }} Contract -
-                        <span
-                          [ngStyle]="{
-                            color: statusColor[item.status]
-                          }">
-                          {{ item.result }}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-            </ng-container>
-          </div>
-        </ng-container>
       </form>
     </div>
   </div>
@@ -131,7 +104,7 @@
             </ng-container>
           </ul>
         </div>
-        <form class="aura-form single-input-field search-form search-form--mob ml-4" (ngSubmit)='searchContract()'>
+        <form class="aura-form single-input-field search-form search-form--mob ml-4">
           <div class="input-group">
             <input
               type="text"
@@ -139,6 +112,7 @@
               placeholder="Search for Code ID"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
+              (keyup.enter)='textSearchCache = textSearch; searchContract()'
               name="search"
               autocomplete="off" />
             <button
@@ -153,33 +127,6 @@
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
-          <ng-container *ngIf="textSearch?.length > 0">
-            <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
-              <ng-container *ngIf="filterSearchData?.length === 0">
-                <span> There are no matching contracts </span>
-              </ng-container>
-              <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                <div class="txt-title-search">Smart Contract</div>
-                <ng-container *ngFor="let item of filterSearchData">
-                  <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
-                    <div class="ml-1">
-                      <div class="d-flex align-items-center">
-                    <span class="text-clamp">
-                      {{ item.code_id }} - {{ item.type }} Contract -
-                      <span
-                        [ngStyle]="{
-                          color: statusColor[item.status]
-                        }">
-                        {{ item.result }}
-                      </span>
-                    </span>
-                      </div>
-                    </div>
-                  </div>
-                </ng-container>
-              </ng-container>
-            </div>
-          </ng-container>
         </form>
       </div>
       <div *ngIf="loading" class="m-auto mt-10">
@@ -238,8 +185,8 @@
                       <div
                         [ngStyle]="{
                           color: statusColor[data[template.matColumnDef]]
-                        }">
-                        {{ data[template.matColumnDef] }}
+                        }" [class.text-capitalize]='data[template.matColumnDef] === "UNVERIFIED"'>
+                        {{ data[template.matColumnDef] === 'UNVERIFIED' ? (data[template.matColumnDef] | lowercase) : data[template.matColumnDef] }}
                       </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'tx_hash'"> - </ng-container>

@@ -25,6 +25,7 @@ import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 })
 export class ContractsSmartListComponent implements OnInit {
   textSearch = '';
+  textSearchCache = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'Address' },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
@@ -33,8 +34,8 @@ export class ContractsSmartListComponent implements OnInit {
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified' },
     { matColumnDef: 'status', headerCellDef: 'Status' },
-    { matColumnDef: 'mainnet_code_id', headerCellDef: 'Code ID On Mainnet' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'Contract On Mainnet' },
+    { matColumnDef: 'reference_code_id', headerCellDef: 'Code ID On Mainnet' },
+    // { matColumnDef: 'tx_hash', headerCellDef: 'Contract On Mainnet' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   pageLimit = 20;
@@ -52,7 +53,6 @@ export class ContractsSmartListComponent implements OnInit {
   userAddress = '';
   walletAccount: any;
   loading = true;
-  isHideSearch = false;
   contractMainnetStatus: SmartContractStatus[] = [];
   currentStatus: SmartContractStatus;
   subscription: Subscription
@@ -100,7 +100,7 @@ export class ContractsSmartListComponent implements OnInit {
     this.loading = true;
     const payload: SmartContractListReq = {
       creatorAddress: this.userAddress,
-      codeId: this.textSearch ? this.textSearch : '',
+      codeId:  this.textSearchCache ?  this.textSearchCache : '',
       status: (this.currentStatus && this.currentStatus.key !== 'ALL') && this.currentStatus.label ? this.currentStatus.label : '',
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
@@ -121,6 +121,7 @@ export class ContractsSmartListComponent implements OnInit {
       this.preIndex = this.pageData.pageIndex;
       this.dataSource.data = res.data;
       this.loading = false;
+
     });
   }
 
@@ -140,16 +141,10 @@ export class ContractsSmartListComponent implements OnInit {
 
   clearSearch(): void {
     this.textSearch = '';
+    this.textSearchCache = '';
     this.filterSearchData = null;
     this.getListContract(this.currentStatus);
     this.resetPageEvent();
-  }
-
-  replacePageList(item: any): void {
-    this.textSearch = item.code_id;
-    this.dataSource.data = item;
-    this.isHideSearch = true;
-    this.pageData.length = 1;
   }
 
   paginatorEmit(event): void {
@@ -183,5 +178,9 @@ export class ContractsSmartListComponent implements OnInit {
     if (indexOfObject !== -1) {
       this.contractMainnetStatus.splice(indexOfObject, 1);
     }
+  }
+
+  logData(){
+    console.log(this.textSearch);
   }
 }
