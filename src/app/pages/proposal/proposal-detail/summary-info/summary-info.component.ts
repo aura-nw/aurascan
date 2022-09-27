@@ -70,6 +70,9 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         map((dta) => dta.data),
         mergeMap((data) => {
           if (data?.count > 0) {
+            if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
+              this.proposalDtl.emit(null);
+            }
             this.proposalDetail = this.makeProposalDataDetail(data.proposals[0]);
             if (this.proposalDetail?.content?.amount) {
               this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
@@ -170,7 +173,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     return {
       ...data,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
-      pro_total_deposits: balanceOf(_.get( data, 'total_deposit[0].amount') || 0),
+      pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
       pro_type: data.content['@type'].split('.').pop(),
       pro_votes_yes,
       pro_votes_no,
