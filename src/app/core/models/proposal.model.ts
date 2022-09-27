@@ -1,8 +1,9 @@
 import { MESSAGE_WARNING } from '../constants/proposal.constant';
 
 export interface IListVoteQuery {
-  proposalId: number;
+  proposalid: number;
   pageLimit: number;
+  nextKey?: string;
 }
 
 export interface IListVoteValidatorQuery {
