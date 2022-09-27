@@ -92,9 +92,14 @@
   }
 }
 @media (max-width: 414px) {
-  ::ng-deep .contract-modal.modal .modal-dialog .modal-content {
-    overflow-y: auto;
-    padding-bottom: 0;
+  ::ng-deep {
+    .contract-modal.modal .modal-dialog .modal-content {
+      overflow-y: auto;
+      padding-bottom: 0;
+    }
+    .box-search-contract {
+      width: 100%;
+    }
   }
 }
 .button-outline__in-card {
