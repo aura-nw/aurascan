@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { map, mergeMap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
@@ -168,8 +169,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
     return {
       ...data,
-      initial_deposit: balanceOf(data.initial_deposit[0]?.amount),
-      pro_total_deposits: balanceOf(data.total_deposit[0].amount),
+      initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
+      pro_total_deposits: balanceOf(_.get( data, 'total_deposit[0].amount') || 0),
       pro_type: data.content['@type'].split('.').pop(),
       pro_votes_yes,
       pro_votes_no,
