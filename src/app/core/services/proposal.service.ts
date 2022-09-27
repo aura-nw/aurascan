@@ -45,28 +45,19 @@ export class ProposalService extends CommonService {
   }
 
   getListVoteFromIndexer(payload, option): Observable<any> {
-    let queryVote = 'proposal_vote.proposal_id=' + payload.proposalId + ';';
-    if (option !== null) {
-      queryVote =
-        'proposal_vote.proposal_id=' +
-        payload.proposalId +
-        ';proposal_vote.option={"option":' +
-        option +
-        ',"weight":"1.000000000000000000"}';
-    }
     const params = _({
       chainid: this.chainInfo.chainId,
       nextKey: payload.nextKey,
       reverse: false,
-      query: queryVote,
       pageLimit: payload.pageLimit,
-      countTotal: true
+      answer: option,
+      proposalid: payload.proposalid 
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+    return this.http.get<any>(`${INDEXER_URL}/votes`, {
       params,
     });
   }
