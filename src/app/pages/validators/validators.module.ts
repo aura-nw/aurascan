@@ -24,9 +24,10 @@ import { LoadingImageModule } from 'src/app/shared/components/loading-image/load
 import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.component';
 import {  NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MilestoneComponent } from './milestone/milestone.component';
+import { DelegateItemComponent } from './validators-detail/delegate-item/delegate-item.component';
 
 @NgModule({
-  declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent, MilestoneComponent],
+  declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent, MilestoneComponent, DelegateItemComponent],
   imports: [
     CommonModule,
     ValidatorsRoutingModule,

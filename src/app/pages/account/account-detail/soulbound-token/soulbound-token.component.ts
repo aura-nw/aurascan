@@ -1,20 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { Router } from "@angular/router";
-import { PAGE_EVENT } from "src/app/core/constants/common.constant";
-import { MAX_LENGTH_SEARCH_TOKEN } from "src/app/core/constants/token.constant";
-import { Globals } from "src/app/global/global";
+import { Component, Input, OnInit } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-soulbound-token',
   templateUrl: './soulbound-token.component.html',
-  styleUrls: ['./soulbound-token.component.scss']
+  styleUrls: ['./soulbound-token.component.scss'],
 })
+
 export class SoulboundTokenComponent implements OnInit {
-  @Output() totalValueNft = new EventEmitter<number>();
+  @Input() address: string;
 
   assetSoulBound: any[];
-  @Input() address: string;
   searchValue = '';
   loading = true;
   pageData: PageEvent = {
@@ -26,7 +26,7 @@ export class SoulboundTokenComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   paginator: MatPaginator;
 
-  constructor(private router: Router, public global: Globals) { }
+  constructor(private router: Router, public global: Globals) {}
 
   ngOnInit(): void {
     this.getNftData();
@@ -36,8 +36,8 @@ export class SoulboundTokenComponent implements OnInit {
     this.loading = true;
     const payload = {
       account_address: this.address,
-      limit: 0,
-      offset: 0,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.searchValue,
     };
     this.assetSoulBound = [
@@ -54,8 +54,8 @@ export class SoulboundTokenComponent implements OnInit {
         uri: '',
         name: 'Euphoria Companion',
         status: 'On-chain',
-      }
-    ]
+      },
+    ];
 
     if (this.pageData) {
       this.pageData.length = this.assetSoulBound?.length || 0;
@@ -99,5 +99,4 @@ export class SoulboundTokenComponent implements OnInit {
     this.pageData.pageIndex = e.pageIndex;
     this.getKeySearch();
   }
-
 }

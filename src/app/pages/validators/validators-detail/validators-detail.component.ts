@@ -1,14 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
-import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
-import { DIALOG_STAKE_MODE, STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
+import { fromHex, toBech32 } from '@cosmjs/encoding';
+import * as _ from 'lodash';
+import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
@@ -16,17 +16,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
-import * as _ from 'lodash';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { getFee } from 'src/app/core/utils/signing/fee';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
-import { forkJoin } from 'rxjs';
-import { AccountService } from 'src/app/core/services/account.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
-import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
-import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
 const marked = require('marked');
 
 @Component({
@@ -89,14 +78,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentNextKey = null;
   nextKeyBlock = null;
   currentNextKeyBlock = null;
-  modalReference: any;
-  isExceedAmount = false;
-  amountFormat = null;
-  errorExceedAmount = false;
-  dataDelegate = null;
-  userAddress = null;
-  isHandleStake = false;
-  isLoading = false;
+  isOpenDialog = false;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -116,37 +98,25 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
-    private walletService: WalletService,
-    private modalService: NgbModal,
-    private accountService: AccountService,
-    private toastr: NgxToastrService,
-    private transactionService: TransactionService,
-    private mappingErrorService: MappingErrorService,
   ) {}
 
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
 
-    this.walletService.wallet$.subscribe((wallet) => {
-      if (wallet) {
-        this.dataDelegate = null;
-        this.userAddress = wallet.bech32Address;
-        this.getDataWallet();
-      } else {
-        this.userAddress = null;
-      }
-    });
-
-    this.getDetail();
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+    this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
     }, 30000);
     this.timerGetBlockMiss = setInterval(() => {
       this.getBlocksMiss(this.consAddress);
     }, 10000);
+  }
+
+  loadData(){
+    this.getDetail();
+    this.getListBlockWithOperator();
+    this.getListDelegator();
+    this.getListPower();
   }
 
   ngOnDestroy() {
@@ -306,7 +276,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
           return { tx_hash, amount, isStakeMode, height, timestamp };
         });
-        if (this.dataSourcePower.data.length > 0) {
+        if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
           this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
         } else {
           this.dataSourcePower.data = [...txs];
@@ -402,199 +372,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  viewPopupDetail(staticDataModal: any) {
-    // this.currentValidatorDialog = address;
-    const view = async () => {
-      const account = this.walletService.getAccount();
-      if (account && account.bech32Address) {
-        // this.amountFormat = null;
-        // this.isHandleStake = false;
-        // this.getValidatorDetail(address, staticDataModal);
-        this.modalReference = this.modalService.open(staticDataModal, {
-          keyboard: false,
-          centered: true,
-          size: 'lg',
-          windowClass: 'modal-holder validator-modal',
-        });
-      }
-    };
-    view();
-    // this.dataDelegate = this.dataDelegate || {};
-    // this.isClaimRewardLoading = false;
+  openDialog() {
+    this.isOpenDialog = true;
   }
 
-  //Get data for wallet info and list staking
-  getDataWallet() {
-    if (this.userAddress) {
-      forkJoin({
-        dataWallet: this.accountService.getAccountDetail(this.userAddress),
-        listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
-      }).subscribe(({ dataWallet, listDelegator }) => {
-        if (dataWallet) {
-          this.dataDelegate = {
-            ...this.dataDelegate,
-            delegableVesting: dataWallet?.data?.delegable_vesting,
-            delegatedToken: dataWallet?.data?.delegated,
-            availableToken: dataWallet?.data?.available,
-            stakingToken: dataWallet?.data?.stake_reward,
-            historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
-            identity: listDelegator?.data?.identity,
-            dialogMode: DIALOG_STAKE_MODE.Delegate,
-          };
-        }
-
-        // if (listDelegator) {
-        //   this.listStakingValidator = listDelegator?.data?.delegations;
-
-        //   if (this.currentValidatorDialog) {
-        //     this.dataDelegate.validatorDetail = this.listStakingValidator?.find(
-        //       (f) => f.validator_address === this.currentValidatorDialog,
-        //     );
-        //   }
-        //   if (listDelegator?.data?.delegations.length > 0) {
-        //     listDelegator?.data?.delegations.forEach((f) => {
-        //       f.identity = f.identity;
-        //       f.amount_staked = f.amount_staked / NUMBER_CONVERT;
-        //       f.pending_reward = f.pending_reward / NUMBER_CONVERT;
-        //       f.reward = f.reward / NUMBER_CONVERT;
-        //     });
-        //     //check amount staked > 0
-        //     this.arrayDelegate = listDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
-        //     dataInfoWallet['arrayDelegate'] = JSON.stringify(this.arrayDelegate);
-        //   } else {
-        //     this.arrayDelegate = null;
-        //     this.lstUndelegate = null;
-        //   }
-        // }
-
-        // if (listUnDelegator) {
-        //   this.lstUndelegate = [];
-        //   const now = new Date();
-        //   listUnDelegator.data.account_unbonding.forEach((data) => {
-        //     data.entries.forEach((f) => {
-        //       f['validator_identity'] = data.validator_description.identity;
-        //       f.balance = f.balance / NUMBER_CONVERT;
-        //       f.validator_address = data.validator_address;
-        //       f.validator_name = this.lstValidatorOrigin.find(
-        //         (i) => i.operator_address === f.validator_address,
-        //       )?.title;
-        //       let timeConvert = new Date(f.completion_time);
-        //       if (now < timeConvert) {
-        //         this.lstUndelegate.push(f);
-        //       }
-        //     });
-        //   });
-
-        //   this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
-        //     return this.compare(a.completion_time, b.completion_time, true);
-        //   });
-        // }
-      });
-    }
-  }
-
-  resetCheck() {
-    this.isExceedAmount = false;
-    this.errorExceedAmount = false;
-  }
-
-  getMaxToken(): void {
-    //check amout for high fee
-    let amountCheck = (
-      Number(this.currentValidatorDetail.availableToken) +
-      Number(this.currentValidatorDetail.delegableVesting) -
-      (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
-    ).toFixed(6);
-    if (Number(amountCheck) < 0) {
-      this.isExceedAmount = true;
-      this.errorExceedAmount = true;
-      amountCheck = '0';
-    }
-    this.amountFormat = amountCheck || 0;
-  }
-
-  closeDialog(modal) {
-    modal.close('Close click');
-    // this.scrollToTop();
-  }
-
-  handleStaking() {
-    this.checkAmountDelegate();
-    if (!this.isExceedAmount && this.amountFormat > 0) {
-      const executeStaking = async () => {
-        this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
-          messageType: SIGNING_MESSAGE_TYPES.STAKE,
-          message: {
-            to: [this.currentValidatorDetail?.operator_address],
-            amount: {
-              amount: (this.amountFormat * Math.pow(10, 6)).toFixed(0),
-              denom: this.coinMinimalDenom,
-            },
-          },
-          senderAddress: this.userAddress,
-          network: this.chainInfo,
-          signingType: ESigningType.Keplr,
-          chainId: this.walletService.chainId,
-        });
-
-        // this.modalReference.close();
-        this.checkStatusExecuteBlock(hash, error, '');
-      };
-
-      executeStaking();
-    }
-  }
-
-  checkAmountDelegate(): void {
-    let amountCheck;
-    amountCheck = (
-      +this.dataDelegate.availableToken +
-        +this.dataDelegate.delegableVesting -
-        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT || 0
-    ).toFixed(6);
-    this.isExceedAmount = false;
-    if (this.amountFormat > amountCheck) {
-      this.isExceedAmount = true;
-    } else {
-      this.isHandleStake = true;
-    }
-  }
-
-  checkStatusExecuteBlock(hash, error, msg) {
-    if (error) {
-      if (error != 'Request rejected') {
-        this.toastr.error(error);
-      }
-      this.resetData();
-    } else {
-      setTimeout(() => {
-        this.checkDetailTx(hash, msg);
-        this.resetData();
-      }, TIME_OUT_CALL_API);
-    }
-  }
-
-  resetData() {
-    this.isLoading = false;
-    this.modalReference?.close();
-    this.isHandleStake = false;
-  }
-
-  async checkDetailTx(id, message) {
-    const res = await this.transactionService.txsDetailLcd(id);
-    let numberCode = res?.data?.tx_response?.code;
-    message = res?.data?.tx_response?.raw_log || message;
-    message = this.mappingErrorService.checkMappingError(message, numberCode);
-    if (numberCode !== undefined) {
-      if (!!!numberCode && numberCode === CodeTransaction.Success) {
-        // setTimeout(() => {
-        //   this.getDataWallet();
-        // }, TIME_OUT_CALL_API);
-        this.toastr.success(message);
-      } else {
-        this.toastr.error(message);
-      }
-    }
+  updateStatus(event){
+    this.isOpenDialog = event;
   }
 }
