@@ -1,10 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe, DecimalPipe } from '@angular/common';
-import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { AfterViewChecked, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Observable, of } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { Globals } from '../../../../../app/global/global';
 import {
   MESSAGE_WARNING,
@@ -16,7 +16,6 @@ import {
   VOTING_SUBTITLE,
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
-import { IResponsesTemplates } from '../../../../core/models/common.model';
 import { CommonService } from '../../../../core/services/common.service';
 import { ProposalService } from '../../../../core/services/proposal.service';
 import { WalletService } from '../../../../core/services/wallet.service';
@@ -31,6 +30,7 @@ const marked = require('marked');
 })
 export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   @Input() proposalId: number;
+  @Output() proposalDtl = new EventEmitter();
   proposalDetail;
   statusConstant = PROPOSAL_STATUS;
   currentStatusConstant = VOTING_FINAL_STATUS;
@@ -49,7 +49,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private proposalService: ProposalService,
-    private datePipe: DatePipe,
     public global: Globals,
     private walletService: WalletService,
     public dialog: MatDialog,
@@ -64,88 +63,69 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     this.walletService.wallet$.subscribe((wallet) => this.getVotedProposal());
   }
 
-  getProposalTally(): Observable<any> {
-    return this.proposalService.getProposalTally(this.proposalId).pipe(
-      tap((tallRes: IResponsesTemplates<any>) => {
-        this.updateVoteResultFromNode(tallRes.data);
-        this.parsingProposalStatus(this.proposalDetail);
-      }),
-    );
-  }
-
   getProposalDetail(): void {
     this.proposalService
-      .getProposalDetail(this.proposalId)
+      .getProposalList(1, null, this.proposalId)
       .pipe(
-        mergeMap(({ data }: IResponsesTemplates<any>) => {
-          if (data) {
-            this.proposalDetail = this.makeProposalDataDetail(data);
-
-            let { pro_status, pro_voting_end_time } = this.proposalDetail;
-
-            if (pro_status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
-              const expiredTime = moment(pro_voting_end_time).diff(moment());
-
-              return this.commonService.status().pipe(
-                mergeMap((res) => {
-                  if (res?.data) {
-                    this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
-                  }
-
-                  this.votingBarLoading = true;
-
-                  if (!(expiredTime < 0)) {
-                    return this.getProposalTally();
-                  }
-
-                  return this.proposalService.getProposalDetailFromNode(this.proposalId).pipe(
-                    tap((_) => {}),
-                    mergeMap((res: IResponsesTemplates<any>) => {
-                      pro_status = res.data.status;
-                      return this.getProposalTally();
-                    }),
-                  );
-                }),
-              );
+        map((dta) => dta.data),
+        mergeMap((data) => {
+          if (data?.count > 0) {
+            if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_NOT_ENOUGH_DEPOSIT) {
+              this.proposalDtl.emit(null);
             }
-
-            const {
-              pro_votes_yes,
-              pro_total_vote,
-              pro_votes_no,
-              pro_votes_no_with_veto,
-              pro_votes_abstain,
-              pro_turnout,
-              quorum,
-            } = this.proposalDetail;
-
-            const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
-            const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
-            const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
-            const abstainPercent = (pro_votes_abstain * 100) / pro_total_vote || 0;
-
-            this.proposalDetail = {
-              ...this.proposalDetail,
-              yesPercent,
-              noPercent,
-              noWithVetoPercent,
-              abstainPercent,
-            };
-
-            if (pro_turnout >= quorum) {
-              if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
-                if (pro_votes_no_with_veto < pro_total_vote / 3) {
-                  this.finalSubTitle = VOTING_SUBTITLE.PASS;
-                } else {
-                  this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
-                    '{{proposalDetail.noWithVetoPercent}}',
-                    this.numberPipe
-                      .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
-                      .toString(),
-                  );
+            this.proposalDetail = this.makeProposalDataDetail(data.proposals[0]);
+            if (this.proposalDetail?.content?.amount) {
+              this.proposalDetail['request_amount'] = balanceOf(this.proposalDetail?.content?.amount[0]?.amount);
+            }
+            return this.commonService.status().pipe(
+              mergeMap((res) => {
+                if (res.data) {
+                  this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
+                  this.proposalDetail.pro_turnout =
+                    (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
                 }
-              } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
-                this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
+                return this.commonService.getParamFromIndexer();
+              }),
+            );
+          }
+          return this.commonService.getParamFromIndexer();
+        }),
+        map((paramFromIndexer) => paramFromIndexer.data?.result[0]),
+        map((result) => {
+          if (!result) {
+            return;
+          }
+          const { quorum, threshold, veto_threshold } = result.params?.tallying_param;
+          const { pro_votes_yes, pro_total_vote, pro_votes_abstain, pro_votes_no_with_veto } = this.proposalDetail;
+
+          this.proposalDetail['quorum'] = quorum * 100;
+          this.proposalDetail['threshold'] = threshold * 100;
+          this.proposalDetail['veto_threshold'] = veto_threshold * 100;
+
+          const yesPercent = (this.proposalDetail.pro_votes_yes * 100) / this.proposalDetail.pro_total_vote || 0;
+          const noPercent = (this.proposalDetail.pro_votes_no * 100) / this.proposalDetail.pro_total_vote || 0;
+          const noWithVetoPercent =
+            (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
+          const abstainPercent =
+            (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
+          const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
+          const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
+
+          this.proposalDetail = {
+            ...this.proposalDetail,
+            yesPercent,
+            noPercent,
+            noWithVetoPercent,
+            abstainPercent,
+            voted_percent,
+            voted,
+          };
+          this.parsingProposalStatus(this.proposalDetail);
+
+          if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
+            if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
+              if (pro_votes_no_with_veto < pro_total_vote / 3) {
+                this.finalSubTitle = VOTING_SUBTITLE.PASS;
               } else {
                 this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
                   '{{proposalDetail.noWithVetoPercent}}',
@@ -154,45 +134,53 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
                     .toString(),
                 );
               }
+            } else if (pro_votes_no_with_veto < pro_total_vote / 3) {
+              this.finalSubTitle = VOTING_SUBTITLE.REJECT_2;
             } else {
-              this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
+              this.finalSubTitle = VOTING_SUBTITLE.REJECT_1.toString().replace(
+                '{{proposalDetail.noWithVetoPercent}}',
+                this.numberPipe
+                  .transform(this.proposalDetail.veto_threshold, this.global.formatNumber2Decimal)
+                  .toString(),
+              );
             }
-          }
-          return of(null);
-        }),
-        map((e) => {
-          if (e === null) {
           } else {
-            this.updateVoteResultFromNode(e.data);
-            this.parsingProposalStatus(this.proposalDetail);
+            this.finalSubTitle = VOTING_SUBTITLE.REJECT_3;
           }
         }),
       )
       .subscribe({
         complete: () => {
           this.votingBarLoading = false;
+          this.proposalDtl.emit(this.proposalDetail);
         },
       });
   }
 
   makeProposalDataDetail(data) {
-    const pro_votes_yes = balanceOf(+data.pro_votes_yes);
-    const pro_votes_no = balanceOf(+data.pro_votes_no);
-    const pro_votes_no_with_veto = balanceOf(+data.pro_votes_no_with_veto);
-    const pro_votes_abstain = balanceOf(+data.pro_votes_abstain);
-
+    let pro_votes_yes = balanceOf(+data.final_tally_result.yes);
+    let pro_votes_no = balanceOf(+data.final_tally_result.no);
+    let pro_votes_no_with_veto = balanceOf(+data.final_tally_result.no_with_veto);
+    let pro_votes_abstain = balanceOf(+data.final_tally_result.abstain);
+    if (data.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+      pro_votes_yes = balanceOf(+data.tally.yes);
+      pro_votes_no = balanceOf(+data.tally.no);
+      pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
+      pro_votes_abstain = balanceOf(+data.tally.abstain);
+    }
     const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
 
     return {
       ...data,
-      initial_deposit: balanceOf(data.initial_deposit),
-      pro_total_deposits: balanceOf(data.pro_total_deposits),
-      pro_type: data.pro_type.split('.').pop(),
+      initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
+      pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
+      pro_type: data.content['@type'].split('.').pop(),
       pro_votes_yes,
       pro_votes_no,
       pro_votes_no_with_veto,
       pro_votes_abstain,
       pro_total_vote,
+      count_vote: data.total_vote,
       request_amount: balanceOf(data.request_amount),
     };
   }
@@ -280,20 +268,18 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   }
 
   openVoteDialog(proposalDetail) {
-    const id = proposalDetail.pro_id;
-    const title = proposalDetail.pro_title;
-    const expiredTime = +moment(proposalDetail.pro_voting_end_time).format('x') - +moment().format('x');
+    const id = proposalDetail.proposal_id;
+    const title = proposalDetail.content.title;
+    const expiredTime = +moment(proposalDetail.voting_end_time).format('x') - +moment().format('x');
 
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
       if (account) {
         this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
-
           const { created_at } = data.result ? data.result : { created_at: null };
-
           warning = created_at
-            ? +moment(created_at).format('x') < +moment(proposalDetail.pro_voting_start_time).format('x')
+            ? +moment(created_at).format('x') < +moment(proposalDetail.voting_start_time).format('x')
               ? null
               : MESSAGE_WARNING.LATE
             : MESSAGE_WARNING.NOT_PARTICIPATE;
@@ -323,7 +309,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           keyVote: this.voteConstant.find((s) => s.voteOption === result.keyVote)?.key,
         };
         this.proposalVotes = result.keyVote;
-        this.getProposalTally();
       }
     });
   }
@@ -342,70 +327,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     } else {
       this.proposalVotes = null;
     }
-  }
-
-  calculatePercentVote(data) {
-    const pro_votes_yes = balanceOf(+data.tally.yes);
-    const pro_votes_no = balanceOf(+data.tally.no);
-    const pro_votes_no_with_veto = balanceOf(+data.tally.no_with_veto);
-    const pro_votes_abstain = balanceOf(+data.tally.abstain);
-    const pro_total_vote = pro_votes_yes + pro_votes_no + pro_votes_no_with_veto + pro_votes_abstain;
-
-    const yesPercent = (pro_votes_yes * 100) / pro_total_vote || 0;
-    const noPercent = (pro_votes_no * 100) / pro_total_vote || 0;
-    const noWithVetoPercent = (pro_votes_no_with_veto * 100) / pro_total_vote || 0;
-    const abstainPercent = (pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
-    const voted = pro_total_vote - pro_votes_abstain;
-    const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
-
-    return {
-      pro_votes_yes,
-      pro_votes_no,
-      pro_votes_no_with_veto,
-      pro_votes_abstain,
-      pro_total_vote,
-      yesPercent,
-      noPercent,
-      noWithVetoPercent,
-      abstainPercent,
-      voted_percent,
-      voted,
-    };
-  }
-
-  updateVoteResultFromNode(nodeData) {
-    if (!nodeData?.proposalVoteTally?.tally) {
-      return;
-    }
-
-    const {
-      pro_votes_yes,
-      pro_votes_no,
-      pro_votes_no_with_veto,
-      pro_votes_abstain,
-      pro_total_vote,
-      yesPercent,
-      noPercent,
-      noWithVetoPercent,
-      abstainPercent,
-      voted_percent,
-      voted,
-    } = this.calculatePercentVote(nodeData.proposalVoteTally);
-
-    this.proposalDetail = {
-      ...this.proposalDetail,
-      pro_votes_yes,
-      pro_votes_no,
-      pro_votes_no_with_veto,
-      pro_votes_abstain,
-      pro_total_vote,
-      yesPercent,
-      noPercent,
-      noWithVetoPercent,
-      abstainPercent,
-      voted_percent,
-      voted,
-    };
   }
 
   formatNumber(number: number, args?: any): any {
@@ -446,7 +367,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
     if (editor) {
-      editor.innerHTML = marked.parse(this.proposalDetail.pro_description);
+      editor.innerHTML = marked.parse(this.proposalDetail.content.description);
       return;
     }
   }

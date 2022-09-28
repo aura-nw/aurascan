@@ -1,10 +1,7 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
-import { merge } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
-import { IListVoteQuery } from '../../../../core/models/proposal.model';
 
 export interface IValidatorVotes {
   rank: number;
@@ -47,7 +44,6 @@ export class ValidatorsVotesComponent implements OnInit {
   voteDataListLoading = true;
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
-  LIMIT_DEFAULT = 10000;
   query = [];
 
   voteData = {
@@ -64,41 +60,23 @@ export class ValidatorsVotesComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.proposalId) {
-      const payloads: IListVoteQuery[] = this.TABS.map((vote) => ({
-        limit: this.LIMIT_DEFAULT,
-        offset: 0,
-        option: vote.key,
-        proposalId: this.proposalId,
-      }));
-
-      this.query = payloads;
-
-      merge(
-        this.proposalService.getValidatorVotes(payloads[0]).pipe(map((item) => ({ all: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[1]).pipe(map((item) => ({ yes: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[2]).pipe(map((item) => ({ no: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[3]).pipe(map((item) => ({ noWithVeto: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[4]).pipe(map((item) => ({ abstain: item.data.result }))),
-        this.proposalService.getValidatorVotes(payloads[5]).pipe(map((item) => ({ didNotVote: item.data.result }))),
-      ).subscribe((res) => {
+      this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe((res) => {
         this.voteDataListLoading = true;
-        res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
-        res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
-        res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
-        res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
-        res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
-        res['didNotVote'] && ((dta) => (this.voteData.didNotVote = dta))(res['didNotVote']);
+        this.voteData.all = res.data;
+        this.voteData.yes = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_YES);
+        this.voteData.abstain = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_ABSTAIN);
+        this.voteData.no = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_NO);
+        this.voteData.noWithVeto = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO);
+        this.voteData.didNotVote = res.data.filter((f) => f.answer === '');
+        this.voteDataList = [...this.voteData.all];
 
-        if (res['all']) {
-          this.voteDataList = [...this.voteData.all.proposalVotes];
+        this.countVote.set('', this.voteData.all.length);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.yes.length);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.abstain.length);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.no.length);
+        this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.noWithVeto.length);
+        this.countVote.set('null', this.voteData.didNotVote.length);
 
-          this.countVote.set('', this.voteData.all.countTotal);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.voteData.all.countYes);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.voteData.all.countAbstain);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.voteData.all.countNo);
-          this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.voteData.all.countNoWithVeto);
-          this.countVote.set('null', this.voteData.all.countDidNotVote);
-        }
         this.voteDataListLoading = false;
       });
     }
@@ -108,22 +86,22 @@ export class ValidatorsVotesComponent implements OnInit {
     this.countCurrent = tabId;
     switch (tabId) {
       case '':
-        this.voteDataList = this.voteData.all.proposalVotes;
+        this.voteDataList = this.voteData.all;
         break;
       case VOTE_OPTION.VOTE_OPTION_YES:
-        this.voteDataList = this.voteData.yes.proposalVotes;
+        this.voteDataList = this.voteData.yes;
         break;
       case VOTE_OPTION.VOTE_OPTION_ABSTAIN:
-        this.voteDataList = this.voteData.abstain.proposalVotes;
+        this.voteDataList = this.voteData.abstain;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO:
-        this.voteDataList = this.voteData.no.proposalVotes;
+        this.voteDataList = this.voteData.no;
         break;
       case VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO:
-        this.voteDataList = this.voteData.noWithVeto.proposalVotes;
+        this.voteDataList = this.voteData.noWithVeto;
         break;
       default:
-        this.voteDataList = this.voteData.didNotVote.proposalVotes;
+        this.voteDataList = this.voteData.didNotVote;
         break;
     }
   }
