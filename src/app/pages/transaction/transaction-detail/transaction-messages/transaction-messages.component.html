@@ -1,4 +1,7 @@
-<h2 class="card-header mb-0 pb-0 text--white">Message</h2>
+<h2 class="card-header mb-0 pb-0 text--white d-block">
+  Messages
+  <div class="divider divider-horizontal my-4 d-lg-none"></div>
+</h2>
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div class="card-info">
