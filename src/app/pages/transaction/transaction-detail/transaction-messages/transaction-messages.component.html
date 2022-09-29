@@ -110,17 +110,17 @@
           </div>
           <div class="divider divider-horizontal my-3"></div>
           <app-messages-item
-                  [label]="'Delegator Address'"
-                  [value]="item.delegator_address"
-                  [dataLink]="{ url: '/account' }"></app-messages-item>
+            [label]="'Delegator Address'"
+            [value]="item.delegator_address"
+            [dataLink]="{ url: '/account' }"></app-messages-item>
           <div class="row mb-3 body-02 body-01-mob">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
             <div class="col-12 col-lg-9">
               <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
                 {{ item.validator_address }}
                 <span>
-                <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
-              </span>
+                  <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
+                </span>
               </a>
             </div>
           </div>
@@ -566,7 +566,7 @@
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
               <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              {{ transactionDetailType }}
+              {{ displayTitle(item['@type']) }}
             </div>
           </div>
         </div>
@@ -582,13 +582,15 @@
             <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCUpdateClient">
-            <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
+            </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCTimeout">
             <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
-            <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
+            </ng-container>
           </div>
         </ng-container>
       </div>
@@ -789,9 +791,6 @@
   </ng-template>
 
   <ng-template #ibcProgress>
-
-
-
     <div class="row mb-3 body-02 body-01-mob border-ibc pt-3" *ngIf="listIBCProgress?.length > 0">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
       <div class="col-12 col-lg-9" style="word-break: break-word">
