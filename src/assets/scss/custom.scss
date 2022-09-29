@@ -479,8 +479,7 @@ body {
 
     .validator-avatar {
         display: inline-block;
-        overflow: hidden;
-
+        // overflow: hidden;
         width: 24px;
         height: 24px;
         border-radius: 1000px;
@@ -516,12 +515,10 @@ body {
 
     .jailed {
         position: absolute;
-        top: 0px;
-        left: -2px;
-
-        @media screen and (min-width: 992px) {
-            top: 4px;
-        }
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px;
     }
 }
 
