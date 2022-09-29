@@ -2,7 +2,7 @@
   <div class="d-md-flex justify-content-between box-title-register">
     <h1 class="text--white mb-0">Type Smart Contract</h1>
     <button class="button button-outline button--md button-pill button-flat btn-register button-fixed mt-4 mt-md-0" (click)="viewPopupDetail(modalManage, '')">
-      <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+      <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
       <span class="ml-2 text--black">Register Contract</span>
     </button>
   </div>

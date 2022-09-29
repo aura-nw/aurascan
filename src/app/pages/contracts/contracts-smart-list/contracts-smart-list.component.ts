@@ -181,6 +181,5 @@ export class ContractsSmartListComponent implements OnInit {
   }
 
   logData(){
-    console.log(this.textSearch);
   }
 }

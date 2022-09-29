@@ -3,7 +3,7 @@
     <h1 class="text--white mb-0">Smart contracts list</h1>
     <a href="/contracts/contracts-deploy-mainnet"
        class="button button-outline button--md button-pill button-flat d-none d-lg-flex">
-      <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+      <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
       <span class="ml-2 text--black">Register Contract</span>
     </a>
   </div>
@@ -18,7 +18,7 @@
       </div>
       <a href="/contracts/contracts-deploy-mainnet"
          class="button button-outline button--md button-pill button-flat d-flex d-lg-none mt-4">
-        <img src="assets/icons/icons-svg/black/plus.svg" alt="" width="16px" height="16px" />
+        <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
         <span class="ml-2 text--black">Register Contract</span>
       </a>
     </div>
