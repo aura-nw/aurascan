@@ -1,53 +1,46 @@
-<app-pagetitle title="Transaction Details"></app-pagetitle>
 <!-- Tabs -->
-<ul
-  ngbNav
-  #customNav="ngbNav"
-  [activeId]="isRawData ? 1 : 0"
-  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
-  <ng-container *ngFor="let tab of TAB; index as index">
-    <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-      <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-        <span>{{ tab.value }}</span>
-      </a>
-    </li>
-  </ng-container>
-</ul>
+<div class='d-flex justify-content-between align-items-center mb-4 mb-lg-6'>
+  <h1 class='text--white mb-0'>Transaction Details</h1>
+  <div class='button-switch-stage button-fixed d-none d-lg-inline-flex'>
+    <button class='button' [class.active]='!isRawData' (click)="changeType(false)">Summary</button>
+    <button class='button' [class.active]='isRawData' (click)="changeType(true)">JSON</button>
+  </div>
+</div>
+
+<div class="d-lg-none mb-4">
+  <!-- Tabs -->
+  <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
+    <ng-container *ngFor="let tab of TAB; index as index">
+      <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
+        <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
+          <span>{{ tab.value }}</span>
+        </a>
+      </li>
+    </ng-container>
+  </ul>
+</div>
 
 <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-  <div class="card-body body">
-    <div class="d-lg-none mb-4">
-      <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-      <!-- Tabs -->
-      <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
-        <ng-container *ngFor="let tab of TAB; index as index">
-          <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-            <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-              <span>{{ tab.value }}</span>
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-    <div *ngIf="!isRawData" [ngClass]="{ 'card-info': breakpoint.value.matches }">
+  <h2 class="card-header mb-0 text--white pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+  <div class="card-body body py-4">
+    <div *ngIf="!isRawData">
       <div class="row box-error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
-        <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ transaction?.chainid }}</div>
+      <div class="row mb-3 body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4">Chain Id</div>
+        <div class="col-auto col-lg-10 text--gray-1 body-01 mb-0">{{ transaction?.chainid }}</div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">TxHash</div>
-        <div class="col-auto col-lg-9 text--gray-1">
+      <div class="row mb-3 body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4">TxHash</div>
+        <div class="col-auto col-lg-10 text--gray-1 body-01">
           <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
           <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe: 8:8 }}</span>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Status</div>
-        <div class="col-auto col-lg-9 d-flex align-items-center">
+      <div class="row mb-3 body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4">Status</div>
+        <div class="col-auto col-lg-10 d-flex align-items-center body-01">
           <img
             [src]="
               transaction?.code == codeTransaction.Success
@@ -61,19 +54,19 @@
           }}</span>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Height</div>
-        <div class="col-auto col-lg-9">
+      <div class="row mb-3 body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4">Height</div>
+        <div class="col-auto col-lg-10 body-01">
           <a class="text--primary" routerLink="/blocks/{{ transaction?.height }}">
             {{ transaction?.height | number }}
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Time</div>
-        <div class="col-auto col-lg-9 text-end text-lg-start d-lg-flex align-items-center text--gray-1">
+      <div class="row mb-3 body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4">Time</div>
+        <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1 body-01">
           <div>{{ commonService.getDateValue(transaction?.timestamp)[0] }}</div>
-          <div class="d-flex align-items-center ml-1">
+          <div class="d-flex align-items-center ml-1 text--gray-4">
             <span class="d-none d-lg-block">(</span>
             <span>{{ transaction?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
             <div class="divider divider-vertical divider-lighter mx-2"></div>
@@ -82,24 +75,24 @@
           </div>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Fee</div>
-        <div class="col-auto col-lg-9 text--gray-1">
+      <div class="row mb-3 body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4">Fee</div>
+        <div class="col-auto col-lg-10 text--gray-1 body-01">
           {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
-      <div class="row body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
+      <div class="row body justify-content-between justify-content-lg-start">
+        <div class="col-auto col-lg-2 text--gray-4 d-md-flex">
           <div>Gas</div>
           <div class='ml-md-1'>(used / wanted)</div>
         </div>
-        <div class="col-auto col-lg-9 text--gray-1">
+        <div class="col-auto col-lg-10 text--gray-1 body-01">
           {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
         </div>
       </div>
     </div>
 
-    <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1 px-4" [innerHtml]="transaction.tx | appJson"></pre>
+    <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1" [innerHtml]="transaction.tx | appJson"></pre>
   </div>
 </div>
 
@@ -109,14 +102,14 @@
 
 <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
   <div class="card-header title-small">Read</div>
-  <div class="card-body">
+  <div class="card-body py-4">
     <ngx-json-viewer [json]="!isRawData && transaction?.read_set"></ngx-json-viewer>
   </div>
 </div>
 
 <div class="card text--white" *ngIf="!isRawData && transaction?.write_set">
   <div class="card-header title-small">Write</div>
-  <div class="card-body" *ngIf="transaction?.write_set">
+  <div class="card-body py-4" *ngIf="transaction?.write_set">
     <ngx-json-viewer [json]="transaction?.write_set"></ngx-json-viewer>
   </div>
 </div>

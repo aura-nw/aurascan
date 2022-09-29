@@ -1,6 +1,6 @@
-<div class="row mb-3 body-02 body-01-mob">
-  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">{{ label }}</div>
-  <div class="col-12 col-lg-9">
+<div class="row mb-3">
+  <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">{{ label }}</div>
+  <div class="col-12 col-lg-9 body-01">
     <ng-container *ngIf="dataLink">
       <a class="text--primary" [routerLink]="[dataLink?.url || '/account', dataLink?.data || value]">
         {{ dataLink?.data || value }}
