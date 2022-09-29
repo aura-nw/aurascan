@@ -10,7 +10,7 @@ export enum VOTING_STATUS {
 export const PROPOSAL_STATUS = [
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_FAILED,
-    value: 'rejected',
+    value: 'failed',
     class: 'text--red-3',
   },
   {
@@ -100,6 +100,7 @@ export enum VOTING_SUBTITLE {
   REJECT_1 = 'This proposal is rejected because there are more than {{proposalDetail.noWithVetoPercent}}% of No With Veto votes.',
   REJECT_2 = 'This proposal is rejected because it is above the threshold and received more than 50.00% of No votes.',
   REJECT_3 = 'This proposal is failed because it did not reach the quorum.',
+  FAILED = 'This proposal is failed because the upgrade can\'t be executed',
 }
 
 export enum VOTING_QUORUM {
