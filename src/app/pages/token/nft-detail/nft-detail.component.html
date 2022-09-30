@@ -3,10 +3,22 @@
     <div class="row p-xl-3">
       <!-- Desktop nft-image -->
       <div class="col-4 nft-img__contain d-none d-xl-block">
-        <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
+        <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center" #card>
           <!-- !important:
           Default image if this ntf-detail has not image -->
-          <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+          <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+          <!-- <app-model-view
+            *ngIf="nftType === '3d'"
+            [modelUrl]="nftDetail?.media_info[0]?.media_link"
+            [appHeight]="card.clientHeight"
+            [appWidth]="card.clientWidth"
+            [disablePan]="true"></app-model-view> -->
+          <app-custom-video-player
+            [videoSrc]="nftDetail?.media_info[0]?.media_link"
+            [showControl]="false"
+            *ngIf="nftType === 'video'"
+            [isMuted]="true">
+          </app-custom-video-player>
         </div>
       </div>
       <!-- Mobile nft-image -->
@@ -16,11 +28,19 @@
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
               <!-- !important:
             Default image if this ntf-detail has not image -->
-              <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+              <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+              <app-custom-video-player
+                [videoSrc]="nftDetail?.media_info[0]?.media_link"
+                [showControl]="false"
+                *ngIf="nftType === 'video'"
+                [isMuted]="true">
+              </app-custom-video-player>
             </div>
           </div>
           <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
-            <h1 class="fw-semibold title-small mb-0 body-01-mob text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+            <h1 class="fw-semibold title-small mb-0 body-01-mob text--white">
+              {{ nftDetail?.name }} #{{ nftDetail?.token_id }}
+            </h1>
             <span class="burnt-tag my-1" *ngIf="nftDetail?.is_burned">Burnt</span>
             <div class="mb-0">
               <!-- <img
