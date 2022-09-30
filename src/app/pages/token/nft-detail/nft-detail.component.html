@@ -4,9 +4,9 @@
       <!-- Desktop nft-image -->
       <div class="col-4 nft-img__contain d-none d-xl-block">
         <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-          <!-- !important:
-          Default image if this ntf-detail has not image -->
-          <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+          <div class="nft__img">
+            <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+          </div>
         </div>
       </div>
       <!-- Mobile nft-image -->
@@ -14,9 +14,7 @@
         <div class="d-flex">
           <div class="nft-img__contain">
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-              <!-- !important:
-            Default image if this ntf-detail has not image -->
-              <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+                <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" class="nft__img--mob" />
             </div>
           </div>
           <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
