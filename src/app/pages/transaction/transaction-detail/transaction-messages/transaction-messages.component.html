@@ -5,7 +5,7 @@
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
-      <div class="card-info">
+      <div class="card-info" *ngIf="i < numberListSend">
         <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
@@ -27,13 +27,23 @@
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="item?.amount[0]?.amount > 0">
-              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }}
+              <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
           </div>
         </div>
       </div>
     </ng-container>
+    <div class="text-md-left text-center">
+      <button
+        type="button"
+        class="button button--md button-pill button-outline button-outline__in-card ml-auto"
+        (click)="loadMoreSend()"
+        *ngIf="transactionDetail?.messages?.length > numberListSend">
+        <span class="fw-500 body-02 text--gray-1">Load More</span>
+      </button>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
