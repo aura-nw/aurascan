@@ -22,3 +22,36 @@
 .raw-content {
   white-space: pre-wrap;
 }
+.ibc-item {
+  position: relative;
+  padding-bottom: 16px;
+  &:not(:last-child):before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 32px;
+    height: calc(100% - 32px);
+    width: 1px;
+    background-color: var(--aura-green-4);
+  }
+  .bg-gray-8 {
+    background: var(--aura-gray-8);
+    border-radius: 8px;
+  }
+  .divider-lighter {
+    background-color: var(--aura-gray-5);
+    max-height: 8px;
+  }
+  .ibc__date {
+    @media (min-width: 414px) {
+      display: flex;
+      justify-content: end;
+    }
+  }
+}
+.ibc-checker {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  background: url("/assets/icons/icons-svg/white/Check.svg") var(--aura-green-4) center no-repeat;
+}
