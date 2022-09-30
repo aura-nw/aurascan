@@ -5,7 +5,7 @@
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -36,7 +36,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -64,7 +64,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -100,7 +100,7 @@
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
         <div class="card-info">
-          <div class="row mb-3 d-flex box-header">
+          <div class="mb-3 d-flex box-header">
             <div class="col-12 col-lg-3">
               <div class="card-text header-title">
                 <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -139,7 +139,7 @@
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
       <div class="card-info">
-        <div class="row mb-3 d-flex box-header">
+        <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
               <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -183,7 +183,7 @@
     </ng-container>
     <ng-container *ngIf="commissionAutoClaim > 0">
       <div class="card-info">
-        <div class="row mb-3 d-flex box-header">
+        <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
               <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -227,7 +227,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -255,7 +255,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -278,7 +278,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -316,7 +316,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -375,7 +375,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -406,7 +406,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -432,7 +432,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -454,7 +454,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -476,7 +476,7 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.CreateValidator">
     <div class="card-info">
-      <div class="row mb-3 d-flex box-header">
+      <div class="mb-3 d-flex box-header">
         <div class="col-12 col-lg-3">
           <div class="card-text header-title">
             <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -562,7 +562,7 @@
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
       <div class="card-info">
-        <div class="row mb-3 d-flex box-header">
+        <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
               <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
@@ -577,9 +577,11 @@
           </div>
           <div *ngSwitchCase="eTransType.IBCReceived">
             <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCAcknowledgement">
             <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCUpdateClient">
             <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
@@ -587,6 +589,7 @@
           </div>
           <div *ngSwitchCase="eTransType.IBCTimeout">
             <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
             <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
@@ -595,7 +598,7 @@
         </ng-container>
       </div>
     </ng-container>
-    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
+
   </ng-container>
 
   <ng-template #ibcTransfer let-data="data">
@@ -791,73 +794,79 @@
   </ng-template>
 
   <ng-template #ibcProgress>
-    <div class="row mb-3 body-01 border-ibc pt-3" *ngIf="listIBCProgress?.length > 0">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
-      <div class="col-12 col-lg-9" style="word-break: break-word">
-        <ng-container
-          [ngTemplateOutlet]="ibcItem"
-          [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
-          *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
-        </ng-container>
-
-        <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
+    <div *ngIf="listIBCProgress?.length > 0">
+      <div class="divider divider-horizontal my-3"></div>
+      <div class="row mb-3 body-01 ibc-process">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
+        <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
-            [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
-            *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
+                  [ngTemplateOutlet]="ibcItem"
+                  [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
+                  *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
           </ng-container>
 
-          <ng-container
-            [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
-            *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
-          <ng-container
-            [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
-            *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
-          </ng-container>
-        </ng-container>
-      </div>
-    </div>
+          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
+            <ng-container
+                    [ngTemplateOutlet]="ibcItem"
+                    [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
+                    *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
+            </ng-container>
 
-    <ng-template #ibcItem let-type="type" let-title="title">
-      <div class="row col-12">
-        <div class="col-lg-3">
-          <img [src]="'assets/icons/icons-svg/color/success.svg' | imageS3" width="20px" height="20px" class="mr-1" />{{
-            title
-          }}
+            <ng-container
+                    [ngTemplateOutlet]="ibcItem"
+                    [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
+                    *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
+            <ng-container
+                    [ngTemplateOutlet]="ibcItem"
+                    [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
+                    *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
+            </ng-container>
+          </ng-container>
         </div>
       </div>
-      <div class="row ml-6 p-3">
-        <ng-container *ngFor="let item of filterIBCType(type)">
-          <div
-            class="d-flex col-lg-10 justify-content-between py-2"
-            [ngStyle]="{ 'border-radius': '5px', 'background-color': item.effected ? '#363843' : '' }">
-            <div>{{ item.denom }}</div>
-            <div class="txt-right">
-              <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
-                {{ item.tx_hash }}
-              </a>
-              <span *ngIf="item.denom !== denom"> {{ item.tx_hash }} </span>
-              <div class="mb-1">
-                <img
-                  [src]="'assets/icons/icons-svg/color/success.svg' | imageS3"
-                  width="20px"
-                  height="20px"
-                  *ngIf="item.effected"
-                  class="mr-1" />{{ commonService.getDateValue(item.time)[0] }} (<span>{{
-                  item.time | customDate: 'yyyy-MM-dd'
-                }}</span>
-                <span> {{ item.time | customDate: 'HH:mm:ss' }}</span
-                >)
-              </div>
-            </div>
+      <ng-template #ibcItem let-type="type" let-title="title">
+        <div class="ibc-item">
+          <div class="d-flex align-items-center">
+            <div class="ibc-checker mr-2"></div>
+            <div class="text--green-4">{{ title}}</div>
           </div>
-        </ng-container>
-      </div>
-    </ng-template>
+          <div class="ml-10 p-3 p-lg-4 bg-gray-8">
+            <ng-container *ngFor="let item of filterIBCType(type)">
+              <div class="d-lg-flex justify-content-between">
+                <div>{{ item.denom }}</div>
+                <div class="body text-end mt-3 mt-lg-0">
+                  <div>
+                    <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
+                      <span class="d-lg-none">{{ (item.tx_hash | cutStringPipe: 8:8)}}</span>
+                      <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
+                    </a>
+                    <span *ngIf="item.denom !== denom">
+                    <span class="d-lg-none">{{ (item.tx_hash | cutStringPipe: 8:8)}}</span>
+                    <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
+                  </span>
+                  </div>
+                  <div class="mt-1 ibc__date">
+                      <div class="d-flex justify-content-end">
+                        <img src="assets/icons/icons-svg/color/Check.svg"
+                             width="16px" height="16px"
+                             *ngIf="item.effected" class="mr-1" />
+                        {{ commonService.getDateValue(item.time)[0] }}
+                      </div>
+                      <div class="d-flex justify-content-end align-items-center ml-2">
+                        <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                        <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
+                        <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </div>
   </ng-template>
 </div>
