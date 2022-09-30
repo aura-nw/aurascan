@@ -4,33 +4,45 @@
 </h2>
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-    <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
+      <div class="card-info" *ngIf="i < numberListSend">
+        <div class="mb-3 d-flex box-header">
+          <div class="col-12 col-lg-3">
+            <div class="card-text header-title">
+              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+              {{ transactionDetailType }}
+            </div>
+          </div>
+        </div>
+        <div class="divider divider-horizontal my-3"></div>
+        <app-messages-item
+          [label]="'From Address'"
+          [value]="item?.from_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <app-messages-item
+          [label]="'To Address'"
+          [value]="item?.to_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+          <div class="col-12 col-lg-9 text--gray-1">
+            <ng-container *ngIf="item?.amount[0]?.amount > 0">
+              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }}
+              <span class="text--primary">{{ denom }}</span>
+            </ng-container>
+            <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
           </div>
         </div>
       </div>
-      <div class="divider divider-horizontal my-3"></div>
-      <app-messages-item
-        [label]="'From Address'"
-        [value]="transactionDetail?.messages[0]?.from_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <app-messages-item
-        [label]="'To Address'"
-        [value]="transactionDetail?.messages[0]?.to_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-01">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-        <div class="col-12 col-lg-9 text--gray-1">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
-          </ng-container>
-          <ng-container *ngIf="amount == 0"> - </ng-container>
-        </div>
-      </div>
+    </ng-container>
+    <div class="text-md-left text-center">
+      <button
+        type="button"
+        class="button button--md button-pill button-outline button-outline__in-card ml-auto"
+        (click)="loadMoreSend()"
+        *ngIf="transactionDetail?.messages?.length > numberListSend">
+        <span class="fw-500 body-02 text--gray-1">Load More</span>
+      </button>
     </div>
   </ng-container>
 
@@ -110,9 +122,9 @@
           </div>
           <div class="divider divider-horizontal my-3"></div>
           <app-messages-item
-                  [label]="'Delegator Address'"
-                  [value]="item.delegator_address"
-                  [dataLink]="{ url: '/account' }"></app-messages-item>
+            [label]="'Delegator Address'"
+            [value]="item.delegator_address"
+            [dataLink]="{ url: '/account' }"></app-messages-item>
           <div class="row mb-3 body-01">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
             <div class="col-12 col-lg-9">
@@ -574,6 +586,7 @@
         <ng-container [ngSwitch]="item['@type']">
           <div *ngSwitchCase="eTransType.IBCTransfer">
             <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCReceived">
             <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
@@ -598,7 +611,6 @@
         </ng-container>
       </div>
     </ng-container>
-
   </ng-container>
 
   <ng-template #ibcTransfer let-data="data">
@@ -800,29 +812,29 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
         <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
-                  [ngTemplateOutlet]="ibcItem"
-                  [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
-                  *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
+            [ngTemplateOutlet]="ibcItem"
+            [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
+            *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
           </ng-container>
 
           <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
             <ng-container
-                    [ngTemplateOutlet]="ibcItem"
-                    [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
-                    *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
+              [ngTemplateOutlet]="ibcItem"
+              [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
+              *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
             </ng-container>
 
             <ng-container
-                    [ngTemplateOutlet]="ibcItem"
-                    [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
-                    *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
+              [ngTemplateOutlet]="ibcItem"
+              [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
+              *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
             </ng-container>
           </ng-container>
           <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
             <ng-container
-                    [ngTemplateOutlet]="ibcItem"
-                    [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
-                    *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
+              [ngTemplateOutlet]="ibcItem"
+              [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
+              *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
             </ng-container>
           </ng-container>
         </div>
@@ -831,7 +843,7 @@
         <div class="ibc-item">
           <div class="d-flex align-items-center">
             <div class="ibc-checker mr-2"></div>
-            <div class="text--green-4">{{ title}}</div>
+            <div class="text--green-4">{{ title }}</div>
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">
@@ -840,26 +852,29 @@
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
-                      <span class="d-lg-none">{{ (item.tx_hash | cutStringPipe: 8:8)}}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe: 8:8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
                     <span *ngIf="item.denom !== denom">
-                    <span class="d-lg-none">{{ (item.tx_hash | cutStringPipe: 8:8)}}</span>
-                    <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
-                  </span>
+                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe: 8:8 }}</span>
+                      <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
+                    </span>
                   </div>
                   <div class="mt-1 ibc__date">
-                      <div class="d-flex justify-content-end">
-                        <img src="assets/icons/icons-svg/color/Check.svg"
-                             width="16px" height="16px"
-                             *ngIf="item.effected" class="mr-1" />
-                        {{ commonService.getDateValue(item.time)[0] }}
-                      </div>
-                      <div class="d-flex justify-content-end align-items-center ml-2">
-                        <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
-                        <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
-                        <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
-                      </div>
+                    <div class="d-flex justify-content-end">
+                      <img
+                        src="assets/icons/icons-svg/color/Check.svg"
+                        width="16px"
+                        height="16px"
+                        *ngIf="item.effected"
+                        class="mr-1" />
+                      {{ commonService.getDateValue(item.time)[0] }}
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center ml-2">
+                      <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                      <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
+                      <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
+                    </div>
                   </div>
                 </div>
               </div>
