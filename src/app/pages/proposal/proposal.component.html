@@ -1,9 +1,9 @@
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <section class="lasted-list" *ngIf="lastedList && lastedList.length > 0">
+  <section class="lasted-list" *ngIf="proposalData && proposalData?.length > 0">
     <app-pagetitle title="Votings"></app-pagetitle>
     <div class="row row-eq-height">
       <ng-container *ngIf="!breakpoint.value.matches">
-        <div class="col-6 proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idx">
+        <div class="col-6 proposal-lasted" *ngFor="let lastedItem of proposalData.slice(0, 4); index as idx">
           <div class="card mb-0 h-100">
             <div class="card-body pb-0">
               <div class="d-flex justify-content-between align-items-start">
@@ -146,7 +146,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
-        <div class="proposal-lasted" *ngFor="let lastedItem of lastedList.slice(0, 4); index as idex">
+        <div class="proposal-lasted" *ngFor="let lastedItem of proposalData.slice(0, 4); index as idex">
           <div class="card mb-0 h-100">
             <div class="card-body px-3 py-3">
               <div class="border-bottom-mobile pb-4">
@@ -289,7 +289,7 @@
   </section>
   <!-- Proposal Table -->
   <section class="all-list table-responsive" *ngIf="!breakpoint.value.matches">
-    <div class="card" *ngIf="dataSourceMobile?.length > 0">
+    <div class="card" *ngIf="dataSource?.data?.length > 0">
       <div class="card-header card-header-dark align-items-center d-flex justify-content-between">
         <h2 class="mb-0 text--white">Proposals</h2>
         <!-- <button type="button" class="button button-outline" [routerLink]="'/transaction'">View more</button> -->
@@ -427,7 +427,7 @@
           (paginator)="paginatorEmit($event)"
           (pageEvent)="pageEvent($event)">
         </app-paginator>
-        <div *ngIf="!proposalData || (proposalData && proposalData.length === 0)">
+        <div *ngIf="!dataSource.data || (dataSource.data && dataSource.data.length === 0)">
           <app-table-no-data></app-table-no-data>
         </div>
       </div>
