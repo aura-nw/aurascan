@@ -576,6 +576,7 @@
         <ng-container [ngSwitch]="item['@type']">
           <div *ngSwitchCase="eTransType.IBCTransfer">
             <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCReceived">
             <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
