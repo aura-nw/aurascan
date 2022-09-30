@@ -22,7 +22,7 @@
         [label]="'To Address'"
         [value]="transactionDetail?.messages[0]?.to_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
@@ -53,7 +53,7 @@
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.sender"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
@@ -73,7 +73,7 @@
         </div>
       </div>
       <div class="divider divider-horizontal my-3"></div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
       </div>
@@ -81,7 +81,7 @@
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.sender"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0 text--gray-4">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
@@ -110,10 +110,10 @@
           </div>
           <div class="divider divider-horizontal my-3"></div>
           <app-messages-item
-            [label]="'Delegator Address'"
-            [value]="item.delegator_address"
-            [dataLink]="{ url: '/account' }"></app-messages-item>
-          <div class="row mb-3 body-02 body-01-mob">
+                  [label]="'Delegator Address'"
+                  [value]="item.delegator_address"
+                  [dataLink]="{ url: '/account' }"></app-messages-item>
+          <div class="row mb-3 body-01">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
             <div class="col-12 col-lg-9">
               <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
@@ -124,7 +124,7 @@
               </a>
             </div>
           </div>
-          <div class="row mb-3 body-02 body-01-mob">
+          <div class="row mb-3 body-01">
             <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
             <div class="col-12 col-lg-9 text--gray-1">
               <ng-container *ngIf="listAmountClaim[i] > 0">
@@ -152,7 +152,7 @@
           [label]="'Delegator Address'"
           [value]="transactionDetail?.messages[0]?.delegator_address"
           [dataLink]="{ url: '/account' }"></app-messages-item>
-        <div class="row mb-3 body-02 body-01-mob">
+        <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
@@ -163,7 +163,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-01-mob">
+        <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
@@ -173,7 +173,7 @@
             <ng-template #noValues> - </ng-template>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
+        <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
           <div class="col-12 col-lg-9 text--gray-1">
             {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -204,7 +204,7 @@
           [label]="'To Address'"
           [value]="transactionDetail?.messages[0]?.to_address"
           [dataLink]="{ url: '/account' }"></app-messages-item>
-        <div class="row mb-3 body-02 body-01-mob">
+        <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
@@ -215,7 +215,7 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-01-mob">
+        <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -244,7 +244,7 @@
         [label]="'Voter'"
         [value]="transactionDetail?.messages[0]?.voter"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Option</div>
         <div class="col-9 text--gray-1">
           {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
@@ -287,7 +287,7 @@
         </div>
       </div>
       <div class="divider divider-horizontal my-3"></div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
@@ -329,7 +329,7 @@
         [label]="'Delegate Address'"
         [value]="transactionDetail?.messages[0]?.delegator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Source Validator Address</div>
         <div class="col-12 col-lg-9">
           <a
@@ -342,7 +342,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Destination Validator Address</div>
         <div class="col-12 col-lg-9">
           <a
@@ -355,7 +355,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
@@ -364,7 +364,7 @@
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
+      <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
         <div class="col-12 col-lg-9 text--gray-1">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -392,7 +392,7 @@
         [label]="'Depositor'"
         [value]="transactionDetail?.messages[0]?.depositor"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
@@ -419,7 +419,7 @@
         [label]="'To Address'"
         [value]="transactionDetail?.messages[0]?.to_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator</div>
         <div class="col-12 col-lg-9 text--gray-1">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
       </div>
@@ -485,7 +485,7 @@
         </div>
       </div>
       <div class="divider divider-horizontal my-3"></div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Min Self Delegation</div>
         <div class="col-12 col-lg-9 text--gray-1">
           {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
@@ -495,7 +495,7 @@
         [label]="'Delegator Address'"
         [value]="transactionDetail?.messages[0]?.delegator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
@@ -506,7 +506,7 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
@@ -521,7 +521,7 @@
       <app-messages-item
         [label]="'Moniker'"
         [value]="transactionDetail?.messages[0]?.description?.moniker"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
         <div class="col-9">
           <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length > 0">
@@ -535,19 +535,19 @@
       <app-messages-item
         [label]="'Identity'"
         [value]="transactionDetail?.messages[0]?.description?.identity || '-'"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Commission Max Change Rate</div>
         <div class="col-12 col-lg-9">
           {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
@@ -613,7 +613,7 @@
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
+    <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | number: global.formatNumberToken }}
@@ -635,7 +635,7 @@
       [label]="'Sequence'"
       [value]="data?.packet?.sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob" *ngIf="ibcData?.receive?.denom">
+    <div class="row mb-3 body-01" *ngIf="ibcData?.receive?.denom">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | number: global.formatNumberToken }}
@@ -669,7 +669,7 @@
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
+    <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.acknowledgement?.amount | balanceOf | number: global.formatNumberToken }}
@@ -710,7 +710,7 @@
       [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
+    <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
       <div class="col-12 col-lg-9">
         <pre id="json" class="raw-content text--white px-4" [innerHtml]="ibcData?.time_out?.data | appJson"></pre>
@@ -791,7 +791,7 @@
   </ng-template>
 
   <ng-template #ibcProgress>
-    <div class="row mb-3 body-02 body-01-mob border-ibc pt-3" *ngIf="listIBCProgress?.length > 0">
+    <div class="row mb-3 body-01 border-ibc pt-3" *ngIf="listIBCProgress?.length > 0">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
       <div class="col-12 col-lg-9" style="word-break: break-word">
         <ng-container
