@@ -211,7 +211,7 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getListProposal();
+      this.getListProposal(null, true);
     }
   }
 
@@ -228,7 +228,7 @@ export class ProposalComponent implements OnInit {
       }
       this.scrollToTop();
       setTimeout(() => {
-        this.getListProposal();
+        this.getListProposal(null, true);
       }, 3000);
     });
   }
