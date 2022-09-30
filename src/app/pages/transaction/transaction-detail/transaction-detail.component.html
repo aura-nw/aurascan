@@ -67,11 +67,11 @@
         <div class="col-auto col-lg-10 text-end text-lg-start d-lg-flex align-items-center text--gray-1 body-01">
           <div>{{ commonService.getDateValue(transaction?.timestamp)[0] }}</div>
           <div class="d-flex align-items-center ml-1 text--gray-4">
-            <span class="d-none d-lg-block">(</span>
+            <span>(</span>
             <span>{{ transaction?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
             <div class="divider divider-vertical divider-lighter mx-2"></div>
             <span>{{ transaction?.timestamp | customDate: 'HH:mm:ss' }}</span>
-            <span class="d-none d-lg-block">)</span>
+            <span>)</span>
           </div>
         </div>
       </div>
