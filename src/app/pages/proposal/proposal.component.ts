@@ -8,12 +8,7 @@ import * as moment from 'moment';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from '../../../app/global/global';
-import {
-  MESSAGE_WARNING,
-  PROPOSAL_STATUS,
-  PROPOSAL_VOTE,
-  VOTE_OPTION
-} from '../../core/constants/proposal.constant';
+import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
@@ -92,29 +87,21 @@ export class ProposalComponent implements OnInit {
       if (res?.data?.proposals) {
         const dataFiltered = res.data.proposals;
 
-        if (this.dataSource.data.length > 0 && !iscall) {
-          this.dataSource.data = [...this.dataSource.data, ...dataFiltered];
-        } else {
-          this.dataSource.data = [...dataFiltered];
-          this.proposalData = dataFiltered;
-        }
-
         this.dataSourceMobile = this.dataSource.data.slice(
           this.pageData.pageIndex * this.pageData.pageSize,
           this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
         );
 
-        this.length = this.dataSource.data.length;
-        this.proposalData.forEach((pro, index) => {
+        dataFiltered.forEach((pro, index) => {
           pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
           if (index < 4) {
             const { yes, no, no_with_veto, abstain } = pro.tally;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
 
-            this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
-            this.proposalData[index].tally.no = (+no * 100) / totalVote;
-            this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
+            dataFiltered[index].tally.no = (+no * 100) / totalVote;
+            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
             const getVoted = async () => {
               if (addr) {
                 const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
@@ -127,13 +114,20 @@ export class ProposalComponent implements OnInit {
           } else {
             const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
-            this.proposalData[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-            this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
-            this.proposalData[index].tally.no = (+no * 100) / totalVote;
-            this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+            dataFiltered[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
+            dataFiltered[index].tally.no = (+no * 100) / totalVote;
+            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
           }
         });
+        if (this.dataSource.data.length > 0 && !iscall) {
+          this.dataSource.data = [...this.dataSource.data, ...dataFiltered];
+        } else {
+          this.dataSource.data = [...dataFiltered];
+          this.proposalData = dataFiltered;
+        }
+        this.length = this.dataSource.data.length;
       }
     });
   }
