@@ -81,8 +81,12 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               mergeMap((res) => {
                 if (res.data) {
                   this.proposalDetail.total_bonded_token = balanceOf(res.data.bonded_tokens);
-                  this.proposalDetail.pro_turnout =
-                    (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+                  if (data.proposals[0].status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+                    this.proposalDetail.pro_turnout =
+                      (this.proposalDetail.pro_total_vote * 100) / this.proposalDetail.total_bonded_token;
+                  } else {
+                    this.proposalDetail.pro_turnout = this.proposalDetail.turnout;
+                  }
                 }
                 return this.commonService.getParamFromIndexer();
               }),
@@ -122,7 +126,9 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
           };
           this.parsingProposalStatus(this.proposalDetail);
 
-          if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
+          if (this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_FAILED) {
+            this.finalSubTitle = VOTING_SUBTITLE.FAILED;
+          } else if (this.proposalDetail.pro_turnout >= this.proposalDetail.quorum) {
             if (pro_votes_yes > (pro_total_vote - pro_votes_abstain) / 2) {
               if (pro_votes_no_with_veto < pro_total_vote / 3) {
                 this.finalSubTitle = VOTING_SUBTITLE.PASS;
