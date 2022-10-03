@@ -28,11 +28,29 @@
   }
   border: 1px solid var(--aura-gray-9);
   border-radius: 16px;
-  img {
-    width: 136px;
-    height: auto;
-    @media (min-width: 1200px) {
+  .nft__img {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+    }
+    img, app-custom-video-player  {
       width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: contain;
+    }
+  }
+  @media (max-width: 991.98px) {
+    app-custom-video-player, img.nft__img--mob {
+      width: 136px;
+      height: 136px;
+      object-fit: contain;
     }
   }
 }

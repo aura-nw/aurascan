@@ -360,11 +360,6 @@
     font-size: 1.4rem;
     line-height: 1.8rem;
   }
-  @media (max-width: 414px) {
-    button {
-      width: 80px !important;
-    }
-  }
   button {
     padding: 0;
     width: 100px;
@@ -375,6 +370,7 @@
     height: 34px;
     @media (max-width: 991.99px) {
       height: 32px;
+      width: 100%;
     }
     background: transparent;
     color: var(--aura-gray-4);

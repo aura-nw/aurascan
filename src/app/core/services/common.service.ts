@@ -8,6 +8,7 @@ import { DATEFORMAT, INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
 import axios from 'axios';
+import { STATUS_VALIDATOR } from '../constants/validator.enum';
 @Injectable()
 export class CommonService {
   apiUrl = '';
@@ -96,6 +97,11 @@ export class CommonService {
   mappingNameIBC(value) {
     let temp = value.slice(value.indexOf('ibc'));
     let result = this.coins.find((k) => k.denom === temp) || {};
+    return result;
+  }
+
+  isValidatorJailed(jail, status){
+    let result = jail && status === STATUS_VALIDATOR.Jail ? true : false;
     return result;
   }
 }

@@ -12,21 +12,19 @@
               <td mat-cell *matCellDef="let data" style="max-width: 200px">
                 <div>
                   <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                    <a  *ngSwitchCase="'validator_name'"
-                        class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
-                        [routerLink]="['/validators', data['validator_address']]">
+                    <a
+                      *ngSwitchCase="'validator_name'"
+                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                      [routerLink]="['/validators', data['validator_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                            [appClass]="data?.jailed ? 'validator-jailed' : ''"
-                            [identity]='data.validator_identity'
+                            [appClass]="data['jailed'] ? 'jailed' : ''"
+                            [identity]="data.validator_identity"
                             [srcImg]="getValidatorAvatar(data.validator_address)"></app-loading-image>
                         </div>
-                        <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                          <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
-                        </div>
                       </div>
-                      <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
+                      <span [class.text-title]="data['jailed']">
                         {{ data[template.matColumnDef] }}
                       </span>
                     </a>
@@ -37,7 +35,7 @@
                     <div *ngSwitchCase="'token_amount'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                     </div>
-                    <div *ngSwitchCase="'token_name'" class=" text--primary">
+                    <div *ngSwitchCase="'token_name'" class="text--primary">
                       {{ data[template.matColumnDef] }}
                     </div>
                     <div *ngSwitchCase="'reward'">
@@ -62,21 +60,19 @@
                     <div *ngSwitchCase="'total_value'">
                       $ {{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}
                     </div>
-                    <a  *ngSwitchCase="'validator_src_name'"
-                        class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
-                        [routerLink]="['/validators', data['validator_src_address']]">
+                    <a
+                      *ngSwitchCase="'validator_src_name'"
+                      class="text--primary cursor-pointer text-clamp box-title-validator d-flex align-items-center position-relative"
+                      [routerLink]="['/validators', data['validator_src_address']]">
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                            [identity]='data.validator_src_identity'
-                            [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                            [identity]="data.validator_src_identity"
+                            [appClass]="data['validator_src_jailed'] ? 'jailed' : ''"
                             [srcImg]="getValidatorAvatar(data.validator_src_address)"></app-loading-image>
                         </div>
-                        <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                          <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
-                        </div>
                       </div>
-                      <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
+                      <span [class.text-title]="data['validator_src_jailed']">
                         {{ data[template.matColumnDef] }}
                       </span>
                     </a>
@@ -87,15 +83,12 @@
                       <div class="avatar-wrapper">
                         <div class="validator-avatar">
                           <app-loading-image
-                            [identity]='data.validator_dst_identity'
-                            [appClass]="data?.jailed ? 'validator-jailed' : ''"
+                            [identity]="data.validator_dst_identity"
+                            [appClass]="data['jailed'] ? 'jailed' : ''"
                             [srcImg]="getValidatorAvatar(data.validator_dst_address)"></app-loading-image>
                         </div>
-                        <div *ngIf="data?.jailed && data['status'] !== statusValidator.Active" class="jailed">
-                          <img [src]="'assets/icons/icons-svg/color/jailed.svg' | imageS3" alt="" />
-                        </div>
                       </div>
-                      <span [class.text-title]="data?.jailed && data['status'] !== statusValidator.Active">
+                      <span [class.text-title]="data['jailed']">
                         {{ data[template.matColumnDef] }}
                       </span>
                     </a>
@@ -121,11 +114,14 @@
             <div class="box-mob-table fw-normal mb-3">
               <ng-container [ngSwitch]="pageEventType" class="fw-normal">
                 <div *ngSwitchCase="pageType.Delegation">
-                  <a class="body-mob text--primary d-flex align-items-center" [routerLink]="['/validators', item['validator_address']]">
+                  <a
+                    class="body-mob text--primary d-flex align-items-center"
+                    [routerLink]="['/validators', item['validator_address']]">
                     <div class="avatar-wrapper">
                       <span class="validator-avatar">
                         <app-loading-image
-                          [identity]='item["validator_identity"]'
+                          [appClass]="item['jailed'] ? 'jailed' : ''"
+                          [identity]="item['validator_identity']"
                           [srcImg]="getValidatorAvatar(item['validator_address'])">
                         </app-loading-image>
                       </span>
@@ -149,44 +145,50 @@
                   </div>
                 </div>
                 <div *ngSwitchCase="pageType.Unbonding">
-                    <a class="body-mob text--primary d-flex justify-content-between align-items-center" [routerLink]="['/validators', item['validator_address']]">
-                      <div class="d-flex align-items-center">
-                        <div class="avatar-wrapper">
-                          <span class="validator-avatar">
-                            <app-loading-image
-                              [identity]='item["validator_identity"]'
-                              [srcImg]="getValidatorAvatar(item['validator_address'])">
-                            </app-loading-image>
-                          </span>
-                        </div>
-                        <span class="h5 mb-0 text--primary"> {{ item.validator_name }} </span>
+                  <a
+                    class="body-mob text--primary d-flex justify-content-between align-items-center"
+                    [routerLink]="['/validators', item['validator_address']]">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-wrapper">
+                        <span class="validator-avatar">
+                          <app-loading-image
+                            [appClass]="item['jailed'] ? 'jailed' : ''"
+                            [identity]="item['validator_identity']"
+                            [srcImg]="getValidatorAvatar(item['validator_address'])">
+                          </app-loading-image>
+                        </span>
                       </div>
-                      <div class="text--white">{{ commonService.getDateValue(item.completion_time, false)[1] }}</div>
-                    </a>
-                    <div class="divider divider-horizontal divider-lighter my-3"></div>
-                    <div class="d-flex justify-content-between body-01">
-                      <div class="text--gray-4">Amount</div>
-                      <div class="txt-right">
-                        {{ item.amount | number: global.formatNumberToken }}
-                        <span class="text--primary">{{ denom }}</span>
-                      </div>
+                      <span class="h5 mb-0 text--primary"> {{ item.validator_name }} </span>
                     </div>
-                    <div class="d-flex justify-content-between body-01 mt-3">
-                      <div class="text--gray-4">Completion Time</div>
-                      <div class="d-flex align-items-center body-mob">
-                        <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
-                        <div class="divider divider-vertical divider-lighter mx-1"></div>
-                        <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
-                      </div>
+                    <div class="text--white">{{ commonService.getDateValue(item.completion_time, false)[1] }}</div>
+                  </a>
+                  <div class="divider divider-horizontal divider-lighter my-3"></div>
+                  <div class="d-flex justify-content-between body-01">
+                    <div class="text--gray-4">Amount</div>
+                    <div class="txt-right">
+                      {{ item.amount | number: global.formatNumberToken }}
+                      <span class="text--primary">{{ denom }}</span>
                     </div>
+                  </div>
+                  <div class="d-flex justify-content-between body-01 mt-3">
+                    <div class="text--gray-4">Completion Time</div>
+                    <div class="d-flex align-items-center body-mob">
+                      <span>{{ item.completion_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <div class="divider divider-vertical divider-lighter mx-1"></div>
+                      <span>{{ item.completion_time | customDate: 'HH:mm:ss' }}</span>
+                    </div>
+                  </div>
                 </div>
                 <div *ngSwitchCase="pageType.Redelegation">
                   <div class="d-flex justify-content-between">
-                    <a class="fw-normal text--primary body-01 ellipsis-text mr-4 w-50" [routerLink]="['/validators', item['validator_src_address']]">
+                    <a
+                      class="fw-normal text--primary body-01 ellipsis-text mr-4 w-50"
+                      [routerLink]="['/validators', item['validator_src_address']]">
                       <div class="d-flex align-items-center">
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">
                             <app-loading-image
+                              [appClass]="item['validator_src_jailed'] ? 'jailed' : ''"
                               [identity]="item['validator_src_identity']"
                               [srcImg]="getValidatorAvatar(item['validator_src_address'])">
                             </app-loading-image>
@@ -195,7 +197,9 @@
                         <span class="h5 mb-0 text--primary ellipsis-text"> {{ item.validator_src_name }} </span>
                       </div>
                     </a>
-                    <a class="fw-normal text--primary body-01 ellipsis-text w-50" [routerLink]="['/validators', item['validator_dst_address']]">
+                    <a
+                      class="fw-normal text--primary body-01 ellipsis-text w-50"
+                      [routerLink]="['/validators', item['validator_dst_address']]">
                       <div class="d-flex align-items-center">
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">

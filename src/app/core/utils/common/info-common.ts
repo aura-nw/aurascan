@@ -75,6 +75,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
 }
 
 export function checkTypeFile(filename: string) {
+  if(!filename) return null;
   let parts = filename.split('.');
   let typeString = parts[parts.length - 1];
   switch (typeString.toLowerCase().trim()) {

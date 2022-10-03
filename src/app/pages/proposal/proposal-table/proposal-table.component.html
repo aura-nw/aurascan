@@ -16,6 +16,7 @@
                         class="validator-avatar d-inline-flex"
                         [routerLink]="[template.isUrl, data['operator_address']]">
                         <app-loading-image
+                          [appClass]="data['jailed'] ? 'jailed' : ''"
                           [identity]="data['validator_identity']"
                           [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
                       </span>

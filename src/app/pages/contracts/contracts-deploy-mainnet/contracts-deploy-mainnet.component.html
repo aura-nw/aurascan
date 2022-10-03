@@ -169,7 +169,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('whitepaper')?.invalid && (contractForm.get('whitepaper')?.dirty || contractForm.get('whitepaper')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="whitepaper">
-                                                <img src="assets/icons/icons-svg/white/FilePdf.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/FilePdf.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="whitepaper"
@@ -190,7 +190,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('medium')?.invalid && (contractForm.get('medium')?.dirty || contractForm.get('medium')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="medium">
-                                                <img src="assets/icons/icons-svg/white/Medium.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Medium.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="medium"
@@ -213,7 +213,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('github')?.invalid && (contractForm.get('github')?.dirty || contractForm.get('github')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="github">
-                                                <img src="assets/icons/icons-svg/white/Github.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Github.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="github"
@@ -234,7 +234,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('reddit')?.invalid && (contractForm.get('reddit')?.dirty || contractForm.get('reddit')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="reddit">
-                                                <img src="assets/icons/icons-svg/white/Reddit.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Reddit.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="reddit"
@@ -257,7 +257,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('telegram')?.invalid && (contractForm.get('telegram')?.dirty || contractForm.get('telegram')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="telegram">
-                                                <img src="assets/icons/icons-svg/white/Telegram.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Telegram.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="telegram"
@@ -278,7 +278,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('slack')?.invalid && (contractForm.get('slack')?.dirty || contractForm.get('slack')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="slack">
-                                                <img src="assets/icons/icons-svg/white/Slack.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Slack.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="slack"
@@ -301,7 +301,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('weChat')?.invalid && (contractForm.get('weChat')?.dirty || contractForm.get('weChat')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="weChat">
-                                                <img src="assets/icons/icons-svg/white/WeChat.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/WeChat.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="weChat"
@@ -322,7 +322,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('facebook')?.invalid && (contractForm.get('facebook')?.dirty || contractForm.get('facebook')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="facebook">
-                                                <img src="assets/icons/icons-svg/white/Facebook.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Facebook.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="facebook"
@@ -345,7 +345,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('linkedin')?.invalid && (contractForm.get('linkedin')?.dirty || contractForm.get('linkedin')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="linkedin">
-                                                <img src="assets/icons/icons-svg/white/LinkedIn.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/LinkedIn.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="linkedin"
@@ -366,7 +366,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('twitter')?.invalid && (contractForm.get('twitter')?.dirty || contractForm.get('twitter')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="twitter">
-                                                <img src="assets/icons/icons-svg/white/Twitter.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Twitter.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="twitter"
@@ -389,7 +389,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('discord')?.invalid && (contractForm.get('discord')?.dirty || contractForm.get('discord')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="discord">
-                                                <img src="assets/icons/icons-svg/white/Discord.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Discord.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="discord"
@@ -410,7 +410,7 @@
                                         <div class="input-group form-check-input"
                                         [class.form-control--error]="contractForm.get('bit_coin_talk')?.invalid && (contractForm.get('bit_coin_talk')?.dirty || contractForm.get('bit_coin_talk')?.touched)">
                                             <label class="input-group-prepend h6 mb-0 text--primary" for="bit_coin_talk">
-                                                <img src="assets/icons/icons-svg/white/Bitcoin.svg" alt="">
+                                                <img [src]="'assets/icons/icons-svg/white/Bitcoin.svg' | imageS3" alt="">
                                             </label>
                                             <input
                                                 id="bit_coin_talk"

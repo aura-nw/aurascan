@@ -16,3 +16,7 @@
   padding: 10px 15px;
   margin-bottom: 1rem;
 }
+
+::ng-deep app-transaction-messages .card-info:not(:last-child) {
+  margin-bottom: 16px;
+}
