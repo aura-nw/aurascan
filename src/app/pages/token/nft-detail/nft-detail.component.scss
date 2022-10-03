@@ -72,13 +72,13 @@
     .g-ellipsis {
       width: unset;
       max-width: 100px;
-      @media (min-width: 414px) {
+      @media (min-width: 576px) {
         max-width: 150px;
       }
-      @media (min-width: 576px) {
+      @media (min-width: 992px) {
         max-width: 300px;
       }
-      @media (min-width: 768px) {
+      @media (min-width: 1200px) {
         max-width: 100%;
       }
     }

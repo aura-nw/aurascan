@@ -18,7 +18,6 @@ export class NftCardComponent {
       ) {}
 
   ngOnChanges(changes: SimpleChange): void {
-    console.log(this.nftItem.media_link)
     if (changes['nftItem']?.currentValue) {
       if(this.nftItem?.media_info.length > 0)
       {

@@ -22,6 +22,7 @@
     }
   }
   &__item {
+    position: relative;
     display: block;
     padding: var(--spacer-3);
     border-radius: var(--spacer-2);
