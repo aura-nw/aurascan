@@ -1,6 +1,6 @@
-<div class="nft-card-container" routerLink="/moment/{{ nftItem?.momentId }}">
-  <div class="card-image" #card>
-    <img *ngIf="nftType === 'img'" src="{{ nftItem.media_info[0]?.media_link }}" alt="" />
+<div class="nft-cards__img" routerLink="/moment/{{ nftItem?.momentId }}">
+    <img *ngIf="!nftType"  [src]="defaultImgToken" alt="" />
+    <img *ngIf="nftType === 'img'"  [src]="nftItem.media_info[0]?.media_link" alt="" />
     <app-custom-video-player
       [videoSrc]="this.nftItem?.media_info[0]?.media_link"
       [showControl]="false"
@@ -15,18 +15,4 @@
       [appWidth]="card.clientWidth"
       [disablePan]="true"
     ></app-model-view> -->
-  </div>
-  <div class="card-name h4 text-ellipsis-3">
-    {{ nftItem?.momentName }}
-  </div>
-
-  <div class="d-flex align-items-center justify-content-between">
-    <div class="singer text-3">
-      <!-- <app-level [level]="nftItem?.momentLevel || 0"></app-level> -->
-    </div>
-    <div class="count text-3">
-      <i class="icon icon--switch-stage icon-nft g-mr-8"></i>
-      {{ nftItem?.momentNFTAmount | mask: "separator" }} NFT
-    </div>
-  </div>
 </div>
