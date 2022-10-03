@@ -6,10 +6,10 @@
   }
 }
 .box-token-transfer {
-  justify-content: start;
   min-width: 80px;
   margin-left: 32px;
   display: flex;
+  justify-content: flex-start;
   .token-transfer-status {
     display: inline-flex;
     align-items: center;
