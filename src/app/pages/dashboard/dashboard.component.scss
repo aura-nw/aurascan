@@ -18,14 +18,17 @@
 }
 
 .aura-table.transaction {
+  th:last-child {
+    width: 30%;
+  }
   th:not(:last-child) {
     width: 16%;
   }
   .width-type {
-    width: 30% !important;
+    width: 20% !important;
   }
   .width-txhash {
-    width: 33% !important;
+    width: 30% !important;
   }
   .label__status {
     max-width: 165px;
