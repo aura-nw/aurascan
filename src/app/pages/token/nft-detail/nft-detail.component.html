@@ -32,7 +32,7 @@
               <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link" class="nft__img--mob" />
               <app-custom-video-player
                 [videoSrc]="nftDetail?.media_info[0]?.media_link"
-                [showControl]="false"
+                [showControl]="true"
                 *ngIf="nftType === 'video'"
                 [isMuted]="false">
               </app-custom-video-player>
