@@ -77,7 +77,7 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
       this.nftDetail = res.data;
-      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link)
+      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
       this.loading = false;
     });
   }
@@ -148,5 +148,3 @@ export class NFTDetailComponent implements OnInit {
     };
   }
 }
-
-
