@@ -5,7 +5,7 @@ section.contracts-deploy {
       padding: 0;
       padding-right: var(--spacer-6);
       align-items: flex-start;
-      justify-content: start;
+      justify-content: flex-start;
       &.form-control--error {
         border-color: var(--aura-red-3) !important;
       }
