@@ -7,7 +7,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { AccountService } from 'src/app/core/services/account.service';
+import { NftCardComponent } from 'src/app/shared/components/cards/nft-card/nft-card.component';
+import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
+import { CustomVideoPlayerModule } from 'src/app/shared/components/custom-video-player/custom-video-player.module';
+// import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { MaterialModule } from '../../../app/app.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
 import { TableNoDataModule } from '../../../app/shared/components/table-no-data/table-no-data.module';
@@ -66,7 +70,10 @@ import { TokenRoutingModule } from './token-routing.module';
     ContractPopoverModule,
     NgxMaskModule,
     WriteContractModule,
-    ReadContractModule
+    ReadContractModule,
+    CustomVideoPlayerModule,
+    //ModelViewModule
+    NftCardModule
   ],
   providers: [TokenService, AccountService],
 })

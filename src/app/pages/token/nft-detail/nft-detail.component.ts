@@ -11,7 +11,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from 'src/app/global/global';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { TokenService } from 'src/app/core/services/token.service';
-import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 
 @Component({
@@ -48,6 +48,7 @@ export class NFTDetailComponent implements OnInit {
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;
   currentKey: string;
+  nftType: string;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -76,6 +77,7 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
       this.nftDetail = res.data;
+      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link)
       this.loading = false;
     });
   }
@@ -146,3 +148,5 @@ export class NFTDetailComponent implements OnInit {
     };
   }
 }
+
+

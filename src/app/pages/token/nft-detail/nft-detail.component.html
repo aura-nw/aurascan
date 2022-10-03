@@ -3,9 +3,21 @@
     <div class="row p-xl-3">
       <!-- Desktop nft-image -->
       <div class="col-4 nft-img__contain d-none d-xl-block">
-        <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
+        <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center" #card>
           <div class="nft__img">
-            <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+            <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+            <app-custom-video-player
+                    [videoSrc]="nftDetail?.media_info[0]?.media_link"
+                    [showControl]="false"
+                    *ngIf="nftType === 'video'"
+                    [isMuted]="true">
+            </app-custom-video-player>
+            <!-- <app-model-view
+              *ngIf="nftType === '3d'"
+              [modelUrl]="nftDetail?.media_info[0]?.media_link"
+              [appHeight]="card.clientHeight"
+              [appWidth]="card.clientWidth"
+              [disablePan]="true"></app-model-view> -->
           </div>
         </div>
       </div>
@@ -14,7 +26,13 @@
         <div class="d-flex">
           <div class="nft-img__contain">
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-                <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" class="nft__img--mob" />
+                <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" class="nft__img--mob" />
+              <app-custom-video-player
+                      [videoSrc]="nftDetail?.media_info[0]?.media_link"
+                      [showControl]="false"
+                      *ngIf="nftType === 'video'"
+                      [isMuted]="true">
+              </app-custom-video-player>
             </div>
           </div>
           <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
