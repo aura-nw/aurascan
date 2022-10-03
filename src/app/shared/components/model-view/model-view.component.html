@@ -1,0 +1,28 @@
+<div *ngIf="modelUrl" class="model-viewer-container">
+  <ng-container *ngIf="!disablePan">
+    <model-viewer
+      [ngStyle]="{ width: appWidth + 'px', height: appHeight + 'px' }"
+      camera-controls
+      [attr.src]="modelUrl"
+      alt="Aura"
+      data-js-focus-visible=""
+      ar-status="not-presenting"
+      touch-action="none"
+      interaction-prompt="none"
+    >
+    </model-viewer>
+  </ng-container>
+
+  <ng-container *ngIf="disablePan">
+    <model-viewer
+      [ngStyle]="{ width: appWidth + 'px', height: appHeight + 'px' }"
+      [attr.src]="modelUrl"
+      alt="Aura"
+      data-js-focus-visible=""
+      ar-status="not-presenting"
+      touch-action="none"
+      interaction-prompt="none"
+    >
+    </model-viewer>
+  </ng-container>
+</div>
