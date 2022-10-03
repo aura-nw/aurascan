@@ -3,8 +3,10 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -14,7 +16,8 @@ import { Globals } from 'src/app/global/global';
 })
 export class NftListComponent implements OnChanges {
   @Output() totalValueNft = new EventEmitter<number>();
-
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   assetCW721: any[];
   @Input() address: string;
   searchValue = '';
@@ -30,7 +33,12 @@ export class NftListComponent implements OnChanges {
   totalValue = 0;
   paginator: MatPaginator;
 
-  constructor(private accountService: AccountService, private router: Router, public global: Globals) {}
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    public global: Globals,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnChanges(): void {
     this.getNftData();
@@ -50,6 +58,9 @@ export class NftListComponent implements OnChanges {
         this.pageData.length = res.meta.count;
 
         res?.data.forEach((element) => {
+          if (element.media_info.length > 0) {
+            element.nftType = checkTypeFile(element?.media_info[0]?.media_link);
+          }
           if (!this.searchValue) {
             this.totalValue += element.price * +element.balance || 0;
           }
