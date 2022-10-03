@@ -53,6 +53,7 @@ export class TransactionMessagesComponent implements OnInit {
     Transfer: 'send_packet',
     Ack: 'acknowledge_packet',
   };
+  numberListSend = 5;
 
   listIBCProgress = [];
 
@@ -378,5 +379,9 @@ export class TransactionMessagesComponent implements OnInit {
   displayTitle(type) {
     const typeTrans = this.typeTransaction?.find((f) => f.label.toLowerCase() === type.toLowerCase());
     return typeTrans?.value;
+  }
+
+  loadMoreSend(){
+    this.numberListSend += 5;
   }
 }
