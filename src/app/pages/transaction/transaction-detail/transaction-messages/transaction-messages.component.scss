@@ -45,7 +45,7 @@
   .ibc__date {
     @media (min-width: 450px) {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
     }
   }
 }
