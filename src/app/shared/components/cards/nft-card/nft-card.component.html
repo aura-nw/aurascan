@@ -1,4 +1,4 @@
-<div class="nft-cards__img" #card>
+<div class="nft-cards__img">
   <img *ngIf="!nftType" [src]="defaultImgToken" alt="" />
   <img *ngIf="nftType === 'img'" [src]="nftItem.media_info[0]?.media_link" alt="" />
   <app-custom-video-player
@@ -10,7 +10,7 @@
   <app-model-view
     *ngIf="nftType === '3d'"
     [modelUrl]="nftItem.media_info[0]?.media_link"
-    [appHeight]="card.clientHeight"
-    [appWidth]="card.clientWidth"
-    [disablePan]="true"></app-model-view>
+    [disablePan]="true">
+  </app-model-view>
+  <app-audio-player *ngIf="nftType === 'audio'" [src]="nftItem?.media_info[0]?.media_link"> </app-audio-player>
 </div>

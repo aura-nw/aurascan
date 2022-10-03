@@ -1,0 +1,13 @@
+.audio-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    audio {
+        max-height: 100%;
+        max-width: 100%;
+        margin: auto;
+        object-fit: contain;
+    }
+}
