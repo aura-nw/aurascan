@@ -114,33 +114,38 @@ form.aura-form.single-input-field {
       bottom: -90%;
       transform: translateY(95%);
       border: 1px solid transparent;
-      border-radius: 25px;
+      border-radius: 8px;
       z-index: 1500;
       overflow: hidden;
       max-height: 0;
       transition: max-height .35s ease-in-out;
+      @media (min-width: 992px) {
+        min-width: 217px;
+      }
       a {
         display: block;
-        font-size: 1.6rem;
-        color: var(--aura-gray-6);
-        padding: 8px 16px;
+        font-size: 1.4rem;
+        color: var(--aura-gray-1);
+        padding: 14px;
         transition: all .35s ease-in-out;
+        background-color: var(--aura-black);
         &:first-child {
           padding-top: 16px;
-          border-top-left-radius: 25px;
-          border-top-right-radius: 25px;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
         }
         &:last-child {
           padding-bottom: 16px;
-          border-bottom-left-radius: 25px;
-          border-bottom-right-radius: 25px;
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
         }
         &:hover {
-          color: var(--aura-white);
-          background-color: var(--aura-gray-9);
+          color: var(--aura-gray-1);
+          background-color: var(--aura-gray-10);
         }
         &.active {
           color: var(--aura-white);
+          background-color: var(--aura-gray-10);
         }
       }
     }

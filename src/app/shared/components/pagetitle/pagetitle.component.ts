@@ -19,7 +19,7 @@ export class PagetitleComponent implements OnInit {
   }>;
 
   @Input() title: string | undefined;
-  @Input() displayInfo: boolean;
+  @Input() displayInfo: boolean = false;
 
   constructor(public global: Globals) { }
 

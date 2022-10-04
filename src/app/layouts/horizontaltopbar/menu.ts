@@ -9,6 +9,9 @@ export enum MenuName {
   Token = 'Token',
   TokenCW20 = 'TokenCW20',
   TokenCW721 = 'TokenCW721',
+  Statistic = 'Statistic',
+  ChartStats = 'Chart & Stats',
+  TopStatistics = 'Top Statistics',
   Contract = 'Contract',
   Account = 'Account',
 }
@@ -63,16 +66,16 @@ export const MENU: MenuItem[] = [
     link: '/tokens',
     name: MenuName.Token,
     subItems: [
-        // {
-        //     id: 1,
-        //     label: 'CW-20',
-        //     link: '/tokens',
-        //     name: MenuName.TokenCW20,
-        //     icon: 'coins',
-        // },
+        {
+            id: 1,
+            label: 'CW-20 Top Tokens',
+            link: '/tokens',
+            name: MenuName.TokenCW20,
+            icon: 'coins',
+        },
         {
             id: 2,
-            label: 'CW-721',
+            label: 'CW-721 Top Tokens',
             link: '/tokens/tokens-nft',
             name: MenuName.TokenCW721,
             icon: 'coins',
@@ -81,6 +84,29 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 8,
+    label: 'MENUITEMS.STATISTICS.TEXT',
+    icon: 'coin',
+    link: '/',
+    name: MenuName.Statistic,
+    subItems: [
+        {
+            id: 1,
+            label: 'Chart & Stats',
+            link: '/statistics/charts-stats',
+            name: MenuName.ChartStats,
+            icon: 'coins',
+        },
+        {
+            id: 2,
+            label: 'Top Statistics',
+            link: '/statistics/top-statistic',
+            name: MenuName.TopStatistics,
+            icon: 'coins',
+        }
+    ]
+  },
+  {
+    id: 9,
     label: 'MENUITEMS.ACCOUNT.TEXT',
     icon: 'user',
     link: '',

@@ -14,6 +14,8 @@ import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-dashboard',
@@ -60,6 +62,8 @@ export class DashboardComponent implements OnInit {
     public global: Globals,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
+    private toastr: NgxToastrService,
+    public translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -166,6 +170,15 @@ export class DashboardComponent implements OnInit {
         this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
         `<span class=text--primary> ${this.denom} </span>`
       );
+    }
+  }
+
+  triggerChartMenuClick() {
+    const chartMenuIcon = document.querySelector('.apexcharts-menu-icon') as HTMLElement | null;
+    if(chartMenuIcon) {
+      chartMenuIcon?.click();
+    } else {
+      this.toastr.warning(this.translate.instant('NOTICE.CHART_WAIT_DATA'))
     }
   }
 }

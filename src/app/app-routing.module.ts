@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
   },
   {
+    path: 'statistics',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
+  },
+  {
     path: 'contracts',
     component: LayoutComponent,
     loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),

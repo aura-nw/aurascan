@@ -89,13 +89,12 @@
       <div class="collapse navbar-collapse active" id="topnav-menu-content">
         <ul class="navbar-nav">
           <ng-container *ngFor="let item of menuItems">
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" [class.pr-6]="item.id === 7 || item.id === 8">
               <a
                 class="nav-link d-flex align-items-center h4 mb-0"
                 *ngIf="!item.subItems && item.link"
                 (click)="onMenuClick($event)"
                 href="javascript: void(0);"
-                id="topnav-components"
                 [routerLink]="item.link"
                 routerLinkActive="active"
                 [class.active]="router.url === '/' && item.link === '/dashboard'"
@@ -103,16 +102,12 @@
                 <i class="icon icon-{{ item.icon }}"></i>
                                 <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
               </a>
-              <a
-                *ngIf="item.subItems"
+              <a *ngIf="item.subItems && item.id === 7" (click)="onMenuClick($event)"
                 class="nav-link dropdown-toggle arrow-none d-flex align-items-center h4 mb-0"
-                (click)="onMenuClick($event)"
                 [class.active]="
                   (router.url === '/' && item.link === '/dashboard') || (item.name === menuName.Token && router.url.includes('/token'))
                 "
-                href="javascript: void(0);"
-                id="topnav-components"
-                role="button">
+                href="javascript: void(0);" role="button">
                 <i class="icon icon-{{ item.icon }}"></i>
                                 <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
                 <span class="nav-link__panel">
@@ -127,8 +122,20 @@
                       (subMenu.name === menuName.TokenCW721 && (router.url.includes('/tokens-nft') || router.url.includes('/token-nft')))
                     "
                     >
-                    <ng-container *ngIf="subMenu.label === 'CW-20'">CW-20 Top Tokens</ng-container>
-                    <ng-container *ngIf="subMenu.label === 'CW-721'">CW-721 Top Tokens</ng-container>
+                    <span>{{ subMenu.label }}</span>
+                  </a>
+                </span>
+              </a>
+              <a *ngIf="item.subItems && item.id === 8" (click)="onMenuClick($event)"
+                class="nav-link dropdown-toggle arrow-none d-flex align-items-center h4 mb-0"
+                href="javascript: void(0);" role="button">
+                <i class="icon icon-{{ item.icon }}"></i>
+                                <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
+                <span class="nav-link__panel">
+                  <a
+                    [routerLink]="subMenu.link"
+                    *ngFor="let subMenu of item.subItems">
+                    <span>{{ subMenu.label }}</span>
                   </a>
                 </span>
               </a>
