@@ -1,0 +1,25 @@
+<div *ngIf="modelUrl" class="model-viewer-container">
+  <ng-container *ngIf="!disablePan">
+    <model-viewer
+      class="model-viewer"
+      camera-controls
+      [attr.src]="modelUrl"
+      alt="Aura"
+      data-js-focus-visible=""
+      ar-status="not-presenting"
+      touch-action="none"
+      interaction-prompt="none">
+    </model-viewer>
+  </ng-container>
+
+  <ng-container *ngIf="disablePan">
+    <model-viewer
+      [attr.src]="modelUrl"
+      alt="Aura"
+      data-js-focus-visible=""
+      ar-status="not-presenting"
+      touch-action="none"
+      interaction-prompt="none">
+    </model-viewer>
+  </ng-container>
+</div>

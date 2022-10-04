@@ -22,8 +22,9 @@
     }
   }
   &__item {
+    position: relative;
     display: block;
-    padding: var(--spacer-3);
+    padding: var(--spacer-2);
     border-radius: var(--spacer-2);
     background-color: var(--aura-black);
     width: 100%;
@@ -34,7 +35,7 @@
     overflow: hidden;
     border-radius: var(--spacer-1);
     width: 100%;
-    img {
+    img, app-custom-video-player, app-model-view, app-audio-player {
       width: 100%;
       height: 100%;
       position: absolute;

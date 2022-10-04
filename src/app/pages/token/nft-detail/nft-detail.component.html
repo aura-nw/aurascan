@@ -1,24 +1,54 @@
 <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
   <div class="text--white">
-    <div class="row p-xl-3">
+    <div class="row p-lg-3">
       <!-- Desktop nft-image -->
-      <div class="col-4 nft-img__contain d-none d-xl-block">
+      <div class="col-4 nft-img__contain d-none d-lg-block">
         <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
           <div class="nft__img">
-            <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" />
+            <img *ngIf="!nftType" [src]="defaultImgToken" />
+            <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link" />
+            <app-custom-video-player
+              [videoSrc]="nftDetail?.media_info[0]?.media_link"
+              [showControl]="true"
+              *ngIf="nftType === 'video'"
+              [isMuted]="false">
+            </app-custom-video-player>
+            <app-model-view
+              *ngIf="nftType === '3d'"
+              [modelUrl]="nftDetail?.media_info[0]?.media_link"
+              [disablePan]="false">
+            </app-model-view>
+            <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.media_info[0]?.media_link">
+            </app-audio-player>
           </div>
         </div>
       </div>
       <!-- Mobile nft-image -->
-      <div class="col-12 d-xl-none mb-4">
+      <div class="col-12 d-lg-none mb-4">
         <div class="d-flex">
           <div class="nft-img__contain">
             <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-                <img *ngIf="true" [src]="nftDetail?.media_info[0]?.media_link || defaultImgToken" class="nft__img--mob" />
+              <img *ngIf="!nftType" [src]="defaultImgToken" class="nft__img--mob" />
+              <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link" class="nft__img--mob" />
+              <app-custom-video-player
+                [videoSrc]="nftDetail?.media_info[0]?.media_link"
+                [showControl]="true"
+                *ngIf="nftType === 'video'"
+                [isMuted]="false">
+              </app-custom-video-player>
+              <app-model-view
+                *ngIf="nftType === '3d'"
+                [modelUrl]="nftDetail?.media_info[0]?.media_link"
+                [disablePan]="false">
+              </app-model-view>
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.media_info[0]?.media_link">
+              </app-audio-player>
             </div>
           </div>
-          <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob">
-            <h1 class="fw-semibold title-small mb-0 body-01-mob text--white">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+          <div class="ml-4 flex-shrink-0 flex-grow-1 d-flex flex-column justify-content-center title--mob pr-4">
+            <h1 class="fw-semibold title-small mb-0 body-01-mob text--white">
+              {{ nftDetail?.name }} #{{ nftDetail?.token_id }}
+            </h1>
             <span class="burnt-tag my-1" *ngIf="nftDetail?.is_burned">Burnt</span>
             <div class="mb-0">
               <!-- <img
@@ -34,156 +64,158 @@
         </div>
       </div>
       <!-- End nft-image -->
-      <div class="col-12 col-xl-8 pl-xl-7">
-        <div class="d-none d-xl-block">
-          <div class="d-flex align-items-center">
-            <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
-            <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
+      <div class="col-12 col-lg-8 pl-lg-7">
+        <div class="d-lg-flex flex-column justify-content-between h-100">
+          <div class="d-none d-lg-block">
+            <div class="d-flex align-items-center">
+              <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+              <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
+            </div>
+            <div class="my-5">
+              <!-- <img
+                [src]="nftDetail?.image || defaultLogoToken"
+                width="24px"
+                height="24px"
+                class="mr-1 object-fit--none" /> -->
+              <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+                nftDetail?.name
+              }}</a>
+            </div>
           </div>
-          <div class="my-5">
-            <!-- <img
-              [src]="nftDetail?.image || defaultLogoToken"
-              width="24px"
-              height="24px"
-              class="mr-1 object-fit--none" /> -->
-            <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
-              nftDetail?.name
-            }}</a>
+          <!-- Desktop card info -->
+          <div class="d-none d-lg-block card py-3 px-6">
+            <div class="d-flex">
+              <div class="flex-shrink-0 flex-grow-1 w-auto">
+                <div class="body-01 text--gray-5 mb-1">Min. Price</div>
+                <div class="h3 mb-0 text--white">
+                  <span class="fw-500">- {{ denom }}</span>
+                  <span class="text--gray-5 ml-2">(-)</span>
+                </div>
+              </div>
+              <div class="flex-shrink-0 flex-grow-1 w-auto">
+                <div class="divider divider-vertical"></div>
+              </div>
+              <div class="flex-shrink-0 flex-grow-1 w-auto">
+                <div class="body-01 text--gray-5 mb-1">Last Sale (Item)</div>
+                <div class="h3 mb-0 text--white">
+                  <span class="fw-500">N/A</span>
+                  <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
+                </div>
+              </div>
+              <div class="flex-shrink-0 flex-grow-1 w-auto">
+                <div class="divider divider-vertical"></div>
+              </div>
+              <div class="flex-shrink-0 flex-grow-1 w-auto">
+                <div class="body-01 text--gray-5 mb-1">Last Sale (Contract)</div>
+                <div class="h3 mb-0 text--white">
+                  <span class="fw-500">- {{ denom }}</span>
+                  <span class="text--gray-5 ml-2">(-)</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <!-- Desktop card info -->
-        <div class="d-none d-lg-block card py-3 px-6">
-          <div class="d-flex">
-            <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="body-01 text--gray-5 mb-1">Min. Price</div>
+          <!-- Mobile card info -->
+          <div class="d-lg-none">
+            <div class="card px-6 py-3 mb-4">
+              <div class="body-02 text--gray-5 mb-1">Min. Price</div>
               <div class="h3 mb-0 text--white">
                 <span class="fw-500">- {{ denom }}</span>
                 <span class="text--gray-5 ml-2">(-)</span>
               </div>
             </div>
-            <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="divider divider-vertical"></div>
-            </div>
-            <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="body-01 text--gray-5 mb-1">Last Sale (Item)</div>
+            <div class="card px-6 py-3 mb-4">
+              <div class="body-02 text--gray-5 mb-1">Last Sale (Item)</div>
               <div class="h3 mb-0 text--white">
                 <span class="fw-500">N/A</span>
                 <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
               </div>
             </div>
-            <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="divider divider-vertical"></div>
-            </div>
-            <div class="flex-shrink-0 flex-grow-1 w-auto">
-              <div class="body-01 text--gray-5 mb-1">Last Sale (Contract)</div>
+            <div class="card px-6 py-3 mb-4">
+              <div class="body-02 text--gray-5 mb-1">Last Sale (Contract)</div>
               <div class="h3 mb-0 text--white">
                 <span class="fw-500">- {{ denom }}</span>
                 <span class="text--gray-5 ml-2">(-)</span>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Mobile card info -->
-        <div class="d-lg-none">
-          <div class="card px-6 py-3 mb-4">
-            <div class="body-02 text--gray-5 mb-1">Min. Price</div>
-            <div class="h3 mb-0 text--white">
-              <span class="fw-500">- {{ denom }}</span>
-              <span class="text--gray-5 ml-2">(-)</span>
+          <!-- End card info -->
+          <div class="card card__ntf-detail mb-0">
+            <h4 class="mb-0 text--white card__ntf-detail-item" id="popupCopy">Details</h4>
+            <div class="card__ntf-detail-item body-02">
+              <div class="label-detail text--gray-5">Owner:</div>
+              <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
+                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
+                  {{ nftDetail?.owner }}
+                </a>
+                <img
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #owner="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.owner); owner.toggle()" />
+              </div>
             </div>
-          </div>
-          <div class="card px-6 py-3 mb-4">
-            <div class="body-02 text--gray-5 mb-1">Last Sale (Item)</div>
-            <div class="h3 mb-0 text--white">
-              <span class="fw-500">N/A</span>
-              <!--              <span class="text--gray-5 ml-2">($32.42)</span>-->
+            <div class="card__ntf-detail-item body-02">
+              <div class="label-detail text--gray-5">Contract Address:</div>
+              <div class="d-flex align-items-center position-relative">
+                <img
+                  *ngIf="contractType !== contractVerifyType.Unverifed"
+                  [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+                  class="mr-2"
+                  alt="contract_verification" />
+                <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
+                  {{ nftDetail?.contract_address }}</a
+                >
+                <img
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #address="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.contract_address); address.toggle()" />
+              </div>
             </div>
-          </div>
-          <div class="card px-6 py-3 mb-4">
-            <div class="body-02 text--gray-5 mb-1">Last Sale (Contract)</div>
-            <div class="h3 mb-0 text--white">
-              <span class="fw-500">- {{ denom }}</span>
-              <span class="text--gray-5 ml-2">(-)</span>
+            <div class="card__ntf-detail-item body-02">
+              <div class="label-detail text--gray-5">Creator:</div>
+              <div class="d-flex align-items-center">
+                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
+                  {{ nftDetail?.creator }}</a
+                >
+                <img
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #creator="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.creator); creator.toggle()" />
+              </div>
             </div>
-          </div>
-        </div>
-        <!-- End card info -->
-        <div class="card card__ntf-detail mb-0">
-          <h4 class="mb-0 text--white card__ntf-detail-item" id="popupCopy">Details</h4>
-          <div class="card__ntf-detail-item body-02">
-            <div class="label-detail text--gray-5">Owner:</div>
-            <div class="d-flex align-items-center position-relative" *ngIf="nftDetail?.owner">
-              <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.owner]">
-                {{ nftDetail?.owner }}
-              </a>
-              <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="ml-2 cursor-pointer btn-copy"
-                alt=""
-                matTooltip="Copied!"
-                #owner="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyData(nftDetail?.owner); owner.toggle()" />
+            <div class="card__ntf-detail-item body-02">
+              <div class="label-detail text--gray-5">Token ID:</div>
+              <div class="d-flex align-items-center">
+                <span class="text--gray-1 fw-normal-mob">{{ nftDetail?.token_id }}</span>
+                <img
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #tokenId="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.token_id); tokenId.toggle()" />
+              </div>
             </div>
-          </div>
-          <div class="card__ntf-detail-item body-02">
-            <div class="label-detail text--gray-5">Contract Address:</div>
-            <div class="d-flex align-items-center position-relative">
-              <img
-                *ngIf="contractType !== contractVerifyType.Unverifed"
-                [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                class="mr-2"
-                alt="contract_verification" />
-              <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
-                {{ nftDetail?.contract_address }}</a
-              >
-              <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="ml-2 cursor-pointer btn-copy"
-                alt=""
-                matTooltip="Copied!"
-                #address="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyData(nftDetail?.contract_address); address.toggle()" />
+            <div class="card__ntf-detail-item body-02">
+              <div class="label-detail text--gray-5">Token Standard:</div>
+              <div class="text--gray-1 fw-normal-mob">CW-721</div>
             </div>
-          </div>
-          <div class="card__ntf-detail-item body-02">
-            <div class="label-detail text--gray-5">Creator:</div>
-            <div class="d-flex align-items-center">
-              <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.creator]">
-                {{ nftDetail?.creator }}</a
-              >
-              <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="ml-2 cursor-pointer btn-copy"
-                alt=""
-                matTooltip="Copied!"
-                #creator="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyData(nftDetail?.creator); creator.toggle()" />
-            </div>
-          </div>
-          <div class="card__ntf-detail-item body-02">
-            <div class="label-detail text--gray-5">Token ID:</div>
-            <div class="d-flex align-items-center">
-              <span class="text--gray-1 fw-normal-mob">{{ nftDetail?.token_id }}</span>
-              <img
-                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                class="ml-2 cursor-pointer btn-copy"
-                alt=""
-                matTooltip="Copied!"
-                #tokenId="matTooltip"
-                (mouseenter)="$event.stopImmediatePropagation()"
-                (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyData(nftDetail?.token_id); tokenId.toggle()" />
-            </div>
-          </div>
-          <div class="card__ntf-detail-item body-02">
-            <div class="label-detail text--gray-5">Token Standard:</div>
-            <div class="text--gray-1 fw-normal-mob">CW-721</div>
           </div>
         </div>
       </div>
