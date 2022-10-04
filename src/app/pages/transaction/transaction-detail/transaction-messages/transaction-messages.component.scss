@@ -32,7 +32,7 @@
     top: 32px;
     height: calc(100% - 32px);
     width: 1px;
-    background-color: var(--aura-green-4);
+    background-color: var(--aura-gray-7);
   }
   .bg-gray-8 {
     background: var(--aura-gray-8);
@@ -53,5 +53,8 @@
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  background: url("/assets/icons/icons-svg/white/Check.svg") var(--aura-green-4) center no-repeat;
+  background: url('/assets/icons/icons-svg/white/Check.svg') var(--aura-green-4) center no-repeat;
+  &.timeout {
+    background: url('/assets/icons/icons-svg/white/fail.svg') var(--aura-red-3) center no-repeat;
+  }
 }
