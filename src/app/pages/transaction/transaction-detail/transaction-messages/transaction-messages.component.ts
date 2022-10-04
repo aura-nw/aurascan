@@ -282,10 +282,10 @@ export class TransactionMessagesComponent implements OnInit {
           if (this.ibcData['time_out']) {
             this.ibcData['time_out']['data'] = {
               root: {
-                amount: dataTimeOut.timeout.find((f) => f.key === 'refund_amount').value,
-                denom: dataTimeOut.timeout.find((f) => f.key === 'refund_denom').value,
-                receiver: dataTimeOut.timeout.find((f) => f.key === 'refund_receiver').value,
-                sender: dataTimeOut.transfer.find((f) => f.key === 'sender').value,
+                amount: dataTimeOut?.timeout?.find((f) => f.key === 'refund_amount')?.value,
+                denom: dataTimeOut?.timeout?.find((f) => f.key === 'refund_denom')?.value,
+                receiver: dataTimeOut?.timeout?.find((f) => f.key === 'refund_receiver')?.value,
+                sender: dataTimeOut?.transfer?.find((f) => f.key === 'sender')?.value,
               },
             };
           }
