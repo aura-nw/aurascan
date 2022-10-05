@@ -63,7 +63,7 @@ export class VotesComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.proposalDetail?.proposal_id) {
       const payloads: IListVoteQuery = {
-        pageLimit: 5,
+        pageLimit: 25,
         proposalid: this.proposalDetail.proposal_id,
       };
       this.proposalDetail?.total_vote.forEach((f) => {
@@ -152,7 +152,7 @@ export class VotesComponent implements OnChanges {
 
   loadMore($event): void {
     const payloads: IListVoteQuery = {
-      pageLimit: 5,
+      pageLimit: 25,
       proposalid: this.proposalDetail.proposal_id,
     };
 

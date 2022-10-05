@@ -4,7 +4,7 @@
 </h2>
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index;">
       <div class="card-info" *ngIf="i < numberListSend">
         <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
@@ -573,9 +573,7 @@
 
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
-      <div
-        class="card-info"
-        *ngIf="(i === 1 && item['@type'] === eTransType.IBCTimeout) || item['@type'] !== eTransType.IBCTimeout">
+      <div class="card-info">
         <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
@@ -603,7 +601,8 @@
             </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCTimeout">
-            <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
+            </ng-container>
             <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
@@ -714,11 +713,11 @@
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
-  <ng-template #ibcTimeout let-data="data">
-    {{ getDataIBC(ibcListMapping.TimeOut) }}
+  <ng-template #ibcTimeout let-data="data" let-index="index">
+    {{ getDataIBC(ibcListMapping.TimeOut, index) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="ibcData?.time_out[index-1]?.next_sequence_recv"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
@@ -727,30 +726,33 @@
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
       <div class="col-12 col-lg-9">
-        <pre id="json" class="raw-content text--white px-4" [innerHtml]="ibcData?.time_out?.data | appJson"></pre>
+        <pre
+          id="json"
+          class="raw-content text--white px-4"
+          [innerHtml]="ibcData?.time_out[index-1]?.data | appJson"></pre>
       </div>
     </div>
     <app-messages-item
       [label]="'Timeout Revision Number'"
-      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.packet?.timeout_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Revision Height'"
-      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.packet?.timeout_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Timestamp'"
-      [value]="ibcData?.time_out?.packet?.timeout_timestamp"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.packet?.timeout_timestamp"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Number'"
-      [value]="ibcData?.time_out?.proof_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.proof_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Height'"
-      [value]="ibcData?.time_out?.proof_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Next Sequence Recv'"
-      [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.next_sequence_recv"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="ibcData?.time_out?.signer"
+      [value]="ibcData?.time_out[index-1]?.signer"
       [dataLink]="{ url: '/account' }"></app-messages-item>
   </ng-template>
 
