@@ -314,8 +314,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         if (code === 200) {
           const txs = convertDataTransaction(data, this.coinInfo);
           txs.forEach((element) => {
-            if (element.type === 'Send' && element.messages.find((k) => k.to_address === this.currentAddress)) {
-              element.type = 'Receive';
+            if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
+              if (element.type === 'Send' && element.messages.find((k) => k.to_address === this.currentAddress)) {
+                element.type = 'Receive';
+              }
             }
           });
 
