@@ -110,7 +110,7 @@
                               </app-loading-image>
                             </div>
                           </div>
-                          <span>{{ data[template.matColumnDef] }}</span>
+                          <span [class.text-jailed]="data['jailed']">{{ data[template.matColumnDef] }}</span>
                         </a>
                       </div>
                     </ng-container>
@@ -145,7 +145,7 @@
                         </app-loading-image>
                       </span>
                     </div>
-                    <span class="h5-mob"> {{ validator.validator_name }} </span>
+                    <span class="h5-mob" [class.text-jailed]="validator['jailed']"> {{ validator.validator_name }} </span>
                   </a>
                 </div>
                 <div class="table-header__action">
@@ -203,7 +203,7 @@
                   </app-loading-image>
                 </div>
               </div>
-              {{ validator.validator_name }}
+              <span [class.text-jailed]="validator['jailed']">{{ validator.validator_name }}</span>
             </a>
           </div>
           <div class="col-9 text--gray-1 body-02 pl-0 pl-lg-1">
@@ -237,7 +237,7 @@
                     </app-loading-image>
                   </div>
                 </div>
-                {{ validator.validator_name }}
+                <span [class.text-jailed]="validator['jailed']">{{ validator.validator_name }}</span>
               </a>
               <div class="body-01 text-end">
                 <span class="text--white">{{ validator.balance | number: globals.formatNumberToken }}</span>

@@ -57,4 +57,7 @@
   &.timeout {
     background: url('/assets/icons/icons-svg/white/fail.svg') var(--aura-red-3) center no-repeat;
   }
+  &.fail {
+    background: url('/assets/icons/icons-svg/white/close.svg') var(--aura-red-3) center no-repeat;
+  }
 }
