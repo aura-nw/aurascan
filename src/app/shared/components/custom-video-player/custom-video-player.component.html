@@ -10,7 +10,7 @@
     [src]="videoSrc"
     disablePictureInPicture
     controlslist="nodownload noplaybackrate"
-    autoplay="{{ true }}"></video>
+    autoplay="{{ false }}"></video>
   <div class="timeline-container" *ngIf="showControl">
     <input type="range" min="0" max="100" class="timeline" value="0" #timeline (change)="onTimelineChange()" />
   </div>
