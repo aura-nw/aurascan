@@ -1,16 +1,16 @@
 <div class="nft-cards__img">
-  <img *ngIf="!nftType" [src]="defaultImgToken" alt="" />
-  <img *ngIf="nftType === 'img'" [src]="nftItem.media_info[0]?.media_link" alt="" />
-  <app-custom-video-player
-    [videoSrc]="this.nftItem?.media_info[0]?.media_link"
-    [showControl]="false"
-    *ngIf="nftType === 'video'"
-    [isMuted]="true">
-  </app-custom-video-player>
-  <app-model-view
-    *ngIf="nftType === '3d'"
-    [modelUrl]="nftItem.media_info[0]?.media_link"
-    [disablePan]="true">
-  </app-model-view>
-  <app-audio-player *ngIf="nftType === 'audio'" [src]="nftItem?.media_info[0]?.media_link"> </app-audio-player>
+  <a href="{{ nftLink }}">
+    <img *ngIf="!nftType" [src]="defaultImgToken" alt="" />
+    <img *ngIf="nftType === 'img'" [src]="nftItem.media_info[0]?.media_link" alt="" />
+    <app-custom-video-player
+      [videoSrc]="this.nftItem?.media_info[0]?.media_link"
+      [showControl]="false"
+      *ngIf="nftType === 'video'"
+      [isMuted]="true">
+    </app-custom-video-player>
+    <app-model-view *ngIf="nftType === '3d'" [modelUrl]="nftItem.media_info[0]?.media_link" [disablePan]="true">
+    </app-model-view>
+  </a>
+  <app-audio-player *ngIf="nftType === 'audio'" [link]="nftLink" [src]="nftItem?.media_info[0]?.media_link">
+  </app-audio-player>
 </div>
