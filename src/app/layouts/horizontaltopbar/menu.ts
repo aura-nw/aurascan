@@ -66,13 +66,13 @@ export const MENU: MenuItem[] = [
     link: '/tokens',
     name: MenuName.Token,
     subItems: [
-        {
-            id: 1,
-            label: 'CW-20 Top Tokens',
-            link: '/tokens',
-            name: MenuName.TokenCW20,
-            icon: 'coins',
-        },
+        // {
+        //     id: 1,
+        //     label: 'CW-20 Top Tokens',
+        //     link: '/tokens',
+        //     name: MenuName.TokenCW20,
+        //     icon: 'coins',
+        // },
         {
             id: 2,
             label: 'CW-721 Top Tokens',

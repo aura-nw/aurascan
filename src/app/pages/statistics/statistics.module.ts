@@ -6,6 +6,7 @@ import { ChartStatsComponent } from './chart-stats/chart-stats.component';
 import { TopStatisticsComponent } from './top-statistics/top-statistics.component';
 import { ChartDetailComponent } from './chart-detail/chart-detail.component';
 import {SharedModule} from "src/app/shared/shared.module";
+import {CommonPipeModule} from "src/app/core/pipes/common-pipe.module";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {SharedModule} from "src/app/shared/shared.module";
     imports: [
         CommonModule,
         StatisticsRoutingModule,
-        SharedModule
+        SharedModule,
+        CommonPipeModule
     ]
 })
 export class StatisticsModule { }

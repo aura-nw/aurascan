@@ -87,9 +87,12 @@
   <div class="container-fluid">
     <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
       <div class="collapse navbar-collapse active" id="topnav-menu-content">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav w-100 justify-content-between align-items-center">
           <ng-container *ngFor="let item of menuItems">
-            <li class="nav-item dropdown" [class.pr-6]="item.id === 7 || item.id === 8">
+            <li class="nav-item dropdown"
+                [class.pr-6]="item.id === 7 || item.id === 8"
+                [ngClass]="{'d-none d-xl-block': (item.id === 7 || item.id === 8 || item.id === 9)}"
+            >
               <a
                 class="nav-link d-flex align-items-center h4 mb-0"
                 *ngIf="!item.subItems && item.link"
@@ -141,6 +144,21 @@
               </a>
             </li>
           </ng-container>
+          <!-- For tablet horizontal screen -->
+          <div class="divider divider-vertical d-xl-none"></div>
+          <li class="dropdown d-xl-none">
+            <a (click)="onMenuClick($event)"
+               class="nav-link dropdown-toggle arrow-none d-flex align-items-center h4 mb-0"
+               href="javascript: void(0);" role="button">
+              <span class="ml-2 fw-semibold">{{ 'MENUITEMS.MORE.TEXT' | translate}}</span>
+              <span class="nav-link__panel">
+                  <a [routerLink]="subMenu.link"
+                      *ngFor="let subMenu of menuItems">
+                    <span>{{ subMenu.label }}</span>
+                  </a>
+                </span>
+            </a>
+          </li>
         </ul>
       </div>
     </nav>

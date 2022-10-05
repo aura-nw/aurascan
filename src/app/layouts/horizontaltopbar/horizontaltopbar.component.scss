@@ -54,8 +54,14 @@ form.aura-form.single-input-field {
 .topnav {
   height: 56px;
   .navbar-nav {
+    .divider.divider-vertical {
+      min-height: 24px;
+    }
     .nav-item {
-      padding: 13.5px 16px;
+      padding: 12px 8px;
+      @media (min-width: 1366px) {
+        padding: 13.5px 12px;
+      }
       @media (min-width: 1440px) {
         padding: 16px;
       }
