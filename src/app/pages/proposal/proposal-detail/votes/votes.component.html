@@ -22,9 +22,6 @@
         [length]="countVote.get(countCurrent)"
         [data]="voteDataList"
         (loadMore)="loadMore($event)"></app-proposal-table>
-      <div *ngIf="voteDataListLoading">
-        <app-loading-sprint></app-loading-sprint>
-      </div>
     </div>
   </div>
 </div>

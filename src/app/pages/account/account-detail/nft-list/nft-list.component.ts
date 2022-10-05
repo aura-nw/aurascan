@@ -111,4 +111,12 @@ export class NftListComponent implements OnChanges {
     this.router.navigate(link);
     e.preventDefault();
   }
+
+  getTypeFile(nft: any){
+    if (nft?.media_info?.length > 0) {
+      return checkTypeFile(nft.media_info[0]?.media_link);
+    } else {
+      return '';
+    }
+  }
 }
