@@ -40,35 +40,7 @@
         <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
           <div class="nft-cards__col col" *ngFor="let item of showedData">
             <div class="nft-cards__item-border">
-              <!-- Nft not mp3 -->
-              <a *ngIf="getTypeFile(item) !== 'audio'"
-                [routerLink]="['/tokens/token-nft/' + item.contract_address + '/' + item.token_id]"
-                class="nft-cards__item">
-                  <app-nft-card [nftItem]="item" [nftType]="getTypeFile(item)"></app-nft-card>
-                  <div class="nft-cards__label">
-                    <span class="text-gradient">CW-721</span>
-                  </div>
-                <div class="mt-3 nft__info">
-                  <span class="mr-1 text--gray-1">Token:</span>
-                  <span
-                    class="text--primary hover-link"
-                    (click)="handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address])"
-                    >{{ item.token_name }}</span
-                  >
-                </div>
-                <div class="mt-1 nft__info">
-                  <span class="mr-1 text--gray-1">Token ID:</span>
-                  <span
-                    class="text--primary hover-link"
-                    (click)="
-                      handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address + '/' + item.token_id])
-                    ">
-                    {{ item.token_id }}
-                  </span>
-                </div>
-              </a>
-              <!-- Nft mp3 -->
-              <div class="nft-cards__item" *ngIf="getTypeFile(item) === 'audio'">
+              <div class="nft-cards__item">
                   <app-nft-card [nftItem]="item" [nftType]="getTypeFile(item)"></app-nft-card>
                   <div class="nft-cards__label">
                     <span class="text-gradient">CW-721</span>
