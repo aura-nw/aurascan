@@ -67,9 +67,7 @@ export class TokenInventoryComponent implements OnInit {
 
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
       this.nextKey = res.data.nextKey;
-
       const cw721Asset = _.get(res, 'data.assets.CW721');
-
       if (this.nftData.data.length > 0) {
         this.nftData.data = [...this.nftData.data, ...cw721Asset.asset];
       } else {
@@ -80,9 +78,7 @@ export class TokenInventoryComponent implements OnInit {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-
       this.pageData.length = cw721Asset.count;
-
       this.loading = false;
     });
   }
@@ -94,11 +90,8 @@ export class TokenInventoryComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-
     const next = length <= (pageIndex + 2) * pageSize;
-
     this.pageData = e;
-
     this.dataSourceMobile = this.nftData.data.slice(
       this.pageData.pageIndex * this.pageData.pageSize,
       this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,

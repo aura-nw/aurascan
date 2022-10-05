@@ -52,7 +52,9 @@ export class TransactionMessagesComponent implements OnInit {
     Receive: 'recv_packet',
     Transfer: 'send_packet',
     Ack: 'acknowledge_packet',
+    TimeOut: 'timeout_packet',
   };
+  numberListSend = 5;
 
   listIBCProgress = [];
 
@@ -226,9 +228,12 @@ export class TransactionMessagesComponent implements OnInit {
   getDataIBC(type = ''): void {
     try {
       const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      let dataTimeOut = {timeout: [], transfer: []};
       if (type && jsonData.length > 0) {
         jsonData.forEach((k) => {
           this.ibcOrigin = k.events.find((f) => f.type === type)?.attributes;
+          dataTimeOut['timeout'] = k.events.find((f) => f.type === 'timeout')?.attributes;
+          dataTimeOut['transfer'] = k.events.find((f) => f.type === 'transfer')?.attributes;
           if (k.events.type === type) {
             this.ibcData = k.events.type;
           }
@@ -276,10 +281,12 @@ export class TransactionMessagesComponent implements OnInit {
 
           if (this.ibcData['time_out']) {
             this.ibcData['time_out']['data'] = {
-              amount: this.ibcData.find((f) => f.key === 'receiver').value,
-              denom: this.ibcData.find((f) => f.key === 'refund_denom').value,
-              receiver: this.ibcData.find((f) => f.key === 'refund_denom').value,
-              sender: this.ibcData.find((f) => f.key === 'sender').value,
+              root: {
+                amount: dataTimeOut.timeout.find((f) => f.key === 'refund_amount').value,
+                denom: dataTimeOut.timeout.find((f) => f.key === 'refund_denom').value,
+                receiver: dataTimeOut.timeout.find((f) => f.key === 'refund_receiver').value,
+                sender: dataTimeOut.transfer.find((f) => f.key === 'sender').value,
+              },
             };
           }
 
@@ -378,5 +385,9 @@ export class TransactionMessagesComponent implements OnInit {
   displayTitle(type) {
     const typeTrans = this.typeTransaction?.find((f) => f.label.toLowerCase() === type.toLowerCase());
     return typeTrans?.value;
+  }
+
+  loadMoreSend() {
+    this.numberListSend += 5;
   }
 }

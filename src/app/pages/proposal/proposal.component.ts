@@ -8,13 +8,7 @@ import * as moment from 'moment';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { Globals } from '../../../app/global/global';
-import {
-  MESSAGE_WARNING,
-  PROPOSAL_STATUS,
-  PROPOSAL_VOTE,
-  VOTE_OPTION,
-  VOTING_STATUS
-} from '../../core/constants/proposal.constant';
+import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
@@ -49,8 +43,6 @@ export class ProposalComponent implements OnInit {
   dataSourceMobile: any[];
   proposalData: any;
   length: number;
-  pageIndex = 0;
-  lastedList: IProposal[] = [];
   nextKey = null;
 
   pageData: PageEvent = {
@@ -84,41 +76,32 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => this.getListProposal());
+    this.walletService.wallet$.subscribe((wallet) => this.getListProposal(null, true));
   }
 
-  getListProposal(nextKey = null) {
+  getListProposal(nextKey = null, iscall = false) {
     const addr = this.walletService.wallet?.bech32Address || null;
-    this.proposalService.getProposalList(20, nextKey).subscribe((res) => {
+    this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
       this.nextKey = res.data.nextKey ? res.data.nextKey : null;
 
       if (res?.data?.proposals) {
-        this.proposalData = res.data.proposals;
         const dataFiltered = res.data.proposals;
-
-        if (this.dataSource.data.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...dataFiltered];
-        } else {
-          this.dataSource.data = [...dataFiltered];
-        }
 
         this.dataSourceMobile = this.dataSource.data.slice(
           this.pageData.pageIndex * this.pageData.pageSize,
           this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
         );
 
-        this.length = this.dataSource.data.length;
-        this.lastedList = [...res?.data?.proposals];
-        this.lastedList.forEach((pro, index) => {
+        dataFiltered.forEach((pro, index) => {
           pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-          if (index < 4 && pro?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD) {
+          if (index < 4) {
             const { yes, no, no_with_veto, abstain } = pro.tally;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
 
-            this.lastedList[index].tally.yes = (+yes * 100) / totalVote;
-            this.lastedList[index].tally.no = (+no * 100) / totalVote;
-            this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
+            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
+            dataFiltered[index].tally.no = (+no * 100) / totalVote;
+            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
             const getVoted = async () => {
               if (addr) {
                 const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
@@ -131,13 +114,20 @@ export class ProposalComponent implements OnInit {
           } else {
             const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
-            this.lastedList[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-            this.lastedList[index].tally.yes = (+yes * 100) / totalVote;
-            this.lastedList[index].tally.no = (+no * 100) / totalVote;
-            this.lastedList[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            this.lastedList[index].tally.abstain = (+abstain * 100) / totalVote;
+            dataFiltered[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
+            dataFiltered[index].tally.no = (+no * 100) / totalVote;
+            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
           }
         });
+        if (this.dataSource.data.length > 0 && !iscall) {
+          this.dataSource.data = [...this.dataSource.data, ...dataFiltered];
+        } else {
+          this.dataSource.data = [...dataFiltered];
+          this.proposalData = dataFiltered;
+        }
+        this.length = this.dataSource.data.length;
       }
     });
   }
@@ -215,7 +205,7 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getListProposal();
+      this.getListProposal(null, true);
     }
   }
 
@@ -227,12 +217,12 @@ export class ProposalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        let votedValue = this.lastedList.find((s) => s.proposal_id === data.id);
+        let votedValue = this.proposalData.find((s) => s.proposal_id === data.id);
         votedValue.vote_option = result.keyVote;
       }
       this.scrollToTop();
       setTimeout(() => {
-        this.getListProposal();
+        this.getListProposal(null, true);
       }, 3000);
     });
   }
