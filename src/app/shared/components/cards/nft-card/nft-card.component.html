@@ -12,5 +12,7 @@
     [modelUrl]="nftItem.media_info[0]?.media_link"
     [disablePan]="true">
   </app-model-view>
-  <app-audio-player *ngIf="nftType === 'audio'" [src]="nftItem?.media_info[0]?.media_link"> </app-audio-player>
+  <app-audio-player *ngIf="nftType === 'audio'"
+                    [link]="nftLink"
+                    [src]="nftItem?.media_info[0]?.media_link"> </app-audio-player>
 </div>
