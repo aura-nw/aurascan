@@ -10,7 +10,5 @@ export class AudioPlayerComponent implements OnInit {
   @Input() src: any;
   constructor() {}
 
-  ngOnInit() {
-    console.log(this.link)
-  }
+  ngOnInit() {}
 }
