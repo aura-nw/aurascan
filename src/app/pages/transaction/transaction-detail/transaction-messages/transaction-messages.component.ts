@@ -55,6 +55,7 @@ export class TransactionMessagesComponent implements OnInit {
     TimeOut: 'timeout_packet',
   };
   numberListSend = 5;
+  dataTimeOut = {};
 
   listIBCProgress = [];
 
@@ -225,15 +226,12 @@ export class TransactionMessagesComponent implements OnInit {
     } catch (e) {}
   }
 
-  getDataIBC(type = ''): void {
+  getDataIBC(type = '', index = 0): void {
     try {
       const jsonData = JSON.parse(this.transactionDetail?.raw_log);
-      let dataTimeOut = {timeout: [], transfer: []};
       if (type && jsonData.length > 0) {
         jsonData.forEach((k) => {
           this.ibcOrigin = k.events.find((f) => f.type === type)?.attributes;
-          dataTimeOut['timeout'] = k.events.find((f) => f.type === 'timeout')?.attributes;
-          dataTimeOut['transfer'] = k.events.find((f) => f.type === 'transfer')?.attributes;
           if (k.events.type === type) {
             this.ibcData = k.events.type;
           }
@@ -266,9 +264,10 @@ export class TransactionMessagesComponent implements OnInit {
             };
           }
 
-          this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
+          this.ibcData['time_out'] = this.transactionDetail?.tx?.tx?.body?.messages.filter(
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCTimeout,
           );
+
           this.ibcData['update_client'] = this.transactionDetail?.tx?.tx?.body?.messages.find(
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCUpdateClient,
           );
@@ -279,15 +278,19 @@ export class TransactionMessagesComponent implements OnInit {
             (k) => k['@type'] === TRANSACTION_TYPE_ENUM.IBCReceived,
           );
 
-          if (this.ibcData['time_out']) {
-            this.ibcData['time_out']['data'] = {
-              root: {
-                amount: dataTimeOut?.timeout?.find((f) => f.key === 'refund_amount')?.value,
-                denom: dataTimeOut?.timeout?.find((f) => f.key === 'refund_denom')?.value,
-                receiver: dataTimeOut?.timeout?.find((f) => f.key === 'refund_receiver')?.value,
-                sender: dataTimeOut?.transfer?.find((f) => f.key === 'sender')?.value,
-              },
-            };
+          if (this.ibcData['time_out']?.length > 0) {
+            this.ibcData['time_out'].forEach((element, index) => {
+              let timeout = jsonData[index + 1]?.events?.find((f) => f.type === 'timeout')?.attributes;
+              let transfer = jsonData[index + 1]?.events?.find((f) => f.type === 'transfer')?.attributes;
+              element['data'] = {
+                root: {
+                  amount: timeout?.find((f) => f.key === 'refund_amount')?.value,
+                  denom: timeout?.find((f) => f.key === 'refund_denom')?.value,
+                  receiver: timeout?.find((f) => f.key === 'refund_receiver')?.value,
+                  sender: transfer?.find((f) => f.key === 'sender')?.value,
+                },
+              };
+            });
           }
 
           if (this.ibcData['acknowledgement']) {
@@ -328,6 +331,7 @@ export class TransactionMessagesComponent implements OnInit {
         let typeTx;
         this.listIBCProgress = [];
         let txs = _.get(data, 'transactions').map((element) => {
+          const code = _.get(element, 'tx_response.code');
           const tx_hash = _.get(element, 'tx_response.txhash');
           const time = _.get(element, 'tx_response.timestamp');
           const effected = _.get(element, 'indexes.fungible_token_packet_success')?.length > 0 ? 1 : 0;
@@ -345,7 +349,7 @@ export class TransactionMessagesComponent implements OnInit {
 
           let temp = _.get(element, 'tx_response.tx.auth_info.fee.amount[0].denom') || this.coinMinimalDenom;
           const denom = temp === this.coinMinimalDenom ? this.denom : temp;
-          return { tx_hash, typeTx, denom, time, effected };
+          return { code, tx_hash, typeTx, denom, time, effected };
         });
         if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
           txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
