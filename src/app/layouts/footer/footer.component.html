@@ -23,18 +23,8 @@
                   <a target="_blank" href="{{ getUrl(validatorURL) }}">Validators</a>
                 </div>
                 <div class="mb-4"><a target="_blank" href="{{ getUrl(governanceURL) }}">Governance</a></div>
-                <!-- <div class="mb-4"><a target="_blank" href="https://safe.aura.network/welcome">Safe</a></div>
-                                <div class="mb-4"><a target="_blank" href="https://docs.aura.network/">Docs</a></div>
-                                <div class="mb-4"><a target="_blank" href="https://explorer.aura.network/">Explorer</a></div> -->
               </div>
             </div>
-            <!-- <div class="col-6 col-sm-3">
-                            <div class="body contact__title text--white">Partners</div>
-                            <div class="body mt-2 mt-md-10">
-                                <div class="mb-4"><button type="button">Partners</button></div>
-                                <div class="mb-4"><button type="button">Advisors</button></div>
-                            </div>
-                        </div> -->
             <div class="col-4 col-sm-4">
               <div class="body contact__title text--white">Resources</div>
               <div class="body mt-2 mt-md-10">
@@ -43,25 +33,22 @@
                 <div class="mb-4"><a target="_blank" href="https://docs.aura.network/">Docs</a></div>
                 <div class="mb-4">
                   <a
-                    target="_blank"
-                    href="https://github.com/aura-nw/whitepaper/blob/main/release/Aura_Network___whitepaper.pdf"
-                    >Whitepaper</a
+                          target="_blank"
+                          href="https://github.com/aura-nw/whitepaper/blob/main/release/Aura_Network___whitepaper.pdf"
+                  >Whitepaper</a
                   >
                 </div>
                 <div class="mb-4"><a target="_blank" href="https://docs.aura.network/blog">Research</a></div>
-                <!-- <div class="mb-4"><button>FAQs</button></div> -->
               </div>
             </div>
             <div class="col-4 col-sm-4">
               <div class="body contact__title text--white">About us</div>
               <div class="body mt-2 mt-md-10">
-                <!-- <div class="mb-4">
-                    <a target="_blank" href="https://aura.network/#/team">Meet Our Team</a></div> -->
                 <div class="mb-4">
                   <a
-                    target="_blank"
-                    href="https://aura-network.notion.site/Aura-Job-Board-172bb39a89d844b0a0e1d8871026dc23"
-                    >Careers</a
+                          target="_blank"
+                          href="https://aura-network.notion.site/Aura-Job-Board-172bb39a89d844b0a0e1d8871026dc23"
+                  >Careers</a
                   >
                 </div>
                 <div class="mb-4">
@@ -118,23 +105,23 @@
         <li class="menu-item" *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
           <ng-container *ngIf="item.id === 99">
             <button
-              id="popover-link"
-              class="menu-link text-center"
-              #popover="ngbPopover"
-              [ngbPopover]="popContent"
-              [autoClose]="'outside'"
-              [popoverClass]="'mobile-menu-more'"
-              [class.active]="popover.isOpen()">
+                    id="popover-link"
+                    class="menu-link text-center"
+                    #popover="ngbPopover"
+                    [ngbPopover]="popContent"
+                    [autoClose]="'outside'"
+                    [popoverClass]="'mobile-menu-more'"
+                    [class.active]="popover.isOpen()">
               <div><i class="icon icon-{{ item.icon }} d-block" id="popover-icon"></i></div>
               <div class="caption fw-500 d-block mt-1" id="popover-text">{{ item.label | translate }}</div>
             </button>
           </ng-container>
-         <ng-container *ngIf="item.id !== 99">
+          <ng-container *ngIf="item.id !== 99">
             <a
-              class="menu-link text-center"
-              [routerLink]="item.link"
-              routerLinkActive="active"
-              [class.active]="router.url === '/' && item.link === '/dashboard'">
+                    class="menu-link text-center"
+                    [routerLink]="item.link"
+                    routerLinkActive="active"
+                    [class.active]="router.url === '/' && item.link === '/dashboard'">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
             </a>
@@ -148,27 +135,28 @@
   <div class="text--white box-menu" id="popContent">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menuMore; index as idx">
-        <li class="menu-item p-0  {{item.name === menuName.Token ? 'menu-token' : ''}} " *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
-          <ng-container *ngIf="item.name !== menuName.Token">
+        <li class="menu-item p-0  {{(item.name === menuName.Token || item.name === menuName.Statistic) ? 'menu-dropdown' : ''}} " *ngIf="item.name !== menuName.Account && idx <= numberMenuFooter + 1">
+          <ng-container *ngIf="item.name !== menuName.Token && item.name !== menuName.Statistic">
             <a
-              class="menu-link text-center d-flex py-3 px-3"
-              [routerLink]="item.link"
-              routerLinkActive="active"
-              [class.active]="router.url === '/' && item.link === '/dashboard'">
+                    class="menu-link text-center d-flex py-3 px-3"
+                    [routerLink]="item.link"
+                    routerLinkActive="active"
+                    [class.active]="router.url === '/' && item.link === '/dashboard'">
               <div><i class="icon icon-{{ item.icon }} d-block"></i></div>
               <div class="fw-500 d-block ml-4">{{ item.label | translate }}</div>
             </a>
           </ng-container>
+          <!-- Token -->
           <ng-container *ngIf="item.name === menuName.Token">
-            <button class="button menu-token__button w-100 menu-link justify-content-start pl-3 py-3" type="button" id="btnDropdown"
+            <button class="button menu-dropdown__button w-100 menu-link justify-content-start pl-3 py-3" type="button" id="btnDropdownToken"
                     data-bs-toggle="collapse"
-                    data-bs-target="#collapseExample"
+                    data-bs-target="#collapseToken"
                     aria-expanded="false"
-                    aria-controls="collapseExample">
-              <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownIcon"></i></div>
-              <div class="fw-500 d-block ml-4" id="btnDropdownText">{{ item.label | translate }}</div>
+                    aria-controls="collapseToken">
+              <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownTokenIcon"></i></div>
+              <div class="fw-500 d-block ml-4" id="btnDropdownTokenText">{{ item.label | translate }}</div>
             </button>
-            <ul class="collapse pl-0" id="collapseExample">
+            <ul class="collapse pl-0" id="collapseToken">
               <li class="dropdown-item menu-link pl-0 d-flex py-3 pl-3"
                   [class.active]="
                       (subItem.name === menuName.TokenCW20 && router.url.includes('/tokens') && !router.url.includes('/tokens-nft') && !router.url.includes('/token-nft')) ||
@@ -181,6 +169,26 @@
               </li>
             </ul>
           </ng-container>
+          <!-- Statistics -->
+<!--          <ng-container *ngIf="item.name === menuName.Statistic">-->
+<!--            <button class="button menu-dropdown__button w-100 menu-link justify-content-start pl-3 py-3" type="button" id="btnDropdownStatistic"-->
+<!--                    data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#collapseStatistic"-->
+<!--                    aria-expanded="false"-->
+<!--                    aria-controls="collapseStatistic">-->
+<!--              <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownStatisticIcon"></i></div>-->
+<!--              <div class="fw-500 d-block ml-4" id="btnDropdownStatisticText">{{ item.label | translate }}</div>-->
+<!--            </button>-->
+<!--            <ul class="collapse pl-0" id="collapseStatistic">-->
+<!--              <li class="dropdown-item menu-link pl-0 d-flex py-3 pl-3"-->
+<!--                  [class.active]="true"-->
+<!--                  *ngFor="let subItem of item.subItems"-->
+<!--                  [routerLink]="subItem.link">-->
+<!--                <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>-->
+<!--                <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </ng-container>-->
         </li>
       </ng-container>
     </ul>

@@ -52,10 +52,18 @@ form.aura-form.single-input-field {
   }
 }
 .topnav {
-  height: 56px;
+  @media (min-width: 1200px) {
+    height: 56px;
+  }
   .navbar-nav {
+    .divider.divider-vertical {
+      min-height: 24px;
+    }
     .nav-item {
-      padding: 13.5px 16px;
+      padding: 12px 8px;
+      @media (min-width: 1366px) {
+        padding: 13.5px 12px;
+      }
       @media (min-width: 1440px) {
         padding: 16px;
       }
@@ -70,6 +78,11 @@ form.aura-form.single-input-field {
         transition: color .35s ease-in-out;
       }
       .nav-link {
+        font-size: 1.4rem;
+        font-weight: 600;
+        @media(min-width: 1200px) {
+          font-size: 1.6rem;
+        }
         padding: 0;
         position: relative;
         &:hover, &.active {
@@ -107,12 +120,15 @@ form.aura-form.single-input-field {
       }
     }
     i.icon {
-      font-size: 2.4rem;
+      font-size: 2rem;
+      @media(min-width: 1200px) {
+        font-size: 2.4rem;
+      }
     }
     .nav-link__panel {
       position: absolute;
       bottom: -90%;
-      transform: translateY(95%);
+      transform: translateY(92%);
       border: 1px solid transparent;
       border-radius: 25px;
       z-index: 1500;
@@ -121,7 +137,11 @@ form.aura-form.single-input-field {
       transition: max-height .35s ease-in-out;
       a {
         display: block;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
+        font-weight: 600;
+        @media(min-width: 1200px) {
+          font-size: 1.6rem;
+        }
         color: var(--aura-gray-6);
         padding: 8px 16px;
         transition: all .35s ease-in-out;
@@ -135,12 +155,15 @@ form.aura-form.single-input-field {
           border-bottom-left-radius: 25px;
           border-bottom-right-radius: 25px;
         }
-        &:hover {
-          color: var(--aura-white);
-          background-color: var(--aura-gray-9);
+        &:hover, &.active {
+          color: var(--aura-gray-1);
+          background-color: var(--aura-gray-10);
         }
-        &.active {
-          color: var(--aura-white);
+      }
+      &-more {
+        transform: translate(-50%, 95%);
+        a {
+          min-width: 150px;
         }
       }
     }
