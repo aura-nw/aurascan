@@ -58,15 +58,16 @@ export class FooterComponent implements OnInit {
   @HostListener('body:click', ['$event'])
   mouseleave(event) {
     const ids = ['popover-link', 'popover-icon', 'popover-text',
-                 'btnDropdownStatistic', 'btnDropdownToken',
-                 'btnDropdownTokenIcon', 'btnDropdownStatisticIcon',
-                 'btnDropdownTokenText', 'btnDropdownStatisticText',
-                 'collapseToken', 'collapseStatistic'];
+      'btnDropdownStatistic', 'btnDropdownToken',
+      'btnDropdownTokenIcon', 'btnDropdownStatisticIcon',
+      'btnDropdownTokenText', 'btnDropdownStatisticText',
+      'collapseToken', 'collapseStatistic'];
     const id= event.target?.id;
     if(this.popover.isOpen()) {
       if(ids.indexOf(id) < 0){
         document.getElementById('popover-link').click();
       }
     }
+
   }
 }

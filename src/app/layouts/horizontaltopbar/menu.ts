@@ -47,63 +47,63 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 5,
-    label: 'MENUITEMS.BLOCKS.TEXT',
-    icon: 'block',
-    link: '/blocks',
-    name: MenuName.Block
-  },
-  {
-    id: 6,
     label: 'MENUITEMS.CONTRACT.TEXT',
     icon: 'file-document',
     link: '/contracts',
     name: MenuName.Contract
   },
   {
-    id: 7,
+    id: 6,
     label: 'MENUITEMS.TOKEN.TEXT',
     icon: 'coin',
     link: '/tokens',
     name: MenuName.Token,
     subItems: [
-        // {
-        //     id: 1,
-        //     label: 'CW-20 Top Tokens',
-        //     link: '/tokens',
-        //     name: MenuName.TokenCW20,
-        //     icon: 'coins',
-        // },
-        {
-            id: 2,
-            label: 'CW-721 Top Tokens',
-            link: '/tokens/tokens-nft',
-            name: MenuName.TokenCW721,
-            icon: 'coins',
-        }
+      // {
+      //     id: 1,
+      //     label: 'CW-20 Top Tokens',
+      //     link: '/tokens',
+      //     name: MenuName.TokenCW20,
+      //     icon: 'coins',
+      // },
+      {
+        id: 2,
+        label: 'CW-721 Top Tokens',
+        link: '/tokens/tokens-nft',
+        name: MenuName.TokenCW721,
+        icon: 'coins',
+      }
     ]
   },
+  // {
+  //   id: 7,
+  //   label: 'MENUITEMS.STATISTICS.TEXT',
+  //   icon: 'coin',
+  //   link: '/',
+  //   name: MenuName.Statistic,
+  //   subItems: [
+  //     {
+  //       id: 1,
+  //       label: 'Chart & Stats',
+  //       link: '/statistics/charts-stats',
+  //       name: MenuName.ChartStats,
+  //       icon: 'coins',
+  //     },
+  //     {
+  //       id: 2,
+  //       label: 'Top Statistics',
+  //       link: '/statistics/top-statistic',
+  //       name: MenuName.TopStatistics,
+  //       icon: 'coins',
+  //     }
+  //   ]
+  // },
   {
     id: 8,
-    label: 'MENUITEMS.STATISTICS.TEXT',
-    icon: 'coin',
-    link: '/',
-    name: MenuName.Statistic,
-    subItems: [
-        {
-            id: 1,
-            label: 'Chart & Stats',
-            link: '/statistics/charts-stats',
-            name: MenuName.ChartStats,
-            icon: 'coins',
-        },
-        {
-            id: 2,
-            label: 'Top Statistics',
-            link: '/statistics/top-statistic',
-            name: MenuName.TopStatistics,
-            icon: 'coins',
-        }
-    ]
+    label: 'MENUITEMS.BLOCKS.TEXT',
+    icon: 'block',
+    link: '/blocks',
+    name: MenuName.Block
   },
   {
     id: 9,

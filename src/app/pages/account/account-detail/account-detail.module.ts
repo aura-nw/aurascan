@@ -5,6 +5,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { CustomVideoPlayerModule } from 'src/app/shared/components/custom-video-player/custom-video-player.module';
 import { MaterialModule } from '../../../app.module';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
@@ -39,7 +40,7 @@ import { TokenTableComponent } from './token-table/token-table.component';
     QrModule,
     NgbNavModule,
     CustomVideoPlayerModule,
-
+    NftCardModule,
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })

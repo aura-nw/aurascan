@@ -5,7 +5,7 @@
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
     <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
-      <div class="card-info">
+      <div class="card-info" *ngIf="i < numberListSend">
         <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
@@ -27,13 +27,23 @@
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="item?.amount[0]?.amount > 0">
-              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }}
+              <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
           </div>
         </div>
       </div>
     </ng-container>
+    <div class="text-md-left text-center">
+      <button
+        type="button"
+        class="button button--md button-pill button-outline button-outline__in-card ml-auto"
+        (click)="loadMoreSend()"
+        *ngIf="transactionDetail?.messages?.length > numberListSend">
+        <span class="fw-500 body-02 text--gray-1">Load More</span>
+      </button>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
@@ -563,7 +573,9 @@
 
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
-      <div class="card-info">
+      <div
+        class="card-info"
+        *ngIf="(i === 1 && item['@type'] === eTransType.IBCTimeout) || item['@type'] !== eTransType.IBCTimeout">
         <div class="mb-3 d-flex box-header">
           <div class="col-12 col-lg-3">
             <div class="card-text header-title">
@@ -703,16 +715,13 @@
   </ng-template>
 
   <ng-template #ibcTimeout let-data="data">
+    {{ getDataIBC(ibcListMapping.TimeOut) }}
     <app-messages-item
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Port'"
-      [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Channel'"
-      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
+    <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <div class="row mb-3 body-01">
@@ -739,7 +748,10 @@
     <app-messages-item
       [label]="'Next Sequence Recv'"
       [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
-    <app-messages-item [label]="'Signer'" [value]="ibcData?.time_out?.signer"></app-messages-item>
+    <app-messages-item
+      [label]="'Signer'"
+      [value]="ibcData?.time_out?.signer"
+      [dataLink]="{ url: '/account' }"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcUpdateClient let-data="data">
@@ -832,8 +844,8 @@
       <ng-template #ibcItem let-type="type" let-title="title">
         <div class="ibc-item">
           <div class="d-flex align-items-center">
-            <div class="ibc-checker mr-2"></div>
-            <div class="text--green-4">{{ title }}</div>
+            <div class="ibc-checker mr-2" [ngClass]="type === eTransType.IBCTimeout ? 'timeout' : ''"></div>
+            <div class="text--green-4" [ngClass]="type === eTransType.IBCTimeout ? 'text--red-3' : ''">{{ title }}</div>
           </div>
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">

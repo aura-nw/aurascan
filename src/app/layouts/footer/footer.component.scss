@@ -183,7 +183,7 @@ footer {
     border-radius: 8px;
     padding: 0;
     .menu-item {
-      .menu-link {
+      .menu-link.active {
         color: var(--aura-white) !important;
       }
     }
