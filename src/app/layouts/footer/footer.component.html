@@ -152,6 +152,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseToken"
                     aria-expanded="false"
+                    [class.active]="router.url.includes('/tokens') || router.url.includes('/tokens-nft')"
                     aria-controls="collapseToken">
               <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownTokenIcon"></i></div>
               <div class="fw-500 d-block ml-4" id="btnDropdownTokenText">{{ item.label | translate }}</div>

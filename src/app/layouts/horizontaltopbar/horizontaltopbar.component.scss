@@ -87,7 +87,12 @@ form.aura-form.single-input-field {
         position: relative;
         &:hover, &.active {
           i.icon, span {
-            color: var(--aura-white) !important;
+            color: var(--aura-white);
+          }
+          .nav-link__panel {
+            i.icon, span {
+              color: var(--aura-gray-6);
+            }
           }
         }
         &.dropdown-toggle {
@@ -95,7 +100,7 @@ form.aura-form.single-input-field {
             content: '';
             position: absolute;
             right: -24px;
-            top: 0;
+            top: -2px;
             width: 24px;
             height: 24px;
             background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
@@ -114,6 +119,17 @@ form.aura-form.single-input-field {
               background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
               background-size: auto;
               transform: unset;
+            }
+          }
+        }
+        &:has( .active) {
+          > span {
+            color: var(--aura-white);
+          }
+          &.dropdown-toggle {
+            &:after {
+              background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
+              transform: rotate(180deg);
             }
           }
         }
@@ -156,8 +172,10 @@ form.aura-form.single-input-field {
           border-bottom-right-radius: 25px;
         }
         &:hover, &.active {
-          color: var(--aura-gray-1);
           background-color: var(--aura-gray-10);
+          i.icon, span {
+            color: var(--aura-gray-1) !important;
+          }
         }
       }
       &-more {

@@ -47,6 +47,13 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 5,
+    label: 'MENUITEMS.CONTRACT.TEXT',
+    icon: 'file-document',
+    link: '/contracts',
+    name: MenuName.Contract
+  },
+  {
+    id: 6,
     label: 'MENUITEMS.TOKEN.TEXT',
     icon: 'coin',
     link: '/tokens',
@@ -69,7 +76,7 @@ export const MENU: MenuItem[] = [
     ]
   },
   // {
-  //   id: 6,
+  //   id: 7,
   //   label: 'MENUITEMS.STATISTICS.TEXT',
   //   icon: 'coin',
   //   link: '/',
@@ -92,18 +99,11 @@ export const MENU: MenuItem[] = [
   //   ]
   // },
   {
-    id: 7,
+    id: 8,
     label: 'MENUITEMS.BLOCKS.TEXT',
     icon: 'block',
     link: '/blocks',
     name: MenuName.Block
-  },
-  {
-    id: 8,
-    label: 'MENUITEMS.CONTRACT.TEXT',
-    icon: 'file-document',
-    link: '/contracts',
-    name: MenuName.Contract
   },
   {
     id: 9,

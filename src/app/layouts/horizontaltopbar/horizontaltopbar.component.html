@@ -105,7 +105,7 @@
                 <i class="icon icon-{{ item.icon }}"></i>
                 <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
               </a>
-              <a *ngIf="item.subItems && item.id === 5" (click)="onMenuClick($event)"
+              <a *ngIf="item.subItems && item.name === menuName.Token" (click)="onMenuClick($event)"
                  class="nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0"
                  [class.active]="
                   (router.url === '/' && item.link === '/dashboard') || (item.name === menuName.Token && router.url.includes('/token'))
@@ -129,7 +129,7 @@
                   </a>
                 </span>
               </a>
-              <a *ngIf="item.subItems && item.id === 6" (click)="onMenuClick($event)"
+              <a *ngIf="item.subItems && item.name === menuName.Statistic" (click)="onMenuClick($event)"
                  class="nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0"
                  href="javascript: void(0);" role="button">
                 <i class="icon icon-{{ item.icon }}"></i>
@@ -154,6 +154,7 @@
                 <span class="ml-2 fw-semibold">{{ 'MENUITEMS.MORE.TEXT' | translate}}</span>
                 <span class="nav-link__panel nav-link__panel-more">
                   <a [routerLink]="subMenu.link"
+                     routerLinkActive="active"
                      *ngFor="let subMenu of menuItems.slice(-2)">
                     <span>{{ subMenu.label | translate }}</span>
                   </a>
