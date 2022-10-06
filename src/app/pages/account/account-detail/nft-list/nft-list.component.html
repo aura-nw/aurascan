@@ -41,7 +41,10 @@
           <div class="nft-cards__col col" *ngFor="let item of showedData">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
-                  <app-nft-card [nftItem]="item" [nftType]="getTypeFile(item)"></app-nft-card>
+                  <app-nft-card
+                          [nftLink]="'/tokens/token-nft/'+item.contract_address+'/'+item.token_id"
+                          [nftItem]="item"
+                          [nftType]="getTypeFile(item)"></app-nft-card>
                   <div class="nft-cards__label">
                     <span class="text-gradient">CW-721</span>
                   </div>
