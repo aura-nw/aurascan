@@ -171,25 +171,29 @@
             </ul>
           </ng-container>
           <!-- Statistics -->
-<!--          <ng-container *ngIf="item.name === menuName.Statistic">-->
-<!--            <button class="button menu-dropdown__button w-100 menu-link justify-content-start pl-3 py-3" type="button" id="btnDropdownStatistic"-->
-<!--                    data-bs-toggle="collapse"-->
-<!--                    data-bs-target="#collapseStatistic"-->
-<!--                    aria-expanded="false"-->
-<!--                    aria-controls="collapseStatistic">-->
-<!--              <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownStatisticIcon"></i></div>-->
-<!--              <div class="fw-500 d-block ml-4" id="btnDropdownStatisticText">{{ item.label | translate }}</div>-->
-<!--            </button>-->
-<!--            <ul class="collapse pl-0" id="collapseStatistic">-->
-<!--              <li class="dropdown-item menu-link pl-0 d-flex py-3 pl-3"-->
-<!--                  [class.active]="true"-->
-<!--                  *ngFor="let subItem of item.subItems"-->
-<!--                  [routerLink]="subItem.link">-->
-<!--                <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>-->
-<!--                <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </ng-container>-->
+          <ng-container *ngIf="item.name === menuName.Statistic">
+            <button class="button menu-dropdown__button w-100 menu-link justify-content-start pl-3 py-3" type="button" id="btnDropdownStatistic"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseStatistic"
+                    aria-expanded="false"
+                    [class.active]="router.url.includes('/statistics')"
+                    aria-controls="collapseStatistic">
+              <div><i class="icon icon-{{ item.icon }} d-block" id="btnDropdownStatisticIcon"></i></div>
+              <div class="fw-500 d-block ml-4" id="btnDropdownStatisticText">{{ item.label | translate }}</div>
+            </button>
+            <ul class="collapse pl-0" id="collapseStatistic">
+              <li class="dropdown-item menu-link pl-0 d-flex py-3 pl-3"
+                  [class.active]="
+                      (subItem.name === menuName.ChartStats && router.url.includes('/charts-stats')) ||
+                      (subItem.name === menuName.TopStatistics && router.url.includes('/top-statistic'))
+                    "
+                  *ngFor="let subItem of item.subItems"
+                  [routerLink]="subItem.link">
+                <div><i class="icon icon-{{ subItem.icon }} d-block"></i></div>
+                <div class="fw-500 d-block ml-4">{{ subItem.label | translate }}</div>
+              </li>
+            </ul>
+          </ng-container>
         </li>
       </ng-container>
     </ul>

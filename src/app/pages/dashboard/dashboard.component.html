@@ -9,21 +9,21 @@
               <h2 class="text--white mb-6 mb-lg-0">Transactions</h2>
               <div class="ms-auto">
                 <div class="d-flex align-items-center chart__options">
-                  <div class="button-switch-stage chart__button-switch-stage">
+                  <div class="button-switch-stage">
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.M_60"
                             (click)="updateBlockAndTxs(chartRangeData.M_60)">
-                      <span>60m</span>
+                      <span>60M</span>
                     </button>
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.H_24"
                             (click)="updateBlockAndTxs(chartRangeData.H_24)">
-                      <span>24h</span>
+                      <span>24H</span>
                     </button>
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.D_30"
                             (click)="updateBlockAndTxs(chartRangeData.D_30)">
-                      <span>30d</span>
+                      <span>30D</span>
                     </button>
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.MONTH_12"

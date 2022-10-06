@@ -75,29 +75,29 @@ export const MENU: MenuItem[] = [
       }
     ]
   },
-  // {
-  //   id: 7,
-  //   label: 'MENUITEMS.STATISTICS.TEXT',
-  //   icon: 'coin',
-  //   link: '/',
-  //   name: MenuName.Statistic,
-  //   subItems: [
-  //     {
-  //       id: 1,
-  //       label: 'Chart & Stats',
-  //       link: '/statistics/charts-stats',
-  //       name: MenuName.ChartStats,
-  //       icon: 'coins',
-  //     },
-  //     {
-  //       id: 2,
-  //       label: 'Top Statistics',
-  //       link: '/statistics/top-statistic',
-  //       name: MenuName.TopStatistics,
-  //       icon: 'coins',
-  //     }
-  //   ]
-  // },
+  {
+    id: 7,
+    label: 'MENUITEMS.STATISTICS.TEXT',
+    icon: 'coin',
+    link: '/',
+    name: MenuName.Statistic,
+    subItems: [
+      {
+        id: 1,
+        label: 'Chart & Stats',
+        link: '/statistics/charts-stats',
+        name: MenuName.ChartStats,
+        icon: 'coins',
+      },
+      {
+        id: 2,
+        label: 'Top Statistics',
+        link: '/statistics/top-statistic',
+        name: MenuName.TopStatistics,
+        icon: 'coins',
+      }
+    ]
+  },
   {
     id: 8,
     label: 'MENUITEMS.BLOCKS.TEXT',

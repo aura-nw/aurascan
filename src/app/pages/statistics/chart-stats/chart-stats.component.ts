@@ -12,4 +12,6 @@ export class ChartStatsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  triggerChartMenuClick(){}
+
 }
