@@ -16,7 +16,6 @@ import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
  * Footer Component
  */
 export class FooterComponent implements OnInit {
-  @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
   @Input() label!: string;
   chainId = this.environmentService.configValue.chainId;
   @ViewChild('popover') public popover: NgbPopover;
@@ -56,13 +55,13 @@ export class FooterComponent implements OnInit {
     return this.router.serializeUrl(this.router.createUrlTree([url]));
   }
 
-  viewSelected(e: DropdownElement): void {
-    this.onViewSelected.emit(e);
-  }
-
   @HostListener('body:click', ['$event'])
   mouseleave(event) {
-    const ids = ['popover-link', 'popover-icon', 'popover-text', 'btnDropdown', 'btnDropdownIcon', 'btnDropdownText'];
+    const ids = ['popover-link', 'popover-icon', 'popover-text',
+      'btnDropdownStatistic', 'btnDropdownToken',
+      'btnDropdownTokenIcon', 'btnDropdownStatisticIcon',
+      'btnDropdownTokenText', 'btnDropdownStatisticText',
+      'collapseToken', 'collapseStatistic'];
     const id= event.target?.id;
     if(this.popover.isOpen()) {
       if(ids.indexOf(id) < 0){

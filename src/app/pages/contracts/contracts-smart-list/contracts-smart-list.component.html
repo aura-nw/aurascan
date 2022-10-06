@@ -1,11 +1,13 @@
 <div class="contract-register-mainnet" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-flex justify-content-between align-items-center">
     <h1 class="text--white mb-0">Smart contracts list</h1>
-    <a href="/contracts/contracts-deploy-mainnet"
-       class="button button-outline button--md button-pill button-flat d-none d-lg-flex">
-      <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
-      <span class="ml-2 text--black">Register Contract</span>
-    </a>
+    <button class="button button-outline button--md button-pill button-flat d-none d-lg-flex"
+    [disabled]="!this.dataSource || this.dataSource?.data?.length == 0">
+      <a href="{{ (!this.dataSource || this.dataSource?.data?.length == 0) ? 'javascript:void(0)' : '/contracts/contracts-deploy-mainnet' }}">
+        <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
+        <span class="ml-2 text--black">Register Contract</span>
+      </a>
+    </button>
   </div>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
   <div class="d-lg-flex justify-content-between mt-4 mt-lg-0">
@@ -16,11 +18,13 @@
       <div class="body-03-mob body-02 mt-2 mt-lg-1 text--gray-5">
         A total of {{ pageData?.length }} Contract{{ pageData?.length > 1 ? 's' : '' }} that you created
       </div>
-      <a href="/contracts/contracts-deploy-mainnet"
-         class="button button-outline button--md button-pill button-flat d-flex d-lg-none mt-4">
-        <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
-        <span class="ml-2 text--black">Register Contract</span>
-      </a>
+      <button class="button button-outline button--md button-pill button-flat d-flex d-lg-none mt-4 w-100"
+              [disabled]="!this.dataSource || this.dataSource?.data?.length == 0">
+        <a href="{{ (!this.dataSource || this.dataSource?.data?.length == 0) ? 'javascript:void(0)' : '/contracts/contracts-deploy-mainnet' }}">
+          <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
+          <span class="ml-2 text--black">Register Contract</span>
+        </a>
+      </button>
     </div>
     <div class="d-flex mt-4 mt-md-0">
       <div class="dropdown aura-dropdown mr-4 btn-status d-none d-lg-block" *ngIf="contractMainnetStatus.length > 0">

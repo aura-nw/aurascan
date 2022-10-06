@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -28,10 +28,11 @@ export class NftListComponent implements OnChanges {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   nftData = [];
+  nftList = [];
   showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
-  paginator: MatPaginator;
+  nextKey = null;
 
   constructor(
     private accountService: AccountService,
@@ -44,20 +45,27 @@ export class NftListComponent implements OnChanges {
     this.getNftData();
   }
 
-  getNftData() {
+  getNftData(next_key = null) {
     this.loading = true;
+    this.searchValue = this.searchValue?.trim();
+
     const payload = {
       account_address: this.address,
-      limit: this.pageData.pageSize,
-      offset: this.pageData.pageSize * this.pageData.pageIndex,
+      limit: 100,
       keyword: this.searchValue,
+      next_key: this.nextKey,
     };
     this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
       if (res?.data?.length > 0) {
-        this.showedData = res?.data;
-        this.pageData.length = res.meta.count;
+        if (this.nftList.length > 0) {
+          this.nftList = [...this.nftList, ...res.data];
+        } else {
+          this.nftList = res?.data;
+        }
+        this.nextKey = res.meta?.next_key;
+        this.pageData.length = this.nftList.length;
 
-        res?.data.forEach((element) => {
+        this.nftList.forEach((element) => {
           if (element.media_info.length > 0) {
             element.nftType = checkTypeFile(element?.media_info[0]?.media_link);
           }
@@ -65,46 +73,49 @@ export class NftListComponent implements OnChanges {
             this.totalValue += element.price * +element.balance || 0;
           }
         });
+        this.showedData = this.nftList.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
         this.totalValueNft.emit(this.totalValue);
       } else {
-        this.showedData.length = 0;
+        this.nftList.length = 0;
       }
     });
     this.loading = false;
   }
 
-  paginatorEmit(event): void {
-    this.paginator = event;
-  }
-
   resetSearch(): void {
     this.searchValue = '';
     this.pageData.pageIndex = 0;
-    this.getNftData();
-  }
-
-  getKeySearch() {
-    this.searchValue = this.searchValue?.trim();
+    this.nftList = [];
+    this.nextKey = null;
     this.getNftData();
   }
 
   searchTokenNft(): void {
-    if (this.paginator.pageIndex !== 0) {
-      this.paginator.firstPage();
+    if (this.pageData.pageIndex !== 0) {
+      this.pageData.pageIndex = 0;
     } else {
-      this.getKeySearch();
-    }
-  }
-
-  checkSearch(): void {
-    if (this.searchValue.length === 0) {
-      this.searchTokenNft();
+      this.nextKey = null;
+      this.nftList = [];
+      this.getNftData();
     }
   }
 
   handlePageEvent(e: any) {
+    const { pageIndex, pageSize } = e;
+    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
+
     this.pageData.pageIndex = e.pageIndex;
-    this.getKeySearch();
+    if (next && this.nextKey) {
+      this.getNftData(this.nextKey);
+    } else {
+      this.showedData = this.nftList.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+    }
   }
 
   handleRouterLink(e: Event, link): void {
@@ -112,7 +123,7 @@ export class NftListComponent implements OnChanges {
     e.preventDefault();
   }
 
-  getTypeFile(nft: any){
+  getTypeFile(nft: any) {
     if (nft?.media_info?.length > 0) {
       return checkTypeFile(nft.media_info[0]?.media_link);
     } else {
