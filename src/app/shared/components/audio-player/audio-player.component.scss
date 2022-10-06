@@ -8,10 +8,16 @@
   audio {
     z-index: 12;
     object-fit: contain;
-
+    @media(max-width: 991.98px) {
+      max-width: 100%;
+    }
+  }
+  &.isoClass {
     @media(max-width: 991.98px) {
       position: absolute;
       max-width: 44px;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 

@@ -1,7 +1,7 @@
-<div class="audio-player audio-player--has-link">
-  <a href="{{ link }}" *ngIf="link"></a>
-  <audio controls>
-    <source *ngIf="src" [src]="src" />
-    Your browser does not support the audio element.
-  </audio>
-</div>
+  <div class="audio-player audio-player--has-link" [class.isoClass]="browserEnv === 'ios'">
+    <a href="{{link}}" *ngIf="link"></a>
+    <audio controls>
+      <source *ngIf="src" [src]="src" />
+      Your browser does not support the audio element.
+    </audio>
+  </div>

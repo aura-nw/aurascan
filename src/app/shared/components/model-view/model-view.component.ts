@@ -11,7 +11,7 @@ export class ModelViewComponent implements OnInit {
   @Input() appWidth: number;
   @Input() appHeight: number;
 
-  @Input() disablePan = false;
+  @Input() disablePan = false
 
   camera_orbit = '45deg 55deg 2.5m';
   constructor() {}
