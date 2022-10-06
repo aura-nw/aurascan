@@ -7,14 +7,9 @@
 .box-title-validator {
   min-height: 35px;
   overflow: visible;
-  .text-title {
-    opacity: 0.5;
-    min-width: 60px;
-    display: block;
-  }
 
   @media (max-width: 991.99px) {
-    .text-title {
+    .text-jailed {
       min-width: 30px;
     }
     .label-jailed span {
