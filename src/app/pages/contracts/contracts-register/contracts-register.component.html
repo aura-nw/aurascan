@@ -1,9 +1,9 @@
 <div class="contract-register" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-md-flex justify-content-between box-title-register">
     <h1 class="text--white mb-0">Type Smart Contract</h1>
-    <button class="button button-pill button--sm button--md-mob button-outline button-outline--gradient btn-register button-fixed mt-4 mt-md-0" (click)="viewPopupDetail(modalManage, '')">
-      <img [src]="'assets/icons/icons-svg/white/plus.svg' | imageS3" alt="" width="16px" height="16px" />
-      <span class="ml-2">Register Contract</span>
+    <button class="button button-outline button--md button-pill button-flat btn-register button-fixed mt-4 mt-md-0" (click)="viewPopupDetail(modalManage, '')">
+      <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
+      <span class="ml-2 text--black">Register Contract</span>
     </button>
   </div>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
@@ -70,37 +70,38 @@
 <section>
   <div class="card mt-4 mt-lg-6">
     <form class="aura-form single-input-field search-form mt-4 px-4 d-lg-none">
-      <div class="input-group">
-        <input
-                type="text"
-                class="form-control"
-                placeholder="Search for Code ID"
-                [(ngModel)]="textSearch"
-                [maxLength]="maxLengthSearch"
-                (keyup)="searchCode()"
-                name="search"
-                autocomplete="off" />
-        <button type="submit" class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}" (click)="searchCode()">
-          <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-        </button>
-        <button
-                type="reset"
-                class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="clearSearch()">
-          <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-        </button>
-      </div>
-      <ng-container *ngIf="textSearch?.length > 0">
-        <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
-          <ng-container *ngIf="filterSearchData?.length === 0">
-            <span> There are no matching contracts </span>
-          </ng-container>
-          <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-            <div class="txt-title-search">Smart Contract</div>
-            <ng-container *ngFor="let item of filterSearchData">
-              <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
-                <div class="ml-1">
-                  <div class="d-flex align-items-center">
+      <div class="position-relative">
+        <div class="input-group">
+          <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search for Code ID"
+                  [(ngModel)]="textSearch"
+                  [maxLength]="maxLengthSearch"
+                  (keyup)="searchCode()"
+                  name="search"
+                  autocomplete="off" />
+          <button type="submit" class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}" (click)="searchCode()">
+            <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+          <button
+                  type="reset"
+                  class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
+                  (click)="clearSearch()">
+            <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+          </button>
+        </div>
+        <ng-container *ngIf="textSearch?.length > 0">
+          <div class="box-search-data box-search-contract text-white" [style.display]="isHideSearch ? 'none' : 'block'">
+            <ng-container *ngIf="filterSearchData?.length === 0">
+              <span> There are no matching contracts </span>
+            </ng-container>
+            <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
+              <div class="txt-title-search">Smart Contract</div>
+              <ng-container *ngFor="let item of filterSearchData">
+                <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
+                  <div class="ml-1">
+                    <div class="d-flex align-items-center">
                     <span class="text-clamp">
                       {{ item.code_id }} - {{ item.type }} Contract -
                       <span
@@ -110,13 +111,14 @@
                         {{ item.result }}
                       </span>
                     </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
             </ng-container>
-          </ng-container>
-        </div>
-      </ng-container>
+          </div>
+        </ng-container>
+      </div>
     </form>
     <div class="card-body">
       <div *ngIf="loading" class="m-auto mt-10">

@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import {checkTypeFile} from "src/app/core/utils/common/info-common";
 
 @Component({
   selector: 'app-token-inventory-tab',
@@ -23,6 +24,7 @@ export class TokenInventoryComponent implements OnInit {
   contractAddress = '';
   keyWord = '';
   nextKey = null;
+  currentKey = null;
 
   dataSourceMobile: any[];
 
@@ -66,9 +68,7 @@ export class TokenInventoryComponent implements OnInit {
 
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
       this.nextKey = res.data.nextKey;
-
       const cw721Asset = _.get(res, 'data.assets.CW721');
-
       if (this.nftData.data.length > 0) {
         this.nftData.data = [...this.nftData.data, ...cw721Asset.asset];
       } else {
@@ -79,9 +79,7 @@ export class TokenInventoryComponent implements OnInit {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-
       this.pageData.length = cw721Asset.count;
-
       this.loading = false;
     });
   }
@@ -93,18 +91,16 @@ export class TokenInventoryComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-
     const next = length <= (pageIndex + 2) * pageSize;
-
     this.pageData = e;
-
     this.dataSourceMobile = this.nftData.data.slice(
       this.pageData.pageIndex * this.pageData.pageSize,
       this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
     );
 
-    if (next && this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getNftData();
+      this.currentKey = this.nextKey;
     }
   }
 
@@ -129,5 +125,12 @@ export class TokenInventoryComponent implements OnInit {
       queryParams: params,
     });
     e.preventDefault();
+  }
+  getTypeFile(nft: any){
+    if (nft?.media_info?.length > 0) {
+      return checkTypeFile(nft.media_info[0]?.media_link);
+    } else {
+      return '';
+    }
   }
 }

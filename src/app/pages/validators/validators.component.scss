@@ -177,14 +177,9 @@ form.search-form-validators {
   overflow: visible;
   display: flex;
   align-items: center;
-  .text-title {
-    opacity: 0.5;
-    min-width: 60px;
-    display: block;
-  }
 
   @media (max-width: 991.99px) {
-    .text-title {
+    .text-jailed {
       min-width: 30px;
     }
     .label-jailed span {
@@ -192,9 +187,9 @@ form.search-form-validators {
     }
   }
 }
-.avatar-wrapper.validator-avatar-wrapper .jailed {
-  left: unset;
-}
+// .avatar-wrapper.validator-avatar-wrapper .jailed {
+//   left: unset;
+// }
 
 @media (max-width: 991.99px) {
   .validator-container {

@@ -75,7 +75,7 @@
     }
 
     &.button-pill {
-      border-radius: 24px;
+      border-radius: 8px;
       font-weight: 400;
     }
 
@@ -353,17 +353,12 @@
 
 .button-switch-stage {
   padding: var(--spacer-1);
-  background-color: var(--aura-dark-gray);
-  border-radius: var(--spacer-2);
+  background-color: var(--aura-gray-9);
+  border-radius: var(--spacer-1);
   display: flex;
   @media (max-width: 991.99px) {
     font-size: 1.4rem;
     line-height: 1.8rem;
-  }
-  @media (max-width: 414px) {
-    button {
-      width: 80px !important;
-    }
   }
   button {
     padding: 0;
@@ -371,17 +366,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
-    height: 40px;
+    border-radius: 4px;
+    height: 34px;
     @media (max-width: 991.99px) {
-      height: 33px;
+      height: 32px;
+      width: 100%;
     }
     background: transparent;
-    color: var(--aura-neutrals-4);
+    color: var(--aura-gray-4);
     transition: all .35s ease-in-out;
     &.active {
-      background: var(--aura-gradient-general);
-      color: var(--aura-black);
+      background: var(--aura-gray-10);
+      color: var(--aura-white);
     }
   }
 }

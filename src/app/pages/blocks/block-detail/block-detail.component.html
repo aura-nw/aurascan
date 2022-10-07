@@ -148,7 +148,7 @@
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                         {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                        <span class="text--primary">{{ denom }}</span>
+                        <span class="text--primary">{{ data?.denom }}</span>
                       </ng-container>
                       <ng-template #displayNonNumber>
                         <span *ngIf="!data[template.matColumnDef]"> - </span>

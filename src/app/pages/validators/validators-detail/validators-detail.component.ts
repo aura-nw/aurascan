@@ -1,13 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
+import { fromHex, toBech32 } from '@cosmjs/encoding';
+import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction, TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
+import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -16,7 +16,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
-import * as _ from 'lodash';
 const marked = require('marked');
 
 @Component({
@@ -76,7 +75,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   timerGetBlockMiss: any;
   consAddress: string;
   nextKey = null;
+  currentNextKey = null;
   nextKeyBlock = null;
+  currentNextKeyBlock = null;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -306,8 +307,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           page.pageIndex * page.pageSize + page.pageSize,
         );
         const nextBlock = page.length <= (page.pageIndex + 2) * page.pageSize;
-        if (nextBlock && this.nextKeyBlock) {
+        if (nextBlock && this.nextKeyBlock && this.currentNextKeyBlock !== this.nextKeyBlock) {
           this.getListBlockWithOperator(this.nextKeyBlock);
+          this.currentNextKeyBlock = this.nextKeyBlock;
         }
         this.pageIndexPower = page.pageIndex;
         break;
@@ -322,8 +324,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         );
         const { length, pageIndex, pageSize } = page;
         const next = length <= (pageIndex + 2) * pageSize;
-        if (next && this.nextKey) {
+        if (next && this.nextKey && this.currentNextKey !== this.nextKey) {
           this.getListPower(this.nextKey);
+          this.currentNextKey =  this.nextKey;
         }
         this.pageIndexPower = page.pageIndex;
         break;
@@ -350,9 +353,10 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }
+  
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
-    if (editor) {
+    if (editor && this.currentValidatorDetail) {
       editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
       return;
     }

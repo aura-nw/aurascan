@@ -4,6 +4,9 @@
   white-space: pre-wrap;
   font-size: 14px;
   font-weight: 400;
+  background: var(--aura-gray-9);
+  border-radius: 8px;
+  padding: var(--spacer-3);
 }
 
 .box-error {
@@ -12,4 +15,8 @@
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 1rem;
+}
+
+::ng-deep app-transaction-messages .card-info:not(:last-child) {
+  margin-bottom: 16px;
 }

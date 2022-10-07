@@ -20,10 +20,8 @@
         [tabId]="countCurrent"
         [type]="'VOTES'"
         [length]="countVote.get(countCurrent)"
-        [data]="voteDataList"></app-proposal-table>
-      <div *ngIf="voteDataListLoading">
-        <app-loading-sprint></app-loading-sprint>
-      </div>
+        [data]="voteDataList"
+        (loadMore)="loadMore($event)"></app-proposal-table>
     </div>
   </div>
 </div>

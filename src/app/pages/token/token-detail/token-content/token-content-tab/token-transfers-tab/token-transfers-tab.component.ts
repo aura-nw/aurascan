@@ -63,6 +63,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
   nftDetail: any;
   linkToken = 'token';
   nextKey = null;
+  currentKey = null;
 
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -150,8 +151,9 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     const { length, pageIndex, pageSize } = e;
     const next = length <= (pageIndex + 2) * pageSize;
     this.pageData = e;
-    if (next && this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getListTransactionToken(null, this.nextKey);
+      this.currentKey = this.nextKey;
     }
   }
 

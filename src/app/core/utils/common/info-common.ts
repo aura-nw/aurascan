@@ -1,4 +1,4 @@
-import { getDataInfo, getAmount } from 'src/app/global/global';
+import { getAmount, getDataInfo } from 'src/app/global/global';
 import { NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
@@ -67,11 +67,33 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
   if (Number(trans.tx_response?.code) === CodeTransaction.Success) {
     trans.status = StatusTransaction.Success;
   }
-  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] = getDataInfo(
-    trans.tx_response?.tx?.body?.messages,
-    tokenID,
-  );
+  [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] =
+    getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID);
   trans.type = trans.method || typeTrans?.value;
   trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
   return trans;
+}
+
+export function checkTypeFile(filename: string) {
+  if(!filename) return null;
+  let parts = filename.split('.');
+  let typeString = parts[parts.length - 1];
+  switch (typeString.toLowerCase().trim()) {
+    case 'webm':
+    case 'mp4':
+      return 'video';
+    case 'ipg':
+    case 'png':
+    case 'svg':
+      return 'img';
+    case 'glb':
+    case 'gltf':
+      return '3d';
+    case 'ogg':
+    case 'wav':
+    case 'mp3':
+      return 'audio';
+    default:
+      return 'img';
+  }
 }

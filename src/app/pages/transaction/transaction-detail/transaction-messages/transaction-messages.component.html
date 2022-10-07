@@ -1,51 +1,50 @@
-<h2 class="card-header mb-0 pb-0 text--white d-none d-lg-block">Message</h2>
-<div class="card-body body pt-lg-0" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="d-flex justify-content-between align-items-center d-lg-none">
-    <h2 class="mb-0 text--white">Messages</h2>
-    <div class="label__status body body-02-mob">{{ transactionDetailType }}</div>
-  </div>
-
-
-  <ng-container [ngTemplateOutlet]="titleHeader"
-                *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') <= -1">
-  </ng-container>
-
-  <ng-template #titleHeader let-title="title">
-    <div class="divider divider-horizontal my-6"></div>
-    <div class="row mb-3 d-none d-lg-flex box-header">
-      <div class="col-12 col-lg-3">
-        <div class="card-text header-title">
-          <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-          {{ title || transactionDetailType }}
-        </div>
-      </div>
-    </div>
-  </ng-template>
-
+<h2 class="card-header mb-0 pb-0 text--white d-block">
+  Messages
+  <div class="divider divider-horizontal my-4 d-lg-none"></div>
+</h2>
+<div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <app-messages-item
-        [label]="'From Address'"
-        [value]="transactionDetail?.messages[0]?.from_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <app-messages-item
-        [label]="'To Address'"
-        [value]="transactionDetail?.messages[0]?.to_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
-        <div class="col-12 col-lg-9 text--gray-1">
-          <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
-          </ng-container>
-          <ng-container *ngIf="amount == 0"> - </ng-container>
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index;">
+      <div class="card-info" *ngIf="i < numberListSend">
+        <ng-container
+                *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+        </ng-container>
+        <app-messages-item
+          [label]="'From Address'"
+          [value]="item?.from_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <app-messages-item
+          [label]="'To Address'"
+          [value]="item?.to_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+          <div class="col-12 col-lg-9 text--gray-1">
+            <ng-container *ngIf="item?.amount[0]?.amount > 0">
+              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }}
+              <span class="text--primary">{{ denom }}</span>
+            </ng-container>
+            <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
+          </div>
         </div>
       </div>
+    </ng-container>
+    <div class="text-md-left text-center">
+      <button
+        type="button"
+        class="button button--md button-pill button-outline button-outline__in-card ml-auto"
+        (click)="loadMoreSend()"
+        *ngIf="transactionDetail?.messages?.length > numberListSend">
+        <span class="fw-500 body-02 text--gray-1">Load More</span>
+      </button>
     </div>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'Contract'"
         [value]="transactionDetail?.messages[0]?.contract"
@@ -54,8 +53,8 @@
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.sender"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Messages</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
         </div>
@@ -64,8 +63,11 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <div class="row mb-3 body-02 body-01-mob">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
       </div>
@@ -73,7 +75,7 @@
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.sender"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 fw-semibold mb-2 mb-lg-0 text--gray-4">Messages</div>
         <div class="col-12 col-lg-9">
           <pre id="json" class="raw-content text--white px-4" [innerHtml]="objMsgContract | appJson"></pre>
@@ -91,13 +93,16 @@
     <ng-container
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
-        <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+        <div class="card-info">
+          <ng-container
+                  *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+          </ng-container>
           <app-messages-item
             [label]="'Delegator Address'"
             [value]="item.delegator_address"
             [dataLink]="{ url: '/account' }"></app-messages-item>
-          <div class="row mb-3 body-02 body-01-mob">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
+          <div class="row mb-3 body-01">
+            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
             <div class="col-12 col-lg-9">
               <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
                 {{ item.validator_address }}
@@ -107,8 +112,8 @@
               </a>
             </div>
           </div>
-          <div class="row mb-3 body-02 body-01-mob">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+          <div class="row mb-3 body-01">
+            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
             <div class="col-12 col-lg-9 text--gray-1">
               <ng-container *ngIf="listAmountClaim[i] > 0">
                 {{ listAmountClaim[i] | number: global.formatNumberToken }}
@@ -118,17 +123,19 @@
             </div>
           </div>
         </div>
-        <div class='divider divider-horizontal my-3 d-none d-lg-block' *ngIf='!isLast'></div>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
-      <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+      <div class="card-info">
+        <ng-container
+                *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+        </ng-container>
         <app-messages-item
           [label]="'Delegator Address'"
           [value]="transactionDetail?.messages[0]?.delegator_address"
           [dataLink]="{ url: '/account' }"></app-messages-item>
-        <div class="row mb-3 body-02 body-01-mob">
-          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
               {{ transactionDetail?.messages[0]?.validator_address }}
@@ -138,8 +145,8 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-01-mob">
-          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
               {{ amountCommission || amount | number: global.formatNumberToken }}
@@ -148,8 +155,8 @@
             <ng-template #noValues> - </ng-template>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
-          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
+        <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
           <div class="col-12 col-lg-9 text--gray-1">
             {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </div>
@@ -157,11 +164,14 @@
       </div>
     </ng-container>
     <ng-container *ngIf="commissionAutoClaim > 0">
-      <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+      <div class="card-info">
+        <ng-container
+                *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+        </ng-container>
         <div class="row mb-3 mt-5 d-none d-lg-flex">
           <div class="col-12">
             <div class="card-text header-title">
-              <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
               Get Commission
             </div>
           </div>
@@ -170,8 +180,8 @@
           [label]="'To Address'"
           [value]="transactionDetail?.messages[0]?.to_address"
           [dataLink]="{ url: '/account' }"></app-messages-item>
-        <div class="row mb-3 body-02 body-01-mob">
-          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
           <div class="col-12 col-lg-9">
             <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
               {{ transactionDetail?.messages[0]?.validator_address }}
@@ -181,8 +191,8 @@
             </a>
           </div>
         </div>
-        <div class="row mb-3 body-02 body-01-mob">
-          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
           </div>
@@ -192,7 +202,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'Proposal Id'"
         [value]="transactionDetail?.messages[0]?.proposal_id"
@@ -201,7 +214,7 @@
         [label]="'Voter'"
         [value]="transactionDetail?.messages[0]?.voter"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Option</div>
         <div class="col-9 text--gray-1">
           {{ parsingOptionVote(transactionDetail?.messages[0]?.option) }}
@@ -211,7 +224,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'From Address'"
         [value]="transactionDetail?.messages[0]?.from_address"
@@ -225,9 +241,12 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -254,13 +273,16 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'Delegate Address'"
         [value]="transactionDetail?.messages[0]?.delegator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Source Validator Address</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Source Validator Address</div>
         <div class="col-12 col-lg-9">
           <a
             class="text--primary"
@@ -272,8 +294,8 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Destination Validator Address</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Destination Validator Address</div>
         <div class="col-12 col-lg-9">
           <a
             class="text--primary"
@@ -285,8 +307,8 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -294,8 +316,8 @@
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob" *ngIf="amountClaim > 0">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Auto Claim Reward</div>
+      <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
         <div class="col-12 col-lg-9 text--gray-1">
           {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
         </div>
@@ -304,7 +326,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'Proposal Id'"
         [value]="transactionDetail?.messages[0]?.proposal_id"
@@ -313,8 +338,8 @@
         [label]="'Depositor'"
         [value]="transactionDetail?.messages[0]?.depositor"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -326,13 +351,16 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'To Address'"
         [value]="transactionDetail?.messages[0]?.to_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator</div>
         <div class="col-12 col-lg-9 text--gray-1">{{ transactionDetail?.messages[0]?.description?.moniker }}</div>
       </div>
       <app-messages-item
@@ -343,7 +371,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'Validator'"
         [value]="transactionDetail?.messages[0]?.description?.moniker"
@@ -356,7 +387,10 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
       <app-messages-item
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.validator_address"
@@ -368,10 +402,25 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Unjail">
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
+      <app-messages-item
+        [label]="'Validator Address'"
+        [value]="transactionDetail?.messages[0]?.validator_addr"
+        [dataLink]="{ url: '/validator' }"></app-messages-item>
+    </div>
+  </ng-container>
+
   <ng-container *ngIf="transactionDetail?.type === eTransType.CreateValidator">
-    <div [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Min Self Delegation</div>
+    <div class="card-info">
+      <ng-container
+              *ngTemplateOutlet="messageHeader; context:{data: {label: transactionDetailType}}">
+      </ng-container>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Min Self Delegation</div>
         <div class="col-12 col-lg-9 text--gray-1">
           {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
         </div>
@@ -380,8 +429,8 @@
         [label]="'Delegator Address'"
         [value]="transactionDetail?.messages[0]?.delegator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Validator Address</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
         <div class="col-12 col-lg-9">
           <a class="text--primary" [routerLink]="['/validators', transactionDetail?.messages[0]?.validator_address]">
             {{ transactionDetail?.messages[0]?.validator_address }}
@@ -391,8 +440,8 @@
           </a>
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
             {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
@@ -406,7 +455,7 @@
       <app-messages-item
         [label]="'Moniker'"
         [value]="transactionDetail?.messages[0]?.description?.moniker"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Website</div>
         <div class="col-9">
           <ng-container *ngIf="transactionDetail?.messages[0]?.description?.website?.length > 0">
@@ -420,20 +469,20 @@
       <app-messages-item
         [label]="'Identity'"
         [value]="transactionDetail?.messages[0]?.description?.identity || '-'"></app-messages-item>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
+      <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
         <div class="col-9">
           {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
       </div>
-      <div class="row mb-3 body-02 body-01-mob">
-        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Commission Max Change Rate</div>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Commission Max Change Rate</div>
         <div class="col-12 col-lg-9">
           {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
         </div>
@@ -446,77 +495,39 @@
 
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
-      <ng-container
-        [ngTemplateOutlet]="titleHeader"
-        [ngTemplateOutletContext]="{ title: displayTitle(item['@type']) }"
-        *ngIf="
-          transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1 &&
-          transactionDetail?.messages &&
-          item['@type'] !== eTransType.IBCAcknowledgement
-        ">
-      </ng-container>
-      <ng-container [ngSwitch]="item['@type']">
-        <div *ngSwitchCase="eTransType.IBCTransfer">
-          <div class="row mb-3 d-lg-none box-header">
-            <div class="col-12 col-lg-3">
-              <div class="card-text header-title">
-                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-                IBC Transfer
-              </div>
-            </div>
+      <div class="card-info">
+        <ng-container
+                *ngTemplateOutlet="messageHeader; context:{data: {label: displayTitle(item['@type'])}}">
+        </ng-container>
+        <ng-container [ngSwitch]="item['@type']">
+          <div *ngSwitchCase="eTransType.IBCTransfer">
+            <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
-          <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-        </div>
-        <div *ngSwitchCase="eTransType.IBCReceived">
-          <div class="row mb-3 d-lg-none box-header">
-            <div class="col-12 col-lg-3">
-              <div class="card-text header-title">
-                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-                IBC Received
-              </div>
-            </div>
+          <div *ngSwitchCase="eTransType.IBCReceived">
+            <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
-          <ng-container [ngTemplateOutlet]="ibcReceive" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-        </div>
-        <div *ngSwitchCase="eTransType.IBCAcknowledgement">
-          <!-- <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container> -->
-        </div>
-        <div *ngSwitchCase="eTransType.IBCUpdateClient">
-          <div class="row mb-3 d-lg-none box-header">
-            <div class="col-12 col-lg-3">
-              <div class="card-text header-title">
-                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-                IBC Update Client
-              </div>
-            </div>
+          <div *ngSwitchCase="eTransType.IBCAcknowledgement">
+            <ng-container [ngTemplateOutlet]="ibcAck" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
-          <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-        </div>
-        <div *ngSwitchCase="eTransType.IBCTimeout">
-          <div class="row mb-3 d-lg-none box-header">
-            <div class="col-12 col-lg-3">
-              <div class="card-text header-title">
-                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-                IBC Timeout
-              </div>
-            </div>
+          <div *ngSwitchCase="eTransType.IBCUpdateClient">
+            <ng-container [ngTemplateOutlet]="ibcUpdateClient" [ngTemplateOutletContext]="{ data: item }">
+            </ng-container>
           </div>
-          <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-        </div>
-        <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
-          <div class="row mb-3 d-lg-none box-header">
-            <div class="col-12 col-lg-3">
-              <div class="card-text header-title">
-                <img [src]="'assets/images/icons/trans-send.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-                IBC Channel Open Init
-              </div>
-            </div>
+          <div *ngSwitchCase="eTransType.IBCTimeout">
+            <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
+            </ng-container>
+            <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
-          <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
-        </div>
-      </ng-container>
+          <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
+            <ng-container [ngTemplateOutlet]="ibcChannelOpen" [ngTemplateOutletContext]="{ data: item }">
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
     </ng-container>
-    <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
   </ng-container>
 
   <ng-template #ibcTransfer let-data="data">
@@ -534,8 +545,8 @@
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+    <div class="row mb-3 body-01">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | number: global.formatNumberToken }}
         <span class="text--primary">{{ denom }}</span>
@@ -556,11 +567,11 @@
       [label]="'Sequence'"
       [value]="data?.packet?.sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+    <div class="row mb-3 body-01" *ngIf="ibcData?.receive?.denom">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
         {{ ibcData?.amount | balanceOf | number: global.formatNumberToken }}
-        <span class="text--primary">{{ denom }}</span>
+        <span class="text--primary">{{ ibcData?.receive?.denom }}</span>
       </div>
     </div>
     <app-messages-item
@@ -585,84 +596,80 @@
   </ng-template>
 
   <ng-template #ibcAck let-data="data">
+    {{ getDataIBC(ibcListMapping.Ack) }}
     <app-messages-item
       [label]="'Sequence'"
       [value]="ibcData?.packet_sequence"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Amount</div>
+    <div class="row mb-3 body-01">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | number: global.formatNumberToken }}
+        {{ ibcData?.acknowledgement?.amount | balanceOf | number: global.formatNumberToken }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
     <app-messages-item
       [label]="'Origin Amount'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount"
+      [value]="ibcData?.acknowledgement?.amount"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item
-      [label]="'Origin Denom'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.token?.denom"></app-messages-item>
-    <app-messages-item
-      [label]="'Receiver'"
-      [value]="transactionDetail?.messages[0]?.receiver"
-      [dataLink]="{ url: '/account' }"></app-messages-item>
+    <app-messages-item [label]="'Origin Denom'" [value]="ibcData?.acknowledgement?.denom"></app-messages-item>
+    <app-messages-item [label]="'Receiver'" [value]="ibcData?.acknowledgement?.receiver"></app-messages-item>
     <app-messages-item
       [label]="'Sender'"
-      [value]="transactionDetail?.messages[0]?.sender"
+      [value]="ibcData?.acknowledgement?.sender"
       [dataLink]="{ url: '/account' }"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Port'"
-      [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Channel'"
-      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
+    <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="transactionDetail?.tx?.tx?.body?.messages[0]?.signer"></app-messages-item>
+      [value]="ibcData?.acknowledgement?.signer"
+      [dataLink]="{ url: '/account' }"></app-messages-item>
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
-  <ng-template #ibcTimeout let-data="data">
+  <ng-template #ibcTimeout let-data="data" let-index="index">
+    {{ getDataIBC(ibcListMapping.TimeOut, index) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="ibcData?.time_out[index-1]?.next_sequence_recv"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Port'"
-      [value]="transactionDetail?.messages[0]?.source_port"></app-messages-item>
-    <app-messages-item
-      [label]="'Source Channel'"
-      [value]="transactionDetail?.messages[0]?.source_channel"></app-messages-item>
+    <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
+    <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
     <app-messages-item [label]="'Destination Port'" [value]="ibcData?.packet_dst_port"></app-messages-item>
     <app-messages-item [label]="'Destination Channel'" [value]="ibcData?.packet_dst_channel"></app-messages-item>
-    <div class="row mb-3 body-02 body-01-mob">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">Data</div>
+    <div class="row mb-3 body-01">
+      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
       <div class="col-12 col-lg-9">
-        <pre id="json" class="raw-content text--white px-4" [innerHtml]="ibcData?.time_out?.data | appJson"></pre>
+        <pre
+          id="json"
+          class="raw-content text--white px-4"
+          [innerHtml]="ibcData?.time_out[index-1]?.data | appJson"></pre>
       </div>
     </div>
     <app-messages-item
       [label]="'Timeout Revision Number'"
-      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.packet?.timeout_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Revision Height'"
-      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.packet?.timeout_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Timestamp'"
-      [value]="ibcData?.time_out?.packet?.timeout_timestamp"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.packet?.timeout_timestamp"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Number'"
-      [value]="ibcData?.time_out?.proof_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.proof_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Height'"
-      [value]="ibcData?.time_out?.proof_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Next Sequence Recv'"
-      [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
-    <app-messages-item [label]="'Signer'" [value]="ibcData?.time_out?.signer"></app-messages-item>
+      [value]="ibcData?.time_out[index-1]?.next_sequence_recv"></app-messages-item>
+    <app-messages-item
+      [label]="'Signer'"
+      [value]="ibcData?.time_out[index-1]?.signer"
+      [dataLink]="{ url: '/account' }"></app-messages-item>
   </ng-template>
 
   <ng-template #ibcUpdateClient let-data="data">
@@ -719,70 +726,94 @@
   </ng-template>
 
   <ng-template #ibcProgress>
-    <div class="row mb-3 body-02 body-01-mob border-ibc pt-3" *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
-      <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4">IBC Progress</div>
-      <div class="col-12 col-lg-9" style="word-break: break-word">
-        <ng-container
-          [ngTemplateOutlet]="ibcItem"
-          [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
-          *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
-        </ng-container>
-
-        <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
+    <div *ngIf="listIBCProgress?.length > 0">
+      <div class="divider divider-horizontal my-3"></div>
+      <div class="row mb-3 body-01 ibc-process">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">IBC Progress</div>
+        <div class="col-12 col-lg-9" style="word-break: break-word">
           <ng-container
             [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
-            *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
+            [ngTemplateOutletContext]="{ type: eTransType.IBCTransfer, title: 'Transfer' }"
+            *ngIf="filterIBCType(eTransType.IBCTransfer)?.length > 0">
           </ng-container>
 
-          <ng-container
-            [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
-            *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
-          <ng-container
-            [ngTemplateOutlet]="ibcItem"
-            [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
-            *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
-          </ng-container>
-        </ng-container>
-      </div>
-    </div>
+          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length === 0">
+            <ng-container
+              [ngTemplateOutlet]="ibcItem"
+              [ngTemplateOutletContext]="{ type: eTransType.IBCReceived, title: 'Receive' }"
+              *ngIf="filterIBCType(eTransType.IBCReceived)?.length > 0">
+            </ng-container>
 
-    <ng-template #ibcItem let-type="type" let-title="title">
-      <div class="row col-12">
-        <div class="col-lg-2">
-          <img [src]="'assets/icons/icons-svg/color/success.svg' | imageS3" width="20px" height="20px" class="mr-1" />{{
-            title
-          }}
+            <ng-container
+              [ngTemplateOutlet]="ibcItem"
+              [ngTemplateOutletContext]="{ type: eTransType.IBCAcknowledgement, title: 'Acknowledgement' }"
+              *ngIf="filterIBCType(eTransType.IBCAcknowledgement)?.length > 0">
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="filterIBCType(eTransType.IBCTimeout).length > 0">
+            <ng-container
+              [ngTemplateOutlet]="ibcItem"
+              [ngTemplateOutletContext]="{ type: eTransType.IBCTimeout, title: 'Timeout' }"
+              *ngIf="filterIBCType(eTransType.IBCTimeout)?.length > 0">
+            </ng-container>
+          </ng-container>
         </div>
       </div>
-      <div class="row ml-6 p-3">
-        <ng-container *ngFor="let item of filterIBCType(type)">
-          <div
-            class="row col-lg-9 justify-content-between py-2"
-            [ngStyle]="{ 'background-color': item.effected ? '#363843' : '' }">
-            <div>{{ item.denom }}</div>
-            <div class="text-right">
-              <a class="text--primary" href="/transaction/{{ item.tx_hash }}"> {{ item.tx_hash }} </a>
-              <div class="mb-1">
-                <img
-                  [src]="'assets/icons/icons-svg/color/success.svg' | imageS3"
-                  width="20px"
-                  height="20px"
-                  *ngIf="item.effected"
-                  class="mr-1" />{{ commonService.getDateValue(item.time)[0] }} (<span>{{
-                  item.time | customDate: 'yyyy-MM-dd'
-                }}</span>
-                <span>{{ item.time | customDate: 'HH:mm:ss' }}</span
-                >)
-              </div>
-            </div>
+      <ng-template #ibcItem let-type="type" let-title="title">
+        <div class="ibc-item">
+          <div class="d-flex align-items-center">
+            <div class="ibc-checker mr-2" [ngClass]="type === eTransType.IBCTimeout ? 'timeout' : ''"></div>
+            <div class="text--green-4" [ngClass]="type === eTransType.IBCTimeout ? 'text--red-3' : ''">{{ title }}</div>
           </div>
-        </ng-container>
+          <div class="ml-10 p-3 p-lg-4 bg-gray-8">
+            <ng-container *ngFor="let item of filterIBCType(type)">
+              <div class="d-lg-flex justify-content-between">
+                <div>{{ item.denom }}</div>
+                <div class="body text-end mt-3 mt-lg-0">
+                  <div>
+                    <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
+                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe: 8:8 }}</span>
+                      <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
+                    </a>
+                    <span *ngIf="item.denom !== denom">
+                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe: 8:8 }}</span>
+                      <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
+                    </span>
+                  </div>
+                  <div class="mt-1 ibc__date">
+                    <div class="d-flex justify-content-end">
+                      <img
+                        src="assets/icons/icons-svg/color/Check.svg"
+                        width="16px"
+                        height="16px"
+                        *ngIf="item.effected"
+                        class="mr-1" />
+                      {{ commonService.getDateValue(item.time)[0] }}
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center ml-2">
+                      <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                      <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
+                      <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </ng-template>
+
+  <ng-template #messageHeader let-data='data'>
+    <div class="mb-3 d-flex box-header">
+      <div class="col-12 col-lg-3">
+        <div class="card-text header-title">
+          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+          {{ data.label }}
+        </div>
       </div>
-    </ng-template>
+    </div>
+    <div class="divider divider-horizontal my-3"></div>
   </ng-template>
 </div>

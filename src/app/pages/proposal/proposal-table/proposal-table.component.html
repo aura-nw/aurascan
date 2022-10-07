@@ -16,6 +16,7 @@
                         class="validator-avatar d-inline-flex"
                         [routerLink]="[template.isUrl, data['operator_address']]">
                         <app-loading-image
+                          [appClass]="data['jailed'] ? 'jailed' : ''"
                           [identity]="data['validator_identity']"
                           [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
                       </span>
@@ -46,11 +47,14 @@
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'answer'">
+                      {{ getVoteValue(data[template.matColumnDef]) }}
+                    </ng-container>
                     <ng-container *ngSwitchCase="'option'">
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span [class.label-circle]="j <= 2">{{ data[template.matColumnDef] }}</span>
+                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{ data[template.matColumnDef] }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'updated_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -121,9 +125,9 @@
                   class: 'h5 mb-0 text--primary',
                   info:
                     '<a class=text--primary href=' +
-                    ('/account/' + data.voter) +
+                    ('/account/' + data.voter_address) +
                     '>' +
-                    (data.voter ? shortenAddress(data.voter) : '-') +
+                    (data.voter_address ? shortenAddress(data.voter_address) : '-') +
                     '</a>'
                 },
                 {
@@ -131,23 +135,23 @@
                   class: 'body-01',
                   info:
                     '<a class=text--primary href=' +
-                    ('/transaction/' + data.tx_hash) +
+                    ('/transaction/' + data.txhash) +
                     '>' +
-                    (data.tx_hash ? shortenAddress(data.tx_hash) : '-') +
+                    (data.txhash ? shortenAddress(data.txhash) : '-') +
                     '</a>'
                 },
-                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.answer) },
                 {
                   label: 'Time',
                   class: 'card__date text--gray-1 body-01',
                   info:
                     '<div class=text-end>' +
-                    commonService.getDateValue(data.created_at, false)[0] +
+                    commonService.getDateValue(data.timestamp, false)[0] +
                     '</div><div class=text--gray-5><span>' +
-                    (data.created_at | customDate: 'yyyy-MM-dd') +
+                    (data.timestamp | customDate: 'yyyy-MM-dd') +
                     '</span>' +
                     '<span>' +
-                    (data.created_at | customDate: 'HH:mm:ss') +
+                    (data.timestamp | customDate: 'HH:mm:ss') +
                     '</span></div>'
                 }
               ]"></app-card-mob-simple>
@@ -160,7 +164,7 @@
                 validatorName: data.validator_name,
                 validatorAddress: data.validator_address,
                 validatorNumber: data.rank,
-                validatorIdentity: data.identity
+                validatorIdentity: data.validator_identity
               }"
               [content]="[
                 {
@@ -174,19 +178,19 @@
                       '</a>'
                     : '<span class=text--gray-1>-</span>'
                 },
-                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.option) },
+                { label: 'Answer', class: 'body-01 text--gray-1', info: getVoteValue(data.answer) },
                 {
                   label: 'Time',
                   class: 'card__date text--gray-1 body-01',
-                  info: data.created_at
+                  info: data.timestamp
                     ? '<div class=text-end>' +
-                      commonService.getDateValue(data.created_at, false)[0] +
+                      commonService.getDateValue(data.timestamp, false)[0] +
                       '</div>' +
                       '<div class=text--gray-5><span>' +
-                      (data.created_at | customDate: 'yyyy-MM-dd') +
+                      (data.timestamp | customDate: 'yyyy-MM-dd') +
                       '</span>' +
                       '<span>' +
-                      (data.created_at | customDate: 'HH:mm:ss') +
+                      (data.timestamp | customDate: 'HH:mm:ss') +
                       '</span></div>'
                     : '-'
                 }

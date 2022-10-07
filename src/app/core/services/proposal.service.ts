@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
-import { IListVoteQuery, IListVotesRes, IProposal, IVotingInfo } from '../models/proposal.model';
+import { IVotingInfo } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -17,23 +18,24 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getProposal(): Observable<IResponsesTemplates<IProposal[]>> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/proposals`);
-  }
-
-  getProposalDetail(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}`);
-  }
-
   getVotes(proposalId: string | number, voter: string, limit: string | number, offset: string | number) {
     return axios.get(
       `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}&order_by=ORDER_BY_DESC`,
     );
   }
 
-  getValidatorVotes(data): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/proposals/votes/get-by-validator`, data);
+  getValidatorVotesFromIndexer(proposalid): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      proposalid: proposalid
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/votes/validators`, {
+      params,
+    });
   }
 
   getDepositors(proposalId: string | number) {
@@ -42,25 +44,42 @@ export class ProposalService extends CommonService {
     );
   }
 
-  getListVote(payload: IListVoteQuery): Observable<IResponsesTemplates<IListVotesRes>> {
-    return this.http.post<IResponsesTemplates<IListVotesRes>>(`${this.apiUrl}/proposals/votes/get-by-option`, payload);
-  }
+  getListVoteFromIndexer(payload, option): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      nextKey: payload.nextKey,
+      reverse: false,
+      pageLimit: payload.pageLimit,
+      answer: option,
+      proposalid: payload.proposalid 
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
 
-  getProposalTally(proposalId: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/proposals/${proposalId}/tally`);
+    return this.http.get<any>(`${INDEXER_URL}/votes`, {
+      params,
+    });
   }
 
   getStakeInfo(delegatorAddress: string): Observable<IResponsesTemplates<IVotingInfo>> {
     return this.http.get<IResponsesTemplates<IVotingInfo>>(`${this.apiUrl}/proposals/delegations/${delegatorAddress}`);
   }
 
-  getProposalDetailFromNode(proposalId: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/proposals/node/${proposalId}`);
-  }
+  getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit: pageLimit,
+      nextKey,
+      reverse: false,
+      proposalId: proposalId,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
 
-  getProposalList(address: string): Observable<IResponsesTemplates<IProposal[]>> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/proposals/list/get-by-address/${address}`);
+    return this.http.get<any>(`${INDEXER_URL}/proposal`, {
+      params,
+    });
   }
 }

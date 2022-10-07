@@ -1,11 +1,11 @@
 .btn-status {
-  min-width: 80px;
   @media (min-width: 992px) {
-    min-width: 180px;
+    width: 185px;
   }
   &--mob {
     @media (max-width: 991.98px) {
       .button-dropdown {
+        width: 107px;
         &:after, &:before {
           right: 17px;
         }
@@ -14,10 +14,19 @@
         white-space: break-spaces;
       }
       .dropdown-menu.aura-dropdown-menu {
-        min-width: 150px;
+        min-width: 125px;
       }
     }
   }
+}
+.search-form--mob .input-group {
+  padding: 0 var(--spacer-2);
+}
+.card__info {
+  min-height: 275px;
+}
+button:disabled a {
+  cursor: not-allowed;
 }
 
 @media (max-width: 991.99px) {

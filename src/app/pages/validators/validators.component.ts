@@ -395,7 +395,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               availableToken: dataWallet?.data?.available,
               stakingToken: dataWallet?.data?.stake_reward,
               historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
-              identity: listDelegator?.data?.identity
+              identity: listDelegator?.data?.identity,
             };
           }
 
@@ -418,7 +418,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               });
               //check amount staked > 0
               this.arrayDelegate = listDelegator?.data?.delegations.filter((x) => x.amount_staked > 0);
-              // console.log(this.arrayDelegate);
               dataInfoWallet['arrayDelegate'] = JSON.stringify(this.arrayDelegate);
             } else {
               this.arrayDelegate = null;
@@ -431,12 +430,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             const now = new Date();
             listUnDelegator.data.account_unbonding.forEach((data) => {
               data.entries.forEach((f) => {
-                f.identity = f.identity;
+                f['validator_identity'] = data.validator_description?.identity;
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
                 f.validator_name = this.lstValidatorOrigin.find(
                   (i) => i.operator_address === f.validator_address,
                 )?.title;
+                f.jailed = data.validator_description?.jailed || false;
                 let timeConvert = new Date(f.completion_time);
                 if (now < timeConvert) {
                   this.lstUndelegate.push(f);

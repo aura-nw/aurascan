@@ -59,7 +59,7 @@
 
       li.bg {
         &--primary {
-          background-color: var(--aura-primary);
+          background-color: var(--aura-green-3);
         }
 
         &--danger {
@@ -67,11 +67,15 @@
         }
 
         &--info {
-          background-color: var(--aura-secondary);
+          background-color: var(--aura-red-2);
         }
 
         &--secondary {
           background-color: var(--aura-gray-8);
+        }
+
+        &--purple {
+          background-color: var(--aura-secondary);
         }
       }
 
@@ -158,7 +162,7 @@
         }
 
         &[data-style='primary'] .item-box::before {
-          background-color: var(--aura-primary);
+          background-color: var(--aura-green-3);
         }
 
         &[data-style='danger'] .item-box::before {
@@ -166,7 +170,7 @@
         }
 
         &[data-style='info'] .item-box::before {
-          background-color: var(--aura-secondary);
+          background-color: var(--aura-red-2);
         }
 
         &[data-style='secondary'] .item-box::before {
@@ -244,7 +248,7 @@
     }
 
     &.status--primary {
-      background-color: var(--aura-primary);
+      background-color: var(--aura-green-3);
     }
 
     &.status--danger {
@@ -252,7 +256,7 @@
     }
 
     &.status--info {
-      background-color: var(--aura-secondary);
+      background-color: var(--aura-red-2);
     }
 
     &.status--secondary {

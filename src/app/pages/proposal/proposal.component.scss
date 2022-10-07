@@ -58,7 +58,7 @@
       }
 
       &.primary:before {
-        background-color: var(--aura-primary);
+        background-color: var(--aura-green-3);
       }
 
       &.danger:before {
@@ -66,7 +66,7 @@
       }
 
       &.info:before {
-        background-color: var(--aura-secondary);
+        background-color: var(--aura-red-2);
       }
 
       &.secondary:before {

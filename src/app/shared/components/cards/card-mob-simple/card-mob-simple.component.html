@@ -1,62 +1,82 @@
 <div class="card-mob-simple">
-    <a href="{{link}}" *ngIf="link">
-        <div *ngIf="title" class="d-flex justify-content-between align-items-center">
-            <div *ngIf="title.label" class="text--primary body {{title.size ? ('title-'+title.size) : ''}}">
-                <span *ngIf="title.rankNum" class="mr-2 {{title.titleClass ? title.titleClass : ''}}">{{title.rankNum}}</span>
-                <span class="{{title.titleClass ? title.titleClass : ''}}">{{title.label}}</span>
-            </div>
-            <div class="d-flex align-items-center">
-                <div *ngIf="title.status && +title.status !== statusTransaction.Success " class="mr-2">
-                    <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px">
-                </div>
-                <div *ngIf="title.subLabelContent" class="sub-label body text-end {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
-            </div>
+  <a href="{{ link }}" *ngIf="link">
+    <div *ngIf="title" class="d-flex justify-content-between align-items-center">
+      <div *ngIf="title.label" class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+        <span *ngIf="title.rankNum" class="mr-2 {{ title.titleClass ? title.titleClass : '' }}">{{
+          title.rankNum
+        }}</span>
+        <span class="{{ title.titleClass ? title.titleClass : '' }}">{{ title.label }}</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <div *ngIf="title.status && +title.status !== statusTransaction.Success" class="mr-2">
+          <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
         </div>
-        <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
-            <div class="avt">
-                <app-loading-image
-                  [identity]='validatorData.validatorIdentity'
-                  [srcImg]="getValidatorAvatar(validatorData.validatorAddress)"> </app-loading-image>
-                <span class="avt__num">{{validatorData.validatorNumber}}</span>
-            </div>
-            <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{validatorData.validatorName}}</a>
+        <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
+          {{ title.subLabelContent }}
         </div>
-        <span class="divider divider-horizontal d-block my-3" *ngIf="title || validatorData"></span>
-        <div *ngIf="content && content.length > 0">
-            <div *ngFor="let data of content, let i = index" class="{{ i > 0 ? 'mt-3' : ''}} d-flex justify-content-between align-items-center small-body">
-                <div class="body-01 text--gray-4" *ngIf="data.label">{{data.label}}</div>
-                <h6 *ngIf="data.info" class="{{data.class ? data.class : 'text--gray-1'}} mb-0" [innerHTML]="data.info"></h6>
-            </div>
-        </div>
-    </a>
-    <div *ngIf="!link">
-        <div *ngIf="title" class="d-flex justify-content-between align-items-center">
-            <div *ngIf="title.label" class="text--primary body {{title.size ? ('title-'+title.size) : ''}}">
-                <span *ngIf="title.rankNum" class="mr-2 {{title.titleClass ? title.titleClass : ''}}">{{title.rankNum}}</span>
-                <span class="{{title.titleClass ? title.titleClass : ''}}">{{title.label}}</span>
-            </div>
-            <div class="d-flex align-items-center">
-                <div *ngIf="title.status && +title.status !== statusTransaction.Success " class="mr-2">
-                    <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px">
-                </div>
-                <div *ngIf="title.subLabelContent" class="sub-label body text-end {{title.subLabelClass ? title.subLabelClass : ''}}">{{title.subLabelContent}}</div>
-            </div>
-        </div>
-        <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
-            <div class="avt">
-                <app-loading-image
-                  [identity]='validatorData.validatorIdentity'
-                  [srcImg]="getValidatorAvatar(validatorData.validatorAddress)"> </app-loading-image>
-                <span class="avt__num">{{validatorData.validatorNumber}}</span>
-            </div>
-            <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{validatorData.validatorName}}</a>
-        </div>
-        <span class="divider divider-horizontal d-block my-3" *ngIf="title || validatorData"></span>
-        <div *ngIf="content && content.length > 0">
-            <div *ngFor="let data of content, let i = index" class="{{ i > 0 ? 'mt-3' : ''}} d-flex justify-content-between align-items-center small-body">
-                <div class="body-01 text--gray-4" *ngIf="data.label">{{data.label}}</div>
-                <h6 *ngIf="data.info" class="{{data.class ? data.class : 'text--gray-1'}} mb-0" [innerHTML]="data.info"></h6>
-            </div>
-        </div>
+      </div>
     </div>
+    <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
+      <div class="avt">
+        <app-loading-image
+          [appClass]="validatorData['jailed'] ? 'jailed' : ''"
+          [identity]="validatorData.validatorIdentity"
+          [srcImg]="getValidatorAvatar(validatorData.validatorAddress)">
+        </app-loading-image>
+        <span class="avt__num">{{ validatorData.validatorNumber }}</span>
+      </div>
+      <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{
+        validatorData.validatorName
+      }}</a>
+    </div>
+    <span class="divider divider-horizontal d-block my-3" *ngIf="title || validatorData"></span>
+    <div *ngIf="content && content.length > 0">
+      <div
+        *ngFor="let data of content; let i = index"
+        class="{{ i > 0 ? 'mt-3' : '' }} d-flex justify-content-between align-items-center small-body">
+        <div class="body-01 text--gray-4" *ngIf="data.label">{{ data.label }}</div>
+        <h6 *ngIf="data.info" class="{{ data.class ? data.class : 'text--gray-1' }} mb-0" [innerHTML]="data.info"></h6>
+      </div>
+    </div>
+  </a>
+  <div *ngIf="!link">
+    <div *ngIf="title" class="d-flex justify-content-between align-items-center">
+      <div *ngIf="title.label" class="text--primary body {{ title.size ? 'title-' + title.size : '' }}">
+        <span *ngIf="title.rankNum" class="mr-2 {{ title.titleClass ? title.titleClass : '' }}">{{
+          title.rankNum
+        }}</span>
+        <span class="{{ title.titleClass ? title.titleClass : '' }}">{{ title.label }}</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <div *ngIf="title.status && title.status !== statusTransaction.Success" class="mr-2">
+          <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
+        </div>
+        <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
+          {{ title.subLabelContent }}
+        </div>
+      </div>
+    </div>
+    <div *ngIf="validatorData" class="text--primary body h5 mb-0 d-flex align-items-center">
+      <div class="avt">
+        <app-loading-image
+          [appClass]="validatorData['jailed'] ? 'jailed' : ''"
+          [identity]="validatorData.validatorIdentity"
+          [srcImg]="getValidatorAvatar(validatorData.validatorAddress)">
+        </app-loading-image>
+        <span class="avt__num">{{ validatorData.validatorNumber }}</span>
+      </div>
+      <a [routerLink]="['/validators', validatorData.validatorAddress]" class="h5 mb-0 ml-2 text--primary">{{
+        validatorData.validatorName
+      }}</a>
+    </div>
+    <span class="divider divider-horizontal d-block my-3" *ngIf="title || validatorData"></span>
+    <div *ngIf="content && content.length > 0">
+      <div
+        *ngFor="let data of content; let i = index"
+        class="{{ i > 0 ? 'mt-3' : '' }} d-flex justify-content-between align-items-center small-body">
+        <div class="body-01 text--gray-4" *ngIf="data.label">{{ data.label }}</div>
+        <h6 *ngIf="data.info" class="{{ data.class ? data.class : 'text--gray-1' }} mb-0" [innerHTML]="data.info"></h6>
+      </div>
+    </div>
+  </div>
 </div>

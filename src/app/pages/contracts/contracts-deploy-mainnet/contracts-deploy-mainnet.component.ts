@@ -15,11 +15,12 @@ import { DeployContractListReq } from 'src/app/core/models/contract.model';
   styleUrls: ['./contracts-deploy-mainnet.component.scss']
 })
 export class ContractsDeployMainnetComponent implements OnInit {
+  submitting = false;
   userAddress;
   contractForm;
   emailPattern = /\S+@\S+\.\S+/;
-  websitePattern = /(https?:\/\/)?([\w\d]+\.)?[\w\d]+\.\w+\/?.+/;
-  listID = ['sdas', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41', 'sda11231', '123adqwd', 'aad41']
+  websitePattern = /(https:\/\/)[\w\d]+\.\w+\/?.+/;
+  listID = []
 
   constructor(
     private fb: FormBuilder,
@@ -53,7 +54,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
     this.contractForm = this.fb.group(
       {
         code_ids: ['', [Validators.required]],
-        project_name: ['', [Validators.required, Validators.maxLength(200)]],
+        project_name: ['', [Validators.maxLength(200)]],
         official_project_website: ['', [Validators.required, Validators.maxLength(500), Validators.pattern(this.websitePattern)]],
         official_project_email: ['', [Validators.required, Validators.maxLength(200), Validators.pattern(this.emailPattern)]],
         name: ['', [Validators.required, Validators.maxLength(200)]],
@@ -87,6 +88,7 @@ export class ContractsDeployMainnetComponent implements OnInit {
 
   onSubmit() {
     if (this.contractForm.valid) {
+      this.submitting = true;
       // Do action
       const dataDeploy: DeployContractListReq = {
         requester_address: this.userAddress,
@@ -118,10 +120,11 @@ export class ContractsDeployMainnetComponent implements OnInit {
             this.contractForm.reset();
             this.router.navigate(['/contracts/smart-contract-list']);
           } else {
-            this.toastr.error(res.message);
+            this.toastr.error(res.message)
           }
         }
       });
+      this.submitting = false;
     }
   }
 }

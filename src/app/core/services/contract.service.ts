@@ -31,15 +31,6 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
-  getTransactions(payload: {
-    contract_address: string;
-    label: string;
-    limit: number;
-    offset: number;
-  }): Observable<IResponsesSuccess<IContractsResponse[]>> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/search-transactions`, payload);
-  }
-
   getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = ''): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
@@ -72,10 +63,6 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/match-creation-code/${contractAddress}`);
   }
 
-  readContract(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/read`, data);
-  }
-
   checkVerified(contractAddress: string): Observable<IResponsesTemplates<any>> {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${contractAddress}`);
   }
@@ -101,9 +88,8 @@ export class ContractService extends CommonService {
     return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
   }
 
-  getListSmartContract(params: SmartContractListReq){
-    return axios.get(`
-    ${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`);
+  getListSmartContract(params: SmartContractListReq): Observable<IResponsesTemplates<any>>{
+    return this.http.get<any>(`${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`);
   }
 
   getSmartContractStatus() {
@@ -115,6 +101,18 @@ export class ContractService extends CommonService {
   }
 
   createContractRequest(data: DeployContractListReq) {
-    return this.http.post<any>(`https://contract-deployer.dev.aura.network/api/v1/request/create`, data);
+    let api_url = '';
+    switch (this.apiUrl) {
+      case 'https://serenity-api.aurascan.io/api/v1':
+        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
+        break;
+      case 'https://euphoria-api.aurascan.io/api/v1':
+        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
+        break;
+      default:
+        api_url = 'https://contract-deployer.dev.aura.network/api/v1';
+        break;
+    }
+    return this.http.post<any>(api_url + `/request/create`, data);
   }
 }
