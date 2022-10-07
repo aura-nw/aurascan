@@ -40,8 +40,12 @@
         </div>
         <div class="nft-img__contain mt-4">
           <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-            <img *ngIf="!nftType" [src]="defaultImgToken" class="nft__img--mob" />
-            <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link" class="nft__img--mob" />
+            <img *ngIf="!nftType || isError" [src]="defaultImgToken" class="nft__img--mob" />
+            <img
+              *ngIf="nftType === 'img' && isError === false"
+              (error)="error()"
+              [src]="nftDetail?.media_info[0]?.media_link"
+              class="nft__img--mob" />
             <app-custom-video-player
               [videoSrc]="nftDetail?.media_info[0]?.media_link"
               [showControl]="true"
