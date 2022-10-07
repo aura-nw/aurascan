@@ -132,7 +132,7 @@ export class MaterialModule {}
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    ToastrModule.forRoot({ positionClass: 'inline' }),
+    ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
     NgxMaskModule.forRoot(maskConfig),
   ],
   providers: [
