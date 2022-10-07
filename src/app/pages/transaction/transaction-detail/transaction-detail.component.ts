@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import { CodeTransaction } from '../../../core/constants/transaction.enum';
@@ -37,6 +38,8 @@ export class TransactionDetailComponent implements OnInit {
   chainId = this.environmentService.configValue.chainId;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  loading = true;
+  isReload = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,32 +61,42 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   getDetail(): void {
-    this.transactionService.txsIndexer(1, 0, this.txHash).subscribe(
-      (res) => {
-        const { code, data } = res;
-        if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinInfo);
-          this.transaction = txs[0];
-          this.transaction = {
-            ...this.transaction,
-            chainid: this.chainId,
-            gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
-            gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
-            raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
-            type: _.get(res?.data.transactions[0], 'tx_response.tx.body.messages[0].@type'),
-            tx: _.get(res?.data.transactions[0], 'tx_response'),
-          };
-          
-          if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
-            this.errorMessage = this.transaction.raw_log;
-            this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
+    if (this.txHash?.length === LENGTH_CHARACTER.TRANSACTION) {
+      this.transactionService.txsIndexer(1, 0, this.txHash).subscribe(
+        (res) => {
+          const { code, data } = res;
+          if (code === 200 && data.transactions?.length > 0) {
+            const txs = convertDataTransaction(data, this.coinInfo);
+            this.transaction = txs[0];
+            this.transaction = {
+              ...this.transaction,
+              chainid: this.chainId,
+              gas_used: _.get(res?.data.transactions[0], 'tx_response.gas_used'),
+              gas_wanted: _.get(res?.data.transactions[0], 'tx_response.gas_wanted'),
+              raw_log: _.get(res?.data.transactions[0], 'tx_response.raw_log'),
+              type: _.get(res?.data.transactions[0], 'tx_response.tx.body.messages[0].@type'),
+              tx: _.get(res?.data.transactions[0], 'tx_response'),
+            };
+
+            if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
+              this.errorMessage = this.transaction.raw_log;
+              this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
+            }
+            this.loading = false;
+          } else if (this.isReload) {
+            this.loading = false;
+          } else {
+            setTimeout(() => {
+              this.getDetail();
+              this.isReload = true;
+            }, 10000);
           }
-        }
-      },
-      (_) => {
-        this.router.navigate(['/']);
-      },
-    );
+        },
+        (_) => {
+          this.router.navigate(['/']);
+        },
+      );
+    }
   }
 
   changeType(type: boolean): void {
