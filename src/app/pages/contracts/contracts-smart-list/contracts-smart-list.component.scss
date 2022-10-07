@@ -25,6 +25,9 @@
 .card__info {
   min-height: 275px;
 }
+button:disabled a {
+  cursor: not-allowed;
+}
 
 @media (max-width: 991.99px) {
   .aura-table th.mat-header-cell {

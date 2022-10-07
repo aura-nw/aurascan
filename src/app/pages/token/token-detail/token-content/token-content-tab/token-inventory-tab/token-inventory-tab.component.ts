@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import {checkTypeFile} from "src/app/core/utils/common/info-common";
 
 @Component({
   selector: 'app-token-inventory-tab',
@@ -124,5 +125,12 @@ export class TokenInventoryComponent implements OnInit {
       queryParams: params,
     });
     e.preventDefault();
+  }
+  getTypeFile(nft: any){
+    if (nft?.media_info?.length > 0) {
+      return checkTypeFile(nft.media_info[0]?.media_link);
+    } else {
+      return '';
+    }
   }
 }
