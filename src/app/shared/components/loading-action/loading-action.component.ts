@@ -18,10 +18,12 @@ export class LoadingActionComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.urlAction && this.currentUrl !== changes.urlAction?.currentValue && this.isLoadingAction) {
       this.currentUrl = changes.urlAction?.currentValue;
+      //<span class=''>Transaction is In Progress</h5> <br>
       this.toastr.info(
-        'Transaction is In Progress <br> <a href="' +
+        '<a href="' +
           this.urlAction +
           '"target="_blank" class="toastr-link">Check your transaction on the explorer</a>',
+        'Transaction is In Progress',
       );
     } else {
       this.toastr.clear();
