@@ -31,6 +31,9 @@ export class WriteContractComponent implements OnInit {
 
   jsValidator = new Validator();
 
+  isLoadingAction = false;
+  urlAction = '';
+
   root: any[];
 
   constructor(
@@ -195,8 +198,14 @@ export class WriteContractComponent implements OnInit {
       .then((client) => {
         return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
       })
-      .then(() => {
-        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+      .then((client) => {
+        if (client?.transactionHash) {
+          this.urlAction = 'transaction/' + client?.transactionHash;
+          this.isLoadingAction = true;
+          setTimeout(() => {
+            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+          }, 4000);
+        }
       })
       .catch((error) => {
         if (!error.toString().includes('Request rejected')) {
