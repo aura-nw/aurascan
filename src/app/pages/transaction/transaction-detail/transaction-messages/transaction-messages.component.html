@@ -162,14 +162,6 @@
       <div class="card-info">
         <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
         </ng-container>
-        <div class="row mb-3 mt-5 d-none d-lg-flex">
-          <div class="col-12">
-            <div class="card-text header-title">
-              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              Get Commission
-            </div>
-          </div>
-        </div>
         <app-messages-item
           [label]="'To Address'"
           [value]="transactionDetail?.messages[0]?.to_address"
