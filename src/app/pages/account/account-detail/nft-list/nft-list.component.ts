@@ -47,6 +47,8 @@ export class NftListComponent implements OnChanges {
       this.showedData = [];
       this.pageData.pageIndex = PAGE_EVENT.PAGE_INDEX;
       this.pageData.pageSize = 20;
+      this.nextKey = null;
+      this.currentKey = null;
     }
     this.getNftData();
   }
