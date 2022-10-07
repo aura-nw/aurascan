@@ -27,14 +27,14 @@ const routes: Routes = [
     path: 'transactions/:addressId',
     component: ContractsTransactionsComponent
   },
-  {
-    path: 'contracts-deploy-mainnet',
-    component: ContractsDeployMainnetComponent,
-  },
-  {
-    path: 'smart-contract-list',
-    component: ContractsSmartListComponent,
-  },
+  // {
+  //   path: 'contracts-deploy-mainnet',
+  //   component: ContractsDeployMainnetComponent,
+  // },
+  // {
+  //   path: 'smart-contract-list',
+  //   component: ContractsSmartListComponent,
+  // },
   {
     path: ':contractAddress',
     component: ContractsDetailComponent,
