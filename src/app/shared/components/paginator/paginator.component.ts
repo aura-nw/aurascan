@@ -13,6 +13,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-paginator',
@@ -51,7 +52,7 @@ export class PaginatorComponent implements OnInit, AfterViewInit, OnChanges {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.changePageMax(this.current.list[0].index);
+    this.changePageMax(_.get(this.current, 'list[0].index') );
     this.changePage();
   }
   constructor() {}

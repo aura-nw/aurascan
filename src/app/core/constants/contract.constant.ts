@@ -27,8 +27,8 @@ export const CONTRACT_TAB = [
 export const CONTRACT_RESULT = {
   TBD: 'TBD',
   CORRECT: 'Correct',
-  INCORRECT: 'Incorrect'
-}
+  INCORRECT: 'Incorrect',
+};
 
 export const MAX_LENGTH_SEARCH_CONTRACT = 200;
 
@@ -46,7 +46,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   { matColumnDef: 'time', headerCellDef: 'Time', type: 'time-distance', headerWidth: 8, suffix: 'ago' },
   { matColumnDef: 'from', headerCellDef: 'From', type: 'hash-url', headerWidth: 12, isUrl: '/account' },
   { matColumnDef: 'label', headerCellDef: '', type: 'status', headerWidth: 6, justify: 'center' },
-  { matColumnDef: 'to', headerCellDef: 'To', type: 'short-string', headerWidth: 12 },
+  { matColumnDef: 'to', headerCellDef: 'To', type: 'hash-url', headerWidth: 12, isUrl: '/contracts' },
   { matColumnDef: 'value', headerCellDef: 'Value', type: 'numb', suffix: 'AURA', headerWidth: 10 },
   { matColumnDef: 'fee', headerCellDef: 'Txn Fee', type: 'numb', headerWidth: 10 },
 ];

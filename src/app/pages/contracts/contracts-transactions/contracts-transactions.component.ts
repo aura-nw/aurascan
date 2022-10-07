@@ -38,8 +38,7 @@ export class ContractsTransactionsComponent implements OnInit {
   label = null;
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public translate: TranslateService,
@@ -73,11 +72,11 @@ export class ContractsTransactionsComponent implements OnInit {
     }).subscribe(({ dataExecute, dataInstantiate }) => {
       const { code, data } = dataExecute;
       if (code === 200) {
-        const txsExecute = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+        const txsExecute = convertDataTransaction(data, this.coinInfo);
 
         if (dataExecute.data.count > 0 || dataInstantiate?.data.count > 0) {
           const { code, data } = dataInstantiate;
-          const txsInstantiate = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txsInstantiate = convertDataTransaction(data, this.coinInfo);
           if (txsInstantiate.length > 0) {
             txsInstantiate[0]['type'] = dataInstantiate.data?.transactions[0]?.tx_response?.tx?.body.messages[0]['@type'];
             txsInstantiate[0]['contract_address'] = this.contractAddress;

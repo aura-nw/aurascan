@@ -5,7 +5,7 @@
   &.single-input-field {
     .input-group {
       border: 1px solid var(--aura-gray-9);
-      border-radius: 32px;
+      border-radius: 8px;
       justify-content: space-between;
       align-items: center;
       height: 40px;
@@ -176,6 +176,9 @@
       &--error {
         border-color: var(--aura-red-3) !important;
       }
+    }
+    textarea.form-control {
+      white-space: break-spaces;
     }
     .error {
       color: var(--aura-red-3);

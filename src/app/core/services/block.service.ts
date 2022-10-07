@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -15,37 +17,41 @@ export class BlockService extends CommonService {
     super(http, environmentService);
   }
 
-  blocksLastest(limit: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/get-blocks-latest?limit=${limit}`);
+  blocksIndexer(pageLimit: string | number, blockHeight = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit,
+      blockHeight
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${INDEXER_URL}/block`, {
+      params,
+    });
   }
 
-  blockDetailById(blockId: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/id/${blockId}`);
-  }
+  blockWithOperator(pageLimit: string | number, operatorAddress: string, nextKey = null): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      pageLimit,
+      operatorAddress,
+      nextKey
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
 
-  blockDetail(height: string | number): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/${height}`);
-  }
-
-  blockWithOperator(limit: string | number, offset: string | number, operator_address: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/${operator_address}/validator?limit=${limit}&offset=${offset}`);
+    return this.http.get<any>(`${INDEXER_URL}/block`, {
+      params,
+    });
   }
 
   getBlockAndTxs(type: string): Observable<any> {
     this.setURL();
     const date = new Date();
-    return this.http.get<any>(
-      `${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`,
-    );
-  }
-
-  getLastBlock(validator_address): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/blocks/${validator_address}/latest`);
+    return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
   }
 
   getBlockMiss(limit: number) {

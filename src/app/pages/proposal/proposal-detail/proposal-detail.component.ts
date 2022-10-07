@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProposalDetailComponent implements OnInit {
   proposalId: number;
+  proposalDetail;
+  errorPro = false;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {
     activatedRoute.url.subscribe((e) => {
@@ -19,6 +21,16 @@ export class ProposalDetailComponent implements OnInit {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  getProposalDetail(e):void{
+    if(e === null)
+    {
+      this.errorPro = true;
+    }
+    else{
+      this.proposalDetail = e;
+    }
   }
 
   ngOnInit(): void {}

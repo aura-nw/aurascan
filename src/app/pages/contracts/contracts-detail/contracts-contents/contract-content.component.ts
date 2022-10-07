@@ -54,8 +54,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject();
 
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     private contractService: ContractService,
@@ -120,15 +119,15 @@ export class ContractContentComponent implements OnInit, OnDestroy {
       }).subscribe(({ dataExecute, dataInstantiate }) => {
         const { code, data } = dataExecute;
         if (code === 200) {
-          const txsExecute = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txsExecute = convertDataTransaction(data, this.coinInfo);
           if (dataExecute?.data.count > 0 || dataInstantiate?.data.count > 0) {
             const { code, data } = dataInstantiate;
-            const txsInstantiate = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+            const txsInstantiate = convertDataTransaction(data, this.coinInfo);
             this.contractTransaction['data'] = txsExecute;
             this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
 
             //check data < 25 record
-            if (dataExecute.data.count < this.limit) {
+            if (dataExecute.data.count < this.limit && dataInstantiate?.data?.transactions?.length > 0) {
               txsInstantiate[0]['type'] = dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
               txsInstantiate[0]['contract_address'] = this.contractsAddress;
               this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsInstantiate];

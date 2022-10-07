@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { Globals } from 'src/app/global/global';
+import { convertDataBlock, Globals } from 'src/app/global/global';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
@@ -23,24 +24,29 @@ export class BlocksComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   dataBlock: any[];
 
-  length: number;
   pageSize = 20;
   loading = true;
 
-  constructor(private blockService: BlockService, public commonService: CommonService, private globals: Globals) {}
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+
+  constructor(
+    private blockService: BlockService,
+    public commonService: CommonService,
+    private globals: Globals,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.getList();
   }
 
   getList(): void {
-    this.blockService.blocksLastest(this.pageSize).subscribe((res) => {
-      this.loading = true;
-      this.getInfoCommon();
-      if (res?.data?.length > 0) {
-        this.dataSource = new MatTableDataSource(res.data);
-        this.dataBlock = res.data;
-        this.length = res?.data?.length;
+    this.blockService.blocksIndexer(this.pageSize).subscribe((res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        const blocks = convertDataBlock(data);
+        this.dataSource = new MatTableDataSource(blocks);
       }
       this.loading = false;
     });

@@ -1,16 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { formatDistanceToNowStrict } from 'date-fns';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DATEFORMAT } from '../constants/common.constant';
+import { DATEFORMAT, INDEXER_URL } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+import axios from 'axios';
+import { STATUS_VALIDATOR } from '../constants/validator.enum';
 @Injectable()
 export class CommonService {
   apiUrl = '';
+  coins = this._environmentService.configValue.coins;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
+  chainInfo = this._environmentService.configValue.chain_info;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
@@ -30,6 +35,20 @@ export class CommonService {
   status(): Observable<any> {
     this.setURL();
     return this._http.get<any>(`${this.apiUrl}/status`);
+  }
+
+  getParamFromIndexer(){
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      module: 'gov'
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this._http.get<any>(`${INDEXER_URL}/param`, {
+      params,
+    });
   }
 
   setURL() {
@@ -69,5 +88,20 @@ export class CommonService {
     } else {
       return ['-', ''];
     }
+  }
+
+  getValidatorImg(identity: string) {
+    return axios.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`);
+  }
+
+  mappingNameIBC(value) {
+    let temp = value.slice(value.indexOf('ibc'));
+    let result = this.coins.find((k) => k.denom === temp) || {};
+    return result;
+  }
+
+  isValidatorJailed(jail, status){
+    let result = jail && status === STATUS_VALIDATOR.Jail ? true : false;
+    return result;
   }
 }

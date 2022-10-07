@@ -1,0 +1,34 @@
+.audio-player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+
+  audio {
+    z-index: 12;
+    object-fit: contain;
+    @media(max-width: 991.98px) {
+      max-width: 100%;
+    }
+  }
+  &.isoClass {
+    @media(max-width: 991.98px) {
+      position: absolute;
+      max-width: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  &--has-link {
+    a {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+    }
+  }
+}

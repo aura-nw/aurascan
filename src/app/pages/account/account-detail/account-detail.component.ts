@@ -51,6 +51,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   currentAddress: string;
+  currentKey = null;
 
   currentAccountDetail: IAccountDetail;
   textSearch = '';
@@ -169,9 +170,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   TABS = TABS_TITLE_ACCOUNT;
   tabsData = TabsAccount;
@@ -305,17 +305,19 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     const chainId = this.environmentService.configValue.chainId;
     const address = this.currentAddress;
 
-    this.transactionService.getAccountTxFromHoroscope(chainId, address, 100, nextKey).subscribe({
+    this.transactionService.getAccountTxFromHoroscope(chainId, address, 40, nextKey).subscribe({
       next: (txResponse) => {
         const { code, data } = txResponse;
 
         this.nextKey = data.nextKey || null;
 
         if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txs = convertDataTransaction(data, this.coinInfo);
           txs.forEach((element) => {
-            if (element.type === 'Send' && element.messages[0]?.to_address === this.currentAddress) {
-              element.type = 'Receive';
+            if (element.type === 'Send') {
+              if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
+                element.type = 'Receive';
+              }
             }
           });
 
@@ -356,6 +358,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
             color: WalletAcount.Commission,
             amount: '0.000000',
           });
+        } else {
+          this.chartCustomOptions = chartCustomOptions;
         }
 
         this.chartCustomOptions.forEach((f) => {
@@ -457,7 +461,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         previousPageIndex: this.dataSource.paginator.pageIndex,
       });
       this.dataSource.paginator = e;
-      // this.pageData.pageIndex = e.pageIndex;
     } else this.dataSource.paginator = e;
   }
 
@@ -470,8 +473,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
     this.pageData = e;
 
-    if (next && this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getTxsFromHoroscope(this.nextKey);
+      this.currentKey = this.nextKey;
     }
   }
 

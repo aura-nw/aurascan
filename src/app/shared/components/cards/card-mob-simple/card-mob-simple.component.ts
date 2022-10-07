@@ -7,6 +7,7 @@ export interface CardMobSimpleValidatorAddress {
   validatorName: string;
   validatorAddress: string;
   validatorNumber: string;
+  validatorIdentity: string;
 }
 
 export interface CardMobSimpleTitle {

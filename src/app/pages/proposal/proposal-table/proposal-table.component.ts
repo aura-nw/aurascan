@@ -24,6 +24,7 @@ import { PaginatorComponent } from '../../../shared/components/paginator/paginat
 interface CustomPageEvent {
   next: number;
   type: string;
+  tabId: string;
 }
 
 @Component({
@@ -41,10 +42,10 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   @Output() loadMore = new EventEmitter<CustomPageEvent>();
 
   votesTemplates: Array<TableTemplate> = [
-    { matColumnDef: 'voter', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'updated_at', headerCellDef: 'Time', desktopOnly: true },
+    { matColumnDef: 'voter_address', headerCellDef: 'Voter', isUrl: '/account', isShort: true },
+    { matColumnDef: 'txhash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   validatorsVotesTemplates: Array<TableTemplate> = [
@@ -57,8 +58,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       prefix: 'operator_address',
     },
     { matColumnDef: 'tx_hash', headerCellDef: 'TxHash', isUrl: '/transaction', isShort: true, desktopOnly: true },
-    { matColumnDef: 'option', headerCellDef: 'Answer' },
-    { matColumnDef: 'updated_at', headerCellDef: 'Time', desktopOnly: true },
+    { matColumnDef: 'answer', headerCellDef: 'Answer' },
+    { matColumnDef: 'timestamp', headerCellDef: 'Time', desktopOnly: true },
   ];
 
   depositorsTemplates: Array<TableTemplate> = [
@@ -137,6 +138,7 @@ export class ProposalTableComponent implements OnInit, OnChanges {
       this.loadMore.emit({
         next: 1,
         type: this.type,
+        tabId: this.tabId
       });
     }
   }

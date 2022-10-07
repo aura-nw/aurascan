@@ -12,7 +12,7 @@ import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
-import { convertDataTransaction, Globals } from '../../global/global';
+import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
@@ -36,7 +36,6 @@ export class DashboardComponent implements OnInit {
   ];
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
   dataSourceBlock: MatTableDataSource<any>;
-  dataBlock: any[];
 
   templatesTx: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
@@ -52,8 +51,7 @@ export class DashboardComponent implements OnInit {
   timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
-  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
   constructor(
     public commonService: CommonService,
@@ -89,10 +87,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getListBlock(): void {
-    this.blockService.blocksLastest(this.PAGE_SIZE).subscribe((res) => {
-      if (res?.data?.length > 0) {
-        this.dataSourceBlock = new MatTableDataSource(res.data);
-        this.dataBlock = res.data;
+    this.blockService.blocksIndexer(this.PAGE_SIZE).subscribe((res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        const blocks = convertDataBlock(data);
+        this.dataSourceBlock = new MatTableDataSource(blocks);
       }
     });
   }
@@ -102,7 +101,7 @@ export class DashboardComponent implements OnInit {
       this.dataSourceTx.data = [];
       const { code, data } = res;
         if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinDecimals, this.coinMinimalDenom);
+          const txs = convertDataTransaction(data, this.coinInfo);
 
           if (this.dataSourceTx.data.length > 0) {
             this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
