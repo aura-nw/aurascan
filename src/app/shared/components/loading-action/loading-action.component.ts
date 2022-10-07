@@ -9,7 +9,6 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 export class LoadingActionComponent implements OnInit {
   @Input() isLoadingAction: boolean;
   @Input() urlAction: string;
-  isDisplay = false;
   currentUrl = '';
   constructor(private toastr: NgxToastrService) {}
 
@@ -18,7 +17,6 @@ export class LoadingActionComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.urlAction && this.currentUrl !== changes.urlAction?.currentValue && this.isLoadingAction) {
       this.currentUrl = changes.urlAction?.currentValue;
-      //<span class=''>Transaction is In Progress</h5> <br>
       this.toastr.info(
         '<a href="' +
           this.urlAction +
