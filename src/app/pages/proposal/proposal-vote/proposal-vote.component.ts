@@ -23,6 +23,8 @@ export class ProposalVoteComponent implements OnInit {
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
   isLoading = false;
+  isLoadingAction = false;
+  urlAction = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
@@ -54,8 +56,11 @@ export class ProposalVoteComponent implements OnInit {
     });
 
     if (hash) {
+      this.urlAction = 'transaction/' + hash;
+      this.isLoadingAction = true;
       this.isLoading = false;
-      this.dialogRef.close({ keyVote: this.keyVote });
+      // this.dialogRef.close({ keyVote: this.keyVote });
+      this.dialogRef.close();
       setTimeout(() => {
         this.checkDetailTx(hash, 'Error Voting');
       }, TIME_OUT_CALL_API);
@@ -70,6 +75,7 @@ export class ProposalVoteComponent implements OnInit {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
+    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (numberCode === CodeTransaction.Success) {
         this.toastr.success(message);
@@ -77,7 +83,7 @@ export class ProposalVoteComponent implements OnInit {
         this.toastr.error(message);
       }
     }
-    if(this.route.url !== '/votings') {
+    if (this.route.url !== '/votings') {
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -91,6 +97,7 @@ export class ProposalVoteComponent implements OnInit {
   closeVoteForm() {
     this.dialogRef.close();
   }
+
   onClick(): void {
     if (this.data.warning === MESSAGE_WARNING.LATE) {
       this.dialogRef.close();

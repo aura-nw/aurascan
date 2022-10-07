@@ -5,8 +5,11 @@
       <div class="col-4 nft-img__contain d-none d-lg-block">
         <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
           <div class="nft__img">
-            <img *ngIf="!nftType" [src]="defaultImgToken" />
-            <img *ngIf="nftType === 'img'" [src]="nftDetail?.media_info[0]?.media_link" />
+            <img *ngIf="!nftType || isError" [src]="defaultImgToken" />
+            <img
+              *ngIf="nftType === 'img' && isError === false"
+              (error)="error()"
+              [src]="nftDetail?.media_info[0]?.media_link" />
             <app-custom-video-player
               [videoSrc]="nftDetail?.media_info[0]?.media_link"
               [showControl]="true"
@@ -33,7 +36,7 @@
         <div class="mt-2">
           <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
             nftDetail?.name
-            }}</a>
+          }}</a>
         </div>
         <div class="nft-img__contain mt-4">
           <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
