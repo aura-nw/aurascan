@@ -57,13 +57,13 @@ export class NgxToastrService {
     });
   }
 
-  info(message: string, title = '', configTimeOut = 10000): void {
+  info(message: string, title = '', configTimeOut = 5000): void {
     if (this.toastrService.toasts.length === 0) {
       this.toastrService.info(message, title, {
         positionClass: this.POSITION_CLASS,
         enableHtml: true,
         closeButton: true,
-        timeOut: 5000,
+        timeOut: configTimeOut,
         tapToDismiss: true,
       });
     }
