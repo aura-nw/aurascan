@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -27,12 +27,12 @@ export class NftListComponent implements OnChanges {
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  nftData = [];
   nftList = [];
   showedData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   totalValue = 0;
   nextKey = null;
+  currentKey = null;
 
   constructor(
     private accountService: AccountService,
@@ -41,7 +41,11 @@ export class NftListComponent implements OnChanges {
     private environmentService: EnvironmentService,
   ) {}
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.address) {
+      this.nftList = [];
+      this.showedData = [];
+    }
     this.getNftData();
   }
 
@@ -108,8 +112,9 @@ export class NftListComponent implements OnChanges {
     const next = this.pageData.length <= (pageIndex + 2) * pageSize;
 
     this.pageData.pageIndex = e.pageIndex;
-    if (next && this.nextKey) {
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getNftData(this.nextKey);
+      this.currentKey = this.nextKey;
     } else {
       this.showedData = this.nftList.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
