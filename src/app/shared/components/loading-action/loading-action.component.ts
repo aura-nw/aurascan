@@ -23,7 +23,7 @@ export class LoadingActionComponent implements OnInit {
         '<a href="' +
           this.urlAction +
           '"target="_blank" class="toastr-link">Check your transaction on the explorer</a>',
-        'Transaction is In Progress',
+        'Transaction is in progress',
       );
     } else {
       this.toastr.clear();

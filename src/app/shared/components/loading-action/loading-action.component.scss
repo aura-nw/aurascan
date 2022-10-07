@@ -59,6 +59,10 @@ svg {
     background-image: url('/assets/icons/icons-svg/white/loading-action.svg');
     font-size: 1.4rem;
   }
+  .toast-info .toast-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+  }
   .toast-container .ngx-toastr {
     width: 350px;
   }
