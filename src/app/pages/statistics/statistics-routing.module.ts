@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {ChartStatsComponent} from "src/app/pages/statistics/chart-stats/chart-stats.component";
 import {TopStatisticsComponent} from "src/app/pages/statistics/top-statistics/top-statistics.component";
+import {ChartDetailComponent} from "src/app/pages/statistics/chart-detail/chart-detail.component";
 
 const routes: Routes = [
   {
@@ -14,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'chart/:type',
-    component: TopStatisticsComponent
+    component: ChartDetailComponent
   }
 ];
 

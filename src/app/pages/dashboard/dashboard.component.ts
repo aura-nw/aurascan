@@ -13,9 +13,10 @@ import { TransactionService } from '../../../app/core/services/transaction.servi
 import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
-import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
 import {TranslateService} from "@ngx-translate/core";
+import {ChartOptions} from "src/app/core/models/chart.model";
 
 @Component({
   selector: 'app-dashboard',
@@ -124,7 +125,6 @@ export class DashboardComponent implements OnInit {
       this.getInfoCommon();
       const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => i.timestamp);
-
       this.chartOptions.series = [
         {
           name: 'transactions',
@@ -133,7 +133,6 @@ export class DashboardComponent implements OnInit {
           color: '#5EE6D0',
         },
       ];
-
       this.chartOptions.xAxis = {
         type: 'datetime',
         categories: categories,

@@ -1,14 +1,4 @@
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexStroke, ApexTooltip, ApexDataLabels } from 'ng-apexcharts';
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xAxis: ApexXAxis;
-  stroke: ApexStroke;
-  tooltip: ApexTooltip;
-  dataLabels: ApexDataLabels;
-};
-
+import {ChartOptions} from "src/app/core/models/chart.model";
 export const DASHBOARD_CHART_OPTIONS: Partial<ChartOptions> = {
   series: [
     {

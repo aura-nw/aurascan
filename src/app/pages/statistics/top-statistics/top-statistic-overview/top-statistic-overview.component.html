@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-between align-items-center">
+  <div class="body-02 text--gray-1">06-Sep ~ 07-Sep</div>
+  <div class="button-switch-stage">
+    <button type="button" *ngFor="let data of rangeList | keyvalue"
+            [class.active]="currentRange === data.value"
+            (click)="getTransactionData(data.value)">
+      <span>{{ data.value }}</span>
+    </button>
+  </div>
+</div>
+<div class="card mt-6">
+  <div class="card-body">
+    <div class="body-01 fw-semibold text--gray-1">Transactions</div>
+    <div class="row mt-4">
+      <div class="col-12 col-lg-6 mb-4">
+        <div class="card-info">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="body text--gray-2">Top AURA Sender</div>
+            <div class="body text--gray-2">Total AURA</div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="body">
+              <a href="/" class="text--primary">aura1lla...8dlsve9n</a>
+            </div>
+            <div class="body-01 text--gray-1">28,620,618,758.98</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 mb-4">
+        <div class="card-info">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="body text--gray-2">Top AURA Receiver</div>
+            <div class="body text--gray-2">Total AURA</div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="body">
+              <a href="/" class="text--primary">aura1lla...8dlsve9n</a>
+            </div>
+            <div class="body-01 text--gray-1">28,620,618,758.98</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+        <div class="card-info">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="body text--gray-2">Top Txn Count Sent</div>
+            <div class="body text--gray-2">Total Txn</div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="body">
+              <a href="/" class="text--primary">aura1lla...8dlsve9n</a>
+            </div>
+            <div class="body-01 text--gray-1">28,620,618,758.98</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+        <div class="card-info">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="body text--gray-2">Top Txn Count Received</div>
+            <div class="body text--gray-2">Total Txn</div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="body">
+              <a href="/" class="text--primary">aura1lla...8dlsve9n</a>
+            </div>
+            <div class="body-01 text--gray-1">28,620,618,758.98</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

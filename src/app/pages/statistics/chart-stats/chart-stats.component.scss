@@ -1,8 +1,12 @@
 .price-text {
   font-family: BigShouldersDisplay;
-  font-size: 4.8rem;
-  line-height: 6rem;
+  font-size: 3.2rem;
+  line-height: 4rem;
   font-weight: 700;
+  @media (min-width: 992px) {
+    font-size: 4.8rem;
+    line-height: 6rem;
+  }
 }
 .percent {
   margin-right: var(--spacer-1);
@@ -22,5 +26,23 @@
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
     border-bottom: 9px solid var(--aura-green-3);
+  }
+}
+@media (max-width: 414px) {
+  .chart__options {
+    width: 100%;
+  }
+  .button-switch-stage {
+    flex-grow: 1;
+    button {
+      width: 100%;
+    }
+  }
+}
+section.chart-stats .chart-contain {
+  .chart__name {
+    @media (min-width: 992px) {
+      display: none;
+    }
   }
 }

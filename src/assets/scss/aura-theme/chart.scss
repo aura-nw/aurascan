@@ -2,13 +2,26 @@
   .divider.divider-vertical {
     min-height: 22px;
   }
-  img.download-simple {
-    width: 18px;
-    height: 18px;
+  i.ph-download-simple {
+    font-size: 1.8rem;
+    color: var(--aura-gray-4);
   }
   .button-switch-stage {
     button {
       width: 60px;
+    }
+  }
+}
+.chart-contain {
+  position: relative;
+  .chart__name {
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    transform: translateY(-50%);
+    span {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
     }
   }
 }

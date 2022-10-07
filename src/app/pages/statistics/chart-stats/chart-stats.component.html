@@ -1,17 +1,17 @@
 <app-pagetitle title="Aura Charts & Statistics"></app-pagetitle>
-<section>
+<section class="chart-stats">
     <div class="card">
         <div class="card-body">
             <div class="container-fluid px-0">
                 <div class="row">
                     <div class="col-12 col-lg-4">
-                        <div class="card-info p-6 p-lg-5">
+                        <div class="card-info px-6 py-6 px-lg-5 py-lg-5">
                             <div class="mx-auto">
                                 <div class="d-flex align-items-center justify-content-center">
                                     <img src="assets/images/logo/auraTitleLogo.png" alt="" class="mr-2" width="40px" height="40px">
-                                    <div class="h1 fw-normal text--white">AURA</div>
+                                    <div class="h1 h2-mob fw-normal text--white mb-0">AURA</div>
                                 </div>
-                                <div class="price-text mt-4 text-center">$0.092655</div>
+                                <div class="price-text mt-3 mt-lg-4 text-center">$0.092655</div>
                             </div>
                             <div class="divider divider-horizontal my-6"></div>
                             <div>
@@ -34,28 +34,104 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-8">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="h1 text--white">Price Chart</div>
+                    <div class="col-12 col-lg-8 mt-6 mt-lg-0">
+                        <div class="d-lg-flex justify-content-between align-items-center">
+                            <div class="h1 text--white mb-4 mb-lg-0">Price Chart</div>
                             <div class="d-flex align-items-center chart__options">
-                                <div class="button-switch-stage">
-                                    <button type="button"
-                                            [class.active]="true">
-                                        <span>24H</span>
-                                    </button>
-                                    <button type="button">
-                                        <span>7D</span>
-                                    </button>
-                                    <button type="button">
-                                        <span>30D</span>
+                                <div class="button-switch-stage flex-row-reverse">
+                                    <button type="button" *ngFor="let data of priceChartRangeData | keyvalue"
+                                            [class.active]="priceChartRange === priceChartRangeData[data.key]"
+                                            (click)="setPriceChartData(priceChartRangeData[data.key])">
+                                        <span>{{ data.value }}</span>
                                     </button>
                                 </div>
                                 <div class="divider divider-vertical mx-3 mx-md-4"></div>
                                 <button class="button d-flex align-items-center justify-content-center text--gray-4"
                                         (click)="triggerChartMenuClick()">
-                                    <img src="assets/icons/icons-svg/basic/download-simple.svg" alt="" class="download-simple">
+                                    <i class="ph-download-simple"></i>
                                 </button>
                             </div>
+                        </div>
+                        <div class="w-100" *ngIf="priceChartOptions">
+                            <apx-chart
+                                    [series]="priceChartOptions.series"
+                                    [chart]="priceChartOptions.chart"
+                                    [xaxis]="priceChartOptions.xAxis"
+                                    [stroke]="priceChartOptions.stroke"
+                                    [tooltip]="priceChartOptions.tooltip"
+                                    [dataLabels]="priceChartOptions.dataLabels">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="container-fluid px-0">
+                <div class="h1 text--white mb-4">
+                    Blockchain Data
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-4">
+                        <div class="card-info px-4 py-4 px-lg-6">
+                            <a [routerLink]="['/statistics/chart', 'daily-transactions']">
+                                <div class="body-01 text--gray-1">Daily Transactions Chart</div>
+                                <div class="w-100 chart-contain pl-1 pl-lg-0" *ngIf="dailyTransactionChartOptions">
+                                    <apx-chart
+                                            [series]="dailyTransactionChartOptions.series"
+                                            [chart]="dailyTransactionChartOptions.chart"
+                                            [xaxis]="dailyTransactionChartOptions.xAxis"
+                                            [stroke]="dailyTransactionChartOptions.stroke"
+                                            [tooltip]="dailyTransactionChartOptions.tooltip"
+                                            [dataLabels]="dailyTransactionChartOptions.dataLabels">
+                                    </apx-chart>
+                                    <div class="chart__name">
+                                        <span class="text--gray-1 caption fw-normal">Transactions per Day</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 mt-6 mt-lg-0">
+                        <div class="card-info px-4 py-4 px-lg-6">
+                            <a [routerLink]="['/statistics/chart', 'unique-addresses']">
+                                <div class="body-01 text--gray-1">Unique Addresses Chart</div>
+                                <div class="w-100 chart-contain pl-1 pl-lg-0" *ngIf="uniqueAddressChartOptions">
+                                    <apx-chart
+                                            [series]="uniqueAddressChartOptions.series"
+                                            [chart]="uniqueAddressChartOptions.chart"
+                                            [xaxis]="uniqueAddressChartOptions.xAxis"
+                                            [stroke]="uniqueAddressChartOptions.stroke"
+                                            [tooltip]="uniqueAddressChartOptions.tooltip"
+                                            [dataLabels]="uniqueAddressChartOptions.dataLabels">
+                                    </apx-chart>
+                                    <div class="chart__name">
+                                        <span class="text--gray-1 caption fw-normal">Aura cumulative Address Growth</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 mt-6 mt-lg-0">
+                        <div class="card-info px-4 py-4 px-lg-6">
+                            <a [routerLink]="['/statistics/chart', 'cumulative-addresses']">
+                                <div class="body-01 text--gray-1">Aura cumulative Address Growth</div>
+                                <div class="w-100 chart-contain pl-1 pl-lg-0" *ngIf="dailyAddressChartOptions">
+                                    <apx-chart
+                                            [series]="dailyAddressChartOptions.series"
+                                            [chart]="dailyAddressChartOptions.chart"
+                                            [xaxis]="dailyAddressChartOptions.xAxis"
+                                            [stroke]="dailyAddressChartOptions.stroke"
+                                            [tooltip]="dailyAddressChartOptions.tooltip"
+                                            [dataLabels]="dailyAddressChartOptions.dataLabels">
+                                    </apx-chart>
+                                    <div class="chart__name">
+                                        <span class="text--gray-1 caption fw-normal">Active Aura addresses per day</span>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
