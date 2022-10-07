@@ -45,6 +45,8 @@ export class NftListComponent implements OnChanges {
     if (changes.address) {
       this.nftList = [];
       this.showedData = [];
+      this.pageData.pageIndex = PAGE_EVENT.PAGE_INDEX;
+      this.pageData.pageSize = 20;
     }
     this.getNftData();
   }
@@ -77,10 +79,9 @@ export class NftListComponent implements OnChanges {
             this.totalValue += element.price * +element.balance || 0;
           }
         });
-        this.showedData = this.nftList.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
+        let start = this.pageData.pageIndex * this.pageData.pageSize;
+        let end = this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize;
+        this.showedData = this.nftList.slice(start, end);
         this.totalValueNft.emit(this.totalValue);
       } else {
         this.nftList.length = 0;
