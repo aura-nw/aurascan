@@ -9,14 +9,15 @@ import { DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
+
 @Injectable()
 export class CommonService {
   apiUrl = '';
   coins = this._environmentService.configValue.coins;
+  indexerUrl = `${this._environmentService.configValue.indexerUri}`;
   private networkQuerySubject: BehaviorSubject<any>;
   public networkQueryOb: Observable<any>;
   chainInfo = this._environmentService.configValue.chain_info;
-  indexerUrl = `${this._environmentService.configValue.indexerUri}`;
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService) {
     this.apiUrl = `${this._environmentService.configValue.beUri}`;
