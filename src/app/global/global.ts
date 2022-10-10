@@ -69,19 +69,13 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
         0;
     } else if (type === eTransType.CreateValidator) {
       amount = itemMessage?.value?.amount || 0;
-    } else if (type === eTransType.GetReward && arrayMsg.length === 1) {
-      //check error with rawlog
-      try {
-        const jsonData = JSON.parse(rawRog);
-        amount = jsonData[0].events[0].attributes[1].value.replace(coinMinimalDenom, '');
-      } catch {}
     }
   } catch {}
 
   if (itemMessage && amount >= 0) {
     amount = amount / NUMBER_CONVERT || 0;
     amountFormat = arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward ? amount : 'More';
-    if (arrayMsg.length > 1 && type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.MultiSend) {
+    if (type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.MultiSend) {
       amountFormat = 'More';
     }
   }
