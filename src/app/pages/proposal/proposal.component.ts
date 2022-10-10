@@ -57,6 +57,9 @@ export class ProposalComponent implements OnInit {
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
+  isLoadingAction = false;
+  urlAction = '';
+
   pageYOffset = 0;
   scrolling = false;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
@@ -86,11 +89,6 @@ export class ProposalComponent implements OnInit {
 
       if (res?.data?.proposals) {
         const dataFiltered = res.data.proposals;
-
-        this.dataSourceMobile = this.dataSource.data.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
 
         dataFiltered.forEach((pro, index) => {
           pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
@@ -127,6 +125,10 @@ export class ProposalComponent implements OnInit {
           this.dataSource.data = [...dataFiltered];
           this.proposalData = dataFiltered;
         }
+        this.dataSourceMobile = this.dataSource.data.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
         this.length = this.dataSource.data.length;
       }
     });

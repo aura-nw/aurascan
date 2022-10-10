@@ -4,17 +4,10 @@
 </h2>
 <div class="card-body body" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <ng-container *ngIf="transactionDetail?.type === eTransType.Send">
-    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
       <div class="card-info" *ngIf="i < numberListSend">
-        <div class="mb-3 d-flex box-header">
-          <div class="col-12 col-lg-3">
-            <div class="card-text header-title">
-              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              {{ transactionDetailType }}
-            </div>
-          </div>
-        </div>
-        <div class="divider divider-horizontal my-3"></div>
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+        </ng-container>
         <app-messages-item
           [label]="'From Address'"
           [value]="item?.from_address"
@@ -46,17 +39,43 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
-    <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
+  <ng-container *ngIf="transactionDetail?.type === eTransType.MultiSend">
+    <ng-container *ngFor="let item of transactionDetail?.messages[0]?.outputs; let i = index">
+      <div class="card-info" *ngIf="i < numberListSend">
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+        </ng-container>
+        <app-messages-item
+          [label]="'From Address'"
+          [value]="transactionDetail?.messages[0]?.inputs[0]?.address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <app-messages-item
+          [label]="'To Address'"
+          [value]="item?.address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <div class="row mb-3 body-01">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+          <div class="col-12 col-lg-9 text--gray-1">
+            {{ item?.coins[0]?.amount | balanceOf | number: global.formatNumberToken }}
+            <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
       </div>
-      <div class="divider divider-horizontal my-3"></div>
+    </ng-container>
+    <div class="text-md-left text-center">
+      <button
+        type="button"
+        class="button button--md button-pill button-outline button-outline__in-card ml-auto"
+        (click)="loadMoreSend()"
+        *ngIf="transactionDetail?.messages[0]?.outputs?.length > numberListSend">
+        <span class="fw-500 body-02 text--gray-1">Load More</span>
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.ExecuteContract">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'Contract'"
         [value]="transactionDetail?.messages[0]?.contract"
@@ -76,15 +95,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.InstantiateContract">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
@@ -112,15 +124,8 @@
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
         <div class="card-info">
-          <div class="mb-3 d-flex box-header">
-            <div class="col-12 col-lg-3">
-              <div class="card-text header-title">
-                <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-                {{ transactionDetailType }}
-              </div>
-            </div>
-          </div>
-          <div class="divider divider-horizontal my-3"></div>
+          <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+          </ng-container>
           <app-messages-item
             [label]="'Delegator Address'"
             [value]="item.delegator_address"
@@ -151,15 +156,8 @@
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
       <div class="card-info">
-        <div class="mb-3 d-flex box-header">
-          <div class="col-12 col-lg-3">
-            <div class="card-text header-title">
-              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              {{ transactionDetailType }}
-            </div>
-          </div>
-        </div>
-        <div class="divider divider-horizontal my-3"></div>
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+        </ng-container>
         <app-messages-item
           [label]="'Delegator Address'"
           [value]="transactionDetail?.messages[0]?.delegator_address"
@@ -195,27 +193,8 @@
     </ng-container>
     <ng-container *ngIf="commissionAutoClaim > 0">
       <div class="card-info">
-        <div class="mb-3 d-flex box-header">
-          <div class="col-12 col-lg-3">
-            <div class="card-text header-title">
-              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              {{ transactionDetailType }}
-            </div>
-          </div>
-        </div>
-        <div class="divider divider-horizontal my-3"></div>
-        <div class="row mb-3 mt-5 d-none d-lg-flex">
-          <div class="col-12">
-            <div class="card-text header-title">
-              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              Get Commission
-            </div>
-          </div>
-        </div>
-        <app-messages-item
-          [label]="'To Address'"
-          [value]="transactionDetail?.messages[0]?.to_address"
-          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Get Commission' } }">
+        </ng-container>
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
           <div class="col-12 col-lg-9">
@@ -239,15 +218,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vote">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'Proposal Id'"
         [value]="transactionDetail?.messages[0]?.proposal_id"
@@ -267,15 +239,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Vesting">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'From Address'"
         [value]="transactionDetail?.messages[0]?.from_address"
@@ -290,15 +255,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.SubmitProposalTx">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
@@ -328,15 +286,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Redelegate">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'Delegate Address'"
         [value]="transactionDetail?.messages[0]?.delegator_address"
@@ -387,15 +338,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Deposit">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'Proposal Id'"
         [value]="transactionDetail?.messages[0]?.proposal_id"
@@ -418,15 +362,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'To Address'"
         [value]="transactionDetail?.messages[0]?.to_address"
@@ -444,15 +381,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.EditValidator">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'Validator'"
         [value]="transactionDetail?.messages[0]?.description?.moniker"
@@ -466,15 +396,8 @@
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <app-messages-item
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.validator_address"
@@ -486,17 +409,21 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="transactionDetail?.type === eTransType.Unjail">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Validator Address'"
+        [value]="transactionDetail?.messages[0]?.validator_addr"
+        [dataLink]="{ url: '/validators' }"></app-messages-item>
+    </div>
+  </ng-container>
+
   <ng-container *ngIf="transactionDetail?.type === eTransType.CreateValidator">
     <div class="card-info">
-      <div class="mb-3 d-flex box-header">
-        <div class="col-12 col-lg-3">
-          <div class="card-text header-title">
-            <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-            {{ transactionDetailType }}
-          </div>
-        </div>
-      </div>
-      <div class="divider divider-horizontal my-3"></div>
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Min Self Delegation</div>
         <div class="col-12 col-lg-9 text--gray-1">
@@ -573,18 +500,9 @@
 
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
-      <div
-        class="card-info"
-        *ngIf="(i === 1 && item['@type'] === eTransType.IBCTimeout) || item['@type'] !== eTransType.IBCTimeout">
-        <div class="mb-3 d-flex box-header">
-          <div class="col-12 col-lg-3">
-            <div class="card-text header-title">
-              <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
-              {{ displayTitle(item['@type']) }}
-            </div>
-          </div>
-        </div>
-        <div class="divider divider-horizontal my-3"></div>
+      <div class="card-info">
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: displayTitle(item['@type']) } }">
+        </ng-container>
         <ng-container [ngSwitch]="item['@type']">
           <div *ngSwitchCase="eTransType.IBCTransfer">
             <ng-container [ngTemplateOutlet]="ibcTransfer" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
@@ -603,7 +521,8 @@
             </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCTimeout">
-            <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item }"> </ng-container>
+            <ng-container [ngTemplateOutlet]="ibcTimeout" [ngTemplateOutletContext]="{ data: item, index: i }">
+            </ng-container>
             <ng-container *ngTemplateOutlet="ibcProgress"> </ng-container>
           </div>
           <div *ngSwitchCase="eTransType.IBCChannelOpenInit">
@@ -714,11 +633,11 @@
     <app-messages-item [label]="'Effected'" [value]="ibcData?.effected"></app-messages-item>
   </ng-template>
 
-  <ng-template #ibcTimeout let-data="data">
-    {{ getDataIBC(ibcListMapping.TimeOut) }}
+  <ng-template #ibcTimeout let-data="data" let-index="index">
+    {{ getDataIBC(ibcListMapping.TimeOut, index) }}
     <app-messages-item
       [label]="'Sequence'"
-      [value]="ibcData?.packet_sequence"
+      [value]="ibcData?.time_out[index - 1]?.next_sequence_recv"
       [pipeType]="pipeTypeData.Number"></app-messages-item>
     <app-messages-item [label]="'Source Port'" [value]="ibcData?.packet_src_port"></app-messages-item>
     <app-messages-item [label]="'Source Channel'" [value]="ibcData?.packet_src_channel"></app-messages-item>
@@ -727,30 +646,33 @@
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Data</div>
       <div class="col-12 col-lg-9">
-        <pre id="json" class="raw-content text--white px-4" [innerHtml]="ibcData?.time_out?.data | appJson"></pre>
+        <pre
+          id="json"
+          class="raw-content text--white px-4"
+          [innerHtml]="ibcData?.time_out[index - 1]?.data | appJson"></pre>
       </div>
     </div>
     <app-messages-item
       [label]="'Timeout Revision Number'"
-      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.time_out[index - 1]?.packet?.timeout_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Revision Height'"
-      [value]="ibcData?.time_out?.packet?.timeout_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.time_out[index - 1]?.packet?.timeout_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Timeout Timestamp'"
-      [value]="ibcData?.time_out?.packet?.timeout_timestamp"></app-messages-item>
+      [value]="ibcData?.time_out[index - 1]?.packet?.timeout_timestamp"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Number'"
-      [value]="ibcData?.time_out?.proof_height?.revision_number"></app-messages-item>
+      [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_number"></app-messages-item>
     <app-messages-item
       [label]="'Proof Revision Height'"
-      [value]="ibcData?.time_out?.proof_height?.revision_height"></app-messages-item>
+      [value]="ibcData?.time_out[index - 1]?.proof_height?.revision_height"></app-messages-item>
     <app-messages-item
       [label]="'Next Sequence Recv'"
-      [value]="ibcData?.time_out?.next_sequence_recv"></app-messages-item>
+      [value]="ibcData?.time_out[index - 1]?.next_sequence_recv"></app-messages-item>
     <app-messages-item
       [label]="'Signer'"
-      [value]="ibcData?.time_out?.signer"
+      [value]="ibcData?.time_out[index - 1]?.signer"
       [dataLink]="{ url: '/account' }"></app-messages-item>
   </ng-template>
 
@@ -885,5 +807,17 @@
         </div>
       </ng-template>
     </div>
+  </ng-template>
+
+  <ng-template #messageHeader let-data="data">
+    <div class="mb-3 d-flex box-header">
+      <div class="col-12 col-lg-3">
+        <div class="card-text header-title">
+          <img [src]="'assets/icons/icons-svg/color/money.svg' | imageS3" class="m-1 mb-0 mt-0 msg-image" />
+          {{ data.label }}
+        </div>
+      </div>
+    </div>
+    <div class="divider divider-horizontal my-3"></div>
   </ng-template>
 </div>

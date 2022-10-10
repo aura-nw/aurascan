@@ -49,6 +49,7 @@ export class NFTDetailComponent implements OnInit {
   nextKey = null;
   currentKey: string;
   nftType: string;
+  isError = false;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -73,9 +74,14 @@ export class NFTDetailComponent implements OnInit {
     this.getDataTable();
   }
 
+  error(): void {
+    this.isError = true;
+  }
+  
   getNFTDetail() {
     this.loading = true;
-    this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
+    const encoded = encodeURIComponent(this.nftId);
+    this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
       this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
       this.loading = false;

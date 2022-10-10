@@ -84,21 +84,7 @@ export class TokenTableComponent implements OnChanges {
       if (res?.data?.length > 0) {
         let lstToken = _.get(res, 'data').map((element) => {
           data = element;
-          if (element.name.toLowerCase() === this.denom?.toLowerCase()) {
-            data.contract_address = '';
-            data.name = this.stableTokenName;
-            data.symbol = this.denom;
-          } else if (data.symbol.startsWith('ibc')) {
-            let dataIBCToken = this.commonService.mappingNameIBC(data.symbol);
-            if (dataIBCToken?.name) {
-              data.contract_address = '';
-              data.name = dataIBCToken.name || '';
-              data.symbol = dataIBCToken.display || '';
-              data.image = dataIBCToken.logo || this.defaultLogoAura;
-            } else {
-              data = null;
-            }
-          }
+          data.contract_address = '-' ? '' : data.contract_address;
           if (data) {
             data.change = data.price_change_percentage_24h;
             data.isValueUp = true;

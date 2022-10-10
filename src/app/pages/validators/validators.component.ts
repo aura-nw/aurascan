@@ -94,6 +94,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
+  isLoadingAction = false;
+  urlAction = '';
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -395,7 +397,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
               availableToken: dataWallet?.data?.available,
               stakingToken: dataWallet?.data?.stake_reward,
               historyTotalReward: listDelegator?.data?.claim_reward / NUMBER_CONVERT || 0,
-              identity: listDelegator?.data?.identity
+              identity: listDelegator?.data?.identity,
             };
           }
 
@@ -430,12 +432,13 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             const now = new Date();
             listUnDelegator.data.account_unbonding.forEach((data) => {
               data.entries.forEach((f) => {
-                f['validator_identity'] = data.validator_description.identity;
+                f['validator_identity'] = data.validator_description?.description?.identity;
                 f.balance = f.balance / NUMBER_CONVERT;
                 f.validator_address = data.validator_address;
                 f.validator_name = this.lstValidatorOrigin.find(
                   (i) => i.operator_address === f.validator_address,
                 )?.title;
+                f.jailed = data.validator_description?.jailed || false;
                 let timeConvert = new Date(f.completion_time);
                 if (now < timeConvert) {
                   this.lstUndelegate.push(f);
@@ -655,6 +658,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   checkStatusExecuteBlock(hash, error, msg) {
+    this.checkHashAction(hash);
     if (error) {
       if (error != 'Request rejected') {
         this.toastr.error(error);
@@ -673,6 +677,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
+    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
         setTimeout(() => {
@@ -695,5 +700,17 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
+    this.isLoadingAction = false;
+    this.urlAction = '';
+  }
+
+  checkHashAction(hash) {
+    const myInterval = setInterval(() => {
+      if (hash) {
+        this.urlAction = 'transaction/' + hash;
+        this.isLoadingAction = true;
+        clearInterval(myInterval);
+      }
+    }, 500);
   }
 }

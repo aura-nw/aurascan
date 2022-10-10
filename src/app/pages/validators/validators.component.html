@@ -168,7 +168,7 @@
                                 [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
                             </div>
                           </div>
-                          <span [class.text-title]="data['jailed']">
+                          <span [class.text-jailed]="data['jailed']">
                             {{ data[template.matColumnDef] }}
                           </span>
                         </a>
@@ -234,7 +234,7 @@
                             </div>
                           </div>
                         </div>
-                        <h5 class="text--primary mb-0" [class.text-title]="validator['jailed']">
+                        <h5 class="text--primary mb-0" [class.text-jailed]="validator['jailed']">
                           {{ validator.title }}
                         </h5>
                       </a>
@@ -574,3 +574,5 @@
     </div>
   </ng-template>
 </div>
+
+<app-loading-action [isLoadingAction]="isLoadingAction" [urlAction]="urlAction"></app-loading-action>
