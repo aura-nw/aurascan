@@ -11,6 +11,9 @@ import {NgApexchartsModule} from "ng-apexcharts";
 import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 import { TopStatisticOverviewComponent } from './top-statistics/top-statistic-overview/top-statistic-overview.component';
 import { TopStatisticTransactionComponent } from './top-statistics/top-statistic-transaction/top-statistic-transaction.component';
+import {MatTableModule} from "@angular/material/table";
+import {TranslateModule} from "@ngx-translate/core";
+import {TableNoDataModule} from "src/app/shared/components/table-no-data/table-no-data.module";
 
 
 @NgModule({
@@ -27,7 +30,10 @@ import { TopStatisticTransactionComponent } from './top-statistics/top-statistic
         SharedModule,
         CommonPipeModule,
         NgApexchartsModule,
-        NgbNavModule
+        NgbNavModule,
+        MatTableModule,
+        TranslateModule,
+        TableNoDataModule
     ]
 })
 export class StatisticsModule { }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ChartOptions} from "src/app/core/models/chart.model";
+import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-chart-detail',
@@ -16,6 +18,8 @@ export class ChartDetailComponent implements OnInit {
   constructor(
       private route: ActivatedRoute,
       private router: Router,
+      private toastr: NgxToastrService,
+      public translate: TranslateService,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if(this.chartType !== 'daily-transactions' && this.chartType !== 'unique-addresses' && this.chartType !== 'cumulative-addresses') {
@@ -47,6 +51,15 @@ export class ChartDetailComponent implements OnInit {
       default:
         this.router.navigate(['/']);
         break;
+    }
+  }
+
+  triggerChartMenuClick(){
+    const chartMenuIcon = document.querySelector('.apexcharts-menu-icon') as HTMLElement | null;
+    if(chartMenuIcon) {
+      chartMenuIcon?.click();
+    } else {
+      this.toastr.warning(this.translate.instant('NOTICE.CHART_WAIT_DATA'))
     }
   }
 }
