@@ -126,11 +126,16 @@ export class TokenInventoryComponent implements OnInit {
     });
     e.preventDefault();
   }
+
   getTypeFile(nft: any){
     if (nft?.media_info?.length > 0) {
       return checkTypeFile(nft.media_info[0]?.media_link);
     } else {
       return '';
     }
+  }
+
+  encodeData(data){
+    return encodeURIComponent(data);
   }
 }
