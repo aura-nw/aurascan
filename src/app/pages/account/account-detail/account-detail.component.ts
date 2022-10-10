@@ -318,6 +318,10 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
               if (!element.messages.find((k) => k.from_address === this.currentAddress)) {
                 element.type = 'Receive';
               }
+            } else if (element.type === 'Multi Send') {
+              if (element.messages[0]?.inputs[0]?.address !== this.currentAddress) {
+                element.type = 'Receive';
+              }
             }
           });
 
