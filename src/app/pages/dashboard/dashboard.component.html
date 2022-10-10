@@ -246,10 +246,11 @@
                   *ngFor="let data of dataSourceBlock.data"
                   [link]="'/blocks/' + data.height"
                   [content]="[
-                    { label: 'Height', class: 'text--primary', info: data.height },
+                    { label: 'Height',
+                      info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
+                    },
                     {
                       label: 'Proposer',
-                      class: 'text--primary',
                       info:
                         '<a class=text--primary href=' +
                         ('/validators/' + data.operator_address) +
@@ -366,7 +367,6 @@
                   [content]="[
                     {
                       label: 'Height',
-                      class: 'text--primary',
                       info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
                     },
                     {

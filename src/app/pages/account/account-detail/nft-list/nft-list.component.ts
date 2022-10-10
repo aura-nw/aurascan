@@ -60,7 +60,7 @@ export class NftListComponent implements OnChanges {
     const payload = {
       account_address: this.address,
       limit: 100,
-      keyword: this.searchValue,
+      keyword: encodeURIComponent(this.searchValue),
       next_key: this.nextKey,
     };
     this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {

@@ -187,4 +187,8 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
       modeExecute: data?.modeExecute,
     };
   }
+
+  encodeData(data){
+    return encodeURIComponent(data);
+  }
 }
