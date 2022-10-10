@@ -69,15 +69,11 @@ export class TokenContentComponent implements OnInit {
   }
 
   handleSearch() {
-    const VALIDATORS = {
-      HASHRULE: /^[A-Za-z0-9]/,
-    };
-    const regexRule = VALIDATORS.HASHRULE;
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
 
-    if (regexRule.test(this.searchTemp)) {
+    if (this.searchTemp?.length > 0) {
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = this.searchTemp;
