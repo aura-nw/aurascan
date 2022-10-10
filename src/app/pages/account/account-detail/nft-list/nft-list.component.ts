@@ -53,7 +53,7 @@ export class NftListComponent implements OnChanges {
     this.getNftData();
   }
 
-  getNftData(next_key = null) {
+  getNftData() {
     this.loading = true;
     this.searchValue = this.searchValue?.trim();
 
@@ -116,7 +116,7 @@ export class NftListComponent implements OnChanges {
 
     this.pageData.pageIndex = e.pageIndex;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getNftData(this.nextKey);
+      this.getNftData();
       this.currentKey = this.nextKey;
     } else {
       this.showedData = this.nftList.slice(

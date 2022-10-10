@@ -80,7 +80,8 @@ export class NFTDetailComponent implements OnInit {
   
   getNFTDetail() {
     this.loading = true;
-    this.tokenService.getNFTDetail(this.contractAddress, this.nftId).subscribe((res) => {
+    const encoded = encodeURIComponent(this.nftId);
+    this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
       this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
       this.loading = false;
