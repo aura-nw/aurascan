@@ -138,4 +138,8 @@ export class NftListComponent implements OnChanges {
       return '';
     }
   }
+
+  encodeData(data){
+    return encodeURIComponent(data);
+  }
 }
