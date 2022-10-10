@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, timer } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -20,7 +20,7 @@ import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   chartRange = CHART_RANGE.D_30;
   chartRangeData = CHART_RANGE;
 
@@ -60,6 +60,7 @@ export class DashboardComponent implements OnInit {
     public global: Globals,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -167,5 +168,8 @@ export class DashboardComponent implements OnInit {
         `<span class=text--primary> ${this.denom} </span>`
       );
     }
+  }
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
   }
 }

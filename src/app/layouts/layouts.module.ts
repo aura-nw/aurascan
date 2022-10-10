@@ -16,6 +16,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
+import {ContractService} from "src/app/core/services/contract.service";
 
 @NgModule({
   declarations: [LayoutComponent, FooterComponent, HorizontalComponent, HorizontaltopbarComponent, DialogComponent],
@@ -31,7 +32,7 @@ import { LayoutComponent } from './layout.component';
     NgbPopoverModule,
     CommonPipeModule,
   ],
-  providers: [LanguageService, CommonService, TransactionService],
+  providers: [LanguageService, CommonService, TransactionService, ContractService],
   exports: [],
 })
 export class LayoutsModule {}
