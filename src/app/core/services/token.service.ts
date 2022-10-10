@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { INDEXER_URL, LENGTH_CHARACTER } from '../constants/common.constant';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class TokenService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
   }
@@ -58,7 +60,7 @@ export class TokenService extends CommonService {
       }
     }
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
       params,
     });
   }
@@ -78,7 +80,7 @@ export class TokenService extends CommonService {
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
       .value();
-    return this.http.get<any>(`${INDEXER_URL}/asset/getByOwner`, {
+    return this.http.get<any>(`${this.indexerUrl}/asset/getByOwner`, {
       params,
     });
   }
@@ -89,7 +91,7 @@ export class TokenService extends CommonService {
     contractType: string,
     contractAddress: string,
   ): Observable<any> {
-    let url = `${INDEXER_URL}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
+    let url = `${this.indexerUrl}/asset/holder?chainid=${this.chainInfo.chainId}&contractType=${contractType}&contractAddress=${contractAddress}&pageOffset=${offset}&pageLimit=${limit}&countTotal=true&reverse=false`;
     return this.http.get<any>(url);
   }
 
