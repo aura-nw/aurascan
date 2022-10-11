@@ -75,25 +75,6 @@ export class ContractComponent implements OnInit, OnDestroy {
           this.isVerifying = false;
         }
       });
-
-    /*     this.contractService
-      .checkVerified(this.contractAddress)
-      .pipe(
-        mergeMap(({ data }) => {
-          if (data?.status === 'verifying' && !notCheck) {
-            this.isVerifying = true;
-          } else {
-            this.isVerifying = false;
-          }
-
-          return this.contractService.contractObservable;
-        }),
-      )
-      .subscribe((res: IResponsesTemplates<any>) => {
-        if (res.data) {
-          this.contractDetail = res.data;
-        }
-      }); */
   }
 
   changeTab(tabId): void {

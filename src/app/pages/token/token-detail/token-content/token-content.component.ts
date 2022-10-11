@@ -91,9 +91,9 @@ export class TokenContentComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail?.isNFTContract) {
-            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${this.paramQuery}`;
+            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
-            window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+            window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
         }
       });
