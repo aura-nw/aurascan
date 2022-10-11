@@ -183,39 +183,56 @@ export class WriteContractComponent implements OnInit {
   }
 
   execute(data, msg) {
-    let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-    const fee: any = {
-      amount: [
-        {
-          denom: this.coinMinimalDenom,
-          amount: '1',
-        },
-      ],
-      gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
-    };
-
-    SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
-      .then((client) => {
-        return client.execute(this.userAddress, this.contractDetailData.contract_address, data, fee);
-      })
-      .then((client) => {
-        if (client?.transactionHash) {
+    try {
+      this.walletService
+        .execute(this.userAddress, this.contractDetailData.contract_address, data)
+        .then(() => {
           msg.isLoading = false;
-          this.urlAction = 'transaction/' + client?.transactionHash;
-          this.isLoadingAction = true;
-          setTimeout(() => {
-            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-          }, 4000);
-        }
-      })
-      .catch((error) => {
-        msg.isLoading = false;
-        if (!error.toString().includes('Request rejected')) {
-          let msgError = error.toString() || 'Error';
-          this.toastr.error(msgError);
-        }
-      });
+          this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+        })
+        .catch((error) => {
+          msg.isLoading = false;
+          if (!error.toString().includes('Request rejected')) {
+            let msgError = error.toString() || 'Error';
+            this.toastr.error(msgError);
+          }
+        });
+    } catch (error) {
+      this.toastr.error(`E: ${error}`);
+    }
   }
+  // execute(msg) {
+  //   let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
+  //   const fee: any = {
+  //     amount: [
+  //       {
+  //         denom: this.coinMinimalDenom,
+  //         amount: '1',
+  //       },
+  //     ],
+  //     gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
+  //   };
+
+  //   SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
+  //     .then((client) => {
+  //       return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+  //     })
+  //     .then((client) => {
+  //       if (client?.transactionHash) {
+  //         this.urlAction = 'transaction/' + client?.transactionHash;
+  //         this.isLoadingAction = true;
+  //         setTimeout(() => {
+  //           this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+  //         }, 4000);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (!error.toString().includes('Request rejected')) {
+  //         let msgError = error.toString() || 'Error';
+  //         this.toastr.error(msgError);
+  //       }
+  //     });
+  // }
 
   resetError(msg, all = false) {
     if (msg) {
