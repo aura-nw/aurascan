@@ -697,7 +697,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.isLoading = false;
-    this.modalReference?.close();
+    // this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
     this.isLoadingAction = false;
@@ -709,6 +709,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       if (hash) {
         this.urlAction = 'transaction/' + hash;
         this.isLoadingAction = true;
+        this.isLoading = false;
+        this.modalReference?.close();
         clearInterval(myInterval);
       }
     }, 500);
