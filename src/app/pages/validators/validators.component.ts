@@ -25,7 +25,6 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
-import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',
@@ -507,7 +506,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
             to: [this.dataModal.operator_address],
@@ -535,7 +535,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       const executeClaim = async () => {
         this.isLoading = true;
         this.isClaimRewardLoading = true;
-        const { hash, error } = await createSignBroadcast(
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
             message: {
@@ -560,7 +561,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeUnStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
             from: [this.dataModal.operator_address],
@@ -587,7 +589,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeReStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
             src_address: this.dataModal.operator_address,

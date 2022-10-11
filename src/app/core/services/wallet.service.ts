@@ -2,15 +2,17 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
+import { getFee } from 'src/app/core/utils/signing/fee';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
-import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { LAST_USED_PROVIDER, SIGNING_MESSAGE_TYPES, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
@@ -316,5 +318,29 @@ export class WalletService implements OnDestroy {
 
   signMessage(base64String: string) {
     return this.coin98Client.signArbitrary(this.wallet.bech32Address, base64String);
+  }
+
+  execute(userAddress, contract_address, msg) {
+    let signer;
+
+    const fee: any = {
+      amount: [
+        {
+          denom: this.chainInfo.currencies[0].coinMinimalDenom,
+          amount: '1',
+        },
+      ],
+      gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
+    };
+
+    if (this.isMobileMatched && !this.checkExistedCoin98()) {
+      return this.coin98Client.execute(userAddress, contract_address, msg, '', undefined, fee, undefined);
+    } else {
+      signer = window.getOfflineSignerOnlyAmino(this.chainId);
+    }
+
+    return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer).then((client) =>
+      client.execute(userAddress, contract_address, msg, fee),
+    );
   }
 }
