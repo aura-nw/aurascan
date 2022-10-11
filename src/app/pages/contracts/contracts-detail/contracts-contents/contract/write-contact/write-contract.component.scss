@@ -59,3 +59,6 @@ mat-expansion-panel {
 input.form-check-input {
   color: var(--aura-gray-1);
 }
+.error-null {
+  border: 2px solid var(--aura-red-3) !important;
+}

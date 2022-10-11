@@ -34,6 +34,7 @@ export enum TypeTransaction {
   Vesting = 'Vesting',
   Deposit = 'Deposit',
   SubmitProposalTx = 'Submit Proposal',
+  GetRewardCommission = 'Get Reward Commission',
   Fail = 'Fail'
 }
 
