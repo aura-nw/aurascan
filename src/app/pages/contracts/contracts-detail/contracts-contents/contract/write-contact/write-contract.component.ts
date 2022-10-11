@@ -186,9 +186,14 @@ export class WriteContractComponent implements OnInit {
     try {
       this.walletService
         .execute(this.userAddress, this.contractDetailData.contract_address, data)
-        .then(() => {
+        .then((e) => {
           msg.isLoading = false;
-          this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+          if((e as any).result?.error) {
+            let msgError = ( e as any).result.error.toString() || 'Error';
+            this.toastr.error(msgError);
+          } else {
+            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+          }
         })
         .catch((error) => {
           msg.isLoading = false;
@@ -198,7 +203,7 @@ export class WriteContractComponent implements OnInit {
           }
         });
     } catch (error) {
-      this.toastr.error(`E: ${error}`);
+      this.toastr.error(`Error: ${error}`);
     }
   }
   // execute(msg) {
