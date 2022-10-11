@@ -28,9 +28,9 @@ export class EnvironmentService {
     validator_s3: '',
     image_s3: '',
     chain_info: null,
-    coins:'',
+    coins: '',
     env: '',
-    indexerUri: ''
+    indexerUri: '',
   });
 
   get configValue(): IConfiguration {
@@ -49,7 +49,6 @@ export class EnvironmentService {
     //   validator_s3: '',
     //   chain_info: {},
     // });
-
     // this.config$.subscribe(console.log)
   }
 
@@ -72,7 +71,7 @@ export class EnvironmentService {
           chain_info,
           coins: config['coins'],
           env: config['env'],
-          indexerUri: config['urlIndexer']
+          indexerUri: config['urlIndexer'],
         };
 
         this.config.next(data);
