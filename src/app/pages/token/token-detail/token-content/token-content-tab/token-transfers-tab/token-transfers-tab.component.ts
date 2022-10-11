@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -19,7 +29,7 @@ import { convertDataTransaction, Globals } from '../../../../../../global/global
   templateUrl: './token-transfers-tab.component.html',
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
-export class TokenTransfersTabComponent implements OnInit, OnChanges {
+export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() isNFTContract: boolean;
   @Input() contractAddress: string;
   @Input() keyWord = '';
@@ -76,6 +86,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -190,5 +201,9 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges {
 
   encodeData(data){
     return encodeURIComponent(data);
+  }
+
+  ngAfterViewInit(): void {
+    this.cdr.markForCheck();
   }
 }

@@ -36,13 +36,15 @@
     <!-- Table -->
     <ng-container *ngIf="nftList?.length > 0; else noValues">
       <div>
-        <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5">
-          <div class="nft-cards__col col" *ngFor="let item of showedData">
+        <div class="nft-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+             id="nft-cards">
+          <div class="nft-cards__col col" *ngFor="let item of showedData; let i = index">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
                 <app-nft-card
                   [nftLink]="'/tokens/token-nft/' + item.contract_address + '/' + item.token_id"
                   [nftItem]="item"
+                  nftId="{{'nft#'+i}}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
                 <div class="nft-cards__label">
                   <span class="text-gradient">CW-721</span>

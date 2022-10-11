@@ -586,3 +586,29 @@ body {
 .break-word {
     word-break: break-word;
 }
+.control-container {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    @media (min-width: 992px) {
+        opacity: .8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+    button {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        opacity: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(225,225,225,0.5);
+    }
+    i {
+        font-size: 16px;
+        color: var(--aura-white);
+    }
+}
