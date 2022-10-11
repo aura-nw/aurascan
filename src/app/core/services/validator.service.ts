@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { INDEXER_URL } from '../constants/common.constant';
-import * as _ from 'lodash';
 import { LCD_COSMOS } from '../constants/url.constant';
 
 @Injectable({
@@ -14,6 +13,7 @@ import { LCD_COSMOS } from '../constants/url.constant';
 export class ValidatorService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -40,7 +40,7 @@ export class ValidatorService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction/power-event`, {
+    return this.http.get<any>(`${this.indexerUrl}/transaction/power-event`, {
       params,
     });
   }
@@ -51,7 +51,7 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsListUndelegateWallet(address: string): Observable<any> {
-    return this.http.get<any>(`${INDEXER_URL}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`);
+    return this.http.get<any>(`${this.indexerUrl}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`);
   }
 
   delegators(limit: string | number, offset: string | number, address: string) {

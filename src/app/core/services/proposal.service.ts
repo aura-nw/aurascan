@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { IResponsesTemplates } from '../models/common.model';
@@ -13,7 +12,7 @@ import { CommonService } from './common.service';
 @Injectable()
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
-
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   reloadList$ = new Subject();
 
   reloadList() {
@@ -39,7 +38,7 @@ export class ProposalService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/votes/validators`, {
+    return this.http.get<any>(`${this.indexerUrl}/votes/validators`, {
       params,
     });
   }
@@ -63,7 +62,7 @@ export class ProposalService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/votes`, {
+    return this.http.get<any>(`${this.indexerUrl}/votes`, {
       params,
     });
   }
@@ -84,7 +83,7 @@ export class ProposalService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/proposal`, {
+    return this.http.get<any>(`${this.indexerUrl}/proposal`, {
       params,
     });
   }
