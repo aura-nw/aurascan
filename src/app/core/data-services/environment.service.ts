@@ -14,6 +14,7 @@ export interface IConfiguration {
   chain_info: ChainInfo | null;
   coins: any;
   env: string;
+  indexerUri: string;
 }
 
 @Injectable()
@@ -27,8 +28,9 @@ export class EnvironmentService {
     validator_s3: '',
     image_s3: '',
     chain_info: null,
-    coins:'',
+    coins: '',
     env: '',
+    indexerUri: '',
   });
 
   get configValue(): IConfiguration {
@@ -47,7 +49,6 @@ export class EnvironmentService {
     //   validator_s3: '',
     //   chain_info: {},
     // });
-
     // this.config$.subscribe(console.log)
   }
 
@@ -69,7 +70,8 @@ export class EnvironmentService {
           image_s3: config['image_s3'] || 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/',
           chain_info,
           coins: config['coins'],
-          env: config['env']
+          env: config['env'],
+          indexerUri: config['urlIndexer'],
         };
 
         this.config.next(data);

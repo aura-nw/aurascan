@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
+import { debounceTime } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 
@@ -56,12 +57,19 @@ export class ValidatorsVotesComponent implements OnInit {
   };
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {}
+  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
+    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+      if (event) {
+        this.getValidatorVotes();
+      }
+    });
+  }
 
-  ngOnInit(): void {
+  getValidatorVotes(): void {
     if (this.proposalId) {
       this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe((res) => {
         this.voteDataListLoading = true;
+
         this.voteData.all = res.data;
         this.voteData.yes = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_YES);
         this.voteData.abstain = res.data.filter((f) => f.answer === VOTE_OPTION.VOTE_OPTION_ABSTAIN);
@@ -80,6 +88,9 @@ export class ValidatorsVotesComponent implements OnInit {
         this.voteDataListLoading = false;
       });
     }
+  }
+  ngOnInit(): void {
+    this.getValidatorVotes();
   }
 
   changeTab(tabId): void {

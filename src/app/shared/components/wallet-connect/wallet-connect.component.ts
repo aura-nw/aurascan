@@ -1,6 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Key } from '@keplr-wallet/types';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
@@ -14,7 +13,7 @@ import { WalletService } from '../../../core/services/wallet.service';
   styleUrls: ['./wallet-connect.component.scss'],
 })
 export class WalletConnectComponent implements AfterViewInit, OnDestroy {
-  wallet$: Observable<Key> = this.walletService.wallet$;
+  wallet$: Observable<any> = this.walletService.wallet$;
 
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
@@ -54,7 +53,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   connectWallet(provider: WALLET_PROVIDER): void {
     try {
       const connect = async () => {
-        const connect = await this.walletService.connect(provider, this.chainId);
+        const connect = await this.walletService.connect(provider);
         if (!connect && provider === WALLET_PROVIDER.COIN98) {
           this.dlgService.showDialog({
             title: '',

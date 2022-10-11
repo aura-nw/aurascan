@@ -310,12 +310,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.voteValue = {
-          keyVote: this.voteConstant.find((s) => s.voteOption === result.keyVote)?.key,
-        };
-        this.proposalVotes = result.keyVote;
-      }
+      this.proposalService.reloadList();
+      this.getVotedProposal();
     });
   }
 
