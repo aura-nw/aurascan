@@ -176,8 +176,8 @@
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
-              {{ amountCommission || amount | number: global.formatNumberToken }}
+            <ng-container *ngIf="listAmountClaim[0] > 0 || amountCommission > 0; else noValues">
+              {{ amountCommission || listAmountClaim[0] | number: global.formatNumberToken }}
               <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-template #noValues> - </ng-template>

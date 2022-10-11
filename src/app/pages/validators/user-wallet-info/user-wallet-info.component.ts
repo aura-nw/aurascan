@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataDelegateDto, TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -35,6 +44,7 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
     public globals: Globals,
     public commonService: CommonService,
     private validatorService: ValidatorService,
+    private  cdr: ChangeDetectorRef
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -59,6 +69,7 @@ export class UserWalletInfoComponent implements OnInit, OnChanges {
       });
       this.lstUndelegate = lstUndelegateTemp;
     }
+    this.cdr.markForCheck();
   }
 
   ngOnInit(): void {}
