@@ -1,17 +1,43 @@
 <div class="video-player" [ngStyle]="{ width: appWidth, height: appHeight }">
-  <video
-    *ngIf="videoSrc"
-    [muted]="isMuted"
-    loop
-    #video
-    (mouseover)="playVideo(video)" (mouseout)="pauseVideo(video)"
-    videoPlayInViewport
-    [controls]="showControl"
-    [src]="videoSrc"
-    disablePictureInPicture
-    playsinline
-    controlslist="nodownload noplaybackrate"
+  <video *ngIf="isDetail && videoSrc"
+         loop
+         #video id="{{nftId}}"
+         videoPlayInViewport
+         [controls]="showControl"
+         [src]="videoSrc"
+         disablePictureInPicture
+         playsinline
+         controlslist="nodownload noplaybackrate"
   ></video>
+
+  <div *ngIf="!isDetail">
+    <a href="{{link}}">
+      <video
+          *ngIf="videoSrc"
+          loop
+          #video id="{{nftId}}"
+          videoPlayInViewport
+          [controls]="showControl"
+          [src]="videoSrc"
+          disablePictureInPicture
+          playsinline
+          controlslist="nodownload noplaybackrate"
+      ></video>
+    </a>
+    <div *ngIf="showCustomControl" class="control-container">
+      <button class="button control__button"
+              *ngIf="paused"
+              (click)="playVideo(video)">
+        <i class="ph-play"></i>
+      </button>
+      <button class="button control__button"
+              *ngIf="!paused"
+              (click)="pauseVideo(video)">
+        <i class="ph-pause"></i>
+      </button>
+    </div>
+  </div>
+
   <div class="timeline-container" *ngIf="showControl">
     <input type="range" min="0" max="100" class="timeline" value="0" #timeline (change)="onTimelineChange()" />
   </div>

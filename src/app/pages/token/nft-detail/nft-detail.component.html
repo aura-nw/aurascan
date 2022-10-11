@@ -13,15 +13,16 @@
             <app-custom-video-player
               [videoSrc]="nftDetail?.media_info[0]?.media_link"
               [showControl]="true"
-              *ngIf="nftType === 'video'"
-              [isMuted]="false" [isDetail]="true">
+              *ngIf="nftType === 'video'" [isDetail]="true">
             </app-custom-video-player>
             <app-model-view
               *ngIf="nftType === '3d'"
               [modelUrl]="nftDetail?.media_info[0]?.media_link"
               [disablePan]="false">
             </app-model-view>
-            <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.media_info[0]?.media_link">
+            <app-audio-player
+                *ngIf="nftType === 'audio'"
+                [src]="nftDetail?.media_info[0]?.media_link">
             </app-audio-player>
           </div>
         </div>
