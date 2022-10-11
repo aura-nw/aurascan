@@ -146,8 +146,8 @@ export class WalletService implements OnDestroy {
           return Promise.resolve(true);
         } else {
           if (this.isMobileMatched) {
-            this.mobileConnect();
-            return Promise.resolve(true);
+            return this.mobileConnect();
+            // return Promise.resolve(true);
           }
           return Promise.resolve(false);
         }
@@ -274,11 +274,17 @@ export class WalletService implements OnDestroy {
         .toPromise()
         .then((signDoc) => {
           return this.coin98Client.signAndBroadcast(senderAddress, signDoc).then((e) => {
-            // this.toastr.success(`Success: ${JSON.stringify(e)}`);
+            return {
+              hash: e?.result?.transactionHash || null,
+              error: null,
+            }
           });
         })
         .catch((error) => {
-          this.toastr.error(JSON.stringify(`Error: ${error}`));
+          return {
+            hash:  null,
+            error,
+          }
         });
     }
 
