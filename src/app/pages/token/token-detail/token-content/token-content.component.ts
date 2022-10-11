@@ -69,15 +69,11 @@ export class TokenContentComponent implements OnInit {
   }
 
   handleSearch() {
-    const VALIDATORS = {
-      HASHRULE: /^[A-Za-z0-9]/,
-    };
-    const regexRule = VALIDATORS.HASHRULE;
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
 
-    if (regexRule.test(this.searchTemp)) {
+    if (this.searchTemp?.length > 0) {
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = this.searchTemp;
@@ -95,9 +91,9 @@ export class TokenContentComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail?.isNFTContract) {
-            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${this.paramQuery}`;
+            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
-            window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+            window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
         }
       });

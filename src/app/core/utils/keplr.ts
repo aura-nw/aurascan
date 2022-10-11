@@ -54,7 +54,7 @@ export function getKeplrError(err: any): KEPLR_ERRORS {
   return KEPLR_ERRORS.Failed;
 }
 
-export async function handleErrors(err: Error, chainId: string): Promise<string> {
+export async function handleErrors(err: Error): Promise<string> {
   const error = getKeplrError(err.message);
   switch (error) {
     case KEPLR_ERRORS.NoChainInfo:

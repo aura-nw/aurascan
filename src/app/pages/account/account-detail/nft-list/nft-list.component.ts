@@ -53,14 +53,14 @@ export class NftListComponent implements OnChanges {
     this.getNftData();
   }
 
-  getNftData(next_key = null) {
+  getNftData() {
     this.loading = true;
     this.searchValue = this.searchValue?.trim();
 
     const payload = {
       account_address: this.address,
       limit: 100,
-      keyword: encodeURIComponent(this.searchValue),
+      keyword: this.searchValue,
       next_key: this.nextKey,
     };
     this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
@@ -116,7 +116,7 @@ export class NftListComponent implements OnChanges {
 
     this.pageData.pageIndex = e.pageIndex;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getNftData(this.nextKey);
+      this.getNftData();
       this.currentKey = this.nextKey;
     } else {
       this.showedData = this.nftList.slice(
@@ -137,5 +137,9 @@ export class NftListComponent implements OnChanges {
     } else {
       return '';
     }
+  }
+
+  encodeData(data){
+    return encodeURIComponent(data);
   }
 }

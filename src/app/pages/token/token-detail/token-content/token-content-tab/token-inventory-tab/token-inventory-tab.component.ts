@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import {checkTypeFile} from "src/app/core/utils/common/info-common";
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-token-inventory-tab',
@@ -79,7 +79,7 @@ export class TokenInventoryComponent implements OnInit {
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-      this.pageData.length = cw721Asset.count;
+      this.pageData.length = this.nftData.data.length;
       this.loading = false;
     });
   }
@@ -126,11 +126,16 @@ export class TokenInventoryComponent implements OnInit {
     });
     e.preventDefault();
   }
-  getTypeFile(nft: any){
+
+  getTypeFile(nft: any) {
     if (nft?.media_info?.length > 0) {
       return checkTypeFile(nft.media_info[0]?.media_link);
     } else {
       return '';
     }
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

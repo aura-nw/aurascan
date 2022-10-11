@@ -12,7 +12,10 @@
         <div class="pl-md-6">
           <h3 class="mb-1 mb-lg-2 text--white">Address</h3>
           <div class="d-flex align-items-center">
-            <div class="body-01 g-ellipsis-address text--gray-1" id="currentAddress">{{ currentAddress }}</div>
+            <div class="body-01 text--gray-1" id="currentAddress">
+              <span class="d-md-flex d-none">{{ currentAddress }}</span>
+              <span class="d-md-none d-flex">{{ currentAddress | cutStringPipe: 8:8 }}</span>
+            </div>
             <div class="button button--xxs button-circle ml-2">
               <img
                 [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"

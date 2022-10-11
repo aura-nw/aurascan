@@ -42,7 +42,7 @@
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
                 <app-nft-card
-                  [nftLink]="'/tokens/token-nft/' + item.contract_address + '/' + item.token_id"
+                  [nftLink]="'/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id)"
                   [nftItem]="item"
                   nftId="{{'nft#'+i}}"
                   [nftType]="getTypeFile(item)"></app-nft-card>
@@ -62,7 +62,7 @@
                   <span
                     class="text--primary hover-link"
                     (click)="
-                      handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address + '/' + item.token_id])
+                      handleRouterLink($event, ['/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id)])
                     ">
                     {{ item.token_id }}
                   </span>

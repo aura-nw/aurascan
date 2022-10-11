@@ -43,7 +43,8 @@ export class ProposalVoteComponent implements OnInit {
 
   async proposalVote() {
     this.isLoading = true;
-    const { hash, error } = await createSignBroadcast({
+    // const { hash, error } = await createSignBroadcast({
+    const { hash, error } = await this.walletService.signAndBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
         voteOption: this.keyVote,
@@ -82,11 +83,6 @@ export class ProposalVoteComponent implements OnInit {
       } else {
         this.toastr.error(message);
       }
-    }
-    if (this.route.url !== '/votings') {
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     }
   }
 
