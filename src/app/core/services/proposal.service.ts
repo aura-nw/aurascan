@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { INDEXER_URL } from '../constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -13,6 +13,12 @@ import { CommonService } from './common.service';
 @Injectable()
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
+
+  reloadList$ = new Subject();
+
+  reloadList() {
+    this.reloadList$.next(true)
+  }
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

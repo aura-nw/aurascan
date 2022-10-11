@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnChanges } from '@angular/core';
 import { merge } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
@@ -58,9 +58,19 @@ export class VotesComponent implements OnChanges {
   };
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {}
+  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
+    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+      if (event) {
+        this.getVotesList();
+      }
+    });
+  }
 
   ngOnChanges(): void {
+    this.getVotesList();
+  }
+
+  getVotesList(): void {
     if (this.proposalDetail?.proposal_id) {
       const payloads: IListVoteQuery = {
         pageLimit: 25,

@@ -218,10 +218,6 @@ export class ProposalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        let votedValue = this.proposalData.find((s) => s.proposal_id === data.id);
-        votedValue.vote_option = result.keyVote;
-      }
       this.scrollToTop();
       setTimeout(() => {
         this.getListProposal(null, true);
