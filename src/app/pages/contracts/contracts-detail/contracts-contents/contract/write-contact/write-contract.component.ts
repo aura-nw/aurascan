@@ -196,7 +196,6 @@ export class WriteContractComponent implements OnInit {
             let msgError = error.toString() || 'Error';
             this.toastr.error(msgError);
           }
-          this.toastr.error(error);
         });
     } catch (error) {
       this.toastr.error(`E: ${error}`);
