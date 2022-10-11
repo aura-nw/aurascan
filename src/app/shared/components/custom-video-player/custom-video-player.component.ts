@@ -13,8 +13,8 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
   @Input() appHeight = '100%';
   @Input() showControl = true;
   @Input() isMuted = false;
+  @Input() isDetail = false;
   isFullScreen = false;
-
   constructor() {}
 
   ngOnInit(): void {}
@@ -31,7 +31,15 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
       };
     }
   }
+  playVideo(element) {
+    if(this.isDetail) return;
+    element.play();
+  }
+  pauseVideo(element) {
+    if(this.isDetail) return;
+    element.pause();
 
+  }
   onTimelineChange(): void {
     const time = (this.timeline?.nativeElement.value * this.video?.nativeElement?.duration) / 100;
     this.video.nativeElement.currentTime = time;
