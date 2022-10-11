@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { INDEXER_URL } from 'src/app/core/constants/common.constant';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
@@ -12,6 +11,7 @@ import { CommonService } from './common.service';
 export class TransactionService extends CommonService {
   apiUrl = `${this.environmentService.configValue.beUri}`;
   chainInfo = this.environmentService.configValue.chain_info;
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -28,7 +28,7 @@ export class TransactionService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
       params,
     });
   }
@@ -48,7 +48,7 @@ export class TransactionService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
       params,
     });
   }
@@ -63,7 +63,7 @@ export class TransactionService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
       params,
     });
   }

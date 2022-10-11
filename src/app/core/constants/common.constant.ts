@@ -56,7 +56,7 @@ export const TIME_OUT_CALL_API = 5000;
 
 export const NUM_BLOCK = 10000;
 
-export const INDEXER_URL = 'https://indexer.dev.aurascan.io/api/v1';
+// export const INDEXER_URL = 'https://indexer.dev.aurascan.io/api/v1';
 
 export const CHART_RANGE = {
   M_60: '60m',
