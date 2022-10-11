@@ -15,27 +15,25 @@ export async function createSignBroadcast(
     chainId,
   }: { messageType: any; message: any; senderAddress: any; network: ChainInfo; signingType: any; chainId: any },
   validatorsCount?: number,
+  coin98Client?: any,
 ): Promise<any> {
   let error: KEPLR_ERRORS;
   let broadcastResult: DeliverTxResponse;
   if (signingType === 'extension') {
   } else {
-    const signer = await getSigner(signingType, chainId);
-
-    const client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
-
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message, network);
 
-    const fee: StdFee = {
-      amount: [
-        {
-          denom: network.currencies[0].coinMinimalDenom,
-          amount: '1',
-        },
-      ],
-      gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
-    };
+    const fee: StdFee = getNetworkFee(network, messageType, validatorsCount);
+    let client;
+
+    if (coin98Client) {
+      client = coin98Client;
+    } else {
+      const signer = await getSigner(signingType, chainId);
+
+      client = await SigningStargateClient.connectWithSigner(network.rpc, signer);
+    }
 
     try {
       broadcastResult = await client.signAndBroadcast(
@@ -54,6 +52,18 @@ export async function createSignBroadcast(
       error,
     };
   }
+}
+
+export function getNetworkFee(network, messageType, validatorsCount?: number): StdFee {
+  return {
+    amount: [
+      {
+        denom: network.currencies[0].coinMinimalDenom,
+        amount: '1',
+      },
+    ],
+    gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
+  };
 }
 
 export function assertIsBroadcastTxSuccess(res): DeliverTxResponse {
