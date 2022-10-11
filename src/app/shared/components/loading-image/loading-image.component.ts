@@ -49,11 +49,11 @@ export class LoadingImageComponent implements OnInit, OnChanges {
     if(this.identity && this.identity !== '') {
       const req = await this.commonService.getValidatorImg(this.identity);
       this.imgByIdentity = req.data['them'][0]?.pictures?.primary?.url;
-      this.cdr.markForCheck();
       this.isError = false;
     } else {
       this.isError = true;
     }
+    this.cdr.markForCheck();
     this.isLoading = false;
   }
 }

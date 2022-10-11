@@ -4,14 +4,14 @@
     [muted]="isMuted"
     loop
     #video
-    preload="auto"
+    (mouseover)="playVideo(video)" (mouseout)="pauseVideo(video)"
     videoPlayInViewport
     [controls]="showControl"
     [src]="videoSrc"
     disablePictureInPicture
     playsinline
     controlslist="nodownload noplaybackrate"
-    autoplay="{{ false }}"></video>
+  ></video>
   <div class="timeline-container" *ngIf="showControl">
     <input type="range" min="0" max="100" class="timeline" value="0" #timeline (change)="onTimelineChange()" />
   </div>

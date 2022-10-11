@@ -14,7 +14,7 @@
               [videoSrc]="nftDetail?.media_info[0]?.media_link"
               [showControl]="true"
               *ngIf="nftType === 'video'"
-              [isMuted]="false">
+              [isMuted]="false" [isDetail]="true">
             </app-custom-video-player>
             <app-model-view
               *ngIf="nftType === '3d'"
