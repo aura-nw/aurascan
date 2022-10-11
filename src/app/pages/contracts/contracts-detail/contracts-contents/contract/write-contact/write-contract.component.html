@@ -55,9 +55,16 @@
           <div class="px-0">
             <button
               class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card"
-              [disabled]="false"
               type="button"
+              [disabled]="msg.isLoading"
               (click)="handleExecute(msg)">
+              <img
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                class="mr-2"
+                width="20"
+                height="20"
+                *ngIf="msg.isLoading" />
               <span>Write</span>
             </button>
           </div>

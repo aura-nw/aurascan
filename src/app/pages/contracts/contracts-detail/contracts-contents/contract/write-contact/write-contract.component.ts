@@ -120,7 +120,6 @@ export class WriteContractComponent implements OnInit {
     let fieldList = [];
 
     if (childProps) {
-
       fieldList = Object.keys(childProps).map((e) => ({
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
@@ -177,12 +176,13 @@ export class WriteContractComponent implements OnInit {
       });
 
       if (msgExecute[fieldName]) {
-        this.execute(msgExecute);
+        msg.isLoading = true;
+        this.execute(msgExecute, msg);
       }
     }
   }
 
-  execute(msg) {
+  execute(data, msg) {
     let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
     const fee: any = {
       amount: [
@@ -196,10 +196,11 @@ export class WriteContractComponent implements OnInit {
 
     SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
       .then((client) => {
-        return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
+        return client.execute(this.userAddress, this.contractDetailData.contract_address, data, fee);
       })
       .then((client) => {
         if (client?.transactionHash) {
+          msg.isLoading = false;
           this.urlAction = 'transaction/' + client?.transactionHash;
           this.isLoadingAction = true;
           setTimeout(() => {
@@ -208,6 +209,7 @@ export class WriteContractComponent implements OnInit {
         }
       })
       .catch((error) => {
+        msg.isLoading = false;
         if (!error.toString().includes('Request rejected')) {
           let msgError = error.toString() || 'Error';
           this.toastr.error(msgError);
