@@ -10,6 +10,7 @@ export class NftCardComponent {
   @Input() nftItem: any;
   @Input() nftType: string;
   @Input() nftLink: string;
+  @Input() nftId: string;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
