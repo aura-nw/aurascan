@@ -1,4 +1,5 @@
 import { Client } from '@coin98-com/connect-sdk';
+import { requestParameter } from '@coin98-com/connect-sdk/dist/types/client';
 import { StdSignDoc } from '@cosmjs/amino';
 import { ChainInfo } from '@keplr-wallet/types';
 
@@ -24,6 +25,24 @@ export class Coin98Client {
   constructor(chainInfo: ChainInfo) {
     this.chainInfo = chainInfo;
     this.client = new Client();
+  }
+
+  request(requestParameter: requestParameter) {
+    if (this.connectionId) {
+      return this.client.request({
+        id: this.connectionId,
+        ...requestParameter,
+      });
+    }
+
+    return this.connect().then(
+      (connectionId) =>
+        connectionId &&
+        this.client.request({
+          id: connectionId,
+          ...requestParameter,
+        }),
+    );
   }
 
   async connect(): Promise<string> {
@@ -67,7 +86,7 @@ export class Coin98Client {
 
   async suggestChain(): Promise<unknown> {
     try {
-      return this.client.request({
+      return this.request({
         method: 'cosmos_experimentalSuggestChain',
         params: [this.chainInfo],
       });
@@ -77,7 +96,7 @@ export class Coin98Client {
   }
 
   async signAmino(signer: string, signDoc: StdSignDoc) {
-    return this.client.request({
+    return this.request({
       method: 'cosmos_signAmino',
       params: [
         {
@@ -90,14 +109,14 @@ export class Coin98Client {
   }
 
   async signDirect(signer: string, signDoc: StdSignDoc) {
-    return await this.client.request({
+    return await this.request({
       method: 'cosmos_signDirect',
       params: [this.chainInfo.chainId, signer, signDoc],
     });
   }
 
   signAndBroadcast(signer: string, signDoc: StdSignDoc): Promise<any> {
-    return this.client.request({
+    return this.request({
       method: 'cosmos_signAndBroadcast' as any,
       params: [
         {
@@ -119,7 +138,7 @@ export class Coin98Client {
     transferAmount?: any,
     contractCodeHash?: string,
   ) {
-    return this.client.request({
+    return this.request({
       method: 'cosmos_execute' as any,
       params: [
         {
@@ -135,7 +154,7 @@ export class Coin98Client {
   }
 
   signArbitrary(signer: string, data: unknown) {
-    return this.client.request({
+    return this.request({
       method: 'cosmos_signArbitrary' as any,
       params: [
         {
