@@ -1,6 +1,9 @@
 <ng-container *ngIf="!loading">
-  <div class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
+  <div *ngIf="nextKey" class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
     More than {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
+  </div>
+  <div *ngIf="!nextKey" class="body-03 caption-mob fw-normal-mob text--gray-5 mb-lg-3">
+    A total {{ pageData?.length | number }} transaction{{ pageData?.length > 1 ? 's' : '' }} found
   </div>
   <div class="divider divider-horizontal my-4 d-lg-none"></div>
   <div class="transfer-table-container table-responsive">
@@ -51,16 +54,16 @@
                     <ng-container *ngIf="template.isUrl && !template.isShort && data[template.matColumnDef]">
                       <a [routerLink]="[template.isUrl, data[template.paramField] || data[template.matColumnDef]]">
                         {{
-                        (template.isShort
-                                ? shortenAddress(data[template.matColumnDef])
-                                : data[template.matColumnDef]) || '-'
+                          (template.isShort
+                            ? shortenAddress(data[template.matColumnDef])
+                            : data[template.matColumnDef]) || '-'
                         }}
                       </a>
                     </ng-container>
                     <ng-container *ngIf="template.isUrl && template.isShort">
                       <a
-                              [routerLink]="[template.isUrl, data[template.matColumnDef]]"
-                              [class.disabled-link]="!data[template.matColumnDef]">
+                        [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                        [class.disabled-link]="!data[template.matColumnDef]">
                         {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                       </a>
                     </ng-container>
@@ -85,30 +88,30 @@
                         <ng-container *ngSwitchCase="'from_address'">
                           <div class="d-flex align-items-center">
                             <a
-                                    class="text--primary txt-from-address content-transfer"
-                                    href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
+                              class="text--primary txt-from-address content-transfer"
+                              href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                              *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
                               data[template.matColumnDef] | cutStringPipe: 8:8
-                              }}</span>
+                            }}</span>
                             <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
                             <ng-container *ngIf="!isSearchAddress">
                               <img
-                                      [src]="'assets/images/icons/arrow-right.png' | imageS3"
-                                      width="14"
-                                      height="9"
-                                      class="ml-4 ml-lg-0" />
+                                [src]="'assets/images/icons/arrow-right.png' | imageS3"
+                                width="14"
+                                height="9"
+                                class="ml-4 ml-lg-0" />
                             </ng-container>
                             <ng-container *ngIf="isSearchAddress">
                               <div class="box-token-transfer">
-                              <span
-                                      class="token-transfer-status d-flex"
-                                      [ngClass]="{ 'status-out': data.from_address === keyWord }">
-                                <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
-                                <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
-                              </span>
+                                <span
+                                  class="token-transfer-status d-flex"
+                                  [ngClass]="{ 'status-out': data.from_address === keyWord }">
+                                  <ng-container *ngIf="data.from_address !== keyWord"> IN </ng-container>
+                                  <ng-container *ngIf="data.from_address === keyWord"> OUT </ng-container>
+                                </span>
                               </div>
                             </ng-container>
                           </div>
@@ -116,43 +119,47 @@
                         <ng-container *ngSwitchCase="'to_address'">
                           <div class="pl-4 pl-lg-0">
                             <a
-                                    class="text--primary"
-                                    href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
+                              class="text--primary"
+                              href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
+                              *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
                               data[template.matColumnDef] | cutStringPipe: 8:8
-                              }}</span>
+                            }}</span>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
                           </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'details'">
                           <button
-                                  class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                                  [disabled]="!data.token_id"
-                                  [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
+                            class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
+                            [disabled]="!data.token_id"
+                            [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                             <span>View NFT</span>
                           </button>
                         </ng-container>
                         <ng-container *ngSwitchCase="'token_id'">
                           <a
-                                  class="text--primary"
-                                  href="/tokens/token/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
-                                  *ngIf="data['token_id']?.length > 0">
+                            class="text--primary"
+                            href="/tokens/token/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
+                            *ngIf="data['token_id']?.length > 0">
                             {{ data[template.matColumnDef] | stringEllipsis: 16 }}
                           </a>
                           <span *ngIf="data['token_id']?.length === 0"> - </span>
                         </ng-container>
                         <div *ngSwitchCase="'action'">
                           <button
-                                  mat-icon-button
-                                  aria-label="Example icon-button with a menu"
-                                  placement="right"
-                                  (click)="getNFTDetail(data)"
-                                  [ngbPopover]="popContent"
-                                  popoverClass="custom-popover token-popover">
-                            <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
+                            mat-icon-button
+                            aria-label="Example icon-button with a menu"
+                            placement="right"
+                            (click)="getNFTDetail(data)"
+                            [ngbPopover]="popContent"
+                            popoverClass="custom-popover token-popover">
+                            <img
+                              [src]="'assets/images/icons/token-detail.png' | imageS3"
+                              alt=""
+                              width="16"
+                              height="16" />
                           </button>
                           <ng-template #popContent class="popContent">
                             <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>

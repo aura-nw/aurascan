@@ -7,7 +7,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,7 +22,7 @@ import { TableTemplate } from '../../../../../../core/models/common.model';
 import { CommonService } from '../../../../../../core/services/common.service';
 import { TokenService } from '../../../../../../core/services/token.service';
 import { shortenAddress } from '../../../../../../core/utils/common/shorten';
-import { convertDataTransaction, Globals } from '../../../../../../global/global';
+import { Globals } from '../../../../../../global/global';
 
 @Component({
   selector: 'app-token-transfers-tab',
@@ -86,7 +86,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewI
     private tokenService: TokenService,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -122,25 +122,24 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewI
       filterData['isSearchWallet'] = true;
     }
 
-    this.tokenService
-      .getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey)
-      .subscribe((res) => {
-        const { code, data } = res;
-        this.nextKey = data.nextKey || null;
-        if (code === 200) {
-          res.data.transactions.forEach((trans) => {
-            trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-          });
-          if (this.dataSource.data.length > 0 && nextKey) {
-            this.dataSource.data = [...this.dataSource.data, ...res.data.transactions];
-          } else {
-            this.dataSource.data = [...res.data.transactions];
-          }
-          this.pageData.length = res.data?.count;
-          this.resultLength.emit(this.pageData.length);
+    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey).subscribe((res) => {
+      const { code, data } = res;
+      this.nextKey = data.nextKey || null;
+      if (code === 200) {
+        res.data.transactions.forEach((trans) => {
+          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+        });
+      
+        if (this.dataSource.data.length > 0) {
+          this.dataSource.data = [...this.dataSource.data, ...res.data.transactions];
+        } else {
+          this.dataSource.data = [...res.data.transactions];
         }
-        this.loading = false;
-      });
+        this.pageData.length = this.dataSource.data.length;
+        this.resultLength.emit(this.pageData.length);
+      }
+      this.loading = false;
+    });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -199,7 +198,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewI
     };
   }
 
-  encodeData(data){
+  encodeData(data) {
     return encodeURIComponent(data);
   }
 
