@@ -3,7 +3,8 @@
     <h1 class="text--white mb-0">Smart contracts list</h1>
     <button class="button button-outline button--md button-pill button-flat d-none d-lg-flex"
     [disabled]="!this.dataSource || this.dataSource?.data?.length == 0">
-      <a href="{{ (!this.dataSource || this.dataSource?.data?.length == 0) ? 'javascript:void(0)' : '/contracts/contracts-deploy-mainnet' }}">
+      <a [routerLink]=""
+          href="{{ (!this.dataSource || this.dataSource?.data?.length == 0) ? 'javascript:void(0)' : '/contracts/contracts-deploy-mainnet' }}">
         <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
         <span class="ml-2 text--black">Register Contract</span>
       </a>
