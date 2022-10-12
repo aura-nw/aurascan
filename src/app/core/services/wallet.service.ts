@@ -262,7 +262,7 @@ export class WalletService implements OnDestroy {
     validatorsCount?: number,
   ) {
     let signingClient;
-    if (this.isMobileMatched) {
+    if (this.isMobileMatched && !this.checkExistedCoin98()) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
 
       return this.makeSignDocData(senderAddress, {
@@ -277,14 +277,14 @@ export class WalletService implements OnDestroy {
             return {
               hash: e?.result?.transactionHash || null,
               error: null,
-            }
+            };
           });
         })
         .catch((error) => {
           return {
-            hash:  null,
+            hash: null,
             error,
-          }
+          };
         });
     }
 
