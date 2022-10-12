@@ -6,7 +6,7 @@ export enum PageEventType {
   Unbonding = 'Unbonding',
   Redelegation = 'Redelegation',
   Vestings = 'Vestings',
-  Token = 'Token'
+  Token = 'Token',
 }
 
 export enum TypeAccount {
@@ -48,7 +48,7 @@ export enum WalletAcount {
 export enum TabsAccount {
   Assets = 'ASSETS',
   Transactions = 'TRANSACTIONS',
-  Stake = 'STAKE'
+  Stake = 'STAKE',
 }
 
 export enum StakeModeAccount {
@@ -56,4 +56,9 @@ export enum StakeModeAccount {
   Unbondings = 1,
   Redelegations = 2,
   Vestings = 3,
+}
+export enum EAccountType {
+  BaseAccount = 'cosmos-sdk/BaseAccount',
+  PeriodicVestingAccount = 'cosmos-sdk/PeriodicVestingAccount',
+  DelayedVestingAccount = 'cosmos-sdk/DelayedVestingAccount',
 }

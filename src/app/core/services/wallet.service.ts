@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { EAccountType } from 'src/app/core/constants/account.enum';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
@@ -113,10 +114,8 @@ export class WalletService implements OnDestroy {
       .then((account) => {
         if (account) {
           this.setWallet(account);
-
           return true;
         }
-
         return undefined;
       })
       .catch((err) => {
@@ -305,7 +304,17 @@ export class WalletService implements OnDestroy {
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
     return this.http.get(`${this.urlIndexer}/account-info?address=${address}&chainId=${signDoc.chain_id}`).pipe(
       map((res) => {
-        const account = _.get(res, 'data.account_auth.result.value');
+        const accountAuth = _.get(res, 'data.account_auth.result');
+        let account: {
+          account_number: number | string;
+          sequence: number | string;
+        };
+
+        if (accountAuth.type === EAccountType.BaseAccount) {
+          account = accountAuth.value;
+        } else {
+          account = _.get(accountAuth, 'value.base_vesting_account.base_account');
+        }
 
         if (account) {
           return makeSignDoc(
