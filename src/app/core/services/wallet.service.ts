@@ -316,6 +316,10 @@ export class WalletService implements OnDestroy {
           account = _.get(accountAuth, 'value.base_vesting_account.base_account');
         }
 
+        if (!account.account_number) {
+          throw new Error('Can not get Account');
+        }
+
         if (account) {
           return makeSignDoc(
             signDoc.msgs,
@@ -323,7 +327,7 @@ export class WalletService implements OnDestroy {
             signDoc.chain_id,
             signDoc.memo,
             account.account_number,
-            account.sequence,
+            account.sequence || 0,
           );
         }
         throw new Error('Can not get Account');
