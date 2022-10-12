@@ -36,6 +36,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   countCurrent: string = ContractTab.Transactions;
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
+  nextKey = null;
 
   contractTransaction = {};
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
@@ -116,11 +117,11 @@ export class ContractContentComponent implements OnInit, OnDestroy {
         dataInstantiate: this.contractService.getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate'),
       }).subscribe(({ dataExecute, dataInstantiate }) => {
         const { code, data } = dataExecute;
+        this.nextKey = dataExecute.data.nextKey;
         if (code === 200) {
           const txsExecute = convertDataTransaction(data, this.coinInfo);
           if (dataExecute?.data.count > 0 || dataInstantiate?.data.count > 0) {
-            const { code, data } = dataInstantiate;
-            const txsInstantiate = convertDataTransaction(data, this.coinInfo);
+            const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
             this.contractTransaction['data'] = txsExecute;
             this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
 

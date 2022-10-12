@@ -30,7 +30,7 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
-  getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = ''): Observable<any> {
+  getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       searchType: type,
