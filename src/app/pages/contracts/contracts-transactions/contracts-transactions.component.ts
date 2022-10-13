@@ -53,7 +53,10 @@ export class ContractsTransactionsComponent implements OnInit {
 
     valueColumn &&
       ((v) => {
-        v.suffix = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+        v.suffix =
+          `<span class="text--primary">` +
+          this.environmentService.configValue.chain_info.currencies[0].coinDenom +
+          `</span>`;
       })(valueColumn);
   }
 
