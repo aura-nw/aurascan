@@ -273,13 +273,15 @@ export class WalletService implements OnDestroy {
         .toPromise()
         .then((signDoc) => {
           return this.coin98Client.signAndBroadcast(senderAddress, signDoc).then((e) => {
+            let error;
             if (e.result?.error || e?.error) {
+              error = JSON.stringify(e.result?.error || e?.error) || null;
               this.catchErrors(e.result?.error || e?.error, true);
             }
 
             return {
               hash: e?.result?.transactionHash || null,
-              error: e.result?.error || e?.error,
+              error,
             };
           });
         })
