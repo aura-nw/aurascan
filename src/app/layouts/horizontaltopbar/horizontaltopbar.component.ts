@@ -12,7 +12,6 @@ import {WalletService} from '../../core/services/wallet.service';
 import {LAYOUT_MODE} from '../layouts.model';
 import {MENU, MenuName} from './menu';
 import {MenuItem} from './menu.model';
-import {balanceOf} from "src/app/core/utils/common/parsing";
 import {ContractService} from "src/app/core/services/contract.service";
 
 @Component({

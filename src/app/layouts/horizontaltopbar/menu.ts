@@ -10,53 +10,62 @@ export enum MenuName {
   TokenCW20 = 'TokenCW20',
   TokenCW721 = 'TokenCW721',
   Statistic = 'Statistic',
-  ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
   Contract = 'Contract',
   Account = 'Account',
+  BlockChain = 'Block chain',
+  Resources = 'Resources',
+  More = 'More',
 }
 
 export const MENU: MenuItem[] = [
   {
     id: 1,
-    label: 'MENUITEMS.DASHBOARDS.TEXT',
-    icon: 'grid',
+    label: 'MENUITEMS.DASHBOARDS',
+    icon: 'squares-four',
     link: '/dashboard',
     name: MenuName.Dashboard
   },
   {
     id: 2,
-    label: 'MENUITEMS.TRANSACTION.TEXT',
-    icon: 'credit-card',
-    link: '/transaction',
-    name: MenuName.Transaction
+    label: 'MENUITEMS.BLOCKCHAIN',
+    icon: 'stack',
+    name: MenuName.BlockChain,
+    subItems: [
+      {
+        id: 1,
+        label: 'MENUITEMS.TRANSACTION',
+        icon: 'credit-card',
+        link: '/transaction',
+        name: MenuName.Transaction
+      },
+      {
+        id: 2,
+        label: 'MENUITEMS.VALIDATORS',
+        icon: 'graph',
+        link: '/validators',
+        name: MenuName.Validator
+      },
+      {
+        id: 3,
+        label: 'MENUITEMS.PROPOSAL',
+        icon: 'envelope-open',
+        link: '/votings',
+        name: MenuName.Proposal
+      },
+      {
+        id: 4,
+        label: 'MENUITEMS.BLOCKS',
+        icon: 'stack',
+        link: '/blocks',
+        name: MenuName.Block
+      },
+    ]
   },
   {
     id: 3,
-    label: 'MENUITEMS.VALIDATORS.TEXT',
-    icon: 'collab',
-    link: '/validators',
-    name: MenuName.Validator
-  },
-  {
-    id: 4,
-    label: 'MENUITEMS.PROPOSAL.TEXT',
-    icon: 'archive',
-    link: '/votings',
-    name: MenuName.Proposal
-  },
-  {
-    id: 5,
-    label: 'MENUITEMS.CONTRACT.TEXT',
-    icon: 'file-document',
-    link: '/contracts',
-    name: MenuName.Contract
-  },
-  {
-    id: 6,
-    label: 'MENUITEMS.TOKEN.TEXT',
-    icon: 'coin',
-    link: '/tokens',
+    label: 'MENUITEMS.TOKEN',
+    icon: 'coins',
     name: MenuName.Token,
     subItems: [
       // {
@@ -75,41 +84,53 @@ export const MENU: MenuItem[] = [
       }
     ]
   },
+  {
+    id: 4,
+    label: 'MENUITEMS.RESOURCES',
+    icon: 'credit-card',
+    name: MenuName.Resources,
+    subItems: [
+      {
+        id: 1,
+        label: 'MENUITEMS.CONTRACT',
+        icon: 'newspaper',
+        link: '/contracts',
+        name: MenuName.Contract
+      },
+      // {
+      //   id: 2,
+      //   label: 'MENUITEMS.CHART-STATS',
+      //   link: '/statistics/charts-stats',
+      //   name: MenuName.ChartStats,
+      //   icon: 'line-segments',
+      // },
+      // {
+      //   id: 3,
+      //   label: 'MENUITEMS.TOP-STATISTICS',
+      //   link: '/statistics/top-statistic',
+      //   name: MenuName.TopStatistics,
+      //   icon: 'chart-line',
+      // }
+    ]
+  },
   // {
-  //   id: 7,
-  //   label: 'MENUITEMS.STATISTICS.TEXT',
-  //   icon: 'coin',
-  //   link: '/',
-  //   name: MenuName.Statistic,
+  //   id: 5,
+  //   label: 'MENUITEMS.MORE',
+  //   icon: 'list',
+  //   name: MenuName.More,
   //   subItems: [
-  //     {
-  //       id: 1,
-  //       label: 'Chart & Stats',
-  //       link: '/statistics/charts-stats',
-  //       name: MenuName.ChartStats,
-  //       icon: 'coins',
-  //     },
-  //     {
-  //       id: 2,
-  //       label: 'Top Statistics',
-  //       link: '/statistics/top-statistic',
-  //       name: MenuName.TopStatistics,
-  //       icon: 'coins',
-  //     }
+  //   {
+  //     id: 1,
+  //     label: 'Fee Grant',
+  //     link: '/fee',
+  //     icon: 'gas-pump',
+  //   },
+  //   {
+  //     id: 2,
+  //     label: 'Multi-send',
+  //     link: '/fee',
+  //     icon: 'users-three',
+  //   }
   //   ]
   // },
-  {
-    id: 8,
-    label: 'MENUITEMS.BLOCKS.TEXT',
-    icon: 'block',
-    link: '/blocks',
-    name: MenuName.Block
-  },
-  {
-    id: 9,
-    label: 'MENUITEMS.ACCOUNT.TEXT',
-    icon: 'user',
-    link: '',
-    name: MenuName.Account
-  },
 ];
