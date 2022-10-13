@@ -30,8 +30,8 @@ export class Coin98Client {
   request(requestParameter: requestParameter) {
     if (this.connectionId) {
       return this.client.request({
-        id: this.connectionId,
         ...requestParameter,
+        id: this.connectionId,
       });
     }
 
@@ -39,8 +39,8 @@ export class Coin98Client {
       (connectionId) =>
         connectionId &&
         this.client.request({
-          id: connectionId,
           ...requestParameter,
+          id: connectionId,
         }),
     );
   }
