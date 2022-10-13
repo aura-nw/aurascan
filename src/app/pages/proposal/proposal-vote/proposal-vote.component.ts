@@ -56,10 +56,11 @@ export class ProposalVoteComponent implements OnInit {
       chainId: this.chainId,
     });
 
+    this.isLoading = false;
+
     if (hash) {
       this.urlAction = 'transaction/' + hash;
       this.isLoadingAction = true;
-      this.isLoading = false;
       // this.dialogRef.close({ keyVote: this.keyVote });
       this.dialogRef.close();
       setTimeout(() => {
