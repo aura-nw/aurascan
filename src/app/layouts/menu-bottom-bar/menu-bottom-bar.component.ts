@@ -23,9 +23,9 @@ export class MenuBottomBarComponent implements OnInit {
       if(!menu.subItems) {
         this.menuLink.push(menu.link)
       } else {
-        let arr = [];
+        let arr = '';
         for(let subMenu of menu.subItems) {
-          arr.push(subMenu.link)
+          arr += subMenu.link;
         }
         this.menuLink.push(arr)
       }
@@ -40,7 +40,10 @@ export class MenuBottomBarComponent implements OnInit {
     const id= event.target?.id;
     if(this.popover.isOpen()) {
       if(ids.indexOf(id) < 0){
-        document.getElementById('popover-overlay').click();
+        const overlay = document.getElementById('popover-overlay');
+        if(overlay) {
+          overlay.click();
+        }
       }
     }
   }
