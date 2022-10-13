@@ -40,6 +40,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     pageTitle = null;
     innerWidth;
     menuName = MenuName;
+    menuLink = [];
 
     prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
 
@@ -74,6 +75,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         private environmentService: EnvironmentService,
         private contractService: ContractService,
     ) {
+        this.getMenuLink();
         router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 this.activateMenu();
@@ -111,7 +113,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.element = document.documentElement;
         this.layoutMode = LAYOUT_MODE;
-        this.initialize();
         this.checkEnv();
         /***
          * Language value cookies wise set
@@ -126,14 +127,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         } else {
             this.flagvalue = val.map((element) => element.flag);
         }
-    }
-
-    /**
-     * Initialize
-     */
-    initialize(): void {
-        // this.menuItems = MENU;
-        // this.getList();
+        console.log('here')
     }
 
     checkEnv() {
@@ -361,5 +355,20 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
                 this.searchValue = '';
             },
         );
+    }
+
+    getMenuLink() {
+        for (let menu of this.menuItems) {
+            if (!menu.subItems) {
+                this.menuLink.push(menu.link)
+            } else {
+                let arr = '';
+                for (let subMenu of menu.subItems) {
+                    arr += subMenu.link;
+                }
+                this.menuLink.push(arr)
+            }
+        }
+        console.log(this.menuLink)
     }
 }
