@@ -16,7 +16,6 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
   contractDetail: any;
   priceToken = 0;
   modalReference: any;
-
   subscription: Subscription;
 
   constructor(
