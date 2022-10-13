@@ -75,7 +75,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         private environmentService: EnvironmentService,
         private contractService: ContractService,
     ) {
-        this.getMenuLink();
         router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 this.activateMenu();
@@ -111,6 +110,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.getMenuLink();
         this.element = document.documentElement;
         this.layoutMode = LAYOUT_MODE;
         this.checkEnv();
@@ -127,7 +127,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         } else {
             this.flagvalue = val.map((element) => element.flag);
         }
-        console.log('here')
     }
 
     checkEnv() {
@@ -369,6 +368,5 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
                 this.menuLink.push(arr)
             }
         }
-        console.log(this.menuLink)
     }
 }

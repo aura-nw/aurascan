@@ -50,6 +50,7 @@
             <app-custom-video-player
               [videoSrc]="nftDetail?.media_info[0]?.media_link"
               [showControl]="true"
+              [isDetail]="true"
               *ngIf="nftType === 'video'"
               [isMuted]="false">
             </app-custom-video-player>
