@@ -90,14 +90,14 @@ export class ContractsTransactionsComponent implements OnInit {
             if (dataExecute.data.count > 0) {
               this.nextKey = dataExecute.data.nextKey;
 
+              if (this.contractTransaction['data']?.length > 0) {
+                this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
+              } else {
+                this.contractTransaction['data'] = txsExecute;
+              }
+
               if (this.nextKey === null) {
                 this.getDataInstantiate();
-              } else {
-                if (this.contractTransaction['data']?.length > 0) {
-                  this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsExecute];
-                } else {
-                  this.contractTransaction['data'] = txsExecute;
-                }
               }
               this.contractTransaction['count'] = this.contractTransaction['data']?.length;
             }
