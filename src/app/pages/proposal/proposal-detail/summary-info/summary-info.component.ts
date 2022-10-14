@@ -312,6 +312,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     dialogRef.afterClosed().subscribe((result) => {
       this.proposalService.reloadList();
       this.getVotedProposal();
+      this.getProposalDetail();
     });
   }
 

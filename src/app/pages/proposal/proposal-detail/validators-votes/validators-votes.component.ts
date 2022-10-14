@@ -45,7 +45,7 @@ export class ValidatorsVotesComponent implements OnInit {
   voteDataListLoading = true;
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
-  query = [];
+  isFirstChange = false;
 
   voteData = {
     all: null,
