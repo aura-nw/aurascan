@@ -64,7 +64,7 @@ form.aura-form.single-input-field {
         transition: color .35s ease-in-out;
       }
       .nav-link {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: 600;
         padding: 0;
         position: relative;
@@ -97,7 +97,6 @@ form.aura-form.single-input-field {
             &:after {
               background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
               background-size: auto;
-              transform: rotate(180deg);
             }
           }
           &:hover {
@@ -117,6 +116,22 @@ form.aura-form.single-input-field {
               background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
               transform: rotate(180deg);
             }
+          }
+        }
+      }
+      &:hover, &.active {
+        i, span {
+          color: var(--aura-white);
+        }
+        .nav-link {
+          .nav-link__panel {
+            i, span {
+              color: var(--aura-gray-6);
+            }
+          }
+          &.dropdown-toggle:after {
+            background: url("../../../assets/icons/icons-svg/white/chevron-up.svg") center no-repeat;
+            background-size: auto;
           }
         }
       }
@@ -142,7 +157,7 @@ form.aura-form.single-input-field {
         font-size: 1.4rem;
         font-weight: 600;
         @media(min-width: 1200px) {
-          font-size: 1.6rem;
+          font-size: 1.4rem;
         }
         color: var(--aura-gray-6);
         padding: 8px 16px;
