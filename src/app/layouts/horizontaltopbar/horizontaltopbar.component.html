@@ -87,9 +87,9 @@
   <div class="container-fluid">
     <nav class="navbar navbar-light navbar-expand-lg topnav-menu active">
       <div class="collapse navbar-collapse active" id="topnav-menu-content">
-        <ul class="navbar-nav w-100 justify-content-center align-items-center">
+        <ul class="navbar-nav w-100 align-items-center">
           <ng-container *ngFor="let item of menuItems; let i = index">
-            <li class="nav-item dropdown mx-5 mx-lg-8 mx-xl-12" *ngIf="i === 0" routerLinkActive="active">
+            <li class="nav-item dropdown mr-5 mr-lg-8 mr-xl-12" *ngIf="i === 0" routerLinkActive="active">
               <a class="nav-link d-flex align-items-center mb-0"
                  [routerLink]="item.link"
                  [class.active]="(router.url === '/' || router.url === '/dashboard') && item.link === '/dashboard'" role="button">
