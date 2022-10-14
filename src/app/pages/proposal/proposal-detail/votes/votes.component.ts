@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { merge } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
@@ -40,6 +40,7 @@ export class VotesComponent implements OnChanges {
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
   voteDataListLoading = true;
+  isFirstChange = false;
 
   voteData = {
     all: null,
@@ -66,8 +67,11 @@ export class VotesComponent implements OnChanges {
     });
   }
 
-  ngOnChanges(): void {
-    this.getVotesList();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['proposalDetail'].currentValue.proposal_id && !this.isFirstChange) {
+      this.isFirstChange = true;
+      this.getVotesList();
+    }
   }
 
   getVotesList(): void {
