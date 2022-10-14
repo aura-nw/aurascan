@@ -18,7 +18,8 @@
                         <app-loading-image
                           [appClass]="data['jailed'] ? 'jailed' : ''"
                           [identity]="data['validator_identity']"
-                          [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
+                          [srcImg]="getValidatorAvatar(data.operator_address)">
+                        </app-loading-image>
                       </span>
                     </div>
                   </ng-container>
@@ -54,7 +55,9 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{ data[template.matColumnDef] }}</span>
+                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
+                        data[template.matColumnDef]
+                      }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'updated_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -88,14 +91,6 @@
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
-                    </ng-container>
-
-                    <ng-container *ngSwitchDefault>
-                      {{
-                        (template.isShort
-                          ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) || '-'
-                      }}
                     </ng-container>
                   </ng-container>
                 </ng-container>
