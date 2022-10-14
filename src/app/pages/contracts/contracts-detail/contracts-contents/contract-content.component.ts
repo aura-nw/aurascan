@@ -128,21 +128,23 @@ export class ContractContentComponent implements OnInit, OnDestroy {
               this.contractService
                 .getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate')
                 .subscribe((dataInstantiate) => {
-                  const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
-                  txsInstantiate[0]['type'] =
-                    dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
-                  txsInstantiate[0]['contract_address'] = this.contractsAddress;
-                  let data = [];
-                  if (this.contractTransaction['data']?.length > 0) {
-                    data = [...this.contractTransaction['data'], txsInstantiate[0]];
-                  } else {
-                    data = txsInstantiate;
+                  if (dataInstantiate.data?.transactions?.length > 0) {
+                    const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
+                    txsInstantiate[0]['type'] =
+                      dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
+                    txsInstantiate[0]['contract_address'] = this.contractsAddress;
+                    let data = [];
+                    if (this.contractTransaction['data']?.length > 0) {
+                      data = [...this.contractTransaction['data'], txsInstantiate[0]];
+                    } else {
+                      data = txsInstantiate;
+                    }
+                    let count = data.length || 0;
+                    this.contractTransaction = {
+                      data,
+                      count,
+                    };
                   }
-                  let count = data.length || 0;
-                  this.contractTransaction = {
-                    data,
-                    count,
-                  };
                 });
             }
           }

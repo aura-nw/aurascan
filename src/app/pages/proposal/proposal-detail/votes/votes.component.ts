@@ -68,7 +68,7 @@ export class VotesComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['proposalDetail'].currentValue.proposal_id && !this.isFirstChange) {
+    if (changes['proposalDetail'].currentValue?.proposal_id && !this.isFirstChange) {
       this.isFirstChange = true;
       this.getVotesList();
     }
