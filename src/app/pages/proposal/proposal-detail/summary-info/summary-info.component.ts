@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { map, mergeMap } from 'rxjs/operators';
+import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { Globals } from '../../../../../app/global/global';
 import {
   MESSAGE_WARNING,
@@ -180,7 +181,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
       ...data,
       initial_deposit: balanceOf(_.get(data, 'initial_deposit[0].amount') || 0),
       pro_total_deposits: balanceOf(_.get(data, 'total_deposit[0].amount') || 0),
-      pro_type: data.content['@type'].split('.').pop(),
+      pro_type: data?.content['@type']?.split('.').pop(),
       pro_votes_yes,
       pro_votes_no,
       pro_votes_no_with_veto,
@@ -310,9 +311,13 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.proposalService.reloadList();
-      this.getVotedProposal();
-      this.getProposalDetail();
+      if (result !== 'canceled') {
+        setTimeout(() => {
+          this.proposalService.reloadList();
+          this.getProposalDetail();
+        }, 3000);
+        this.getVotedProposal();
+      }
     });
   }
 
