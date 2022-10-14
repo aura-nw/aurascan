@@ -124,7 +124,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
               this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
             }
             //check data < 25 record
-            if (this.contractTransaction['data'].length < this.limit || !this.contractTransaction['data']) {
+            if (this.contractTransaction['data']?.length < this.limit || !this.contractTransaction['data']) {
               this.contractService
                 .getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate')
                 .subscribe((dataInstantiate) => {
@@ -133,12 +133,12 @@ export class ContractContentComponent implements OnInit, OnDestroy {
                     dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
                   txsInstantiate[0]['contract_address'] = this.contractsAddress;
                   let data = [];
-                  if (this.contractTransaction['data'].length > 0) {
+                  if (this.contractTransaction['data']?.length > 0) {
                     data = [...this.contractTransaction['data'], txsInstantiate[0]];
                   } else {
                     data = txsInstantiate;
                   }
-                  let count = this.contractTransaction['data'].length || 0;
+                  let count = data.length || 0;
                   this.contractTransaction = {
                     data,
                     count,
