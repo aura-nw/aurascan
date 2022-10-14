@@ -168,9 +168,14 @@
                       </div>
                       <span *ngIf="!data[template.matColumnDef]">-</span>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'contract_name'"
-                      >{{ data[template.matColumnDef] }}
+                    <ng-container *ngSwitchCase="'contract_name'">
+                      {{ data[template.matColumnDef] }}
                       <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'project_name'">
+                      <a [routerLink]="['/project', 123]">
+                        demo
+                      </a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
                       {{ data[template.matColumnDef] }}

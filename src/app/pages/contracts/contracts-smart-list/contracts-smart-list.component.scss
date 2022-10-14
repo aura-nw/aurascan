@@ -28,16 +28,13 @@
 button:disabled a {
   cursor: not-allowed;
 }
-
-@media (max-width: 991.99px) {
-  .aura-table th.mat-header-cell {
-    min-width: 150px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-  .aura-table th.mat-header-cell:nth-child(1),
-  .aura-table th.mat-header-cell:nth-child(2),
-  .aura-table th.mat-header-cell:nth-child(9) {
-    min-width: 200px;
-  }
+.aura-table th.mat-header-cell {
+  min-width: 120px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.aura-table th.mat-header-cell:nth-child(1),
+.aura-table th.mat-header-cell:nth-child(2),
+.aura-table th.mat-header-cell:nth-child(9) {
+  min-width: 200px;
 }
