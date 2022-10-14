@@ -52,45 +52,28 @@ form.aura-form.single-input-field {
   }
 }
 .topnav {
-  @media (min-width: 1200px) {
-    height: 56px;
-  }
+  height: 56px;
   .navbar-nav {
     .divider.divider-vertical {
       min-height: 24px;
     }
     .nav-item {
-      padding: 12px 8px;
-      @media (min-width: 1366px) {
-        padding: 13.5px 12px;
-      }
-      @media (min-width: 1440px) {
-        padding: 16px;
-      }
-      &:first-child {
-        padding-left: 0;
-      }
-      &:last-child {
-        padding-right: 0;
-      }
-      i.icon, span {
+      padding: 16px;
+      i, span {
         color: var(--aura-gray-6);
         transition: color .35s ease-in-out;
       }
       .nav-link {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 600;
-        @media(min-width: 1200px) {
-          font-size: 1.6rem;
-        }
         padding: 0;
         position: relative;
         &:hover, &.active {
-          i.icon, span {
+          i, span {
             color: var(--aura-white);
           }
           .nav-link__panel {
-            i.icon, span {
+            i, span {
               color: var(--aura-gray-6);
             }
           }
@@ -100,7 +83,10 @@ form.aura-form.single-input-field {
             content: '';
             position: absolute;
             right: -24px;
-            top: -2px;
+            top: -3px;
+            @media (min-width: 1200px) {
+              top: 0;
+            }
             width: 24px;
             height: 24px;
             background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
@@ -123,7 +109,7 @@ form.aura-form.single-input-field {
           }
         }
         &:has( .active) {
-          > span {
+          > .nav-link__item span, > .nav-link__item i {
             color: var(--aura-white);
           }
           &.dropdown-toggle {
@@ -135,7 +121,7 @@ form.aura-form.single-input-field {
         }
       }
     }
-    i.icon {
+    i {
       font-size: 2rem;
       @media(min-width: 1200px) {
         font-size: 2.4rem;
@@ -143,10 +129,10 @@ form.aura-form.single-input-field {
     }
     .nav-link__panel {
       position: absolute;
-      bottom: -90%;
-      transform: translateY(92%);
+      bottom: -16px;
+      transform: translateY(100%);
       border: 1px solid transparent;
-      border-radius: 25px;
+      border-radius: 8px;
       z-index: 1500;
       overflow: hidden;
       max-height: 0;
@@ -173,13 +159,12 @@ form.aura-form.single-input-field {
         }
         &:hover, &.active {
           background-color: var(--aura-gray-10);
-          i.icon, span {
+          i, span {
             color: var(--aura-gray-1) !important;
           }
         }
       }
       &-more {
-        transform: translate(-50%, 95%);
         a {
           min-width: 150px;
         }

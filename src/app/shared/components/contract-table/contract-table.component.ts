@@ -39,6 +39,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
   @Input() contractInfo!: ITableContract;
   @Input() templates!: Array<TableTemplate>;
   @Input() label!: string;
+  @Input() nextKey: string;
   @Output() onViewSelected: EventEmitter<DropdownElement> = new EventEmitter();
   @Output() onChangePage: EventEmitter<any> = new EventEmitter();
 
@@ -119,12 +120,8 @@ export class ContractTableComponent implements OnInit, OnChanges {
     return parseLabel(+id);
   }
 
-  pageEvent({ pageIndex }) {
-    if (pageIndex?.toString()) {
-      this.onChangePage.emit({
-        next: pageIndex,
-      });
-    }
+  pageEvent(event) {
+    this.onChangePage.emit(event);
   }
 
   getListContractTransaction(): void {

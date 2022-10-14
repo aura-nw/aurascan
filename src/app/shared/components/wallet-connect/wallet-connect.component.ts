@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
@@ -20,7 +20,14 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.configValue.chainId;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  isMobileMatched = false;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
+    tap((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    }),
+  );
 
   destroy$ = new Subject();
   constructor(
@@ -54,7 +61,7 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
     try {
       const connect = async () => {
         const connect = await this.walletService.connect(provider);
-        if (!connect && provider === WALLET_PROVIDER.COIN98) {
+        if (!connect && provider === WALLET_PROVIDER.COIN98 && !this.isMobileMatched) {
           this.dlgService.showDialog({
             title: '',
             content: 'Please set up override Keplr in settings of Coin98 wallet',

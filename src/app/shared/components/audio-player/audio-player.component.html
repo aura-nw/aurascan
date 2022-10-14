@@ -3,7 +3,7 @@
   <a href="{{link}}" *ngIf="link"></a>
   <audio id="{{nftId}}"
       [controls]="!link"
-      #audio>
+      #audio loop>
     <source *ngIf="src" [src]="src" />
     Your browser does not support the audio element.
   </audio>

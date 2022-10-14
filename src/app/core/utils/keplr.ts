@@ -54,7 +54,7 @@ export function getKeplrError(err: any): KEPLR_ERRORS {
   return KEPLR_ERRORS.Failed;
 }
 
-export async function handleErrors(err: Error): Promise<string> {
+export async function handleErrors(err: any): Promise<string> {
   const error = getKeplrError(err.message);
   switch (error) {
     case KEPLR_ERRORS.NoChainInfo:
@@ -64,6 +64,6 @@ export async function handleErrors(err: Error): Promise<string> {
       window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
       return null;
     default:
-      return err.message;
+      return err.message || err;
   }
 }

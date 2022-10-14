@@ -4,19 +4,18 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Buffer } from 'buffer';
+import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DATEFORMAT, PAGE_EVENT } from '../../../../app/core/constants/common.constant';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransaction, getAmount, Globals } from '../../../../app/global/global';
-import { sha256 } from 'js-sha256';
-import { Buffer } from 'buffer';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { convertDataBlock, convertDataTransaction, Globals } from '../../../../app/global/global';
 
 @Component({
   selector: 'app-block-detail',
@@ -102,7 +101,7 @@ export class BlockDetailComponent implements OnInit {
   getDetail(): void {
     if (this.id) {
       this.getDetailByHeight();
-    } 
+    }
   }
 
   getDetailByHeight() {

@@ -31,6 +31,7 @@
       *ngIf="countCurrent === contractTab.Transactions && contractTransaction['data']"
       [dataList]="contractTransaction"
       [templates]="templates"
+      [nextKey]="nextKey"
       [contractInfo]="contractInfo"
       (onViewSelected)="filterTransaction($event)"></app-contract-table>
     <app-contract

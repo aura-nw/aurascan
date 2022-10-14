@@ -20,7 +20,7 @@ import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit {
   chartRange = CHART_RANGE.D_30;
   chartRangeData = CHART_RANGE;
 
@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.updateBlockAndTxs(this.chartRange);
     }, 1000);
+    this.cdr.detectChanges();
   }
 
   /**
@@ -168,8 +169,5 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         `<span class=text--primary> ${this.denom} </span>`
       );
     }
-  }
-  ngAfterViewInit() {
-    this.cdr.detectChanges();
   }
 }
