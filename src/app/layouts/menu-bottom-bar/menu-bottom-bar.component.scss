@@ -1,0 +1,121 @@
+.menu-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1f1f22;
+  z-index: 2001;
+  .menu-item {
+    position: relative;
+    padding: var(--spacer-3);
+    .menu-link {
+      * {
+        color: var(--aura-gray-6);
+      }
+      &.active {
+        * {
+          color: var(--aura-white);
+        }
+      }
+    }
+    i.icon {
+      font-size: 2.4rem;
+    }
+  }
+}
+.menu-dropdown {
+  background: rgba(19, 20, 25, 0.5);
+  padding-left: 0px !important;
+  .menu-dropdown__button {
+    background-color: var(--aura-gray-10);
+    &:after, &:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      background-size: contain;
+      right: 12px;
+      top: 18px;
+      width: 14px;
+      height: 14px;
+    }
+    &:before {
+      opacity: 1;
+    }
+    &:after {
+      transform: rotate(180deg);
+      opacity: 0;
+    }
+    &[aria-expanded="true"]{
+      &:before {
+        opacity: 0;
+      }
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+  .dropdown-item.menu-link:active,
+  .dropdown-item.menu-link:focus {
+    background: transparent;
+  }
+}
+::ng-deep {
+  .menu-dropdown-popover {
+    top: -15px !important;
+    z-index: 2;
+    border: none !important;
+    border-radius: 10px !important;
+    .popover-body {
+      max-width: 200px;
+      overflow: hidden;
+      background-color: var(--aura-gray-10);
+      box-shadow: 2px 2px 30px rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      padding: 0;
+      .menu-item {
+        .menu-link {
+          display: flex;
+          align-items: center;
+          &.active {
+            color: var(--aura-white) !important;
+          }
+        }
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--aura-gray-9);
+        }
+      }
+      .box-menu {
+        min-width: 200px;
+        li.dropdown-item.menu-link {
+          color: var(--aura-gray-1);
+          &.active, &:hover {
+            background: rgba(54, 56, 67, 0.5);
+            color: var(--aura-white);
+          }
+        }
+      }
+    }
+    .arrow {
+      display: none !important;
+    }
+  }
+  .menu-item:nth-child(2) .menu-dropdown-popover .popover-body {
+    position: absolute;
+    transform: translate(-11%, -100%);
+  }
+  .menu-item:not(:nth-child(2)) .menu-dropdown-popover .popover-body {
+    position: absolute;
+    transform: translate(-95%, -100%);
+  }
+}
+.overlay-panel {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--aura-black);
+  opacity: 0.95;
+}

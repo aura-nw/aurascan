@@ -1,5 +1,5 @@
-<div class="video-player" [ngStyle]="{ width: appWidth, height: appHeight }">
-  <video *ngIf="isDetail && videoSrc"
+<div class="video-player" [ngStyle]="{ width: appWidth, height: appHeight }" *ngIf="videoSrc">
+  <video *ngIf="isDetail"
          loop
          #video id="{{nftId}}"
          videoPlayInViewport

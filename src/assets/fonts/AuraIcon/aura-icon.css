@@ -97,3 +97,9 @@ i {
 .icon-coins:before {
   content: "\e917";
 }
+.icon-download-simple:before {
+  content: "\e918";
+}
+.icon-nft:before {
+  content: "\e919";
+}

@@ -12,7 +12,6 @@ import {WalletService} from '../../core/services/wallet.service';
 import {LAYOUT_MODE} from '../layouts.model';
 import {MENU, MenuName} from './menu';
 import {MenuItem} from './menu.model';
-import {balanceOf} from "src/app/core/utils/common/parsing";
 import {ContractService} from "src/app/core/services/contract.service";
 
 @Component({
@@ -41,6 +40,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     pageTitle = null;
     innerWidth;
     menuName = MenuName;
+    menuLink = [];
 
     prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
 
@@ -110,9 +110,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.getMenuLink();
         this.element = document.documentElement;
         this.layoutMode = LAYOUT_MODE;
-        this.initialize();
         this.checkEnv();
         /***
          * Language value cookies wise set
@@ -127,14 +127,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         } else {
             this.flagvalue = val.map((element) => element.flag);
         }
-    }
-
-    /**
-     * Initialize
-     */
-    initialize(): void {
-        // this.menuItems = MENU;
-        // this.getList();
     }
 
     checkEnv() {
@@ -362,5 +354,19 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
                 this.searchValue = '';
             },
         );
+    }
+
+    getMenuLink() {
+        for (let menu of this.menuItems) {
+            if (!menu.subItems) {
+                this.menuLink.push(menu.link)
+            } else {
+                let arr = '';
+                for (let subMenu of menu.subItems) {
+                    arr += subMenu.link;
+                }
+                this.menuLink.push(arr)
+            }
+        }
     }
 }

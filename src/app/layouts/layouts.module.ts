@@ -17,9 +17,10 @@ import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
 import { LayoutComponent } from './layout.component';
 import {ContractService} from "src/app/core/services/contract.service";
+import { MenuBottomBarComponent } from './menu-bottom-bar/menu-bottom-bar.component';
 
 @NgModule({
-  declarations: [LayoutComponent, FooterComponent, HorizontalComponent, HorizontaltopbarComponent, DialogComponent],
+  declarations: [LayoutComponent, FooterComponent, HorizontalComponent, HorizontaltopbarComponent, DialogComponent, MenuBottomBarComponent],
   imports: [
     CommonModule,
     TranslateModule,
