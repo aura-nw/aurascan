@@ -91,7 +91,7 @@ export class ProposalVoteComponent implements OnInit {
   }
 
   closeVoteForm() {
-    this.dialogRef.close();
+    this.dialogRef.close('canceled');
   }
 
   onClick(): void {

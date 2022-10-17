@@ -93,7 +93,8 @@
           [ngbPopover]="data.popContent" (shown)="overlayPanel = true"
           [autoClose]="'outside'"
           [popoverClass]="'menu-dropdown-popover'"
-          [class.active]="popover.isOpen() || menuLink[data.idx].includes('/' + router.url.split('/')[1])">
+          [class.active]="popover.isOpen() ||
+            (menuLink[data.idx].includes('/' + router.url.split('/')[1]) && ('/' + router.url.split('/')[1]) !== '/')">
     <i class="ph-{{ data.icon }} mx-auto h3 mb-0" id="{{ data.iconId }}"></i>
     <div class="caption d-block mt-1" id="{{ data.textId }}">{{ data.label | translate }}</div>
   </button>

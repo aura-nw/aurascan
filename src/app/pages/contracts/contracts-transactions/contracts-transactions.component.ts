@@ -103,6 +103,8 @@ export class ContractsTransactionsComponent implements OnInit {
                 this.getDataInstantiate();
               }
               this.contractTransaction['count'] = this.contractTransaction['data']?.length;
+            } else {
+              this.getDataInstantiate();
             }
           }
         });

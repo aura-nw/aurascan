@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -29,7 +19,7 @@ import { Globals } from '../../../../../../global/global';
   templateUrl: './token-transfers-tab.component.html',
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
-export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewInit {
+export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() isNFTContract: boolean;
   @Input() contractAddress: string;
   @Input() keyWord = '';
@@ -94,18 +84,12 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewI
       this.keyWord = params?.a || '';
     });
 
-    this.getListTransactionToken();
+    this.getListTransactionToken(this.keyWord);
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     if (this.isNFTContract) {
       this.linkToken = 'token-nft';
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.keyWord.length > 0) {
-      this.getListTransactionToken(this.keyWord);
     }
   }
 
@@ -129,7 +113,7 @@ export class TokenTransfersTabComponent implements OnInit, OnChanges, AfterViewI
         res.data.transactions.forEach((trans) => {
           trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
         });
-      
+
         if (this.dataSource.data.length > 0) {
           this.dataSource.data = [...this.dataSource.data, ...res.data.transactions];
         } else {
