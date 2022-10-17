@@ -87,7 +87,7 @@ export const MENU: MenuItem[] = [
   {
     id: 4,
     label: 'MENUITEMS.RESOURCES',
-    icon: 'credit-card',
+    icon: 'newspaper',
     name: MenuName.Resources,
     subItems: [
       {
