@@ -148,11 +148,15 @@
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
                     {{ (data[template.matColumnDef] | cutStringPipe: 16) || '-' }}
                   </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'project_name'">
+                    <a [routerLink]="['/project', data.request_id]">{{ data[template.matColumnDef] }}</a>
+                  </ng-container>
                   <ng-container
                     *ngIf="
                       (!template.isUrl || data[template.matColumnDef] === '') &&
                       template.matColumnDef !== 'contract_verification' &&
-                      template.matColumnDef !== 'contract_name'
+                      template.matColumnDef !== 'contract_name' &&
+                      template.matColumnDef !== 'project_name'
                     ">
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <ng-container *ngSwitchDefault>

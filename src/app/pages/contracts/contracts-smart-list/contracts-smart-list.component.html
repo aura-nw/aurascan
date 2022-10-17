@@ -172,10 +172,11 @@
                       {{ data[template.matColumnDef] }}
                       <span class="ml-1" *ngIf="data.symbol">({{ data.symbol }})</span>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'code_id'">
+                      <div class="pl-4">{{ data[template.matColumnDef] }}</div>
+                    </ng-container>
                     <ng-container *ngSwitchCase="'project_name'">
-                      <a [routerLink]="['/project', 123]">
-                        demo
-                      </a>
+                      <a [routerLink]="['/project', data.request_id]">{{ data[template.matColumnDef] }}</a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
                       {{ data[template.matColumnDef] }}

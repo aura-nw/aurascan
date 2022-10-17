@@ -121,7 +121,6 @@ export class ContractsSmartListComponent implements OnInit {
       });
       this.preIndex = this.pageData.pageIndex;
       this.dataSource.data = res.data;
-      console.log(res.data)
       this.loading = false;
 
     });

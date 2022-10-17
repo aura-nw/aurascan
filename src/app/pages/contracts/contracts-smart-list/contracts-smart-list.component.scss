@@ -35,6 +35,10 @@ button:disabled a {
 }
 .aura-table th.mat-header-cell:nth-child(1),
 .aura-table th.mat-header-cell:nth-child(2),
+.aura-table th.mat-header-cell:nth-child(4),
 .aura-table th.mat-header-cell:nth-child(9) {
   min-width: 200px;
+}
+.aura-table th.mat-header-cell:nth-child(3) {
+  padding-left: 16px;
 }

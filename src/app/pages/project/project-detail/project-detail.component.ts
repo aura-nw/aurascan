@@ -1,4 +1,7 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import {ProjectService} from "src/app/core/services/project.service";
+import {ActivatedRoute} from "@angular/router";
+import {ProjectDetail} from "src/app/core/models/project";
 const marked = require('marked');
 
 @Component({
@@ -7,47 +10,26 @@ const marked = require('marked');
   styleUrls: ['./project-detail.component.scss']
 })
 export class ProjectDetailComponent implements OnInit, AfterViewChecked {
+  projectDetail: ProjectDetail;
   loading = true;
-  projectData;
-  constructor() { }
+  constructor(private route: ActivatedRoute, private projectService :ProjectService) { }
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.projectData = {
-        projectName: 'Demo project',
-        codeIds: [
-          { euphoria_code_id: '12', mainnet_code_id: '23' },
-          { euphoria_code_id: '13', mainnet_code_id: '21' },
-          { euphoria_code_id: '14', mainnet_code_id: '31' }
-        ],
-        official_project_website: 'Demo.com.vn',
-        official_project_email: 'Demo@gmail.com',
-        creator: 'Demo 001',
-        socialProfiles: {
-          whitepaper: 'Demo.com.vn',
-          medium: 'Demo.com.vn',
-          github: 'Demo.com.vn',
-          reddit: 'Demo.com.vn',
-          telegram: 'Demo.com.vn',
-          slack: 'Demo.com.vn',
-          weChat: 'Demo.com.vn',
-          facebook: 'Demo.com.vn',
-          linkedin: 'Demo.com.vn',
-          twitter: 'Demo.com.vn',
-          discord: 'Demo.com.vn',
-          bit_coin_talk: 'Demo.com.vn',
-        },
-        description: 'This is a description!'
-      };
+  async ngOnInit() {
+    const requestId = this.route.snapshot.paramMap.get('id');
+    if(requestId) {
+      const rq = await this.projectService.projectDetail(+requestId).toPromise();
+      if(rq && rq.code === 200 && rq.message === "Successful") {
+        this.projectDetail = rq.data;
+      }
       this.loading = false
-    }, 500);
+    }
   }
 
 
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
-    if (editor && this.projectData) {
-      editor.innerHTML = marked.parse(this.projectData.description);
+    if (editor && this.projectDetail) {
+      editor.innerHTML = marked.parse(this.projectDetail.contract_description);
       return;
     }
   }

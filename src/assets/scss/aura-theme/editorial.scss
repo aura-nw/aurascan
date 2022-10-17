@@ -36,6 +36,12 @@
       margin-bottom: var(--spacer-1);
     }
   }
+  a {
+    color: var(--aura-primary);
+    &:hover {
+      color: var(--aura-green-3);
+    }
+  }
 }
 
 
