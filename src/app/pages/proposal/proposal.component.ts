@@ -80,8 +80,7 @@ export class ProposalComponent implements OnInit {
     this.walletService.wallet$.subscribe((wallet) => this.getFourLastedProposal());
   }
 
-  getFourLastedProposal()
-  {
+  getFourLastedProposal() {
     this.proposalService.getProposalList(4, null).subscribe((res) => {
       if (res?.data?.proposals) {
         const addr = this.walletService.wallet?.bech32Address || null;
@@ -90,7 +89,7 @@ export class ProposalComponent implements OnInit {
           this.proposalData.forEach((pro, index) => {
             const { yes, no, no_with_veto, abstain } = pro?.tally;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
-  
+
             this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
             this.proposalData[index].tally.no = (+no * 100) / totalVote;
             this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
@@ -129,7 +128,6 @@ export class ProposalComponent implements OnInit {
           this.dataSource.data = [...this.dataSource.data, ...tempDta];
         } else {
           this.dataSource.data = [...tempDta];
-          
         }
       }
       this.dataSourceMobile = this.dataSource.data.slice(
@@ -213,7 +211,8 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getListProposal(null);
+      // this.getListProposal(null);
+      this.getFourLastedProposal();
     }
   }
 
@@ -226,7 +225,7 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.scrollToTop();
       setTimeout(() => {
-        this.getListProposal(null);
+        this.getFourLastedProposal();
       }, 3000);
     });
   }
