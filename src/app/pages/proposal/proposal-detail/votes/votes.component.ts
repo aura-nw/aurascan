@@ -81,7 +81,6 @@ export class VotesComponent implements OnChanges {
         proposalid: this.proposalDetail.proposal_id,
       };
       this.proposalDetail?.total_vote.forEach((f) => {
-        this.countTotal.all += f.count;
         switch (f.answer) {
           case VOTE_OPTION.VOTE_OPTION_YES:
             this.countTotal.yes = f.count;
@@ -97,6 +96,8 @@ export class VotesComponent implements OnChanges {
             break;
         }
       });
+      this.countTotal.all =
+        this.countTotal.yes + this.countTotal.no + this.countTotal.noWithVeto + this.countTotal.abstain;
 
       merge(
         this.proposalService
