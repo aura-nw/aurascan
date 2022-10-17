@@ -91,7 +91,7 @@ export class ValidatorsVotesComponent implements OnInit {
         this.voteDataListLoading = false;
       });
     }
-    this.customNav.select(this.tabAll);
+    this.customNav?.select(this.tabAll);
   }
   ngOnInit(): void {
     this.getValidatorVotes();
