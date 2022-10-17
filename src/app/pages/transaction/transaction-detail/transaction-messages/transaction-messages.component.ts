@@ -220,7 +220,7 @@ export class TransactionMessagesComponent implements OnInit {
       if (jsonData && jsonData[0]) {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.StoreCode);
         if (temp) {
-          this.storeCodeId = temp[0]?.attributes[0]?.value || 0;
+          this.storeCodeId = temp[0]?.attributes.find(k => k.key === "code_id")?.value || 0;
         }
       }
     } catch (e) {}
