@@ -147,7 +147,7 @@ export class VotesComponent implements OnChanges {
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.countTotal?.no);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.countTotal?.noWithVeto);
         this.voteDataListLoading = false;
-        this.customNav.select(this.tabAll);
+        this.customNav?.select(this.tabAll);
       });
     }
   }
