@@ -411,7 +411,7 @@
       </ng-container>
       <app-messages-item
         [label]="'Sender'"
-        [value]="transactionDetail?.messages[0]?.validator_address"
+        [value]="transactionDetail?.messages[0]?.sender || transactionDetail?.messages[0]?.validator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
       <app-messages-item [label]="'Code Id'" [value]="storeCodeId"></app-messages-item>
       <app-messages-item
