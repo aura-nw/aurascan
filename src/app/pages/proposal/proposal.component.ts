@@ -38,12 +38,16 @@ export class ProposalComponent implements OnInit {
     { matColumnDef: 'submitTime', headerCellDef: 'Submit Time' },
     { matColumnDef: 'totalDeposit', headerCellDef: 'Total Deposit' },
   ];
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile: any[];
   proposalData: any;
   length: number;
   nextKey = null;
+  isLoadingAction = false;
+  pageYOffset = 0;
+  scrolling = false;
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -55,13 +59,6 @@ export class ProposalComponent implements OnInit {
     vote: string | null;
   }[] = [];
 
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
-  isLoadingAction = false;
-  urlAction = '';
-
-  pageYOffset = 0;
-  scrolling = false;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
@@ -79,58 +76,67 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => this.getListProposal(null, true));
+    this.getListProposal();
+    this.walletService.wallet$.subscribe((wallet) => this.getFourLastedProposal());
   }
 
-  getListProposal(nextKey = null, iscall = false) {
-    const addr = this.walletService.wallet?.bech32Address || null;
+  getFourLastedProposal()
+  {
+    this.proposalService.getProposalList(4, null).subscribe((res) => {
+      if (res?.data?.proposals) {
+        const addr = this.walletService.wallet?.bech32Address || null;
+        this.proposalData = res.data.proposals;
+        if (this.proposalData?.length > 0) {
+          this.proposalData.forEach((pro, index) => {
+            const { yes, no, no_with_veto, abstain } = pro?.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+  
+            this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
+            this.proposalData[index].tally.no = (+no * 100) / totalVote;
+            this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+            const getVoted = async () => {
+              if (addr) {
+                const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
+                pro.vote_option = this.voteConstant.find(
+                  (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+                )?.voteOption;
+              }
+            };
+            getVoted();
+          });
+        }
+      }
+    });
+  }
+
+  getListProposal(nextKey = null) {
     this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
       this.nextKey = res.data.nextKey ? res.data.nextKey : null;
-
       if (res?.data?.proposals) {
-        if (this.dataSource.data.length > 0 && !iscall) {
-          this.dataSource.data = [...this.dataSource.data, ...res.data.proposals];
+        let tempDta = res.data.proposals;
+        tempDta.forEach((pro, index) => {
+          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+          const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
+          let totalVote = +yes + +no + +no_with_veto + +abstain;
+          tempDta[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+          tempDta[index].tally.yes = (+yes * 100) / totalVote;
+          tempDta[index].tally.no = (+no * 100) / totalVote;
+          tempDta[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+          tempDta[index].tally.abstain = (+abstain * 100) / totalVote;
+        });
+        if (this.dataSource.data.length > 0) {
+          this.dataSource.data = [...this.dataSource.data, ...tempDta];
         } else {
-          this.dataSource.data = [...res.data.proposals];
-          const dataFiltered = res.data.proposals;
-
-          dataFiltered.forEach((pro, index) => {
-            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-            if (index < 4) {
-              const { yes, no, no_with_veto, abstain } = pro?.tally;
-              let totalVote = +yes + +no + +no_with_veto + +abstain;
-
-              dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
-              dataFiltered[index].tally.no = (+no * 100) / totalVote;
-              dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-              dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
-              const getVoted = async () => {
-                if (addr) {
-                  const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
-                  pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
-                  )?.voteOption;
-                }
-              };
-              getVoted();
-            } else {
-              const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-              let totalVote = +yes + +no + +no_with_veto + +abstain;
-              dataFiltered[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-              dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
-              dataFiltered[index].tally.no = (+no * 100) / totalVote;
-              dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-              dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
-            }
-          });
-          this.proposalData = dataFiltered;
+          this.dataSource.data = [...tempDta];
+          
         }
-        this.dataSourceMobile = this.dataSource.data.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
-        this.length = this.dataSource.data.length;
       }
+      this.dataSourceMobile = this.dataSource.data.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+      this.length = this.dataSource.data.length;
     });
   }
 
@@ -207,7 +213,7 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getListProposal(null, true);
+      this.getListProposal(null);
     }
   }
 
@@ -220,7 +226,7 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.scrollToTop();
       setTimeout(() => {
-        this.getListProposal(null, true);
+        this.getListProposal(null);
       }, 3000);
     });
   }
@@ -266,10 +272,9 @@ export class ProposalComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-
+    const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
 
-    const next = length <= (pageIndex + 2) * pageSize;
     if (next && this.nextKey) {
       this.getListProposal(this.nextKey);
     }
