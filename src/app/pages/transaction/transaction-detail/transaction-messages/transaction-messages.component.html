@@ -97,6 +97,10 @@
     <div class="card-info">
       <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
       </ng-container>
+      <app-messages-item
+        [label]="'Contract'"
+        [value]="getDataJson('_contract_address')"
+        [dataLink]="{ url: '/contracts' }"></app-messages-item>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>

@@ -394,4 +394,13 @@ export class TransactionMessagesComponent implements OnInit {
   loadMoreSend() {
     this.numberListSend += 5;
   }
+
+  getDataJson(key) {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      const result =
+        jsonData[0]?.events.find((f) => f.type === 'instantiate')?.attributes?.find((f) => f.key === key)?.value || '';
+      return result;
+    } catch (e) {}
+  }
 }
