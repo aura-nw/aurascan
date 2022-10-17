@@ -123,7 +123,7 @@ export class TokenContentComponent implements OnInit {
     let queryData = {};
     if (this.tokenDetail.isNFTContract) {
       queryData = {
-        tokens: { owner: address },
+        tokens: { limit: 1000, owner: address },
       };
     } else {
       queryData = {

@@ -188,11 +188,17 @@ export class WriteContractComponent implements OnInit {
         .execute(this.userAddress, this.contractDetailData.contract_address, data)
         .then((e) => {
           msg.isLoading = false;
-          if((e as any).result?.error) {
-            let msgError = ( e as any).result.error.toString() || 'Error';
+          if ((e as any).result?.error) {
+            let msgError = (e as any).result.error.toString() || 'Error';
             this.toastr.error(msgError);
           } else {
-            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+            if ((e as any)?.transactionHash) {
+              this.urlAction = 'transaction/' + (e as any)?.transactionHash;
+              this.isLoadingAction = true;
+              setTimeout(() => {
+                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+              }, 4000);
+            }
           }
         })
         .catch((error) => {
