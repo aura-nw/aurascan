@@ -23,8 +23,6 @@ export class ProposalVoteComponent implements OnInit {
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
   isLoading = false;
-  isLoadingAction = false;
-  urlAction = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
@@ -59,8 +57,7 @@ export class ProposalVoteComponent implements OnInit {
     this.isLoading = false;
 
     if (hash) {
-      this.urlAction = 'transaction/' + hash;
-      this.isLoadingAction = true;
+      this.toastr.loading(hash);
       // this.dialogRef.close({ keyVote: this.keyVote });
       this.dialogRef.close();
       setTimeout(() => {
@@ -77,7 +74,6 @@ export class ProposalVoteComponent implements OnInit {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
-    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (numberCode === CodeTransaction.Success) {
         this.toastr.success(message);

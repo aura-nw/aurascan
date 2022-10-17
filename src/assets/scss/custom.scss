@@ -612,3 +612,19 @@ body {
         color: var(--aura-white);
     }
 }
+
+.toast-info {
+    background-color: var(--aura-blue-6);
+    background-image: url('../../assets/icons/icons-svg/white/loading-action.svg');
+    font-size: 1.4rem;
+    .toast-title {
+        font-size: 1.7rem;
+        font-weight: 700;
+    }
+}
+.toast-container .ngx-toastr {
+    width: 350px;
+}
+.toast-container a {
+    text-decoration: underline !important;
+}
