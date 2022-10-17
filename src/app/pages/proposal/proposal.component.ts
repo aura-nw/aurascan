@@ -57,9 +57,6 @@ export class ProposalComponent implements OnInit {
 
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  isLoadingAction = false;
-  urlAction = '';
-
   pageYOffset = 0;
   scrolling = false;
   @HostListener('window:scroll', ['$event']) onScroll(event) {

@@ -31,9 +31,6 @@ export class WriteContractComponent implements OnInit {
 
   jsValidator = new Validator();
 
-  isLoadingAction = false;
-  urlAction = '';
-
   root: any[];
 
   constructor(
@@ -193,8 +190,7 @@ export class WriteContractComponent implements OnInit {
             this.toastr.error(msgError);
           } else {
             if ((e as any)?.transactionHash) {
-              this.urlAction = 'transaction/' + (e as any)?.transactionHash;
-              this.isLoadingAction = true;
+              this.toastr.loading((e as any)?.transactionHash);
               setTimeout(() => {
                 this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
               }, 4000);
