@@ -19,7 +19,6 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
   isFullScreen = false;
   showCustomControl = false
   paused = true;
-  imgSrc;
   constructor(
       private cdr: ChangeDetectorRef
   ) {}
@@ -41,9 +40,8 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
       };
       setTimeout(()=> {
         this.showCustomControl = true;
-        this.video.nativeElement.setAttribute("poster", this.createPoster())
+        this.video.nativeElement.setAttribute("poster", this.createPoster());
       }, 200);
-
     }
     this.cdr.markForCheck();
   }

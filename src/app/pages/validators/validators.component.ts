@@ -93,8 +93,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-  isLoadingAction = false;
-  urlAction = '';
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -680,7 +678,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
-    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
         setTimeout(() => {
@@ -703,15 +700,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     // this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
-    this.isLoadingAction = false;
-    this.urlAction = '';
   }
 
   checkHashAction(hash) {
     const myInterval = setInterval(() => {
       if (hash) {
-        this.urlAction = 'transaction/' + hash;
-        this.isLoadingAction = true;
+        this.toastr.loading(hash);
         this.isLoading = false;
         this.modalReference?.close();
         clearInterval(myInterval);
