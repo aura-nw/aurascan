@@ -39,11 +39,23 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
         this.paused = this.video.nativeElement.paused;
       };
       setTimeout(()=> {
-        this.showCustomControl = true
+        this.showCustomControl = true;
+        this.video.nativeElement.setAttribute("poster", this.createPoster());
       }, 200);
+
     }
     this.cdr.markForCheck();
   }
+
+  createPoster() {
+    this.video.nativeElement.currentTime = 1;
+    const canvas = document.createElement("canvas");
+    canvas.width = 350;
+    canvas.height = 200;
+    canvas.getContext("2d").drawImage(this.video.nativeElement, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL("image/jpeg");
+  }
+
   playVideo(element) {
     if(this.isDetail) return;
     element.nativeElement.play();
