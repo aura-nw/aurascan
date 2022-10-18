@@ -77,6 +77,11 @@ section.account-detail {
     height: 24px;
   }
 }
+.link-reset-data {
+  text-decoration: underline;
+  color: aqua;
+  cursor: pointer;
+}
 @media (max-width: 991.98px) {
   .g-ellipsis-address {
     width: 310px;
