@@ -165,6 +165,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   userAddress = '';
   lstBalanceAcount = undefined;
   modalReference: any;
+  isNoData = false;
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -351,6 +352,12 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
+      
+      if (res.data.code === 200 && !res.data?.data) {
+        this.isNoData = true;
+        return;
+      }
+
       if (res?.data) {
         this.currentAccountDetail = res.data;
         this.chartOptions.series = [];
@@ -498,5 +505,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   closePopup() {
     this.modalReference.close();
+  }
+
+  reloadData() {
+    location.reload();
   }
 }
