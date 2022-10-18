@@ -10,3 +10,8 @@
     }
   }
 }
+
+.aura-table.contract-table th.mat-header-cell:nth-child(3),
+.aura-table.contract-table th.mat-header-cell:nth-child(5) {
+  max-width: 130px;
+}

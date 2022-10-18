@@ -42,7 +42,6 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
         this.showCustomControl = true;
         this.video.nativeElement.setAttribute("poster", this.createPoster());
       }, 200);
-
     }
     this.cdr.markForCheck();
   }
