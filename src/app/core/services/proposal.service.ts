@@ -5,8 +5,6 @@ import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { IResponsesTemplates } from '../models/common.model';
-import { IVotingInfo } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -65,10 +63,6 @@ export class ProposalService extends CommonService {
     return this.http.get<any>(`${this.indexerUrl}/votes`, {
       params,
     });
-  }
-
-  getStakeInfo(delegatorAddress: string): Observable<IResponsesTemplates<IVotingInfo>> {
-    return this.http.get<IResponsesTemplates<IVotingInfo>>(`${this.apiUrl}/proposals/delegations/${delegatorAddress}`);
   }
 
   getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {

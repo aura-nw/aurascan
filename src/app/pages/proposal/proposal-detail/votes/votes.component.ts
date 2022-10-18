@@ -105,6 +105,7 @@ export class VotesComponent implements OnChanges {
             break;
         }
       });
+      
       merge(
         this.proposalService
           .getListVoteFromIndexer(payloads, null)
@@ -140,14 +141,15 @@ export class VotesComponent implements OnChanges {
             item.updated_at = item.tx_response?.timestamp;
           });
         }
+        this.countTotal.all =
+        this.countTotal.yes + this.countTotal.no + this.countTotal.noWithVeto + this.countTotal.abstain;
+        
         this.countVote.set('', this.countTotal?.all);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.countTotal?.yes);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.countTotal?.abstain);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.countTotal?.no);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.countTotal?.noWithVeto);
-
-        this.countTotal.all =
-        this.countTotal.yes + this.countTotal.no + this.countTotal.noWithVeto + this.countTotal.abstain;
+        
         this.voteDataListLoading = false;
         this.customNav?.select(this.tabAll);
       });

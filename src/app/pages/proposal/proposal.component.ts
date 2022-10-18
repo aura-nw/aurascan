@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
@@ -65,6 +66,7 @@ export class ProposalComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
+    private validatorService: ValidatorService,
     public dialog: MatDialog,
     public global: Globals,
     public walletService: WalletService,
@@ -191,7 +193,7 @@ export class ProposalComponent implements OnInit {
       const account = this.walletService.getAccount();
 
       if (account) {
-        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+        this.validatorService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
 
           const { created_at } = data.result ? data.result : { created_at: null };
