@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { map, mergeMap } from 'rxjs/operators';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from '../../../../../app/global/global';
 import {
   MESSAGE_WARNING,
@@ -13,7 +14,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE,
+  VOTING_SUBTITLE
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { CommonService } from '../../../../core/services/common.service';
@@ -49,6 +50,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private proposalService: ProposalService,
+    private validatorService: ValidatorService,
     public global: Globals,
     private walletService: WalletService,
     public dialog: MatDialog,
@@ -289,7 +291,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
       if (account) {
-        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+        this.validatorService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
           const { created_at } = data.result ? data.result : { created_at: null };
           warning = created_at
