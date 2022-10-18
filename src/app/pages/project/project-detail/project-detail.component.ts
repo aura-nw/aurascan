@@ -2,6 +2,7 @@ import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {ProjectService} from "src/app/core/services/project.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectDetail} from "src/app/core/models/project";
+import {EnvironmentService} from "src/app/core/data-services/environment.service";
 const marked = require('marked');
 
 @Component({
@@ -10,9 +11,14 @@ const marked = require('marked');
   styleUrls: ['./project-detail.component.scss']
 })
 export class ProjectDetailComponent implements OnInit, AfterViewChecked {
+  apiUrl = (this.environmentService.configValue.chain_info as any).explorer;
   projectDetail: ProjectDetail;
   loading = true;
-  constructor(private route: ActivatedRoute, private projectService :ProjectService) { }
+  constructor(
+      private route: ActivatedRoute,
+      private projectService :ProjectService,
+      private environmentService: EnvironmentService
+  ) { }
 
   async ngOnInit() {
     const requestId = this.route.snapshot.paramMap.get('id');
