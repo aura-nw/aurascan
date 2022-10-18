@@ -14,7 +14,7 @@ import {
   VOTING_FINAL_STATUS,
   VOTING_QUORUM,
   VOTING_STATUS,
-  VOTING_SUBTITLE
+  VOTING_SUBTITLE,
 } from '../../../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../../../core/data-services/environment.service';
 import { CommonService } from '../../../../core/services/common.service';
@@ -115,7 +115,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             const noWithVetoPercent =
               (this.proposalDetail.pro_votes_no_with_veto * 100) / this.proposalDetail.pro_total_vote || 0;
             const abstainPercent =
-              (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token || 0;
+              (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
             const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
             const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
 
