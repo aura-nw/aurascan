@@ -1,5 +1,5 @@
 <div class="proposal-table-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <ng-container *ngIf="data.length > 0; else noValues">
+  <ng-container *ngIf="data?.length > 0; else noValues">
     <ng-container *ngIf="!breakpoint.value.matches">
       <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
         <ng-container *ngFor="let template of template; index as i">
