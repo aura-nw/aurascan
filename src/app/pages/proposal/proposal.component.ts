@@ -92,25 +92,23 @@ export class ProposalComponent implements OnInit {
 
         dataFiltered.forEach((pro, index) => {
           pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-          if (index < 4) {
-            if (pro?.tally) {
-              const { yes, no, no_with_veto, abstain } = pro.tally;
-              let totalVote = +yes + +no + +no_with_veto + +abstain;
+          if (index < 4 && pro?.tally) {
+            const { yes, no, no_with_veto, abstain } = pro.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
 
-              dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
-              dataFiltered[index].tally.no = (+no * 100) / totalVote;
-              dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-              dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
-              const getVoted = async () => {
-                if (addr) {
-                  const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
-                  pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
-                  )?.voteOption;
-                }
-              };
-              getVoted();
-            }
+            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
+            dataFiltered[index].tally.no = (+no * 100) / totalVote;
+            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
+            const getVoted = async () => {
+              if (addr) {
+                const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
+                pro.vote_option = this.voteConstant.find(
+                  (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
+                )?.voteOption;
+              }
+            };
+            getVoted();
           } else {
             const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
