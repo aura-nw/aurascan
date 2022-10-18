@@ -89,13 +89,26 @@ export class ProposalComponent implements OnInit {
         this.proposalData = res.data.proposals;
         if (this.proposalData?.length > 0) {
           this.proposalData.forEach((pro, index) => {
-            const { yes, no, no_with_veto, abstain } = pro?.tally;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
+            if (pro?.tally) {
+              const { yes, no, no_with_veto, abstain } = pro?.tally;
+              let totalVote = +yes + +no + +no_with_veto + +abstain;
 
-            this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
-            this.proposalData[index].tally.no = (+no * 100) / totalVote;
-            this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+              if (this.proposalData[index].tally) {
+                this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
+                this.proposalData[index].tally.no = (+no * 100) / totalVote;
+                this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+                this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+              }
+            } else if (pro?.final_tally_result) {
+              const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
+              let totalVote = +yes + +no + +no_with_veto + +abstain;
+              this.proposalData[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+              this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
+              this.proposalData[index].tally.no = (+no * 100) / totalVote;
+              this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+              this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+            }
+
             const getVoted = async () => {
               if (addr) {
                 const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
