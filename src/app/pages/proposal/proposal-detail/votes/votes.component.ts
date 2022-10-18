@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { merge } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
@@ -21,6 +22,7 @@ export interface IVotes {
 })
 export class VotesComponent implements OnChanges {
   @Input() proposalDetail;
+  @ViewChild('customNav') customNav: NgbNav;
 
   TABS = PROPOSAL_VOTE.filter((vote) =>
     [
@@ -41,6 +43,7 @@ export class VotesComponent implements OnChanges {
   countCurrent: string = '';
   voteDataListLoading = true;
   isFirstChange = false;
+  tabAll = 0;
 
   voteData = {
     all: null,
@@ -62,6 +65,11 @@ export class VotesComponent implements OnChanges {
   constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
     this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
       if (event) {
+        this.voteDataList = [];
+        this.countTotal.yes = 0;
+        this.countTotal.abstain = 0;
+        this.countTotal.no = 0;
+        this.countTotal.noWithVeto = 0;
         this.getVotesList();
       }
     });
@@ -80,6 +88,7 @@ export class VotesComponent implements OnChanges {
         pageLimit: 25,
         proposalid: this.proposalDetail.proposal_id,
       };
+      
       this.proposalDetail?.total_vote.forEach((f) => {
         switch (f.answer) {
           case VOTE_OPTION.VOTE_OPTION_YES:
@@ -96,9 +105,7 @@ export class VotesComponent implements OnChanges {
             break;
         }
       });
-      this.countTotal.all =
-        this.countTotal.yes + this.countTotal.no + this.countTotal.noWithVeto + this.countTotal.abstain;
-
+      
       merge(
         this.proposalService
           .getListVoteFromIndexer(payloads, null)
@@ -134,12 +141,17 @@ export class VotesComponent implements OnChanges {
             item.updated_at = item.tx_response?.timestamp;
           });
         }
+        this.countTotal.all =
+        this.countTotal.yes + this.countTotal.no + this.countTotal.noWithVeto + this.countTotal.abstain;
+        
         this.countVote.set('', this.countTotal?.all);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.countTotal?.yes);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.countTotal?.abstain);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.countTotal?.no);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.countTotal?.noWithVeto);
+        
         this.voteDataListLoading = false;
+        this.customNav?.select(this.tabAll);
       });
     }
   }

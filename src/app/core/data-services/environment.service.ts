@@ -15,6 +15,7 @@ export interface IConfiguration {
   coins: any;
   env: string;
   indexerUri: string;
+  urlAdmin: string;
 }
 
 @Injectable()
@@ -31,6 +32,7 @@ export class EnvironmentService {
     coins: '',
     env: '',
     indexerUri: '',
+    urlAdmin: ''
   });
 
   get configValue(): IConfiguration {
@@ -72,6 +74,7 @@ export class EnvironmentService {
           coins: config['coins'],
           env: config['env'],
           indexerUri: config['urlIndexer'],
+          urlAdmin: config['urlAdmin'],
         };
 
         this.config.next(data);

@@ -30,6 +30,7 @@ export class ContractsSmartListComponent implements OnInit {
     { matColumnDef: 'contract_address', headerCellDef: 'Address' },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
+    { matColumnDef: 'project_name', headerCellDef: 'Project' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified' },

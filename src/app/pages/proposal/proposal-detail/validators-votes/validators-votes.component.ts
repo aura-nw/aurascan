@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
@@ -19,6 +20,7 @@ export interface IValidatorVotes {
 })
 export class ValidatorsVotesComponent implements OnInit {
   @Input() proposalId: number;
+  @ViewChild('customNav') customNav: NgbNav;
   PROPOSAL_VOTE_EXT = PROPOSAL_VOTE.concat({
     key: VOTE_OPTION.VOTE_OPTION_NULL,
     value: 'Did not vote',
@@ -46,6 +48,7 @@ export class ValidatorsVotesComponent implements OnInit {
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
   isFirstChange = false;
+  tabAll = 0;
 
   voteData = {
     all: null,
@@ -88,6 +91,7 @@ export class ValidatorsVotesComponent implements OnInit {
         this.voteDataListLoading = false;
       });
     }
+    this.customNav?.select(this.tabAll);
   }
   ngOnInit(): void {
     this.getValidatorVotes();
