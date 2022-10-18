@@ -83,9 +83,10 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
       <!-- Coin & Token-->
-      <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ pageData?.length || 0 }})</h2>
+      <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ totalAssets || 0 }})</h2>
       <app-token-table
         [address]="currentAddress"
+        (totalAssets)="totalAssets = $event"
         (totalValue)="totalValueToken = $event"
         *ngIf="!isNoData"></app-token-table>
       <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>

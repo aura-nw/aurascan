@@ -1,5 +1,4 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DecimalPipe } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
@@ -20,7 +19,7 @@ import {
   PageEventType,
   StakeModeAccount,
   TabsAccount,
-  WalletAcount,
+  WalletAcount
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -52,9 +51,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   currentAddress: string;
   currentKey = null;
-
   currentAccountDetail: IAccountDetail;
   textSearch = '';
+
   templates: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
@@ -199,6 +198,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   currentStake = StakeModeAccount.Delegations;
   totalValueToken = 0;
   totalValueNft = 0;
+  totalAssets = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -209,7 +209,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private walletService: WalletService,
     private layout: BreakpointObserver,
     private modalService: NgbModal,
-    private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
   ) {
     this.chartOptions = CHART_OPTION();
@@ -225,7 +224,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe((params) => {
       if (params?.id) {
         this.currentAddress = params?.id;
-
         this.transactionLoading = true;
         this.accDetailLoading = true;
 
@@ -258,7 +256,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.accDetailLoading = false;
         this.chartLoading = false;
         this.currentAccountDetail = dataAccount;
-        this.dataSourceToken.data = dataAccount.balances; //new MatTableDataSource(dataAccount.balances);
+        this.dataSourceToken.data = dataAccount.balances;
         this.pageDataToken.length = dataAccount?.balances?.length;
 
         this.chartOptions = JSON.parse(data?.dataChart);
@@ -309,7 +307,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.transactionService.getAccountTxFromHoroscope(chainId, address, 40, nextKey).subscribe({
       next: (txResponse) => {
         const { code, data } = txResponse;
-
         this.nextKey = data.nextKey || null;
 
         if (code === 200) {
@@ -414,16 +411,16 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         });
 
         this.lstBalanceAcount = this.currentAccountDetail?.balances;
-        this.dataSourceToken.data = this.currentAccountDetail?.balances; //new MatTableDataSource(this.currentAccountDetail?.balances);
+        this.dataSourceToken.data = this.currentAccountDetail?.balances;
         this.pageDataToken.length = this.currentAccountDetail?.balances?.length;
         this.dataSourceTokenBk = this.dataSourceToken;
 
-        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations; //new MatTableDataSource(this.currentAccountDetail?.delegations);
+        this.dataSourceDelegation.data = this.currentAccountDetail?.delegations;
         this.pageDataDelegation.length = this.currentAccountDetail?.delegations?.length;
 
-        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations; //new MatTableDataSource(this.currentAccountDetail?.unbonding_delegations);
+        this.dataSourceUnBonding.data = this.currentAccountDetail?.unbonding_delegations;
         this.pageDataUnbonding.length = this.currentAccountDetail?.unbonding_delegations?.length;
-        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations; // new MatTableDataSource(this.currentAccountDetail?.redelegations);
+        this.dataSourceReDelegation.data = this.currentAccountDetail?.redelegations;
         this.pageDataRedelegation.length = this.currentAccountDetail?.redelegations?.length;
 
         if (this.currentAccountDetail?.vesting) {
@@ -477,11 +474,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-
     const next = length <= (pageIndex + 2) * pageSize;
-
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
-
     this.pageData = e;
 
     if (next && this.nextKey && this.currentKey !== this.nextKey) {

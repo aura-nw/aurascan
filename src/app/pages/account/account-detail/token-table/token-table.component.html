@@ -44,7 +44,7 @@
                   class="d-flex align-items-center"
                   [routerLink]="['/tokens/token', element.contract_address]"
                   *ngIf="element.contract_address">
-                  <img [src]="element.image"  class="image-token" />
+                  <img [src]="element.image" class="image-token" />
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis: 19 }}
                   </div>

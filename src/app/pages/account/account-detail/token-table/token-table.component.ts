@@ -8,7 +8,6 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -20,6 +19,7 @@ import { Globals } from 'src/app/global/global';
 export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValue = new EventEmitter<number>();
+  @Output() totalAssets = new EventEmitter<number>();
 
   math = Math;
   textSearch = '';
@@ -60,7 +60,6 @@ export class TokenTableComponent implements OnChanges {
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
-    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +98,7 @@ export class TokenTableComponent implements OnChanges {
         lstToken = lstToken.filter((k) => k?.symbol);
         this.dataSource = new MatTableDataSource<any>(lstToken);
         this.pageData.length = res.meta.count;
+        this.totalAssets.emit(this.pageData.length);
       } else {
         this.pageData.length = 0;
         this.dataSource.data = [];
