@@ -1,0 +1,96 @@
+<app-pagetitle title="Project Details"></app-pagetitle>
+<div class="card">
+  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+  <div *ngIf="!loading" class="card-body">
+    <app-table-no-data *ngIf="!projectDetail"></app-table-no-data>
+    <div *ngIf="projectDetail">
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Project Name</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">{{projectDetail.project_name}}</div>
+      </div>
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Code ID</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
+          <div class="d-flex flex-wrap">
+            <a *ngFor="let id of projectDetail.code_ids; let islast = last" class="text--primary hover-link d-flex"
+               href="{{apiUrl}}contracts?param={{id}}"
+               target="_blank">{{ id}}<span *ngIf="!islast" class="mr-2">,</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Official Website</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
+          <a href="{{projectDetail.official_project_website}}" class="text--primary hover-link">{{projectDetail.official_project_website}}</a>
+        </div>
+      </div>
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Official Email Address</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">{{projectDetail.official_project_email}}</div>
+      </div>
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Creator</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
+          <a class="text--primary hover-link d-flex"
+             href="{{apiUrl}}contracts?param={{projectDetail.requester_address}}"
+             target="_blank">
+            <span class="d-none d-sm-block">{{ projectDetail.requester_address}}</span>
+            <span class="d-sm-none">{{ projectDetail.requester_address | cutStringPipe: 12:12}}</span>
+          </a>
+        </div>
+      </div>
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Social Profiles</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
+          <div class="d-flex align-items-center social-group mt-3 mt-lg-0 flex-wrap">
+            <a href="{{projectDetail.whitepaper}}" *ngIf="projectDetail?.whitepaper">
+              <i class="ph-file-pdf"></i>
+            </a>
+            <a href="{{projectDetail.medium}}" *ngIf="projectDetail?.medium">
+              <i class="ph-medium-logo"></i>
+            </a>
+            <a href="{{projectDetail.github}}" *ngIf="projectDetail?.github">
+              <i class="ph-github-logo"></i>
+            </a>
+            <a href="{{projectDetail.reddit}}" *ngIf="projectDetail?.reddit">
+              <i class="ph-reddit-logo"></i>
+            </a>
+            <a href="{{projectDetail.telegram}}" *ngIf="projectDetail?.telegram">
+              <i class="ph-telegram-logo"></i>
+            </a>
+            <a href="{{projectDetail.slack}}" *ngIf="projectDetail?.slack">
+              <i class="ph-slack-logo"></i>
+            </a>
+            <a href="{{projectDetail.wechat}}" *ngIf="projectDetail?.wechat">
+              <i class="ph-chats-circle"></i>
+            </a>
+            <a href="{{projectDetail.facebook}}" *ngIf="projectDetail?.facebook">
+              <i class="ph-facebook-logo"></i>
+            </a>
+            <a href="{{projectDetail.linkedin}}" *ngIf="projectDetail?.linkedin">
+              <i class="ph-linkedin-logo"></i>
+            </a>
+            <a href="{{projectDetail.twitter}}" *ngIf="projectDetail?.twitter">
+              <i class="ph-twitter-logo"></i>
+            </a>
+            <a href="{{projectDetail.discord}}" *ngIf="projectDetail?.discord">
+              <i class="ph-discord-logo"></i>
+            </a>
+            <a href="{{projectDetail.bitcointalk}}" *ngIf="projectDetail?.bitcointalk">
+              <i class="ph-currency-btc"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4 body-02 body-01-mob">
+        <div class="col-12 col-lg-3 text--gray-4">Description</div>
+        <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
+          <div class="editorial-container p-4 mt-2 mt-lg-0" *ngIf="projectDetail?.contract_description">
+            <div id="marked" class="editorial"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
