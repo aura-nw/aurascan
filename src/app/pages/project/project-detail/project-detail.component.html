@@ -22,7 +22,8 @@
       <div class="row mb-4 body-02 body-01-mob">
         <div class="col-12 col-lg-3 text--gray-4">Official Website</div>
         <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
-          <a href="{{projectDetail.official_project_website}}" class="text--primary hover-link">{{projectDetail.official_project_website}}</a>
+          <a href="{{projectDetail.official_project_website}}" class="text--primary hover-link"
+             target="_blank">{{projectDetail.official_project_website}}</a>
         </div>
       </div>
       <div class="row mb-4 body-02 body-01-mob">
@@ -44,40 +45,40 @@
         <div class="col-12 col-lg-3 text--gray-4">Social Profiles</div>
         <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
           <div class="d-flex align-items-center social-group mt-3 mt-lg-0 flex-wrap">
-            <a href="{{projectDetail.whitepaper}}" *ngIf="projectDetail?.whitepaper">
+            <a href="{{projectDetail.whitepaper}}" *ngIf="projectDetail?.whitepaper" target="_blank">
               <i class="ph-file-pdf"></i>
             </a>
-            <a href="{{projectDetail.medium}}" *ngIf="projectDetail?.medium">
+            <a href="{{projectDetail.medium}}" *ngIf="projectDetail?.medium" target="_blank">
               <i class="ph-medium-logo"></i>
             </a>
-            <a href="{{projectDetail.github}}" *ngIf="projectDetail?.github">
+            <a href="{{projectDetail.github}}" *ngIf="projectDetail?.github" target="_blank">
               <i class="ph-github-logo"></i>
             </a>
-            <a href="{{projectDetail.reddit}}" *ngIf="projectDetail?.reddit">
+            <a href="{{projectDetail.reddit}}" *ngIf="projectDetail?.reddit" target="_blank">
               <i class="ph-reddit-logo"></i>
             </a>
-            <a href="{{projectDetail.telegram}}" *ngIf="projectDetail?.telegram">
+            <a href="{{projectDetail.telegram}}" *ngIf="projectDetail?.telegram" target="_blank">
               <i class="ph-telegram-logo"></i>
             </a>
-            <a href="{{projectDetail.slack}}" *ngIf="projectDetail?.slack">
+            <a href="{{projectDetail.slack}}" *ngIf="projectDetail?.slack" target="_blank">
               <i class="ph-slack-logo"></i>
             </a>
-            <a href="{{projectDetail.wechat}}" *ngIf="projectDetail?.wechat">
+            <a href="{{projectDetail.wechat}}" *ngIf="projectDetail?.wechat" target="_blank">
               <i class="ph-chats-circle"></i>
             </a>
-            <a href="{{projectDetail.facebook}}" *ngIf="projectDetail?.facebook">
+            <a href="{{projectDetail.facebook}}" *ngIf="projectDetail?.facebook" target="_blank">
               <i class="ph-facebook-logo"></i>
             </a>
-            <a href="{{projectDetail.linkedin}}" *ngIf="projectDetail?.linkedin">
+            <a href="{{projectDetail.linkedin}}" *ngIf="projectDetail?.linkedin" target="_blank">
               <i class="ph-linkedin-logo"></i>
             </a>
-            <a href="{{projectDetail.twitter}}" *ngIf="projectDetail?.twitter">
+            <a href="{{projectDetail.twitter}}" *ngIf="projectDetail?.twitter" target="_blank">
               <i class="ph-twitter-logo"></i>
             </a>
-            <a href="{{projectDetail.discord}}" *ngIf="projectDetail?.discord">
+            <a href="{{projectDetail.discord}}" *ngIf="projectDetail?.discord" target="_blank">
               <i class="ph-discord-logo"></i>
             </a>
-            <a href="{{projectDetail.bitcointalk}}" *ngIf="projectDetail?.bitcointalk">
+            <a href="{{projectDetail.bitcointalk}}" *ngIf="projectDetail?.bitcointalk" target="_blank">
               <i class="ph-currency-btc"></i>
             </a>
           </div>
