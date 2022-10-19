@@ -2,9 +2,9 @@
   <div class="card" *ngIf="proposalDetail">
     <div class="card-header bg-transparent border-bottom pb-0" *ngIf="!breakpoint.value.matches">
       <div class="d-flex justify-content-between">
-        <h2 class="text--white">
+        <h2>
           <div class="text--gray-3">#{{ proposalId }}</div>
-          <a href="javascript:void(0)" class="text--white">{{ proposalDetail.content.title }}</a>
+          <div class="text--white">{{ proposalDetail.content.title }}</div>
         </h2>
         <div class="card__status d-flex align-items-center flex-shrink-0">
           <div class="text--gray-5 mr-6 d-flex flex-column align-items-center" *ngIf="proposalVotes">
@@ -55,7 +55,7 @@
         <div class="row justify-content-between mb-3 mb-md-4 body-02 body-01-mob">
           <div class="col-auto col-md-2 text--gray-4">Proposer</div>
           <div class="col-8 col-md-10 text-end text-lg-start">
-            <a class="text--primary h6" href="/account/{{ proposalDetail.proposer_address }}">
+            <a class="text--primary h6" [routerLink]="['/account', proposalDetail.proposer_address]">
               <span class="d-none d-lg-block">
                 {{ proposalDetail.proposer_name ? proposalDetail.proposer_name : proposalDetail.proposer_address }}
               </span>

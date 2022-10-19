@@ -97,6 +97,10 @@
     <div class="card-info">
       <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
       </ng-container>
+      <app-messages-item
+        [label]="'Contract'"
+        [value]="getDataJson('_contract_address')"
+        [dataLink]="{ url: '/contracts' }"></app-messages-item>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
@@ -123,35 +127,43 @@
     <ng-container
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
-        <div class="card-info">
-          <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
-          </ng-container>
-          <app-messages-item
-            [label]="'Delegator Address'"
-            [value]="item.delegator_address"
-            [dataLink]="{ url: '/account' }"></app-messages-item>
-          <div class="row mb-3 body-01">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
-            <div class="col-12 col-lg-9">
-              <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
-                {{ item.validator_address }}
-                <span>
-                  <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
-                </span>
-              </a>
+        <ng-container *ngIf="item['@type'] !== eTransType.GetRewardCommission">
+          <div class="card-info">
+            <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: displayTitle(item['@type']) } }">
+            </ng-container>
+            <app-messages-item
+              [label]="'Delegator Address'"
+              [value]="item.delegator_address"
+              [dataLink]="{ url: '/account' }"></app-messages-item>
+            <div class="row mb-3 body-01">
+              <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
+              <div class="col-12 col-lg-9">
+                <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
+                  {{ item.validator_address }}
+                  <span>
+                    <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="row mb-3 body-01">
+              <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+              <div class="col-12 col-lg-9 text--gray-1">
+                <ng-container *ngIf="item['@type'] === eTransType.GetReward">
+                  <ng-container *ngIf="listAmountClaim[i] > 0">
+                    {{ listAmountClaim[i] | number: global.formatNumberToken }}
+                    <span class="text--primary">{{ denom }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
+                </ng-container>
+                <ng-container *ngIf="item['@type'] !== eTransType.GetReward">
+                  {{ item.amount?.amount | balanceOf | number: global.formatNumberToken }}
+                  <span class="text--primary">{{ denom }}</span>
+                </ng-container>
+              </div>
             </div>
           </div>
-          <div class="row mb-3 body-01">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-            <div class="col-12 col-lg-9 text--gray-1">
-              <ng-container *ngIf="listAmountClaim[i] > 0">
-                {{ listAmountClaim[i] | number: global.formatNumberToken }}
-                <span class="text--primary">{{ denom }}</span>
-              </ng-container>
-              <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
-            </div>
-          </div>
-        </div>
+        </ng-container>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
@@ -399,7 +411,7 @@
       </ng-container>
       <app-messages-item
         [label]="'Sender'"
-        [value]="transactionDetail?.messages[0]?.validator_address"
+        [value]="transactionDetail?.messages[0]?.sender || transactionDetail?.messages[0]?.validator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
       <app-messages-item [label]="'Code Id'" [value]="storeCodeId"></app-messages-item>
       <app-messages-item

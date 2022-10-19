@@ -23,8 +23,6 @@ export class ProposalVoteComponent implements OnInit {
   chainId = this.environmentService.configValue.chainId;
   chainInfo = this.environmentService.configValue.chain_info;
   isLoading = false;
-  isLoadingAction = false;
-  urlAction = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: IVotingDialog,
@@ -43,7 +41,8 @@ export class ProposalVoteComponent implements OnInit {
 
   async proposalVote() {
     this.isLoading = true;
-    const { hash, error } = await createSignBroadcast({
+    // const { hash, error } = await createSignBroadcast({
+    const { hash, error } = await this.walletService.signAndBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
         voteOption: this.keyVote,
@@ -55,10 +54,10 @@ export class ProposalVoteComponent implements OnInit {
       chainId: this.chainId,
     });
 
+    this.isLoading = false;
+
     if (hash) {
-      this.urlAction = 'transaction/' + hash;
-      this.isLoadingAction = true;
-      this.isLoading = false;
+      this.toastr.loading(hash);
       // this.dialogRef.close({ keyVote: this.keyVote });
       this.dialogRef.close();
       setTimeout(() => {
@@ -75,18 +74,12 @@ export class ProposalVoteComponent implements OnInit {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
-    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (numberCode === CodeTransaction.Success) {
         this.toastr.success(message);
       } else {
         this.toastr.error(message);
       }
-    }
-    if (this.route.url !== '/votings') {
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     }
   }
 
@@ -95,7 +88,7 @@ export class ProposalVoteComponent implements OnInit {
   }
 
   closeVoteForm() {
-    this.dialogRef.close();
+    this.dialogRef.close('canceled');
   }
 
   onClick(): void {

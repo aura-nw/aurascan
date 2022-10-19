@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
 import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
@@ -38,12 +39,16 @@ export class ProposalComponent implements OnInit {
     { matColumnDef: 'submitTime', headerCellDef: 'Submit Time' },
     { matColumnDef: 'totalDeposit', headerCellDef: 'Total Deposit' },
   ];
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataSourceMobile: any[];
   proposalData: any;
   length: number;
   nextKey = null;
+  isLoadingAction = false;
+  pageYOffset = 0;
+  scrolling = false;
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -55,19 +60,13 @@ export class ProposalComponent implements OnInit {
     vote: string | null;
   }[] = [];
 
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-
-  isLoadingAction = false;
-  urlAction = '';
-
-  pageYOffset = 0;
-  scrolling = false;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
+    private validatorService: ValidatorService,
     public dialog: MatDialog,
     public global: Globals,
     public walletService: WalletService,
@@ -79,27 +78,37 @@ export class ProposalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => this.getListProposal(null, true));
+    this.getListProposal();
+    this.walletService.wallet$.subscribe((wallet) => this.getFourLastedProposal());
   }
 
-  getListProposal(nextKey = null, iscall = false) {
-    const addr = this.walletService.wallet?.bech32Address || null;
-    this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
-      this.nextKey = res.data.nextKey ? res.data.nextKey : null;
-
+  getFourLastedProposal() {
+    this.proposalService.getProposalList(4, null).subscribe((res) => {
       if (res?.data?.proposals) {
-        const dataFiltered = res.data.proposals;
+        const addr = this.walletService.wallet?.bech32Address || null;
+        this.proposalData = res.data.proposals;
+        if (this.proposalData?.length > 0) {
+          this.proposalData.forEach((pro, index) => {
+            if (pro?.tally) {
+              const { yes, no, no_with_veto, abstain } = pro?.tally;
+              let totalVote = +yes + +no + +no_with_veto + +abstain;
 
-        dataFiltered.forEach((pro, index) => {
-          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-          if (index < 4 && pro?.tally) {
-            const { yes, no, no_with_veto, abstain } = pro.tally;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
+              if (this.proposalData[index].tally) {
+                this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
+                this.proposalData[index].tally.no = (+no * 100) / totalVote;
+                this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+                this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+              }
+            } else if (pro?.final_tally_result) {
+              const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
+              let totalVote = +yes + +no + +no_with_veto + +abstain;
+              this.proposalData[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+              this.proposalData[index].tally.yes = (+yes * 100) / totalVote;
+              this.proposalData[index].tally.no = (+no * 100) / totalVote;
+              this.proposalData[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+              this.proposalData[index].tally.abstain = (+abstain * 100) / totalVote;
+            }
 
-            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
-            dataFiltered[index].tally.no = (+no * 100) / totalVote;
-            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
             const getVoted = async () => {
               if (addr) {
                 const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
@@ -109,28 +118,38 @@ export class ProposalComponent implements OnInit {
               }
             };
             getVoted();
-          } else {
-            const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-            let totalVote = +yes + +no + +no_with_veto + +abstain;
-            dataFiltered[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-            dataFiltered[index].tally.yes = (+yes * 100) / totalVote;
-            dataFiltered[index].tally.no = (+no * 100) / totalVote;
-            dataFiltered[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-            dataFiltered[index].tally.abstain = (+abstain * 100) / totalVote;
-          }
-        });
-        if (this.dataSource.data.length > 0 && !iscall) {
-          this.dataSource.data = [...this.dataSource.data, ...dataFiltered];
-        } else {
-          this.dataSource.data = [...dataFiltered];
-          this.proposalData = dataFiltered;
+          });
         }
-        this.dataSourceMobile = this.dataSource.data.slice(
-          this.pageData.pageIndex * this.pageData.pageSize,
-          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-        );
-        this.length = this.dataSource.data.length;
       }
+    });
+  }
+
+  getListProposal(nextKey = null) {
+    this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
+      this.nextKey = res.data.nextKey ? res.data.nextKey : null;
+      if (res?.data?.proposals) {
+        let tempDta = res.data.proposals;
+        tempDta.forEach((pro, index) => {
+          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+          const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
+          let totalVote = +yes + +no + +no_with_veto + +abstain;
+          tempDta[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+          tempDta[index].tally.yes = (+yes * 100) / totalVote;
+          tempDta[index].tally.no = (+no * 100) / totalVote;
+          tempDta[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+          tempDta[index].tally.abstain = (+abstain * 100) / totalVote;
+        });
+        if (this.dataSource.data.length > 0) {
+          this.dataSource.data = [...this.dataSource.data, ...tempDta];
+        } else {
+          this.dataSource.data = [...tempDta];
+        }
+      }
+      this.dataSourceMobile = this.dataSource.data.slice(
+        this.pageData.pageIndex * this.pageData.pageSize,
+        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+      );
+      this.length = this.dataSource.data.length;
     });
   }
 
@@ -187,7 +206,7 @@ export class ProposalComponent implements OnInit {
       const account = this.walletService.getAccount();
 
       if (account) {
-        this.proposalService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
+        this.validatorService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
           let warning: MESSAGE_WARNING;
 
           const { created_at } = data.result ? data.result : { created_at: null };
@@ -207,7 +226,8 @@ export class ProposalComponent implements OnInit {
         });
       }
     } else {
-      this.getListProposal(null, true);
+      // this.getListProposal(null);
+      this.getFourLastedProposal();
     }
   }
 
@@ -218,13 +238,9 @@ export class ProposalComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        let votedValue = this.proposalData.find((s) => s.proposal_id === data.id);
-        votedValue.vote_option = result.keyVote;
-      }
       this.scrollToTop();
       setTimeout(() => {
-        this.getListProposal(null, true);
+        this.getFourLastedProposal();
       }, 3000);
     });
   }
@@ -270,10 +286,9 @@ export class ProposalComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     const { length, pageIndex, pageSize } = e;
-
+    const next = length <= (pageIndex + 2) * pageSize;
     this.dataSourceMobile = this.dataSource.data.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
 
-    const next = length <= (pageIndex + 2) * pageSize;
     if (next && this.nextKey) {
       this.getListProposal(this.nextKey);
     }

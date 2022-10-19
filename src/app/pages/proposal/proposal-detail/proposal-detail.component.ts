@@ -23,12 +23,10 @@ export class ProposalDetailComponent implements OnInit {
     });
   }
 
-  getProposalDetail(e):void{
-    if(e === null)
-    {
+  getProposalDetail(e): void {
+    if (e === null || e === undefined) {
       this.errorPro = true;
-    }
-    else{
+    } else {
       this.proposalDetail = e;
     }
   }

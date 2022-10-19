@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
@@ -26,13 +26,11 @@ export class TokenDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    if(this.contractAddress === 'null') {
+    if (this.contractAddress === 'null') {
       this.route.navigate(['/']);
     }
     this.getTokenDetail();
   }
-
-  searchTokenTable(): void {}
 
   getTokenDetail(): void {
     this.loading = true;
