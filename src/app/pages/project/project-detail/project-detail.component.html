@@ -22,7 +22,7 @@
       <div class="row mb-4 body-02 body-01-mob">
         <div class="col-12 col-lg-3 text--gray-4">Official Website</div>
         <div class="col-12 col-lg-9 text--gray-1 h6 mb-0">
-          <a href="{{projectDetail.official_project_website}}" class="text--primary hover-link"
+          <a [href]="sanitize(projectDetail.official_project_website)" class="text--primary hover-link"
              target="_blank">{{projectDetail.official_project_website}}</a>
         </div>
       </div>

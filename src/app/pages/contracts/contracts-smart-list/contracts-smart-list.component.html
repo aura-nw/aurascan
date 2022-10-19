@@ -176,7 +176,7 @@
                       <div class="pl-4">{{ data[template.matColumnDef] }}</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'project_name'">
-                      <a [routerLink]="['/project', data.request_id]">{{ data[template.matColumnDef] }}</a>
+                      <a [routerLink]="['/project', data.request_id]" class="row-ellipsis-2">{{ data[template.matColumnDef] }}</a>
                     </ng-container>
                     <ng-container *ngSwitchCase="'type'">
                       {{ data[template.matColumnDef] }}
