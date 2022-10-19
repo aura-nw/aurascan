@@ -1,12 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { isContract } from 'src/app/core/utils/common/validation';
 import { convertDataTransaction } from 'src/app/global/global';
 import { CONTRACT_TAB, CONTRACT_TABLE_TEMPLATES } from '../../../../core/constants/contract.constant';
@@ -38,6 +36,7 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   countCurrent: string = ContractTab.Transactions;
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
+  nextKey = null;
 
   contractTransaction = {};
   templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
@@ -113,28 +112,43 @@ export class ContractContentComponent implements OnInit, OnDestroy {
 
   getTransaction(): void {
     if (isContract(this.contractsAddress)) {
-      forkJoin({
-        dataExecute: this.contractService.getTransactionsIndexer(this.limit, this.contractsAddress, 'execute'),
-        dataInstantiate: this.contractService.getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate'),
-      }).subscribe(({ dataExecute, dataInstantiate }) => {
-        const { code, data } = dataExecute;
-        if (code === 200) {
-          const txsExecute = convertDataTransaction(data, this.coinInfo);
-          if (dataExecute?.data.count > 0 || dataInstantiate?.data.count > 0) {
-            const { code, data } = dataInstantiate;
-            const txsInstantiate = convertDataTransaction(data, this.coinInfo);
-            this.contractTransaction['data'] = txsExecute;
-            this.contractTransaction['count'] = dataExecute.data.count + txsInstantiate?.length || 0;
-
+      this.contractService
+        .getTransactionsIndexer(this.limit, this.contractsAddress, 'execute')
+        .subscribe((dataExecute) => {
+          const { code, data } = dataExecute;
+          this.nextKey = dataExecute.data.nextKey;
+          if (code === 200) {
+            const txsExecute = convertDataTransaction(data, this.coinInfo);
+            if (dataExecute?.data.count > 0) {
+              this.contractTransaction['data'] = txsExecute;
+              this.contractTransaction['count'] = this.contractTransaction['data'].length || 0;
+            }
             //check data < 25 record
-            if (dataExecute.data.count < this.limit && dataInstantiate?.data?.transactions?.length > 0) {
-              txsInstantiate[0]['type'] = dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
-              txsInstantiate[0]['contract_address'] = this.contractsAddress;
-              this.contractTransaction['data'] = [...this.contractTransaction['data'], ...txsInstantiate];
+            if (this.contractTransaction['data']?.length < this.limit || !this.contractTransaction['data']) {
+              this.contractService
+                .getTransactionsIndexer(this.limit, this.contractsAddress, 'instantiate')
+                .subscribe((dataInstantiate) => {
+                  if (dataInstantiate.data?.transactions?.length > 0) {
+                    const txsInstantiate = convertDataTransaction(dataInstantiate.data, this.coinInfo);
+                    txsInstantiate[0]['type'] =
+                      dataInstantiate.data.transactions[0].tx_response.tx.body.messages[0]['@type'];
+                    txsInstantiate[0]['contract_address'] = this.contractsAddress;
+                    let data = [];
+                    if (this.contractTransaction['data']?.length > 0) {
+                      data = [...this.contractTransaction['data'], txsInstantiate[0]];
+                    } else {
+                      data = txsInstantiate;
+                    }
+                    let count = data.length || 0;
+                    this.contractTransaction = {
+                      data,
+                      count,
+                    };
+                  }
+                });
             }
           }
-        }
-      });
+        });
     }
   }
 

@@ -15,6 +15,7 @@ export interface IConfiguration {
   coins: any;
   env: string;
   indexerUri: string;
+  urlAdmin: string;
 }
 
 @Injectable()
@@ -28,9 +29,10 @@ export class EnvironmentService {
     validator_s3: '',
     image_s3: '',
     chain_info: null,
-    coins:'',
+    coins: '',
     env: '',
-    indexerUri: ''
+    indexerUri: '',
+    urlAdmin: ''
   });
 
   get configValue(): IConfiguration {
@@ -49,7 +51,6 @@ export class EnvironmentService {
     //   validator_s3: '',
     //   chain_info: {},
     // });
-
     // this.config$.subscribe(console.log)
   }
 
@@ -72,7 +73,8 @@ export class EnvironmentService {
           chain_info,
           coins: config['coins'],
           env: config['env'],
-          indexerUri: config['urlIndexer']
+          indexerUri: config['urlIndexer'],
+          urlAdmin: config['urlAdmin'],
         };
 
         this.config.next(data);

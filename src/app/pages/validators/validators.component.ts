@@ -25,7 +25,6 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
-import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',
@@ -94,8 +93,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-  isLoadingAction = false;
-  urlAction = '';
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -382,7 +379,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const halftime = 10000;
     const currentUrl = this.router.url;
     let dataInfoWallet = {};
-    if (this.userAddress && currentUrl === '/validators') {
+    if (this.userAddress && currentUrl.includes('/validators')) {
       forkJoin({
         dataWallet: this.accountService.getAccountDetail(this.userAddress),
         listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
@@ -507,7 +504,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
             to: [this.dataModal.operator_address],
@@ -535,7 +533,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       const executeClaim = async () => {
         this.isLoading = true;
         this.isClaimRewardLoading = true;
-        const { hash, error } = await createSignBroadcast(
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
             message: {
@@ -560,7 +559,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeUnStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
             from: [this.dataModal.operator_address],
@@ -587,7 +587,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeReStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
             src_address: this.dataModal.operator_address,
@@ -677,7 +678,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
-    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
         setTimeout(() => {
@@ -697,18 +697,17 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.isLoading = false;
-    this.modalReference?.close();
+    // this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
-    this.isLoadingAction = false;
-    this.urlAction = '';
   }
 
   checkHashAction(hash) {
     const myInterval = setInterval(() => {
       if (hash) {
-        this.urlAction = 'transaction/' + hash;
-        this.isLoadingAction = true;
+        this.toastr.loading(hash);
+        this.isLoading = false;
+        this.modalReference?.close();
         clearInterval(myInterval);
       }
     }, 500);

@@ -109,7 +109,7 @@
         </div>
         <div class="col-12 col-lg-6">
           <!-- Voting Power -->
-          <div class="row mt-3">
+          <div class="row mt-3 mt-lg-0">
             <div class="col-6">Voting Power</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
@@ -278,7 +278,7 @@
                         ? 'none'
                         : '#5EE6D0'
                   }"
-                  href="/blocks/{{ itemBlock?.height }}"
+                  [routerLink]="['/blocks',itemBlock?.height]"
                   currentitem="false"
                   matTooltip="{{ itemBlock?.height || 0 }}"
                   [matTooltipPosition]="'above'">

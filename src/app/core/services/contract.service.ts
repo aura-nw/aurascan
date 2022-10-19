@@ -20,6 +20,7 @@ export class ContractService extends CommonService {
   }
 
   apiUrl = `${this.environmentService.configValue.beUri}`;
+  apiAdminUrl = `${this.environmentService.configValue.urlAdmin}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
 
@@ -30,12 +31,7 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
-  getTransactionsIndexer(
-    pageLimit: string | number,
-    contractAddress = '',
-    type: string,
-    nextKey = '',
-  ): Observable<any> {
+  getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       searchType: type,
@@ -87,15 +83,13 @@ export class ContractService extends CommonService {
 
   updateContractType(codeID: number, typeContract: string): Observable<any> {
     const payload = {
-      type: typeContract,
-    };
+      type: typeContract
+    }
     return this.http.put<any>(`${this.apiUrl}/contract-codes/${codeID}`, payload);
   }
 
-  getListSmartContract(params: SmartContractListReq): Observable<IResponsesTemplates<any>> {
-    return this.http.get<any>(
-      `${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`,
-    );
+  getListSmartContract(params: SmartContractListReq): Observable<IResponsesTemplates<any>>{
+    return this.http.get<any>(`${this.apiUrl}/contracts/get-contract-by-creator?creatorAddress=${params.creatorAddress}&codeId=${params.codeId}&status=${params.status}&limit=${params.limit}&offset=${params.offset}`);
   }
 
   getSmartContractStatus() {
@@ -107,18 +101,6 @@ export class ContractService extends CommonService {
   }
 
   createContractRequest(data: DeployContractListReq) {
-    let api_url = '';
-    switch (this.apiUrl) {
-      case 'https://serenity-api.aurascan.io/api/v1':
-        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
-        break;
-      case 'https://euphoria-api.aurascan.io/api/v1':
-        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
-        break;
-      default:
-        api_url = 'https://contract-deployer.dev.aura.network/api/v1';
-        break;
-    }
-    return this.http.post<any>(api_url + `/request/create`, data);
+    return this.http.post<any>(`${this.apiAdminUrl}/request/create`, data);
   }
 }

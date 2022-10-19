@@ -1,8 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Key } from '@keplr-wallet/types';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { WALLET_PROVIDER } from '../../../core/constants/wallet.constant';
 import { EnvironmentService } from '../../../core/data-services/environment.service';
 import { DialogService } from '../../../core/services/dialog.service';
@@ -14,14 +13,21 @@ import { WalletService } from '../../../core/services/wallet.service';
   styleUrls: ['./wallet-connect.component.scss'],
 })
 export class WalletConnectComponent implements AfterViewInit, OnDestroy {
-  wallet$: Observable<Key> = this.walletService.wallet$;
+  wallet$: Observable<any> = this.walletService.wallet$;
 
   @ViewChild('offcanvasWallet') offcanvasWallet: ElementRef;
   @ViewChild('buttonDismiss') buttonDismiss: ElementRef<HTMLButtonElement>;
   @ViewChild('connectButton') connectButton: ElementRef<HTMLButtonElement>;
 
   chainId = this.envService.configValue.chainId;
-  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  isMobileMatched = false;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(
+    tap((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    }),
+  );
 
   destroy$ = new Subject();
   constructor(
@@ -54,8 +60,8 @@ export class WalletConnectComponent implements AfterViewInit, OnDestroy {
   connectWallet(provider: WALLET_PROVIDER): void {
     try {
       const connect = async () => {
-        const connect = await this.walletService.connect(provider, this.chainId);
-        if (!connect && provider === WALLET_PROVIDER.COIN98) {
+        const connect = await this.walletService.connect(provider);
+        if (!connect && provider === WALLET_PROVIDER.COIN98 && !this.isMobileMatched) {
           this.dlgService.showDialog({
             title: '',
             content: 'Please set up override Keplr in settings of Coin98 wallet',
