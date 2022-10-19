@@ -10,7 +10,13 @@
     }
   }
 }
-
+.g-ellipsis-project {
+  width: 130px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
 .aura-table.contract-table th.mat-header-cell:nth-child(3),
 .aura-table.contract-table th.mat-header-cell:nth-child(5) {
   max-width: 130px;
