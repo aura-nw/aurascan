@@ -149,7 +149,7 @@
                     {{ (data[template.matColumnDef] | cutStringPipe: 16) || '-' }}
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'project_name'">
-                    <a [routerLink]="['/project', data.request_id]" class="row-ellipsis-2">{{ data[template.matColumnDef] }}</a>
+                    <a [routerLink]="['/project', data.request_id]" class="g-ellipsis-project">{{ data[template.matColumnDef] }}</a>
                   </ng-container>
                   <ng-container
                     *ngIf="

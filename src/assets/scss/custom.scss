@@ -628,10 +628,3 @@ body {
 .toast-container a {
     text-decoration: underline !important;
 }
-.row-ellipsis-2 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
