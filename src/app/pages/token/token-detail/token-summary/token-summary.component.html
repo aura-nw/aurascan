@@ -67,8 +67,9 @@
             <div class="d-flex align-items-center py-2">
               <div class="first-col text--gray-5">Official Site:</div>
               <div>
-                -
-                <!-- <a class="text--primary" href="javascript:void(0)"></a> -->
+                 <a class="text--primary break-word" *ngIf="projectDetail && projectDetail.official_project_website"
+                    [href]="sanitize(projectDetail.official_project_website)">{{projectDetail.official_project_website}}</a>
+                <span *ngIf="!projectDetail || (projectDetail && !projectDetail.official_project_website)">-</span>
               </div>
             </div>
           </td>
@@ -76,39 +77,47 @@
         <tr>
           <td colspan="2" class="border_none">
             <div class="d-flex align-items-center py-2">
-              <div class="first-col text--gray-5">Social Profiles:</div>
-              <div class="d-flex social-group">
-                -
-                <!-- <a
-                  href="https://github.com/aura-nw"
-                  target="_blank"
-                  class="d-flex align-items-center justify-content-center body">
-                  <i class="mr-3 icon icon-github"></i>
-                </a>
-                <a
-                  href="https://twitter.com/AuraNetworkHQ"
-                  target="_blank"
-                  class="d-flex align-items-center justify-content-center body">
-                  <i class="mx-3 icon icon-twitter"></i>
-                </a>
-                <a
-                  href="https://www.facebook.com/AuraNetworkHQ/"
-                  target="_blank"
-                  class="d-flex align-items-center justify-content-center body">
-                  <i class="mx-3 icon icon-facebook"></i>
-                </a>
-                <a
-                  href="https://t.me/auranw"
-                  target="_blank"
-                  class="d-flex align-items-center justify-content-center body">
-                  <i class="mx-3 icon icon-file-document"></i>
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/auranetwork/about/"
-                  target="_blank"
-                  class="d-flex align-items-center justify-content-center body">
-                  <i class="ml-3 icon icon-email"></i>
-                </a> -->
+              <div class="first-col text--gray-5 mb-1">Social Profiles:</div>
+              <div>
+                <span *ngIf="!projectDetail">-</span>
+                <div class="d-flex flex-wrap social-group">
+                  <a href="{{projectDetail.whitepaper}}" *ngIf="projectDetail?.whitepaper" target="_blank">
+                    <i class="ph-file-pdf"></i>
+                  </a>
+                  <a href="{{projectDetail.medium}}" *ngIf="projectDetail?.medium" target="_blank">
+                    <i class="ph-medium-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.github}}" *ngIf="projectDetail?.github" target="_blank">
+                    <i class="ph-github-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.reddit}}" *ngIf="projectDetail?.reddit" target="_blank">
+                    <i class="ph-reddit-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.telegram}}" *ngIf="projectDetail?.telegram" target="_blank">
+                    <i class="ph-telegram-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.slack}}" *ngIf="projectDetail?.slack" target="_blank">
+                    <i class="ph-slack-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.wechat}}" *ngIf="projectDetail?.wechat" target="_blank">
+                    <i class="ph-chats-circle"></i>
+                  </a>
+                  <a href="{{projectDetail.facebook}}" *ngIf="projectDetail?.facebook" target="_blank">
+                    <i class="ph-facebook-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.linkedin}}" *ngIf="projectDetail?.linkedin" target="_blank">
+                    <i class="ph-linkedin-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.twitter}}" *ngIf="projectDetail?.twitter" target="_blank">
+                    <i class="ph-twitter-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.discord}}" *ngIf="projectDetail?.discord" target="_blank">
+                    <i class="ph-discord-logo"></i>
+                  </a>
+                  <a href="{{projectDetail.bitcointalk}}" *ngIf="projectDetail?.bitcointalk" target="_blank">
+                    <i class="ph-currency-btc"></i>
+                  </a>
+                </div>
               </div>
             </div>
           </td>
