@@ -48,8 +48,12 @@ export class LoadingImageComponent implements OnInit, OnChanges {
   async ngOnChanges(changes: SimpleChanges) {
     if(this.identity && this.identity !== '') {
       const req = await this.commonService.getValidatorImg(this.identity);
-      this.imgByIdentity = req.data['them'][0]?.pictures?.primary?.url;
-      this.isError = false;
+      if(req?.data['them'] && req?.data['them'][0]?.pictures?.primary?.url ) {
+        this.imgByIdentity = req.data['them'][0]?.pictures?.primary?.url;
+        this.isError = false;
+      } else {
+        this.isError = true;
+      }
     } else {
       this.isError = true;
     }
