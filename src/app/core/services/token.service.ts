@@ -23,8 +23,8 @@ export class TokenService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/cw721-tokens`, payload);
   }
 
-  getTokenCW20Detail(address): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw20-tokens/${address}`);
+  getTokenDetail(address): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
   }
 
   getTokenCW721Detail(address): Observable<any> {
