@@ -3,6 +3,7 @@ import {ProjectService} from "src/app/core/services/project.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectDetail} from "src/app/core/models/project";
 import {EnvironmentService} from "src/app/core/data-services/environment.service";
+import {DomSanitizer} from '@angular/platform-browser';
 const marked = require('marked');
 
 @Component({
@@ -17,7 +18,8 @@ export class ProjectDetailComponent implements OnInit, AfterViewChecked {
   constructor(
       private route: ActivatedRoute,
       private projectService :ProjectService,
-      private environmentService: EnvironmentService
+      private environmentService: EnvironmentService,
+      private sanitizer:DomSanitizer
   ) { }
 
   async ngOnInit() {
@@ -31,7 +33,9 @@ export class ProjectDetailComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
+  sanitize(url:string){
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
     if (editor && this.projectDetail) {
