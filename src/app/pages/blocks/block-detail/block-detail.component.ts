@@ -110,7 +110,7 @@ export class BlockDetailComponent implements OnInit {
       if (code === 200) {
         const block = convertDataBlock(data)[0];
         block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
-        block['chainid'] = _.get(data.blocks[0], 'custom_info.chain_id');
+        block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
         block['json_data'] = _.get(data.blocks[0], 'block');
         block['gas_used'] = block['gas_wanted'] = 0;
         this.item = block;

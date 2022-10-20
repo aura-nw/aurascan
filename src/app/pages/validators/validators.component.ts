@@ -383,9 +383,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       forkJoin({
         dataWallet: this.accountService.getAccountDetail(this.userAddress),
         listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
-        listUnDelegator: this.validatorService.validatorsListUndelegateWallet(this.userAddress),
       }).subscribe(
-        ({ dataWallet, listDelegator, listUnDelegator }) => {
+        ({ dataWallet, listDelegator}) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
@@ -424,29 +423,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             }
           }
 
-          if (listUnDelegator) {
-            this.lstUndelegate = [];
-            const now = new Date();
-            listUnDelegator.data.account_unbonding.forEach((data) => {
-              data.entries.forEach((f) => {
-                f['validator_identity'] = data.validator_description?.description?.identity;
-                f.balance = f.balance / NUMBER_CONVERT;
-                f.validator_address = data.validator_address;
-                f.validator_name = this.lstValidatorOrigin.find(
-                  (i) => i.operator_address === f.validator_address,
-                )?.title;
-                f.jailed = data.validator_description?.jailed || false;
-                let timeConvert = new Date(f.completion_time);
-                if (now < timeConvert) {
-                  this.lstUndelegate.push(f);
-                }
-              });
-            });
-
-            this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
-              return this.compare(a.completion_time, b.completion_time, true);
-            });
-          }
+          this.getDataUndelegate();
 
           // store data wallet info
           dataInfoWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
@@ -711,5 +688,32 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         clearInterval(myInterval);
       }
     }, 500);
+  }
+
+  getDataUndelegate() {
+    this.validatorService.validatorsListUndelegateWallet(this.userAddress).subscribe((res) => {
+      let listUnDelegator = res;
+      if (listUnDelegator) {
+        this.lstUndelegate = [];
+        const now = new Date();
+        listUnDelegator.data.account_unbonding.forEach((data) => {
+          data.entries.forEach((f) => {
+            f['validator_identity'] = data.validator_description?.description?.identity;
+            f.balance = f.balance / NUMBER_CONVERT;
+            f.validator_address = data.validator_address;
+            f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
+            f.jailed = data.validator_description?.jailed || false;
+            let timeConvert = new Date(f.completion_time);
+            if (now < timeConvert) {
+              this.lstUndelegate.push(f);
+            }
+          });
+        });
+
+        this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
+          return this.compare(a.completion_time, b.completion_time, true);
+        });
+      }
+    });
   }
 }
