@@ -128,8 +128,31 @@ export class TokenInventoryComponent implements OnInit {
   }
 
   getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft.media_info[0]?.media_link);
     if (nft?.media_info?.length > 0) {
-      return checkTypeFile(nft.media_info[0]?.media_link);
+      if (nftType === '') {
+        switch (nft?.media_info[0]?.content_type) {
+          case 'video/webm':
+          case 'video/mp4':
+            nftType = 'video';
+            break;
+          case 'image/png':
+          case 'image/jpeg':
+          case 'image/gif':
+            nftType = 'img';
+            break;
+          case 'model/gltf-binary':
+            nftType = '3d';
+            break;
+          case 'audio/mpeg':
+          case 'audio/vnd.wave':
+            nftType = 'audio';
+            break;
+          default:
+            nftType = '';
+        }
+      }
+      return nftType;
     } else {
       return '';
     }

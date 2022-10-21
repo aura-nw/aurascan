@@ -90,6 +90,29 @@ export class NFTDetailComponent implements OnInit {
       }
 
       this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
+      if (this.nftType === '') {
+        switch (this.nftDetail?.media_info[0]?.content_type) {
+          case 'video/webm':
+          case 'video/mp4':
+            this.nftType = 'video';
+            break;
+          case 'image/png':
+          case 'image/jpeg':
+          case 'image/gif':
+            this.nftType = 'img';
+            break;
+          case 'model/gltf-binary':
+          case 'gltf':
+            this.nftType = '3d';
+            break;
+          case 'audio/mpeg':
+          case 'audio/vnd.wave':
+            this.nftType = 'audio';
+            break;
+          default:
+            this.nftType = '';
+        }
+      }
       this.loading = false;
     });
   }

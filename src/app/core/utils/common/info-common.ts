@@ -94,6 +94,6 @@ export function checkTypeFile(filename: string) {
     case 'mp3':
       return 'audio';
     default:
-      return 'img';
+      return '';
   }
 }
