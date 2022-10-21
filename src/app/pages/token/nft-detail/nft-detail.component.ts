@@ -77,12 +77,18 @@ export class NFTDetailComponent implements OnInit {
   error(): void {
     this.isError = true;
   }
-  
+
   getNFTDetail() {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
+
+      if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
+        this.nftDetail['isDisplayName'] = true;
+        this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+      }
+
       this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
       this.loading = false;
     });
