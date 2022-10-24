@@ -384,7 +384,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         dataWallet: this.accountService.getAccountDetail(this.userAddress),
         listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
       }).subscribe(
-        ({ dataWallet, listDelegator}) => {
+        ({ dataWallet, listDelegator }) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
@@ -637,17 +637,10 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   checkStatusExecuteBlock(hash, error, msg) {
     this.checkHashAction(hash);
-    if (error) {
-      if (error != 'Request rejected') {
-        this.toastr.error(error);
-      }
+    setTimeout(() => {
+      this.checkDetailTx(hash, msg);
       this.resetData();
-    } else {
-      setTimeout(() => {
-        this.checkDetailTx(hash, msg);
-        this.resetData();
-      }, TIME_OUT_CALL_API);
-    }
+    }, TIME_OUT_CALL_API);
   }
 
   async checkDetailTx(id, message) {
