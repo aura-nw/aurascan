@@ -31,7 +31,7 @@ export const MESSAGES_CODE_STAKING = {
   24: { Code: 24, Message: 'not enough delegation shares' },
   25: { Code: 25, Message: 'entry not mature' },
   26: { Code: 26, Message: 'no unbonding delegation found' },
-  27: { Code: 27, Message: 'too many unbonding delegation entries for (delegator, validator) tuple' },
+  27: { Code: 27, Message: 'you can undelegate from the same validator only up to 7 times' },
   28: { Code: 28, Message: 'no redelegation found' },
   29: { Code: 29, Message: 'cannot redelegate to the same validator' },
   30: { Code: 30, Message: 'too few tokens to redelegate (truncates to zero tokens)' },
