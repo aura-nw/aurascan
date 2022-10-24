@@ -45,8 +45,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     { matColumnDef: 'action', headerCellDef: '' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
-  dataSourceBk: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>();
+  dataSourceBk = new MatTableDataSource<any>();
 
   arrayDelegate = [];
   textSearch = '';
@@ -100,6 +100,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
+
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
@@ -160,6 +161,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.timerUnSub.unsubscribe();
     }
   }
+
   // loadDataTemp(): void {
   //   //get data from client for wallet info
   //   let retrievedObject = localStorage.getItem('dataInfoWallet');
@@ -197,7 +199,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.lstValidator = dataFilter;
         }
 
-        this.dataSource = new MatTableDataSource(dataFilter);
+        // this.dataSource.data = dataFilter;
+        Object.keys(dataFilter).forEach((key) => {
+          if (this.dataSource.data[key]) {
+            Object.assign(this.dataSource.data[key], dataFilter[key]);
+          } else {
+            this.dataSource.data[key] = dataFilter[key];
+          }
+        });
+
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
         this.searchValidator();
@@ -240,7 +250,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
-    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.data = data;
     this.dataSourceBk = this.dataSource;
     this.searchValidator();
   }
@@ -275,7 +285,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
-    this.dataSource = new MatTableDataSource(dataFilter);
+    this.dataSource.data = dataFilter;
     this.dataSource.sort = this.sort;
   }
 
@@ -291,7 +301,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         (f) => f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
       this.dataSource = this.dataSourceBk;
-      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.data = data;
       if (data === undefined || data?.length === 0) {
         this.searchNullData = true;
       }
