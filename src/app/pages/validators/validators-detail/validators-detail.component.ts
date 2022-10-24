@@ -227,7 +227,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       res.data?.delegation_responses.forEach((k) => {
         data.push({ delegator_address: k.delegation?.delegator_address, amount: balanceOf(k.balance?.amount) });
       });
-      this.dataSourceDelegator = new MatTableDataSource(data);
+      this.dataSourceDelegator.data = data;
     }
   }
 
