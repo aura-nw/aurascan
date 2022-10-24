@@ -11,7 +11,7 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
   @ViewChild('video') video!: ElementRef;
   @Input() appWidth = 'auto';
   @Input() appHeight = '100%';
-  @Input() link = '100%';
+  @Input() link;
   @Input() showControl = true;
   @Input() isMuted = false;
   @Input() isDetail = false;
