@@ -647,10 +647,18 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   checkStatusExecuteBlock(hash, error, msg) {
     this.checkHashAction(hash);
-    setTimeout(() => {
-      this.checkDetailTx(hash, msg);
+    if (error) {
+      if (error != 'Request rejected') {
+        let errorMessage = this.mappingErrorService.checkMappingError('', error);
+        this.toastr.error(errorMessage);
+      }
       this.resetData();
-    }, TIME_OUT_CALL_API);
+    } else {
+      setTimeout(() => {
+        this.checkDetailTx(hash, msg);
+        this.resetData();
+      }, TIME_OUT_CALL_API);
+    }
   }
 
   async checkDetailTx(id, message) {
