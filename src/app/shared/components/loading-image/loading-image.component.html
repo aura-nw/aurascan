@@ -17,11 +17,11 @@
 </div>
 <div class="d-flex justify-content-center align-items-center h-100 position-relative" *ngIf="!isLoading">
   <img
-    *ngIf="!isError"
-    class="image"
-    [src]="identity ? imgByIdentity : srcImg"
-    alt="{{ identity ? imgByIdentity : srcImg }}"
-    [class.validator-jailed]="appClass === 'jailed'" />
+      *ngIf="!isError"
+      class="image"
+      [src]="identity ? imgByIdentity : srcImg"
+      alt="{{ identity ? imgByIdentity : srcImg }}"
+      [class.validator-jailed]="appClass === 'jailed'" />
 
   <img *ngIf="isError" class="image" [src]="df" alt="aura" [class.validator-jailed]="appClass === 'jailed'"/>
   <div class="jailed" [class.d-none]="appClass !== 'jailed'">
