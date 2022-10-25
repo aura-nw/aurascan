@@ -77,13 +77,42 @@ export class NFTDetailComponent implements OnInit {
   error(): void {
     this.isError = true;
   }
-  
+
   getNFTDetail() {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
+
+      if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
+        this.nftDetail['isDisplayName'] = true;
+        this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+      }
+
       this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
+      if (this.nftType === '') {
+        switch (this.nftDetail?.media_info[0]?.content_type) {
+          case 'video/webm':
+          case 'video/mp4':
+            this.nftType = 'video';
+            break;
+          case 'image/png':
+          case 'image/jpeg':
+          case 'image/gif':
+            this.nftType = 'img';
+            break;
+          case 'model/gltf-binary':
+          case 'gltf':
+            this.nftType = '3d';
+            break;
+          case 'audio/mpeg':
+          case 'audio/vnd.wave':
+            this.nftType = 'audio';
+            break;
+          default:
+            this.nftType = '';
+        }
+      }
       this.loading = false;
     });
   }

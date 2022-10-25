@@ -118,6 +118,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
             const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
             const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
+            const voted_abstain_percent = (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token;
 
             this.proposalDetail = {
               ...this.proposalDetail,
@@ -127,6 +128,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               abstainPercent,
               voted_percent,
               voted,
+              voted_abstain_percent
             };
             this.parsingProposalStatus(this.proposalDetail);
 

@@ -73,7 +73,7 @@ export class ProposalVoteComponent implements OnInit {
     const res = await this.transactionService.txsDetailLcd(id);
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
-    message = this.mappingErrorService.checkMappingError(message, numberCode);
+    message = this.mappingErrorService.checkMappingError(message, numberCode, true);
     if (numberCode !== undefined) {
       if (numberCode === CodeTransaction.Success) {
         this.toastr.success(message);
