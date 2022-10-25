@@ -1,0 +1,12 @@
+.grantees-search-form {
+  @media (min-width: 992px) {
+    min-width: 410px;
+  }
+}
+
+@media (max-width: 991.99px) {
+  .button-switch-stage button {
+    width: auto;
+    padding: 0 14px;
+  }
+}
