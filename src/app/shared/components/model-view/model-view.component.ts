@@ -10,6 +10,7 @@ export class ModelViewComponent implements OnInit {
   @Input() modelUrl: string;
   @Input() appWidth: number;
   @Input() appHeight: number;
+  @Input() link;
 
   @Input() disablePan = false
 

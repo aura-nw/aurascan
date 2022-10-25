@@ -15,7 +15,7 @@
                                     <div class="form-group">
                                         <label for="code_ids" class="form-label required text--gray-1 body-02">Code ID</label>
                                             <mat-select formControlName="code_ids" class="form-control form-check-input"
-                                            id="code_ids" [placeholder]='"Select one or many Code IDs"'
+                                            id="code_ids" #code_ids [placeholder]='"Select one or many Code IDs"'
                                             [class.form-control--error]="contractForm.get('code_ids')?.invalid && (contractForm.get('code_ids')?.dirty || contractForm.get('code_ids')?.touched)"
                                              multiple [disableOptionCentering]="true" panelClass="aura-optional-panel aura-optional-contract-deploy">
                                               <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>

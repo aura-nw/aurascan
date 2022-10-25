@@ -38,11 +38,11 @@
               >$ {{ totalValueToken + totalValueNft || 0 | number: global.formatNumber2Decimal }}</span
             >
             <img
-              [src]="'assets/icons/icons-svg/white/refresh.svg'"
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
               alt=""
-              width="20px"
-              height="20px"
               class="ml-10"
+              width="20"
+              height="20"
               *ngIf="isNoData" />
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
@@ -368,7 +368,7 @@
 <ng-template #reloadTemplate>
   <div class="card p-5 d-flex justify-content-between align-items-center" *ngIf="isNoData">
     <div class="text-center">
-      <img [src]="'assets/icons/icons-svg/white/refresh.svg'" alt="" width="40px" height="40px" />
+      <img [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3" alt="" class="mr-2" width="40" height="40" />
       <div class="small-text text--light-gray mt-4">
         Fetching data, might take longer than usual. <br />
         Please come back later or
