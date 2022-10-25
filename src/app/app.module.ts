@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -52,15 +52,16 @@ import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/t
 import { CommonService } from './core/services/common.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
-import {BlankModule} from "./pages/blank/blank.module";
+import { BlankModule } from './pages/blank/blank.module';
 import { TokenService } from './core/services/token.service';
+import { GlobalErrorHandler } from './core/helpers/global-error';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
 const maskConfig: Partial<IConfig> = {
-  thousandSeparator: ','
+  thousandSeparator: ',',
 };
 
 @NgModule({
@@ -140,6 +141,7 @@ export class MaterialModule {}
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RequestTimeoutHttpInterceptor, multi: true },
     { provide: DEFAULT_TIMEOUT, useValue: 60000 },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     EnvironmentService,
     DatePipe,
@@ -156,7 +158,7 @@ export class MaterialModule {}
       multi: true,
     },
     CommonService,
-    TokenService
+    TokenService,
   ],
   bootstrap: [AppComponent],
 })
