@@ -208,38 +208,6 @@ export class WriteContractComponent implements OnInit {
       this.toastr.error(`Error: ${error}`);
     }
   }
-  // execute(msg) {
-  //   let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-  //   const fee: any = {
-  //     amount: [
-  //       {
-  //         denom: this.coinMinimalDenom,
-  //         amount: '1',
-  //       },
-  //     ],
-  //     gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
-  //   };
-
-  //   SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
-  //     .then((client) => {
-  //       return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-  //     })
-  //     .then((client) => {
-  //       if (client?.transactionHash) {
-  //         this.urlAction = 'transaction/' + client?.transactionHash;
-  //         this.isLoadingAction = true;
-  //         setTimeout(() => {
-  //           this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-  //         }, 4000);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (!error.toString().includes('Request rejected')) {
-  //         let msgError = error.toString() || 'Error';
-  //         this.toastr.error(msgError);
-  //       }
-  //     });
-  // }
 
   resetError(msg, all = false) {
     if (msg) {
