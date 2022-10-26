@@ -1,0 +1,19 @@
+.card {
+  @media (min-width: 992px) {
+    width: 500px;
+  }
+  &-header {
+    background-color: var(--aura-gray-9);
+  }
+}
+
+::ng-deep {
+  .revoke-overlay-pane .mat-dialog-container {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  .cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}

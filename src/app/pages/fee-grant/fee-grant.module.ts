@@ -13,6 +13,8 @@ import {MatTableModule} from "@angular/material/table";
 import {PaginatorModule} from "src/app/shared/components/paginator/paginator.module";
 import {TableNoDataModule} from "src/app/shared/components/table-no-data/table-no-data.module";
 import {TranslateModule} from "@ngx-translate/core";
+import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
+import {SharedModule} from "src/app/shared/shared.module";
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import {TranslateModule} from "@ngx-translate/core";
     FeeGrantComponent,
     MyGranteesComponent,
     MyGrantersComponent,
-    PopupAddGrantComponent
+    PopupAddGrantComponent,
+    PopupRevokeComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +34,8 @@ import {TranslateModule} from "@ngx-translate/core";
     MatTableModule,
     PaginatorModule,
     TableNoDataModule,
-    TranslateModule
+    TranslateModule,
+    SharedModule
   ]
 })
 export class FeeGrantModule { }

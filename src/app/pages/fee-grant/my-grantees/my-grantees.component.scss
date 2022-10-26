@@ -10,3 +10,11 @@
     padding: 0 14px;
   }
 }
+.aura-table.grant-table th.mat-header-cell {
+  min-width: 150px;
+  @media (max-width: 991.98px) {
+    &:nth-child(1), &:nth-child(2), &:nth-child(4) {
+      min-width: 200px;
+    }
+  }
+}

@@ -2,6 +2,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 2.157845,
@@ -12,6 +13,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-12T09:11:28.776Z",
     "limit": 3.157845,
@@ -22,6 +24,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2021-2-21T09:11:28.776Z",
     "limit": 4.127845,
@@ -32,6 +35,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2022-11-24T09:11:28.776Z",
     "limit": 12.152845,
@@ -42,6 +46,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 6.157845,
@@ -52,6 +57,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 8.157845,
@@ -62,6 +68,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 2.157845,
@@ -72,6 +79,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 3.157845,
@@ -82,6 +90,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 4.157845,
@@ -92,6 +101,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 6.157845,
@@ -102,6 +112,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 7.157845,
@@ -112,6 +123,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 8.157845,
@@ -122,6 +134,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 9.157845,
@@ -132,6 +145,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 1.157845,
@@ -142,6 +156,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 6.157845,
@@ -152,6 +167,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 2.157845,
@@ -162,6 +178,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 6.157845,
@@ -172,6 +189,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Periodic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 7.157845,
@@ -182,6 +200,7 @@
   {
     "tx_hash": "1B382DC1E909BA103406E66297473EA67BCACCF6842C279394E1274F9F1B0DBB",
     "grantee": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
+    "granter": "aura1jlp9ge244um2v7mdm7xwamwsv9z9vhpej6wjh7",
     "type": "Basic",
     "time": "2020-10-25T09:11:28.776Z",
     "limit": 8.157845,
