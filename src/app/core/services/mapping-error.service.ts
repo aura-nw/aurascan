@@ -33,4 +33,28 @@ export class MappingErrorService extends CommonService {
     message = temp ? temp.charAt(0).toUpperCase() + temp.slice(1) : 'Error';
     return message;
   }
+
+  checkMappingErrorTxDetail(message, code){
+    if (code === CodeTransaction.Success) {
+      message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
+      return message;
+    }
+    if (message.indexOf('too many redelegation') >= 0) {
+      message = this.translate.instant('NOTICE.ERROR_REDELEGATE_TIME');
+    } else if (message.indexOf('in progress') >= 0) {
+      message = this.translate.instant('NOTICE.ERROR_REDELEGATE_INPROGRESS', {timeStaking: this.timeStaking});
+    } else if (message.indexOf('too many unbonding') >= 0) {
+      message = this.translate.instant('NOTICE.ERROR_UNDELEGATE_TIME');
+    } 
+    else if (code && code !== CodeTransaction.Success) {
+      const arr = ['claim reward', 'delegate', 'redelegate', 'undelegate'];
+      const contains = arr.some(element => {
+        if (message.includes(element)) {
+          message = 'claim reward/delegate/ redelegate/undelegate unsuccessfully';
+          return message;
+        }
+      });
+    }
+    return message;
+  }
 }
