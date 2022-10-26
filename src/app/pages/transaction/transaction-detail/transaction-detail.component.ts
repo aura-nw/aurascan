@@ -80,7 +80,7 @@ export class TransactionDetailComponent implements OnInit {
 
             if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
               this.errorMessage = this.transaction.raw_log;
-              this.errorMessage = this.mappingErrorService.checkMappingError(this.errorMessage, this.transaction.code);
+              this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(this.errorMessage, this.transaction.code);
             }
             this.loading = false;
           } else if (this.isReload) {
