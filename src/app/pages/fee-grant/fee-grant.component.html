@@ -1,9 +1,9 @@
 <!-- Tabs -->
 <ul
-    ngbNav
-    #customNav="ngbNav"
-    [activeId]="!isGrantees ? 1 : 0"
-    class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-flex">
+  ngbNav
+  #customNav="ngbNav"
+  [activeId]="!isGrantees ? 1 : 0"
+  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-flex">
   <ng-container *ngFor="let tab of TAB; index as index">
     <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
       <a ngbNavLink (click)="changeType(tab.id === 0)" class="fw-semibold">

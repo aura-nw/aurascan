@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-fee-grant',
   templateUrl: './fee-grant.component.html',
-  styleUrls: ['./fee-grant.component.scss']
+  styleUrls: ['./fee-grant.component.scss'],
 })
 export class FeeGrantComponent implements OnInit {
   isGrantees = true;
@@ -17,13 +17,11 @@ export class FeeGrantComponent implements OnInit {
       value: 'My Granters',
     },
   ];
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   changeType(type: boolean) {
     this.isGrantees = type;
   }
-
 }

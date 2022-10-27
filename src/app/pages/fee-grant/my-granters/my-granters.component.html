@@ -7,33 +7,34 @@
   <div class="card-body">
     <ng-container *ngIf="!loading">
       <div class="d-lg-flex flex-row-reverse justify-content-between align-items-center">
-        <form (ngSubmit)="searchToken()"
-              class="aura-form single-input-field granter-search-form">
+        <form (ngSubmit)="searchToken()" class="aura-form single-input-field granter-search-form">
           <div class="input-group px-6">
             <input
-                type="text"
-                class="form-control pl-0"
-                placeholder="Search for Tx Hash, Address or Status"
-                [(ngModel)]="textSearch"
-                [maxLength]="maxLengthSearch"
-                name="search"
-                autocomplete="off"/>
+              type="text"
+              class="form-control pl-0"
+              placeholder="Search for Tx Hash, Address or Status"
+              [(ngModel)]="textSearch"
+              [maxLength]="maxLengthSearch"
+              name="search"
+              autocomplete="off" />
             <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              type="submit"
+              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              (click)="searchToken()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
-                type="reset"
-                class="btn-reset cursor-pointer {{ !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : '' }}"
-                (click)="resetFilterSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetFilterSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
         <div class="mt-4 mt-lg-0 text--gray-1" *ngIf="dataSource.data">
-          {{dataSource.data.length}} transaction{{dataSource.data.length > 0 ? 's' : ''}} found
+          {{ dataSource.data.length }} transaction{{ dataSource.data.length > 0 ? 's' : '' }} found
         </div>
       </div>
       <div class="mt-4">
@@ -48,17 +49,19 @@
                   <td mat-cell *matCellDef="let data">
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                        <a target="_blank"
-                           *ngSwitchCase="'tx_hash'"
-                           class="text--primary cursor-pointer"
-                           [routerLink]="['/transaction', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe:8:8}}</span>
+                        <a
+                          target="_blank"
+                          *ngSwitchCase="'tx_hash'"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/transaction', data[template.matColumnDef]]">
+                          <span>{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</span>
                         </a>
-                        <a target="_blank"
-                           *ngSwitchCase="'granter'"
-                           class="text--primary cursor-pointer"
-                           [routerLink]="['/account', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe:8:8}}</span>
+                        <a
+                          target="_blank"
+                          *ngSwitchCase="'granter'"
+                          class="text--primary cursor-pointer"
+                          [routerLink]="['/account', data[template.matColumnDef]]">
+                          <span>{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</span>
                         </a>
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
@@ -71,7 +74,7 @@
                           <span class="ml-2">{{ denom }}</span>
                         </div>
                         <div *ngSwitchCase="'expiration'">
-                          {{ (data[template.matColumnDef] | customDate: 'yyyy-MM-dd' )}}
+                          {{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}
                         </div>
                         <div *ngSwitchCase="'spendable'">
                           {{ data[template.matColumnDef] | number: global.formatNumberToken }}
@@ -79,9 +82,11 @@
                         </div>
                         <div *ngSwitchCase="'reason'" class="d-flex justify-content-between align-items-center">
                           <span>{{ data[template.matColumnDef] }}</span>
-                          <a [routerLink]="['/transaction', data['tx_hash']]"
-                             *ngIf="data['reason'] === 'Revoked'"
-                             target="_blank" class="button body-01 text--primary">
+                          <a
+                            [routerLink]="['/transaction', data['tx_hash']]"
+                            *ngIf="data['reason'] === 'Revoked'"
+                            target="_blank"
+                            class="button body-01 text--primary">
                             <i class="ph-arrow-square-out"></i>
                           </a>
                         </div>
@@ -96,9 +101,9 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
             <app-paginator
-                [length]="pageData.length"
-                [pageSize]="pageData.pageSize"
-                (paginator)="paginatorEmit($event)">
+              [length]="pageData.length"
+              [pageSize]="pageData.pageSize"
+              (paginator)="paginatorEmit($event)">
             </app-paginator>
           </div>
         </ng-container>
@@ -108,7 +113,7 @@
       </div>
     </ng-container>
     <ng-container *ngIf="loading">
-      <div  class="m-auto mt-10">
+      <div class="m-auto mt-10">
         <app-loading-sprint></app-loading-sprint>
       </div>
     </ng-container>

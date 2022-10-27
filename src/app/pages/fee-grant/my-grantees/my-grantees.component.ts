@@ -1,20 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
-import {PAGE_EVENT} from "src/app/core/constants/common.constant";
-import {MatTableDataSource} from "@angular/material/table";
-import {TableTemplate} from "src/app/core/models/common.model";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {CommonService} from "src/app/core/services/common.service";
-import {Globals} from "src/app/global/global";
-import {EnvironmentService} from "src/app/core/data-services/environment.service";
-import {HttpClient} from "@angular/common/http";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {PopupRevokeComponent} from "src/app/pages/fee-grant/popup-revoke/popup-revoke.component";
+import { Component, OnInit } from '@angular/core';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MatTableDataSource } from '@angular/material/table';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { CommonService } from 'src/app/core/services/common.service';
+import { Globals } from 'src/app/global/global';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { HttpClient } from '@angular/common/http';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup-revoke.component';
 
 @Component({
   selector: 'app-my-grantees',
   templateUrl: './my-grantees.component.html',
-  styleUrls: ['./my-grantees.component.scss']
+  styleUrls: ['./my-grantees.component.scss'],
 })
 export class MyGranteesComponent implements OnInit {
   loading = true;
@@ -23,23 +23,23 @@ export class MyGranteesComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   dataSource = new MatTableDataSource<any>();
   templatesActive: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'TX HASH'},
-    {matColumnDef: 'grantee', headerCellDef: 'GRANTEE'},
-    {matColumnDef: 'type', headerCellDef: 'TYPE'},
-    {matColumnDef: 'time', headerCellDef: 'TIME'},
-    {matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT'},
-    {matColumnDef: 'expiration', headerCellDef: 'EXPIRATION'},
-    {matColumnDef: 'spendable', headerCellDef: 'SPENDABLE'},
-    {matColumnDef: 'action', headerCellDef: ''},
+    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
+    { matColumnDef: 'grantee', headerCellDef: 'GRANTEE' },
+    { matColumnDef: 'type', headerCellDef: 'TYPE' },
+    { matColumnDef: 'time', headerCellDef: 'TIME' },
+    { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
+    { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
+    { matColumnDef: 'spendable', headerCellDef: 'SPENDABLE' },
+    { matColumnDef: 'action', headerCellDef: '' },
   ];
   templatesInActive: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'TX HASH'},
-    {matColumnDef: 'grantee', headerCellDef: 'GRANTEE'},
-    {matColumnDef: 'type', headerCellDef: 'TYPE'},
-    {matColumnDef: 'time', headerCellDef: 'TIME'},
-    {matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT'},
-    {matColumnDef: 'expiration', headerCellDef: 'EXPIRATION'},
-    {matColumnDef: 'reason', headerCellDef: 'REASON'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
+    { matColumnDef: 'grantee', headerCellDef: 'GRANTEE' },
+    { matColumnDef: 'type', headerCellDef: 'TYPE' },
+    { matColumnDef: 'time', headerCellDef: 'TIME' },
+    { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
+    { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
+    { matColumnDef: 'reason', headerCellDef: 'REASON' },
   ];
   templates: Array<TableTemplate>;
   displayedColumns: string[];
@@ -54,8 +54,7 @@ export class MyGranteesComponent implements OnInit {
     private environmentService: EnvironmentService,
     private http: HttpClient,
     private dialog: MatDialog,
-  ) {
-  }
+  ) {}
 
   async ngOnInit() {
     await this.getGranteesData();
@@ -106,7 +105,7 @@ export class MyGranteesComponent implements OnInit {
   }
 
   paginatorEmit(e: MatPaginator): void {
-    const {pageIndex, pageSize} = e;
+    const { pageIndex, pageSize } = e;
     const next = this.pageData.length <= (pageIndex + 2) * pageSize;
 
     this.pageData.pageIndex = e.pageIndex;
@@ -126,7 +125,7 @@ export class MyGranteesComponent implements OnInit {
     dialogConfig.panelClass = 'revoke-overlay-pane';
     dialogConfig.data = {
       granterAddress: 'auralluwyzsc5pnygennjOufyquqfue@nqxvqmaskko',
-      granteeAddress: granteeAddress
+      granteeAddress: granteeAddress,
     };
     this.dialog.open(PopupRevokeComponent, dialogConfig);
   }

@@ -1,19 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
-import {MatTableDataSource} from "@angular/material/table";
-import {TableTemplate} from "src/app/core/models/common.model";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {CommonService} from "src/app/core/services/common.service";
-import {Globals} from "src/app/global/global";
-import {EnvironmentService} from "src/app/core/data-services/environment.service";
-import {HttpClient} from "@angular/common/http";
-import {PAGE_EVENT} from "src/app/core/constants/common.constant";
-import {PopupRevokeComponent} from "src/app/pages/fee-grant/popup-revoke/popup-revoke.component";
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { TableTemplate } from 'src/app/core/models/common.model';
+import { CommonService } from 'src/app/core/services/common.service';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-my-granters',
   templateUrl: './my-granters.component.html',
-  styleUrls: ['./my-granters.component.scss']
+  styleUrls: ['./my-granters.component.scss'],
 })
 export class MyGrantersComponent implements OnInit {
   loading = true;
@@ -22,22 +21,22 @@ export class MyGrantersComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   dataSource = new MatTableDataSource<any>();
   templatesActive: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'TX HASH'},
-    {matColumnDef: 'granter', headerCellDef: 'GRANTER'},
-    {matColumnDef: 'type', headerCellDef: 'TYPE'},
-    {matColumnDef: 'time', headerCellDef: 'TIME'},
-    {matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT'},
-    {matColumnDef: 'expiration', headerCellDef: 'EXPIRATION'},
-    {matColumnDef: 'spendable', headerCellDef: 'SPENDABLE'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
+    { matColumnDef: 'granter', headerCellDef: 'GRANTER' },
+    { matColumnDef: 'type', headerCellDef: 'TYPE' },
+    { matColumnDef: 'time', headerCellDef: 'TIME' },
+    { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
+    { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
+    { matColumnDef: 'spendable', headerCellDef: 'SPENDABLE' },
   ];
   templatesInActive: Array<TableTemplate> = [
-    {matColumnDef: 'tx_hash', headerCellDef: 'TX HASH'},
-    {matColumnDef: 'granter', headerCellDef: 'GRANTER'},
-    {matColumnDef: 'type', headerCellDef: 'TYPE'},
-    {matColumnDef: 'time', headerCellDef: 'TIME'},
-    {matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT'},
-    {matColumnDef: 'expiration', headerCellDef: 'EXPIRATION'},
-    {matColumnDef: 'reason', headerCellDef: 'REASON'},
+    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
+    { matColumnDef: 'granter', headerCellDef: 'GRANTER' },
+    { matColumnDef: 'type', headerCellDef: 'TYPE' },
+    { matColumnDef: 'time', headerCellDef: 'TIME' },
+    { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
+    { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
+    { matColumnDef: 'reason', headerCellDef: 'REASON' },
   ];
   templates: Array<TableTemplate>;
   displayedColumns: string[];
@@ -51,8 +50,7 @@ export class MyGrantersComponent implements OnInit {
     public global: Globals,
     private environmentService: EnvironmentService,
     private http: HttpClient,
-  ) {
-  }
+  ) {}
 
   async ngOnInit() {
     await this.getGranteesData();
@@ -103,7 +101,7 @@ export class MyGrantersComponent implements OnInit {
   }
 
   paginatorEmit(e: MatPaginator): void {
-    const {pageIndex, pageSize} = e;
+    const { pageIndex, pageSize } = e;
     const next = this.pageData.length <= (pageIndex + 2) * pageSize;
 
     this.pageData.pageIndex = e.pageIndex;
@@ -117,5 +115,4 @@ export class MyGrantersComponent implements OnInit {
     this.isActive = type;
     await this.getGranteesData();
   }
-
 }
