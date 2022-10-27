@@ -127,13 +127,7 @@ export class WalletService implements OnDestroy {
   connect(provider: WALLET_PROVIDER): Promise<boolean> {
     switch (provider) {
       case WALLET_PROVIDER.KEPLR:
-        const coin98 = this.checkExistedCoin98();
-
-        if (coin98) {
-          this.connectCoin98(this.chainInfo);
-        } else {
-          this.connectKeplr(this.chainInfo);
-        }
+        this.connectKeplr(this.chainInfo);
 
         return Promise.resolve(true);
 
@@ -164,7 +158,8 @@ export class WalletService implements OnDestroy {
         const keplr = await getKeplr();
 
         if (keplr) {
-          await keplrSuggestChain(chainInfo);
+          // await keplrSuggestChain(chainInfo);
+          await this.suggestChain(keplr);
           await keplr.enable(chainInfo.chainId);
           const account = await keplr.getKey(chainInfo.chainId);
 
@@ -193,7 +188,8 @@ export class WalletService implements OnDestroy {
 
     if (coin98) {
       try {
-        await keplrSuggestChain(chainInfo);
+        // await keplrSuggestChain(chainInfo);
+        await this.suggestChain(coin98);
         await coin98.enable(chainInfo.chainId);
 
         const account = await coin98.getKey(chainInfo.chainId);
@@ -218,9 +214,9 @@ export class WalletService implements OnDestroy {
   }
 
   checkExistedCoin98(): Keplr | null | undefined {
-    if ((window as any).coin98) {
-      if ((window as any).coin98.keplr) {
-        return (window as any).keplr || (window as any).coin98.keplr;
+    if (window.coin98) {
+      if (window.coin98.keplr) {
+        return window.coin98.keplr;
       } else {
         return undefined; // c98 not override keplr
       }
@@ -369,5 +365,9 @@ export class WalletService implements OnDestroy {
     return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer).then((client) =>
       client.execute(userAddress, contract_address, msg, fee),
     );
+  }
+
+  suggestChain(w: Keplr) {
+    return w.experimentalSuggestChain(this.chainInfo);
   }
 }
