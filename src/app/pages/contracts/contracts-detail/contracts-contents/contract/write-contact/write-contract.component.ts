@@ -189,7 +189,6 @@ export class WriteContractComponent implements OnInit {
         .then((e) => {
           msg.isLoading = false;
           if ((e as any).result?.error) {
-            let msgError = (e as any).result.error.toString() || 'Error';
             this.toastr.error(msgError);
           } else {
             if ((e as any)?.transactionHash) {

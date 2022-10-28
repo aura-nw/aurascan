@@ -69,7 +69,7 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
         0;
     } else if (type === eTransType.CreateValidator) {
       amount = itemMessage?.value?.amount || 0;
-    } 
+    }
   } catch {}
 
   if (itemMessage && amount >= 0) {
@@ -126,10 +126,12 @@ export function getDataInfo(arrayMsg, addressContract) {
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Burn;
-      }
-      if (method === ModeExecuteTransaction.Mint) {
+      } else if (method === ModeExecuteTransaction.Mint) {
         fromAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Mint;
+      } else if (method === ModeExecuteTransaction.Buy) {
+        fromAddress = itemMessage.sender;
+        toAddress = itemMessage.sender;
       }
       break;
     case eTransType.Deposit:
