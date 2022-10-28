@@ -82,9 +82,10 @@ export function checkTypeFile(filename: string) {
     case 'webm':
     case 'mp4':
       return 'video';
-    case 'ipg':
+    case 'jpg':
     case 'png':
     case 'svg':
+    case 'gif':
       return 'img';
     case 'glb':
     case 'gltf':
