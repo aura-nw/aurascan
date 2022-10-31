@@ -381,3 +381,10 @@
     }
   }
 }
+
+.button-max {
+  border-radius: 8px;
+  padding: 0 var(--spacer-5);
+  display: flex;
+  align-items: center;
+}

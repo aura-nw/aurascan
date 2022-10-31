@@ -3,9 +3,9 @@
     <button class="button" [class.active]="isActive" (click)="changeType(true)">Active</button>
     <button class="button" [class.active]="!isActive" (click)="changeType(false)">Inactive</button>
   </div>
-  <div class="button button-outline button-outline--gradient button--md button-pill">
+  <button class="button button-outline button-outline--gradient button--md button-pill" (click)="openCreatePopup()">
     <span>Add New Grant</span>
-  </div>
+  </button>
 </div>
 
 <div class="mt-4 mt-lg-5 card">

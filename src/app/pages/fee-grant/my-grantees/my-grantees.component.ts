@@ -10,6 +10,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup-revoke.component';
+import {PopupAddGrantComponent} from "src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component";
 
 @Component({
   selector: 'app-my-grantees',
@@ -122,11 +123,19 @@ export class MyGranteesComponent implements OnInit {
 
   showRevoke(granteeAddress: string) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'revoke-overlay-pane';
+    dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.data = {
       granterAddress: 'auralluwyzsc5pnygennjOufyquqfue@nqxvqmaskko',
       granteeAddress: granteeAddress,
     };
     this.dialog.open(PopupRevokeComponent, dialogConfig);
+  }
+
+  openCreatePopup() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    dialogConfig.disableClose = true;
+    dialogConfig.data = { };
+    this.dialog.open(PopupAddGrantComponent, dialogConfig);
   }
 }

@@ -136,4 +136,12 @@ export class ContractsDeployMainnetComponent implements OnInit {
             this.codeIds.close();
         }
     }
+
+    addClassFocus(e: HTMLInputElement) {
+        e.parentElement.classList.add('border-white');
+    }
+
+    removeClassFocus(e: HTMLInputElement) {
+        e.parentElement.classList.remove('border-white');
+    }
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -15,6 +15,8 @@ import { MyGranteesComponent } from './my-grantees/my-grantees.component';
 import { MyGrantersComponent } from './my-granters/my-granters.component';
 import { PopupAddGrantComponent } from './popup-add-grant/popup-add-grant.component';
 import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {ClickOutsideModule} from "ng-click-outside";
 
 @NgModule({
   declarations: [
@@ -35,6 +37,10 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     TableNoDataModule,
     TranslateModule,
     SharedModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    ClickOutsideModule
   ],
+  providers: [FormBuilder]
 })
 export class FeeGrantModule {}
