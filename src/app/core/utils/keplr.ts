@@ -2,18 +2,18 @@ import { Keplr } from '@keplr-wallet/types';
 import { KEPLR_ERRORS } from '../constants/wallet.constant';
 
 export async function getKeplr(): Promise<Keplr | undefined> {
-  if ((window as any).keplr) {
-    return (window as any).keplr;
+  if (window.keplr) {
+    return window.keplr;
   }
 
   if (document.readyState === 'complete') {
-    return (window as any).keplr;
+    return window.keplr;
   }
 
   return new Promise((resolve) => {
     const documentStateChange = (event: Event) => {
       if (event.target && (event.target as Document).readyState === 'complete') {
-        resolve((window as any).keplr);
+        resolve(window.keplr);
         document.removeEventListener('readystatechange', documentStateChange);
       }
     };
