@@ -3,6 +3,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
+import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
@@ -180,13 +181,14 @@ export class WriteContractComponent implements OnInit {
   }
 
   execute(data, msg) {
+    let msgError = MESSAGES_CODE_CONTRACT[5].Message;
+    msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
     try {
       this.walletService
         .execute(this.userAddress, this.contractDetailData.contract_address, data)
         .then((e) => {
           msg.isLoading = false;
           if ((e as any).result?.error) {
-            let msgError = (e as any).result.error.toString() || 'Error';
             this.toastr.error(msgError);
           } else {
             if ((e as any)?.transactionHash) {
@@ -200,46 +202,13 @@ export class WriteContractComponent implements OnInit {
         .catch((error) => {
           msg.isLoading = false;
           if (!error.toString().includes('Request rejected')) {
-            let msgError = error.toString() || 'Error';
             this.toastr.error(msgError);
           }
         });
     } catch (error) {
-      this.toastr.error(`Error: ${error}`);
+      this.toastr.error(`Error: ${msgError}`);
     }
   }
-  // execute(msg) {
-  //   let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-  //   const fee: any = {
-  //     amount: [
-  //       {
-  //         denom: this.coinMinimalDenom,
-  //         amount: '1',
-  //       },
-  //     ],
-  //     gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
-  //   };
-
-  //   SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
-  //     .then((client) => {
-  //       return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-  //     })
-  //     .then((client) => {
-  //       if (client?.transactionHash) {
-  //         this.urlAction = 'transaction/' + client?.transactionHash;
-  //         this.isLoadingAction = true;
-  //         setTimeout(() => {
-  //           this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-  //         }, 4000);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (!error.toString().includes('Request rejected')) {
-  //         let msgError = error.toString() || 'Error';
-  //         this.toastr.error(msgError);
-  //       }
-  //     });
-  // }
 
   resetError(msg, all = false) {
     if (msg) {

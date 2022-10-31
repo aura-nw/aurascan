@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { getAmount, getDataInfo } from 'src/app/global/global';
 import { NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
@@ -71,6 +72,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
     getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID);
   trans.type = trans.method || typeTrans?.value;
   trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
+  trans.price = balanceOf(_.get(trans, 'tx_response.tx.body.messages[0].funds[0].amount'));
   return trans;
 }
 
@@ -82,9 +84,10 @@ export function checkTypeFile(filename: string) {
     case 'webm':
     case 'mp4':
       return 'video';
-    case 'ipg':
+    case 'jpg':
     case 'png':
     case 'svg':
+    case 'gif':
       return 'img';
     case 'glb':
     case 'gltf':
