@@ -88,7 +88,8 @@ export enum CodeTransaction {
 export enum ModeExecuteTransaction {
   Default = 'default',
   Mint = 'mint',
-  Burn = 'burn'
+  Burn = 'burn',
+  Buy = 'buy'
 }
 
 export enum pipeTypeData {
