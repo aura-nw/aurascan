@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, timer } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -14,6 +14,7 @@ import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { createChart } from 'lightweight-charts';
 
 @Component({
   selector: 'app-dashboard',
@@ -60,13 +61,30 @@ export class DashboardComponent implements OnInit {
     public global: Globals,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
+  }
+
+  drawChart(data, dateTime) {
+    // somewhere in your code
+    let chart = null;
+    chart = createChart(document.getElementById('chart'), { width: 1300, height: 400 });
+    const areaSeries = chart.addAreaSeries();
+    console.log(data);
+
+    let arr = [];
+    data.forEach((element, index) => {
+      var temp = { value: element, time: dateTime[index] };
+      arr.push(temp);
+    });
+
+    areaSeries.setData(arr);
+    chart.timeScale().fitContent();
   }
 
   //get all data for dashboard
@@ -102,16 +120,16 @@ export class DashboardComponent implements OnInit {
     this.transactionService.txsIndexer(this.PAGE_SIZE, 0).subscribe((res) => {
       this.dataSourceTx.data = [];
       const { code, data } = res;
-        if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinInfo);
+      if (code === 200) {
+        const txs = convertDataTransaction(data, this.coinInfo);
 
-          if (this.dataSourceTx.data.length > 0) {
-            this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
-          } else {
-            this.dataSourceTx.data = [...txs];
-          }
-          this.dataTx = txs;
+        if (this.dataSourceTx.data.length > 0) {
+          this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
+        } else {
+          this.dataSourceTx.data = [...txs];
         }
+        this.dataTx = txs;
+      }
     });
   }
 
@@ -143,6 +161,8 @@ export class DashboardComponent implements OnInit {
           color: '#FFA741',
         },
       };
+
+      this.drawChart(data1, categories);
     });
   }
 
