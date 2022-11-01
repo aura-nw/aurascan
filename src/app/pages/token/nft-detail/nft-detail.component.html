@@ -212,8 +212,12 @@
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
       A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
-    <div class="table-responsive aura-table-contain mt-2 mt-lg-3" style="height:600px">
-      <table *ngIf="dataSource?.data?.length > 0; else noValues" mat-table [dataSource]="dataSource" class="aura-table nft-detail-table">
+    <div class="table-responsive aura-table-contain mt-2 mt-lg-3" style="height: 600px">
+      <table
+        *ngIf="dataSource?.data?.length > 0; else noValues"
+        mat-table
+        [dataSource]="dataSource"
+        class="aura-table nft-detail-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef class="">
@@ -266,9 +270,15 @@
                     class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
+                  <img
+                    [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                    *ngIf="isContractAddress(data.type, data.to_address)"
+                    alt=""
+                    width="16px"
+                    height="16px" />
                   <a
                     class="text--primary"
-                    [routerLink]="['/account', data[template.matColumnDef]]"
+                    [routerLink]="[data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
