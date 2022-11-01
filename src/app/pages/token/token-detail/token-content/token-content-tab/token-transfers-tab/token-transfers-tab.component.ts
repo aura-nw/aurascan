@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
@@ -64,8 +64,6 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   linkToken = 'token';
   nextKey = null;
   currentKey = null;
-
-  arrTypeContract = ['revoke_all', 'approve_all', 'revoke', 'approve'];
 
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -193,7 +191,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   isContractAddress(type, address) {
-    if (this.arrTypeContract.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
       return true;
     }
     return false;
