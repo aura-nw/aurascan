@@ -65,6 +65,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   nextKey = null;
   currentKey = null;
 
+  arrTypeContract = ['revoke_all', 'approve_all', 'revoke', 'approve'];
+
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -188,5 +190,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  isContractAddress(type, address) {
+    if (this.arrTypeContract.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+      return true;
+    }
+    return false;
   }
 }
