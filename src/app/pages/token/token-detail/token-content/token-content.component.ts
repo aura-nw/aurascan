@@ -34,6 +34,7 @@ export class TokenContentComponent implements OnInit {
   infoSearch = {};
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
+  lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
