@@ -43,43 +43,9 @@
     }
   }
 }
-
-:host::ng-deep {
-  apx-chart {
-    .apexcharts-text tspan {
-      color: var(--aura-gray-5);
-      font-size: 1.2rem;
-      line-height: 1.6rem;
-      @media (min-width: 992px) {
-        font-size: 1.4rem;
-        line-height: 1.6rem;
-      }
-    }
-    .apexcharts-toolbar {
-      padding: 0;
-      top: -15px !important;
-      @media (max-width: 992px) {
-        top: -25px !important;
-      }
-      .apexcharts-zoomin-icon,
-      .apexcharts-zoomout-icon,
-      .apexcharts-menu-icon {
-        display: flex;
-        align-items: center;
-        width: auto;
-        height: auto;
-        &:not(:nth-last-child(2)) {
-          margin-right: 12px;
-        }
-      }
-      i.icon {
-        font-size: 2.86rem;
-        transition: color 0.35s ease-in-out;
-        color: var(--aura-gray-5);
-        &:hover {
-          color: var(--aura-green);
-        }
-      }
-    }
-  }
+.divider.divider-vertical {
+  min-height: 16px;
+}
+#chart .tv-lightweight-charts {
+  width: 100% !important;
 }
