@@ -139,6 +139,7 @@ export class TokenInventoryComponent implements OnInit {
           case 'image/png':
           case 'image/jpeg':
           case 'image/gif':
+          case 'application/xml':
             nftType = 'img';
             break;
           case 'model/gltf-binary':
