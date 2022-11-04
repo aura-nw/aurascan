@@ -132,10 +132,10 @@ export class NftListComponent implements OnChanges {
   }
 
   getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft.media_info[0]?.media_link);
-    if (nft?.media_info?.length > 0) {
+    let nftType = checkTypeFile(nft.animation?.link_s3);
+    if (nft?.animation?.content_type) {
       if (nftType === '') {
-        switch (nft?.media_info[0]?.content_type) {
+        switch (nft?.animation?.content_type) {
           case 'video/webm':
           case 'video/mp4':
             nftType = 'video';
