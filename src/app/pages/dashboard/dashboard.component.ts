@@ -60,6 +60,10 @@ export class DashboardComponent implements OnInit {
   chartData;
   chartDataExp = [];
 
+  toolTipWidth = 80;
+  toolTipHeight = 80;
+  toolTipMargin = 15;
+
   SETTINGS_FOR_EXPORT = {
     // Table settings
     fileName: 'Transactions',
@@ -131,6 +135,7 @@ export class DashboardComponent implements OnInit {
       topColor: 'rgba(136,198,203,0.12)',
       bottomColor: 'rgba(119, 182, 188, 0.01)',
     });
+    this.initTooltip();
   }
 
   drawChart(data, dateTime) {
@@ -246,5 +251,61 @@ export class DashboardComponent implements OnInit {
   chartDataExport() {
     const excelExport = new ExcelExport();
     excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.chartDataExp);
+  }
+
+  businessDayToString(businessDay) {
+    return businessDay.year + '-' + businessDay.month + '-' + businessDay.day;
+  }
+
+  initTooltip() {
+    const container = document.getElementById('chart');
+    const toolTip = document.createElement('div');
+    toolTip.className = 'floating-tooltip-2';
+    container.appendChild(toolTip);
+
+    // update tooltip
+    this.chart.subscribeCrosshairMove((param) => {
+      if (
+        param.point === undefined ||
+        !param.time ||
+        param.point.x < 0 ||
+        param.point.x > container.clientWidth ||
+        param.point.y < 0 ||
+        param.point.y > container.clientHeight
+      ) {
+        toolTip.style.display = 'none';
+      } else {
+        const dateStr = this.businessDayToString(param.time);
+        toolTip.style.display = 'block';
+        var price = param.seriesPrices.get(this.areaSeries);
+        toolTip.innerHTML =
+          '' +
+          '<div class="floating-tooltip__header">Transactions</div>' +
+          '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
+          Math.round(100 * price) / 100 +
+          '</div><div>' +
+          dateStr +
+          '' +
+          '</div></div>';
+        var coordinate = this.areaSeries.priceToCoordinate(price);
+        var shiftedCoordinate = param.point.x - 50;
+        if (coordinate === null) {
+          return;
+        }
+        shiftedCoordinate = Math.max(0, Math.min(container.clientWidth - this.toolTipWidth, shiftedCoordinate));
+        var coordinateY =
+          coordinate - this.toolTipHeight - this.toolTipMargin > 0
+            ? coordinate - this.toolTipHeight - this.toolTipMargin
+            : Math.max(
+                0,
+                Math.min(
+                  container.clientHeight - this.toolTipHeight - this.toolTipMargin,
+                  coordinate + this.toolTipMargin,
+                ),
+              );
+        toolTip.style.left = shiftedCoordinate + 'px';
+        toolTip.style.top = coordinateY + 'px';
+      }
+    });
   }
 }

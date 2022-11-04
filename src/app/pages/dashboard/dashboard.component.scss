@@ -46,6 +46,38 @@
 .divider.divider-vertical {
   min-height: 16px;
 }
-#chart .tv-lightweight-charts {
-  width: 100% !important;
+#chart {
+  position: relative;
+  overflow: hidden;
+}
+::ng-deep {
+  .floating-tooltip-2 {
+    width: 100px;
+    height: 80px;
+    position: absolute;
+    display: none;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: var(--aura-white);
+    background-color: #3b403d;
+    text-align: left;
+    z-index: 1000;
+    top: 12px;
+    left: 12px;
+    pointer-events: none;
+    border-radius: 8px;
+  }
+  .floating-tooltip__header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: var(--aura-gray-8);
+    padding: 8px;
+  }
+  .floating-tooltip__body {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: var(--aura-gray-9);
+    padding: 8px;
+  }
+
 }
