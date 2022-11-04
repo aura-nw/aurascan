@@ -90,7 +90,7 @@ export class NFTDetailComponent implements OnInit {
         this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
       }
 
-      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
+      this.nftType = checkTypeFile(this.nftDetail?.animation);
       if (this.nftType === '') {
         switch (this.nftDetail?.media_info[0]?.content_type) {
           case 'video/webm':
