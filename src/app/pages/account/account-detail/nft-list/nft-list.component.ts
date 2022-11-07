@@ -152,6 +152,7 @@ export class NftListComponent implements OnChanges {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':
             nftType = 'audio';
             break;
           default:
