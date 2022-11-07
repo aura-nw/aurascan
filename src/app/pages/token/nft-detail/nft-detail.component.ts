@@ -109,6 +109,7 @@ export class NFTDetailComponent implements OnInit {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':  
             this.nftType = 'audio';
             break;
           default:

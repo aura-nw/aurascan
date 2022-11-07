@@ -147,6 +147,7 @@ export class TokenInventoryComponent implements OnInit {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':
             nftType = 'audio';
             break;
           default:
