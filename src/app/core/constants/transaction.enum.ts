@@ -35,6 +35,7 @@ export enum TypeTransaction {
   Deposit = 'Deposit',
   SubmitProposalTx = 'Submit Proposal',
   GetRewardCommission = 'Get Reward Commission',
+  PeriodicVestingAccount = 'Periodic Vesting',
   Fail = 'Fail'
 }
 
@@ -73,6 +74,7 @@ export enum TRANSACTION_TYPE_ENUM {
   Deposit = '/cosmos.gov.v1beta1.MsgDeposit',
   SubmitProposalTx = '/cosmos.gov.v1beta1.MsgSubmitProposal',
   GetRewardCommission = '/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission',
+  PeriodicVestingAccount = '/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount',
   Fail = 'FAILED'
 }
 

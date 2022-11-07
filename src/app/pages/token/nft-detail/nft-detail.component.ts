@@ -90,9 +90,9 @@ export class NFTDetailComponent implements OnInit {
         this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
       }
 
-      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
+      this.nftType = checkTypeFile(this.nftDetail?.animation?.link_s3);
       if (this.nftType === '') {
-        switch (this.nftDetail?.media_info[0]?.content_type) {
+        switch (this.nftDetail?.animation?.content_type) {
           case 'video/webm':
           case 'video/mp4':
             this.nftType = 'video';
@@ -100,6 +100,7 @@ export class NFTDetailComponent implements OnInit {
           case 'image/png':
           case 'image/jpeg':
           case 'image/gif':
+          case 'application/xml':
             this.nftType = 'img';
             break;
           case 'model/gltf-binary':
@@ -108,6 +109,7 @@ export class NFTDetailComponent implements OnInit {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':  
             this.nftType = 'audio';
             break;
           default:

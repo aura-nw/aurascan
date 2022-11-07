@@ -132,10 +132,10 @@ export class NftListComponent implements OnChanges {
   }
 
   getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft.media_info[0]?.media_link);
-    if (nft?.media_info?.length > 0) {
+    let nftType = checkTypeFile(nft.animation?.link_s3);
+    if (nft?.animation?.content_type) {
       if (nftType === '') {
-        switch (nft?.media_info[0]?.content_type) {
+        switch (nft?.animation?.content_type) {
           case 'video/webm':
           case 'video/mp4':
             nftType = 'video';
@@ -143,6 +143,7 @@ export class NftListComponent implements OnChanges {
           case 'image/png':
           case 'image/jpeg':
           case 'image/gif':
+          case 'application/xml':
             nftType = 'img';
             break;
           case 'model/gltf-binary':
@@ -151,6 +152,7 @@ export class NftListComponent implements OnChanges {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':
             nftType = 'audio';
             break;
           default:
