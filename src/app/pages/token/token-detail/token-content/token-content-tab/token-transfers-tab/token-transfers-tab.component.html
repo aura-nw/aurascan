@@ -117,7 +117,13 @@
                           </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'to_address'">
-                          <div class="pl-4 pl-lg-0">
+                          <div class="pl-4 pl-lg-0" [style.width]="'180px'">
+                            <img
+                              [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                              *ngIf="isContractAddress(data.type, data.to_address)"
+                              alt=""
+                              width="16px"
+                              height="16px" />
                             <a
                               class="text--primary"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"

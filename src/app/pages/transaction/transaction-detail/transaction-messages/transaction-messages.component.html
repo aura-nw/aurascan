@@ -509,6 +509,33 @@
     </div>
   </ng-container>
 
+  <ng-container *ngIf="transactionDetail?.type === eTransType.PeriodicVestingAccount">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'From Address'"
+        [value]="transactionDetail?.messages[0]?.from_address"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'To Address'"
+        [value]="transactionDetail?.messages[0]?.to_address"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Start Time'"
+        [value]="dateVesting"></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Vesting Periods</div>
+        <div class="col-12 col-lg-9">
+          <pre
+            id="json"
+            class="raw-content text--white px-4"
+            [innerHtml]="transactionDetail?.messages[0]?.vesting_periods | appJson"></pre>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">
       <div class="card-info">

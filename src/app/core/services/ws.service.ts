@@ -41,7 +41,7 @@ export class WSService {
     }
 
     this.socket = io(this.socketUrl, {
-      path: '/ws/socket.io',
+      path: '/socket.io',
       autoConnect: true,
     });
   }

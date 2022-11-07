@@ -76,3 +76,5 @@ export const TOKEN_ID_GET_PRICE = {
   AURA: 'aura-network',
   BTC: 'bitcoin'
 };
+
+export const LIST_TYPE_CONTRACT_ADDRESS = ['revoke_all', 'approve_all', 'revoke', 'approve'];

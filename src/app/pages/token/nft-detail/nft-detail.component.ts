@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -54,6 +54,7 @@ export class NFTDetailComponent implements OnInit {
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -89,9 +90,9 @@ export class NFTDetailComponent implements OnInit {
         this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
       }
 
-      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
+      this.nftType = checkTypeFile(this.nftDetail?.animation?.link_s3);
       if (this.nftType === '') {
-        switch (this.nftDetail?.media_info[0]?.content_type) {
+        switch (this.nftDetail?.animation?.content_type) {
           case 'video/webm':
           case 'video/mp4':
             this.nftType = 'video';
@@ -181,5 +182,12 @@ export class NFTDetailComponent implements OnInit {
       nftDetail: this.nftDetail,
       modeExecute: data?.modeExecute,
     };
+  }
+
+  isContractAddress(type, address) {
+    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+      return true;
+    }
+    return false;
   }
 }
