@@ -132,7 +132,14 @@ export class DashboardComponent implements OnInit {
         visible: false,
       },
     });
-    this.areaSeries = this.chart.addAreaSeries();
+    this.areaSeries = this.chart.addAreaSeries({
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: this.min,
+          maxValue: this.max,
+        },
+      }),
+    });
     this.areaSeries.applyOptions({
       lineColor: '#5EE6D0',
       topColor: 'rgba(136,198,203,0.12)',
