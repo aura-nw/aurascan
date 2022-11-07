@@ -64,6 +64,9 @@ export class DashboardComponent implements OnInit {
   toolTipHeight = 80;
   toolTipMargin = 15;
 
+  min = 0;
+  max = 99999;
+
   SETTINGS_FOR_EXPORT = {
     // Table settings
     fileName: 'Transactions',
@@ -132,7 +135,17 @@ export class DashboardComponent implements OnInit {
         }
       }
     );
-    this.areaSeries = this.chart.addAreaSeries();
+
+    this.areaSeries = this.chart.addAreaSeries({
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: this.min,
+          maxValue: this.max,
+        },
+      }),
+    });
+
+
     this.areaSeries.applyOptions({
       lineColor: '#5EE6D0',
       topColor: 'rgba(136,198,203,0.12)',
@@ -150,7 +163,7 @@ export class DashboardComponent implements OnInit {
       arr.push(temp);
     });
     this.chartData = arr;
-
+    let transactionData = [];
     // setup data for export
     arr.forEach(data => {
       const dateF =this.datepipe.transform(data.time, 'dd-MM-yyyy');
@@ -158,6 +171,7 @@ export class DashboardComponent implements OnInit {
         date: dateF,
         transactions: +data.value
       })
+      transactionData.push(+data.value);
     })
     this.chartDataExp = [
       {
@@ -166,6 +180,8 @@ export class DashboardComponent implements OnInit {
     ];
     this.areaSeries.setData(arr);
     this.chart.timeScale().fitContent();
+    this.min = Math.min(...transactionData);
+    this.max = Math.max(...transactionData);
   }
 
   //get all data for dashboard
