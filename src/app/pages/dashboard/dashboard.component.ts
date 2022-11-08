@@ -153,7 +153,7 @@ export class DashboardComponent implements OnInit {
     let transactionData = [];
     // setup data for export
     arrPrint.forEach((data) => {
-      const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:hh-mm-ss');
+      const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
       this.chartDataExp.push({
         date: dateF,
         transactions: +data.value,
