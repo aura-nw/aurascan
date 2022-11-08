@@ -101,6 +101,7 @@ export class NFTDetailComponent implements OnInit {
           case 'image/jpeg':
           case 'image/gif':
           case 'application/xml':
+          case 'image/svg+xml':
             this.nftType = 'img';
             break;
           case 'model/gltf-binary':
@@ -109,7 +110,7 @@ export class NFTDetailComponent implements OnInit {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
-          case 'audio/ogg':  
+          case 'audio/ogg':
             this.nftType = 'audio';
             break;
           default:
