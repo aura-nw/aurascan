@@ -74,9 +74,6 @@ export class NftListComponent implements OnChanges {
         this.pageData.length = this.nftList.length;
 
         this.nftList.forEach((element) => {
-          if (element.media_info.length > 0) {
-            element.nftType = checkTypeFile(element?.media_info[0]?.media_link);
-          }
           if (!this.searchValue) {
             this.totalValue += element.price * +element.balance || 0;
           }
