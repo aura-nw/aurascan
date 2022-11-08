@@ -143,6 +143,7 @@ export class NftListComponent implements OnChanges {
           case 'image/png':
           case 'image/jpeg':
           case 'image/gif':
+          case 'application/xml':
             nftType = 'img';
             break;
           case 'model/gltf-binary':
@@ -151,6 +152,7 @@ export class NftListComponent implements OnChanges {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':
             nftType = 'audio';
             break;
           default:

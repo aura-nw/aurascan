@@ -139,6 +139,7 @@ export class TokenInventoryComponent implements OnInit {
           case 'image/png':
           case 'image/jpeg':
           case 'image/gif':
+          case 'application/xml':
             nftType = 'img';
             break;
           case 'model/gltf-binary':
@@ -146,6 +147,7 @@ export class TokenInventoryComponent implements OnInit {
             break;
           case 'audio/mpeg':
           case 'audio/vnd.wave':
+          case 'audio/ogg':
             nftType = 'audio';
             break;
           default:
