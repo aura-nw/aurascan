@@ -75,7 +75,7 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   if (itemMessage && amount >= 0) {
     amount = amount / NUMBER_CONVERT || 0;
     amountFormat = arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward ? amount : 'More';
-    if (type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.MultiSend) {
+    if (type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.MultiSend || type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount) {
       amountFormat = 'More';
     }
   }
