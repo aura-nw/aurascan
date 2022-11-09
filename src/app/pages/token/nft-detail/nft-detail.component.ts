@@ -30,6 +30,7 @@ export class NFTDetailComponent implements OnInit {
     // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },

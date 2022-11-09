@@ -244,6 +244,19 @@
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
                 </ng-container>
+                <ng-container *ngSwitchCase="'status'">
+                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                    <div *ngSwitchCase="'Success'" class="text--green-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Fail'" class="text--red-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
+                </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                 </ng-container>

@@ -36,6 +36,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   // { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
   { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
+  { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 10 },
   {
     matColumnDef: 'blockHeight',
     headerCellDef: 'Block',
