@@ -16,6 +16,7 @@ import { convertDataBlock, convertDataTransaction, Globals } from '../../global/
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 import { createChart } from 'lightweight-charts';
 import ExcelExport from 'export-xlsx';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-dashboard',
@@ -67,32 +68,9 @@ export class DashboardComponent implements OnInit {
   min = 0;
   max = 99999;
 
-  SETTINGS_FOR_EXPORT = {
-    // Table settings
-    fileName: 'Transactions',
-    workSheets: [
-      {
-        sheetName: 'Transactions',
-        startingRowNumber: 2,
-        gapBetweenTwoTables: 2,
-        tableSettings: {
-          table1: {
-            tableTitle: 'Transactions value by date',
-            headerDefinition: [
-              {
-                name: 'Date',
-                key: 'date',
-              },
-              {
-                name: 'Transactions',
-                key: 'transactions',
-              },
-            ],
-          },
-        },
-      },
-    ],
-  };
+  currDate;
+  SETTINGS_FOR_EXPORT;
+
 
   constructor(
     public commonService: CommonService,
@@ -122,8 +100,12 @@ export class DashboardComponent implements OnInit {
         textColor: '#868a97',
       },
       grid: {
-        vertLines: { visible: false },
-        horzLines: { visible: false },
+        vertLines: {
+          color: '#363843',
+        },
+        horzLines: {
+          color: '#363843',
+        },
       },
       leftPriceScale: {
         visible: true,
@@ -131,6 +113,10 @@ export class DashboardComponent implements OnInit {
       rightPriceScale: {
         visible: false,
       },
+      timeScale: {
+        timeVisible: true,
+        secondsVisible: true
+      }
     });
     this.areaSeries = this.chart.addAreaSeries({
       autoscaleInfoProvider: () => ({
@@ -146,21 +132,32 @@ export class DashboardComponent implements OnInit {
       bottomColor: 'rgba(119, 182, 188, 0.01)',
     });
     this.initTooltip();
+    this.currDate = moment(new Date()).format("DDMMYYYY_HHMMSS")
   }
 
   drawChart(data, dateTime) {
     this.chartData = null;
     this.chartDataExp = [];
-    let arr = [];
-    data.forEach((element, index) => {
-      var temp = { value: element, time: dateTime[index] };
+    let arr = []; // drawing chart array
+    let arrPrint = []; // exporting data array
+
+    // convert timeStamp to UNIX Timestamp format (for hour timeBar)
+    dateTime.forEach((date, index) => {
+      const ts = Math.floor(new Date(date).getTime() / 1000)
+      const temp = { value: data[index], time: ts+25200 }; // GMT+7
       arr.push(temp);
     });
+    // push data to export csv array
+    data.forEach((element, index) => {
+      const temp = { value: element, time: dateTime[index] };
+      arrPrint.push(temp);
+    });
+
     this.chartData = arr;
     let transactionData = [];
     // setup data for export
-    arr.forEach((data) => {
-      const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy');
+    arrPrint.forEach((data) => {
+      const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
       this.chartDataExp.push({
         date: dateF,
         transactions: +data.value,
@@ -231,7 +228,6 @@ export class DashboardComponent implements OnInit {
       this.getInfoCommon();
       const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => i.timestamp);
-
       this.drawChart(data1, categories);
     });
   }
@@ -262,6 +258,47 @@ export class DashboardComponent implements OnInit {
   }
 
   chartDataExport() {
+    let type;
+    switch (this.chartRange) {
+      case '60m':
+      type = 'in 60 minutes';
+      break;
+      case '24h':
+      type = 'in about 24 hours';
+      break;
+      case '30d':
+      type = 'in 30 days';
+      break;
+      case '12M':
+      type = 'in 12 months';
+      break;
+    }
+    this.SETTINGS_FOR_EXPORT = {
+      // Table settings
+      fileName: 'Transactions_' + this.currDate,
+      workSheets: [
+        {
+          sheetName: 'Transactions',
+          startingRowNumber: 2,
+          gapBetweenTwoTables: 2,
+          tableSettings: {
+            table1: {
+              tableTitle: 'Transactions value ' + type,
+              headerDefinition: [
+                {
+                  name: 'Date',
+                  key: 'date',
+                },
+                {
+                  name: 'Transactions',
+                  key: 'transactions',
+                },
+              ],
+            },
+          },
+        },
+      ],
+    };
     const excelExport = new ExcelExport();
     excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.chartDataExp);
   }
@@ -288,9 +325,10 @@ export class DashboardComponent implements OnInit {
       ) {
         toolTip.style.display = 'none';
       } else {
-        const dateStr = this.businessDayToString(param.time);
+        const timestamp = moment.unix(param.time - 25200); // GMT+7
+        const dateStr = timestamp.format("DD/MM/YYYY HH:mm:ss");
         toolTip.style.display = 'block';
-        var price = param.seriesPrices.get(this.areaSeries);
+        const price = param.seriesPrices.get(this.areaSeries);
         toolTip.innerHTML =
           '' +
           '<div class="floating-tooltip__header">Transactions</div>' +
@@ -300,13 +338,13 @@ export class DashboardComponent implements OnInit {
           dateStr +
           '' +
           '</div></div>';
-        var coordinate = this.areaSeries.priceToCoordinate(price);
-        var shiftedCoordinate = param.point.x - 50;
+        const coordinate = this.areaSeries.priceToCoordinate(price);
+        let shiftedCoordinate = param.point.x - 50;
         if (coordinate === null) {
           return;
         }
         shiftedCoordinate = Math.max(0, Math.min(container.clientWidth - this.toolTipWidth, shiftedCoordinate));
-        var coordinateY =
+        const coordinateY =
           coordinate - this.toolTipHeight - this.toolTipMargin > 0
             ? coordinate - this.toolTipHeight - this.toolTipMargin
             : Math.max(

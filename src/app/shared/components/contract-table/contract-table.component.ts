@@ -15,6 +15,7 @@ import { DropdownElement } from 'src/app/shared/components/dropdown/dropdown.com
 export interface TableData {
   txHash: string;
   method: string;
+  status: string;
   blockHeight: number;
   blockId: number;
   time: Date;
@@ -105,7 +106,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       from_address: data?.from || '',
       to_address: data?.to || '',
       price: 0,
-      status: 'Success',
+      status: data.status,
       symbol: this.denom,
       tokenAddress: this.contractInfo?.contractsAddress,
       tx_hash: data?.txHash || '',
@@ -166,6 +167,7 @@ export class ContractTableComponent implements OnInit, OnChanges {
       const tableDta: TableData = {
         txHash: contract.tx_hash,
         method,
+        status: contract.status,
         blockHeight: contract.height,
         blockId: contract.blockId,
         time: new Date(contract.timestamp),

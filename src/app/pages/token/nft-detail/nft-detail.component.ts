@@ -30,6 +30,7 @@ export class NFTDetailComponent implements OnInit {
     // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -50,6 +51,7 @@ export class NFTDetailComponent implements OnInit {
   currentKey: string;
   nftType: string;
   isError = false;
+  nftUrl = '';
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -90,31 +92,12 @@ export class NFTDetailComponent implements OnInit {
         this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
       }
 
-      this.nftType = checkTypeFile(this.nftDetail?.animation?.link_s3);
-      if (this.nftType === '') {
-        switch (this.nftDetail?.animation?.content_type) {
-          case 'video/webm':
-          case 'video/mp4':
-            this.nftType = 'video';
-            break;
-          case 'image/png':
-          case 'image/jpeg':
-          case 'image/gif':
-          case 'application/xml':
-            this.nftType = 'img';
-            break;
-          case 'model/gltf-binary':
-          case 'gltf':
-            this.nftType = '3d';
-            break;
-          case 'audio/mpeg':
-          case 'audio/vnd.wave':
-          case 'audio/ogg':  
-            this.nftType = 'audio';
-            break;
-          default:
-            this.nftType = '';
-        }
+      this.nftType = checkTypeFile(this.nftDetail);
+      if (this.nftDetail.animation && this.nftDetail.animation?.content_type) {
+        this.nftUrl = this.nftDetail.animation?.link_s3 || '';
+      }
+      if (this.nftDetail.image && this.nftUrl == '') {
+        this.nftUrl = this.nftDetail.image?.link_s3 || '';
       }
       this.loading = false;
     });

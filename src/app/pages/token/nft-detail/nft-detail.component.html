@@ -26,19 +26,19 @@
               <img
                 *ngIf="nftType === 'img' && isError === false"
                 (error)="error()"
-                [src]="nftDetail?.animation?.link_s3" />
+                [src]="this.nftUrl" />
               <app-custom-video-player
-                [videoSrc]="nftDetail?.animation?.link_s3"
+                [videoSrc]="this.nftUrl"
                 [showControl]="true"
                 *ngIf="nftType === 'video'"
                 [isDetail]="true">
               </app-custom-video-player>
               <app-model-view
                 *ngIf="nftType === '3d'"
-                [modelUrl]="nftDetail?.animation?.link_s3"
+                [modelUrl]="this.nftUrl"
                 [disablePan]="false">
               </app-model-view>
-              <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.animation?.link_s3">
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl">
               </app-audio-player>
             </div>
           </div>
@@ -243,6 +243,19 @@
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
+                </ng-container>
+                <ng-container *ngSwitchCase="'status'">
+                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                    <div *ngSwitchCase="'Success'" class="text--green-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Fail'" class="text--red-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
