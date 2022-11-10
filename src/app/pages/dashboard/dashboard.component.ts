@@ -100,8 +100,12 @@ export class DashboardComponent implements OnInit {
         textColor: '#868a97',
       },
       grid: {
-        vertLines: { visible: false },
-        horzLines: { visible: false },
+        vertLines: {
+          color: '#363843',
+        },
+        horzLines: {
+          color: '#363843',
+        },
       },
       leftPriceScale: {
         visible: true,

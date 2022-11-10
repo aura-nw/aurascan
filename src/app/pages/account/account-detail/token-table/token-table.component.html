@@ -44,13 +44,15 @@
                   class="d-flex align-items-center"
                   [routerLink]="['/tokens/token', element.contract_address]"
                   *ngIf="element.contract_address">
-                  <img [src]="element.image" class="image-token" />
+                  <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
+                  <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis: 19 }}
                   </div>
                 </a>
                 <div class="d-flex align-items-center" *ngIf="!element.contract_address">
-                  <img [src]="element.image" class="image-token" />
+                  <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
+                  <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis: 19 }}
                   </div>
