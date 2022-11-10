@@ -36,12 +36,14 @@ export class TokenService extends CommonService {
     contractAddress: string,
     filterData: any,
     nextKey = null,
+    needFullLog = false
   ): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       searchType: 'execute',
       searchKey: '_contract_address',
       searchValue: contractAddress,
+      needFullLog: needFullLog,
       pageLimit,
       nextKey,
       countTotal: true,
