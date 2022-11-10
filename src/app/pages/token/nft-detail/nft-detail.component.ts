@@ -105,8 +105,8 @@ export class NFTDetailComponent implements OnInit {
 
   getDataTable(nextKey = null) {
     let filterData = {};
-    filterData['keyWord'] = this.nftId;
-    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey).subscribe((res) => {
+    filterData['keyWord'] = encodeURIComponent(this.nftId);
+    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey, true).subscribe((res) => {
       const { code, data } = res;
       this.nextKey = data.nextKey || null;
 
