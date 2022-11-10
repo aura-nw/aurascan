@@ -69,7 +69,7 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
     trans.status = StatusTransaction.Success;
   }
   [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] =
-    getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID);
+    getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID, trans.tx_response?.raw_log);
   trans.type = trans.method || typeTrans?.value;
   trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
   trans.price = balanceOf(_.get(trans, 'tx_response.tx.body.messages[0].funds[0].amount'));
