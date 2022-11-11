@@ -100,7 +100,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       this.loading = true;
     }
     let filterData = {};
-    filterData['keyWord'] = this.keyWord || dataSearch;
+    let txtSearch = this.keyWord || dataSearch;
+    filterData['keyWord'] = encodeURIComponent(txtSearch);
     if (
       filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
       filterData['keyWord']?.startsWith(this.prefixAdd)

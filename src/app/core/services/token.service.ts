@@ -57,7 +57,7 @@ export class TokenService extends CommonService {
       } else if (filterData['isSearchWallet']) {
         params['addressInContract'] = filterData?.keyWord;
       } else {
-        params['query'] = 'wasm.token_id=' + encodeURIComponent(filterData?.keyWord);
+        params['query'] = 'wasm.token_id=' + filterData?.keyWord;
       }
     }
 
