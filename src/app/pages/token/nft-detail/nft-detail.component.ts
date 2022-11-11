@@ -103,22 +103,19 @@ export class NFTDetailComponent implements OnInit {
     });
   }
 
-  getDataTable(nextKey = null) {
+  async getDataTable(nextKey = null) {
     let filterData = {};
-    filterData['keyWord'] = encodeURIComponent(this.nftId);
-    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKey = data.nextKey || null;
+    filterData['keyWord'] = this.nftId;
 
-      if (code === 200) {
-        res.data.transactions.forEach((trans) => {
-          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-        });
-        this.dataSource.data = res.data.transactions;
-        this.pageData.length = res.data?.count;
-      }
-      this.loading = false;
-    });
+    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
+    if (res?.data?.code === 200) {
+      res?.data?.data?.transactions.forEach((trans) => {
+        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+      });
+      this.dataSource.data = res.data?.data?.transactions;
+      this.pageData.length = res.data?.data?.count;
+    }
+    this.loading = false;
   }
 
   paginatorEmit(event): void {
