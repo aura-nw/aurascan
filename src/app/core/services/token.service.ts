@@ -36,14 +36,13 @@ export class TokenService extends CommonService {
     contractAddress: string,
     filterData: any,
     nextKey = null,
-    needFullLog = false
   ): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       searchType: 'execute',
       searchKey: '_contract_address',
       searchValue: contractAddress,
-      needFullLog: needFullLog,
+      needFullLog: true,
       pageLimit,
       nextKey,
       countTotal: true,
@@ -58,7 +57,7 @@ export class TokenService extends CommonService {
       } else if (filterData['isSearchWallet']) {
         params['addressInContract'] = filterData?.keyWord;
       } else {
-        params['query'] = 'wasm.token_id=' + filterData?.keyWord;
+        params['query'] = 'wasm.token_id=' + encodeURIComponent(filterData?.keyWord);
       }
     }
 
