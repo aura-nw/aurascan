@@ -1,5 +1,5 @@
-import { DecimalPipe } from '@angular/common';
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, timer } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -14,6 +14,9 @@ import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { createChart } from 'lightweight-charts';
+import ExcelExport from 'export-xlsx';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-dashboard',
@@ -53,6 +56,22 @@ export class DashboardComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
+  chart = null;
+  areaSeries = null;
+  chartData;
+  chartDataExp = [];
+
+  toolTipWidth = 80;
+  toolTipHeight = 80;
+  toolTipMargin = 15;
+
+  min = 0;
+  max = 99999;
+
+  currDate;
+  SETTINGS_FOR_EXPORT;
+
+
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
@@ -60,13 +79,100 @@ export class DashboardComponent implements OnInit {
     public global: Globals,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public datepipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
     this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
+    // somewhere in your code
+    this.chart = createChart(document.getElementById('chart'), {
+      height: 400,
+      crosshair: {
+        horzLine: {
+          visible: false,
+        },
+      },
+      layout: {
+        backgroundColor: '#24262e',
+        textColor: '#868a97',
+      },
+      grid: {
+        vertLines: {
+          color: '#363843',
+        },
+        horzLines: {
+          color: '#363843',
+        },
+      },
+      leftPriceScale: {
+        visible: true,
+      },
+      rightPriceScale: {
+        visible: false,
+      },
+      timeScale: {
+        timeVisible: true,
+        secondsVisible: true
+      }
+    });
+    this.areaSeries = this.chart.addAreaSeries({
+      autoscaleInfoProvider: () => ({
+        priceRange: {
+          minValue: this.min,
+          maxValue: this.max,
+        },
+      }),
+    });
+    this.areaSeries.applyOptions({
+      lineColor: '#5EE6D0',
+      topColor: 'rgba(136,198,203,0.12)',
+      bottomColor: 'rgba(119, 182, 188, 0.01)',
+    });
+    this.initTooltip();
+    this.currDate = moment(new Date()).format("DDMMYYYY_HHMMSS")
+  }
+
+  drawChart(data, dateTime) {
+    this.chartData = null;
+    this.chartDataExp = [];
+    let arr = []; // drawing chart array
+    let arrPrint = []; // exporting data array
+
+    // convert timeStamp to UNIX Timestamp format (for hour timeBar)
+    dateTime.forEach((date, index) => {
+      const ts = Math.floor(new Date(date).getTime() / 1000)
+      const temp = { value: data[index], time: ts+25200 }; // GMT+7
+      arr.push(temp);
+    });
+    // push data to export csv array
+    data.forEach((element, index) => {
+      const temp = { value: element, time: dateTime[index] };
+      arrPrint.push(temp);
+    });
+
+    this.chartData = arr;
+    let transactionData = [];
+    // setup data for export
+    arrPrint.forEach((data) => {
+      const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
+      this.chartDataExp.push({
+        date: dateF,
+        transactions: +data.value,
+      });
+      transactionData.push(+data.value);
+    });
+    this.chartDataExp = [
+      {
+        table1: this.chartDataExp,
+      },
+    ];
+    this.areaSeries.setData(arr);
+    this.chart.timeScale().fitContent();
+    this.min = Math.min(...transactionData);
+    this.max = Math.max(...transactionData);
   }
 
   //get all data for dashboard
@@ -102,16 +208,16 @@ export class DashboardComponent implements OnInit {
     this.transactionService.txsIndexer(this.PAGE_SIZE, 0).subscribe((res) => {
       this.dataSourceTx.data = [];
       const { code, data } = res;
-        if (code === 200) {
-          const txs = convertDataTransaction(data, this.coinInfo);
+      if (code === 200) {
+        const txs = convertDataTransaction(data, this.coinInfo);
 
-          if (this.dataSourceTx.data.length > 0) {
-            this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
-          } else {
-            this.dataSourceTx.data = [...txs];
-          }
-          this.dataTx = txs;
+        if (this.dataSourceTx.data.length > 0) {
+          this.dataSourceTx.data = [...this.dataSourceTx.data, ...txs];
+        } else {
+          this.dataSourceTx.data = [...txs];
         }
+        this.dataTx = txs;
+      }
     });
   }
 
@@ -122,27 +228,7 @@ export class DashboardComponent implements OnInit {
       this.getInfoCommon();
       const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => i.timestamp);
-
-      this.chartOptions.series = [
-        {
-          name: 'transactions',
-          type: 'line',
-          data: data1,
-          color: '#5EE6D0',
-        },
-      ];
-
-      this.chartOptions.xAxis = {
-        type: 'datetime',
-        categories: categories,
-        labels: {
-          datetimeUTC: false,
-        },
-        axisBorder: {
-          show: true,
-          color: '#FFA741',
-        },
-      };
+      this.drawChart(data1, categories);
     });
   }
 
@@ -169,5 +255,108 @@ export class DashboardComponent implements OnInit {
         `<span class=text--primary> ${this.denom} </span>`
       );
     }
+  }
+
+  chartDataExport() {
+    let type;
+    switch (this.chartRange) {
+      case '60m':
+      type = 'in 60 minutes';
+      break;
+      case '24h':
+      type = 'in about 24 hours';
+      break;
+      case '30d':
+      type = 'in 30 days';
+      break;
+      case '12M':
+      type = 'in 12 months';
+      break;
+    }
+    this.SETTINGS_FOR_EXPORT = {
+      // Table settings
+      fileName: 'Transactions_' + this.currDate,
+      workSheets: [
+        {
+          sheetName: 'Transactions',
+          startingRowNumber: 2,
+          gapBetweenTwoTables: 2,
+          tableSettings: {
+            table1: {
+              tableTitle: 'Transactions value ' + type,
+              headerDefinition: [
+                {
+                  name: 'Date',
+                  key: 'date',
+                },
+                {
+                  name: 'Transactions',
+                  key: 'transactions',
+                },
+              ],
+            },
+          },
+        },
+      ],
+    };
+    const excelExport = new ExcelExport();
+    excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.chartDataExp);
+  }
+
+  businessDayToString(businessDay) {
+    return businessDay.year + '-' + businessDay.month + '-' + businessDay.day;
+  }
+
+  initTooltip() {
+    const container = document.getElementById('chart');
+    const toolTip = document.createElement('div');
+    toolTip.className = 'floating-tooltip-2';
+    container.appendChild(toolTip);
+
+    // update tooltip
+    this.chart.subscribeCrosshairMove((param) => {
+      if (
+        param.point === undefined ||
+        !param.time ||
+        param.point.x < 0 ||
+        param.point.x > container.clientWidth ||
+        param.point.y < 0 ||
+        param.point.y > container.clientHeight
+      ) {
+        toolTip.style.display = 'none';
+      } else {
+        const timestamp = moment.unix(param.time - 25200); // GMT+7
+        const dateStr = timestamp.format("DD/MM/YYYY HH:mm:ss");
+        toolTip.style.display = 'block';
+        const price = param.seriesPrices.get(this.areaSeries);
+        toolTip.innerHTML =
+          '' +
+          '<div class="floating-tooltip__header">Transactions</div>' +
+          '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
+          Math.round(100 * price) / 100 +
+          '</div><div>' +
+          dateStr +
+          '' +
+          '</div></div>';
+        const coordinate = this.areaSeries.priceToCoordinate(price);
+        let shiftedCoordinate = param.point.x - 50;
+        if (coordinate === null) {
+          return;
+        }
+        shiftedCoordinate = Math.max(0, Math.min(container.clientWidth - this.toolTipWidth, shiftedCoordinate));
+        const coordinateY =
+          coordinate - this.toolTipHeight - this.toolTipMargin > 0
+            ? coordinate - this.toolTipHeight - this.toolTipMargin
+            : Math.max(
+                0,
+                Math.min(
+                  container.clientHeight - this.toolTipHeight - this.toolTipMargin,
+                  coordinate + this.toolTipMargin,
+                ),
+              );
+        toolTip.style.left = shiftedCoordinate + 'px';
+        toolTip.style.top = coordinateY + 'px';
+      }
+    });
   }
 }

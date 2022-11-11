@@ -69,34 +69,44 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
     trans.status = StatusTransaction.Success;
   }
   [trans.from_address, trans.to_address, trans.amountToken, trans.method, trans.token_id, trans.modeExecute] =
-    getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID);
+    getDataInfo(trans.tx_response?.tx?.body?.messages, tokenID, trans.tx_response?.raw_log);
   trans.type = trans.method || typeTrans?.value;
   trans.depositors = trans.tx_response?.tx?.body?.messages[0]?.depositor;
   trans.price = balanceOf(_.get(trans, 'tx_response.tx.body.messages[0].funds[0].amount'));
   return trans;
 }
 
-export function checkTypeFile(filename: string) {
-  if(!filename) return null;
-  let parts = filename.split('.');
-  let typeString = parts[parts.length - 1];
-  switch (typeString.toLowerCase().trim()) {
-    case 'webm':
-    case 'mp4':
-      return 'video';
-    case 'jpg':
-    case 'png':
-    case 'svg':
-    case 'gif':
-      return 'img';
-    case 'glb':
-    case 'gltf':
-      return '3d';
-    case 'ogg':
-    case 'wav':
-    case 'mp3':
-      return 'audio';
-    default:
-      return '';
+export function checkTypeFile(nft: any) {
+  let nftType = '';
+  let content_type = '';
+  if (nft?.animation) {
+    nftType = nft?.animation?.content_type || '';
   }
+  if (nft?.image && nftType == '') {
+    nftType = nft?.image?.content_type || '';
+  }
+  switch (nftType) {
+    case 'video/webm':
+    case 'video/mp4':
+      content_type = 'video';
+      break;
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/gif':
+    case 'application/xml':
+    case 'image/svg+xml':
+      content_type = 'img';
+      break;
+    case 'model/gltf-binary':
+      content_type = '3d';
+      break;
+    case 'audio/mpeg':
+    case 'audio/vnd.wave':
+    case 'audio/ogg':
+      content_type = 'audio';
+      break;
+    default:
+      content_type = '';
+  }
+  return content_type;
 }

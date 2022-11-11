@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
@@ -30,6 +30,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'status', headerCellDef: 'Result'},
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -40,6 +41,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'status', headerCellDef: 'Result'},
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -98,7 +100,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       this.loading = true;
     }
     let filterData = {};
-    filterData['keyWord'] = this.keyWord || dataSearch;
+    let txtSearch = this.keyWord || dataSearch;
+    filterData['keyWord'] = encodeURIComponent(txtSearch);
     if (
       filterData['keyWord']?.length >= LENGTH_CHARACTER.ADDRESS &&
       filterData['keyWord']?.startsWith(this.prefixAdd)
@@ -188,5 +191,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  isContractAddress(type, address) {
+    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+      return true;
+    }
+    return false;
   }
 }

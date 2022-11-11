@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
+import { LENGTH_CHARACTER, NULL_ADDRESS, NUMBER_CONVERT } from '../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../core/constants/transaction.constant';
 import {
   CodeTransaction,
@@ -75,7 +75,11 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   if (itemMessage && amount >= 0) {
     amount = amount / NUMBER_CONVERT || 0;
     amountFormat = arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward ? amount : 'More';
-    if (type === TRANSACTION_TYPE_ENUM.GetReward || type === TRANSACTION_TYPE_ENUM.MultiSend) {
+    if (
+      type === TRANSACTION_TYPE_ENUM.GetReward ||
+      type === TRANSACTION_TYPE_ENUM.MultiSend ||
+      type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount
+    ) {
       amountFormat = 'More';
     }
   }
@@ -83,7 +87,7 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
   return amountFormat;
 }
 
-export function getDataInfo(arrayMsg, addressContract) {
+export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
   let itemMessage = arrayMsg[0];
   let fromAddress = '',
     toAddress = '';
@@ -130,8 +134,15 @@ export function getDataInfo(arrayMsg, addressContract) {
         fromAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Mint;
       } else if (method === ModeExecuteTransaction.Buy) {
-        fromAddress = itemMessage.sender;
+        fromAddress = null;
         toAddress = itemMessage.sender;
+        try {
+          const data = JSON.parse(rawLog);
+          fromAddress =
+            data[0]?.events[0]?.attributes.find(
+              (k) => k.key === 'receiver' && k.value.length <= LENGTH_CHARACTER.ADDRESS,
+            )?.value || null;
+        } catch (e) {}
       }
       break;
     case eTransType.Deposit:

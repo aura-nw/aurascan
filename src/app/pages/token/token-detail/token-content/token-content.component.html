@@ -19,7 +19,11 @@
               height="18px" />
             FILTER BY TOKEN HOLDER
           </div>
-          <a class="body-02 text--primary" [routerLink]="['/account', textSearch]">{{ textSearch }}</a>
+          <a
+            class="body-02 text--primary"
+            [routerLink]="[textSearch?.length > lengthNormalAddress ? '/contracts' : '/account', textSearch]"
+            >{{ textSearch }}</a
+          >
         </div>
         <div
           class="col-12 col-lg-4 pt-3 py-lg-0 px-lg-4 border-x text--gray-1 {{
@@ -27,7 +31,7 @@
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <span *ngIf="!tokenDetail?.isNFTContract">
-            {{ infoSearch['balance'] || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
+            {{ infoSearch['balance'] || 0 | number: global.formatNumberToken }} {{ tokenDetail.symbol || tokenDetail.name }}
           </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>

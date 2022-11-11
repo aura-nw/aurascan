@@ -42,6 +42,7 @@ export class TokenService extends CommonService {
       searchType: 'execute',
       searchKey: '_contract_address',
       searchValue: contractAddress,
+      needFullLog: true,
       pageLimit,
       nextKey,
       countTotal: true,

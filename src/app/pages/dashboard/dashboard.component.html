@@ -5,10 +5,10 @@
       <div class="card card-h-100">
         <div class="card-body">
           <div class="align-items-center mb-3">
-            <div class="d-flex flex-wrap align-items-center mb-lg-6">
+            <div class="d-flex flex-wrap align-items-center mb-4 mb-lg-6">
               <h2 class="text--white mb-0">Transactions</h2>
               <div class="ms-auto">
-                <div class="d-none d-lg-block">
+                <div class="d-none d-lg-flex align-items-center">
                   <button
                     type="button"
                     class="button button--sm button-pill button-flat px-3 body mr-2"
@@ -37,23 +37,18 @@
                     (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
                     <span>12M</span>
                   </button>
+                  <div class="divider divider-vertical divider-lighter mx-4"></div>
+                  <button class="button" (click)="chartDataExport()">
+                    <i class="ph-download-simple-fill body-02 text--gray-1"></i>
+                  </button>
                 </div>
               </div>
             </div>
             <div class="w-100" *ngIf="chartOptions">
-              <div id="chart">
-                <apx-chart
-                  [series]="chartOptions.series"
-                  [chart]="chartOptions.chart"
-                  [xaxis]="chartOptions.xAxis"
-                  [stroke]="chartOptions.stroke"
-                  [tooltip]="chartOptions.tooltip"
-                  [dataLabels]="chartOptions.dataLabels">
-                </apx-chart>
-              </div>
+              <div id="chart"> </div>
             </div>
 
-            <div class="d-lg-none text-center">
+            <div class="d-flex align-items-center justify-content-center d-lg-none text-center">
               <button
                 type="button"
                 class="button button--sm button-pill button-flat px-3 body mr-3"
@@ -81,6 +76,10 @@
                 [class.button-flat--inactive]="chartRange !== chartRangeData.MONTH_12"
                 (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
                 <span>12M</span>
+              </button>
+              <div class="divider divider-vertical divider-lighter mx-4"></div>
+              <button class="button" (click)="chartDataExport()">
+                <i class="ph-download-simple-fill body-02 text--gray-1"></i>
               </button>
             </div>
           </div>
