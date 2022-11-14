@@ -95,6 +95,7 @@ export function checkTypeFile(nft: any) {
     case 'image/gif':
     case 'application/xml':
     case 'image/svg+xml':
+    case 'image/webp': 
       content_type = 'img';
       break;
     case 'model/gltf-binary':
