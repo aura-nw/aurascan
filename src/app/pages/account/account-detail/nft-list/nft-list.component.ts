@@ -74,9 +74,6 @@ export class NftListComponent implements OnChanges {
         this.pageData.length = this.nftList.length;
 
         this.nftList.forEach((element) => {
-          if (element.media_info.length > 0) {
-            element.nftType = checkTypeFile(element?.media_info[0]?.media_link);
-          }
           if (!this.searchValue) {
             this.totalValue += element.price * +element.balance || 0;
           }
@@ -132,35 +129,8 @@ export class NftListComponent implements OnChanges {
   }
 
   getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft.media_info[0]?.media_link);
-    if (nft?.media_info?.length > 0) {
-      if (nftType === '') {
-        switch (nft?.media_info[0]?.content_type) {
-          case 'video/webm':
-          case 'video/mp4':
-            nftType = 'video';
-            break;
-          case 'image/png':
-          case 'image/jpeg':
-          case 'image/gif':
-            nftType = 'img';
-            break;
-          case 'model/gltf-binary':
-          case 'gltf':
-            nftType = '3d';
-            break;
-          case 'audio/mpeg':
-          case 'audio/vnd.wave':
-            nftType = 'audio';
-            break;
-          default:
-            nftType = '';
-        }
-      }
-      return nftType;
-    } else {
-      return '';
-    }
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 
   encodeData(data) {

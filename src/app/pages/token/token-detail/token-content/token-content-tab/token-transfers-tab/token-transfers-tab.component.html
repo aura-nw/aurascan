@@ -72,6 +72,19 @@
                         <ng-container *ngSwitchCase="'amountToken'">
                           {{ data[template.matColumnDef] | number: global.formatNumberToken }}
                         </ng-container>
+                        <ng-container *ngSwitchCase="'status'">
+                          <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                            <div *ngSwitchCase="'Success'" class="text--green-3">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'Fail'" class="text--red-3">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                            <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                              {{ data[template.matColumnDef] }}
+                            </div>
+                          </div>
+                        </ng-container>
                         <ng-container *ngSwitchCase="'timestamp'">
                           {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                         </ng-container>
@@ -117,7 +130,13 @@
                           </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'to_address'">
-                          <div class="pl-4 pl-lg-0">
+                          <div class="pl-4 pl-lg-0" [style.width]="'180px'">
+                            <img
+                              [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                              *ngIf="isContractAddress(data.type, data.to_address)"
+                              alt=""
+                              width="16px"
+                              height="16px" />
                             <a
                               class="text--primary"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"

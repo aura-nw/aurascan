@@ -76,8 +76,10 @@ export class TransactionMessagesComponent implements OnInit {
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
-    }
-    if (
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount) {
+      let date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
+      this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
+    } else if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||

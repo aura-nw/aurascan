@@ -5,7 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { LENGTH_CHARACTER, PAGE_EVENT } from '../../../../../../core/constants/common.constant';
+import {
+  LENGTH_CHARACTER,
+  LIST_TYPE_CONTRACT_ADDRESS,
+  PAGE_EVENT,
+} from '../../../../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../../../core/constants/transaction.constant';
 import { CodeTransaction, ModeExecuteTransaction } from '../../../../../../core/constants/transaction.enum';
 import { TableTemplate } from '../../../../../../core/models/common.model';
@@ -30,6 +34,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -40,6 +45,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     // { matColumnDef: 'action', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash', isShort: true },
     { matColumnDef: 'type', headerCellDef: 'Method', isShort: true },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -93,7 +99,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getListTransactionToken(dataSearch = '', nextKey = null) {
+  async getListTransactionToken(dataSearch = '', nextKey = null) {
     if (!this.dataSource.data) {
       this.loading = true;
     }
@@ -106,24 +112,21 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       filterData['isSearchWallet'] = true;
     }
 
-    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKey = data.nextKey || null;
-      if (code === 200) {
-        res.data.transactions.forEach((trans) => {
-          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-        });
+    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
+    if (res?.data?.code === 200) {
+      res?.data?.data?.transactions.forEach((trans) => {
+        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+      });
 
-        if (this.dataSource.data.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...res.data.transactions];
-        } else {
-          this.dataSource.data = [...res.data.transactions];
-        }
-        this.pageData.length = this.dataSource.data.length;
-        this.resultLength.emit(this.pageData.length);
+      if (this.dataSource.data.length > 0) {
+        this.dataSource.data = [...this.dataSource.data, ...res.data.data.transactions];
+      } else {
+        this.dataSource.data = [...res.data.data.transactions];
       }
-      this.loading = false;
-    });
+      this.pageData.length = this.dataSource.data.length;
+      this.resultLength.emit(this.pageData.length);
+    }
+    this.loading = false;
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -188,5 +191,12 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdr.markForCheck();
+  }
+
+  isContractAddress(type, address) {
+    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+      return true;
+    }
+    return false;
   }
 }
