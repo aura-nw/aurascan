@@ -26,19 +26,19 @@
               <img
                 *ngIf="nftType === 'img' && isError === false"
                 (error)="error()"
-                [src]="nftDetail?.media_info[0]?.media_link" />
+                [src]="this.nftUrl" />
               <app-custom-video-player
-                [videoSrc]="nftDetail?.media_info[0]?.media_link"
+                [videoSrc]="this.nftUrl"
                 [showControl]="true"
                 *ngIf="nftType === 'video'"
                 [isDetail]="true">
               </app-custom-video-player>
               <app-model-view
                 *ngIf="nftType === '3d'"
-                [modelUrl]="nftDetail?.media_info[0]?.media_link"
+                [modelUrl]="this.nftUrl"
                 [disablePan]="false">
               </app-model-view>
-              <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.media_info[0]?.media_link">
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl">
               </app-audio-player>
             </div>
           </div>
@@ -62,7 +62,7 @@
                 width="24px"
                 height="24px"
                 class="mr-1 object-fit--none" /> -->
-              <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+              <a class="h6 mb-0 text--primary break-word" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
                 nftDetail?.name
               }}</a>
             </div>
@@ -212,8 +212,12 @@
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
       A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
-    <div class="table-responsive aura-table-contain mt-2 mt-lg-3">
-      <table *ngIf="dataSource?.data?.length > 0; else noValues" mat-table [dataSource]="dataSource" class="aura-table">
+    <div class="table-responsive aura-table-contain mt-2 mt-lg-3" style="height: 600px">
+      <table
+        *ngIf="dataSource?.data?.length > 0; else noValues"
+        mat-table
+        [dataSource]="dataSource"
+        class="aura-table nft-detail-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef class="">
@@ -239,6 +243,19 @@
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
+                </ng-container>
+                <ng-container *ngSwitchCase="'status'">
+                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                    <div *ngSwitchCase="'Success'" class="text--green-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Fail'" class="text--red-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
@@ -266,9 +283,15 @@
                     class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
+                  <img
+                    [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                    *ngIf="isContractAddress(data.type, data.to_address)"
+                    alt=""
+                    width="16px"
+                    height="16px" />
                   <a
                     class="text--primary"
-                    [routerLink]="['/account', data[template.matColumnDef]]"
+                    [routerLink]="[data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
@@ -297,12 +320,12 @@
         </tr>
       </table>
     </div>
-    <app-paginator
+    <!-- <app-paginator
       [length]="pageData?.length"
       [pageSize]="pageData?.pageSize"
       (paginator)="paginatorEmit($event)"
       (pageEvent)="handlePageEvent($event)">
-    </app-paginator>
+    </app-paginator> -->
     <ng-template #noValues> </ng-template>
   </div>
 </ng-container>
