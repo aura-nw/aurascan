@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
@@ -31,12 +32,7 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
   }
 
-  getListTokenTransferIndexer(
-    pageLimit: string | number,
-    contractAddress: string,
-    filterData: any,
-    nextKey = null,
-  ): Observable<any> {
+  getListTokenTransferIndexer(pageLimit: string | number, contractAddress: string, filterData: any, nextKey = null) {
     const params = _({
       chainid: this.chainInfo.chainId,
       searchType: 'execute',
@@ -61,9 +57,7 @@ export class TokenService extends CommonService {
       }
     }
 
-    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
-      params,
-    });
+    return axios.get(`${this.indexerUrl}/transaction`, { params });
   }
 
   getListTokenNFTFromIndexer(payload): Observable<any> {
