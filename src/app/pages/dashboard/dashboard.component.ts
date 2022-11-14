@@ -50,7 +50,6 @@ export class DashboardComponent implements OnInit {
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
 
-  typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -71,6 +70,15 @@ export class DashboardComponent implements OnInit {
   currDate;
   SETTINGS_FOR_EXPORT;
 
+  isPrice = true;
+
+  curr_voting_Period = '';
+  voting_Period_arr = [
+    '#1 GoodfellasHacker',
+    '#71 Community Pool',
+    '#66 Upgrade Aurad'
+  ]
+
 
   constructor(
     public commonService: CommonService,
@@ -84,12 +92,13 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.curr_voting_Period = this.voting_Period_arr[0];
     this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
     // somewhere in your code
     this.chart = createChart(document.getElementById('chart'), {
-      height: 400,
+      height: 244,
       crosshair: {
         horzLine: {
           visible: false,
@@ -358,5 +367,9 @@ export class DashboardComponent implements OnInit {
         toolTip.style.top = coordinateY + 'px';
       }
     });
+  }
+
+  getVotingPeriod(data) {
+
   }
 }
