@@ -29,6 +29,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
   @Output() resultLength = new EventEmitter<any>();
+  @Output() hasMore = new EventEmitter<any>();
 
   noneNFTTemplates: Array<TableTemplate> = [
     // { matColumnDef: 'action', headerCellDef: '' },
@@ -114,6 +115,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
 
     const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
     if (res?.data?.code === 200) {
+      this.nextKey = res.data.data.nextKey || null;
       res?.data?.data?.transactions.forEach((trans) => {
         trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
       });
@@ -125,6 +127,11 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       }
       this.pageData.length = this.dataSource.data.length;
       this.resultLength.emit(this.pageData.length);
+      if (this.nextKey) {
+        this.hasMore.emit(true);
+      } else {
+        this.hasMore.emit(false);
+      }
     }
     this.loading = false;
   }
