@@ -109,7 +109,9 @@
       [keyWord]="textSearch"
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
-      (resultLength)="getLength($event)"></app-token-transfers-tab>
+      (resultLength)="getLength($event)"
+      (hasMore)="getMoreTx($event)">
+    </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="countCurrent === tokenTab.Holders"
       [keyWord]="textSearch"

@@ -34,7 +34,6 @@ export class TokenDetailComponent implements OnInit {
 
   getTokenDetail(): void {
     this.loading = true;
-
     this.tokenService.getTokenDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.tokenDetail = res.data;
       if (this.tokenDetail?.type === ContractRegisterType.CW721) {
@@ -46,5 +45,9 @@ export class TokenDetailComponent implements OnInit {
 
   getLength(result: string) {
     this.tokenDetail['totalTransfer'] = Number(result) || 0;
+  }
+
+  getMoreTx(event) {
+    this.tokenDetail['hasMoreTx'] = event;
   }
 }
