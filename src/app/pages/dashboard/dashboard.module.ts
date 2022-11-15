@@ -1,26 +1,25 @@
-import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
-import { DashboardRoutingModule } from './dashboard-routing.module';
-import { DashboardComponent } from './dashboard.component';
-import { SharedModule } from '../../../app/shared/shared.module';
-import { NgApexchartsModule } from 'ng-apexcharts';
-import { SimplebarAngularModule } from 'simplebar-angular';
-import { CarouselModule } from 'ngx-owl-carousel-o';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { MaterialModule } from '../../../app/app.module';
-import { NgxMaskModule } from 'ngx-mask';
-import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgxMaskModule } from 'ngx-mask';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { SimplebarAngularModule } from 'simplebar-angular';
+import { MaterialModule } from 'src/app/app.module';
+import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { BlockService } from 'src/app/core/services/block.service';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
-import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
+import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { DashboardRoutingModule } from './dashboard-routing.module';
+import { DashboardComponent } from './dashboard.component';
 
 @NgModule({
-  declarations: [
-    DashboardComponent
-  ],
+  declarations: [DashboardComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -37,8 +36,8 @@ import { TableNoDataModule } from '../../shared/components/table-no-data/table-n
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    TableNoDataModule
+    TableNoDataModule,
   ],
-  providers: [DatePipe, BlockService, TransactionService, DecimalPipe]
+  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService],
 })
-export class DashboardModule { }
+export class DashboardModule {}
