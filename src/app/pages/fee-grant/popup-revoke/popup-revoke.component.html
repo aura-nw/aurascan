@@ -14,5 +14,27 @@
     <div class="body-03 text--gray-1 mt-2">{{ data?.granterAddress || '' }}</div>
     <div class="body-01 text--gray-4 mt-6">Grantee's Address</div>
     <div class="body-03 text--gray-1 mt-2">{{ data?.granteeAddress || '' }}</div>
+
+    <div class="mt-6 d-flex align-items-center justify-content-center justify-content-lg-end">
+      <button
+        type="button"
+        class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4"
+        (click)="closeDialog()">
+        <span>Cancel</span>
+      </button>
+      <button
+        type="button"
+        class="button button--sm fw-semibold button--md-mob button-fixed button-pill button-flat d-flex"
+        (click)="executeRevoke()">
+        <img
+          class="mr-2"
+          [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+          alt=""
+          width="20"
+          height="20"
+          *ngIf="isLoading" />
+        <span>Revoke</span>
+      </button>
+    </div>
   </div>
 </div>

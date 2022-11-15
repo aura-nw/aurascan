@@ -14,11 +14,13 @@ export class FeeGrantService extends CommonService {
     super(http, environmentService);
   }
 
-  getListFeeGrants(granter = null, grantee = null): Observable<any> {
+  getListFeeGrants(textSearch, isGranter = false): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
-      granter:granter,
-      grantee:grantee
+      granter: isGranter ? textSearch : null,
+      grantee: !isGranter ? textSearch : null,
+      pageLimit: 10,
+      pageOffset: 0,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)

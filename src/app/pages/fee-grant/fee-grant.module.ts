@@ -17,6 +17,7 @@ import { PopupAddGrantComponent } from './popup-add-grant/popup-add-grant.compon
 import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {ClickOutsideModule} from "ng-click-outside";
+import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,6 @@ import {ClickOutsideModule} from "ng-click-outside";
     MatDatepickerModule,
     ClickOutsideModule
   ],
-  providers: [FormBuilder]
+  providers: [FormBuilder, FeeGrantService]
 })
 export class FeeGrantModule {}

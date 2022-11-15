@@ -521,9 +521,7 @@
         [label]="'To Address'"
         [value]="transactionDetail?.messages[0]?.to_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <app-messages-item
-        [label]="'Start Time'"
-        [value]="dateVesting"></app-messages-item>
+      <app-messages-item [label]="'Start Time'" [value]="dateVesting"></app-messages-item>
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Vesting Periods</div>
         <div class="col-12 col-lg-9">
@@ -535,6 +533,79 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.MsgGrantAllowance">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Granter'"
+        [value]="transactionDetail?.messages[0]?.granter"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Type'"
+        [value]="
+          transactionDetail?.messages[0]?.allowance['@type'].indexOf('Basic') >= 0 ? 'Basic' : 'Periodic'
+        "></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Spend Limit</div>
+        <div class="col-12 col-lg-9">
+          {{
+            (transactionDetail?.messages[0]?.allowance?.spend_limit[0]?.amount | number: global.formatNumberToken) ||
+              '-'
+          }}
+          {{ transactionDetail?.messages[0]?.allowance?.spend_limit[0]?.denom }}
+        </div>
+      </div>
+      <app-messages-item
+        [label]="'Expiration'"
+        [value]="
+          commonService.getDateValue(transactionDetail?.messages[0]?.allowance?.expiration, false)[0] || '-'
+        "></app-messages-item>
+    </div>
+  </ng-container>
+
+  <!-- <ng-container *ngIf="transactionDetail?.type === eTransType.MsgRevokeAllowance">
+    <div class="card-info">
+      {{transactionDetail?.type}}
+      {{transactionDetailType}}
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      {{ transactionDetail?.messages | json }}
+      <app-messages-item
+        [label]="'Granter'"
+        [value]="transactionDetail?.messages[0]?.granter"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Type'"
+        [value]="
+          transactionDetail?.messages[0]?.allowance['@type'].indexOf('Basic') >= 0 ? 'Basic' : 'Periodic'
+        "></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Spend Limit</div>
+        <div class="col-12 col-lg-9">
+          {{
+            (transactionDetail?.messages[0]?.allowance?.spend_limit[0]?.amount | number: global.formatNumberToken) ||
+              '-'
+          }}
+          {{ transactionDetail?.messages[0]?.allowance?.spend_limit[0]?.denom }}
+        </div>
+      </div>
+      <app-messages-item
+        [label]="'Expiration'"
+        [value]="
+          commonService.getDateValue(transactionDetail?.messages[0]?.allowance?.expiration, false)[0] || '-'
+        "></app-messages-item>
+    </div>
+  </ng-container> -->
 
   <ng-container *ngIf="transactionDetail?.type?.toLowerCase().indexOf('ibc') > -1">
     <ng-container *ngFor="let item of transactionDetail?.messages; index as i">

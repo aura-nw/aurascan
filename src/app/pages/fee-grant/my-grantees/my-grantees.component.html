@@ -17,7 +17,7 @@
             <input
               type="text"
               class="form-control pl-0"
-              placeholder="Search for Tx Hash, Address or Status"
+              placeholder="Search for Tx Hash or Address"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               name="search"
@@ -55,14 +55,12 @@
                     <div>
                       <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
                         <a
-                          target="_blank"
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
                           <span>{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</span>
                         </a>
                         <a
-                          target="_blank"
                           *ngSwitchCase="'grantee'"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/account', data[template.matColumnDef]]">
@@ -71,24 +69,30 @@
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
                         </div>
-                        <div *ngSwitchCase="'time'">
+                        <div *ngSwitchCase="'timestamp'">
                           {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
                         </div>
                         <div *ngSwitchCase="'limit'">
-                          {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                          <span class="ml-2">{{ denom }}</span>
+                          <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
+                          <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                            <span class="ml-1">{{ data?.spend_limit?.denom }}</span>
+                          </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
-                          {{ data[template.matColumnDef] | customDate: 'yyyy-MM-dd' }}
+                          {{ data[template.matColumnDef] ? (data[template.matColumnDef] | customDate: 'yyyy-MM-dd') : '-'  }}
                         </div>
                         <div *ngSwitchCase="'spendable'">
-                          {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                          <span class="ml-2">{{ denom }}</span>
+                          <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
+                          <ng-container *ngIf="+data[template.matColumnDef] > 0">
+                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                            <span class="ml-1">{{ data?.amount?.denom }}</span>
+                          </ng-container>
                         </div>
                         <div *ngSwitchCase="'action'">
                           <button
                             class="button button--sm button-pill button-outline"
-                            (click)="showRevoke(data['grantee'])">
+                            (click)="showRevoke(data['grantee'], data['granter'])">
                             <span>Revoke</span>
                           </button>
                         </div>
@@ -97,7 +101,6 @@
                           <a
                             [routerLink]="['/transaction', data['tx_hash']]"
                             *ngIf="data['reason'] === 'Revoked'"
-                            target="_blank"
                             class="button body-01 text--primary">
                             <i class="ph-arrow-square-out"></i>
                           </a>

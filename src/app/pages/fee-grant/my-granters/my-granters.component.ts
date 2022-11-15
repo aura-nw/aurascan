@@ -1,12 +1,14 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
+import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -14,6 +16,7 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './my-granters.component.html',
   styleUrls: ['./my-granters.component.scss'],
 })
+
 export class MyGrantersComponent implements OnInit {
   loading = true;
   isActive = true;
@@ -24,7 +27,7 @@ export class MyGrantersComponent implements OnInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
     { matColumnDef: 'granter', headerCellDef: 'GRANTER' },
     { matColumnDef: 'type', headerCellDef: 'TYPE' },
-    { matColumnDef: 'time', headerCellDef: 'TIME' },
+    { matColumnDef: 'timestamp', headerCellDef: 'TIME' },
     { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
     { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
     { matColumnDef: 'spendable', headerCellDef: 'SPENDABLE' },
@@ -33,14 +36,18 @@ export class MyGrantersComponent implements OnInit {
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
     { matColumnDef: 'granter', headerCellDef: 'GRANTER' },
     { matColumnDef: 'type', headerCellDef: 'TYPE' },
-    { matColumnDef: 'time', headerCellDef: 'TIME' },
+    { matColumnDef: 'timestamp', headerCellDef: 'TIME' },
     { matColumnDef: 'limit', headerCellDef: 'SPEND LIMIT' },
     { matColumnDef: 'expiration', headerCellDef: 'EXPIRATION' },
     { matColumnDef: 'reason', headerCellDef: 'REASON' },
   ];
   templates: Array<TableTemplate>;
   displayedColumns: string[];
-  pageData: PageEvent;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   nextKey = null;
   currentKey = null;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -49,7 +56,7 @@ export class MyGrantersComponent implements OnInit {
     public commonService: CommonService,
     public global: Globals,
     private environmentService: EnvironmentService,
-    private http: HttpClient,
+    private feeGrantService: FeeGrantService,
   ) {}
 
   async ngOnInit() {
@@ -61,43 +68,38 @@ export class MyGrantersComponent implements OnInit {
     if (this.isActive) {
       this.templates = this.templatesActive;
       this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
-      // @ts-ignore
-      this.dataSource.data = await this.http.get('assets/mock-data/grantees-active.json').toPromise();
     } else {
       this.templates = this.templatesInActive;
       this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
-      // @ts-ignore
-      this.dataSource.data = await this.http.get('assets/mock-data/grantees-inactive.json').toPromise();
     }
-    this.pageData = {
-      length: this.dataSource.data.length,
-      pageSize: 5,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
-    };
-    this.loading = false;
+    await this.getListGrant();
+  }
+
+  getListGrant(filterSearch = '') {
+    this.feeGrantService.getListFeeGrants(filterSearch, true).subscribe((res) => {
+      const { code, data } = res;
+      if (code === 200) {
+        data.grants.forEach((element) => {
+          element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
+          element.limit = element?.spend_limit?.amount || '0';
+          element.spendable = element?.amount?.amount || '0';
+        });
+        this.dataSource.data = data.grants;
+      }
+      this.loading = false;
+    });
   }
 
   searchToken(): void {
     this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
-      const payload = {
-        limit: 100,
-        keyword: this.textSearch,
-        next_key: this.nextKey,
-      };
-      // this.contractService.getListContract(payload).subscribe((res) => {
-      //   if (res?.data?.length > 0) {
-      //     res.data.forEach((item) => {
-      //       item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-      //     });
-      //     this.filterSearchData = res.data;
-      //   }
-      // });
+      this.getListGrant(this.textSearch);
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
+    this.getListGrant();
   }
 
   paginatorEmit(e: MatPaginator): void {
