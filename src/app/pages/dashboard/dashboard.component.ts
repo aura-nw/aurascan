@@ -373,18 +373,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   }
 
-  getInflation() {
-    return this.global.dataHeader.inflation || null;
+  getDataHeader() {
+    return this.global.dataHeader;
   }
 
-  ngAfterViewInit(): void {
-    let inflation = null;
-    do {
-      setTimeout(() => {
-        inflation = this.getInflation();
-      },200);
-    }
-    while (!inflation);
-    console.log(inflation)
+  async ngAfterViewInit() {
+    const communityTaxRq = await this.commonService.getCommunityTax();
+    const communityTax = communityTaxRq?.data?.params?.community_tax;
+    let inflation;
+    let bonded_tokens;
+    let supply;
+    setInterval(() => {
+      if(!inflation && !bonded_tokens && !supply) {
+        inflation = this.getDataHeader().inflation.slice(0, -1);
+        bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
+        supply = this.getDataHeader().supply.toString().slice(0, -1);
+        this.staking_APR = (inflation * (1 - communityTax)) / (bonded_tokens/supply*100);
+      }
+    }, 500);
   }
 }
