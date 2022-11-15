@@ -1,10 +1,14 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import ExcelExport from 'export-xlsx';
+import { createChart } from 'lightweight-charts';
+import * as moment from 'moment';
 import { Subscription, timer } from 'rxjs';
+import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
@@ -14,9 +18,6 @@ import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { createChart } from 'lightweight-charts';
-import ExcelExport from 'export-xlsx';
-import * as moment from "moment";
 
 @Component({
   selector: 'app-dashboard',
@@ -26,9 +27,7 @@ import * as moment from "moment";
 export class DashboardComponent implements OnInit, AfterViewInit {
   chartRange = CHART_RANGE.D_30;
   chartRangeData = CHART_RANGE;
-
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
-
   public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
 
   templatesBlock: Array<TableTemplate> = [
@@ -49,7 +48,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
-
   timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -69,15 +67,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   currDate;
   SETTINGS_FOR_EXPORT;
-
   isPrice = true;
 
   curr_voting_Period = '';
-  voting_Period_arr = [
-    '#1 GoodfellasHacker',
-    '#71 Community Pool',
-    '#66 Upgrade Aurad'
-  ]
+  voting_Period_arr = [];
 
   staking_APR = 0;
   constructor(
@@ -89,6 +82,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     public datepipe: DatePipe,
+    private proposalService: ProposalService,
   ) {}
 
   ngOnInit(): void {
@@ -124,8 +118,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       timeScale: {
         timeVisible: true,
-        secondsVisible: true
-      }
+        secondsVisible: true,
+      },
     });
     this.areaSeries = this.chart.addAreaSeries({
       autoscaleInfoProvider: () => ({
@@ -141,7 +135,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       bottomColor: 'rgba(119, 182, 188, 0.01)',
     });
     this.initTooltip();
-    this.currDate = moment(new Date()).format("DDMMYYYY_HHMMSS")
+    this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
+    this.getVotingPeriod();
   }
 
   drawChart(data, dateTime) {
@@ -152,8 +147,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // convert timeStamp to UNIX Timestamp format (for hour timeBar)
     dateTime.forEach((date, index) => {
-      const ts = Math.floor(new Date(date).getTime() / 1000)
-      const temp = { value: data[index], time: ts+25200 }; // GMT+7
+      const ts = Math.floor(new Date(date).getTime() / 1000);
+      const temp = { value: data[index], time: ts + 25200 }; // GMT+7
       arr.push(temp);
     });
     // push data to export csv array
@@ -270,17 +265,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let type;
     switch (this.chartRange) {
       case '60m':
-      type = 'in 60 minutes';
-      break;
+        type = 'in 60 minutes';
+        break;
       case '24h':
-      type = 'in about 24 hours';
-      break;
+        type = 'in about 24 hours';
+        break;
       case '30d':
-      type = 'in 30 days';
-      break;
+        type = 'in 30 days';
+        break;
       case '12M':
-      type = 'in 12 months';
-      break;
+        type = 'in 12 months';
+        break;
     }
     this.SETTINGS_FOR_EXPORT = {
       // Table settings
@@ -335,7 +330,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         toolTip.style.display = 'none';
       } else {
         const timestamp = moment.unix(param.time - 25200); // GMT+7
-        const dateStr = timestamp.format("DD/MM/YYYY HH:mm:ss");
+        const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
         toolTip.style.display = 'block';
         const price = param.seriesPrices.get(this.areaSeries);
         toolTip.innerHTML =
@@ -369,8 +364,27 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getVotingPeriod(data) {
+  getVotingPeriod() {
+    this.proposalService.getProposalList(20, null).subscribe((res) => {
+      if (res?.data?.proposals) {
+        let tempDta = res.data.proposals;
+        this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
 
+        this.voting_Period_arr.forEach((pro, index) => {
+          if (pro?.tally) {
+            const { yes, no, no_with_veto, abstain } = pro?.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+
+            if (this.voting_Period_arr[index].tally) {
+              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote;
+              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote;
+              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote;
+            }
+          }
+        });
+      }
+    });
   }
 
   getInflation() {
@@ -378,13 +392,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    let inflation = null;
-    do {
-      setTimeout(() => {
-        inflation = this.getInflation();
-      },200);
-    }
-    while (!inflation);
-    console.log(inflation)
+    //   let inflation = null;
+    //   do {
+    //     setTimeout(() => {
+    //       inflation = this.getInflation();
+    //     },200);
+    //   }
+    //   while (!inflation);
+    //   console.log(inflation)
   }
 }
