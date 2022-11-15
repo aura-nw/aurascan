@@ -13,8 +13,8 @@ import { NgxMaskModule } from 'ngx-mask';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { BlockService } from '../../../app/core/services/block.service';
-import { TransactionService } from '../../../app/core/services/transaction.service';
+import { BlockService } from 'src/app/core/services/block.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 
 @NgModule({

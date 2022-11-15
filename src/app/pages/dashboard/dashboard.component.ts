@@ -1,5 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription, timer } from 'rxjs';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -23,7 +23,7 @@ import * as moment from "moment";
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   chartRange = CHART_RANGE.D_30;
   chartRangeData = CHART_RANGE;
 
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
     '#66 Upgrade Aurad'
   ]
 
-
+  staking_APR = 0;
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
@@ -371,5 +371,20 @@ export class DashboardComponent implements OnInit {
 
   getVotingPeriod(data) {
 
+  }
+
+  getInflation() {
+    return this.global.dataHeader.inflation || null;
+  }
+
+  ngAfterViewInit(): void {
+    let inflation = null;
+    do {
+      setTimeout(() => {
+        inflation = this.getInflation();
+      },200);
+    }
+    while (!inflation);
+    console.log(inflation)
   }
 }
