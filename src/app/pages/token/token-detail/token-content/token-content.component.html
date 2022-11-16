@@ -31,7 +31,7 @@
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <span *ngIf="!tokenDetail?.isNFTContract">
-            {{ infoSearch['balance'] || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
+            {{ infoSearch['balance'] || 0 | number: global.formatNumberToken }} {{ tokenDetail.symbol || tokenDetail.name }}
           </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
