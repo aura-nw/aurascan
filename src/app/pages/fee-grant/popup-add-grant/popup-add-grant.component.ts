@@ -1,13 +1,18 @@
-import {Component, ElementRef, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
-import {EnvironmentService} from "src/app/core/data-services/environment.service";
+import { Component, ElementRef, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { StargateClient } from '@cosmjs/stargate';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-popup-add-grant',
   templateUrl: './popup-add-grant.component.html',
-  styleUrls: ['./popup-add-grant.component.scss']
+  styleUrls: ['./popup-add-grant.component.scss'],
 })
 export class PopupAddGrantComponent implements OnInit {
   grantForm;
@@ -22,7 +27,8 @@ export class PopupAddGrantComponent implements OnInit {
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
     private fb: FormBuilder,
     private toastr: NgxToastrService,
-    public environmentService: EnvironmentService
+    public environmentService: EnvironmentService,
+    private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +39,7 @@ export class PopupAddGrantComponent implements OnInit {
   initLayout() {
     // override cdk-overlay-container z-index
     const overlay = document.getElementsByClassName('cdk-overlay-container');
-    if(overlay) {
+    if (overlay) {
       overlay[0].classList.add('cdk-overlay-container--grant');
     }
     // validator min date
@@ -41,40 +47,37 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   formInit() {
-    this.grantForm = this.fb.group(
-      {
-        grantee_address: ['', [Validators.required]],
-        amount: ['', [Validators.maxLength(200)]],
-        expiration_time: [''],
-        period_amount: [''],
-        period_day: [''],
-        execute_contract: this.fb.array([])
-      }
-    );
+    this.grantForm = this.fb.group({
+      grantee_address: ['', [Validators.required]],
+      amount: ['', [Validators.maxLength(200)]],
+      expiration_time: [''],
+      period_amount: [''],
+      period_day: [''],
+      execute_contract: this.fb.array([]),
+    });
     this.addContracts();
   }
 
   get contracts(): FormArray {
-    return this.grantForm.get("execute_contract") as FormArray
+    return this.grantForm.get('execute_contract') as FormArray;
   }
 
   newContract(): FormGroup {
     return this.fb.group({
-      address: ['', { validators: [Validators.required]}]
-    })
+      address: ['', { validators: [Validators.required] }],
+    });
   }
-
 
   addContracts() {
     this.contracts.push(this.newContract());
   }
 
-  removeContract(i:number) {
+  removeContract(i: number) {
     this.contracts.removeAt(i);
   }
 
   getMaxToken(controlName: string) {
-    this.grantForm.controls[controlName].setValue(1000000)
+    this.grantForm.controls[controlName].setValue(1000000);
   }
 
   closeDialog() {
@@ -93,8 +96,36 @@ export class PopupAddGrantComponent implements OnInit {
     this.allContractAllowActive = isAll;
   }
 
-  onSubmit() {
+  async onSubmit() {
+    console.log(this.grantForm.value);
 
+    const granter = this.walletService.wallet?.bech32Address;
+    const { grantee_address, expiration_time, period_amount, period_day, amount, execute_contract } =
+      this.grantForm.value;
+
+    if (!granter) {
+      return;
+    }
+
+    const executeStaking = async () => {
+      const { hash, error } = await this.walletService.signAndBroadcast({
+        messageType: SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
+        message: {
+          granter,
+          grantee: grantee_address,
+          spendLimit: amount,
+          expiration: expiration_time ? moment(expiration_time).toDate() : null,
+        },
+        senderAddress: granter,
+        network: this.environmentService.configValue.chain_info,
+        signingType: ESigningType.Keplr,
+        chainId: this.walletService.chainId,
+      });
+
+      console.log({ hash, error });
+    };
+
+    executeStaking();
   }
 
   addClassFocus(e: HTMLInputElement) {
@@ -104,5 +135,4 @@ export class PopupAddGrantComponent implements OnInit {
   removeClassFocus(e: HTMLInputElement) {
     e.parentElement.classList.remove('border-white');
   }
-
 }

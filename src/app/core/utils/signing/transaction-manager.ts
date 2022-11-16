@@ -24,6 +24,7 @@ export async function createSignBroadcast(
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message, network);
 
+    console.log('messagesSend', messagesSend);
     const fee: StdFee = getNetworkFee(network, messageType, validatorsCount);
     let client;
 

@@ -1,6 +1,11 @@
 import { ChainInfo } from '@keplr-wallet/types';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
+import { MsgGrantAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
+import { BasicAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
+import { Any } from 'cosmjs-types/google/protobuf/any';
+import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
+import * as Long from 'long';
 
 // Staking
 export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
@@ -93,10 +98,61 @@ export function Redelegate(senderAddress, { src_address, to_address, amount }, n
   };
 }
 
+export interface IGrantBasicAllowance {
+  granter: MsgGrantAllowance['granter'];
+  grantee: MsgGrantAllowance['grantee'];
+  spendLimit: number | string | null;
+  expiration: Date;
+}
+
+export function GrantBasicAllowance(
+  senderAddress: string,
+  { granter, grantee, spendLimit, expiration }: IGrantBasicAllowance,
+  network: ChainInfo,
+) {
+  const allowanceValue: BasicAllowance = {
+    spendLimit: spendLimit
+      ? [
+          {
+            denom: network.currencies[0].coinMinimalDenom,
+            amount: `${+spendLimit * Math.pow(10, network.currencies[0].coinDecimals)}`,
+          },
+        ]
+      : [],
+    expiration: {
+      seconds: Long.fromString(expiration.toString()),
+      nanos: 1,
+    },
+  };
+
+  let basicAllowance;
+
+  try {
+    basicAllowance = {
+      typeUrl: TRANSACTION_TYPE_ENUM.BasicAllowance,
+      value: Uint8Array.from(BasicAllowance.encode(allowanceValue).finish()),
+    };
+  } catch (e) {
+    console.log('🐛 Debug', e);
+  }
+
+  const msgGrantAllowance = MsgGrantAllowance.fromPartial({
+    allowance: basicAllowance,
+    grantee,
+    granter,
+  });
+
+  return {
+    typeUrl: TRANSACTION_TYPE_ENUM.MsgGrantAllowance,
+    value: msgGrantAllowance,
+  };
+}
+
 export const messageCreators = {
   Delegate,
   Undelegate,
   GetReward,
   Vote,
   Redelegate,
+  GrantBasicAllowance,
 };
