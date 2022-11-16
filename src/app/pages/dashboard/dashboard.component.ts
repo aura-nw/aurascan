@@ -69,7 +69,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   SETTINGS_FOR_EXPORT;
   isPrice = true;
 
-  curr_voting_Period = '';
+  curr_voting_Period;
   voting_Period_arr = [];
 
   staking_APR = 0;
@@ -86,7 +86,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.curr_voting_Period = this.voting_Period_arr[0];
     this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
@@ -374,15 +373,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           if (pro?.tally) {
             const { yes, no, no_with_veto, abstain } = pro?.tally;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
-
             if (this.voting_Period_arr[index].tally) {
-              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote;
-              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote;
-              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote;
+              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0 ;
+              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
             }
           }
         });
+        this.curr_voting_Period = this.voting_Period_arr[0];
       }
     });
   }

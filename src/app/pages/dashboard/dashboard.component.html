@@ -263,28 +263,38 @@
       <div class="card card__item">
         <div class="card-body">
           <div class="h2 mb-0 text--white">Voting Period</div>
-          <div class="dropdown aura-dropdown mt-4">
+          <div class="dropdown aura-dropdown mt-4" *ngIf="voting_Period_arr.length > 0">
             <button
                 class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-             <span>{{curr_voting_Period}}</span>
+             <span>{{curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title}}</span>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
               <ng-container *ngFor="let item of voting_Period_arr">
                 <li class="dropdown-item cursor-pointer">
-                  <button type="button" class="button p-0 body-03">
-                    {{item}}
+                  <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
+                    {{item.content.title}}
                   </button>
                 </li>
               </ng-container>
             </ul>
           </div>
+          <div class="mt-4 voting-period-btn--disable"
+              *ngIf="voting_Period_arr.length === 0">
+            No proposal within the voting period
+          </div>
           <div class="mt-3 card-child">
             <div class="d-flex align-items-center justify-content-between">
-              <div class="h5 mb-0 text--white">Voting status</div>
-              <a href="#" class="button button--sm button-outline button-pill px-4">
+              <div class="body-01 text--white">Turn out:
+                {{ curr_voting_Period ? (curr_voting_Period.turnout | number: global.formatNumber2Decimal) : 0 }}
+                %</div>
+              <button *ngIf="!curr_voting_Period" [disabled]="true"
+                      class="button button--sm button-outline button-pill px-4">
+                <span class="caption fw-normal">View detail</span>
+              </button>
+              <a *ngIf="curr_voting_Period" href="/votings/{{curr_voting_Period.proposal_id}}" class="button button--sm button-outline button-pill px-4">
                 <span class="caption fw-normal">View detail</span>
               </a>
             </div>
@@ -292,19 +302,27 @@
             <div class="d-flex align-items-center justify-content-between body-01">
               <div>
                   <div class="text--gray-2">Yes</div>
-                  <div class="fw-semibold text--gray-1">4,8%</div>
+                  <div class="fw-semibold text--gray-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.yes | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
               </div>
               <div>
                   <div class="text--gray-2">No</div>
-                  <div class="fw-semibold text--gray-1">4,8%</div>
+                  <div class="fw-semibold text--gray-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
               </div>
               <div>
                   <div class="text--gray-2">Veto</div>
-                  <div class="fw-semibold text--gray-1">4,8%</div>
+                  <div class="fw-semibold text--gray-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
               </div>
               <div>
                   <div class="text--gray-2">Abstain</div>
-                  <div class="fw-semibold text--gray-1">4,8%</div>
+                  <div class="fw-semibold text--gray-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
               </div>
             </div>
           </div>
