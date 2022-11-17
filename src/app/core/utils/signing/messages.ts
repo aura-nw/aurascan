@@ -1,12 +1,10 @@
 import { ChainInfo } from '@keplr-wallet/types';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
-import { MsgGrantAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
+import { MsgGrantAllowance, MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
 import { BasicAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
-import { Any } from 'cosmjs-types/google/protobuf/any';
+import { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
-import * as Long from 'long';
-
 // Staking
 export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
   /* istanbul ignore next */
@@ -102,7 +100,7 @@ export interface IGrantBasicAllowance {
   granter: MsgGrantAllowance['granter'];
   grantee: MsgGrantAllowance['grantee'];
   spendLimit: number | string | null;
-  expiration: Date;
+  expiration: number;
 }
 
 export function GrantBasicAllowance(
@@ -110,41 +108,63 @@ export function GrantBasicAllowance(
   { granter, grantee, spendLimit, expiration }: IGrantBasicAllowance,
   network: ChainInfo,
 ) {
-  const allowanceValue: BasicAllowance = {
-    spendLimit: spendLimit
-      ? [
-          {
-            denom: network.currencies[0].coinMinimalDenom,
-            amount: `${+spendLimit * Math.pow(10, network.currencies[0].coinDecimals)}`,
-          },
-        ]
-      : [],
-    expiration: {
-      seconds: Long.fromString(expiration.toString()),
-      nanos: 1,
-    },
-  };
-
-  let basicAllowance;
+  let msgGrantAllowance;
 
   try {
-    basicAllowance = {
-      typeUrl: TRANSACTION_TYPE_ENUM.BasicAllowance,
-      value: Uint8Array.from(BasicAllowance.encode(allowanceValue).finish()),
+    let timestamp: Timestamp = null;
+
+    if (expiration) {
+      timestamp = Timestamp.fromPartial({
+        seconds: expiration / 1000,
+        nanos: 0,
+      });
+    }
+
+    const allowanceValue: BasicAllowance = {
+      spendLimit: spendLimit
+        ? [
+            {
+              denom: network.currencies[0].coinMinimalDenom,
+              amount: `${+spendLimit * Math.pow(10, network.currencies[0].coinDecimals)}`,
+            },
+          ]
+        : [],
+      expiration: timestamp,
     };
+
+    const basicAllowance = {
+      typeUrl: TRANSACTION_TYPE_ENUM.BasicAllowance,
+      value: Uint8Array.from(BasicAllowance.encode(allowanceValue as any).finish()),
+    };
+
+    msgGrantAllowance = MsgGrantAllowance.fromPartial({
+      allowance: basicAllowance,
+      grantee,
+      granter,
+    });
   } catch (e) {
-    console.log('🐛 Debug', e);
+    console.log('🐛 Error', e);
   }
 
-  const msgGrantAllowance = MsgGrantAllowance.fromPartial({
-    allowance: basicAllowance,
+  return {
+    typeUrl: TRANSACTION_TYPE_ENUM.MsgGrantAllowance,
+    value: msgGrantAllowance || null,
+  };
+}
+
+export function RevokeAllowance(
+  senderAddress: string,
+  { granter, grantee, spendLimit, expiration }: IGrantBasicAllowance,
+  network: ChainInfo,
+) {
+  const msgRevokeAllowance = MsgRevokeAllowance.fromPartial({
     grantee,
     granter,
   });
 
   return {
-    typeUrl: TRANSACTION_TYPE_ENUM.MsgGrantAllowance,
-    value: msgGrantAllowance,
+    typeUrl: TRANSACTION_TYPE_ENUM.MsgRevokeAllowance,
+    value: msgRevokeAllowance || null,
   };
 }
 
@@ -155,4 +175,5 @@ export const messageCreators = {
   Vote,
   Redelegate,
   GrantBasicAllowance,
+  RevokeAllowance,
 };

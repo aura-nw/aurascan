@@ -127,6 +127,7 @@ export const SIGNING_MESSAGE_TYPES = {
   WRITE_CONTRACT: `WriteContract`,
   UNKNOWN: `UnknownTx`,
   GRANT_BASIC_ALLOWANCE: 'GrantBasicAllowance',
+  REVOKE_ALLOWANCE: 'RevokeAllowance',
 };
 
 export enum ESigningType {

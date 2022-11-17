@@ -114,7 +114,7 @@ export class PopupAddGrantComponent implements OnInit {
           granter,
           grantee: grantee_address,
           spendLimit: amount,
-          expiration: expiration_time ? moment(expiration_time).toDate() : null,
+          expiration: expiration_time ? moment(expiration_time).toDate().getTime() : null,
         },
         senderAddress: granter,
         network: this.environmentService.configValue.chain_info,
