@@ -16,6 +16,7 @@ import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../../../app/global/global';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-block-detail',
@@ -80,12 +81,12 @@ export class BlockDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private blockService: BlockService,
-    private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
+    private clipboard: Clipboard,
   ) {}
 
   ngOnInit(): void {
@@ -171,5 +172,19 @@ export class BlockDetailComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  copyData(text: string): void {
+    var dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    this.clipboard.copy(JSON.stringify(text, null, 2));
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function () {
+      document.getElementById('popupCopy').click();
+    }, 800);
   }
 }
