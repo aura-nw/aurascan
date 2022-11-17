@@ -1,5 +1,20 @@
-<app-pagetitle title="Validator Details" [displayInfo]="true"></app-pagetitle>
+<div class="d-flex align-items-center mb-4 mb-md-6">
+  <app-pagetitle title="Validator Details" [displayInfo]="true" class="flex-grow-1"></app-pagetitle>
+  <button
+    type="button"
+    class="button button-pill button-flat button--lg button--sm-mob ml-6 fw-semibold"
+    *ngIf="
+      currentValidatorDetail &&
+      !currentValidatorDetail?.jailed &&
+      currentValidatorDetail?.status === statusValidator.Active
+    "
+    (click)="openDialog()">
+    Delegate
+  </button>
+</div>
+
 <section *ngIf="{ value: breakpoint$ | async } as breakpoint">
+  <!-- Summary info -->
   <div class="card text--white" *ngIf="currentValidatorDetail">
     <div class="card-header header-mob pb-0">
       <div class="d-flex align-items-center">
@@ -77,7 +92,9 @@
       </div>
       <div class="divider divider-horizontal mt-4"></div>
     </div>
-    <div class="card-body body-01 pt-4 text--gray-4">
+    <!-- Aura Marking Milestone -->
+    <app-milestone></app-milestone>
+    <div class="card-body body-01 pt-2 text--gray-4">
       <div class="row">
         <div class="col-12 col-lg-6">
           <!-- Website -->
@@ -153,6 +170,7 @@
   <div class="card py-10" *ngIf="!currentValidatorDetail">
     <app-loading-sprint></app-loading-sprint>
   </div>
+  <!-- Proposed Blocks + Uptime -->
   <div class="row">
     <div class="col-xl-6">
       <div class="card text--white">
@@ -293,6 +311,7 @@
       </div>
     </div>
   </div>
+  <!-- Delegators + Power Events -->
   <div class="row mt-1">
     <div class="col-xl-6">
       <div class="card text--white">
@@ -488,3 +507,9 @@
     </div>
   </div>
 </section>
+
+<app-delegate-item
+  [currentValidatorDetail]="currentValidatorDetail"
+  [isOpenDialog]="isOpenDialog"
+  (changeStatus)="updateStatus($event)"
+  (reloadData)="loadData()"></app-delegate-item>

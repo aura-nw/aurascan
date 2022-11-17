@@ -78,12 +78,16 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentNextKey = null;
   nextKeyBlock = null;
   currentNextKeyBlock = null;
+  isOpenDialog = false;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  chainInfo = this.environmentService.configValue.chain_info;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -98,16 +102,21 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.getDetail();
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+
+    this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
     }, 30000);
     this.timerGetBlockMiss = setInterval(() => {
       this.getBlocksMiss(this.consAddress);
     }, 10000);
+  }
+
+  loadData(){
+    this.getDetail();
+    this.getListBlockWithOperator();
+    this.getListDelegator();
+    this.getListPower();
   }
 
   ngOnDestroy() {
@@ -127,6 +136,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           ...res.data,
           self_bonded: balanceOf(res.data.self_bonded),
           power: balanceOf(res.data.power),
+          identity: res?.data?.identity,
           up_time: 100,
         };
 
@@ -173,7 +183,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         const block = _.get(data, 'blocks').map((element) => {
           const height = _.get(element, 'block.header.height');
           const block_hash = _.get(element, 'block_id.hash');
-          const isMissed = 0
+          const isMissed = 0;
           return { height, block_hash, isMissed };
         });
         this.arrayUpTime = block;
@@ -266,7 +276,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
           return { tx_hash, amount, isStakeMode, height, timestamp };
         });
-        if (this.dataSourcePower.data.length > 0) {
+        if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
           this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
         } else {
           this.dataSourcePower.data = [...txs];
@@ -326,7 +336,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         const next = length <= (pageIndex + 2) * pageSize;
         if (next && this.nextKey && this.currentNextKey !== this.nextKey) {
           this.getListPower(this.nextKey);
-          this.currentNextKey =  this.nextKey;
+          this.currentNextKey = this.nextKey;
         }
         this.pageIndexPower = page.pageIndex;
         break;
@@ -360,5 +370,13 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
       return;
     }
+  }
+
+  openDialog() {
+    this.isOpenDialog = true;
+  }
+
+  updateStatus(event){
+    this.isOpenDialog = event;
   }
 }

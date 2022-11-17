@@ -1,0 +1,45 @@
+.text-header {
+  color: var(--aura-gray-4);
+}
+
+.nft-row {
+  background: rgba(19, 20, 25, 0.5);
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  .nft-item {
+    text-align: center;
+    padding: 0 var(--spacer-3);
+    min-width: 120px;
+    &__img {
+      width: 77px;
+      height: 77px;
+      padding: 6px;
+      background: linear-gradient(136.06deg, #d9d9d9 -2.78%, #838383 100.93%);
+      border-radius: 17px;
+      &-contain {
+        background: linear-gradient(125.66deg, #c4c4c4 18.29%, rgba(255, 255, 255, 0.7) 81.75%);
+        border-radius: 17px;
+        padding: 7px;
+        img {
+          background: linear-gradient(122.11deg, rgba(5, 5, 5, 0.5) 30.25%, rgba(63, 58, 58, 0.25) 95.11%);
+          border: 2px solid #d9d9d9;
+          border-radius: 50%;
+          padding: 7px;
+        }
+      }
+    }
+    &__title {
+      max-width: 125px;
+    }
+    @media (max-width: 991.99px) {
+      padding: 0 var(--spacer-1);
+      margin-right: 0px;
+      min-width: 100px;
+      &__img {
+        width: 64px;
+        height: 64px;
+      }
+    }
+  }
+}

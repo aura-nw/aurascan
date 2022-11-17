@@ -23,9 +23,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
 import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.component';
 import {  NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { MilestoneComponent } from './milestone/milestone.component';
+import { DelegateItemComponent } from './validators-detail/delegate-item/delegate-item.component';
 
 @NgModule({
-  declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent],
+  declarations: [ValidatorsComponent, ValidatorsDetailComponent, UserWalletInfoComponent, MilestoneComponent, DelegateItemComponent],
   imports: [
     CommonModule,
     ValidatorsRoutingModule,

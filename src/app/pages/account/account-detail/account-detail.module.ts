@@ -20,9 +20,10 @@ import { AccountDetailTableModule } from './account-detail-table/account-detail-
 import { AccountDetailComponent } from './account-detail.component';
 import { NftListComponent } from './nft-list/nft-list.component';
 import { TokenTableComponent } from './token-table/token-table.component';
+import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
 
 @NgModule({
-  declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent],
+  declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent, SoulboundTokenComponent],
   imports: [
     CommonModule,
     AccountDetailRoutingModule,

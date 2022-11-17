@@ -69,7 +69,7 @@
           </div>
           <!-- Desktop card info -->
           <div class="d-none d-lg-block card py-3 px-6">
-            <div class="d-flex">
+          <div class="d-flex" *ngIf="!isSoulBound">
               <div class="flex-shrink-0 flex-grow-1 w-auto">
                 <div class="body-01 text--gray-5 mb-1">Min. Price</div>
                 <div class="h3 mb-0 text--white">
@@ -98,6 +98,10 @@
                 </div>
               </div>
             </div>
+          <div class="d-flex" *ngIf="isSoulBound">
+            <div class="button button-pill button--lg button-outline button-outline--gradient button-outline__in-card w-100">Equip</div>
+            <div class="button button-pill button--lg button-outline ml-4 w-100">Un-equip</div>
+          </div>
           </div>
           <!-- Mobile card info -->
           <div class="d-lg-none">
@@ -200,6 +204,10 @@
             <div class="card__ntf-detail-item body-02">
               <div class="label-detail text--gray-5">Token Standard:</div>
               <div class="text--gray-1 fw-normal-mob">CW-721</div>
+          </div>
+          <div class="card__ntf-detail-item body-02" *ngIf="isSoulBound">
+            <div class="label-detail text--gray-5">Status:</div>
+            <div class="text--gray-1 fw-normal-mob">On chain</div>
             </div>
           </div>
         </div>

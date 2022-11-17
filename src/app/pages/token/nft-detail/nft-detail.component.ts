@@ -38,7 +38,7 @@ export class NFTDetailComponent implements OnInit {
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-
+  isSoulBound = true;
   loading = false;
   nftId = '';
   contractAddress = '';

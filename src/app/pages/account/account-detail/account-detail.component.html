@@ -1,4 +1,6 @@
-<app-pagetitle title="Account Details"></app-pagetitle>
+<div class="mb-4 mb-md-6">
+  <app-pagetitle title="Account Details"></app-pagetitle>
+</div>
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
   <div class="card">
@@ -82,6 +84,8 @@
     </ul>
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
+      <!-- Soulbound Tokens -->
+      <app-soulbound-token></app-soulbound-token>
       <!-- Coin & Token-->
       <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ totalAssets || 0 }})</h2>
       <app-token-table
