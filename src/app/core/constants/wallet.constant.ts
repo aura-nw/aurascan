@@ -127,6 +127,7 @@ export const SIGNING_MESSAGE_TYPES = {
   WRITE_CONTRACT: `WriteContract`,
   UNKNOWN: `UnknownTx`,
   GRANT_BASIC_ALLOWANCE: 'GrantBasicAllowance',
+  GRANT_PERIODIC_ALLOWANCE: 'GrantPeriodicAllowance',
   REVOKE_ALLOWANCE: 'RevokeAllowance',
 };
 

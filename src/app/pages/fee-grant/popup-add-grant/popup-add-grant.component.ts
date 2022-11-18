@@ -106,14 +106,17 @@ export class PopupAddGrantComponent implements OnInit {
       return;
     }
 
+    console.log(expiration_time);
     const executeStaking = async () => {
       const { hash, error } = await this.walletService.signAndBroadcast({
-        messageType: SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
+        messageType: period_amount ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
         message: {
           granter,
-          grantee: grantee_address,
+          grantee: grantee_address.trim(),
           spendLimit: amount,
           expiration: expiration_time ? moment(expiration_time).toDate()?.getTime() : null,
+          period: period_day ? period_day * 24 * 60 * 60 : undefined,
+          periodSpendLimit: period_amount,
         },
         senderAddress: granter,
         network: this.environmentService.configValue.chain_info,
@@ -121,7 +124,11 @@ export class PopupAddGrantComponent implements OnInit {
         chainId: this.walletService.chainId,
       });
 
-      this.closeDialog(hash);
+      console.log(error);
+      
+      if(hash){
+        this.closeDialog(hash);
+      }
     };
 
     executeStaking();

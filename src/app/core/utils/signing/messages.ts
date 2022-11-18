@@ -2,8 +2,9 @@ import { ChainInfo } from '@keplr-wallet/types';
 import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1beta1/tx';
 import { MsgBeginRedelegate, MsgDelegate, MsgUndelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import { MsgGrantAllowance, MsgRevokeAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/tx';
-import { BasicAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
+import { BasicAllowance, PeriodicAllowance } from 'cosmjs-types/cosmos/feegrant/v1beta1/feegrant';
 import { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
+import { Duration } from 'cosmjs-types/google/protobuf/duration';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 // Staking
 export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
@@ -111,7 +112,7 @@ export function GrantBasicAllowance(
   let msgGrantAllowance;
 
   try {
-    let timestamp: Timestamp = null;
+    let timestamp: Timestamp = undefined;
 
     if (expiration) {
       timestamp = Timestamp.fromPartial({
@@ -129,16 +130,105 @@ export function GrantBasicAllowance(
             },
           ]
         : [],
-      expiration: timestamp,
+      expiration: timestamp ? timestamp : undefined,
     };
+
+    console.log('allowanceValue', allowanceValue);
 
     const basicAllowance = {
       typeUrl: TRANSACTION_TYPE_ENUM.BasicAllowance,
       value: Uint8Array.from(BasicAllowance.encode(allowanceValue as any).finish()),
     };
 
+    console.log('basicAllowance', basicAllowance);
+
     msgGrantAllowance = MsgGrantAllowance.fromPartial({
       allowance: basicAllowance,
+      grantee,
+      granter,
+    });
+  } catch (e) {
+    console.log('🐛 Error', e);
+  }
+
+  return {
+    typeUrl: TRANSACTION_TYPE_ENUM.MsgGrantAllowance,
+    value: msgGrantAllowance || null,
+  };
+}
+
+export interface IGrantPeriodicAllowance {
+  granter: MsgGrantAllowance['granter'];
+  grantee: MsgGrantAllowance['grantee'];
+  spendLimit: number | string | null;
+  expiration: number;
+  period: Duration;
+  periodSpendLimit: number;
+}
+
+export function GrantPeriodicAllowance(
+  senderAddress: string,
+  { granter, grantee, spendLimit, expiration, period, periodSpendLimit }: IGrantPeriodicAllowance,
+  network: ChainInfo,
+) {
+  let msgGrantAllowance;
+
+  try {
+    let timestamp: Timestamp = undefined;
+
+    if (expiration) {
+      timestamp = Timestamp.fromPartial({
+        seconds: expiration / 1000,
+        nanos: 0,
+      });
+    }
+
+    let timestampPeriod: Duration = undefined;
+    if (period) {
+      timestampPeriod = Duration.fromPartial({
+        seconds: period.toString(),
+        nanos: 0,
+      });
+    }
+
+    let periodSpend = periodSpendLimit
+      ? [
+          {
+            denom: network.currencies[0].coinMinimalDenom,
+            amount: `${+periodSpendLimit * Math.pow(10, network.currencies[0].coinDecimals)}`,
+          },
+        ]
+      : [];
+
+    const allowanceValue: PeriodicAllowance = {
+      basic: {
+        spendLimit: spendLimit
+          ? [
+              {
+                denom: network.currencies[0].coinMinimalDenom,
+                amount: `${+spendLimit * Math.pow(10, network.currencies[0].coinDecimals)}`,
+              },
+            ]
+          : [],
+        expiration: timestamp,
+      },
+      period: timestampPeriod,
+      periodSpendLimit: periodSpend,
+      periodCanSpend: periodSpend,
+      periodReset: undefined,
+    };
+
+    console.log('allowanceValue', allowanceValue);
+
+    const periodicAllowance = {
+      typeUrl: TRANSACTION_TYPE_ENUM.PeriodicAllowance,
+      value: Uint8Array.from(PeriodicAllowance.encode(allowanceValue as any).finish()),
+    };
+
+    console.log('basicAllowance', periodicAllowance);
+
+    msgGrantAllowance = MsgGrantAllowance.fromPartial({
+      allowance: periodicAllowance,
       grantee,
       granter,
     });
@@ -175,5 +265,6 @@ export const messageCreators = {
   Vote,
   Redelegate,
   GrantBasicAllowance,
+  GrantPeriodicAllowance,
   RevokeAllowance,
 };
