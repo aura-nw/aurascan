@@ -50,6 +50,7 @@ export class MyGrantersComponent implements OnInit {
   };
   nextKey = null;
   currentKey = null;
+  currentAddress = null;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
@@ -60,10 +61,13 @@ export class MyGrantersComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.getGranteesData();
+    // await this.getGranteesData();
+
+    this.currentAddress = 'aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx';
+    this.getGrantersData();
   }
 
-  async getGranteesData() {
+  async getGrantersData() {
     this.loading = true;
     if (this.isActive) {
       this.templates = this.templatesActive;
@@ -75,16 +79,30 @@ export class MyGrantersComponent implements OnInit {
     await this.getListGrant();
   }
 
-  getListGrant(filterSearch = '') {
-    this.feeGrantService.getListFeeGrants(filterSearch, true).subscribe((res) => {
+  getListGrant() {
+    let filterSearch = {};
+    filterSearch['textSearch'] = '';
+    filterSearch['isGranter'] = true;
+    filterSearch['isActive'] = this.isActive;
+
+    this.feeGrantService.getListFeeGrants(filterSearch, this.currentAddress, this.nextKey).subscribe((res) => {
       const { code, data } = res;
       if (code === 200) {
+        this.nextKey = res.data.nextKey;
         data.grants.forEach((element) => {
           element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
           element.limit = element?.spend_limit?.amount || '0';
           element.spendable = element?.amount?.amount || '0';
         });
-        this.dataSource.data = data.grants;
+
+        if (this.dataSource?.data?.length > 0) {
+          this.dataSource.data = [...this.dataSource.data, ...data.grants];
+        } else {
+          this.dataSource.data = [...data.grants];
+        }
+
+        // this.dataSource.data = data.grants;
+        this.pageData.length = this.dataSource.data.length;
       }
       this.loading = false;
     });
@@ -93,7 +111,7 @@ export class MyGrantersComponent implements OnInit {
   searchToken(): void {
     this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
-      this.getListGrant(this.textSearch);
+      // this.getListGrant(this.textSearch);
     }
   }
 
@@ -102,19 +120,21 @@ export class MyGrantersComponent implements OnInit {
     this.getListGrant();
   }
 
-  paginatorEmit(e: MatPaginator): void {
+  pageEvent(e: PageEvent): void {
     const { pageIndex, pageSize } = e;
     const next = this.pageData.length <= (pageIndex + 2) * pageSize;
-
     this.pageData.pageIndex = e.pageIndex;
+
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getGranteesData();
+      this.getGrantersData();
       this.currentKey = this.nextKey;
     }
   }
 
   async changeType(type: boolean) {
     this.isActive = type;
-    await this.getGranteesData();
+    this.dataSource.data = null;
+    this.nextKey = null;
+    await this.getGrantersData();
   }
 }

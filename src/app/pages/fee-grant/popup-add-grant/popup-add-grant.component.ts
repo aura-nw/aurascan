@@ -44,6 +44,7 @@ export class PopupAddGrantComponent implements OnInit {
     }
     // validator min date
     this.currDate = new Date();
+    this.currDate.setDate(this.currDate.getDate() + 1);
   }
 
   formInit() {
@@ -80,8 +81,8 @@ export class PopupAddGrantComponent implements OnInit {
     this.grantForm.controls[controlName].setValue(1000000);
   }
 
-  closeDialog() {
-    this.dialogRef.close('');
+  closeDialog(hash = null) {
+    this.dialogRef.close(hash);
   }
 
   changePeriodStage(stage: boolean) {
@@ -97,8 +98,6 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log(this.grantForm.value);
-
     const granter = this.walletService.wallet?.bech32Address;
     const { grantee_address, expiration_time, period_amount, period_day, amount, execute_contract } =
       this.grantForm.value;
@@ -114,7 +113,7 @@ export class PopupAddGrantComponent implements OnInit {
           granter,
           grantee: grantee_address,
           spendLimit: amount,
-          expiration: expiration_time ? moment(expiration_time).toDate().getTime() : null,
+          expiration: expiration_time ? moment(expiration_time).toDate()?.getTime() : null,
         },
         senderAddress: granter,
         network: this.environmentService.configValue.chain_info,
@@ -122,7 +121,7 @@ export class PopupAddGrantComponent implements OnInit {
         chainId: this.walletService.chainId,
       });
 
-      console.log({ hash, error });
+      this.closeDialog(hash);
     };
 
     executeStaking();

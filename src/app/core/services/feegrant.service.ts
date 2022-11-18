@@ -14,19 +14,21 @@ export class FeeGrantService extends CommonService {
     super(http, environmentService);
   }
 
-  getListFeeGrants(textSearch, isGranter = false): Observable<any> {
+  getListFeeGrants(filterSearch, currentAddress, nextKey = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
-      granter: isGranter ? textSearch : null,
-      grantee: !isGranter ? textSearch : null,
-      pageLimit: 10,
-      pageOffset: 0,
+      granter: filterSearch['isGranter'] ? currentAddress : null,
+      grantee: !filterSearch['isGranter'] ? currentAddress : null,
+      status: 'Available',
+      pageLimit: 100,
+      nextKey: nextKey,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${this.indexerUrl}/feegrant/get-grants`, {
+    let urlLink = filterSearch['isActive'] ? 'get-grants' : 'get-grants-inactive';
+    return this.http.get<any>(`${this.indexerUrl}/feegrant/${urlLink}`, {
       params,
     });
   }

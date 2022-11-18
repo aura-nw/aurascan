@@ -22,8 +22,8 @@ export class PopupRevokeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  closeDialog() {
-    this.dialogRef.close('');
+  closeDialog(hash = null) {
+    this.dialogRef.close(hash);
   }
 
   connectWallet(): void {
@@ -32,10 +32,9 @@ export class PopupRevokeComponent implements OnInit {
 
   executeRevoke() {
     //TODO
-
     const granter = this.walletService.wallet?.bech32Address;
 
-    const executeStaking = async () => {
+    const executeRevoke = async () => {
       const { hash, error } = await this.walletService.signAndBroadcast({
         messageType: SIGNING_MESSAGE_TYPES.REVOKE_ALLOWANCE,
         message: {
@@ -52,8 +51,9 @@ export class PopupRevokeComponent implements OnInit {
         hash,
         error,
       });
+      this.closeDialog(hash);
     };
 
-    executeStaking();
+    executeRevoke();
   }
 }

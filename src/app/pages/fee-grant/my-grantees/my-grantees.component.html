@@ -118,7 +118,7 @@
             <app-paginator
               [length]="pageData.length"
               [pageSize]="pageData.pageSize"
-              (paginator)="paginatorEmit($event)">
+              (pageEvent)="pageEvent($event)">
             </app-paginator>
           </div>
         </ng-container>

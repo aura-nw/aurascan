@@ -18,6 +18,8 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {ClickOutsideModule} from "ng-click-outside";
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,6 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
     MatDatepickerModule,
     ClickOutsideModule
   ],
-  providers: [FormBuilder, FeeGrantService]
+  providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService]
 })
 export class FeeGrantModule {}
