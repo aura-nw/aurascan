@@ -9,6 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
 
 @Component({
@@ -16,7 +17,6 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './my-granters.component.html',
   styleUrls: ['./my-granters.component.scss'],
 })
-
 export class MyGrantersComponent implements OnInit {
   loading = true;
   isActive = true;
@@ -58,16 +58,21 @@ export class MyGrantersComponent implements OnInit {
     public global: Globals,
     private environmentService: EnvironmentService,
     private feeGrantService: FeeGrantService,
+    private walletService: WalletService,
   ) {}
 
-  async ngOnInit() {
-    // await this.getGranteesData();
-
-    this.currentAddress = 'aura1afuqcya9g59v0slx4e930gzytxvpx2c43xhvtx';
-    this.getGrantersData();
+  ngOnInit() {
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.currentAddress = wallet.bech32Address;
+        this.getGrantersData();
+      } else {
+        this.currentAddress = null;
+      }
+    });
   }
 
-  async getGrantersData() {
+  getGrantersData() {
     this.loading = true;
     if (this.isActive) {
       this.templates = this.templatesActive;
@@ -76,7 +81,7 @@ export class MyGrantersComponent implements OnInit {
       this.templates = this.templatesInActive;
       this.displayedColumns = this.templatesInActive.map((dta) => dta.matColumnDef);
     }
-    await this.getListGrant();
+    this.getListGrant();
   }
 
   getListGrant() {
@@ -85,7 +90,7 @@ export class MyGrantersComponent implements OnInit {
     filterSearch['isGranter'] = true;
     filterSearch['isActive'] = this.isActive;
 
-    this.feeGrantService.getListFeeGrants(filterSearch, this.currentAddress, this.nextKey).subscribe((res) => {
+    this.feeGrantService.getListFeeGrants(filterSearch, this.currentAddress, this.nextKey, true).subscribe((res) => {
       const { code, data } = res;
       if (code === 200) {
         this.nextKey = res.data.nextKey;
@@ -100,8 +105,6 @@ export class MyGrantersComponent implements OnInit {
         } else {
           this.dataSource.data = [...data.grants];
         }
-
-        // this.dataSource.data = data.grants;
         this.pageData.length = this.dataSource.data.length;
       }
       this.loading = false;
@@ -111,12 +114,14 @@ export class MyGrantersComponent implements OnInit {
   searchToken(): void {
     this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
-      // this.getListGrant(this.textSearch);
+      this.dataSource.data = null;
+      this.getListGrant();
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
+    this.dataSource.data = null;
     this.getListGrant();
   }
 
@@ -128,6 +133,20 @@ export class MyGrantersComponent implements OnInit {
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
       this.getGrantersData();
       this.currentKey = this.nextKey;
+    }
+  }
+
+  paginatorEmit(e: MatPaginator): void {
+    if (this.dataSource.paginator) {
+      e.page.next({
+        length: this.dataSource.paginator.length,
+        pageIndex: 0,
+        pageSize: this.dataSource.paginator.pageSize,
+        previousPageIndex: this.dataSource.paginator.pageIndex,
+      });
+      this.dataSource.paginator = e;
+    } else {
+      this.dataSource.paginator = e;
     }
   }
 

@@ -80,7 +80,9 @@
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
-                          {{ data[template.matColumnDef] ? (data[template.matColumnDef] | customDate: 'yyyy-MM-dd') : '-'  }}
+                          {{
+                            data[template.matColumnDef] ? (data[template.matColumnDef] | customDate: 'yyyy-MM-dd') : '-'
+                          }}
                         </div>
                         <div *ngSwitchCase="'spendable'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
@@ -111,17 +113,17 @@
                   </td>
                 </ng-container>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <app-paginator
-              [length]="pageData.length"
-              [pageSize]="pageData.pageSize"
-              (pageEvent)="pageEvent($event)">
-            </app-paginator>
           </div>
         </ng-container>
+        <app-paginator
+          [length]="pageData?.length"
+          [pageSize]="pageData?.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>
         </ng-template>

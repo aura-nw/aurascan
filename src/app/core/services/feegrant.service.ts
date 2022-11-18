@@ -14,11 +14,20 @@ export class FeeGrantService extends CommonService {
     super(http, environmentService);
   }
 
-  getListFeeGrants(filterSearch, currentAddress, nextKey = null): Observable<any> {
+  getListFeeGrants(filterSearch, currentAddress, nextKey = null, isGranter = false): Observable<any> {
+    let granter;
+    let grantee;
+    if (isGranter) {
+      grantee = currentAddress;
+      granter = filterSearch['textSearch'];
+    } else {
+      granter = currentAddress;
+      grantee = filterSearch['textSearch'];
+    }
     const params = _({
       chainid: this.chainInfo.chainId,
-      granter: filterSearch['isGranter'] ? currentAddress : null,
-      grantee: !filterSearch['isGranter'] ? currentAddress : null,
+      granter: granter,
+      grantee: grantee,
       status: 'Available',
       pageLimit: 100,
       nextKey: nextKey,
