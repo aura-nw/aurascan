@@ -1,0 +1,38 @@
+<app-pagetitle title="Soulbound Token"></app-pagetitle>
+<section class="mt-6">
+  <div class="card">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
+        <div class="h2 mb-0 text--white">Smart Contracts</div>
+        <form class="aura-form single-input-field search-form-sbcontract" #searchForm>
+          <div class="input-group">
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Search for Tx Hash, Address or Status"
+                [(ngModel)]="textSearch"
+                [maxLength]="maxLengthSearch"
+                (keyup)="searchToken()"
+                name="search"
+                autocomplete="off" />
+            <button
+                type="submit"
+                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                (click)="searchToken()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

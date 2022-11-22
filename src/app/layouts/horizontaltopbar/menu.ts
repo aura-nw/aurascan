@@ -113,24 +113,30 @@ export const MENU: MenuItem[] = [
       // }
     ]
   },
-  // {
-  //   id: 5,
-  //   label: 'MENUITEMS.MORE',
-  //   icon: 'list',
-  //   name: MenuName.More,
-  //   subItems: [
-  //   {
-  //     id: 1,
-  //     label: 'Fee Grant',
-  //     link: '/fee',
-  //     icon: 'gas-pump',
-  //   },
-  //   {
-  //     id: 2,
-  //     label: 'Multi-send',
-  //     link: '/fee',
-  //     icon: 'users-three',
-  //   }
-  //   ]
-  // },
+  {
+    id: 5,
+    label: 'MENUITEMS.MORE',
+    icon: 'list',
+    name: MenuName.More,
+    subItems: [
+    {
+      id: 1,
+      label: 'Soulbound Token',
+      link: '/soulbound',
+      icon: 'users-three',
+    }
+    // {
+    //   id: 2,
+    //   label: 'Multi-send',
+    //   link: '/fee',
+    //   icon: 'users-three',
+    // },
+    // {
+    //   id: 3,
+    //   label: 'Fee Grant',
+    //   link: '/fee',
+    //   icon: 'gas-pump',
+    // }
+    ]
+  },
 ];
