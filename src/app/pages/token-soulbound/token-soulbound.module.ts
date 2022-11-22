@@ -13,6 +13,10 @@ import { TokenSoulboundDetailPopupComponent } from './token-soulbound-detail-pop
 import {SharedModule} from "src/app/shared/shared.module";
 import {FormsModule} from "@angular/forms";
 import {CommonPipeModule} from "src/app/core/pipes/common-pipe.module";
+import {MatTableModule} from "@angular/material/table";
+import {PaginatorModule} from "src/app/shared/components/paginator/paginator.module";
+import {TranslateModule} from "@ngx-translate/core";
+import {TableNoDataModule} from "src/app/shared/components/table-no-data/table-no-data.module";
 
 
 @NgModule({
@@ -31,7 +35,11 @@ import {CommonPipeModule} from "src/app/core/pipes/common-pipe.module";
     TokenSoulboundRoutingModule,
     SharedModule,
     FormsModule,
-    CommonPipeModule
+    CommonPipeModule,
+    MatTableModule,
+    PaginatorModule,
+    TranslateModule,
+    TableNoDataModule
   ]
 })
 export class TokenSoulboundModule { }
