@@ -21,4 +21,5 @@ export enum ContractTransactionType {
 export enum ContractRegisterType {
   CW20 = 'CW20',
   CW721 = 'CW721',
+  CW4973 = 'CW4973',
 }
