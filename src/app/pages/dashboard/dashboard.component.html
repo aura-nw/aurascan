@@ -60,8 +60,11 @@
                     <div class="ml-2 ml-xl-4">
                   <div class="mb-2 body-01 text--gray-1">Price</div>
                   <div class="text--white h2 h3-mob mb-0 fw-semibold">
-                    <span>$0.09037</span>
-                    <span class="ml-1 body text--primary">(+3.5%)</span>
+                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].current_price | number: '1.2-2')) : '-'}}</span>
+                    <span class="ml-1 body text--primary">
+                      {{(tokenInfo?.length > 0 && tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
+                        ('(+'+tokenInfo[tokenInfo.length-1].price_change_percentage_24h + '%)') : ''}}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -72,7 +75,7 @@
                 <div class="ml-2 ml-xl-4">
                   <div class="mb-2 body-01 text--gray-1">Market Cap</div>
                   <div class="text--white h2 h3-mob mb-0 fw-semibold">
-                    <span>$90,368,467</span>
+                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].market_cap | number : '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
               </div>
@@ -83,7 +86,7 @@
                 <div class="ml-2 ml-xl-4">
                   <div class="mb-2 body-01 text--gray-1">24h Vol Trading</div>
                   <div class="text--white h2 h3-mob mb-0 fw-semibold">
-                    <span>$3,536</span>
+                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].total_volume | number : '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
               </div>
@@ -95,12 +98,12 @@
               <div class="button-switch-stage button-switch-stage__1">
                 <button type="button"
                         [class.active]="isPrice"
-                        (click)="isPrice = true;">
+                        (click)="isPrice = true; getCoinInfo(chartRange)">
                   <span>Price</span>
                 </button>
                 <button type="button"
                         [class.active]="!isPrice"
-                        (click)="isPrice = false;">
+                        (click)="isPrice = false; getCoinInfo(chartRange)">
                   <span>Volume</span>
                 </button>
               </div>
@@ -109,22 +112,22 @@
                   <div class="button-switch-stage button-switch-stage__2">
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.M_60"
-                            (click)="updateBlockAndTxs(chartRangeData.M_60)">
+                            (click)="getCoinInfo(chartRangeData.M_60)">
                       <span>60M</span>
                     </button>
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.H_24"
-                            (click)="updateBlockAndTxs(chartRangeData.H_24)">
+                            (click)="getCoinInfo(chartRangeData.H_24)">
                       <span>24H</span>
                     </button>
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.D_30"
-                            (click)="updateBlockAndTxs(chartRangeData.D_30)">
+                            (click)="getCoinInfo(chartRangeData.D_30)">
                       <span>30D</span>
                     </button>
                     <button type="button"
                             [class.active]="chartRange === chartRangeData.MONTH_12"
-                            (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
+                            (click)="getCoinInfo(chartRangeData.MONTH_12)">
                       <span>12M</span>
                     </button>
                   </div>

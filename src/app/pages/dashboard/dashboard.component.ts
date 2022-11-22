@@ -14,7 +14,7 @@ import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
+import {CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE} from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
@@ -73,6 +73,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   voting_Period_arr = [];
 
   staking_APR = 0;
+  tokenIdGetPrice = TOKEN_ID_GET_PRICE;
+  tokenInfo;
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
@@ -89,7 +91,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
-    // somewhere in your code
+    // config chart
     this.chart = createChart(document.getElementById('chart'), {
       height: 244,
       crosshair: {
@@ -163,7 +165,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
       this.chartDataExp.push({
         date: dateF,
-        transactions: +data.value,
+        value: +data.value,
       });
       transactionData.push(+data.value);
     });
@@ -183,7 +185,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getListBlock();
     this.getListTransaction();
     setTimeout(() => {
-      this.updateBlockAndTxs(this.chartRange);
+      // new
+      this.getCoinInfo(this.chartRange);
+      // old
+      // this.updateBlockAndTxs(this.chartRange);
     }, 1000);
     this.cdr.detectChanges();
   }
@@ -235,6 +240,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getCoinInfo(type: string) {
+    this.chartRange = type;
+    this.commonService.getTokenByCoinId(this.chartRange, this.tokenIdGetPrice.AURA).subscribe(res => {
+      //update data common
+      this.getInfoCommon();
+      if(res?.data?.length > 0) {
+        this.tokenInfo = res.data;
+        console.log(this.tokenInfo)
+        const dataX = (this.isPrice) ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
+        let dataY = res.data.map((i) => i.timestamp);
+        this.drawChart(dataX, dataY);
+      }
+    });
+  }
+
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
       getInfo(this.global, res.data);
@@ -278,23 +298,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     this.SETTINGS_FOR_EXPORT = {
       // Table settings
-      fileName: 'Transactions_' + this.currDate,
+      fileName: (this.isPrice ? 'Price_' : 'Volume_') + this.currDate,
       workSheets: [
         {
-          sheetName: 'Transactions',
+          sheetName: (this.isPrice ? 'Price' : 'Volume'),
           startingRowNumber: 2,
           gapBetweenTwoTables: 2,
           tableSettings: {
             table1: {
-              tableTitle: 'Transactions value ' + type,
+              tableTitle: (this.isPrice ? 'Price' : 'Volume') + ' value ' + type,
               headerDefinition: [
                 {
                   name: 'Date',
                   key: 'date',
                 },
                 {
-                  name: 'Transactions',
-                  key: 'transactions',
+                  name: 'Value',
+                  key: 'value',
                 },
               ],
             },

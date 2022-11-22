@@ -17,6 +17,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import {CommonService} from "src/app/core/services/common.service";
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -38,6 +39,6 @@ import { DashboardComponent } from './dashboard.component';
     TranslateModule,
     TableNoDataModule,
   ],
-  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService],
+  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService],
 })
 export class DashboardModule {}
