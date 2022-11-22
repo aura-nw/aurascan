@@ -19,10 +19,10 @@
         </td>
       </tr>
 
-      <tr>
+      <tr *ngIf="!tokenDetail.isNFTContract">
         <td colspan="2" class="py-2">
           <div class="d-flex">
-            <div class="{{ !tokenDetail.isNFTContract ? 'flex-item' : 'd-flex d-lg-block' }}">
+            <div class="flex-item">
               <div class="text--gray-5 body-02 fixed-col">
                 <span>Price:</span>
               </div>
