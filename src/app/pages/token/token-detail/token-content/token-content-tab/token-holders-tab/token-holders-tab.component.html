@@ -1,18 +1,20 @@
 <div class="row">
-<!--  <div class="col-12">-->
-<!--     <button class="button button-outline button-outline__in-card">-->
-<!--      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />-->
-<!--      <span class="ml-1">Token Holders Chart</span>-->
-<!--    </button>-->
-<!--  </div>-->
+  <!--  <div class="col-12">-->
+  <!--     <button class="button button-outline button-outline__in-card">-->
+  <!--      <img [src]="'assets/icons/icons-svg/white/chart-line-up.svg' | imageS3" alt="" width="16px" />-->
+  <!--      <span class="ml-1">Token Holders Chart</span>-->
+  <!--    </button>-->
+  <!--  </div>-->
   <div class="col-12 mb-lg-3">
     <div class="body-03 caption-mob fw-normal-mob text--gray-5">
-        <span class="small-body text--light-gray" *ngIf="pageData?.length > numberTopHolder">
-          Top {{ numberTopHolder | number }} holders (From a total of {{ pageData?.length || 0 | number }} holder{{pageData?.length > 1 ? 's' : ''}})
-        </span>
-      <span class="small-body text--light-gray" *ngIf="pageData?.length <= numberTopHolder">
-          A total of {{ pageData?.length || 0 | number }} token holder{{pageData?.length > 1 ? 's' : ''}}
-        </span>
+      <span class="small-body text--light-gray" *ngIf="totalHolder > numberTopHolder">
+        Top {{ numberTopHolder | number }} holders (From a total of {{ totalHolder || 0 | number }} holder{{
+          totalHolder > 1 ? 's' : ''
+        }})
+      </span>
+      <span class="small-body text--light-gray" *ngIf="totalHolder <= numberTopHolder">
+        A total of {{ totalHolder || 0 | number }} token holder{{ totalHolder > 1 ? 's' : '' }}
+      </span>
     </div>
   </div>
 </div>
@@ -63,11 +65,15 @@
                       <a
                         *ngIf="isNFTContract"
                         href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
+                        class="text-clamp"
+                        >{{ data[template.matColumnDef] }}</a
+                      >
                       <a
                         *ngIf="!isNFTContract"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                        class="text-clamp">{{ data[template.matColumnDef] }}</a>
+                        class="text-clamp"
+                        >{{ data[template.matColumnDef] }}</a
+                      >
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
                       {{ data[template.matColumnDef] | number: global.formatNumberToken }}
@@ -111,10 +117,10 @@
         </table>
       </div>
       <app-paginator
-              [length]="pageData.length"
-              [pageSize]="pageData.pageSize"
-              (paginator)="paginatorEmit($event)"
-              (pageEvent)="pageEvent($event)">
+        [length]="pageData.length"
+        [pageSize]="pageData.pageSize"
+        (paginator)="paginatorEmit($event)"
+        (pageEvent)="pageEvent($event)">
       </app-paginator>
     </ng-container>
     <ng-template #noValues>
