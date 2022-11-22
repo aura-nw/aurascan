@@ -53,6 +53,7 @@ export class TokenTableComponent implements OnChanges {
   paginator: MatPaginator;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
