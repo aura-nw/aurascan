@@ -308,13 +308,14 @@ export class WalletService implements OnDestroy {
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
     return this.http.get(`${this.urlIndexer}/account-info?address=${address}&chainId=${signDoc.chain_id}`).pipe(
       map((res) => {
-        const accountAuth = _.get(res, 'data.account_auth.result');
+        let accountAuth;
+        accountAuth = _.get(res, 'data.account_auth.result');
         let account: {
           account_number: number | string;
           sequence: number | string;
         };
 
-        if (accountAuth.type === EAccountType.BaseAccount) {
+        if (accountAuth && accountAuth.type === EAccountType.BaseAccount) {
           account = accountAuth.value;
         } else {
           account = _.get(accountAuth, 'value.base_vesting_account.base_account');

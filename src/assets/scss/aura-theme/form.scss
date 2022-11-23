@@ -366,6 +366,16 @@
         padding-bottom: 10px;
       }
     }
+    &.aura-dropdown-menu--light {
+      border: 1px solid #717582;
+      background-color: #24262E;
+      li.dropdown-item {
+        background-color: #24262E;
+        &:hover {
+          background-color: #363843;
+        }
+      }
+    }
   }
 }
 
