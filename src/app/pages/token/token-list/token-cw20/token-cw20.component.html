@@ -83,7 +83,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">Token</th>
               <td mat-cell *matCellDef="let element" class="title-cell py-4">
                 <div class="d-flex">
-                  <img [src]="element.image || defaultLogoToken" width="18" height="18" />
+                  <img class="rounded-circle" [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token', element.contract_address]" class="text--primary">
                       {{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span>
@@ -101,7 +101,7 @@
                 <ng-container *ngIf="element.price; else noData">
                   <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
                   <div class="caption text--gray-5" *ngIf="global.price.btc">
-                    {{ element.price / global.price.btc || 0 | number: global.formatNumberToken }} Btc
+                    {{ element.price / global.price.btc || 0 | number: global.formatNumberToken }} BTC
                   </div>
                   <div class="caption text--gray-5" *ngIf="global.price.aura">
                     {{ element.price / global.price.aura || 0 | number: global.formatNumberToken }} {{ denom }}
