@@ -20,6 +20,7 @@ import {ClickOutsideModule} from "ng-click-outside";
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
+import { AccountService } from 'src/app/core/services/account.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,6 @@ import { MappingErrorService } from 'src/app/core/services/mapping-error.service
     MatDatepickerModule,
     ClickOutsideModule
   ],
-  providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService]
+  providers: [FormBuilder, FeeGrantService, TransactionService, MappingErrorService, AccountService]
 })
 export class FeeGrantModule {}

@@ -1,13 +1,11 @@
-import { Component, ElementRef, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { StargateClient } from '@cosmjs/stargate';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-popup-add-grant',
@@ -18,17 +16,21 @@ export class PopupAddGrantComponent implements OnInit {
   grantForm;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   periodShow = false;
-  contractType: 'instantiate' | 'execute' = 'instantiate';
+  contractType: 'instantiate' | 'execute';
   allContractAllowActive = true;
   currDate;
+  errorSpendLimit = false;
+  errorNullAddress = false;
+  errorPeriod = false;
+  isSubmit = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
     public dialogRef: MatDialogRef<PopupAddGrantComponent>,
     private fb: FormBuilder,
-    private toastr: NgxToastrService,
     public environmentService: EnvironmentService,
     private walletService: WalletService,
+    private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +56,8 @@ export class PopupAddGrantComponent implements OnInit {
       expiration_time: [''],
       period_amount: [''],
       period_day: [''],
+      isInstantiate: false,
+      isExecute: false,
       execute_contract: this.fb.array([]),
     });
     this.addContracts();
@@ -78,7 +82,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   getMaxToken(controlName: string) {
-    this.grantForm.controls[controlName].setValue(1000000);
+    this.grantForm.controls[controlName].setValue(this.data['maxBalance']);
   }
 
   closeDialog(hash = null) {
@@ -87,10 +91,12 @@ export class PopupAddGrantComponent implements OnInit {
 
   changePeriodStage(stage: boolean) {
     this.periodShow = stage;
-  }
-
-  changeContractStage(contract: 'instantiate' | 'execute') {
-    this.contractType = contract;
+    if (this.periodShow) {
+      this.grantForm.controls['period_amount'].setValidators([Validators.required]);
+      this.grantForm.controls['period_day'].setValidators([Validators.required]);
+    } else {
+      this.errorPeriod = false;
+    }
   }
 
   changeContractsActive(isAll: boolean) {
@@ -98,25 +104,44 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   async onSubmit() {
-    const granter = this.walletService.wallet?.bech32Address;
-    const { grantee_address, expiration_time, period_amount, period_day, amount, execute_contract } =
-      this.grantForm.value;
-
-    if (!granter) {
+    this.isSubmit = true;
+    const check = this.checkFromValid();
+    if (!check) {
       return;
     }
 
-    console.log(expiration_time);
+    const granter = this.walletService.wallet?.bech32Address;
+    const {
+      grantee_address,
+      expiration_time,
+      period_amount,
+      period_day,
+      amount,
+      isInstantiate,
+      isExecute,
+      execute_contract,
+    } = this.grantForm.value;
+
+    const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
     const executeStaking = async () => {
       const { hash, error } = await this.walletService.signAndBroadcast({
-        messageType: period_amount ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
+        messageType:
+          isInstantiate || isExecute
+            ? SIGNING_MESSAGE_TYPES.GRANT_MSG_ALLOWANCE
+            : period_amount && this.periodShow
+            ? SIGNING_MESSAGE_TYPES.GRANT_PERIODIC_ALLOWANCE
+            : SIGNING_MESSAGE_TYPES.GRANT_BASIC_ALLOWANCE,
         message: {
           granter,
-          grantee: grantee_address.trim(),
+          grantee: grantee_address?.trim(),
           spendLimit: amount,
-          expiration: expiration_time ? moment(expiration_time).toDate()?.getTime() : null,
+          expiration: expiration_time ? timeEndDate : null,
           period: period_day ? period_day * 24 * 60 * 60 : undefined,
           periodSpendLimit: period_amount,
+          isPeriodic: this.periodShow,
+          isInstantiate: isInstantiate,
+          isExecute: isExecute,
+          executeContract: execute_contract,
         },
         senderAddress: granter,
         network: this.environmentService.configValue.chain_info,
@@ -124,10 +149,10 @@ export class PopupAddGrantComponent implements OnInit {
         chainId: this.walletService.chainId,
       });
 
-      console.log(error);
-      
-      if(hash){
+      if (hash) {
         this.closeDialog(hash);
+      } else {
+        this.toastr.error(error);
       }
     };
 
@@ -140,5 +165,41 @@ export class PopupAddGrantComponent implements OnInit {
 
   removeClassFocus(e: HTMLInputElement) {
     e.parentElement.classList.remove('border-white');
+  }
+
+  checkFromValid(): boolean {
+    const granter = this.walletService.wallet?.bech32Address;
+    const { grantee_address, period_amount, period_day, amount } = this.grantForm.value;
+
+    this.errorNullAddress = false;
+    if (!granter || !grantee_address) {
+      this.errorNullAddress = true;
+      return false;
+    }
+
+    this.errorSpendLimit = false;
+    if (amount && amount < period_amount) {
+      this.errorSpendLimit = true;
+      return false;
+    }
+
+    this.errorPeriod = false;
+    if (this.periodShow && (!period_amount || !period_day)) {
+      this.errorPeriod = true;
+      return false;
+    }
+
+    this.isSubmit = false;
+    return true;
+  }
+
+  validatePeriodDay(event: any) {
+    const regex = new RegExp(/[0-9]/g);
+    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+      event.preventDefault();
+      return;
+    }
+    this.grantForm.controls['period_day'].setValue(event.target.value);
   }
 }

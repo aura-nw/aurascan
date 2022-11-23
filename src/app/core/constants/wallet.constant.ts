@@ -128,6 +128,7 @@ export const SIGNING_MESSAGE_TYPES = {
   UNKNOWN: `UnknownTx`,
   GRANT_BASIC_ALLOWANCE: 'GrantBasicAllowance',
   GRANT_PERIODIC_ALLOWANCE: 'GrantPeriodicAllowance',
+  GRANT_MSG_ALLOWANCE: 'GrantMsgAllowance',
   REVOKE_ALLOWANCE: 'RevokeAllowance',
 };
 

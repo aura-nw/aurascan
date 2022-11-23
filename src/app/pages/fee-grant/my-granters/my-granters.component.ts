@@ -98,6 +98,10 @@ export class MyGrantersComponent implements OnInit {
           element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
           element.limit = element?.spend_limit?.amount || '0';
           element.spendable = element?.amount?.amount || '0';
+          element.reason = element?.status;
+          if (element.reason === 'Available' && element?.expired) {
+            element.reason = 'Expired';
+          }
         });
 
         if (this.dataSource?.data?.length > 0) {

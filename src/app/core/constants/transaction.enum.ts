@@ -83,6 +83,7 @@ export enum TRANSACTION_TYPE_ENUM {
   PeriodicAllowance = '/cosmos.feegrant.v1beta1.PeriodicAllowance',
   MsgGrantAllowance = '/cosmos.feegrant.v1beta1.MsgGrantAllowance',
   MsgRevokeAllowance = '/cosmos.feegrant.v1beta1.MsgRevokeAllowance',
+  AllowedMsgAllowance = '/cosmos.feegrant.v1beta1.AllowedMsgAllowance',
   Fail = 'FAILED'
 }
 

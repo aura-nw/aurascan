@@ -26,6 +26,7 @@
               formControlName="grantee_address"
               type="text"
               class="form-control form-check-input"
+              (change)="checkFromValid()"
               [class.form-control--error]="
                 grantForm.get('grantee_address')?.invalid &&
                 (grantForm.get('grantee_address')?.dirty || grantForm.get('grantee_address')?.touched)
@@ -47,6 +48,7 @@
                 (clickOutside)="removeClassFocus(amount)"
                 type="number"
                 [max]="1000000"
+                (change)="checkFromValid()"
                 formControlName="amount" />
               <div class="d-flex align-items-center mr-2">
                 <button
@@ -120,8 +122,12 @@
         <div class="col-12">
           <div class="card-explain">
             <div class="form-group">
-              <label for="period_amount" class="form-label text--gray-1 body-01">Period Spend Limit Amount</label>
-              <div class="input-group form-check-input pr-0">
+              <label for="period_amount" class="form-label text--gray-1 body-01 required"
+                >Period Spend Limit Amount</label
+              >
+              <div
+                class="input-group form-check-input pr-0"
+                [class.form-control--error]="grantForm.get('period_amount')?.invalid && isSubmit">
                 <input
                   id="period_amount"
                   #period_amount
@@ -131,6 +137,7 @@
                   type="number"
                   [placeholder]="'Amount'"
                   [max]="1000000"
+                  (change)="checkFromValid()"
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
                   <button
@@ -142,10 +149,15 @@
                 </div>
                 <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
               </div>
+              <div class="error" *ngIf="errorSpendLimit">
+                Period Spend Limit Amount must less than Spend Limit Amount
+              </div>
             </div>
             <div class="form-group mt-4">
-              <label for="period_day" class="form-label text--gray-1 body-01">Period</label>
-              <div class="input-group form-check-input pr-0">
+              <label for="period_day" class="form-label text--gray-1 body-01 required">Period</label>
+              <div
+                class="input-group form-check-input pr-0"
+                [class.form-control--error]="grantForm.get('period_day')?.invalid && isSubmit">
                 <input
                   id="period_day"
                   #period_day
@@ -153,8 +165,10 @@
                   [clickOutsideEnabled]="true"
                   (clickOutside)="removeClassFocus(period_day)"
                   type="number"
+                  (keypress)="validatePeriodDay($event)"
                   [placeholder]="'Number of days'"
                   [max]="1000000"
+                  (change)="checkFromValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
               </div>
@@ -171,11 +185,10 @@
           <div class="d-lg-flex align-items-center">
             <div class="form-group d-flex align-items-center mr-4 mb-4 mb-lg-0">
               <input
-                type="radio"
+                type="checkbox"
                 id="instantiate-contract"
                 class="check-box check-box--dark"
-                [checked]="contractType === 'instantiate'"
-                (change)="changeContractStage('instantiate')" />
+                formControlName="isInstantiate" />
               <label for="instantiate-contract" class="text--gray-1 ml-2 mb-0 text-justify">
                 Instantiate Contract
               </label>
@@ -183,18 +196,17 @@
 
             <div class="form-group d-flex align-items-center">
               <input
-                type="radio"
+                type="checkbox"
                 id="execute-contract"
                 class="check-box check-box--dark"
-                [checked]="contractType === 'execute'"
-                (change)="changeContractStage('execute')" />
+                formControlName="isExecute" />
               <label for="execute-contract" class="text--gray-1 ml-2 mb-0 text-justify"> Execute Contract </label>
             </div>
           </div>
         </div>
       </div>
       <!-- Contract choice -->
-      <div class="row mt-4" *ngIf="contractType === 'execute'">
+      <div class="row mt-4" *ngIf="grantForm.get('isExecute').value">
         <div class="col-12">
           <div class="card-explain">
             <div class="d-lg-flex align-items-center">
@@ -275,7 +287,10 @@
         <button class="button button--md button-pill button-outline" type="button" (click)="dialogRef.close()">
           <span>Cancel</span>
         </button>
-        <button class="button button--md button-pill button-flat ml-4" type="submit" >
+        <button
+          class="button button--md button-pill button-flat ml-4"
+          type="submit"
+          [disabled]="errorNullAddress || errorSpendLimit || errorPeriod">
           <span>Grant</span>
         </button>
       </div>

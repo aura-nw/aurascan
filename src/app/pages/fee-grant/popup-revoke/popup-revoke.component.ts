@@ -47,10 +47,6 @@ export class PopupRevokeComponent implements OnInit {
         chainId: this.walletService.chainId,
       });
 
-      console.log('🐛 Debug', {
-        hash,
-        error,
-      });
       this.closeDialog(hash);
     };
 

@@ -75,8 +75,8 @@
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                            <span class="ml-1">{{ data?.spend_limit?.denom }}</span>
+                            {{ data[template.matColumnDef] | balanceOf | number: global.formatNumberToken }}
+                            <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
@@ -87,8 +87,8 @@
                         <div *ngSwitchCase="'spendable'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | number: global.formatNumberToken }}
-                            <span class="ml-1">{{ data?.amount?.denom }}</span>
+                            {{ data[template.matColumnDef] | balanceOf | number: global.formatNumberToken }}
+                            <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'action'">
