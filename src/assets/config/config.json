@@ -1,7 +1,7 @@
 {
   "fabric": "",
   "cosmos": "https://explorer-api.dev.aura.network/api/v1",
-  "chainId": "aura-testnet",
+  "chainId": "aura-testnet-2",
   "timeStaking": "86400",
   "env": "dev",
   "urlSocket": "https://explorer-api.dev.aura.network",
@@ -16,7 +16,7 @@
     }
   ],
   "chain_info": {
-    "chainId": "aura-testnet",
+    "chainId": "aura-testnet-2",
     "chainName": "aura devnet",
     "rpc": "https://rpc.dev.aura.network",
     "rest": "https://lcd.dev.aura.network",
