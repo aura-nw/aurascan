@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from '../../../app/app.module';
 import { CommonPipeModule } from '../../../app/core/pipes/common-pipe.module';
@@ -16,6 +15,7 @@ import { TransactionRoutingModule } from './transaction-routing.module';
 import { TransactionComponent } from './transaction.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessagesItemComponent } from './transaction-detail/transaction-messages/messages-item/messages-item.component';
+import {NgxJsonViewerModule} from "ngx-json-viewer";
 
 @NgModule({
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent, MessagesItemComponent],
@@ -29,10 +29,10 @@ import { MessagesItemComponent } from './transaction-detail/transaction-messages
     ReactiveFormsModule,
     TranslateModule,
     SharedModule,
-    NgxJsonViewerModule,
     TableNoDataModule,
     CommonPipeModule,
     NgbNavModule,
+    NgxJsonViewerModule,
   ],
   providers: [TransactionService, MappingErrorService],
 })

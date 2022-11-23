@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
@@ -105,5 +105,14 @@ export class CommonService {
   isValidatorJailed(jail, status){
     let result = jail && status === STATUS_VALIDATOR.Jail ? true : false;
     return result;
+  }
+
+  getCommunityTax() {
+    return axios.get(`${this._environmentService.configValue.chain_info.rest}/cosmos/distribution/v1beta1/params`);
+  }
+
+  getTokenByCoinId(range: string, id: string){
+    this.setURL();
+    return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
   }
 }
