@@ -123,6 +123,10 @@ $textColors: (
   font-weight: 500 !important;
 }
 
+.fw-normal {
+  font-weight: 400 !important;
+}
+
 @media (max-width: 991.98px) {
   .fw-semibold-mob {
     font-weight: 600 !important;

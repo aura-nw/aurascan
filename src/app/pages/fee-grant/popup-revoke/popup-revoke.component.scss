@@ -1,0 +1,8 @@
+.card {
+  @media (min-width: 992px) {
+    width: 500px;
+  }
+  &-header {
+    background-color: var(--aura-gray-9);
+  }
+}

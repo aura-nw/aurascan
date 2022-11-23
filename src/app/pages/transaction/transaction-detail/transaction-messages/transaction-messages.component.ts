@@ -56,6 +56,8 @@ export class TransactionMessagesComponent implements OnInit {
   };
   numberListSend = 5;
   dataTimeOut = {};
+  spendLimitAmount = 0;
+  typeGrantAllowance = 'Basic';
 
   listIBCProgress = [];
 
@@ -95,6 +97,27 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
     ) {
       this.displayMsgRaw();
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
+      let type;
+      if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
+      } else {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
+      }
+      if (type.indexOf('Periodic') > 0) {
+        this.typeGrantAllowance = 'Periodic';
+      }
+
+      this.spendLimitAmount = _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') || _.get(
+        this.transactionDetail?.messages[0]?.allowance,
+        'allowance.basic.spend_limit[0].amount',
+      );
+      if (this.typeGrantAllowance === 'Basic') {
+        this.spendLimitAmount = _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') || _.get(
+          this.transactionDetail?.messages[0]?.allowance,
+          'allowance.spend_limit[0].amount',
+        );
+      } 
     } else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
@@ -222,7 +245,7 @@ export class TransactionMessagesComponent implements OnInit {
       if (jsonData && jsonData[0]) {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.StoreCode);
         if (temp) {
-          this.storeCodeId = temp[0]?.attributes.find(k => k.key === "code_id")?.value || 0;
+          this.storeCodeId = temp[0]?.attributes.find((k) => k.key === 'code_id')?.value || 0;
         }
       }
     } catch (e) {}
