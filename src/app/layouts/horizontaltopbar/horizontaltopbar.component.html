@@ -110,7 +110,9 @@
                      [class.active]="(('/' + subMenu.link.split('/')[1]) == ('/' + router.url.split('/')[1])) &&
                      menuLink[i].includes('/' + router.url.split('/')[1])"
                      *ngFor="let subMenu of item.subItems">
+                    <!-- Menu token has special icon -->
                     <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
+                    <!-- . -->
                     <i class="ph-{{ subMenu.icon }}" *ngIf="subMenu.name !== menuName.TokenCW721"></i>
                     <span class="ml-2">{{ subMenu.label | translate }}</span>
                   </a>

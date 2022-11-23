@@ -1,0 +1,299 @@
+<div class="card card-grant">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="h1 mb-0 text--white w-100">Add New Grant</div>
+      <img
+        class="icon-close"
+        [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+        alt=""
+        (click)="closeDialog()" />
+    </div>
+  </div>
+  <div class="card-body">
+    <form
+      [formGroup]="grantForm"
+      (ngSubmit)="onSubmit()"
+      *ngIf="grantForm"
+      class="aura-form single-input-field grant-form"
+      autocomplete="off">
+      <!-- Grantee's address * -->
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="grantee_address" class="form-label required text--gray-1 body-01">Grantee's address</label>
+            <input
+              id="grantee_address"
+              formControlName="grantee_address"
+              type="text"
+              class="form-control form-check-input"
+              (change)="checkFromValid()"
+              [class.form-control--error]="
+                grantForm.get('grantee_address')?.invalid &&
+                (grantForm.get('grantee_address')?.dirty || grantForm.get('grantee_address')?.touched)
+              " />
+          </div>
+        </div>
+      </div>
+      <!-- Spend Limit Amount -->
+      <div class="row mt-6">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="amount" class="form-label text--gray-1 body-01">Spend Limit Amount</label>
+            <div class="input-group form-check-input pr-0">
+              <input
+                id="amount"
+                #amount
+                (focus)="addClassFocus(amount)"
+                [clickOutsideEnabled]="true"
+                (clickOutside)="removeClassFocus(amount)"
+                type="number"
+                [max]="1000000"
+                (change)="checkFromValid()"
+                formControlName="amount" />
+              <div class="d-flex align-items-center mr-2">
+                <button
+                  class="button button-flat button--sm button-max body-02"
+                  type="button"
+                  (click)="getMaxToken('amount')">
+                  Max
+                </button>
+              </div>
+              <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Expiration Time -->
+      <div class="row mt-6">
+        <div class="col-12">
+          <div class="expiration_time">
+            <label for="amount" class="form-label text--gray-1 body-01">Expiration Time</label>
+            <div class="input-group input-group--simply form-check-input pr-0">
+              <input
+                id="expiration_time"
+                #expiration_time
+                (focus)="addClassFocus(expiration_time)"
+                [clickOutsideEnabled]="true"
+                (clickOutside)="removeClassFocus(expiration_time)"
+                [matDatepicker]="picker"
+                [min]="currDate"
+                [style]="'max-width: 90%'"
+                formControlName="expiration_time" />
+              <div class="mr-5 h6 mb-0 text--primary position-relative">
+                <i class="ph-calendar-blank-fill cursor-pointer" (click)="picker.open()"></i>
+                <mat-datepicker #picker></mat-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Periodically granted -->
+      <div class="row mt-6">
+        <div class="col-6 col-lg-4">
+          <label class="form-label required text--gray-1 body-01 mb-0">Periodically granted</label>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <div class="d-flex align-items-center">
+            <div class="form-group d-flex align-items-center">
+              <input
+                type="radio"
+                value="yes"
+                id="granted"
+                class="radio-box radio-box--dark"
+                [checked]="periodShow"
+                (change)="changePeriodStage(true)" />
+              <label for="granted" class="text--gray-1 ml-2 mb-0 text-justify">Yes</label>
+            </div>
+            <div class="form-group d-flex align-items-center ml-8">
+              <input
+                type="radio"
+                value="no"
+                id="not-granted"
+                class="radio-box radio-box--dark"
+                [checked]="!periodShow"
+                (change)="changePeriodStage(false)" />
+              <label for="not-granted" class="text--gray-1 ml-2 mb-0 text-justify">No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Periodically value -->
+      <div class="row mt-4" *ngIf="periodShow">
+        <div class="col-12">
+          <div class="card-explain">
+            <div class="form-group">
+              <label for="period_amount" class="form-label text--gray-1 body-01 required"
+                >Period Spend Limit Amount</label
+              >
+              <div
+                class="input-group form-check-input pr-0"
+                [class.form-control--error]="grantForm.get('period_amount')?.invalid && isSubmit">
+                <input
+                  id="period_amount"
+                  #period_amount
+                  (focus)="addClassFocus(period_amount)"
+                  [clickOutsideEnabled]="true"
+                  (clickOutside)="removeClassFocus(period_amount)"
+                  type="number"
+                  [placeholder]="'Amount'"
+                  [max]="1000000"
+                  (change)="checkFromValid()"
+                  formControlName="period_amount" />
+                <div class="d-flex align-items-center mr-2">
+                  <button
+                    class="button button-flat button--sm button-max body-02"
+                    type="button"
+                    (click)="getMaxToken('period_amount')">
+                    Max
+                  </button>
+                </div>
+                <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
+              </div>
+              <div class="error" *ngIf="errorSpendLimit">
+                Period Spend Limit Amount must less than Spend Limit Amount
+              </div>
+            </div>
+            <div class="form-group mt-4">
+              <label for="period_day" class="form-label text--gray-1 body-01 required">Period</label>
+              <div
+                class="input-group form-check-input pr-0"
+                [class.form-control--error]="grantForm.get('period_day')?.invalid && isSubmit">
+                <input
+                  id="period_day"
+                  #period_day
+                  (focus)="addClassFocus(period_day)"
+                  [clickOutsideEnabled]="true"
+                  (clickOutside)="removeClassFocus(period_day)"
+                  type="number"
+                  (keypress)="validatePeriodDay($event)"
+                  [placeholder]="'Number of days'"
+                  [max]="1000000"
+                  (change)="checkFromValid()"
+                  formControlName="period_day" />
+                <div class="input-group-append h6 fw-normal mb-0">days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Allowed Activities -->
+      <div class="row mt-6">
+        <div class="col-6 col-lg-4">
+          <label class="form-label required text--gray-1 body-01 mb-0">Allowed Activities</label>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <div class="d-lg-flex align-items-center">
+            <div class="form-group d-flex align-items-center mr-4 mb-4 mb-lg-0">
+              <input
+                type="checkbox"
+                id="instantiate-contract"
+                class="check-box check-box--dark"
+                formControlName="isInstantiate" />
+              <label for="instantiate-contract" class="text--gray-1 ml-2 mb-0 text-justify">
+                Instantiate Contract
+              </label>
+            </div>
+
+            <div class="form-group d-flex align-items-center">
+              <input
+                type="checkbox"
+                id="execute-contract"
+                class="check-box check-box--dark"
+                formControlName="isExecute" />
+              <label for="execute-contract" class="text--gray-1 ml-2 mb-0 text-justify"> Execute Contract </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Contract choice -->
+      <div class="row mt-4" *ngIf="grantForm.get('isExecute').value">
+        <div class="col-12">
+          <div class="card-explain">
+            <div class="d-lg-flex align-items-center">
+              <div class="form-group d-flex align-items-center">
+                <input
+                  type="radio"
+                  value="true"
+                  id="all"
+                  class="radio-box radio-box--dark"
+                  [checked]="allContractAllowActive"
+                  (change)="changeContractsActive(true)" />
+                <label for="all" class="text--gray-1 ml-2 mb-0 text-justify">All smart contracts</label>
+              </div>
+              <div class="form-group d-flex align-items-center ml-lg-2 mt-4 mt-lg-0">
+                <input
+                  type="radio"
+                  value="false"
+                  id="specified"
+                  class="radio-box radio-box--dark"
+                  [checked]="!allContractAllowActive"
+                  (change)="changeContractsActive(false)" />
+                <label for="specified" class="text--gray-1 ml-2 mb-0 text-justify">Specified smart contracts</label>
+              </div>
+            </div>
+            <div *ngIf="!allContractAllowActive">
+              <div class="divider divider-horizontal mt-4"></div>
+              <div formArrayName="execute_contract">
+                <div class="form-group mt-4" *ngFor="let contract of contracts.controls; let i = index">
+                  <div
+                    [formGroupName]="i"
+                    class="input-group input-group--simply form-check-input pr-0"
+                    [class.form-control--error]="
+                      grantForm.get('execute_contract')?.controls[i].get('address')?.invalid &&
+                      (grantForm.get('execute_contract')?.controls[i].get('address')?.dirty ||
+                        grantForm.get('execute_contract')?.controls[i].get('address')?.touched)
+                    ">
+                    <input
+                      #address
+                      (focus)="addClassFocus(address)"
+                      [clickOutsideEnabled]="true"
+                      (clickOutside)="removeClassFocus(address)"
+                      [placeholder]="'Contract address.'"
+                      formControlName="address"
+                      type="text"
+                      class="form-control" />
+                    <button class="mr-5 button" *ngIf="i > 0" (click)="removeContract(i)">
+                      <img src="assets/icons/icons-svg/white/close.svg" alt="" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="button mt-8 mb-4 d-flex align-items-center justify-content-center button-add mx-auto"
+                (click)="addContracts()">
+                <i class="ph-plus-fill text--white"></i>
+                <span class="h5 mb-0 fw-normal text--gray-1 ml-2">Add more</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Note -->
+      <div class="row mt-6">
+        <div class="card-note">
+          <div class="d-flex align-items-center">
+            <img src="assets/icons/icons-svg/color/warning.svg" alt="" width="20px" />
+            <div class="body fw-semibold ml-2">NOTE</div>
+          </div>
+          <div class="mt-2 body">
+            If field “Spend Limit Amount” is empty, there is no spend limit and any amount can be spent.<br />
+            If field “Expiration Time” is empty, there is no expiry date for the granted amount.
+          </div>
+        </div>
+      </div>
+      <!-- button group -->
+      <div class="d-flex mt-4 py-6 justify-content-end">
+        <button class="button button--md button-pill button-outline" type="button" (click)="dialogRef.close()">
+          <span>Cancel</span>
+        </button>
+        <button
+          class="button button--md button-pill button-flat ml-4"
+          type="submit"
+          [disabled]="errorNullAddress || errorSpendLimit || errorPeriod">
+          <span>Grant</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

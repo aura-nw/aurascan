@@ -97,6 +97,7 @@ $textColors: (
   "black",
   "gray-light",
   "gray-1",
+  "gray-2",
   "gray-3",
   "gray-4",
   "gray-5",
@@ -120,6 +121,10 @@ $textColors: (
 
 .fw-500 {
   font-weight: 500 !important;
+}
+
+.fw-normal {
+  font-weight: 400 !important;
 }
 
 @media (max-width: 991.98px) {
