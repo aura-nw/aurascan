@@ -247,7 +247,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getInfoCommon();
       if(res?.data?.length > 0) {
         this.tokenInfo = res.data;
-        console.log(this.tokenInfo)
         const dataX = (this.isPrice) ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
         let dataY = res.data.map((i) => i.timestamp);
         this.drawChart(dataX, dataY);
