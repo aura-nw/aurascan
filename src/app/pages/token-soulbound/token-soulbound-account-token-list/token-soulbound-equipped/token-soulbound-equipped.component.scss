@@ -1,0 +1,19 @@
+.search-form-sbequipped {
+  min-width: 100%;
+  @media (min-width: 992px) {
+    min-width: 364px;
+  }
+}
+.token-cards__img {
+  position: relative;
+  .token__bookmark {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 2.4rem;
+    color: #82ECDA;
+    @media (min-width: 992px) {
+      font-size: 3.6rem;
+    }
+  }
+}

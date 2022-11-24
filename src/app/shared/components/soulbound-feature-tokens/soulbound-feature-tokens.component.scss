@@ -1,0 +1,22 @@
+.soulbound-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  @media (min-width: 375px) {
+    width: 60px;
+    height: 60px;
+  }
+  @media (min-width: 767.98px) and (max-width: 992px) {
+    width: 100px;
+    height: 100px;
+  }
+  @media (min-width: 1440px) {
+    width: 100px;
+    height: 100px;
+  }
+}
+.soulbound-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

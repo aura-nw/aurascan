@@ -87,6 +87,28 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  soulboundList = [
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    }
+  ]
 
   constructor(
     private route: ActivatedRoute,

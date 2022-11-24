@@ -1,0 +1,54 @@
+.soulbound-list {
+  .qr-code {
+    border-right: 1px solid var(--aura-gray-9);
+    vertical-align: middle;
+  }
+  .soulbound-feature-tokens {
+    flex: 1 0 100%;
+    border-top: 1px solid var(--aura-gray-9);
+    padding-top: var(--spacer-6);
+    @media (min-width: 991.98px) {
+      padding-top: 0;
+      flex: 0 1 auto;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      flex-grow: 1;
+      border-top: none;
+      border-left: 1px solid var(--aura-gray-9);
+      padding: 0 var(--spacer-6);
+    }
+  }
+}
+
+
+.aura-nav-tabs.nav-tabs .nav-link {
+  font-weight: 500;
+  font-size: 14px;
+  @media (min-width: 992px) {
+    font-weight: 600;
+  }
+}
+
+.tab-contract {
+  width: 100%;
+  ul.aura-nav-tabs {
+    flex-wrap: nowrap;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow: hidden;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .nav-item {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 180px;
+    @media (max-width: 414px) {
+      width: 50%;
+      min-width: 50%;
+    }
+  }
+}

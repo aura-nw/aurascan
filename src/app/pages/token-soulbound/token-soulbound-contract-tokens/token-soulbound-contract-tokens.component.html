@@ -1,1 +1,128 @@
-<p>token-soulbound-contract-tokens works!</p>
+<app-pagetitle title="Soulbound Token"></app-pagetitle>
+<section class="mt-6">
+  <div class="card">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
+          <div class="ml-2 contract-address h4 mb-0">
+            <span>{{contractAddress}}</span>
+
+          </div>
+        </div>
+        <button class="button button-outline button-outline--gradient button-outline__in-card button--md button--sm-mob button-pill"
+          (click)="openDialog()">
+          <span>Create New</span>
+        </button>
+      </div>
+      <!-- Filter -->
+      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mt-6">
+        <div class="body text--gray-4 mt-4 mt-lg-0">A total of 45 records found</div>
+        <form class="aura-form single-input-field search-form-sblist" #searchForm>
+          <div class="input-group">
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Search for Tx Hash, Address or Status"
+                [(ngModel)]="textSearch"
+                [maxLength]="maxLengthSearch"
+                (keyup)="searchToken()"
+                name="search"
+                autocomplete="off" />
+            <button
+                type="submit"
+                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                (click)="searchToken()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- Table -->
+      <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+        <div class="table-responsive aura-table-slist mt-2 mt-lg-4">
+          <table mat-table [dataSource]="dataSource" class="aura-table">
+            <!-- Number Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>NO</th>
+              <td mat-cell *matCellDef="let element; let i = index" class="py-4">
+                <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
+              </td>
+            </ng-container>
+
+            <!-- TOKEN URI -->
+            <ng-container matColumnDef="tokenURI">
+              <th mat-header-cell *matHeaderCellDef class="col-per-25">TOKEN URI</th>
+              <td mat-cell *matCellDef="let element" class="py-4">
+                <div class="d-flex align-items-center">
+                  <a class="hover-link" href="{{element.tokenURI}}">{{element.tokenURI}}</a>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- RECEIVER -->
+            <ng-container matColumnDef="receiver">
+              <th mat-header-cell *matHeaderCellDef class="">RECEIVER</th>
+              <td mat-cell *matCellDef="let element" class="py-4">
+                <a class="hover-link" [routerLink]="['/account', element.receiver]">{{element.receiver | cutStringPipe: 8 : 8}}</a>
+              </td>
+            </ng-container>
+
+            <!-- TOKEN ID -->
+            <ng-container matColumnDef="tokenID">
+              <th mat-header-cell *matHeaderCellDef class="">TOKEN ID</th>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.tokenID }}</td>
+            </ng-container>
+
+            <!-- STATUS -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="">STATUS</th>
+              <td mat-cell *matCellDef="let element" class="py-4 pl-5 fw-normal">
+                <div [ngSwitch]="element.status">
+                  <div *ngSwitchCase="'Equipped'" class="text--green-3 token-status">
+                    {{ element.status }}
+                  </div>
+                  <div *ngSwitchCase="'Unequipped'" class="text--red-3 token-status">
+                    {{ element.status }}
+                  </div>
+                  <div *ngSwitchCase="'Unclaimed'" class="text--yellow-3 token-status">
+                    {{ element.status }}
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="pageEvent($event)">
+        </app-paginator>
+      </ng-container>
+
+      <ng-template #noValues>
+        <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+        <app-table-no-data *ngIf="!loading"></app-table-no-data>
+      </ng-template>
+
+    </div>
+  </div>
+</section>

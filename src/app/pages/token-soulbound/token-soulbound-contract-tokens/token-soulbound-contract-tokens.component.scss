@@ -1,0 +1,68 @@
+.contract-address {
+  background-color: var(--aura-gray-9);
+  height: 36px;
+  padding: 0 var(--spacer-3);
+  border-radius: var(--spacer-4);
+  color: var(--aura-gray-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 992px) {
+    max-width: 400px;
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  @media (max-width: 768px) {
+    max-width: 300px;
+  }
+  @media (max-width: 576px) {
+    max-width: 90px;
+  }
+}
+.search-form-sblist {
+  width: 100%;
+  @media (min-width: 991.98px) {
+    width: 410px;
+  }
+}
+.aura-table-slist {
+  th {
+    min-width: 15%;
+  }
+  th:first-child {
+    min-width: 5%;
+  }
+
+  @media (max-width: 992px) {
+    th {
+      min-width: 150px;
+    }
+    th:first-child {
+      min-width: 80px;
+    }
+    th:nth-child(2),th:nth-child(3), {
+      min-width: 250px;
+    }
+  }
+}
+.token-status {
+  position: relative;
+  &:before {
+    content: '\e916';
+    font-family: 'ico-aura';
+    color: inherit;
+    position: absolute;
+    left: -16px;
+    top: 0;
+    font-size: 8px;
+  }
+}
+::ng-deep {
+  .cdk-overlay-dark-backdrop {
+    background: var(--aura-black);
+    opacity: .85 !important;
+  }
+}

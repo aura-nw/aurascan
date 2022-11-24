@@ -1,0 +1,12 @@
+<div class="text-end" *ngIf="soulboundList && soulboundList.length > 0">
+  <div class="soulbound-list">
+    <a href="#" *ngFor="let token of soulboundList; let last = last">
+      <img src="{{token.img}}" alt="" class="soulbound-img">
+    </a>
+  </div>
+  <a href="/soulbound/account/{{accountAddress}}"
+     class="button button-pill button-outline button-outline--gradient button-outline__in-card button--sm mt-3"
+     *ngIf="extend && accountAddress">
+    <span>See more</span>
+  </a>
+</div>

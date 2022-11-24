@@ -199,6 +199,28 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
+  soulboundList = [
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    },
+    {
+      img: 'assets/images/soulboundToken.png',
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+    }
+  ]
 
   constructor(
     private transactionService: TransactionService,

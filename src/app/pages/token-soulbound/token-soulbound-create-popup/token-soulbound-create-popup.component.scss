@@ -1,0 +1,19 @@
+::ng-deep .TokenSoulboundCreatePopup .mat-dialog-container {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.card {
+  @media (min-width: 991.98px) {
+    min-width: 575px;
+  }
+  &-header {
+    background-color: var(--aura-gray-9);
+  }
+}
+.address-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--aura-gray-3);
+}

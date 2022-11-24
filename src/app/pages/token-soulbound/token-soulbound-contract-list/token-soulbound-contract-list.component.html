@@ -3,8 +3,8 @@
   <div class="card">
     <div class="card-body">
       <!-- Title -->
-      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center">
-        <div class="h2 mb-0 text--white">Smart Contracts</div>
+      <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center">
+        <div class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
         <form class="aura-form single-input-field search-form-sbcontract" #searchForm>
           <div class="input-group">
             <input
@@ -78,7 +78,8 @@
             <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef class="col-per-13"></th>
               <td mat-cell *matCellDef="let element" class="py-4">
-                <a class="button border-radius--sm button-outline button--sm" href="">
+                <a class="button border-radius--sm button-outline button--sm"
+                   [routerLink]="['contract', element.address]">
                   <span>Create New</span>
                 </a>
               </td>
