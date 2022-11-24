@@ -115,6 +115,9 @@ $textColors: (
     color: var(--aura-#{$color}) !important;
   }
 }
+.fw-700 {
+  font-weight: 700 !important;
+}
 .fw-semibold {
   font-weight: 600 !important;
 }
@@ -124,6 +127,9 @@ $textColors: (
 }
 
 @media (max-width: 991.98px) {
+  .fw-700-mob {
+    font-weight: 700 !important;
+  }
   .fw-semibold-mob {
     font-weight: 600 !important;
   }

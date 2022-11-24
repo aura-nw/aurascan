@@ -6,7 +6,7 @@
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
             <img src="assets/images/logo/logo_main_color_dark.png" alt="" width="216px">
-            <div class="mt-4 text--white body-01">
+            <div class="mt-4 text--white body-03">
               Aura Network is scalable, agile and effortless Layer-1 blockchain with a comprehensive ecosystem built to
               accelerate global NFTs adoption
               <ul class="mt-2">
@@ -44,7 +44,7 @@
             <div class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-xl-between">
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-xl-6">
                 <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px">
-                <div class="h1 mb-0 ml-2 ml-xl-8 text--white">AURA</div>
+                <div class="h1 mb-0 ml-7 ml-xl-0 text--white fw-700 fw-semibold-mob">AURA</div>
                 <a href="https://www.coingecko.com/en/coins/aura-network" target="_blank"
                    class="ml-1 button button--sm button-ghost button-ghost--sm"
                         matTooltip="Open CoinGecko"
@@ -58,12 +58,12 @@
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                 <i class="ph-coins-thin icon-info text--gray-3"></i>
                     <div class="ml-2 ml-xl-4">
-                  <div class="mb-2 body-01 text--gray-1">Price</div>
-                  <div class="text--white h2 h3-mob mb-0 fw-semibold">
+                  <div class="mb-2 body-03 text--gray-1">Price</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
                     <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].current_price | number: '1.2-2')) : '-'}}</span>
                     <span class="ml-1 body text--primary">
                       {{(tokenInfo?.length > 0 && tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
-                        ('(+'+tokenInfo[tokenInfo.length-1].price_change_percentage_24h + '%)') : ''}}
+                        ('('+ (tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? '+' : '') + tokenInfo[tokenInfo.length-1].price_change_percentage_24h + '%)') : ''}}
                     </span>
                   </div>
                 </div>
@@ -73,8 +73,8 @@
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                 <i class="ph-chart-line-up-thin icon-info text--gray-3"></i>
                 <div class="ml-2 ml-xl-4">
-                  <div class="mb-2 body-01 text--gray-1">Market Cap</div>
-                  <div class="text--white h2 h3-mob mb-0 fw-semibold">
+                  <div class="mb-2 body-03 text--gray-1">Market Cap</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
                     <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].market_cap | number : '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
@@ -84,8 +84,8 @@
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                 <i class="ph-arrows-down-up-thin icon-info text--gray-3"></i>
                 <div class="ml-2 ml-xl-4">
-                  <div class="mb-2 body-01 text--gray-1">24h Vol Trading</div>
-                  <div class="text--white h2 h3-mob mb-0 fw-semibold">
+                  <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
                     <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].total_volume | number : '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
@@ -158,16 +158,10 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <i class="ph-cube-light icon-brand text--gray-3"></i>
-                  <div class="ml-4">
-                    <div class="body-01 text--gray-1">Height</div>
-                    <div *ngIf="global?.dataHeader?.block_height > 0"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
-                      {{ global?.dataHeader?.block_height || 0 | number }}
-                    </div>
-                  </div>
+                  <div class="ml-4 body-03 text--gray-1">Height</div>
                 </div>
                 <div *ngIf="global?.dataHeader?.block_height > 0"
-                    class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                    class="h5 mb-0 text--white">
                   {{ global?.dataHeader?.block_height || 0 | number }}
                 </div>
               </div>
@@ -175,14 +169,9 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <i class="ph-graph-light icon-brand text--gray-3"></i>
-                  <div class="ml-4">
-                    <div class="body-01 text--gray-1">Community Pool</div>
-                    <div class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
-                      {{ global?.dataHeader?.community_pool_format || 0}}
-                    </div>
-                  </div>
+                  <div class="ml-4 body-03 text--gray-1">Community Pool</div>
                 </div>
-                <div class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                <div class="h5 mb-0 text--white">
                   {{ global?.dataHeader?.community_pool_format || 0}}
                 </div>
               </div>
@@ -190,16 +179,10 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <i class="ph-file-light icon-brand text--gray-3"></i>
-                  <div class="ml-4">
-                    <div class="body-01 text--gray-1">Transactions</div>
-                    <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
-                      {{ global?.dataHeader?.total_txs_num | number }}
-                    </div>
-                  </div>
+                  <div class="ml-4 body-03 text--gray-1">Transactions</div>
                 </div>
                 <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
-                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h5 mb-0 text--white">
                   {{ global?.dataHeader?.total_txs_num | number }}
                 </div>
               </div>
@@ -212,16 +195,10 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand">
-                  <div class="ml-4">
-                    <div class="body-01 text--gray-1">Bonded Token</div>
-                    <div *ngIf="global?.dataHeader?.bonded_tokens"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
-                      {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
-                    </div>
-                  </div>
+                  <div class="ml-4 body-03 text--gray-1">Bonded Token</div>
                 </div>
                 <div *ngIf="global?.dataHeader?.bonded_tokens"
-                    class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                    class="h5 mb-0 text--white">
                   {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
                 </div>
               </div>
@@ -229,16 +206,10 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand">
-                  <div class="ml-4">
-                    <div class="body-01 text--gray-1">Inflation rate</div>
-                    <div *ngIf="global?.dataHeader?.inflation"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
-                      {{ global?.dataHeader?.inflation }}
-                    </div>
-                  </div>
+                  <div class="ml-4 body-03 text--gray-1">Inflation rate</div>
                 </div>
                 <div *ngIf="global?.dataHeader?.inflation"
-                    class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                    class="h5 mb-0 text--white">
                   {{ global?.dataHeader?.inflation }}
                 </div>
               </div>
@@ -246,14 +217,9 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                   <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand">
-                  <div class="ml-4">
-                    <div class="body-01 text--gray-1">Staking APR</div>
-                    <div class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
-                      {{staking_APR.toFixed(2) || 0}}%
-                    </div>
-                  </div>
+                  <div class="ml-4 body-03 text--gray-1">Staking APR</div>
                 </div>
-                <div class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                <div class="h5 mb-0 text--white">
                   {{staking_APR.toFixed(2) || 0}}%
                 </div>
               </div>
@@ -272,7 +238,7 @@
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false">
-             <span>{{curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title}}</span>
+             <span class="body">{{curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title}}</span>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
               <ng-container *ngFor="let item of voting_Period_arr">
@@ -290,7 +256,7 @@
           </div>
           <div class="mt-3 card-child">
             <div class="d-flex align-items-center justify-content-between">
-              <div class="body-01 text--white">Turn out:
+              <div class="body-03 text--white">Turn out:
                 {{ curr_voting_Period ? (curr_voting_Period.turnout | number: global.formatNumber2Decimal) : 0 }}
                 %</div>
               <button *ngIf="!curr_voting_Period" [disabled]="true"
@@ -302,28 +268,28 @@
               </a>
             </div>
             <div class="divider divider-horizontal my-3"></div>
-            <div class="d-flex align-items-center justify-content-between body-01">
+            <div class="d-flex align-items-center justify-content-between body-03">
               <div>
-                  <div class="text--gray-2">Yes</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1">Yes</div>
+                  <div class="h5 mb-0 text--white">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.yes | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
               <div>
-                  <div class="text--gray-2">No</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1">No</div>
+                  <div class="h5 mb-0 text--white">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.no | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
               <div>
-                  <div class="text--gray-2">Veto</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1">Veto</div>
+                  <div class="h5 mb-0 text--white">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
               <div>
-                  <div class="text--gray-2">Abstain</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1">Abstain</div>
+                  <div class="h5 mb-0 text--white">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
