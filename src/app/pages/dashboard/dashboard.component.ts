@@ -25,7 +25,7 @@ import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  chartRange = CHART_RANGE.D_30;
+  chartRange = CHART_RANGE.M_60;
   chartRangeData = CHART_RANGE;
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
   public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
@@ -134,6 +134,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       lineColor: '#5EE6D0',
       topColor: 'rgba(136,198,203,0.12)',
       bottomColor: 'rgba(119, 182, 188, 0.01)',
+      priceFormat: {
+        type: 'price',
+        precision: 6,
+        minMove: 0.000001,
+      },
     });
     this.initTooltip();
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
@@ -241,6 +246,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getCoinInfo(type: string) {
+    this.initTooltip();
     this.chartRange = type;
     this.commonService.getTokenByCoinId(this.chartRange, this.tokenIdGetPrice.AURA).subscribe(res => {
       //update data common
@@ -332,6 +338,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   initTooltip() {
     const container = document.getElementById('chart');
     const toolTip = document.createElement('div');
+    const label = this.isPrice ? 'Price' : 'Volume'
     toolTip.className = 'floating-tooltip-2';
     container.appendChild(toolTip);
 
@@ -353,9 +360,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const price = param.seriesPrices.get(this.areaSeries);
         toolTip.innerHTML =
           '' +
-          '<div class="floating-tooltip__header">Transactions</div>' +
+          '<div class="floating-tooltip__header">'+label+'</div>' +
           '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
-          Math.round(100 * price) / 100 +
+          price +
           '</div><div>' +
           dateStr +
           '' +
