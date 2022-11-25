@@ -1,4 +1,4 @@
-@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "SFPro") {
+@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "Inter") {
   font-size: #{$font-size}rem !important;
   line-height: #{$line-height}rem !important;
   font-weight: $font-weight !important;

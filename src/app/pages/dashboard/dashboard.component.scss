@@ -10,17 +10,17 @@
     width: 16%;
   }
   .width-type {
-    width: 20% !important;
+    width: 20%;
   }
   .width-txhash {
-    width: 30% !important;
+    width: 30%;
   }
 }
 
 @media (max-width: 992px) {
   .aura-table.blocks, .aura-table.transaction {
     th {
-      min-width: 100px;
+      min-width: 140px;
       &:last-child {
         min-width: 180px;
       }
@@ -245,4 +245,7 @@ img.icon-brand {
   line-height: 18px;
   border: 1px solid #494C58;
   border-radius: 8px;
+}
+.summary-info {
+  line-height: 1.8rem !important;
 }
