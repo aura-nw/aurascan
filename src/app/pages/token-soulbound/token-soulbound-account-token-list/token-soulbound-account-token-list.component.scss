@@ -52,3 +52,9 @@
     }
   }
 }
+::ng-deep.search-form-sbtokenlist {
+  min-width: 100%;
+  @media (min-width: 992px) {
+    min-width: 364px;
+  }
+}

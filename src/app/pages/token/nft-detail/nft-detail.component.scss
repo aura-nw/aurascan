@@ -138,3 +138,9 @@
     height: 100%;
   }
 }
+.sb-props {
+  @media (min-width: 991.98px) {
+    max-height: 96px;
+    overflow-y: auto;
+  }
+}

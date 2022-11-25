@@ -105,15 +105,15 @@
       justify-content: center;
       background-color: var(--aura-black);
       img {
-        width: 150px;
-        height: 150px;
+        width: 140px;
+        height: 140px;
         object-fit: contain;
       }
       @media (min-width: 991.98px) {
         min-height: 237px;
         img {
-          width: 180px;
-          height: 180px;
+          width: 160px;
+          height: 160px;
         }
       }
     }
