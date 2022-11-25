@@ -43,6 +43,11 @@
       left: 0;
       object-fit: contain;
     }
+    &.nft-soulbound__img {
+      &:before {
+        padding-top: 73.426573%;
+      }
+    }
   }
   @media (max-width: 991.98px) {
     * {
@@ -127,4 +132,9 @@
   justify-content: center;
   border-radius: 50%;
   background-color: var(--aura-gray-9);
+}
+.card--sb-information {
+  @media (min-width: 991.98px) {
+    height: 100%;
+  }
 }
