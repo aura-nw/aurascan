@@ -55,6 +55,7 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { BlankModule } from './pages/blank/blank.module';
 import { TokenService } from './core/services/token.service';
 import { GlobalErrorHandler } from './core/helpers/global-error';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -135,6 +136,10 @@ export class MaterialModule {}
     }),
     ToastrModule.forRoot({ positionClass: 'inline', maxOpened: 2 }),
     NgxMaskModule.forRoot(maskConfig),
+    ReactiveFormsModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

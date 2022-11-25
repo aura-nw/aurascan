@@ -41,6 +41,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   innerWidth;
   menuName = MenuName;
   menuLink = [];
+  wallet = null;
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
 
   /**
@@ -82,6 +83,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
+        this.wallet = wallet;
         this.menuItems.forEach((item) => {
           if (item.name === this.menuName.Account) {
             // check if item is account

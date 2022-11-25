@@ -10,9 +10,11 @@
           <a routerLink="/" class="logo logo-light">
             <figure class="my-0">
               <picture>
-                <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3">
-                <source media="(min-width: 320px)" [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3">
-                <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy">
+                <source media="(min-width: 992px)" [srcset]="'assets/images/logo/aura-explorer-logo.png' | imageS3" />
+                <source
+                  media="(min-width: 320px)"
+                  [srcset]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" />
+                <img [src]="'assets/images/logo/aura-explorer-logo@mob.png' | imageS3" alt="" loading="lazy" />
               </picture>
             </figure>
           </a>
@@ -26,25 +28,27 @@
         <form class="aura-form single-input-field">
           <div class="input-group">
             <input
-                type="text"
-                class="form-control"
-                placeholder="{{ 'HEADER.SEARCH' | translate }}"
-                [(ngModel)]="searchValue"
-                (keyup.enter)="handleSearch()"
-                [ngModelOptions]="{ standalone: true }"
-                name="inputEmail"
-                autocomplete="off"/>
+              type="text"
+              class="form-control"
+              placeholder="{{ 'HEADER.SEARCH' | translate }}"
+              [(ngModel)]="searchValue"
+              (keyup.enter)="handleSearch()"
+              [ngModelOptions]="{ standalone: true }"
+              name="inputEmail"
+              autocomplete="off" />
             <button
-                type="submit"
-                class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
-                (click)="handleSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+              type="submit"
+              class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
+              (click)="handleSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
-                type="reset"
-                class="btn-reset cursor-pointer {{ !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : '' }}"
-                (click)="searchValue = null">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="searchValue = null">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
         </form>
@@ -59,25 +63,27 @@
     <form class="aura-form single-input-field">
       <div class="input-group">
         <input
-            type="text"
-            class="form-control"
-            placeholder="{{ 'HEADER.SEARCH' | translate }}"
-            [(ngModel)]="searchValue"
-            (keyup.enter)="handleSearch()"
-            [ngModelOptions]="{ standalone: true }"
-            name="inputEmail"
-            autocomplete="off"/>
+          type="text"
+          class="form-control"
+          placeholder="{{ 'HEADER.SEARCH' | translate }}"
+          [(ngModel)]="searchValue"
+          (keyup.enter)="handleSearch()"
+          [ngModelOptions]="{ standalone: true }"
+          name="inputEmail"
+          autocomplete="off" />
         <button
-            type="submit"
-            class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
-            (click)="handleSearch()">
-          <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24"/>
+          type="submit"
+          class="btn-search {{ searchValue && searchValue.length > 0 ? 'd-none' : '' }}"
+          (click)="handleSearch()">
+          <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
         </button>
         <button
-            type="reset"
-            class="btn-reset cursor-pointer {{ !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : '' }}"
-            (click)="searchValue = null">
-          <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24"/>
+          type="reset"
+          class="btn-reset cursor-pointer {{
+            !searchValue || (searchValue && searchValue.length === 0) ? 'd-none' : ''
+          }}"
+          (click)="searchValue = null">
+          <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
         </button>
       </div>
     </form>
@@ -90,32 +96,43 @@
         <ul class="navbar-nav w-100 align-items-center">
           <ng-container *ngFor="let item of menuItems; let i = index">
             <li class="nav-item dropdown mr-5 mr-lg-8 mr-xl-12" *ngIf="i === 0" routerLinkActive="active">
-              <a class="nav-link d-flex align-items-center mb-0"
-                 [routerLink]="item.link"
-                 [class.active]="(router.url === '/' || router.url === '/dashboard') && item.link === '/dashboard'" role="button">
+              <a
+                class="nav-link d-flex align-items-center mb-0"
+                [routerLink]="item.link"
+                [class.active]="(router.url === '/' || router.url === '/dashboard') && item.link === '/dashboard'"
+                role="button">
                 <i class="ph-{{ item.icon }}"></i>
-                <span class="ml-2 fw-semibold">{{ item.label | translate}}</span>
+                <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
               </a>
             </li>
             <li class="nav-item dropdown mx-5 mx-lg-8 mx-xl-12" *ngIf="i > 0" routerLinkActive="active">
-              <button (click)="onMenuClick($event)"
-                 class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
-                <div class="nav-link__item d-flex align-items-center mb-0">
-                  <i class="ph-{{ item.icon }}"></i>
-                  <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
-                </div>
-                <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
-                  <a [routerLink]="subMenu.link" class="d-flex align-items-center mb-0 nav-link__item"
-                     routerLinkActive="active"
-                     [class.active]="(('/' + subMenu.link.split('/')[1]) == ('/' + router.url.split('/')[1])) &&
-                     menuLink[i].includes('/' + router.url.split('/')[1])"
-                     *ngFor="let subMenu of item.subItems">
-                    <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
-                    <i class="ph-{{ subMenu.icon }}" *ngIf="subMenu.name !== menuName.TokenCW721"></i>
-                    <span class="ml-2">{{ subMenu.label | translate }}</span>
-                  </a>
-                </span>
-              </button>
+              <ng-container *ngIf="item.name === 'More' && wallet || item.name !== 'More'">
+                <button
+                  (click)="onMenuClick($event)"
+                  class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
+                  <div class="nav-link__item d-flex align-items-center mb-0">
+                    <i class="ph-{{ item.icon }}"></i>
+                    <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
+                  </div>
+                  <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
+                    <a
+                      [routerLink]="subMenu.link"
+                      class="d-flex align-items-center mb-0 nav-link__item"
+                      routerLinkActive="active"
+                      [class.active]="
+                        '/' + subMenu.link.split('/')[1] == '/' + router.url.split('/')[1] &&
+                        menuLink[i].includes('/' + router.url.split('/')[1])
+                      "
+                      *ngFor="let subMenu of item.subItems">
+                      <!-- Menu token has special icon -->
+                      <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
+                      <!-- . -->
+                      <i class="ph-{{ subMenu.icon }}" *ngIf="subMenu.name !== menuName.TokenCW721"></i>
+                      <span class="ml-2">{{ subMenu.label | translate }}</span>
+                    </a>
+                  </span>
+                </button>
+              </ng-container>
             </li>
           </ng-container>
         </ul>
