@@ -44,7 +44,8 @@
       <div class="card card-h-100">
         <div class="card-body">
           <div class="card-info card-info--gradient-black mb-0 card-summary-info p-0">
-            <div class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-xl-between">
+            <div
+              class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-xl-between">
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-xl-6">
                 <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px">
                 <div class="h1 h2-mob mb-0 ml-4 ml-xl-0 text--white fw-700 fw-semibold-mob">AURA</div>
@@ -63,12 +64,17 @@
                     <div class="ml-4">
                   <div class="mb-2 body-03 text--gray-1">Price</div>
                   <div class="text--white h4 mb-0 fw-semibold">
-                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].current_price | number: '1.2-2')) : '-'}}</span>
+                    <span>{{
+                        tokenInfo?.length > 0
+                            ? ('$'+(tokenInfo[tokenInfo.length-1]?.current_price | number: '1.2-4')) : '-'}}</span>
                     <span *ngIf="tokenInfo?.length > 0"
                         class="ml-1 body
                       {{tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3'}}">
-                      {{(tokenInfo?.length > 0 && tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
-                        ('('+ (tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? '+' : '') + tokenInfo[tokenInfo.length-1].price_change_percentage_24h + '%)') : ''}}
+                      {{(tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
+                        ('('+
+                            (tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? '+' : '') +
+                            (tokenInfo[tokenInfo.length-1].price_change_percentage_24h | number: '1.2-2') +
+                            '%)') : ''}}
                     </span>
                   </div>
                 </div>
@@ -115,24 +121,28 @@
               <div class="ms-auto mt-4 mt-lg-0">
                 <div class="d-flex align-items-center chart__options">
                   <div class="button-switch-stage button-switch-stage__2">
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.M_60"
-                            (click)="getCoinInfo(chartRangeData.M_60)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.M_60"
+                      (click)="getCoinInfo(chartRangeData.M_60)">
                       <span>60M</span>
                     </button>
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.H_24"
-                            (click)="getCoinInfo(chartRangeData.H_24)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.H_24"
+                      (click)="getCoinInfo(chartRangeData.H_24)">
                       <span>24H</span>
                     </button>
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.D_30"
-                            (click)="getCoinInfo(chartRangeData.D_30)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.D_30"
+                      (click)="getCoinInfo(chartRangeData.D_30)">
                       <span>30D</span>
                     </button>
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.MONTH_12"
-                            (click)="getCoinInfo(chartRangeData.MONTH_12)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.MONTH_12"
+                      (click)="getCoinInfo(chartRangeData.MONTH_12)">
                       <span>12M</span>
                     </button>
                   </div>
@@ -216,7 +226,7 @@
             <div class="card-body card-body--gradient-black d-flex flex-column justify-content-between">
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand">
+                  <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand"/>
                   <div class="ml-4">
                     <div class="body text--gray-1">Bonded Token</div>
                     <div *ngIf="global?.dataHeader?.bonded_tokens"
@@ -233,7 +243,7 @@
               <div class="divider divider-horizontal my-4"></div>
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand">
+                  <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand"/>
                   <div class="ml-4">
                     <div class="body text--gray-1">Inflation rate</div>
                     <div *ngIf="global?.dataHeader?.inflation"
@@ -250,7 +260,7 @@
               <div class="divider divider-horizontal my-4"></div>
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand">
+                  <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand"/>
                   <div class="ml-4">
                     <div class="body text--gray-1">Staking APR</div>
                     <div class="h5 mb-0 text--white d-xl-none mt-2">
@@ -273,36 +283,44 @@
           <div class="h3 fw-semibold mb-0 text--white">Voting Period</div>
           <div class="dropdown aura-dropdown mt-4" *ngIf="voting_Period_arr.length > 0">
             <button
-                class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-             <span class="body">{{curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title}}</span>
+              class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <span class="body">{{
+                curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+              }}</span>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
               <ng-container *ngFor="let item of voting_Period_arr">
                 <li class="dropdown-item cursor-pointer">
                   <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
-                    {{item.content.title}}
+                    {{ item.content.title }}
                   </button>
                 </li>
               </ng-container>
             </ul>
           </div>
-          <div class="mt-4 voting-period-btn--disable"
-              *ngIf="voting_Period_arr.length === 0">
+          <div class="mt-4 voting-period-btn--disable" *ngIf="voting_Period_arr.length === 0">
             No proposal within the voting period
           </div>
           <div class="mt-3 card-child">
             <div class="d-flex align-items-center justify-content-between">
-              <div class="body-03 text--white">Turn out:
+              <div class="body-03 text--white">
+                Turn out:
                 {{ curr_voting_Period ? (curr_voting_Period.turnout | number: global.formatNumber2Decimal) : 0 }}
-                %</div>
-              <button *ngIf="!curr_voting_Period" [disabled]="true"
-                      class="button button--sm button-outline button-pill px-4">
+                %
+              </div>
+              <button
+                *ngIf="!curr_voting_Period"
+                [disabled]="true"
+                class="button button--sm button-outline button-pill px-4">
                 <span class="caption fw-normal">View detail</span>
               </button>
-              <a *ngIf="curr_voting_Period" href="/votings/{{curr_voting_Period.proposal_id}}" class="button button--sm button-outline button-pill px-4">
+              <a
+                *ngIf="curr_voting_Period"
+                href="/votings/{{ curr_voting_Period.proposal_id }}"
+                class="button button--sm button-outline button-pill px-4">
                 <span class="caption fw-normal">View detail</span>
               </a>
             </div>
@@ -348,10 +366,10 @@
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Blocks</h2>
           <button
-              type="button"
-              class="button button-pill button--sm button-outline button-outline__in-card body"
-              [routerLink]="'/blocks'"
-              *ngIf="dataSourceBlock">
+            type="button"
+            class="button button-pill button--sm button-outline button-outline__in-card body"
+            [routerLink]="'/blocks'"
+            *ngIf="dataSourceBlock">
             <span>View more</span>
           </button>
         </div>
@@ -371,15 +389,15 @@
                             {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                           </div>
                           <a
-                              *ngSwitchCase="'proposer'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/validators', data.operator_address]">
+                            *ngSwitchCase="'proposer'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/validators', data.operator_address]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/blocks', data.height]">
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/blocks', data.height]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -412,10 +430,10 @@
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Transactions</h2>
           <button
-              type="button"
-              class="button button-pill button--sm button-outline button-outline__in-card body"
-              [routerLink]="'/transaction'"
-              *ngIf="dataSourceTx">
+            type="button"
+            class="button button-pill button--sm button-outline button-outline__in-card body"
+            [routerLink]="'/transaction'"
+            *ngIf="dataSourceTx">
             <span>View more</span>
           </button>
         </div>
@@ -439,15 +457,15 @@
                             {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                           </div>
                           <a
-                              *ngSwitchCase="'tx_hash'"
-                              class="text--primary cursor-pointer hash-link"
-                              [routerLink]="['/transaction', data['tx_hash']]">
+                            *ngSwitchCase="'tx_hash'"
+                            class="text--primary cursor-pointer hash-link"
+                            [routerLink]="['/transaction', data['tx_hash']]">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
                           <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer block-link"
-                              [routerLink]="['/blocks', data['height']]">
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer block-link"
+                            [routerLink]="['/blocks', data['height']]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchCase="'type'">
