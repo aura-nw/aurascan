@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -20,9 +21,11 @@ export class PopupAddGrantComponent implements OnInit {
   allContractAllowActive = true;
   currDate;
   errorSpendLimit = false;
-  errorNullAddress = false;
-  errorPeriod = false;
+  isInvalidAddress = false;
+  formValid = false;
   isSubmit = false;
+
+  prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: any },
@@ -94,9 +97,8 @@ export class PopupAddGrantComponent implements OnInit {
     if (this.periodShow) {
       this.grantForm.controls['period_amount'].setValidators([Validators.required]);
       this.grantForm.controls['period_day'].setValidators([Validators.required]);
-    } else {
-      this.errorPeriod = false;
     }
+    this.checkFromValid();
   }
 
   changeContractsActive(isAll: boolean) {
@@ -152,7 +154,9 @@ export class PopupAddGrantComponent implements OnInit {
       if (hash) {
         this.closeDialog(hash);
       } else {
-        this.toastr.error(error);
+        if (error != 'Request rejected') {
+          this.toastr.error(error);
+        }
       }
     };
 
@@ -171,25 +175,34 @@ export class PopupAddGrantComponent implements OnInit {
     const granter = this.walletService.wallet?.bech32Address;
     const { grantee_address, period_amount, period_day, amount } = this.grantForm.value;
 
-    this.errorNullAddress = false;
+    this.formValid = false;
+    this.isInvalidAddress = false;
+    if (
+      this.isSubmit &&
+      !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
+    ) {
+      this.isInvalidAddress = true;
+      return false;
+    }
+
     if (!granter || !grantee_address) {
-      this.errorNullAddress = true;
       return false;
     }
 
     this.errorSpendLimit = false;
-    if (amount && amount < period_amount) {
-      this.errorSpendLimit = true;
-      return false;
-    }
+    if (this.periodShow) {
+      if (amount && amount < period_amount) {
+        this.errorSpendLimit = true;
+        return false;
+      }
 
-    this.errorPeriod = false;
-    if (this.periodShow && (!period_amount || !period_day)) {
-      this.errorPeriod = true;
-      return false;
+      if (!period_amount || !period_day) {
+        return false;
+      }
     }
 
     this.isSubmit = false;
+    this.formValid = true;
     return true;
   }
 

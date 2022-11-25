@@ -54,7 +54,7 @@ export class MyGranteesComponent implements OnInit {
   displayedColumns: string[];
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   nextKey = null;

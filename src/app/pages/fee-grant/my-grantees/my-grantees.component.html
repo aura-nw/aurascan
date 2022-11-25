@@ -101,7 +101,7 @@
                         <div *ngSwitchCase="'reason'" class="d-flex justify-content-between align-items-center">
                           <span>{{ data[template.matColumnDef] }}</span>
                           <a
-                            [routerLink]="['/transaction', data['tx_hash']]"
+                            [routerLink]="['/transaction', data['origin_revoke_txhash']]"
                             *ngIf="data['reason'] === 'Revoked'"
                             class="button body-01 text--primary">
                             <i class="ph-arrow-square-out"></i>
