@@ -44,7 +44,7 @@
              *ngIf="tokenList.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of showData">
             <div class="nft-cards__item-border">
-              <a href="#">
+              <a href="/tokens/token-nft/contractAddress/tokenID?type=soulbound">
                 <div class="nft-cards__item">
                   <div class="token-cards__img">
                     <img src="{{token.img}}" alt="{{token.name}}">
