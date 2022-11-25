@@ -129,17 +129,6 @@ export class MyGrantersComponent implements OnInit {
     this.getListGrant();
   }
 
-  pageEvent(e: PageEvent): void {
-    const { pageIndex, pageSize } = e;
-    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
-    this.pageData.pageIndex = e.pageIndex;
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getGrantersData();
-      this.currentKey = this.nextKey;
-    }
-  }
-
   paginatorEmit(e: MatPaginator): void {
     if (this.dataSource.paginator) {
       e.page.next({
@@ -151,6 +140,17 @@ export class MyGrantersComponent implements OnInit {
       this.dataSource.paginator = e;
     } else {
       this.dataSource.paginator = e;
+    }
+  }
+
+  pageEvent(e: PageEvent): void {
+    const { pageIndex, pageSize } = e;
+    const next = this.pageData.length <= (pageIndex + 2) * pageSize;
+    this.pageData.pageIndex = e.pageIndex;
+
+    if (next && this.nextKey && this.currentKey !== this.nextKey) {
+      this.getGrantersData();
+      this.currentKey = this.nextKey;
     }
   }
 

@@ -26,14 +26,16 @@
               formControlName="grantee_address"
               type="text"
               class="form-control form-check-input"
-              (change)="checkFromValid()"
+              (ngModelChange)="checkFromValid()"
               [class.form-control--error]="
                 grantForm.get('grantee_address')?.invalid &&
                 (grantForm.get('grantee_address')?.dirty || grantForm.get('grantee_address')?.touched)
               " />
+            <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
           </div>
         </div>
       </div>
+
       <!-- Spend Limit Amount -->
       <div class="row mt-6">
         <div class="col-12">
@@ -48,7 +50,7 @@
                 (clickOutside)="removeClassFocus(amount)"
                 type="number"
                 [max]="1000000"
-                (change)="checkFromValid()"
+                (ngModelChange)="checkFromValid()"
                 formControlName="amount" />
               <div class="d-flex align-items-center mr-2">
                 <button
@@ -70,6 +72,7 @@
             <label for="amount" class="form-label text--gray-1 body-01">Expiration Time</label>
             <div class="input-group input-group--simply form-check-input pr-0">
               <input
+                readOnly
                 id="expiration_time"
                 #expiration_time
                 (focus)="addClassFocus(expiration_time)"
@@ -137,7 +140,7 @@
                   type="number"
                   [placeholder]="'Amount'"
                   [max]="1000000"
-                  (change)="checkFromValid()"
+                  (ngModelChange)="checkFromValid()"
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
                   <button
@@ -168,7 +171,7 @@
                   (keypress)="validatePeriodDay($event)"
                   [placeholder]="'Number of days'"
                   [max]="1000000"
-                  (change)="checkFromValid()"
+                  (ngModelChange)="checkFromValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
               </div>
@@ -290,7 +293,7 @@
         <button
           class="button button--md button-pill button-flat ml-4"
           type="submit"
-          [disabled]="errorNullAddress || errorSpendLimit || errorPeriod">
+          [disabled]="!formValid">
           <span>Grant</span>
         </button>
       </div>
