@@ -1,86 +1,160 @@
-<!-- Chart -->
+<!-- Chart & introduction-->
 <section>
-  <div class="row">
-    <div class="col-xl-12">
+  <div class="row flex-xl-row-reverse">
+    <div class="col-12 col-xl-3">
+      <div class="card card-h-100 card__summary-info">
+        <div class="card-body d-flex flex-column justify-content-between">
+          <div>
+            <div>
+              <img src="assets/images/logo/auraTitleLogo.png" alt="" width="80px" height="71px">
+              <img src="assets/images/logo/logo_aura_network.png" alt="" class="mt-2 d-block">
+            </div>
+            <div class="mt-4 text--white body-03 summary-info text--gray-1">
+              Aura Network is scalable, agile and effortless Layer-1 blockchain with a comprehensive ecosystem built to
+              accelerate global NFTs adoption
+              <ul class="mt-2 pl-5">
+                <li>Develop NFT projects in a new built-in ecosystem</li>
+                <li>Support both newcomers and crypto-native users</li>
+                <li>Integrate to a fully-fledged Metaverse</li>
+                <li>Mint NFTs in great bulk</li>
+              </ul>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <a class="d-flex mr-2 icon--social" href="https://discord.com/invite/bzm3dyxJxR" target="_blank">
+              <i class="ph-discord-logo"></i>
+            </a>
+            <a class="mx-2 d-flex icon--social" href="https://t.me/AuraNetworkOfficial" target="_blank">
+              <i class="ph-telegram-logo"></i>
+            </a>
+            <a class="mx-2 d-flex icon--social" href="https://aura.network/" target="_blank">
+              <i class="ph-globe"></i>
+            </a>
+            <a class="mx-2 d-flex icon--social" href="https://docs.aura.network/" target="_blank">
+              <i class="ph-file-text"></i>
+            </a>
+            <a class="ml-2 d-flex icon--social" href="https://github.com/aura-nw" target="_blank">
+              <i class="aura-icon icon-github-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-9">
       <div class="card card-h-100">
         <div class="card-body">
-          <div class="align-items-center mb-3">
-            <div class="d-flex flex-wrap align-items-center mb-4 mb-lg-6">
-              <h2 class="text--white mb-0">Transactions</h2>
-              <div class="ms-auto">
-                <div class="d-none d-lg-flex align-items-center">
-                  <button
-                    type="button"
-                    class="button button--sm button-pill button-flat px-3 body mr-2"
-                    [class.button-flat--inactive]="chartRange !== chartRangeData.M_60"
-                    (click)="updateBlockAndTxs(chartRangeData.M_60)">
-                    <span>60m</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="button button--sm button-pill button-flat px-3 body mr-2"
-                    [class.button-flat--inactive]="chartRange !== chartRangeData.H_24"
-                    (click)="updateBlockAndTxs(chartRangeData.H_24)">
-                    <span>24h</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="button button--sm button-pill button-flat px-3 body mr-2"
-                    [class.button-flat--inactive]="chartRange !== chartRangeData.D_30"
-                    (click)="updateBlockAndTxs(chartRangeData.D_30)">
-                    <span>30d</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="button button--sm button-pill button-flat px-3 body"
-                    [class.button-flat--inactive]="chartRange !== chartRangeData.MONTH_12"
-                    (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
-                    <span>12M</span>
-                  </button>
-                  <div class="divider divider-vertical divider-lighter mx-4"></div>
+          <div class="card-info card-info--gradient-black mb-0 card-summary-info p-0">
+            <div
+              class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-xl-between">
+              <div class="d-flex align-items-center justify-content-center py-4 px-2 py-xl-6">
+                <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px">
+                <div class="h1 h2-mob mb-0 ml-4 ml-xl-0 text--white fw-700 fw-semibold-mob">AURA</div>
+                <a href="https://www.coingecko.com/en/coins/aura-network" target="_blank"
+                   class="ml-2 button button--sm button-ghost button-ghost--sm"
+                        matTooltip="Open CoinGecko"
+                        [matTooltipPosition]="'above'"
+                        [matTooltipClass]="'dashboard-tooltip'">
+                  <i class="ph-arrow-square-out-fill text--primary h1 mb-0"></i>
+                </a>
+              </div>
+              <div class="divider divider-vertical d-none d-lg-block"></div>
+              <div class="divider divider-horizontal d-lg-none"></div>
+              <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                <i class="ph-coins-thin icon-info text--gray-3"></i>
+                    <div class="ml-4">
+                  <div class="mb-2 body-03 text--gray-1">Price</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
+                    <span>{{
+                        tokenInfo?.length > 0
+                            ? ('$'+(tokenInfo[tokenInfo.length-1]?.current_price | number: '1.2-4')) : '-'}}</span>
+                    <span *ngIf="tokenInfo?.length > 0"
+                        class="ml-1 body
+                      {{tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3'}}">
+                      {{(tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
+                        ('('+
+                            (tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? '+' : '') +
+                            (tokenInfo[tokenInfo.length-1].price_change_percentage_24h | number: '1.2-2') +
+                            '%)') : ''}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="divider divider-vertical d-none d-lg-block"></div>
+              <div class="divider divider-horizontal d-lg-none"></div>
+              <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                <i class="ph-chart-line-up-thin icon-info text--gray-3"></i>
+                <div class="ml-4">
+                  <div class="mb-2 body-03 text--gray-1">Market Cap</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
+                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].market_cap | number : '1.0-0')) : '-'}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="divider divider-vertical d-none d-lg-block"></div>
+              <div class="divider divider-horizontal d-lg-none"></div>
+              <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
+                <i class="ph-arrows-down-up-thin icon-info text--gray-3"></i>
+                <div class="ml-4">
+                  <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
+                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].total_volume | number : '1.0-0')) : '-'}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="align-items-center mt-8 mb-3">
+            <div class="d-xl-flex flex-wrap mb-4">
+              <!-- Tabs -->
+              <div class="button-switch-stage button-switch-stage__1">
+                <button type="button"
+                        [class.active]="isPrice"
+                        (click)="isPrice = true; getCoinInfo(chartRange)">
+                  <span>Price</span>
+                </button>
+                <button type="button"
+                        [class.active]="!isPrice"
+                        (click)="isPrice = false; getCoinInfo(chartRange)">
+                  <span>Volume</span>
+                </button>
+              </div>
+              <div class="ms-auto mt-4 mt-lg-0">
+                <div class="d-flex align-items-center chart__options">
+                  <div class="button-switch-stage button-switch-stage__2">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.M_60"
+                      (click)="getCoinInfo(chartRangeData.M_60)">
+                      <span>60M</span>
+                    </button>
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.H_24"
+                      (click)="getCoinInfo(chartRangeData.H_24)">
+                      <span>24H</span>
+                    </button>
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.D_30"
+                      (click)="getCoinInfo(chartRangeData.D_30)">
+                      <span>30D</span>
+                    </button>
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.MONTH_12"
+                      (click)="getCoinInfo(chartRangeData.MONTH_12)">
+                      <span>12M</span>
+                    </button>
+                  </div>
+                  <div class="divider divider-vertical mx-3 mx-md-4"></div>
                   <button class="button" (click)="chartDataExport()">
-                    <i class="ph-download-simple-fill body-02 text--gray-1"></i>
+                    <i class="ph-download-simple-fill icon--xs text--gray-1"></i>
                   </button>
                 </div>
               </div>
             </div>
             <div class="w-100" *ngIf="chartOptions">
-              <div id="chart"> </div>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-center d-lg-none text-center">
-              <button
-                type="button"
-                class="button button--sm button-pill button-flat px-3 body mr-3"
-                [class.button-flat--inactive]="chartRange !== chartRangeData.M_60"
-                (click)="updateBlockAndTxs(chartRangeData.M_60)">
-                <span>60m</span>
-              </button>
-              <button
-                type="button"
-                class="button button--sm button-pill button-flat px-3 body mr-3"
-                [class.button-flat--inactive]="chartRange !== chartRangeData.H_24"
-                (click)="updateBlockAndTxs(chartRangeData.H_24)">
-                <span>24h</span>
-              </button>
-              <button
-                type="button"
-                class="button button--sm button-pill button-flat px-3 body mr-3"
-                [class.button-flat--inactive]="chartRange !== chartRangeData.D_30"
-                (click)="updateBlockAndTxs(chartRangeData.D_30)">
-                <span>30d</span>
-              </button>
-              <button
-                type="button"
-                class="button button--sm button-pill button-flat px-3 body"
-                [class.button-flat--inactive]="chartRange !== chartRangeData.MONTH_12"
-                (click)="updateBlockAndTxs(chartRangeData.MONTH_12)">
-                <span>12M</span>
-              </button>
-              <div class="divider divider-vertical divider-lighter mx-4"></div>
-              <button class="button" (click)="chartDataExport()">
-                <i class="ph-download-simple-fill body-02 text--gray-1"></i>
-              </button>
+              <div id="chart"></div>
             </div>
           </div>
         </div>
@@ -91,92 +165,195 @@
 <!-- Cards -->
 <section>
   <div class="row">
-    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.block_height > 0">
-      <!-- card -->
-      <div class="card text--white card-highlight">
-        <!-- card body -->
-        <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-12">
-              <span class="h3 text--white">Height</span>
+    <div class="col-12 col-xl-9">
+      <div class="row">
+        <div class="col-12 col-xl-6">
+          <div class="card card__item">
+            <div class="card-body card-body--gradient-black d-flex flex-column justify-content-between">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <i class="ph-cube-light icon-brand text--gray-3"></i>
+                  <div class="ml-4">
+                    <div class="body text--gray-1">Height</div>
+                    <div *ngIf="global?.dataHeader?.block_height > 0"
+                         class="h5 mb-0 text--white d-xl-none mt-2">
+                      {{ global?.dataHeader?.block_height || 0 | number }}
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="global?.dataHeader?.block_height > 0"
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                  {{ global?.dataHeader?.block_height || 0 | number }}
+                </div>
+              </div>
+              <div class="divider divider-horizontal my-4"></div>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <i class="ph-graph-light icon-brand text--gray-3"></i>
+                  <div class="ml-4">
+                    <div class="body text--gray-1">Community Pool</div>
+                    <div class="h5 mb-0 text--white d-xl-none mt-2">
+                      {{ global?.dataHeader?.community_pool_format || 0}}
+                    </div>
+                  </div>
+                </div>
+                <div class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                  {{ global?.dataHeader?.community_pool_format || 0}}
+                </div>
+              </div>
+              <div class="divider divider-horizontal my-4"></div>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <i class="ph-file-light icon-brand text--gray-3"></i>
+                  <div class="ml-4">
+                    <div class="body text--gray-1">Transactions</div>
+                    <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
+                         class="h5 mb-0 text--white d-xl-none mt-2">
+                      {{ global?.dataHeader?.total_txs_num | number }}
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                  {{ global?.dataHeader?.total_txs_num | number }}
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <div class="h1 text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.block_height || 0 | number }}
-            </div>
-            <!-- <div class="body">Update 5s ago</div> -->
           </div>
         </div>
-        <!-- end card body -->
+        <div class="col-12 col-xl-6">
+          <div class="card card__item">
+            <div class="card-body card-body--gradient-black d-flex flex-column justify-content-between">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand"/>
+                  <div class="ml-4">
+                    <div class="body text--gray-1">Bonded Token</div>
+                    <div *ngIf="global?.dataHeader?.bonded_tokens"
+                         class="h5 mb-0 text--white d-xl-none mt-2">
+                      {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="global?.dataHeader?.bonded_tokens"
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                  {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
+                </div>
+              </div>
+              <div class="divider divider-horizontal my-4"></div>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand"/>
+                  <div class="ml-4">
+                    <div class="body text--gray-1">Inflation rate</div>
+                    <div *ngIf="global?.dataHeader?.inflation"
+                         class="h5 mb-0 text--white d-xl-none mt-2">
+                      {{ global?.dataHeader?.inflation }}
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="global?.dataHeader?.inflation"
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                  {{ global?.dataHeader?.inflation }}
+                </div>
+              </div>
+              <div class="divider divider-horizontal my-4"></div>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand"/>
+                  <div class="ml-4">
+                    <div class="body text--gray-1">Staking APR</div>
+                    <div class="h5 mb-0 text--white d-xl-none mt-2">
+                      {{staking_APR.toFixed(2) || 0}}%
+                    </div>
+                  </div>
+                </div>
+                <div class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                  {{staking_APR.toFixed(2) || 0}}%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <!-- end card -->
     </div>
-    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.total_txs_num >= 0">
-      <!-- card -->
-      <div class="card card-h-100 text--white card-highlight">
-        <!-- card body -->
+    <div class="col-12 col-xl-3">
+      <div class="card card__item">
         <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-12">
-              <span class="h3 text--white">Transactions</span>
-            </div>
+          <div class="h3 fw-semibold mb-0 text--white">Voting Period</div>
+          <div class="dropdown aura-dropdown mt-4" *ngIf="voting_Period_arr.length > 0">
+            <button
+              class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <span class="body">{{
+                curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+              }}</span>
+            </button>
+            <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
+              <ng-container *ngFor="let item of voting_Period_arr">
+                <li class="dropdown-item cursor-pointer">
+                  <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
+                    {{ item.content.title }}
+                  </button>
+                </li>
+              </ng-container>
+            </ul>
           </div>
-          <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <div class="h1 text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.total_txs_num | number }}
+          <div class="mt-4 voting-period-btn--disable" *ngIf="voting_Period_arr.length === 0">
+            No proposal within the voting period
+          </div>
+          <div class="mt-3 card-child">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="body-03 text--white">
+                Turn out:
+                {{ curr_voting_Period ? (curr_voting_Period.turnout | number: global.formatNumber2Decimal) : 0 }}
+                %
+              </div>
+              <button
+                *ngIf="!curr_voting_Period"
+                [disabled]="true"
+                class="button button--sm button-outline button-pill px-4">
+                <span class="caption fw-normal">View detail</span>
+              </button>
+              <a
+                *ngIf="curr_voting_Period"
+                href="/votings/{{ curr_voting_Period.proposal_id }}"
+                class="button button--sm button-outline button-pill px-4">
+                <span class="caption fw-normal">View detail</span>
+              </a>
             </div>
-            <!-- <div class="body">Update 5s ago</div> -->
+            <div class="divider divider-horizontal my-3"></div>
+            <div class="d-flex align-items-center justify-content-between body-03">
+              <div>
+                  <div class="text--gray-2">Yes</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.yes | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
+              </div>
+              <div>
+                  <div class="text--gray-2">No</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
+              </div>
+              <div>
+                  <div class="text--gray-2">Veto</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
+              </div>
+              <div>
+                  <div class="text--gray-2">Abstain</div>
+                  <div class="text--gray-1 fw-semibold mt-1">
+                    {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | number: global.formatNumber2Decimal) : '0,0' }}%
+                  </div>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- end card body -->
       </div>
-      <!-- end card -->
-    </div>
-    <div class="col-xl-3 col-md-6" *ngIf="global?.dataHeader?.bonded_tokens">
-      <!-- card -->
-      <div class="card card-h-100 text--white card-highlight">
-        <!-- card body -->
-        <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-12">
-              <span class="h3 text--white">Bonded Tokens</span>
-            </div>
-          </div>
-          <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <div class="h1 text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
-            </div>
-            <!-- <div class="body">Update 5s ago</div> -->
-          </div>
-        </div>
-        <!-- end card body -->
-      </div>
-      <!-- end card -->
-    </div>
-    <div
-      class="col-xl-3 col-md-6"
-      *ngIf="global?.dataHeader?.total_validator_active_num >= 0 && global?.dataHeader?.total_validator_num >= 0">
-      <!-- card -->
-      <div class="card card-h-100 text--white card-highlight">
-        <!-- card body -->
-        <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-12">
-              <span class="h3 text--white">Validators</span>
-            </div>
-          </div>
-          <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <div class="h1 text-gradient card-highlight__content mb-0">
-              {{ global?.dataHeader?.total_validator_active_num || 0 }}
-              {{ global?.dataHeader?.total_validator_num >= 0 ? '/ ' + global?.dataHeader?.total_validator_num : 0 }}
-            </div>
-            <!-- <div class="body">Update 5s ago</div> -->
-          </div>
-        </div>
-        <!-- end card body -->
-      </div>
-      <!-- end card -->
     </div>
   </div>
 </section>
@@ -190,99 +367,59 @@
           <h2 class="text--white mb-0">Blocks</h2>
           <button
             type="button"
-            class="button button-pill button--sm button-outline button-outline__in-card d-none d-lg-block body"
+            class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/blocks'"
             *ngIf="dataSourceBlock">
             <span>View more</span>
           </button>
         </div>
         <div class="card-body pt-4 pt-lg-2 box-dashboard">
-          <ngx-simplebar>
-            <ng-container *ngIf="dataSourceBlock; else noValues">
-              <div class="table-responsive d-none d-lg-block">
-                <table mat-table [dataSource]="dataSourceBlock" class="aura-table body">
-                  <ng-container *ngFor="let template of templatesBlock; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef>
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef">
-                            <div *ngSwitchCase="'timestamp'">
-                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                            </div>
-                            <a
-                              *ngSwitchCase="'proposer'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/validators', data.operator_address]">
-                              {{ data[template.matColumnDef] }}
-                            </a>
-                            <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/blocks', data.height]">
-                              {{ data[template.matColumnDef] }}
-                            </a>
-                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                      <app-table-no-data></app-table-no-data>
+          <ng-container *ngIf="dataSourceBlock; else noValues">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSourceBlock" class="aura-table body blocks">
+                <ng-container *ngFor="let template of templatesBlock; index as i">
+                  <ng-container [matColumnDef]="template.matColumnDef">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                    </th>
+                    <td mat-cell *matCellDef="let data">
+                      <div>
+                        <ng-container [ngSwitch]="template.matColumnDef">
+                          <div *ngSwitchCase="'timestamp'">
+                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                          </div>
+                          <a
+                            *ngSwitchCase="'proposer'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/validators', data.operator_address]">
+                            {{ data[template.matColumnDef] }}
+                          </a>
+                          <a
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/blocks', data.height]">
+                            {{ data[template.matColumnDef] }}
+                          </a>
+                          <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        </ng-container>
+                      </div>
                     </td>
-                  </tr>
-                </table>
-              </div>
-              <div class="d-lg-none" *ngIf="dataSourceBlock?.data?.length > 0">
-                <app-card-mob-simple
-                  *ngFor="let data of dataSourceBlock.data"
-                  [link]="'/blocks/' + data.height"
-                  [content]="[
-                    { label: 'Height',
-                      info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
-                    },
-                    {
-                      label: 'Proposer',
-                      info:
-                        '<a class=text--primary href=' +
-                        ('/validators/' + data.operator_address) +
-                        '>' +
-                        data.proposer +
-                        '</a>'
-                    },
-                    { label: 'Txs', info: data.num_txs.toString() },
-                    {
-                      label: 'Time',
-                      class: 'card__date text--gray-1 body-01',
-                      info:
-                        '<span>' +
-                        (data.timestamp | customDate: 'yyyy-MM-dd') +
-                        '</span>' +
-                        '<span>' +
-                        (data.timestamp | customDate: 'HH:mm:ss') +
-                        '</span>'
-                    }
-                  ]"></app-card-mob-simple>
-              </div>
-            </ng-container>
-            <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
-            </ng-template>
-          </ngx-simplebar>
-          <button
-            type="button"
-            class="button button-pill button--md button-outline button-outline__in-card body d-lg-none w-100 mt-2"
-            [routerLink]="'/blocks'"
-            *ngIf="dataSourceBlock">
-            <span class="body-01-mob">View more</span>
-          </button>
+                  </ng-container>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsBlock"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsBlock"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell g-no-data" colspan="9999">
+                    <app-table-no-data></app-table-no-data>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </ng-container>
+          <ng-template #noValues>
+            <app-table-no-data></app-table-no-data>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -294,105 +431,66 @@
           <h2 class="text--white mb-0">Transactions</h2>
           <button
             type="button"
-            class="button button-pill button--sm button-outline button-outline__in-card d-none d-lg-block body"
+            class="button button-pill button--sm button-outline button-outline__in-card body"
             [routerLink]="'/transaction'"
             *ngIf="dataSourceTx">
             <span>View more</span>
           </button>
         </div>
         <div class="card-body pt-4 pt-lg-2 box-dashboard">
-          <ngx-simplebar>
-            <ng-container *ngIf="dataSourceTx; else noValues">
-              <div class="table-responsive d-none d-lg-block">
-                <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
-                  <ng-container *ngFor="let template of templatesTx; index as i">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th
+          <ng-container *ngIf="dataSourceTx; else noValues">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSourceTx" class="aura-table transaction body">
+                <ng-container *ngFor="let template of templatesTx; index as i">
+                  <ng-container [matColumnDef]="template.matColumnDef">
+                    <th
                         mat-header-cell
                         *matHeaderCellDef
                         [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                         [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef">
-                            <div *ngSwitchCase="'timestamp'">
-                              {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                            </div>
-                            <a
-                              *ngSwitchCase="'tx_hash'"
-                              class="text--primary cursor-pointer hash-link"
-                              [routerLink]="['/transaction', data['tx_hash']]">
-                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                            </a>
-                            <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer block-link"
-                              [routerLink]="['/blocks', data['height']]">
-                              {{ data[template.matColumnDef] }}
-                            </a>
-                            <div *ngSwitchCase="'type'">
-                              <span class="label__status">{{ data[template.matColumnDef] }}</span>
-                            </div>
-                            <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
-                  <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell g-no-data" colspan="9999">
-                      <app-table-no-data></app-table-no-data>
+                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
+                    </th>
+                    <td mat-cell *matCellDef="let data">
+                      <div>
+                        <ng-container [ngSwitch]="template.matColumnDef">
+                          <div *ngSwitchCase="'timestamp'">
+                            {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                          </div>
+                          <a
+                            *ngSwitchCase="'tx_hash'"
+                            class="text--primary cursor-pointer hash-link"
+                            [routerLink]="['/transaction', data['tx_hash']]">
+                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                          </a>
+                          <a
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer block-link"
+                            [routerLink]="['/blocks', data['height']]">
+                            {{ data[template.matColumnDef] }}
+                          </a>
+                          <div *ngSwitchCase="'type'">
+                            <span class="label__status">{{ data[template.matColumnDef] }}</span>
+                          </div>
+                          <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                        </ng-container>
+                      </div>
                     </td>
-                  </tr>
-                </table>
-              </div>
-              <div class="d-lg-none" *ngIf="dataTx && dataTx.length > 0">
-                <app-card-mob-simple
-                  *ngFor="let data of dataTx"
-                  [link]="'/transaction/' + data.tx_hash"
-                  [title]="{
-                    size: 'md',
-                    label: data.tx_hash | cutStringPipe: 6:6,
-                    titleClass: 'h5 mb-0 text--primary',
-                    subLabelContent: data.type,
-                    subLabelClass: 'label__status',
-                    status: data.code
-                  }"
-                  [content]="[
-                    {
-                      label: 'Height',
-                      info: '<a class=text--primary href=' + ('/blocks/' + data.height) + '>' + data.height + '</a>'
-                    },
-                    {
-                      label: 'Time',
-                      class: 'card__date text--gray-1 body-01',
-                      info:
-                        '<span>' +
-                        (data.timestamp | customDate: 'yyyy-MM-dd') +
-                        '</span>' +
-                        '<span>' +
-                        (data.timestamp | customDate: 'HH:mm:ss') +
-                        '</span>'
-                    }
-                  ]"></app-card-mob-simple>
-              </div>
-            </ng-container>
-            <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
-            </ng-template>
-          </ngx-simplebar>
-          <button
-            type="button"
-            class="button button-pill button--md button-outline button-outline__in-card body d-lg-none w-100 mt-2"
-            [routerLink]="'/transaction'"
-            *ngIf="dataSourceTx">
-            <span class="body-01-mob">View more</span>
-          </button>
+                  </ng-container>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsTx"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsTx"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell g-no-data" colspan="9999">
+                    <app-table-no-data></app-table-no-data>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </ng-container>
+          <ng-template #noValues>
+            <app-table-no-data></app-table-no-data>
+          </ng-template>
         </div>
       </div>
     </div>

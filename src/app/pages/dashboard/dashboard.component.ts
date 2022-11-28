@@ -1,34 +1,33 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import ExcelExport from 'export-xlsx';
+import { createChart } from 'lightweight-charts';
+import * as moment from 'moment';
 import { Subscription, timer } from 'rxjs';
+import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { TYPE_TRANSACTION } from '../../../app/core/constants/transaction.constant';
 import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import { CHART_RANGE, PAGE_EVENT } from '../../core/constants/common.constant';
+import {CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE} from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import { createChart } from 'lightweight-charts';
-import ExcelExport from 'export-xlsx';
-import * as moment from "moment";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
-  chartRange = CHART_RANGE.D_30;
+export class DashboardComponent implements OnInit, AfterViewInit {
+  chartRange = CHART_RANGE.M_60;
   chartRangeData = CHART_RANGE;
-
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
-
   public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
 
   templatesBlock: Array<TableTemplate> = [
@@ -49,8 +48,6 @@ export class DashboardComponent implements OnInit {
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
-
-  typeTransaction = TYPE_TRANSACTION;
   timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -70,8 +67,14 @@ export class DashboardComponent implements OnInit {
 
   currDate;
   SETTINGS_FOR_EXPORT;
+  isPrice = true;
 
+  curr_voting_Period;
+  voting_Period_arr = [];
 
+  staking_APR = 0;
+  tokenIdGetPrice = TOKEN_ID_GET_PRICE;
+  tokenInfo;
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
@@ -81,15 +84,16 @@ export class DashboardComponent implements OnInit {
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     public datepipe: DatePipe,
+    private proposalService: ProposalService,
   ) {}
 
   ngOnInit(): void {
     this.getInfoData();
     const halftime = 60000;
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
-    // somewhere in your code
+    // config chart
     this.chart = createChart(document.getElementById('chart'), {
-      height: 400,
+      height: 244,
       crosshair: {
         horzLine: {
           visible: false,
@@ -115,8 +119,8 @@ export class DashboardComponent implements OnInit {
       },
       timeScale: {
         timeVisible: true,
-        secondsVisible: true
-      }
+        secondsVisible: true,
+      },
     });
     this.areaSeries = this.chart.addAreaSeries({
       autoscaleInfoProvider: () => ({
@@ -130,9 +134,15 @@ export class DashboardComponent implements OnInit {
       lineColor: '#5EE6D0',
       topColor: 'rgba(136,198,203,0.12)',
       bottomColor: 'rgba(119, 182, 188, 0.01)',
+      priceFormat: {
+        type: 'price',
+        precision: 6,
+        minMove: 0.000001,
+      },
     });
     this.initTooltip();
-    this.currDate = moment(new Date()).format("DDMMYYYY_HHMMSS")
+    this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
+    this.getVotingPeriod();
   }
 
   drawChart(data, dateTime) {
@@ -143,8 +153,8 @@ export class DashboardComponent implements OnInit {
 
     // convert timeStamp to UNIX Timestamp format (for hour timeBar)
     dateTime.forEach((date, index) => {
-      const ts = Math.floor(new Date(date).getTime() / 1000)
-      const temp = { value: data[index], time: ts+25200 }; // GMT+7
+      const ts = Math.floor(new Date(date).getTime() / 1000);
+      const temp = { value: data[index], time: ts + 25200 }; // GMT+7
       arr.push(temp);
     });
     // push data to export csv array
@@ -160,7 +170,7 @@ export class DashboardComponent implements OnInit {
       const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
       this.chartDataExp.push({
         date: dateF,
-        transactions: +data.value,
+        value: +data.value,
       });
       transactionData.push(+data.value);
     });
@@ -180,7 +190,10 @@ export class DashboardComponent implements OnInit {
     this.getListBlock();
     this.getListTransaction();
     setTimeout(() => {
-      this.updateBlockAndTxs(this.chartRange);
+      // new
+      this.getCoinInfo(this.chartRange);
+      // old
+      // this.updateBlockAndTxs(this.chartRange);
     }, 1000);
     this.cdr.detectChanges();
   }
@@ -232,6 +245,21 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getCoinInfo(type: string) {
+    this.initTooltip();
+    this.chartRange = type;
+    this.commonService.getTokenByCoinId(this.chartRange, this.tokenIdGetPrice.AURA).subscribe(res => {
+      //update data common
+      this.getInfoCommon();
+      if(res?.data?.length > 0) {
+        this.tokenInfo = res.data;
+        const dataX = (this.isPrice) ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
+        let dataY = res.data.map((i) => i.timestamp);
+        this.drawChart(dataX, dataY);
+      }
+    });
+  }
+
   getInfoCommon(): void {
     this.commonService.status().subscribe((res) => {
       getInfo(this.global, res.data);
@@ -261,37 +289,37 @@ export class DashboardComponent implements OnInit {
     let type;
     switch (this.chartRange) {
       case '60m':
-      type = 'in 60 minutes';
-      break;
+        type = 'in 60 minutes';
+        break;
       case '24h':
-      type = 'in about 24 hours';
-      break;
+        type = 'in about 24 hours';
+        break;
       case '30d':
-      type = 'in 30 days';
-      break;
+        type = 'in 30 days';
+        break;
       case '12M':
-      type = 'in 12 months';
-      break;
+        type = 'in 12 months';
+        break;
     }
     this.SETTINGS_FOR_EXPORT = {
       // Table settings
-      fileName: 'Transactions_' + this.currDate,
+      fileName: (this.isPrice ? 'Price_' : 'Volume_') + this.currDate,
       workSheets: [
         {
-          sheetName: 'Transactions',
+          sheetName: (this.isPrice ? 'Price' : 'Volume'),
           startingRowNumber: 2,
           gapBetweenTwoTables: 2,
           tableSettings: {
             table1: {
-              tableTitle: 'Transactions value ' + type,
+              tableTitle: (this.isPrice ? 'Price' : 'Volume') + ' value ' + type,
               headerDefinition: [
                 {
                   name: 'Date',
                   key: 'date',
                 },
                 {
-                  name: 'Transactions',
-                  key: 'transactions',
+                  name: 'Value',
+                  key: 'value',
                 },
               ],
             },
@@ -310,6 +338,7 @@ export class DashboardComponent implements OnInit {
   initTooltip() {
     const container = document.getElementById('chart');
     const toolTip = document.createElement('div');
+    const label = this.isPrice ? 'Price' : 'Volume'
     toolTip.className = 'floating-tooltip-2';
     container.appendChild(toolTip);
 
@@ -326,14 +355,14 @@ export class DashboardComponent implements OnInit {
         toolTip.style.display = 'none';
       } else {
         const timestamp = moment.unix(param.time - 25200); // GMT+7
-        const dateStr = timestamp.format("DD/MM/YYYY HH:mm:ss");
+        const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
         toolTip.style.display = 'block';
         const price = param.seriesPrices.get(this.areaSeries);
         toolTip.innerHTML =
           '' +
-          '<div class="floating-tooltip__header">Transactions</div>' +
+          '<div class="floating-tooltip__header">'+label+'</div>' +
           '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
-          Math.round(100 * price) / 100 +
+          price +
           '</div><div>' +
           dateStr +
           '' +
@@ -358,5 +387,48 @@ export class DashboardComponent implements OnInit {
         toolTip.style.top = coordinateY + 'px';
       }
     });
+  }
+
+  getVotingPeriod() {
+    this.proposalService.getProposalList(20, null).subscribe((res) => {
+      if (res?.data?.proposals) {
+        let tempDta = res.data.proposals;
+        this.voting_Period_arr = tempDta.filter((k) => k?.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD);
+
+        this.voting_Period_arr.forEach((pro, index) => {
+          if (pro?.tally) {
+            const { yes, no, no_with_veto, abstain } = pro?.tally;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+            if (this.voting_Period_arr[index].tally) {
+              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0 ;
+              this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
+              this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
+            }
+          }
+        });
+        this.curr_voting_Period = this.voting_Period_arr[0];
+      }
+    });
+  }
+
+  getDataHeader() {
+    return this.global.dataHeader;
+  }
+
+  async ngAfterViewInit() {
+    const communityTaxRq = await this.commonService.getCommunityTax();
+    const communityTax = communityTaxRq?.data?.params?.community_tax;
+    let inflation;
+    let bonded_tokens;
+    let supply;
+    setInterval(() => {
+      if(!inflation && !bonded_tokens && !supply) {
+        inflation = this.getDataHeader().inflation.slice(0, -1);
+        bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
+        supply = this.getDataHeader().supply.toString().slice(0, -1);
+        this.staking_APR = (inflation * (1 - communityTax)) / (bonded_tokens/supply*100);
+      }
+    }, 500);
   }
 }

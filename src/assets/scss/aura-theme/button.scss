@@ -354,8 +354,9 @@
 .button-switch-stage {
   padding: var(--spacer-1);
   background-color: var(--aura-gray-9);
-  border-radius: var(--spacer-1);
+  border-radius: var(--spacer-2);
   display: flex;
+  border: 1px solid var(--aura-gray-8);
   @media (max-width: 991.99px) {
     font-size: 1.4rem;
     line-height: 1.8rem;
@@ -366,8 +367,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    height: 34px;
+    border-radius: var(--spacer-2);
+    height: 32px;
+    font-weight: 600;
     @media (max-width: 991.99px) {
       height: 32px;
       width: 100%;
@@ -379,5 +381,14 @@
       background: var(--aura-gray-10);
       color: var(--aura-white);
     }
+  }
+}
+.button-ghost {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: var(--aura-gray-9);
   }
 }

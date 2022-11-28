@@ -84,7 +84,6 @@ export class TokenTableComponent implements OnChanges {
       if (res?.data?.length > 0) {
         let lstToken = _.get(res, 'data').map((element) => {
           data = element;
-          data.contract_address = '-' ? '' : data.contract_address;
           if (data) {
             data.change = data.price_change_percentage_24h;
             data.isValueUp = true;

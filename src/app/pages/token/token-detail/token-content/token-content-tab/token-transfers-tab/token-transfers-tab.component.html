@@ -152,7 +152,7 @@
                         <ng-container *ngSwitchCase="'details'">
                           <button
                             class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                            [disabled]="!data.token_id"
+                            [disabled]="!data.token_id || data['status'] === 'Fail'"
                             [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                             <span>View NFT</span>
                           </button>
@@ -161,9 +161,12 @@
                           <a
                             class="text--primary"
                             href="/tokens/token/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
-                            *ngIf="data['token_id']?.length > 0">
+                            *ngIf="data['token_id']?.length > 0 && data['status'] !== 'Fail'">
                             {{ data[template.matColumnDef] | stringEllipsis: 16 }}
                           </a>
+                          <span class="text--primary" *ngIf="data['token_id']?.length > 0 && data['status'] === 'Fail'">
+                            {{ data[template.matColumnDef] | stringEllipsis: 16 }}
+                          </span>
                           <span *ngIf="data['token_id']?.length === 0"> - </span>
                         </ng-container>
                         <div *ngSwitchCase="'action'">
