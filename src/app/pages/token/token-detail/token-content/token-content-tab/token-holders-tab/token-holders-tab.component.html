@@ -31,12 +31,12 @@
           <ng-container *ngFor="let template of template; index as i">
             <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
               <ng-container *ngSwitchCase="'id'">
-                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                <th mat-header-cell *matHeaderCellDef class="col-per-10">
                   <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
                 </th>
               </ng-container>
               <ng-container *ngSwitchCase="'owner'">
-                <th mat-header-cell *matHeaderCellDef class="col-per-25">
+                <th mat-header-cell *matHeaderCellDef class="col-address">
                   <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase"></div>
                 </th>
               </ng-container>
