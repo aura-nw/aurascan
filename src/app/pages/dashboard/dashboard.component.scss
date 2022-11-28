@@ -10,17 +10,17 @@
     width: 16%;
   }
   .width-type {
-    width: 20% !important;
+    width: 20%;
   }
   .width-txhash {
-    width: 30% !important;
+    width: 30%;
   }
 }
 
 @media (max-width: 992px) {
   .aura-table.blocks, .aura-table.transaction {
     th {
-      min-width: 100px;
+      min-width: 140px;
       &:last-child {
         min-width: 180px;
       }
@@ -136,21 +136,33 @@ ul {
     width: 90%;
   }
 }
-.dropdown-menu.aura-dropdown-menu.aura-dropdown-menu--light {
-  padding: var(--spacer-2);
-  li.dropdown-item {
-    border-radius: 0;
-    padding: var(--spacer-3) var(--spacer-2);
-    button {
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-      text-align: start;
+.dropdown-menu {
+  &.aura-dropdown-menu.aura-dropdown-menu--light {
+    padding: var(--spacer-2);
+    li.dropdown-item {
+      border-radius: 0;
+      padding: var(--spacer-3) var(--spacer-2);
+      button {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-align: start;
+        color: var(--aura-gray-light);
+      }
+      &:hover button {
+        color: var(--aura-white);
+      }
     }
   }
+  &.show {
+    min-height: 60px;
+    max-height: 175px;
+    overflow-y: auto !important;
+  }
 }
+
 .card__item {
   min-height: 260px;
 }
@@ -210,25 +222,15 @@ ul {
 }
 i.icon-info {
   font-size: 40px;
-  @media (min-width: 1440.98px) {
-    font-size: 56px;
-  }
 }
 i.icon-brand {
   font-size: 40px;
-  @media (min-width: 991.98px) {
-    font-size: 48px;
-  }
 }
 
 img.icon-brand {
   width: 40px;
   height: 40px;
   object-fit: cover;
-  @media (min-width: 991.98px) {
-    width: 48px;
-    height: 48px;
-  }
 }
 .voting-period-btn--disable {
   display: flex;
@@ -239,8 +241,11 @@ img.icon-brand {
   background: var(--aura-gray-8);
   color: var(--aura-gray-3);
   font-weight: 400;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 18px;
   border: 1px solid #494C58;
   border-radius: 8px;
+}
+.summary-info {
+  line-height: 1.8rem !important;
 }

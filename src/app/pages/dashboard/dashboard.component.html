@@ -5,11 +5,14 @@
       <div class="card card-h-100 card__summary-info">
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
-            <img src="assets/images/logo/logo_main_color_dark.png" alt="" width="216px">
-            <div class="mt-4 text--white body-01">
+            <div>
+              <img src="assets/images/logo/auraTitleLogo.png" alt="" width="80px" height="71px">
+              <img src="assets/images/logo/logo_aura_network.png" alt="" class="mt-2 d-block">
+            </div>
+            <div class="mt-4 text--white body-03 summary-info text--gray-1">
               Aura Network is scalable, agile and effortless Layer-1 blockchain with a comprehensive ecosystem built to
               accelerate global NFTs adoption
-              <ul class="mt-2">
+              <ul class="mt-2 pl-5">
                 <li>Develop NFT projects in a new built-in ecosystem</li>
                 <li>Support both newcomers and crypto-native users</li>
                 <li>Integrate to a fully-fledged Metaverse</li>
@@ -41,29 +44,37 @@
       <div class="card card-h-100">
         <div class="card-body">
           <div class="card-info card-info--gradient-black mb-0 card-summary-info p-0">
-            <div class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-xl-between">
+            <div
+              class="d-flex flex-column align-items-start flex-xl-row align-items-xl-center justify-content-xl-between">
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-xl-6">
                 <img src="assets/images/logo/auraTitleLogo.png" alt="" width="40px" height="40px">
-                <div class="h1 mb-0 ml-2 ml-xl-8 text--white">AURA</div>
+                <div class="h1 h2-mob mb-0 ml-4 ml-xl-0 text--white fw-700 fw-semibold-mob">AURA</div>
                 <a href="https://www.coingecko.com/en/coins/aura-network" target="_blank"
-                   class="ml-1 button button--sm button-ghost button-ghost--sm"
+                   class="ml-2 button button--sm button-ghost button-ghost--sm"
                         matTooltip="Open CoinGecko"
                         [matTooltipPosition]="'above'"
                         [matTooltipClass]="'dashboard-tooltip'">
-                  <i class="ph-arrow-square-out-fill text--primary icon--xs icon--sm-mob mb-0"></i>
+                  <i class="ph-arrow-square-out-fill text--primary h1 mb-0"></i>
                 </a>
               </div>
               <div class="divider divider-vertical d-none d-lg-block"></div>
               <div class="divider divider-horizontal d-lg-none"></div>
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                 <i class="ph-coins-thin icon-info text--gray-3"></i>
-                    <div class="ml-2 ml-xl-4">
-                  <div class="mb-2 body-01 text--gray-1">Price</div>
-                  <div class="text--white h2 h3-mob mb-0 fw-semibold">
-                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].current_price | number: '1.2-2')) : '-'}}</span>
-                    <span class="ml-1 body text--primary">
-                      {{(tokenInfo?.length > 0 && tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
-                        ('(+'+tokenInfo[tokenInfo.length-1].price_change_percentage_24h + '%)') : ''}}
+                    <div class="ml-4">
+                  <div class="mb-2 body-03 text--gray-1">Price</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
+                    <span>{{
+                        tokenInfo?.length > 0
+                            ? ('$'+(tokenInfo[tokenInfo.length-1]?.current_price | number: '1.2-4')) : '-'}}</span>
+                    <span *ngIf="tokenInfo?.length > 0"
+                        class="ml-1 body
+                      {{tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3'}}">
+                      {{(tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
+                        ('('+
+                            (tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? '+' : '') +
+                            (tokenInfo[tokenInfo.length-1].price_change_percentage_24h | number: '1.2-2') +
+                            '%)') : ''}}
                     </span>
                   </div>
                 </div>
@@ -72,9 +83,9 @@
               <div class="divider divider-horizontal d-lg-none"></div>
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                 <i class="ph-chart-line-up-thin icon-info text--gray-3"></i>
-                <div class="ml-2 ml-xl-4">
-                  <div class="mb-2 body-01 text--gray-1">Market Cap</div>
-                  <div class="text--white h2 h3-mob mb-0 fw-semibold">
+                <div class="ml-4">
+                  <div class="mb-2 body-03 text--gray-1">Market Cap</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
                     <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].market_cap | number : '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
@@ -83,9 +94,9 @@
               <div class="divider divider-horizontal d-lg-none"></div>
               <div class="d-flex align-items-center justify-content-center py-4 px-2 py-lg-6 px-xl-6">
                 <i class="ph-arrows-down-up-thin icon-info text--gray-3"></i>
-                <div class="ml-2 ml-xl-4">
-                  <div class="mb-2 body-01 text--gray-1">24h Vol Trading</div>
-                  <div class="text--white h2 h3-mob mb-0 fw-semibold">
+                <div class="ml-4">
+                  <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
+                  <div class="text--white h4 mb-0 fw-semibold">
                     <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].total_volume | number : '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
@@ -110,24 +121,28 @@
               <div class="ms-auto mt-4 mt-lg-0">
                 <div class="d-flex align-items-center chart__options">
                   <div class="button-switch-stage button-switch-stage__2">
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.M_60"
-                            (click)="getCoinInfo(chartRangeData.M_60)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.M_60"
+                      (click)="getCoinInfo(chartRangeData.M_60)">
                       <span>60M</span>
                     </button>
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.H_24"
-                            (click)="getCoinInfo(chartRangeData.H_24)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.H_24"
+                      (click)="getCoinInfo(chartRangeData.H_24)">
                       <span>24H</span>
                     </button>
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.D_30"
-                            (click)="getCoinInfo(chartRangeData.D_30)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.D_30"
+                      (click)="getCoinInfo(chartRangeData.D_30)">
                       <span>30D</span>
                     </button>
-                    <button type="button"
-                            [class.active]="chartRange === chartRangeData.MONTH_12"
-                            (click)="getCoinInfo(chartRangeData.MONTH_12)">
+                    <button
+                      type="button"
+                      [class.active]="chartRange === chartRangeData.MONTH_12"
+                      (click)="getCoinInfo(chartRangeData.MONTH_12)">
                       <span>12M</span>
                     </button>
                   </div>
@@ -159,15 +174,15 @@
                 <div class="d-flex align-items-center">
                   <i class="ph-cube-light icon-brand text--gray-3"></i>
                   <div class="ml-4">
-                    <div class="body-01 text--gray-1">Height</div>
+                    <div class="body text--gray-1">Height</div>
                     <div *ngIf="global?.dataHeader?.block_height > 0"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
+                         class="h5 mb-0 text--white d-xl-none mt-2">
                       {{ global?.dataHeader?.block_height || 0 | number }}
                     </div>
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.block_height > 0"
-                    class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.block_height || 0 | number }}
                 </div>
               </div>
@@ -176,8 +191,8 @@
                 <div class="d-flex align-items-center">
                   <i class="ph-graph-light icon-brand text--gray-3"></i>
                   <div class="ml-4">
-                    <div class="body-01 text--gray-1">Community Pool</div>
-                    <div class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
+                    <div class="body text--gray-1">Community Pool</div>
+                    <div class="h5 mb-0 text--white d-xl-none mt-2">
                       {{ global?.dataHeader?.community_pool_format || 0}}
                     </div>
                   </div>
@@ -191,9 +206,9 @@
                 <div class="d-flex align-items-center">
                   <i class="ph-file-light icon-brand text--gray-3"></i>
                   <div class="ml-4">
-                    <div class="body-01 text--gray-1">Transactions</div>
+                    <div class="body text--gray-1">Transactions</div>
                     <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
+                         class="h5 mb-0 text--white d-xl-none mt-2">
                       {{ global?.dataHeader?.total_txs_num | number }}
                     </div>
                   </div>
@@ -211,44 +226,44 @@
             <div class="card-body card-body--gradient-black d-flex flex-column justify-content-between">
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand">
+                  <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand"/>
                   <div class="ml-4">
-                    <div class="body-01 text--gray-1">Bonded Token</div>
+                    <div class="body text--gray-1">Bonded Token</div>
                     <div *ngIf="global?.dataHeader?.bonded_tokens"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
+                         class="h5 mb-0 text--white d-xl-none mt-2">
                       {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
                     </div>
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.bonded_tokens"
-                    class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
                 </div>
               </div>
               <div class="divider divider-horizontal my-4"></div>
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand">
+                  <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand"/>
                   <div class="ml-4">
-                    <div class="body-01 text--gray-1">Inflation rate</div>
+                    <div class="body text--gray-1">Inflation rate</div>
                     <div *ngIf="global?.dataHeader?.inflation"
-                         class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
+                         class="h5 mb-0 text--white d-xl-none mt-2">
                       {{ global?.dataHeader?.inflation }}
                     </div>
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.inflation"
-                    class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.inflation }}
                 </div>
               </div>
               <div class="divider divider-horizontal my-4"></div>
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand">
+                  <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand"/>
                   <div class="ml-4">
-                    <div class="body-01 text--gray-1">Staking APR</div>
-                    <div class="h3 mb-0 fw-semibold text--white d-xl-none mt-2">
+                    <div class="body text--gray-1">Staking APR</div>
+                    <div class="h5 mb-0 text--white d-xl-none mt-2">
                       {{staking_APR.toFixed(2) || 0}}%
                     </div>
                   </div>
@@ -265,65 +280,73 @@
     <div class="col-12 col-xl-3">
       <div class="card card__item">
         <div class="card-body">
-          <div class="h2 mb-0 text--white">Voting Period</div>
+          <div class="h3 fw-semibold mb-0 text--white">Voting Period</div>
           <div class="dropdown aura-dropdown mt-4" *ngIf="voting_Period_arr.length > 0">
             <button
-                class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-             <span>{{curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title}}</span>
+              class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <span class="body">{{
+                curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
+              }}</span>
             </button>
             <ul class="dropdown-menu aura-dropdown-menu aura-dropdown-menu--light">
               <ng-container *ngFor="let item of voting_Period_arr">
                 <li class="dropdown-item cursor-pointer">
                   <button type="button" class="button p-0 body-03" (click)="curr_voting_Period = item">
-                    {{item.content.title}}
+                    {{ item.content.title }}
                   </button>
                 </li>
               </ng-container>
             </ul>
           </div>
-          <div class="mt-4 voting-period-btn--disable"
-              *ngIf="voting_Period_arr.length === 0">
+          <div class="mt-4 voting-period-btn--disable" *ngIf="voting_Period_arr.length === 0">
             No proposal within the voting period
           </div>
           <div class="mt-3 card-child">
             <div class="d-flex align-items-center justify-content-between">
-              <div class="body-01 text--white">Turn out:
+              <div class="body-03 text--white">
+                Turn out:
                 {{ curr_voting_Period ? (curr_voting_Period.turnout | number: global.formatNumber2Decimal) : 0 }}
-                %</div>
-              <button *ngIf="!curr_voting_Period" [disabled]="true"
-                      class="button button--sm button-outline button-pill px-4">
+                %
+              </div>
+              <button
+                *ngIf="!curr_voting_Period"
+                [disabled]="true"
+                class="button button--sm button-outline button-pill px-4">
                 <span class="caption fw-normal">View detail</span>
               </button>
-              <a *ngIf="curr_voting_Period" href="/votings/{{curr_voting_Period.proposal_id}}" class="button button--sm button-outline button-pill px-4">
+              <a
+                *ngIf="curr_voting_Period"
+                href="/votings/{{ curr_voting_Period.proposal_id }}"
+                class="button button--sm button-outline button-pill px-4">
                 <span class="caption fw-normal">View detail</span>
               </a>
             </div>
             <div class="divider divider-horizontal my-3"></div>
-            <div class="d-flex align-items-center justify-content-between body-01">
+            <div class="d-flex align-items-center justify-content-between body-03">
               <div>
                   <div class="text--gray-2">Yes</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.yes | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
               <div>
                   <div class="text--gray-2">No</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.no | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
               <div>
                   <div class="text--gray-2">Veto</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.no_with_veto | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
               <div>
                   <div class="text--gray-2">Abstain</div>
-                  <div class="fw-semibold text--gray-1">
+                  <div class="text--gray-1 fw-semibold mt-1">
                     {{ curr_voting_Period ? (curr_voting_Period.tally.abstain | number: global.formatNumber2Decimal) : '0,0' }}%
                   </div>
               </div>
@@ -343,10 +366,10 @@
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Blocks</h2>
           <button
-              type="button"
-              class="button button-pill button--sm button-outline button-outline__in-card body"
-              [routerLink]="'/blocks'"
-              *ngIf="dataSourceBlock">
+            type="button"
+            class="button button-pill button--sm button-outline button-outline__in-card body"
+            [routerLink]="'/blocks'"
+            *ngIf="dataSourceBlock">
             <span>View more</span>
           </button>
         </div>
@@ -357,7 +380,7 @@
                 <ng-container *ngFor="let template of templatesBlock; index as i">
                   <ng-container [matColumnDef]="template.matColumnDef">
                     <th mat-header-cell *matHeaderCellDef>
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -366,15 +389,15 @@
                             {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                           </div>
                           <a
-                              *ngSwitchCase="'proposer'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/validators', data.operator_address]">
+                            *ngSwitchCase="'proposer'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/validators', data.operator_address]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer"
-                              [routerLink]="['/blocks', data.height]">
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer"
+                            [routerLink]="['/blocks', data.height]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -407,10 +430,10 @@
         <div class="align-items-center d-flex justify-content-between px-6 pt-4 pt-lg-6 pb-0 pb-lg-2">
           <h2 class="text--white mb-0">Transactions</h2>
           <button
-              type="button"
-              class="button button-pill button--sm button-outline button-outline__in-card body"
-              [routerLink]="'/transaction'"
-              *ngIf="dataSourceTx">
+            type="button"
+            class="button button-pill button--sm button-outline button-outline__in-card body"
+            [routerLink]="'/transaction'"
+            *ngIf="dataSourceTx">
             <span>View more</span>
           </button>
         </div>
@@ -425,7 +448,7 @@
                         *matHeaderCellDef
                         [class.width-txhash]="template.headerCellDef === 'Tx Hash'"
                         [ngClass]="template.headerCellDef === 'Type' ? 'width-type' : ''">
-                      <div [innerHTML]="template.headerCellDef | translate"></div>
+                      <div [innerHTML]="template.headerCellDef | translate" class="text--white"></div>
                     </th>
                     <td mat-cell *matCellDef="let data">
                       <div>
@@ -434,15 +457,15 @@
                             {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                           </div>
                           <a
-                              *ngSwitchCase="'tx_hash'"
-                              class="text--primary cursor-pointer hash-link"
-                              [routerLink]="['/transaction', data['tx_hash']]">
+                            *ngSwitchCase="'tx_hash'"
+                            class="text--primary cursor-pointer hash-link"
+                            [routerLink]="['/transaction', data['tx_hash']]">
                             {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                           </a>
                           <a
-                              *ngSwitchCase="'height'"
-                              class="text--primary cursor-pointer block-link"
-                              [routerLink]="['/blocks', data['height']]">
+                            *ngSwitchCase="'height'"
+                            class="text--primary cursor-pointer block-link"
+                            [routerLink]="['/blocks', data['height']]">
                             {{ data[template.matColumnDef] }}
                           </a>
                           <div *ngSwitchCase="'type'">

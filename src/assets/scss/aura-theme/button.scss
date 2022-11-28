@@ -368,7 +368,8 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--spacer-2);
-    height: 34px;
+    height: 32px;
+    font-weight: 600;
     @media (max-width: 991.99px) {
       height: 32px;
       width: 100%;
