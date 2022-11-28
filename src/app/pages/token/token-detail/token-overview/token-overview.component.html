@@ -28,7 +28,7 @@
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
-                  <span class="small-body">${{ tokenDetail.price | number: global.formatNumber2Decimal }}</span>
+                  <span class="small-body">${{ tokenDetail.price | number: global.formatNumberToken }}</span>
                   <span class="caption fw-normal text--gray-5 ml-1">
                     <ng-container *ngIf="global.price.aura">
                       @{{ tokenDetail.price / global.price.aura || 0 | number: global.formatNumberToken }}
