@@ -5,10 +5,7 @@
 }
 .card {
   @media (min-width: 991.98px) {
-    min-width: 575px;
-  }
-  &-header {
-    background-color: var(--aura-gray-9);
+    width: 575px;
   }
 }
 .address-text {

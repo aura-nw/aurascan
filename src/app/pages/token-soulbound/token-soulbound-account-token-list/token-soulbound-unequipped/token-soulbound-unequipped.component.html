@@ -47,7 +47,7 @@
               <div class="nft-cards__item nft-cards__item--unclaimed">
                   <div class="token-cards__img">
                     <img src="{{token.img}}" alt="{{token.name}}">
-                    <div class="token__unclaimed body fw-semibold" *ngIf="!token.isClaimed">Unclaimed</div>
+                    <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="!token.isClaimed">Unclaimed</div>
                   </div>
                   <div class="pt-2 pb-2 px-2">
                     <div class="nft__info">
@@ -55,10 +55,10 @@
                       <span>Aureliana</span>
                     </div>
                   </div>
-                  <div class="px-2 d-lg-none">
-                    <button class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed mb-2"
+                  <div class="px-2 d-lg-none position-relative">
+                    <button class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed button-review--mob mb-2"
                             (click)="openDialogDetail()">
-                      <span>Preview</span>
+                      <span class="caption fw-normal">Preview</span>
                     </button>
                   </div>
                   <button class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"

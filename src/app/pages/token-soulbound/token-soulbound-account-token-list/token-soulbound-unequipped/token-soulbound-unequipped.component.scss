@@ -4,12 +4,15 @@
   top: 8px;
   background-color: var(--aura-yellow-3);
   border-radius: 4px;
-  height: 22px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 10px;
   color: var(--aura-gray-9);
+  @media (min-width: 991.98px) {
+    height: 22px;
+  }
 }
 .btn-preview {
   position: absolute;
@@ -23,25 +26,27 @@
 .nft__unclaimed {
   .nft-cards__item-border {
     transition: unset;
-    &:hover {
-      border: solid 1px var(--aura-gray-8);
-      background-image: unset;
+    @media (min-width: 991.98px) {
+      &:hover {
+        border: solid 1px var(--aura-gray-8);
+        background-image: unset;
+      }
     }
   }
-  @media (min-width: 991.98px) {
-    .nft-cards__item {
-      position: relative;
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        background: rgba(54, 56, 67, 0.5);
-        transition: background .35s ease-in-out;
-      }
-      &:hover {
+  .nft-cards__item {
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background: rgba(54, 56, 67, 0.5);
+      transition: background .35s ease-in-out;
+    }
+    &:hover {
+      @media (min-width: 991.98px) {
         &:before {
           background: rgba(54, 56, 67, 0.8);
         }
@@ -51,4 +56,7 @@
       }
     }
   }
+}
+.button-review--mob {
+  box-shadow: 2px 1000px 1px rgba(54, 56, 67, 0.9) inset !important;
 }

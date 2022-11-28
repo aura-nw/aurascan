@@ -3,6 +3,10 @@ import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {PAGE_EVENT} from "src/app/core/constants/common.constant";
 import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  TokenSoulboundDetailPopupComponent
+} from "src/app/pages/token-soulbound/token-soulbound-detail-popup/token-soulbound-detail-popup.component";
 
 @Component({
   selector: 'app-token-soulbound-unequipped',
@@ -188,7 +192,9 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
   nextKey = null;
   currentKey = null;
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getTokenData();
@@ -253,6 +259,50 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
   }
 
   openDialogDetail() {
-    console.log('here')
+    const tokenData = {
+      name: 'The Picaroons',
+      img: 'assets/images/soulboundToken.png',
+      desc: 'Soulbound Token given to the validators in accompany with Aura Network throughout Euphoria Testnet duration. We appreciate your contribution and hope we will come alongside together in long term. Soulbound Token given to the validators in accompany with Aura Network throughout Euphoria Testnet duration. We appreciate your contribution and hope we will come alongside together in long term.Soulbound Token given to the validators in accompany with Aura Network throughout Euphoria Testnet duration.',
+      properties: [
+        {
+          label: 'Style',
+          detail: 'Vintage'
+        },
+        {
+          label: 'Goal',
+          detail: 'Sale'
+        },
+        {
+          label: 'Size',
+          detail: '3x4'
+        },
+        {
+          label: 'Time',
+          detail: '2022'
+        },
+        {
+          label: 'Serie',
+          detail: 'A'
+        },
+        {
+          label: 'Function',
+          detail: 'Test'
+        }
+      ]
+    };
+    let dialogRef = this.dialog.open(TokenSoulboundDetailPopupComponent, {
+      panelClass: 'TokenSoulboundDetailPopup',
+      data: tokenData,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'canceled') {
+        console.log(result)
+        // call API post data here
+        // then check response, if response message is successfull -> load dataTable again
+        // setTimeout(() => {
+        // this.getListToken();
+        // }, 3000);
+      }
+    });
   }
 }
