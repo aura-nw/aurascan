@@ -246,8 +246,6 @@ export function GrantMsgAllowance(
       grantee,
       granter,
     });
-
-    console.log(msgAllowance);
   } catch (e) {}
 
   return {
