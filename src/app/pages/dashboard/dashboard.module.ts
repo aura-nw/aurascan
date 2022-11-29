@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxMaskModule } from 'ngx-mask';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { SimplebarAngularModule } from 'simplebar-angular';
@@ -25,7 +24,6 @@ import {CommonService} from "src/app/core/services/common.service";
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    NgApexchartsModule,
     SimplebarAngularModule,
     CarouselModule,
     RouterModule,

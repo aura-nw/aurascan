@@ -18,8 +18,6 @@ import {CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE} from '../../core/constants/
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
-import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
-import {TranslateService} from "@ngx-translate/core";
 import {ChartOptions} from "src/app/core/models/chart.model";
 
 @Component({
@@ -193,10 +191,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getListBlock();
     this.getListTransaction();
     setTimeout(() => {
-      // new
       this.getCoinInfo(this.chartRange);
-      // old
-      // this.updateBlockAndTxs(this.chartRange);
     }, 1000);
     this.cdr.detectChanges();
   }
