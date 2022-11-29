@@ -29,17 +29,17 @@
                       </span>
                     </a>
                     <div *ngSwitchCase="'amount'">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      {{ +data[template.matColumnDef] | mask: 'separator.6' }}
                       <span class="text--primary">{{ data?.denom }}</span>
                     </div>
                     <div *ngSwitchCase="'token_amount'">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      {{ data[template.matColumnDef] | mask: 'separator.6' }}
                     </div>
                     <div *ngSwitchCase="'token_name'" class="text--primary">
                       {{ data[template.matColumnDef] }}
                     </div>
                     <div *ngSwitchCase="'reward'">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      {{ +data[template.matColumnDef] | mask: 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'completion_time'">
@@ -132,14 +132,14 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ item.amount | number: global.formatNumberToken }}
+                      {{ item.amount | mask: 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between body-01 mt-3">
                     <div class="text--gray-4">Reward</div>
                     <div class="txt-right">
-                      {{ item.reward | number: global.formatNumberToken }}
+                      {{ item.reward | mask: 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
@@ -166,7 +166,7 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ item.amount | number: global.formatNumberToken }}
+                      {{ item.amount | mask: 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
@@ -218,7 +218,7 @@
                   <div class="d-flex justify-content-between body-01">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ item.amount | number: global.formatNumberToken }}
+                      {{ item.amount | mask: 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
@@ -237,7 +237,7 @@
                   <div class="d-flex justify-content-between">
                     <div class="text--gray-4">Amount</div>
                     <div class="txt-right">
-                      {{ item.amount | number: global.formatNumberToken }}
+                      {{ item.amount | mask: 'separator.6' }}
                       <span class="text--primary">{{ denom }}</span>
                     </div>
                   </div>
