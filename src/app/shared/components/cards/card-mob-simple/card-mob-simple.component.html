@@ -12,7 +12,7 @@
           <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
         </div>
         <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
-          {{ title.subLabelContent }}
+          <span>{{ title.subLabelContent }}</span>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
           <img [src]="'assets/icons/icons-svg/color/fail.svg' | imageS3" alt="" width="24px" height="24px" />
         </div>
         <div *ngIf="title.subLabelContent" class="sub-label body {{ title.subLabelClass ? title.subLabelClass : '' }}">
-          {{ title.subLabelContent }}
+          <span>{{ title.subLabelContent }}</span>
         </div>
       </div>
     </div>

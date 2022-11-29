@@ -24,11 +24,14 @@
 
   .sub-label {
     text-align: center;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
     font-weight: 500;
+    span {
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+    }
 
     &.label__status {
       font-weight: 600;

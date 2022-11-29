@@ -77,7 +77,7 @@ body {
 }
 
 .cdk-overlay-container {
-    z-index: 1100;
+    z-index: 1100 !important;
 }
 
 .disabled-pointer {

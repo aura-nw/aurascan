@@ -83,7 +83,7 @@
           <div class="row mb-3 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Fee</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01">
-              {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
+              {{ +transaction?.fee | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
             </div>
           </div>
           <div class="row body justify-content-between justify-content-lg-start">
