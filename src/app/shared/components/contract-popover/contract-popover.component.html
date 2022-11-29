@@ -23,7 +23,7 @@
         <div>Token Transfer</div>
         <div>
           <img class="d-inline" width="20px" [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="aura"/>
-          {{ popoverData?.amount | number: FORMAT.PRICE_6 }}
+          {{ popoverData?.amount | mask: 'separator.6' }}
           (${{ popoverData?.amount * popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
           <a class="text--primary" [routerLink]="['/tokens/token', popoverData.tokenAddress]">
             {{ popoverData.symbol }}
@@ -73,7 +73,7 @@
     <div class="d-flex flex-column gap-2 small-body">
       <div>Transaction Fee:</div>
       <div class="text--contract">
-        {{ popoverData.fee | number: FORMAT.PRICE_6 }} {{ denom }} (${{
+        {{ popoverData.fee | mask: 'separator.6' }} {{ denom }} (${{
           popoverData?.fee * popoverData?.price || 0 | number: FORMAT.PRICE_2
         }})
       </div>
@@ -85,8 +85,8 @@
       <div class="text--contract">
         {{ popoverData.gas_used | mask: 'separator' }} Gas Used From
         {{ popoverData.gas_wanted | mask: 'separator' }} Gas Limit<br/>
-        {{ popoverData['gasPrice'] | number: FORMAT.PRICE_6 }} {{ denom }} ({{
-          popoverData['gasPriceU'] | number: FORMAT.PRICE_6
+        {{ popoverData['gasPrice'] | mask: 'separator.6' }} {{ denom }} ({{
+          popoverData['gasPriceU'] | mask: 'separator.6'
         }}
         {{ coinMinimalDenom }})
       </div>

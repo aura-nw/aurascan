@@ -157,12 +157,12 @@
                                 </div>
                               </div>
                               <div *ngSwitchCase="'fee'">
-                                {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                                {{ +data[template.matColumnDef] | mask: 'separator.6' }}
                                 <span class="text--primary">{{ denom }}</span>
                               </div>
                               <div *ngSwitchCase="'amount'">
                                 <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                                  {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                                  {{ +data[template.matColumnDef] | mask: 'separator.6' }}
                                   <span class="text--primary">{{ data?.denom }}</span>
                                 </ng-container>
                                 <ng-template #displayNonNumber>
@@ -237,7 +237,7 @@
                   </ng-container>
                 </ul>
                 <!-- Delegations-->
-                <app-account-table
+                <app-account-detail-table
                   *ngIf="currentStake === stakeMode.Delegations"
                   [dataSource]="dataSourceDelegation"
                   [templates]="templatesDelegation"
@@ -245,9 +245,9 @@
                   [pageData]="pageDataDelegation"
                   [pageEventType]="pageEventType.Delegation"
                   (pageEvent)="changePage($event)">
-                </app-account-table>
+                </app-account-detail-table>
                 <!-- Unbondings-->
-                <app-account-table
+                <app-account-detail-table
                   *ngIf="currentStake === stakeMode.Unbondings"
                   [dataSource]="dataSourceUnBonding"
                   [templates]="templatesUnBonding"
@@ -255,23 +255,23 @@
                   [pageData]="pageDataUnbonding"
                   [pageEventType]="pageEventType.Unbonding"
                   (pageEvent)="changePage($event)">
-                </app-account-table>
+                </app-account-detail-table>
                 <!-- Redelegations-->
                 <div *ngIf="currentStake === stakeMode.Redelegations">
                   <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
                     1. {{ 'NOTICE.REDELEGATE_WAITING' | translate: { timeStaking: timeStaking } }}<br />
                     2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
                   </div>
-                  <app-account-table
+                  <app-account-detail-table
                     [dataSource]="dataSourceReDelegation"
                     [templates]="templatesReDelegation"
                     [displayedColumns]="displayedColumnsReDelegation"
                     [pageData]="pageDataRedelegation"
                     [pageEventType]="pageEventType.Redelegation"
-                    (pageEvent)="changePage($event)"></app-account-table>
+                    (pageEvent)="changePage($event)"></app-account-detail-table>
                 </div>
                 <!-- Vestings-->
-                <app-account-table
+                <app-account-detail-table
                   *ngIf="currentStake === stakeMode.Vestings"
                   [dataSource]="dataSourceVesting"
                   [templates]="templatesVesting"
@@ -279,7 +279,7 @@
                   [pageData]="pageDataVesting"
                   [pageEventType]="pageEventType.Vestings"
                   (pageEvent)="changePage($event)">
-                </app-account-table>
+                </app-account-detail-table>
               </div>
               <div class="mt-20" *ngIf="accDetailLoading">
                 <app-loading-sprint></app-loading-sprint>
@@ -319,7 +319,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
                     <span class="h5 h6-mob mb-0 text--gray-1">{{
-                      currentAccountDetail?.total | number: global.formatNumberToken
+                      currentAccountDetail?.total | mask: 'separator.6'
                     }}</span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -330,7 +330,7 @@
                         <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
                       </div>
                       <span class="text--gray-1 body body-01-mob fw-500 fw-normal-mob">{{
-                        item.amount | number: global.formatNumberToken
+                        +item.amount | mask: 'separator.6'
                       }}</span>
                     </div>
                   </ng-container>

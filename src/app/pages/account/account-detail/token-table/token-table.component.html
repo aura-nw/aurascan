@@ -89,7 +89,7 @@
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef class="">AMOUNT</th>
               <td mat-cell *matCellDef="let element">
-                {{ element.balance | number: global.formatNumberToken }}
+                {{ element.balance | mask: 'separator.6' }}
               </td>
             </ng-container>
 
@@ -98,12 +98,12 @@
               <th mat-header-cell *matHeaderCellDef class="">PRICE</th>
               <td mat-cell *matCellDef="let element">
                 <span *ngIf="element.price > 0; else defaultValues"
-                  >${{ element.price | number: global.formatNumberToken }}</span
+                  >${{ +element.price | mask: 'separator.6' }}</span
                 >
                 <span
                   *ngIf="global.price.aura && element.price > 0 && coinMiniDenom !== element.denom"
                   class="text--gray-5">
-                  &nbsp;{{ '(' + (element.price / global.price.aura | number: global.formatNumberToken) }}&nbsp;{{
+                  &nbsp;{{ '(' + (element.price / global.price.aura | mask: 'separator.6') }}&nbsp;{{
                     denom + ')'
                   }}
                 </span>

@@ -76,7 +76,7 @@
                       >
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      {{ data[template.matColumnDef] | mask: 'separator.6' }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'amount'">
                       {{ data[template.matColumnDef] || 0 }}

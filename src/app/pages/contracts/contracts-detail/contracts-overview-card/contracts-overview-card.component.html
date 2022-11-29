@@ -27,7 +27,7 @@
       <tr>
         <td class="text--gray-5 body-02-mob">Balance:</td>
         <td>
-          {{ contractDetail?.balance | number: global.formatNumberToken }}
+          {{ contractDetail?.balance | mask: 'separator.6' }}
           {{ denom }}
         </td>
       </tr>
@@ -37,7 +37,7 @@
         <td class="border_none">
           ${{ contractDetail?.price | number: global.formatNumber2Decimal }}
           <span class="text--gray-5 ml-1 caption-mob fw-normal break-word text-nowrap">
-            >(@ ${{ global.price.aura | number: global.formatNumberToken }}/{{ denom | uppercase }})
+            >(@ ${{ global.price.aura | mask: 'separator.6' }}/{{ denom | uppercase }})
           </span>
         </td>
       </tr>

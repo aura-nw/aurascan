@@ -99,12 +99,12 @@
               <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price; else noData">
-                  <div class="mb-1">${{ element.price | number: global.formatNumber2Decimal }}</div>
+                  <div class="mb-1">${{ element.price | mask: 'separator.6' }}</div>
                   <div class="caption text--gray-5" *ngIf="global.price.btc">
-                    {{ element.price / global.price.btc || 0 | number: global.formatNumberToken }} BTC
+                    {{ element.price / global.price.btc || 0 | mask: 'separator.6' }} BTC
                   </div>
                   <div class="caption text--gray-5" *ngIf="global.price.aura">
-                    {{ element.price / global.price.aura || 0 | number: global.formatNumberToken }} {{ denom }}
+                    {{ element.price / global.price.aura || 0 | mask: 'separator.6' }} {{ denom }}
                   </div>
                 </ng-container>
               </td>

@@ -148,7 +148,7 @@
                   </div>
                   <div class="divider divider-vertical mx-3 mx-md-4"></div>
                   <button class="button" (click)="chartDataExport()">
-                    <i class="ph-download-simple-fill icon--xs text--gray-1"></i>
+                    <i class="ph-download-simple-fill h3 mb-0 text--gray-1"></i>
                   </button>
                 </div>
               </div>
@@ -182,7 +182,7 @@
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.block_height > 0"
-                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.block_height || 0 | number }}
                 </div>
               </div>
@@ -197,7 +197,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                <div class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.community_pool_format || 0}}
                 </div>
               </div>
@@ -214,7 +214,7 @@
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
-                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.total_txs_num | number }}
                 </div>
               </div>
@@ -236,7 +236,7 @@
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.bonded_tokens"
-                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
                 </div>
               </div>
@@ -253,7 +253,7 @@
                   </div>
                 </div>
                 <div *ngIf="global?.dataHeader?.inflation"
-                     class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                     class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{ global?.dataHeader?.inflation }}
                 </div>
               </div>
@@ -268,7 +268,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="h2 mb-0 fw-semibold text--white d-none d-xl-block">
+                <div class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
                   {{staking_APR.toFixed(2) || 0}}%
                 </div>
               </div>
@@ -280,7 +280,7 @@
     <div class="col-12 col-xl-3">
       <div class="card card__item">
         <div class="card-body">
-          <div class="h3 fw-semibold mb-0 text--white">Voting Period</div>
+          <div class="h2 h3-mob fw-semibold mb-0 text--white">Voting Period</div>
           <div class="dropdown aura-dropdown mt-4" *ngIf="voting_Period_arr.length > 0">
             <button
               class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"

@@ -28,10 +28,10 @@
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
-                  <span class="small-body">${{ tokenDetail.price | number: global.formatNumberToken }}</span>
+                  <span class="small-body">${{ tokenDetail.price | mask: 'separator.6' }}</span>
                   <span class="caption fw-normal text--gray-5 ml-1">
                     <ng-container *ngIf="global.price.aura">
-                      @{{ tokenDetail.price / global.price.aura || 0 | number: global.formatNumberToken }}
+                      @{{ tokenDetail.price / global.price.aura || 0 | mask: 'separator.6' }}
                     </ng-container>
                     <ng-container *ngIf="!global.price.aura">-</ng-container>
                     {{ denom }}
@@ -71,7 +71,7 @@
               <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
-                  {{ tokenDetail.max_total_supply | number: global.formatNumberToken }}
+                  {{ +tokenDetail.max_total_supply | mask: 'separator.6' }}
                 </ng-container>
                 <ng-container *ngIf="tokenDetail.isNFTContract">
                   {{ tokenDetail.num_tokens | number: global.formatNumberOnlyDecimal }}
