@@ -99,7 +99,9 @@ export class TransactionMessagesComponent implements OnInit {
       this.displayMsgRaw();
     } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
       let type;
-      if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
+      if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.allowance.['@type']");
+      } else if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
         type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
       } else {
         type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
@@ -108,16 +110,16 @@ export class TransactionMessagesComponent implements OnInit {
         this.typeGrantAllowance = 'Periodic';
       }
 
-      this.spendLimitAmount = _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') || _.get(
-        this.transactionDetail?.messages[0]?.allowance,
-        'allowance.basic.spend_limit[0].amount',
-      );
+      this.spendLimitAmount =
+        _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
+        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
+        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
       if (this.typeGrantAllowance === 'Basic') {
-        this.spendLimitAmount = _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') || _.get(
-          this.transactionDetail?.messages[0]?.allowance,
-          'allowance.spend_limit[0].amount',
-        );
-      } 
+        this.spendLimitAmount =
+          _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
+          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
+          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.spend_limit[0].amount');
+      }
     } else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1

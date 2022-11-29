@@ -51,7 +51,8 @@
                         </div>
                       </div>
                       <div *ngSwitchCase="'fee'">
-                        {{ +data[template.matColumnDef] | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+                        {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                        <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'amount'">
                         <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
@@ -102,14 +103,17 @@
                 class: 'body-01-mob text--gray-1',
                 info:
                   data.amount > 0
-                    ? (data.amount | mask: 'separator.6') +
-                      '<span class=text--primary> ' +
-                      denom +
-                      '</span>'
+                    ? (+data.amount | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
                     : checkAmountValue(data.amount, data.tx_hash)
               },
-              { label: 'Fee', class: 'body-01-mob text--gray-1', info: data.fee + '<span class=text--primary> ' + denom + '</span>' },
-              { label: 'Time', class: 'body-01-mob text--gray-1 card__date',
+              {
+                label: 'Fee',
+                class: 'body-01-mob text--gray-1',
+                info: (+data.fee | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+              },
+              {
+                label: 'Time',
+                class: 'body-01-mob text--gray-1 card__date',
                 info:
                   '<span>' +
                   (data.timestamp | customDate: 'yyyy-MM-dd') +
