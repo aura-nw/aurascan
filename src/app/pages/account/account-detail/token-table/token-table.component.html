@@ -1,5 +1,4 @@
 <section>
-  <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ pageData?.length || 0 }})</h2>
   <div class="card">
     <div class="card-body">
       <!-- Title -->
@@ -45,13 +44,15 @@
                   class="d-flex align-items-center"
                   [routerLink]="['/tokens/token', element.contract_address]"
                   *ngIf="element.contract_address">
-                  <img [src]="element.image"  class="image-token" />
+                  <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
+                  <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis: 19 }}
                   </div>
                 </a>
                 <div class="d-flex align-items-center" *ngIf="!element.contract_address">
-                  <img [src]="element.image" class="image-token" />
+                  <img *ngIf="element?.image" [src]="element?.image" class="image-token" alt="" />
+                  <img *ngIf="!element?.image" [src]="defaultLogoAura" class="image-token" alt="" />
                   <div class="ml-2 body-03 fw-semibold">
                     {{ element.name | stringEllipsis: 19 }}
                   </div>
@@ -74,13 +75,13 @@
                 <a
                   class="d-flex align-items-center"
                   [routerLink]="['/contracts', element.contract_address]"
-                  *ngIf="element.contract_address">
+                  *ngIf="element.contract_address !== '-'">
                   <img [src]="'assets/icons/icons-svg/basic/file-text.svg' | imageS3" width="24px" height="24px" />
                   <div class="ml-2 text--primary">
                     {{ element.contract_address | cutStringPipe: 8:8 }}
                   </div>
                 </a>
-                <span *ngIf="!element.contract_address">-</span>
+                <span *ngIf="element.contract_address === '-'">-</span>
               </td>
             </ng-container>
 
@@ -88,7 +89,7 @@
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef class="">AMOUNT</th>
               <td mat-cell *matCellDef="let element">
-                {{ element.balance | number: global.formatNumberToken }}
+                {{ element.balance | mask: 'separator.6' }}
               </td>
             </ng-container>
 
@@ -96,21 +97,16 @@
             <ng-container matColumnDef="price">
               <th mat-header-cell *matHeaderCellDef class="">PRICE</th>
               <td mat-cell *matCellDef="let element">
-                <ng-container *ngIf="element.contract_address">
-                  <span *ngIf="element.price > 0; else defaultValues"
-                    >${{ element.price | number: global.formatNumberToken }}</span
-                  >
-                  <span *ngIf="global.price.aura && element.price > 0" class="text--gray-5">
-                    &nbsp;{{ '(' + (element.price / global.price.aura | number: global.formatNumberToken) }}&nbsp;{{
-                      denom + ')'
-                    }}
-                  </span>
-                </ng-container>
-                <ng-container *ngIf="!element.contract_address">
-                  <span *ngIf="element.price > 0; else defaultValues"
-                    >${{ global.price.aura | number: global.formatNumberToken }}</span
-                  >
-                </ng-container>
+                <span *ngIf="element.price > 0; else defaultValues"
+                  >${{ element.price | mask: 'separator.6' }}</span
+                >
+                <span
+                  *ngIf="global.price.aura && element.price > 0 && coinMiniDenom !== element.denom"
+                  class="text--gray-5">
+                  &nbsp;{{ '(' + (element.price / global.price.aura | mask: 'separator.6') }}&nbsp;{{
+                    denom + ')'
+                  }}
+                </span>
               </td>
             </ng-container>
 
@@ -137,22 +133,16 @@
             <ng-container matColumnDef="value">
               <th mat-header-cell *matHeaderCellDef>VALUE</th>
               <td mat-cell *matCellDef="let element">
-                <ng-container *ngIf="element.contract_address">
-                  <span *ngIf="element.price > 0; else defaultValues"
-                    >${{ element.price * element.balance | number: global.formatNumber2Decimal }}</span
-                  >
-                  <span *ngIf="global.price.aura && element.price > 0" class="text--gray-5">
-                    &nbsp;{{
-                      '(' +
-                        ((element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal)
-                    }}&nbsp;{{ denom + ')' }}
-                  </span>
-                </ng-container>
-                <ng-container *ngIf="!element.contract_address">
-                  <span *ngIf="element.price > 0; else defaultValues"
-                    >${{ global.price.aura * element.balance | number: global.formatNumber2Decimal }}</span
-                  >
-                </ng-container>
+                <span *ngIf="element.price > 0; else defaultValues"
+                  >${{ element.price * element.balance | number: global.formatNumber2Decimal }}</span
+                >
+                <span
+                  *ngIf="global.price.aura && element.price > 0 && coinMiniDenom !== element.denom"
+                  class="text--gray-5">
+                  &nbsp;{{
+                    '(' + ((element.price * element.balance) / global.price.aura | number: global.formatNumber2Decimal)
+                  }}&nbsp;{{ denom + ')' }}
+                </span>
               </td>
             </ng-container>
 

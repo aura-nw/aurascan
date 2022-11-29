@@ -3,7 +3,7 @@
     <app-pagetitle title="Votings"></app-pagetitle>
     <div class="row row-eq-height">
       <ng-container *ngIf="!breakpoint.value.matches">
-        <div class="col-6 proposal-lasted" *ngFor="let lastedItem of proposalData.slice(0, 4); index as idx">
+        <div class="col-6 proposal-lasted" *ngFor="let lastedItem of proposalData; index as idx">
           <div class="card mb-0 h-100">
             <div class="card-body pb-0">
               <div class="d-flex justify-content-between align-items-start">
@@ -146,7 +146,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="breakpoint.value.matches">
-        <div class="proposal-lasted" *ngFor="let lastedItem of proposalData.slice(0, 4); index as idex">
+        <div class="proposal-lasted" *ngFor="let lastedItem of proposalData; index as idex">
           <div class="card mb-0 h-100">
             <div class="card-body px-3 py-3">
               <div class="border-bottom-mobile pb-4">
@@ -350,7 +350,7 @@
           <ng-container matColumnDef="totalDeposit">
             <th mat-header-cell *matHeaderCellDef>Total Deposit</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.total_deposit[0].amount | number: global.formatNumberToken }}
+              {{ element.total_deposit[0].amount | mask: 'separator.6' }}
               <span class="text--primary">{{ denom }}</span>
             </td>
           </ng-container>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import { BehaviorSubject } from 'rxjs';
-import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+
 export interface IConfiguration {
   fabric: string;
   beUri: string;
@@ -14,6 +14,8 @@ export interface IConfiguration {
   chain_info: ChainInfo | null;
   coins: any;
   env: string;
+  indexerUri: string;
+  urlAdmin: string;
 }
 
 @Injectable()
@@ -27,8 +29,10 @@ export class EnvironmentService {
     validator_s3: '',
     image_s3: '',
     chain_info: null,
-    coins:'',
+    coins: '',
     env: '',
+    indexerUri: '',
+    urlAdmin: ''
   });
 
   get configValue(): IConfiguration {
@@ -47,7 +51,6 @@ export class EnvironmentService {
     //   validator_s3: '',
     //   chain_info: {},
     // });
-
     // this.config$.subscribe(console.log)
   }
 
@@ -57,7 +60,7 @@ export class EnvironmentService {
       .toPromise()
       .then((config: any) => {
         const chainId = config['chainId'] || 'serenity-testnet-001';
-        const chain_info = config['chain_info']?.chainId ? config['chain_info'] : ChainsInfo?.chainId;
+        const chain_info = config['chain_info'];
 
         const data: IConfiguration = {
           fabric: config['fabric'],
@@ -69,7 +72,9 @@ export class EnvironmentService {
           image_s3: config['image_s3'] || 'https://aura-explorer-assets.s3.ap-southeast-1.amazonaws.com/dev-assets/',
           chain_info,
           coins: config['coins'],
-          env: config['env']
+          env: config['env'],
+          indexerUri: config['urlIndexer'],
+          urlAdmin: config['urlAdmin'],
         };
 
         this.config.next(data);

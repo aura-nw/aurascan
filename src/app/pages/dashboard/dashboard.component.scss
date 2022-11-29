@@ -1,10 +1,3 @@
-.box-dashboard {
-  min-height: 200px;
-  @media (min-width: 992px) {
-    min-height: 305px;
-  }
-}
-
 .aura-table th:not(:last-child) {
   width: 23%;
 }
@@ -17,13 +10,21 @@
     width: 16%;
   }
   .width-type {
-    width: 20% !important;
+    width: 20%;
   }
   .width-txhash {
-    width: 30% !important;
+    width: 30%;
   }
-  .label__status {
-    max-width: 165px;
+}
+
+@media (max-width: 992px) {
+  .aura-table.blocks, .aura-table.transaction {
+    th {
+      min-width: 140px;
+      &:last-child {
+        min-width: 180px;
+      }
+    }
   }
 }
 
@@ -35,28 +36,217 @@
     }
   }
 }
-
-:host::ng-deep {
-  apx-chart {
-    .apexcharts-text tspan {
-      color: var(--aura-gray-5);
-      font-size: 1.2rem;
-      line-height: 1.6rem;
-      @media (min-width: 992px) {
-        font-size: 1.4rem;
-        line-height: 1.6rem;
+.divider.divider-vertical {
+  min-height: 16px;
+}
+#chart {
+  position: relative;
+  overflow: hidden;
+}
+::ng-deep {
+  .floating-tooltip-2 {
+    width: 100px;
+    height: 80px;
+    position: absolute;
+    display: none;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: var(--aura-white);
+    background-color: #3b403d;
+    text-align: left;
+    z-index: 1000;
+    top: 12px;
+    left: 12px;
+    pointer-events: none;
+    border-radius: 8px;
+  }
+  .floating-tooltip__header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: var(--aura-gray-8);
+    padding: 8px;
+  }
+  .floating-tooltip__body {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: var(--aura-gray-9);
+    padding: 8px;
+  }
+  .tv-lightweight-charts table tr:last-child {
+    border-top: 1.5px solid #FFA741;
+  }
+}
+.button-switch-stage {
+  &__1 {
+    width: 100%;
+    @media (min-width: 568.98px) {
+      max-width: 152px;
+    }
+    button {
+      padding: 0 14px;
+    }
+  }
+  &__2 {
+    width: 100%;
+    max-width: unset;
+    @media (min-width: 991.98px) {
+      max-width: 239px;
+    }
+  }
+}
+.card-summary-info {
+  .divider-vertical {
+    min-height: 64px;
+  }
+}
+.card-body--gradient-black {
+  background: var(--aura-gradient-black);
+  border-radius: 8px;
+}
+.card-info--gradient-black {
+  padding: var(--spacer-3) var(--spacer-6);
+  background: var(--aura-gradient-black);
+}
+.button-ghost--sm {
+  padding: 0;
+  width: 32px;
+}
+ul {
+  list-style: disc;
+}
+.icon--social {
+  padding: var(--spacer-3);
+  font-size: 2rem;
+  color: var(--aura-gray-2);
+  border-radius: 8px;
+  &:hover {
+    color: var(--aura-white);
+    background-color: var(--aura-gray-9);
+  }
+}
+.voting-dropdown-button {
+  padding: 0 var(--spacer-4);
+  justify-content: start;
+  height: 36px;
+  span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 90%;
+  }
+}
+.dropdown-menu {
+  &.aura-dropdown-menu.aura-dropdown-menu--light {
+    padding: var(--spacer-2);
+    li.dropdown-item {
+      border-radius: 0;
+      padding: var(--spacer-3) var(--spacer-2);
+      button {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-align: start;
+        color: var(--aura-gray-light);
+      }
+      &:hover button {
+        color: var(--aura-white);
       }
     }
-    .apexcharts-toolbar {
-      .apexcharts-menu-icon {
-        opacity: 0;
-      }
-      .apexcharts-menu {
-        top: 10px;
-        @media (min-width: 1200px) {
-          top: -10px;
+  }
+  inset: auto auto auto 0 !important;
+  &.show {
+    min-height: 60px;
+    max-height: 175px;
+    overflow-y: auto !important;
+  }
+}
+
+.card__item {
+  min-height: 260px;
+}
+.card__summary-info {
+  min-height: 470px;
+}
+.card-child {
+  background: rgba(19, 20, 25, 0.4);
+  border-radius: 8px;
+  padding: var(--spacer-3) var(--spacer-4);
+}
+::ng-deep {
+  .mat-tooltip-panel-above {
+    transform: translateX(25%);
+    mat-tooltip-component {
+      .dashboard-tooltip {
+        overflow: visible;
+        &:before {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          transform: translateY(100%);
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-top: 10px solid rgba(97, 97, 97, 0.9);
         }
       }
     }
   }
+}
+.icon-github-2 {
+  font-size: 2rem;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &:before {
+    background: url("../../../assets/icons/icons-svg/basic/github-2.svg") no-repeat center;
+    background-size: contain;
+    opacity: 1;
+  }
+  &:after {
+    background: url("../../../assets/icons/icons-svg/white/github-2.svg") no-repeat center;
+    background-size: contain;
+    opacity: 0;
+  }
+  &:hover {
+    &:before { opacity: 0; }
+    &:after { opacity: 1; }
+  }
+}
+i.icon-info {
+  font-size: 40px;
+}
+i.icon-brand {
+  font-size: 40px;
+}
+
+img.icon-brand {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+.voting-period-btn--disable {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  width: 100%;
+  height: 34px;
+  background: var(--aura-gray-8);
+  color: var(--aura-gray-3);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  border: 1px solid #494C58;
+  border-radius: 8px;
+}
+.summary-info {
+  line-height: 1.8rem !important;
 }

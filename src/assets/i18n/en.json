@@ -82,50 +82,23 @@
         }
     },
     "MENUITEMS": {
-        "TOKEN": {
-            "TEXT": "Tokens",
-            "BADGE": "04"
-        },
-        "STATISTICS": {
-            "TEXT": "Statistics",
-            "BADGE": "04"
-        },
-        "CONTRACT": {
-            "TEXT": "Contracts",
-            "BADGE": "04"
-        },
-        "DASHBOARDS": {
-            "TEXT": "Dashboard",
-            "BADGE": "04"
-        },
-        "VALIDATORS": {
-            "TEXT": "Validators",
-            "BADGE": "03"
-        },
-        "BLOCKS": {
-            "TEXT": "Blocks",
-            "BADGE": "02"
-        },
-        "TRANSACTION": {
-            "TEXT": "Transactions",
-            "BADGE": "01"
-        },
-        "PROPOSAL": {
-            "TEXT": "Votings",
-            "BADGE": "04"
-        },
-        "CHANEL": {
-            "TEXT": "Chanels",
-            "BADGE": "04"
-        },
-        "USER_MANAGEMENT": {
-            "TEXT": "User management",
-            "BADGE": "04"
-        },
-        "MORE": {
-            "TEXT": "More",
-            "BADGE": "03"
-        },
+        "CHART-STATS": "Chart & Stats",
+        "TOP-STATISTICS": "Top Statistics",
+        "MULTI-SEND": "Multi-send",
+        "FEE-GRANT": "Fee Grant",
+        "RESOURCES": "Resources",
+        "BLOCKCHAIN": "Blockchain",
+        "TOKEN": "Tokens",
+        "CONTRACT": "Contracts",
+        "DASHBOARDS": "Dashboard",
+        "VALIDATORS": "Validators",
+        "BLOCKS": "Blocks",
+        "TRANSACTION": "Transactions",
+        "PROPOSAL": "Votings",
+        "CHANEL": "Chanels",
+        "USER_MANAGEMENT": "User management",
+        "MORE": "More",
+        "STATISTICS": "Statistics",
         "APPS": {
             "TEXT": "Apps",
             "LIST": {

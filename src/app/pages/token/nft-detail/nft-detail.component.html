@@ -1,73 +1,59 @@
-<ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+<ng-container>
   <div class="text--white">
-    <div class="row p-lg-3">
-      <!-- Desktop nft-image -->
-      <div class="col-4 nft-img__contain d-none d-lg-block">
-        <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-          <div class="nft__img">
-            <img *ngIf="!nftType || isError" [src]="defaultImgToken" />
-            <img
-              *ngIf="nftType === 'img' && isError === false"
-              (error)="error()"
-              [src]="nftDetail?.media_info[0]?.media_link" />
-            <app-custom-video-player
-              [videoSrc]="nftDetail?.media_info[0]?.media_link"
-              [showControl]="true"
-              *ngIf="nftType === 'video'"
-              [isMuted]="false">
-            </app-custom-video-player>
-            <app-model-view
-              *ngIf="nftType === '3d'"
-              [modelUrl]="nftDetail?.media_info[0]?.media_link"
-              [disablePan]="false">
-            </app-model-view>
-            <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.media_info[0]?.media_link">
-            </app-audio-player>
-          </div>
-        </div>
-      </div>
-      <!-- Mobile nft-image -->
-      <div class="col-12 d-lg-none mb-4">
-        <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
+    <div class="d-lg-none">
+      <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
+        <ng-container *ngIf="!nftDetail?.isDisplayName">
           <span class="mr-1">{{ nftDetail?.name }}</span>
           <span class="mr-2">#{{ nftDetail?.token_id }}</span>
-          <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
-        </h1>
-        <div class="mt-2">
-          <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
-            nftDetail?.name
-          }}</a>
-        </div>
-        <div class="nft-img__contain mt-4">
-          <div class="card m-0 w-100 h-100 d-flex align-items-center justify-content-center">
-            <img *ngIf="!nftType || isError" [src]="defaultImgToken" class="nft__img--mob" />
-            <img
-              *ngIf="nftType === 'img' && isError === false"
-              (error)="error()"
-              [src]="nftDetail?.media_info[0]?.media_link"
-              class="nft__img--mob" />
-            <app-custom-video-player
-              [videoSrc]="nftDetail?.media_info[0]?.media_link"
-              [showControl]="true"
-              *ngIf="nftType === 'video'"
-              [isMuted]="false">
-            </app-custom-video-player>
-            <app-model-view
-              *ngIf="nftType === '3d'"
-              [modelUrl]="nftDetail?.media_info[0]?.media_link"
-              [disablePan]="false">
-            </app-model-view>
-            <app-audio-player *ngIf="nftType === 'audio'" [src]="nftDetail?.media_info[0]?.media_link">
-            </app-audio-player>
+        </ng-container>
+        <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
+        <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
+      </h1>
+      <div class="mt-2">
+        <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+          nftDetail?.name
+        }}</a>
+      </div>
+    </div>
+
+    <div class="row p-lg-3">
+      <!-- nft-media -->
+      <div class="col-12 col-lg-4 my-4 my-md-0">
+        <div class="nft-img__contain w-100 h-100">
+          <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
+            <div class="nft__img">
+              <img *ngIf="!nftType || isError" [src]="defaultImgToken" />
+              <img
+                *ngIf="nftType === 'img' && isError === false"
+                (error)="error()"
+                [src]="this.nftUrl" />
+              <app-custom-video-player
+                [videoSrc]="this.nftUrl"
+                [showControl]="true"
+                *ngIf="nftType === 'video'"
+                [isDetail]="true">
+              </app-custom-video-player>
+              <app-model-view
+                *ngIf="nftType === '3d'"
+                [modelUrl]="this.nftUrl"
+                [disablePan]="false">
+              </app-model-view>
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl">
+              </app-audio-player>
+            </div>
           </div>
         </div>
       </div>
-      <!-- End nft-image -->
       <div class="col-12 col-lg-8 pl-lg-7">
         <div class="d-lg-flex flex-column justify-content-between h-100">
           <div class="d-none d-lg-block">
             <div class="d-flex align-items-center">
-              <h1 class="fw-semibold sub-text text--white mb-0">{{ nftDetail?.name }} #{{ nftDetail?.token_id }}</h1>
+              <h1 class="fw-semibold sub-text text--white mb-0 mr-1">
+                <ng-container *ngIf="!nftDetail?.isDisplayName">
+                  {{ nftDetail?.name }} #{{ nftDetail?.token_id }}
+                </ng-container>
+                <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
+              </h1>
               <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
             </div>
             <div class="my-5">
@@ -76,7 +62,7 @@
                 width="24px"
                 height="24px"
                 class="mr-1 object-fit--none" /> -->
-              <a class="h6 mb-0 text--primary" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+              <a class="h6 mb-0 text--primary break-word" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
                 nftDetail?.name
               }}</a>
             </div>
@@ -226,8 +212,12 @@
     <div class="text--gray-5 body-02 caption-mob fw-normal-mob mt-3">
       A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
-    <div class="table-responsive aura-table-contain mt-2 mt-lg-3">
-      <table mat-table [dataSource]="dataSource" class="aura-table">
+    <div class="table-responsive aura-table-contain mt-2 mt-lg-3" style="height: 600px">
+      <table
+        *ngIf="dataSource?.data?.length > 0; else noValues"
+        mat-table
+        [dataSource]="dataSource"
+        class="aura-table nft-detail-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef class="">
@@ -253,6 +243,19 @@
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
+                </ng-container>
+                <ng-container *ngSwitchCase="'status'">
+                  <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
+                    <div *ngSwitchCase="'Success'" class="text--green-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Fail'" class="text--red-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                    <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                      {{ data[template.matColumnDef] }}
+                    </div>
+                  </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'timestamp'">
                   {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
@@ -280,9 +283,15 @@
                     class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
+                  <img
+                    [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                    *ngIf="isContractAddress(data.type, data.to_address)"
+                    alt=""
+                    width="16px"
+                    height="16px" />
                   <a
                     class="text--primary"
-                    [routerLink]="['/account', data[template.matColumnDef]]"
+                    [routerLink]="[data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
                     {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                   </a>
@@ -293,7 +302,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] || '-' }} {{ denom }}
+                    {{ data[template.matColumnDef] | mask: 'separator.6' || '-' }} {{ denom }}
                   </span>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -311,12 +320,12 @@
         </tr>
       </table>
     </div>
-    <app-paginator
+    <!-- <app-paginator
       [length]="pageData?.length"
       [pageSize]="pageData?.pageSize"
       (paginator)="paginatorEmit($event)"
       (pageEvent)="handlePageEvent($event)">
-    </app-paginator>
+    </app-paginator> -->
     <ng-template #noValues> </ng-template>
   </div>
 </ng-container>

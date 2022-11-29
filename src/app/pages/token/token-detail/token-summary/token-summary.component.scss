@@ -1,9 +1,5 @@
 .box-token-info {
   table.aura-basic-table {
-    @media (min-width: 992px) {
-      min-height: 280px;
-    }
-
     tr,
     td {
       color: var(--aura-contract);
@@ -24,9 +20,18 @@
 }
 .social-group {
   a {
-    color: var(--aura-gray-light) !important;
+    display: flex;
+    align-items: center;
+    color: var(--aura-white);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    @media (min-width: 992px) {
+      margin-right: 16px;
+    }
     &:hover {
-      color: var(--aura-gray-1) !important;
+      color: var(--aura-primary);
     }
   }
 }

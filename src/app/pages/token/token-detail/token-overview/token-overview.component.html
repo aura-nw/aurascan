@@ -19,19 +19,19 @@
         </td>
       </tr>
 
-      <tr>
+      <tr *ngIf="!tokenDetail.isNFTContract">
         <td colspan="2" class="py-2">
           <div class="d-flex">
-            <div class="{{ !tokenDetail.isNFTContract ? 'flex-item' : 'd-flex d-lg-block' }}">
+            <div class="flex-item">
               <div class="text--gray-5 body-02 fixed-col">
                 <span>Price:</span>
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
-                  <span class="small-body">${{ tokenDetail.price | number: global.formatNumber2Decimal }}</span>
+                  <span class="small-body">${{ tokenDetail.price | mask: 'separator.6' }}</span>
                   <span class="caption fw-normal text--gray-5 ml-1">
                     <ng-container *ngIf="global.price.aura">
-                      @{{ tokenDetail.price / global.price.aura || 0 | number: global.formatNumberToken }}
+                      @{{ tokenDetail.price / global.price.aura || 0 | mask: 'separator.6' }}
                     </ng-container>
                     <ng-container *ngIf="!global.price.aura">-</ng-container>
                     {{ denom }}
@@ -71,7 +71,7 @@
               <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
-                  {{ tokenDetail.max_total_supply | number: global.formatNumberToken }}
+                  {{ +tokenDetail.max_total_supply | mask: 'separator.6' }}
                 </ng-container>
                 <ng-container *ngIf="tokenDetail.isNFTContract">
                   {{ tokenDetail.num_tokens | number: global.formatNumberOnlyDecimal }}
@@ -108,7 +108,7 @@
         <td colspan="2" *ngIf="!params">
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
-            <div class="body-02 text--gray-1">{{ tokenDetail.totalTransfer || 0 }}</div>
+            <div class="body-02 text--gray-1"><span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenDetail.totalTransfer || 0 }}</div>
           </div>
         </td>
       </tr>

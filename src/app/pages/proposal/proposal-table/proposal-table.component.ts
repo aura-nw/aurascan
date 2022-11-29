@@ -88,8 +88,8 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.tabId && !changes.tabId.firstChange && this.dataSource?.paginator) {
-      this.pageChange.selectPage(0);
+    if ((changes.tabId && !changes.tabId.firstChange && this.dataSource?.paginator) || changes.data) {
+      this.pageChange?.selectPage(0);
     }
     if (this.dataSource) {
       this.dataSource.data = this.data;
@@ -101,7 +101,6 @@ export class ProposalTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.template = this.getTemplate(this.type);
     this.displayedColumns = this.getTemplate(this.type).map((template) => template.matColumnDef);
-
     this.dataSource = new MatTableDataSource(this.data);
   }
 

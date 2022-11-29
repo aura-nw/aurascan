@@ -77,7 +77,7 @@ body {
 }
 
 .cdk-overlay-container {
-    z-index: 1100;
+    z-index: 1100 !important;
 }
 
 .disabled-pointer {
@@ -585,4 +585,46 @@ body {
 }
 .break-word {
     word-break: break-word;
+}
+.control-container {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    @media (min-width: 992px) {
+        opacity: .8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+    button {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        opacity: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(225,225,225,0.5);
+    }
+    i {
+        font-size: 16px;
+        color: var(--aura-white);
+    }
+}
+
+.toast-info {
+    background-color: var(--aura-blue-6);
+    background-image: url('../../assets/icons/icons-svg/white/loading-action.svg');
+    font-size: 1.4rem;
+    .toast-title {
+        font-size: 1.7rem;
+        font-weight: 700;
+    }
+}
+.toast-container .ngx-toastr {
+    width: 350px;
+}
+.toast-container a {
+    text-decoration: underline !important;
 }

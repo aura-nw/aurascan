@@ -39,7 +39,7 @@
           {{ proposalDetail.voted_percent | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-5 col-lg-4 text-end body-01 mb-0 fw-normal text--gray-5 body-02-mob">
-          {{ proposalDetail.voted | number: global.formatNumberToken }}
+          {{ proposalDetail.voted | mask: 'separator.6' }}
         </div>
       </div>
     </div>
@@ -48,10 +48,10 @@
       <div class="row flex-grow-1 align-items-center">
         <div class="col-4 col-lg-5 body-01 text--gray-5 mb-0 body-02-mob">Voted Abstain</div>
         <div class="col-3 col-lg-3 h6 text-end mb-0 text--gray-1 body-02-mob">
-          {{ proposalDetail.abstainPercent | number: global.formatNumber2Decimal }}%
+          {{ proposalDetail.voted_abstain_percent | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-5 col-lg-4 text-end body-01 mb-0 text--gray-5 body-02-mob">
-          {{ proposalDetail.pro_votes_abstain | number: global.formatNumberToken }}
+          {{ proposalDetail.pro_votes_abstain | mask: 'separator.6' }}
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
           {{ 100 - proposalDetail.pro_turnout | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-5 col-lg-4 text-end body-01 mb-0 text--gray-5 body-02-mob">
-          {{ proposalDetail.total_bonded_token - proposalDetail.pro_total_vote | number: global.formatNumberToken }}
+          {{ proposalDetail.total_bonded_token - proposalDetail.pro_total_vote | mask: 'separator.6' }}
         </div>
       </div>
     </div>

@@ -8,9 +8,7 @@ import { Globals } from 'src/app/global/global';
 })
 export class CurrentStatusComponent {
   @Input() proposalDetail;
-  @Input()
-  currentSubTitle: string;
-  @Input()
-  currentStatus: { value: string; class: string; key: string };
+  @Input() currentSubTitle: string;
+  @Input() currentStatus: { value: string; class: string; key: string };
   constructor(public global: Globals) {}
 }

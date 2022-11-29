@@ -56,6 +56,8 @@ export class TransactionMessagesComponent implements OnInit {
   };
   numberListSend = 5;
   dataTimeOut = {};
+  spendLimitAmount = 0;
+  typeGrantAllowance = 'Basic';
 
   listIBCProgress = [];
 
@@ -76,8 +78,10 @@ export class TransactionMessagesComponent implements OnInit {
     if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Vesting) {
       let date = new Date(Number(this.transactionDetail?.messages[0]?.end_time) * 1000);
       this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
-    }
-    if (
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount) {
+      let date = new Date(Number(this.transactionDetail?.messages[0]?.start_time) * 1000);
+      this.dateVesting = this.datePipe.transform(date, DATEFORMAT.DATETIME_UTC);
+    } else if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Delegate ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.GetReward ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.Redelegate ||
@@ -93,6 +97,27 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
     ) {
       this.displayMsgRaw();
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
+      let type;
+      if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
+      } else {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
+      }
+      if (type.indexOf('Periodic') > 0) {
+        this.typeGrantAllowance = 'Periodic';
+      }
+
+      this.spendLimitAmount = _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') || _.get(
+        this.transactionDetail?.messages[0]?.allowance,
+        'allowance.basic.spend_limit[0].amount',
+      );
+      if (this.typeGrantAllowance === 'Basic') {
+        this.spendLimitAmount = _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') || _.get(
+          this.transactionDetail?.messages[0]?.allowance,
+          'allowance.spend_limit[0].amount',
+        );
+      } 
     } else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
@@ -220,7 +245,7 @@ export class TransactionMessagesComponent implements OnInit {
       if (jsonData && jsonData[0]) {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.StoreCode);
         if (temp) {
-          this.storeCodeId = temp[0]?.attributes[0]?.value || 0;
+          this.storeCodeId = temp[0]?.attributes.find((k) => k.key === 'code_id')?.value || 0;
         }
       }
     } catch (e) {}
@@ -393,5 +418,14 @@ export class TransactionMessagesComponent implements OnInit {
 
   loadMoreSend() {
     this.numberListSend += 5;
+  }
+
+  getDataJson(key) {
+    try {
+      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+      const result =
+        jsonData[0]?.events.find((f) => f.type === 'instantiate')?.attributes?.find((f) => f.key === key)?.value || '';
+      return result;
+    } catch (e) {}
   }
 }

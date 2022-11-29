@@ -1,26 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IResponsesSuccess, IResponsesTemplates } from 'src/app/core/models/common.model';
-import { DeployContractListReq, IContractsResponse, SmartContractListReq } from 'src/app/core/models/contract.model';
-import { INDEXER_URL } from '../constants/common.constant';
+import { IResponsesTemplates } from 'src/app/core/models/common.model';
+import { DeployContractListReq, SmartContractListReq } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
-import axios from 'axios';
-import { LCD_COSMOS } from 'src/app/core/constants/url.constant';
 
 @Injectable()
 export class ContractService extends CommonService {
   private contract$ = new BehaviorSubject<any>(null);
   contractObservable: Observable<any>;
   chainInfo = this.environmentService.configValue.chain_info;
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
 
   get contract() {
     return this.contract$.value;
   }
 
   apiUrl = `${this.environmentService.configValue.beUri}`;
+  apiAdminUrl = `${this.environmentService.configValue.urlAdmin}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
 
@@ -31,7 +31,7 @@ export class ContractService extends CommonService {
     return this.http.post<any>(`${this.apiUrl}/contracts`, data);
   }
 
-  getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = ''): Observable<any> {
+  getTransactionsIndexer(pageLimit: string | number, contractAddress = '', type: string, nextKey = null): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
       searchType: type,
@@ -45,7 +45,7 @@ export class ContractService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/transaction`, {
+    return this.http.get<any>(`${this.indexerUrl}/transaction`, {
       params,
     });
   }
@@ -101,18 +101,6 @@ export class ContractService extends CommonService {
   }
 
   createContractRequest(data: DeployContractListReq) {
-    let api_url = '';
-    switch (this.apiUrl) {
-      case 'https://serenity-api.aurascan.io/api/v1':
-        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
-        break;
-      case 'https://euphoria-api.aurascan.io/api/v1':
-        api_url = 'https://contract-deployer.serenity.aurascan.io/api/v1';
-        break;
-      default:
-        api_url = 'https://contract-deployer.dev.aura.network/api/v1';
-        break;
-    }
-    return this.http.post<any>(api_url + `/request/create`, data);
+    return this.http.post<any>(`${this.apiAdminUrl}/request/create`, data);
   }
 }

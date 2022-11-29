@@ -8,6 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { from, Subscription } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -15,8 +17,6 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
 import { SmartContractListReq, SmartContractStatus } from '../../../core/models/contract.model';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 
 @Component({
   selector: 'app-contracts-smart-list',
@@ -30,6 +30,7 @@ export class ContractsSmartListComponent implements OnInit {
     { matColumnDef: 'contract_address', headerCellDef: 'Address' },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
+    { matColumnDef: 'project_name', headerCellDef: 'Project' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified' },
@@ -55,14 +56,14 @@ export class ContractsSmartListComponent implements OnInit {
   loading = true;
   contractMainnetStatus: SmartContractStatus[] = [];
   currentStatus: SmartContractStatus;
-  subscription: Subscription
+  subscription: Subscription;
 
   statusColor = {
-    "UNVERIFIED": "#E5E7EA",
-    "Not registered": "#F5B73C",
-    "TBD": "#2CB1F5",
-    "Deployed": "#67C091",
-    "Rejected": "#D5625E",
+    UNVERIFIED: '#E5E7EA',
+    'Not registered': '#F5B73C',
+    TBD: '#2CB1F5',
+    Deployed: '#67C091',
+    Rejected: '#D5625E',
   };
 
   constructor(
@@ -74,8 +75,7 @@ export class ContractsSmartListComponent implements OnInit {
     private layout: BreakpointObserver,
     public walletService: WalletService,
     public commonService: CommonService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     from([1])
@@ -100,12 +100,15 @@ export class ContractsSmartListComponent implements OnInit {
     this.loading = true;
     const payload: SmartContractListReq = {
       creatorAddress: this.userAddress,
-      codeId:  this.textSearchCache ?  this.textSearchCache : '',
-      status: (this.currentStatus && this.currentStatus.key !== 'ALL') && this.currentStatus.label ? this.currentStatus.label : '',
+      codeId: this.textSearchCache ? this.textSearchCache : '',
+      status:
+        this.currentStatus && this.currentStatus.key !== 'ALL' && this.currentStatus.label
+          ? this.currentStatus.label
+          : '',
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
     };
-    this.subscription = this.contractService.getListSmartContract(payload).subscribe(res => {
+    this.subscription = this.contractService.getListSmartContract(payload).subscribe((res) => {
       this.pageData = {
         length: res.meta.count,
         pageSize: this.pageData.pageSize,
@@ -121,7 +124,6 @@ export class ContractsSmartListComponent implements OnInit {
       this.preIndex = this.pageData.pageIndex;
       this.dataSource.data = res.data;
       this.loading = false;
-
     });
   }
 
@@ -131,12 +133,12 @@ export class ContractsSmartListComponent implements OnInit {
       pageIndex: 0,
       pageSize: this.dataSource.paginator.pageSize,
       previousPageIndex: -1,
-    })
+    });
   }
 
   searchContract(): void {
-      this.getListContract(this.currentStatus);
-      this.resetPageEvent();
+    this.getListContract(this.currentStatus);
+    this.resetPageEvent();
   }
 
   clearSearch(): void {
@@ -155,19 +157,19 @@ export class ContractsSmartListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
-    if(e.pageIndex !== this.preIndex) {
+    if (e.pageIndex !== this.preIndex) {
       this.getListContract(this.currentStatus);
     }
   }
 
   async getContractStatus() {
     const req = await this.contractService.getSmartContractStatus();
-    if(req) {
+    if (req) {
       this.contractMainnetStatus = req.data['data'];
       this.contractMainnetStatus.unshift({
         key: 'ALL',
-        label: 'All'
-      })
+        label: 'All',
+      });
     }
   }
 
@@ -178,8 +180,5 @@ export class ContractsSmartListComponent implements OnInit {
     if (indexOfObject !== -1) {
       this.contractMainnetStatus.splice(indexOfObject, 1);
     }
-  }
-
-  logData(){
   }
 }

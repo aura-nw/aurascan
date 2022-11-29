@@ -15,7 +15,7 @@
                                     <div class="form-group">
                                         <label for="code_ids" class="form-label required text--gray-1 body-02">Code ID</label>
                                             <mat-select formControlName="code_ids" class="form-control form-check-input"
-                                            id="code_ids" [placeholder]='"Select one or many Code IDs"'
+                                            id="code_ids" #code_ids [placeholder]='"Select one or many Code IDs"'
                                             [class.form-control--error]="contractForm.get('code_ids')?.invalid && (contractForm.get('code_ids')?.dirty || contractForm.get('code_ids')?.touched)"
                                              multiple [disableOptionCentering]="true" panelClass="aura-optional-panel aura-optional-contract-deploy">
                                               <mat-option class="aura-optional__item" *ngFor="let id of listID" [value]="id">{{id}}</mat-option>
@@ -172,6 +172,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/FilePdf.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #whitepaper
+                                                (focus)="addClassFocus(whitepaper)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(whitepaper)"
                                                 id="whitepaper"
                                                 formControlName="whitepaper"
                                                 type="text"
@@ -193,6 +197,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Medium.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #medium
+                                                (focus)="addClassFocus(medium)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(medium)"
                                                 id="medium"
                                                 formControlName="medium"
                                                 type="text"
@@ -216,6 +224,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Github.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #github
+                                                (focus)="addClassFocus(github)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(github)"
                                                 id="github"
                                                 formControlName="github"
                                                 type="text"
@@ -237,6 +249,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Reddit.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #reddit
+                                                (focus)="addClassFocus(reddit)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(reddit)"
                                                 id="reddit"
                                                 formControlName="reddit"
                                                 type="text"
@@ -260,6 +276,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Telegram.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #telegram
+                                                (focus)="addClassFocus(telegram)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(telegram)"
                                                 id="telegram"
                                                 formControlName="telegram"
                                                 type="text"
@@ -281,6 +301,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Slack.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #slack
+                                                (focus)="addClassFocus(slack)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(slack)"
                                                 id="slack"
                                                 formControlName="slack"
                                                 type="text"
@@ -304,6 +328,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/WeChat.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #weChat
+                                                (focus)="addClassFocus(weChat)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(weChat)"
                                                 id="weChat"
                                                 formControlName="weChat"
                                                 type="text"
@@ -325,6 +353,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Facebook.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #facebook
+                                                (focus)="addClassFocus(facebook)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(facebook)"
                                                 id="facebook"
                                                 formControlName="facebook"
                                                 type="text"
@@ -348,6 +380,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/LinkedIn.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #linkedin
+                                                (focus)="addClassFocus(linkedin)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(linkedin)"
                                                 id="linkedin"
                                                 formControlName="linkedin"
                                                 type="text"
@@ -369,6 +405,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Twitter.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #twitter
+                                                (focus)="addClassFocus(twitter)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(twitter)"
                                                 id="twitter"
                                                 formControlName="twitter"
                                                 type="text"
@@ -392,6 +432,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Discord.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #discord
+                                                (focus)="addClassFocus(discord)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(discord)"
                                                 id="discord"
                                                 formControlName="discord"
                                                 type="text"
@@ -413,6 +457,10 @@
                                                 <img [src]="'assets/icons/icons-svg/white/Bitcoin.svg' | imageS3" alt="">
                                             </label>
                                             <input
+                                                #bit_coin_talk
+                                                (focus)="addClassFocus(bit_coin_talk)"
+                                                [clickOutsideEnabled]="true"
+                                                (clickOutside)="removeClassFocus(bit_coin_talk)"
                                                 id="bit_coin_talk"
                                                 formControlName="bit_coin_talk"
                                                 type="text"

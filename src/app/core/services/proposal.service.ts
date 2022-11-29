@@ -2,17 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
-import { INDEXER_URL } from '../constants/common.constant';
+import { Observable, Subject } from 'rxjs';
 import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
-import { IResponsesTemplates } from '../models/common.model';
-import { IVotingInfo } from '../models/proposal.model';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
+  indexerUrl = `${this.environmentService.configValue.indexerUri}`;
+  reloadList$ = new Subject();
+
+  reloadList() {
+    this.reloadList$.next(true)
+  }
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -33,7 +36,7 @@ export class ProposalService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/votes/validators`, {
+    return this.http.get<any>(`${this.indexerUrl}/votes/validators`, {
       params,
     });
   }
@@ -57,13 +60,9 @@ export class ProposalService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/votes`, {
+    return this.http.get<any>(`${this.indexerUrl}/votes`, {
       params,
     });
-  }
-
-  getStakeInfo(delegatorAddress: string): Observable<IResponsesTemplates<IVotingInfo>> {
-    return this.http.get<IResponsesTemplates<IVotingInfo>>(`${this.apiUrl}/proposals/delegations/${delegatorAddress}`);
   }
 
   getProposalList(pageLimit = 20, nextKey = null, proposalId = null): Observable<any> {
@@ -78,7 +77,7 @@ export class ProposalService extends CommonService {
       .omitBy(_.isUndefined)
       .value();
 
-    return this.http.get<any>(`${INDEXER_URL}/proposal`, {
+    return this.http.get<any>(`${this.indexerUrl}/proposal`, {
       params,
     });
   }

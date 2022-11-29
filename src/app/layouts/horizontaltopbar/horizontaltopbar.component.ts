@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
 import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
@@ -39,7 +40,8 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   pageTitle = null;
   innerWidth;
   menuName = MenuName;
-
+  menuLink = [];
+  wallet = null;
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
 
   /**
@@ -55,11 +57,13 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.innerWidth = window.innerWidth;
     this.checkEnv();
   }
+
   constructor(
     public router: Router,
     public translate: TranslateService,
@@ -69,6 +73,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private walletService: WalletService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
+    private contractService: ContractService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -78,6 +83,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
+        this.wallet = wallet;
         this.menuItems.forEach((item) => {
           if (item.name === this.menuName.Account) {
             // check if item is account
@@ -105,9 +111,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getMenuLink();
     this.element = document.documentElement;
     this.layoutMode = LAYOUT_MODE;
-    this.initialize();
     this.checkEnv();
     /***
      * Language value cookies wise set
@@ -122,14 +128,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     } else {
       this.flagvalue = val.map((element) => element.flag);
     }
-  }
-
-  /**
-   * Initialize
-   */
-  initialize(): void {
-    // this.menuItems = MENU;
-    // this.getList();
   }
 
   checkEnv() {
@@ -194,6 +192,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
       els[0].classList.remove(className);
     }
   }
+
   /**
    * Topbar Light-Dark Mode Change
    */
@@ -296,7 +295,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleSearch() {
+  async handleSearch() {
     const VALIDATORS = {
       HASHRULE: /^[A-Za-z0-9]/,
     };
@@ -313,9 +312,17 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
             this.getTxhDetail(this.searchValue);
           }
         } else if (this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
-          let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate([urlLink, this.searchValue]);
+          this.contractService.getContractDetail(this.searchValue).subscribe((res) => {
+            if (res.data) {
+              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['contracts', this.searchValue]);
+              });
+            } else {
+              let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
+              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                this.router.navigate([urlLink, this.searchValue]);
+              });
+            }
           });
         } else {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -343,5 +350,19 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.searchValue = '';
       },
     );
+  }
+
+  getMenuLink() {
+    for (let menu of this.menuItems) {
+      if (!menu.subItems) {
+        this.menuLink.push(menu.link);
+      } else {
+        let arr = '';
+        for (let subMenu of menu.subItems) {
+          arr += subMenu.link;
+        }
+        this.menuLink.push(arr);
+      }
+    }
   }
 }

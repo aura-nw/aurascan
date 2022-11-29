@@ -1,5 +1,5 @@
 <div class="proposal-table-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <ng-container *ngIf="data.length > 0; else noValues">
+  <ng-container *ngIf="data?.length > 0; else noValues">
     <ng-container *ngIf="!breakpoint.value.matches">
       <table mat-table [dataSource]="dataSource" class="table-responsive aura-table">
         <ng-container *ngFor="let template of template; index as i">
@@ -18,7 +18,8 @@
                         <app-loading-image
                           [appClass]="data['jailed'] ? 'jailed' : ''"
                           [identity]="data['validator_identity']"
-                          [srcImg]="getValidatorAvatar(data.operator_address)"> </app-loading-image>
+                          [srcImg]="getValidatorAvatar(data.operator_address)">
+                        </app-loading-image>
                       </span>
                     </div>
                   </ng-container>
@@ -43,7 +44,7 @@
                     <ng-container *ngSwitchCase="'amount'">
                       {{
                         (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
-                          | number: global.formatNumberToken || '-'
+                          | mask: 'separator.6' || '-'
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
@@ -54,7 +55,9 @@
                       {{ getVoteValue(data[template.matColumnDef]) }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'rank'">
-                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{ data[template.matColumnDef] }}</span>
+                      <span [class.label-circle]="data[template.matColumnDef] <= 3">{{
+                        data[template.matColumnDef]
+                      }}</span>
                     </ng-container>
                     <ng-container *ngSwitchCase="'updated_at'">
                       <div *ngIf="data[template.matColumnDef]">
@@ -88,14 +91,6 @@
                         </div>
                       </div>
                       <div *ngIf="!data[template.matColumnDef]">-</div>
-                    </ng-container>
-
-                    <ng-container *ngSwitchDefault>
-                      {{
-                        (template.isShort
-                          ? shortenAddress(data[template.matColumnDef])
-                          : data[template.matColumnDef]) || '-'
-                      }}
                     </ng-container>
                   </ng-container>
                 </ng-container>
@@ -227,7 +222,7 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount | number: global.formatNumberToken) +
+                      (data.amount | mask: 'separator.6') +
                       '</span><span class=text--primary>' +
                       denom +
                       '</span>'

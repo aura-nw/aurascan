@@ -4,19 +4,19 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Buffer } from 'buffer';
+import { sha256 } from 'js-sha256';
 import * as _ from 'lodash';
 import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { DATEFORMAT, PAGE_EVENT } from '../../../../app/core/constants/common.constant';
+import { TransactionService } from 'src/app/core/services/transaction.service';
+import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
-import { CodeTransaction, StatusTransaction } from '../../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
-import { convertDataBlock, convertDataTransaction, getAmount, Globals } from '../../../../app/global/global';
-import { sha256 } from 'js-sha256';
-import { Buffer } from 'buffer';
-import { TransactionService } from 'src/app/core/services/transaction.service';
+import { convertDataBlock, convertDataTransaction, Globals } from '../../../../app/global/global';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-block-detail',
@@ -81,12 +81,12 @@ export class BlockDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private blockService: BlockService,
-    private datePipe: DatePipe,
     public global: Globals,
     public commonService: CommonService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
     private transactionService: TransactionService,
+    private clipboard: Clipboard,
   ) {}
 
   ngOnInit(): void {
@@ -102,7 +102,7 @@ export class BlockDetailComponent implements OnInit {
   getDetail(): void {
     if (this.id) {
       this.getDetailByHeight();
-    } 
+    }
   }
 
   getDetailByHeight() {
@@ -111,7 +111,7 @@ export class BlockDetailComponent implements OnInit {
       if (code === 200) {
         const block = convertDataBlock(data)[0];
         block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
-        block['chainid'] = _.get(data.blocks[0], 'custom_info.chain_id');
+        block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
         block['json_data'] = _.get(data.blocks[0], 'block');
         block['gas_used'] = block['gas_wanted'] = 0;
         this.item = block;
@@ -172,5 +172,19 @@ export class BlockDetailComponent implements OnInit {
 
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
+  }
+
+  copyData(text: string): void {
+    var dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    this.clipboard.copy(JSON.stringify(text, null, 2));
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function () {
+      document.getElementById('popupCopy').click();
+    }, 800);
   }
 }

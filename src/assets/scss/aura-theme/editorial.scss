@@ -1,6 +1,7 @@
 .editorial {
   > * {
     @include mono-font-size(1.6, 2, 400);
+    color: var(--aura-gray-1);
   }
   h1,
   .h1 {
@@ -28,12 +29,58 @@
   }
   h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5,h6,.h6, p {
     display: block;
-    margin-bottom: 0 !important;
   }
   ul {
+    padding-left: var(--spacer-4);
     list-style: unset !important;
     li {
       margin-bottom: var(--spacer-1);
+    }
+  }
+  a {
+    color: var(--aura-primary);
+    &:hover {
+      color: var(--aura-green-3);
+    }
+  }
+}
+
+
+.editorial-container {
+  max-height: 360px;
+  overflow-y: scroll;
+  background: rgba(19, 20, 25, 0.5);
+  border-radius: 8px;
+
+  ::ng-deep {
+    & * {
+      color: var(--aura-gray-3) !important;
+      margin-top: var(--spacer-1);
+    }
+
+    h1,
+    .h1,
+    h2,
+    .h2,
+    h3,
+    .h3,
+    h4,
+    .h4,
+    h5,
+    .h5,
+    h6,
+    .h6 {
+      color: var(--aura-gray-1) !important;
+      margin-top: var(--spacer-3);
+    }
+
+    h1,
+    .h1 {
+      margin-top: 0;
+    }
+
+    a {
+      color: var(--aura-primary) !important;
     }
   }
 }

@@ -2,18 +2,18 @@ import { Keplr } from '@keplr-wallet/types';
 import { KEPLR_ERRORS } from '../constants/wallet.constant';
 
 export async function getKeplr(): Promise<Keplr | undefined> {
-  if ((window as any).keplr) {
-    return (window as any).keplr;
+  if (window.keplr) {
+    return window.keplr;
   }
 
   if (document.readyState === 'complete') {
-    return (window as any).keplr;
+    return window.keplr;
   }
 
   return new Promise((resolve) => {
     const documentStateChange = (event: Event) => {
       if (event.target && (event.target as Document).readyState === 'complete') {
-        resolve((window as any).keplr);
+        resolve(window.keplr);
         document.removeEventListener('readystatechange', documentStateChange);
       }
     };
@@ -54,7 +54,7 @@ export function getKeplrError(err: any): KEPLR_ERRORS {
   return KEPLR_ERRORS.Failed;
 }
 
-export async function handleErrors(err: Error, chainId: string): Promise<string> {
+export async function handleErrors(err: any): Promise<string> {
   const error = getKeplrError(err.message);
   switch (error) {
     case KEPLR_ERRORS.NoChainInfo:
@@ -64,6 +64,6 @@ export async function handleErrors(err: Error, chainId: string): Promise<string>
       window.open('https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=en');
       return null;
     default:
-      return err.message;
+      return err.message || err;
   }
 }

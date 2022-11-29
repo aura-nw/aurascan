@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto } from 'src/app/core/models/common.model';
@@ -26,18 +26,15 @@ export class TokenDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
-    if(this.contractAddress === 'null') {
+    if (this.contractAddress === 'null') {
       this.route.navigate(['/']);
     }
     this.getTokenDetail();
   }
 
-  searchTokenTable(): void {}
-
   getTokenDetail(): void {
     this.loading = true;
-
-    this.tokenService.getTokenCW20Detail(this.contractAddress).subscribe((res: ResponseDto) => {
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.tokenDetail = res.data;
       if (this.tokenDetail?.type === ContractRegisterType.CW721) {
         this.tokenDetail.isNFTContract = true;
@@ -48,5 +45,9 @@ export class TokenDetailComponent implements OnInit {
 
   getLength(result: string) {
     this.tokenDetail['totalTransfer'] = Number(result) || 0;
+  }
+
+  getMoreTx(event) {
+    this.tokenDetail['hasMoreTx'] = event;
   }
 }

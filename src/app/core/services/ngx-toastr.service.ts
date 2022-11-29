@@ -69,6 +69,19 @@ export class NgxToastrService {
     }
   }
 
+  loading(txHash: string, title = '', configTimeOut = 5000): void {
+    if (this.toastrService.toasts.length === 0) {
+      const message ='<a href="transaction/' + txHash + ' "target="_blank" class="toastr-link">Check your transaction on the explorer</a>';
+      this.toastrService.info(message, 'Transaction is in progress', {
+        positionClass: this.POSITION_CLASS,
+        enableHtml: true,
+        closeButton: true,
+        timeOut: configTimeOut,
+        tapToDismiss: true,
+      });
+    }
+  }
+
   clear() {
     this.toastrService.clear();
   }

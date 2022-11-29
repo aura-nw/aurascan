@@ -4,45 +4,6 @@
   }
 }
 
-.editorial-container {
-  max-height: 360px;
-  overflow-y: scroll;
-  background: rgba(19, 20, 25, 0.5);
-  border-radius: 8px;
-
-  ::ng-deep {
-    & * {
-      color: var(--aura-gray-3) !important;
-      margin-top: var(--spacer-1);
-    }
-
-    h1,
-    .h1,
-    h2,
-    .h2,
-    h3,
-    .h3,
-    h4,
-    .h4,
-    h5,
-    .h5,
-    h6,
-    .h6 {
-      color: var(--aura-gray-1) !important;
-      margin-top: var(--spacer-3);
-    }
-
-    h1,
-    .h1 {
-      margin-top: 0;
-    }
-
-    a {
-      color: var(--aura-primary) !important;
-    }
-  }
-}
-
 ::ng-deep.proposal__summary-total {
   color: var(--aura-white);
 

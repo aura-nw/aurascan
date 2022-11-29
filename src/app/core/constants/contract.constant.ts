@@ -36,6 +36,7 @@ export const CONTRACT_TABLE_TEMPLATES: Array<TableTemplate> = [
   // { matColumnDef: 'popover', headerCellDef: '', type: 'popover', headerWidth: 4 },
   { matColumnDef: 'txHash', headerCellDef: 'Txn Hash', type: 'hash-url', headerWidth: 12, isUrl: '/transaction' },
   { matColumnDef: 'method', headerCellDef: 'Method', type: 'status', headerWidth: 10 },
+  { matColumnDef: 'status', headerCellDef: 'Result', type: 'result', headerWidth: 10 },
   {
     matColumnDef: 'blockHeight',
     headerCellDef: 'Block',
@@ -64,6 +65,9 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/rust-optimizer:0.12.4', value: 'cosmwasm/rust-optimizer:0.12.4' },
   { label: 'cosmwasm/rust-optimizer:0.12.5', value: 'cosmwasm/rust-optimizer:0.12.5' },
   { label: 'cosmwasm/rust-optimizer:0.12.6', value: 'cosmwasm/rust-optimizer:0.12.6' },
+  { label: 'cosmwasm/rust-optimizer:0.12.7', value: 'cosmwasm/rust-optimizer:0.12.7' },
+  { label: 'cosmwasm/rust-optimizer:0.12.8', value: 'cosmwasm/rust-optimizer:0.12.8' },
+  { label: 'cosmwasm/rust-optimizer:0.12.9', value: 'cosmwasm/rust-optimizer:0.12.9' },
 
   // { label: 'cosmwasm/rust-optimizer-arm64:0.12.4', value: 'cosmwasm/rust-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/rust-optimizer-arm64:0.12.5', value: 'cosmwasm/rust-optimizer-arm64:0.12.5' },
@@ -82,6 +86,9 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer:0.12.4', value: 'cosmwasm/workspace-optimizer:0.12.4' },
   { label: 'cosmwasm/workspace-optimizer:0.12.5', value: 'cosmwasm/workspace-optimizer:0.12.5' },
   { label: 'cosmwasm/workspace-optimizer:0.12.6', value: 'cosmwasm/workspace-optimizer:0.12.6' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.7', value: 'cosmwasm/workspace-optimizer:0.12.7' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.8', value: 'cosmwasm/workspace-optimizer:0.12.8' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.9', value: 'cosmwasm/workspace-optimizer:0.12.9' },
 
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
@@ -96,5 +103,9 @@ export const REGISTER_CONTRACT = [
   {
     key: ContractRegisterType.CW721,
     value: ContractRegisterType.CW721,
+  },
+  {
+    key: ContractRegisterType.CW4973,
+    value: ContractRegisterType.CW4973,
   },
 ];

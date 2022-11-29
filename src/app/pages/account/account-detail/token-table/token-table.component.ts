@@ -8,7 +8,6 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ResponseDto, TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
-import { CommonService } from 'src/app/core/services/common.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
 import { Globals } from 'src/app/global/global';
 
@@ -20,6 +19,7 @@ import { Globals } from 'src/app/global/global';
 export class TokenTableComponent implements OnChanges {
   @Input() address: string;
   @Output() totalValue = new EventEmitter<number>();
+  @Output() totalAssets = new EventEmitter<number>();
 
   math = Math;
   textSearch = '';
@@ -53,6 +53,7 @@ export class TokenTableComponent implements OnChanges {
   paginator: MatPaginator;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinMiniDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoAura = this.image_s3 + 'images/icons/aura.svg';
@@ -60,7 +61,6 @@ export class TokenTableComponent implements OnChanges {
     public global: Globals,
     private accountService: AccountService,
     private environmentService: EnvironmentService,
-    private commonService: CommonService,
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +84,6 @@ export class TokenTableComponent implements OnChanges {
       if (res?.data?.length > 0) {
         let lstToken = _.get(res, 'data').map((element) => {
           data = element;
-          data.contract_address = '-' ? '' : data.contract_address;
           if (data) {
             data.change = data.price_change_percentage_24h;
             data.isValueUp = true;
@@ -99,6 +98,7 @@ export class TokenTableComponent implements OnChanges {
         lstToken = lstToken.filter((k) => k?.symbol);
         this.dataSource = new MatTableDataSource<any>(lstToken);
         this.pageData.length = res.meta.count;
+        this.totalAssets.emit(this.pageData.length);
       } else {
         this.pageData.length = 0;
         this.dataSource.data = [];

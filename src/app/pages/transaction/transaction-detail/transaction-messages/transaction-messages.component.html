@@ -20,7 +20,7 @@
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="item?.amount[0]?.amount > 0">
-              {{ item?.amount[0]?.amount | balanceOf | number: global.formatNumberToken }}
+              {{ item?.amount[0]?.amount | balanceOf | mask: 'separator.6' }}
               <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
@@ -55,7 +55,7 @@
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            {{ item?.coins[0]?.amount | balanceOf | number: global.formatNumberToken }}
+            {{ item?.coins[0]?.amount | balanceOf | mask: 'separator.6' }}
             <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
@@ -97,6 +97,10 @@
     <div class="card-info">
       <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
       </ng-container>
+      <app-messages-item
+        [label]="'Contract'"
+        [value]="getDataJson('_contract_address')"
+        [dataLink]="{ url: '/contracts' }"></app-messages-item>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Label</div>
         <div class="col-9 text--gray-1">{{ transactionDetail?.messages[0]?.label }}</div>
@@ -123,35 +127,43 @@
     <ng-container
       *ngIf="transactionDetail?.type === eTransType.GetReward && getRewardLength(transactionDetail?.messages) > 1">
       <ng-container *ngFor="let item of transactionDetail?.messages; let i = index; let isLast = last">
-        <div class="card-info">
-          <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
-          </ng-container>
-          <app-messages-item
-            [label]="'Delegator Address'"
-            [value]="item.delegator_address"
-            [dataLink]="{ url: '/account' }"></app-messages-item>
-          <div class="row mb-3 body-01">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
-            <div class="col-12 col-lg-9">
-              <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
-                {{ item.validator_address }}
-                <span>
-                  <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
-                </span>
-              </a>
+        <ng-container *ngIf="item['@type'] !== eTransType.GetRewardCommission">
+          <div class="card-info">
+            <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: displayTitle(item['@type']) } }">
+            </ng-container>
+            <app-messages-item
+              [label]="'Delegator Address'"
+              [value]="item.delegator_address"
+              [dataLink]="{ url: '/account' }"></app-messages-item>
+            <div class="row mb-3 body-01">
+              <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
+              <div class="col-12 col-lg-9">
+                <a class="text--primary" [routerLink]="['/validators', item.validator_address]">
+                  {{ item.validator_address }}
+                  <span>
+                    <ng-container *ngIf="item.validatorName">({{ item.validatorName }})</ng-container>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="row mb-3 body-01">
+              <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
+              <div class="col-12 col-lg-9 text--gray-1">
+                <ng-container *ngIf="item['@type'] === eTransType.GetReward">
+                  <ng-container *ngIf="listAmountClaim[i] > 0">
+                    {{ listAmountClaim[i] | mask: 'separator.6' }}
+                    <span class="text--primary">{{ denom }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
+                </ng-container>
+                <ng-container *ngIf="item['@type'] !== eTransType.GetReward">
+                  {{ item.amount?.amount | balanceOf | mask: 'separator.6' }}
+                  <span class="text--primary">{{ denom }}</span>
+                </ng-container>
+              </div>
             </div>
           </div>
-          <div class="row mb-3 body-01">
-            <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
-            <div class="col-12 col-lg-9 text--gray-1">
-              <ng-container *ngIf="listAmountClaim[i] > 0">
-                {{ listAmountClaim[i] | number: global.formatNumberToken }}
-                <span class="text--primary">{{ denom }}</span>
-              </ng-container>
-              <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
-            </div>
-          </div>
-        </div>
+        </ng-container>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="getRewardLength(transactionDetail?.messages) === 1">
@@ -176,8 +188,8 @@
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            <ng-container *ngIf="amount > 0 || amountCommission > 0; else noValues">
-              {{ amountCommission || amount | number: global.formatNumberToken }}
+            <ng-container *ngIf="amount > 0 || amountCommission > 0 || listAmountClaim[0] > 0; else noValues">
+              {{ amountCommission || listAmountClaim[0] || amount | mask: 'separator.6' }}
               <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-template #noValues> - </ng-template>
@@ -186,15 +198,14 @@
         <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+            {{ amountClaim | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
       </div>
     </ng-container>
     <ng-container *ngIf="commissionAutoClaim > 0">
       <div class="card-info">
-        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Get Commission' } }">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: 'Get Commission' } }"> </ng-container>
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Validator Address</div>
           <div class="col-12 col-lg-9">
@@ -209,7 +220,7 @@
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            {{ commissionAutoClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+            {{ commissionAutoClaim | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
       </div>
@@ -261,7 +272,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0">
             0.000000 <span class="text--primary">{{ denom }}</span></ng-container
@@ -322,7 +333,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
@@ -330,7 +341,7 @@
       <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
         <div class="col-12 col-lg-9 text--gray-1">
-          {{ amountClaim | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+          {{ amountClaim | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
     </div>
@@ -352,7 +363,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
@@ -400,7 +411,7 @@
       </ng-container>
       <app-messages-item
         [label]="'Sender'"
-        [value]="transactionDetail?.messages[0]?.validator_address"
+        [value]="transactionDetail?.messages[0]?.sender || transactionDetail?.messages[0]?.validator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
       <app-messages-item [label]="'Code Id'" [value]="storeCodeId"></app-messages-item>
       <app-messages-item
@@ -427,7 +438,7 @@
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Min Self Delegation</div>
         <div class="col-12 col-lg-9 text--gray-1">
-          {{ transactionDetail?.messages[0]?.min_self_delegation | number: global.formatNumberToken }}
+          {{ transactionDetail?.messages[0]?.min_self_delegation | mask: 'separator.6' }}
         </div>
       </div>
       <app-messages-item
@@ -449,7 +460,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | number: global.formatNumberToken }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
@@ -495,6 +506,102 @@
       <app-messages-item
         [label]="'Public Key'"
         [value]="transactionDetail?.messages[0]?.pubkey?.key"></app-messages-item>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.PeriodicVestingAccount">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'From Address'"
+        [value]="transactionDetail?.messages[0]?.from_address"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'To Address'"
+        [value]="transactionDetail?.messages[0]?.to_address"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item [label]="'Start Time'" [value]="dateVesting"></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Vesting Periods</div>
+        <div class="col-12 col-lg-9">
+          <pre
+            id="json"
+            class="raw-content text--white px-4"
+            [innerHtml]="transactionDetail?.messages[0]?.vesting_periods | appJson"></pre>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.MsgGrantAllowance">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Granter'"
+        [value]="transactionDetail?.messages[0]?.granter"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item [label]="'Type'" [value]="typeGrantAllowance"></app-messages-item>
+      <div class="row mb-3 body-01">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Spend Limit</div>
+        <div class="col-12 col-lg-9">
+          <ng-container *ngIf="spendLimitAmount > 0; else noValues">
+            {{ spendLimitAmount | balanceOf | mask: 'separator.6' }}
+            {{ denom }}
+          </ng-container>
+          <ng-template #noValues> - </ng-template>
+        </div>
+      </div>
+      <app-messages-item
+        [label]="'Expiration'"
+        [value]="
+          commonService.getDateValue(
+            transactionDetail?.messages[0]?.allowance?.basic?.expiration ||
+              transactionDetail?.messages[0]?.allowance?.expiration ||
+              transactionDetail?.messages[0]?.allowance?.allowance?.expiration ||
+              transactionDetail?.messages[0]?.allowance?.allowance?.basic?.expiration,
+            false
+          )[0] || '-'
+        "></app-messages-item>
+      <div class="row mb-3 body-01" *ngIf="typeGrantAllowance === 'Periodic'">
+        <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Period Spend Limit</div>
+        <div class="col-12 col-lg-9">
+          {{
+            transactionDetail?.messages[0]?.allowance?.allowance?.period_spend_limit[0]?.amount ||
+              transactionDetail?.messages[0]?.allowance?.period_spend_limit[0].amount
+              | balanceOf
+              | mask: 'separator.6'
+          }}
+          <span class="text--primary">{{ denom }}</span>
+        </div>
+      </div>
+      <app-messages-item
+        *ngIf="typeGrantAllowance === 'Periodic'"
+        [label]="'Period'"
+        [value]="
+          transactionDetail?.messages[0]?.allowance?.period ||
+          transactionDetail?.messages[0]?.allowance?.allowance?.period
+        "></app-messages-item>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="transactionDetail?.type === eTransType.MsgRevokeAllowance">
+    <div class="card-info">
+      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+      </ng-container>
+      <app-messages-item
+        [label]="'Granter'"
+        [value]="transactionDetail?.messages[0]?.granter"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
+      <app-messages-item
+        [label]="'Grantee'"
+        [value]="transactionDetail?.messages[0]?.grantee"
+        [dataLink]="{ url: '/account' }"></app-messages-item>
     </div>
   </ng-container>
 
@@ -552,7 +659,7 @@
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | number: global.formatNumberToken }}
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask: 'separator.6' }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
@@ -574,7 +681,7 @@
     <div class="row mb-3 body-01" *ngIf="ibcData?.receive?.denom">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ ibcData?.amount | balanceOf | number: global.formatNumberToken }}
+        {{ ibcData?.amount | balanceOf | mask: 'separator.6' }}
         <span class="text--primary">{{ ibcData?.receive?.denom }}</span>
       </div>
     </div>
@@ -608,7 +715,7 @@
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ ibcData?.acknowledgement?.amount | balanceOf | number: global.formatNumberToken }}
+        {{ ibcData?.acknowledgement?.amount | balanceOf | mask: 'separator.6' }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>

@@ -34,5 +34,11 @@ export const TYPE_TRANSACTION = [
   { label: TRANSACTION_TYPE_ENUM.Vesting, value: TypeTransaction.Vesting },
   { label: TRANSACTION_TYPE_ENUM.Deposit, value: TypeTransaction.Deposit },
   { label: TRANSACTION_TYPE_ENUM.SubmitProposalTx, value: TypeTransaction.SubmitProposalTx },
+  { label: TRANSACTION_TYPE_ENUM.GetRewardCommission, value: TypeTransaction.GetRewardCommission },
+  { label: TRANSACTION_TYPE_ENUM.PeriodicVestingAccount, value: TypeTransaction.PeriodicVestingAccount },
+  { label: TRANSACTION_TYPE_ENUM.BasicAllowance, value: TypeTransaction.BasicAllowance },
+  { label: TRANSACTION_TYPE_ENUM.PeriodicAllowance, value: TypeTransaction.PeriodicAllowance },
+  { label: TRANSACTION_TYPE_ENUM.MsgGrantAllowance, value: TypeTransaction.MsgGrantAllowance },
+  { label: TRANSACTION_TYPE_ENUM.MsgRevokeAllowance, value: TypeTransaction.MsgRevokeAllowance },
   { label: TRANSACTION_TYPE_ENUM.Fail, value: TypeTransaction.Fail },
 ];

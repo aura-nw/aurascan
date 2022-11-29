@@ -50,9 +50,19 @@ const routes: Routes = [
     loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
   },
   {
+    path: 'project/:id',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/project/project.module').then((m) => m.ProjectModule),
+  },
+  {
     path: 'raw-data',
     loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
     pathMatch: 'full',
+  },
+  {
+    path: 'fee-grant',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/fee-grant/fee-grant.module').then((m) => m.FeeGrantModule),
   },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },

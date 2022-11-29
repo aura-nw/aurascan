@@ -3,6 +3,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
+import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
@@ -30,9 +31,6 @@ export class WriteContractComponent implements OnInit {
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   jsValidator = new Validator();
-
-  isLoadingAction = false;
-  urlAction = '';
 
   root: any[];
 
@@ -120,7 +118,6 @@ export class WriteContractComponent implements OnInit {
     let fieldList = [];
 
     if (childProps) {
-
       fieldList = Object.keys(childProps).map((e) => ({
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
@@ -177,42 +174,40 @@ export class WriteContractComponent implements OnInit {
       });
 
       if (msgExecute[fieldName]) {
-        this.execute(msgExecute);
+        msg.isLoading = true;
+        this.execute(msgExecute, msg);
       }
     }
   }
 
-  execute(msg) {
-    let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-    const fee: any = {
-      amount: [
-        {
-          denom: this.coinMinimalDenom,
-          amount: '1',
-        },
-      ],
-      gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
-    };
-
-    SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer)
-      .then((client) => {
-        return client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-      })
-      .then((client) => {
-        if (client?.transactionHash) {
-          this.urlAction = 'transaction/' + client?.transactionHash;
-          this.isLoadingAction = true;
-          setTimeout(() => {
-            this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-          }, 4000);
-        }
-      })
-      .catch((error) => {
-        if (!error.toString().includes('Request rejected')) {
-          let msgError = error.toString() || 'Error';
-          this.toastr.error(msgError);
-        }
-      });
+  execute(data, msg) {
+    let msgError = MESSAGES_CODE_CONTRACT[5].Message;
+    msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
+    try {
+      this.walletService
+        .execute(this.userAddress, this.contractDetailData.contract_address, data)
+        .then((e) => {
+          msg.isLoading = false;
+          if ((e as any).result?.error) {
+            this.toastr.error(msgError);
+          } else {
+            if ((e as any)?.transactionHash) {
+              this.toastr.loading((e as any)?.transactionHash);
+              setTimeout(() => {
+                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+              }, 4000);
+            }
+          }
+        })
+        .catch((error) => {
+          msg.isLoading = false;
+          if (!error.toString().includes('Request rejected')) {
+            this.toastr.error(msgError);
+          }
+        });
+    } catch (error) {
+      this.toastr.error(`Error: ${msgError}`);
+    }
   }
 
   resetError(msg, all = false) {
@@ -233,140 +228,4 @@ export class WriteContractComponent implements OnInit {
       });
     }
   }
-
-  /*
-  checkRequire(item, objDefine): boolean {
-    if (objDefine.value.required.includes(item)) {
-      return true;
-    }
-    return false;
-  }
-
-    async executeSmartContract(name: string, currentFrom: number) {
-    this.connectWallet();
-    if (this.walletAccount) {
-      let err = {};
-      let objWriteContract = {};
-      let msg = {};
-      const contractTemp = this.jsonWriteContract?.oneOf.find((contract) => contract.required[0] === name);
-      if (contractTemp.properties[name].hasOwnProperty('properties')) {
-        Object.entries(contractTemp.properties[name].properties).forEach(([key, value]) => {
-          let element: HTMLInputElement = document.getElementsByClassName(
-            'form-check-input ' + name + ' ' + key,
-          )[0] as HTMLInputElement;
-
-          //check input null && require field
-          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
-            err[key.toString()] = true;
-            this.errorInput = true;
-            this.currentFrom = currentFrom;
-            return;
-          }
-
-          let type = contractTemp.properties[name].properties[key].type;
-          //check exit value
-          if (element?.value) {
-            objWriteContract[key] = element?.value;
-          }
-
-          //convert number if integer field
-          if (type) {
-            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
-              objWriteContract[key] = Number(element?.value);
-            }
-          }
-        });
-      }
-      //check exit ref define
-      else if (contractTemp.properties[name].hasOwnProperty('$ref')) {
-        let objectTemp = contractTemp.properties[name].$ref.replace('#/', '')?.split('/');
-        const contractRef = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
-        Object.entries(contractRef.properties).forEach(([key, value]) => {
-          let element: HTMLInputElement = document.getElementsByClassName(
-            'form-check-input ' + name + ' ' + key,
-          )[0] as HTMLInputElement;
-
-          //check input null && require field
-          if (element?.value?.length === 0 && element?.classList.contains('input-require')) {
-            err[key.toString()] = true;
-            this.errorInput = true;
-            this.currentFrom = currentFrom;
-            return;
-          }
-
-          let type = contractRef.properties[key].type || 'string';
-          if (element?.value) {
-            objWriteContract[key] = element?.value;
-          }
-
-          //convert number if integer field
-          if (type) {
-            if (type === 'integer' || (type[0] === 'integer' && element?.value)) {
-              objWriteContract[key] = Number(element?.value);
-            }
-          }
-        });
-      }
-      contractTemp.properties[name].checkErr = err;
-
-      if (Object.keys(contractTemp.properties[name]?.checkErr).length > 0) {
-        return;
-      }
-
-      msg = {
-        [name]: objWriteContract,
-      };
-      let singer = window.getOfflineSignerOnlyAmino(this.walletService.chainId);
-      const client = await SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, singer);
-      const fee: any = {
-        amount: [
-          {
-            denom: this.coinMinimalDenom,
-            amount: '1',
-          },
-        ],
-        gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
-      };
-      try {
-        await client.execute(this.userAddress, this.contractDetailData.contract_address, msg, fee);
-        contractTemp.properties[name].checkErr = null;
-        this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-      } catch (error) {
-        if (!error.toString().includes('Request rejected')) {
-          let msgError = error.toString() || 'Error';
-          this.toastr.error(msgError);
-        }
-      }
-    }
-  }
-
-    resetCheck() {
-    this.errorInput = false;
-  }
-
-  objectKeys(obj) {
-    return obj ? Object.keys(obj) : [];
-  }
-
-  objectRef(ref, getType = false, contractDetail = null) {
-    if (!ref) {
-      return 'any';
-    }
-
-    let objectTemp = ref.replace('#/', '')?.split('/');
-    let obj = this.jsonWriteContract[objectTemp[0]][objectTemp[1]];
-    let data = {};
-    if (obj) {
-      data = { key: objectTemp, value: obj };
-    }
-    if (contractDetail) {
-      this.objDefine[Object.keys(contractDetail.properties)[0]] = data;
-    }
-    if (getType) {
-      return obj.type || 'string';
-    } else {
-      return obj?.properties ? Object.keys(obj?.properties) : [];
-    }
-  }
-  */
 }

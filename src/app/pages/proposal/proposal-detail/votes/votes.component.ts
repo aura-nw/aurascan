@@ -1,7 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnChanges } from '@angular/core';
-import { merge } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
+import { combineLatest } from 'rxjs';
+import { debounceTime, map, tap } from 'rxjs/operators';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
@@ -21,6 +22,7 @@ export interface IVotes {
 })
 export class VotesComponent implements OnChanges {
   @Input() proposalDetail;
+  @ViewChild('customNav') customNav: NgbNav;
 
   TABS = PROPOSAL_VOTE.filter((vote) =>
     [
@@ -40,6 +42,8 @@ export class VotesComponent implements OnChanges {
   countVote: Map<string, number> = new Map<string, number>();
   countCurrent: string = '';
   voteDataListLoading = true;
+  isFirstChange = false;
+  TAB_ALL = 0;
 
   voteData = {
     all: null,
@@ -58,16 +62,34 @@ export class VotesComponent implements OnChanges {
   };
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
 
-  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {}
+  constructor(private proposalService: ProposalService, private layout: BreakpointObserver) {
+    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+      if (event) {
+        this.voteDataList = [];
+        this.countTotal.yes = 0;
+        this.countTotal.abstain = 0;
+        this.countTotal.no = 0;
+        this.countTotal.noWithVeto = 0;
+        this.getVotesList();
+      }
+    });
+  }
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['proposalDetail'].currentValue?.proposal_id && !this.isFirstChange) {
+      this.isFirstChange = true;
+      this.getVotesList();
+    }
+  }
+
+  getVotesList(): void {
     if (this.proposalDetail?.proposal_id) {
       const payloads: IListVoteQuery = {
         pageLimit: 25,
         proposalid: this.proposalDetail.proposal_id,
       };
+
       this.proposalDetail?.total_vote.forEach((f) => {
-        this.countTotal.all += f.count;
         switch (f.answer) {
           case VOTE_OPTION.VOTE_OPTION_YES:
             this.countTotal.yes = f.count;
@@ -84,47 +106,57 @@ export class VotesComponent implements OnChanges {
         }
       });
 
-      merge(
+      combineLatest([
         this.proposalService
           .getListVoteFromIndexer(payloads, null)
-          .pipe(map((item) => ({ all: { nextKey: item.data.nextKey, votes: item.data.votes } }))),
+          .pipe(map((item) => ({ nextKey: item.data.nextKey, votes: item.data.votes }))),
         this.proposalService
           .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_YES)
-          .pipe(map((item) => ({ yes: { nextKey: item.data.nextKey, votes: item.data.votes } }))),
+          .pipe(map((item) => ({ nextKey: item.data.nextKey, votes: item.data.votes }))),
         this.proposalService
           .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO)
-          .pipe(map((item) => ({ no: { nextKey: item.data.nextKey, votes: item.data.votes } }))),
+          .pipe(map((item) => ({ nextKey: item.data.nextKey, votes: item.data.votes }))),
         this.proposalService
           .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO)
-          .pipe(map((item) => ({ noWithVeto: { nextKey: item.data.nextKey, votes: item.data.votes } }))),
+          .pipe(map((item) => ({ nextKey: item.data.nextKey, votes: item.data.votes }))),
         this.proposalService
           .getListVoteFromIndexer(payloads, VOTE_OPTION.VOTE_OPTION_ABSTAIN)
-          .pipe(map((item) => ({ abstain: { nextKey: item.data.nextKey, votes: item.data.votes } }))),
-      ).subscribe((res) => {
+          .pipe(map((item) => ({ nextKey: item.data.nextKey, votes: item.data.votes }))),
+      ]).subscribe((res) => {
         this.voteDataListLoading = true;
-        res['all'] && ((dta) => (this.voteData.all = dta))(res['all']);
-        res['yes'] && ((dta) => (this.voteData.yes = dta))(res['yes']);
-        res['no'] && ((dta) => (this.voteData.no = dta))(res['no']);
-        res['noWithVeto'] && ((dta) => (this.voteData.noWithVeto = dta))(res['noWithVeto']);
-        res['abstain'] && ((dta) => (this.voteData.abstain = dta))(res['abstain']);
+        res[0] && ((dta) => (this.voteData.all = dta))(res[0]);
+        res[1] && ((dta) => (this.voteData.yes = dta))(res[1]);
+        res[2] && ((dta) => (this.voteData.no = dta))(res[2]);
+        res[3] && ((dta) => (this.voteData.noWithVeto = dta))(res[3]);
+        res[4] && ((dta) => (this.voteData.abstain = dta))(res[4]);
 
+        let voteDataList: any[];
         if (this.voteData?.all) {
-          this.voteDataList = [...this.voteData?.all.votes];
+          voteDataList = [...this.voteData?.all.votes];
         }
-        if (this.voteDataList) {
-          this.voteDataList.forEach((item: any) => {
+        if (voteDataList) {
+          voteDataList.forEach((item: any) => {
             item.voter = item.tx_response?.tx?.body?.messages[0]?.voter;
             item.tx_hash = item.tx_response?.txhash;
             item.option = item.tx_response?.tx?.body?.messages[0]?.option;
             item.updated_at = item.tx_response?.timestamp;
           });
         }
+
+        this.countTotal.all =
+          this.countTotal.yes + this.countTotal.no + this.countTotal.noWithVeto + this.countTotal.abstain;
+
+        this.voteDataList = voteDataList;
+
         this.countVote.set('', this.countTotal?.all);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_YES, this.countTotal?.yes);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_ABSTAIN, this.countTotal?.abstain);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO, this.countTotal?.no);
         this.countVote.set(VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO, this.countTotal?.noWithVeto);
+
         this.voteDataListLoading = false;
+        this.customNav?.select(this.TAB_ALL);
+        this.changeTab('');
       });
     }
   }
@@ -154,6 +186,7 @@ export class VotesComponent implements OnChanges {
     const payloads: IListVoteQuery = {
       pageLimit: 25,
       proposalid: this.proposalDetail.proposal_id,
+      nextKey: null,
     };
 
     switch ($event.tabId) {
@@ -216,8 +249,8 @@ export class VotesComponent implements OnChanges {
         }
         break;
       default:
-        payloads.nextKey = this.voteData.all.nextKey;
-        if (payloads.nextKey) {
+        payloads.nextKey = this.voteData.all?.nextKey;
+        if (payloads?.nextKey) {
           this.proposalService.getListVoteFromIndexer(payloads, null).subscribe((res) => {
             if (res.data.votes) {
               this.voteData.all = {

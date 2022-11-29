@@ -18,6 +18,7 @@ export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
   @Output() resultLength = new EventEmitter<any>();
+  @Output() hasMore = new EventEmitter<any>();
 
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
@@ -34,6 +35,7 @@ export class TokenContentComponent implements OnInit {
   infoSearch = {};
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
+  lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -69,15 +71,11 @@ export class TokenContentComponent implements OnInit {
   }
 
   handleSearch() {
-    const VALIDATORS = {
-      HASHRULE: /^[A-Za-z0-9]/,
-    };
-    const regexRule = VALIDATORS.HASHRULE;
     this.searchTemp = this.searchTemp?.trim();
     this.isSearchTx = false;
     this.TABS = this.tabsBackup;
 
-    if (regexRule.test(this.searchTemp)) {
+    if (this.searchTemp?.length > 0) {
       this.textSearch = this.searchTemp;
       let tempTabs;
       this.paramQuery = this.searchTemp;
@@ -95,9 +93,9 @@ export class TokenContentComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
           if (this.tokenDetail?.isNFTContract) {
-            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${this.paramQuery}`;
+            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
-            window.location.href = `/tokens/token/${this.contractAddress}?a=${this.paramQuery}`;
+            window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
         }
       });
@@ -127,7 +125,7 @@ export class TokenContentComponent implements OnInit {
     let queryData = {};
     if (this.tokenDetail.isNFTContract) {
       queryData = {
-        tokens: { owner: address },
+        tokens: { limit: 1000, owner: address },
       };
     } else {
       queryData = {
@@ -140,5 +138,9 @@ export class TokenContentComponent implements OnInit {
       this.infoSearch['balance'] = this.tokenDetail.isNFTContract ? data?.tokens?.length : data?.balance;
       this.infoSearch['balance'] = this.infoSearch['balance'] || 0;
     } catch (error) {}
+  }
+
+  getMoreTx(event) {
+    this.hasMore.emit(event);
   }
 }

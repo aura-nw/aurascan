@@ -53,14 +53,14 @@ export class NftListComponent implements OnChanges {
     this.getNftData();
   }
 
-  getNftData(next_key = null) {
+  getNftData() {
     this.loading = true;
     this.searchValue = this.searchValue?.trim();
 
     const payload = {
       account_address: this.address,
       limit: 100,
-      keyword: encodeURIComponent(this.searchValue),
+      keyword: this.searchValue,
       next_key: this.nextKey,
     };
     this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
@@ -74,9 +74,6 @@ export class NftListComponent implements OnChanges {
         this.pageData.length = this.nftList.length;
 
         this.nftList.forEach((element) => {
-          if (element.media_info.length > 0) {
-            element.nftType = checkTypeFile(element?.media_info[0]?.media_link);
-          }
           if (!this.searchValue) {
             this.totalValue += element.price * +element.balance || 0;
           }
@@ -116,7 +113,7 @@ export class NftListComponent implements OnChanges {
 
     this.pageData.pageIndex = e.pageIndex;
     if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getNftData(this.nextKey);
+      this.getNftData();
       this.currentKey = this.nextKey;
     } else {
       this.showedData = this.nftList.slice(
@@ -132,10 +129,11 @@ export class NftListComponent implements OnChanges {
   }
 
   getTypeFile(nft: any) {
-    if (nft?.media_info?.length > 0) {
-      return checkTypeFile(nft.media_info[0]?.media_link);
-    } else {
-      return '';
-    }
+    let nftType = checkTypeFile(nft);
+    return nftType;
+  }
+
+  encodeData(data) {
+    return encodeURIComponent(data);
   }
 }

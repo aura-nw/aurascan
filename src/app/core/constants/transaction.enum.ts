@@ -34,6 +34,12 @@ export enum TypeTransaction {
   Vesting = 'Vesting',
   Deposit = 'Deposit',
   SubmitProposalTx = 'Submit Proposal',
+  GetRewardCommission = 'Get Reward Commission',
+  PeriodicVestingAccount = 'Periodic Vesting',
+  BasicAllowance = 'Basic',
+  PeriodicAllowance = 'Periodic',
+  MsgGrantAllowance = "Grant Allowance",
+  MsgRevokeAllowance = "Revoke Allowance",
   Fail = 'Fail'
 }
 
@@ -72,6 +78,12 @@ export enum TRANSACTION_TYPE_ENUM {
   Deposit = '/cosmos.gov.v1beta1.MsgDeposit',
   SubmitProposalTx = '/cosmos.gov.v1beta1.MsgSubmitProposal',
   GetRewardCommission = '/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission',
+  PeriodicVestingAccount = '/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount',
+  BasicAllowance = '/cosmos.feegrant.v1beta1.BasicAllowance',
+  PeriodicAllowance = '/cosmos.feegrant.v1beta1.PeriodicAllowance',
+  MsgGrantAllowance = '/cosmos.feegrant.v1beta1.MsgGrantAllowance',
+  MsgRevokeAllowance = '/cosmos.feegrant.v1beta1.MsgRevokeAllowance',
+  AllowedMsgAllowance = '/cosmos.feegrant.v1beta1.AllowedMsgAllowance',
   Fail = 'FAILED'
 }
 
@@ -87,7 +99,8 @@ export enum CodeTransaction {
 export enum ModeExecuteTransaction {
   Default = 'default',
   Mint = 'mint',
-  Burn = 'burn'
+  Burn = 'burn',
+  Buy = 'buy'
 }
 
 export enum pipeTypeData {

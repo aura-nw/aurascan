@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -30,6 +30,7 @@ export class NFTDetailComponent implements OnInit {
     // { matColumnDef: 'popover', headerCellDef: '' },
     { matColumnDef: 'tx_hash', headerCellDef: 'Txn Hash' },
     { matColumnDef: 'type', headerCellDef: 'Method' },
+    { matColumnDef: 'status', headerCellDef: 'Result' },
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
     { matColumnDef: 'from_address', headerCellDef: 'From' },
     { matColumnDef: 'to_address', headerCellDef: 'To' },
@@ -50,10 +51,12 @@ export class NFTDetailComponent implements OnInit {
   currentKey: string;
   nftType: string;
   isError = false;
+  nftUrl = '';
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -77,33 +80,52 @@ export class NFTDetailComponent implements OnInit {
   error(): void {
     this.isError = true;
   }
-  
+
   getNFTDetail() {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
-      this.nftType = checkTypeFile(this.nftDetail?.media_info[0]?.media_link);
+
+      if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
+        this.nftDetail['isDisplayName'] = true;
+        this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+      }
+
+      this.nftType = checkTypeFile(this.nftDetail);
+      if (this.nftDetail.animation && this.nftDetail.animation?.content_type) {
+        this.nftUrl = this.nftDetail.animation?.link_s3 || '';
+      }
+      if (this.nftDetail.image && this.nftUrl == '') {
+        this.nftUrl = this.nftDetail.image?.link_s3 || '';
+      }
       this.loading = false;
     });
   }
 
-  getDataTable(nextKey = null) {
+  async getDataTable(nextKey = null) {
     let filterData = {};
     filterData['keyWord'] = this.nftId;
-    this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKey = data.nextKey || null;
 
-      if (code === 200) {
-        res.data.transactions.forEach((trans) => {
-          trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
-        });
-        this.dataSource.data = res.data.transactions;
-        this.pageData.length = res.data?.count;
-      }
-      this.loading = false;
-    });
+    const res = await this.tokenService.getListTokenTransferIndexer(100, this.contractAddress, filterData, nextKey);
+    if (res?.data?.code === 200) {
+      res?.data?.data?.transactions.forEach((trans) => {
+        trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+      });
+      let txs = [];
+      res.data?.data?.transactions.forEach((element, index) => {
+        txs.push(element);
+        if (element.type === 'buy') {
+          let txTransfer = { ...element };
+          txTransfer['type'] = 'transfer';
+          txTransfer['price'] = 0;
+          txs.push(txTransfer);
+        }
+      });
+      this.dataSource.data = txs;
+      this.pageData.length = txs?.length;
+    }
+    this.loading = false;
   }
 
   paginatorEmit(event): void {
@@ -152,5 +174,12 @@ export class NFTDetailComponent implements OnInit {
       nftDetail: this.nftDetail,
       modeExecute: data?.modeExecute,
     };
+  }
+
+  isContractAddress(type, address) {
+    if (LIST_TYPE_CONTRACT_ADDRESS.includes(type) && address?.length > LENGTH_CHARACTER.ADDRESS) {
+      return true;
+    }
+    return false;
   }
 }

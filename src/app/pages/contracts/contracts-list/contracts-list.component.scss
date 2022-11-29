@@ -1,12 +1,31 @@
 .search-form.contract-search-form {
-    width: 100%;
+  width: 100%;
+
   @media (min-width: 992px) {
     width: 500px;
   }
+
   .box-search-data {
     width: 93%;
+
     @media (min-width: 992px) {
       width: 490px;
     }
   }
+}
+
+.g-ellipsis-project {
+  width: 130px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
+.aura-table.contract-table th.mat-header-cell:nth-child(3) {
+  max-width: 130px;
+}
+
+.aura-table.contract-table th.mat-header-cell:nth-child(5) {
+  max-width: 150px;
 }

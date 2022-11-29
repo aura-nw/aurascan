@@ -25,7 +25,6 @@ import { ValidatorService } from '../../../app/core/services/validator.service';
 import { WalletService } from '../../../app/core/services/wallet.service';
 import local from '../../../app/core/utils/storage/local';
 import { Globals } from '../../../app/global/global';
-import { createSignBroadcast } from '../../core/utils/signing/transaction-manager';
 
 @Component({
   selector: 'app-validators',
@@ -46,8 +45,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     { matColumnDef: 'action', headerCellDef: '' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  dataSource: MatTableDataSource<any>;
-  dataSourceBk: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>();
+  dataSourceBk = new MatTableDataSource<any>();
 
   arrayDelegate = [];
   textSearch = '';
@@ -94,8 +93,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-  isLoadingAction = false;
-  urlAction = '';
 
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
@@ -103,6 +100,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
+
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
   }
@@ -163,6 +161,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.timerUnSub.unsubscribe();
     }
   }
+
   // loadDataTemp(): void {
   //   //get data from client for wallet info
   //   let retrievedObject = localStorage.getItem('dataInfoWallet');
@@ -200,7 +199,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
           this.lstValidator = dataFilter;
         }
 
-        this.dataSource = new MatTableDataSource(dataFilter);
+        // this.dataSource.data = dataFilter;
+        Object.keys(dataFilter).forEach((key) => {
+          if (this.dataSource.data[key]) {
+            Object.assign(this.dataSource.data[key], dataFilter[key]);
+          } else {
+            this.dataSource.data[key] = dataFilter[key];
+          }
+        });
+
         this.dataSourceBk = this.dataSource;
         this.dataSource.sort = this.sort;
         this.searchValidator();
@@ -243,7 +250,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
-    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.data = data;
     this.dataSourceBk = this.dataSource;
     this.searchValidator();
   }
@@ -278,7 +285,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         ? event.status === this.statusValidator.Active
         : event.status !== this.statusValidator.Active,
     );
-    this.dataSource = new MatTableDataSource(dataFilter);
+    this.dataSource.data = dataFilter;
     this.dataSource.sort = this.sort;
   }
 
@@ -294,7 +301,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         (f) => f.title.toLowerCase().indexOf(this.textSearch.toLowerCase().trim()) > -1,
       );
       this.dataSource = this.dataSourceBk;
-      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.data = data;
       if (data === undefined || data?.length === 0) {
         this.searchNullData = true;
       }
@@ -382,13 +389,12 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     const halftime = 10000;
     const currentUrl = this.router.url;
     let dataInfoWallet = {};
-    if (this.userAddress && currentUrl === '/validators') {
+    if (this.userAddress && currentUrl.includes('/validators')) {
       forkJoin({
         dataWallet: this.accountService.getAccountDetail(this.userAddress),
         listDelegator: this.validatorService.validatorsDetailWallet(this.userAddress),
-        listUnDelegator: this.validatorService.validatorsListUndelegateWallet(this.userAddress),
       }).subscribe(
-        ({ dataWallet, listDelegator, listUnDelegator }) => {
+        ({ dataWallet, listDelegator }) => {
           if (dataWallet) {
             this.dataDelegate = {
               ...this.dataDelegate,
@@ -427,29 +433,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
             }
           }
 
-          if (listUnDelegator) {
-            this.lstUndelegate = [];
-            const now = new Date();
-            listUnDelegator.data.account_unbonding.forEach((data) => {
-              data.entries.forEach((f) => {
-                f['validator_identity'] = data.validator_description?.description?.identity;
-                f.balance = f.balance / NUMBER_CONVERT;
-                f.validator_address = data.validator_address;
-                f.validator_name = this.lstValidatorOrigin.find(
-                  (i) => i.operator_address === f.validator_address,
-                )?.title;
-                f.jailed = data.validator_description?.jailed || false;
-                let timeConvert = new Date(f.completion_time);
-                if (now < timeConvert) {
-                  this.lstUndelegate.push(f);
-                }
-              });
-            });
-
-            this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
-              return this.compare(a.completion_time, b.completion_time, true);
-            });
-          }
+          this.getDataUndelegate();
 
           // store data wallet info
           dataInfoWallet['dataDelegate'] = JSON.stringify(this.dataDelegate);
@@ -507,7 +491,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.STAKE,
           message: {
             to: [this.dataModal.operator_address],
@@ -535,7 +520,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       const executeClaim = async () => {
         this.isLoading = true;
         this.isClaimRewardLoading = true;
-        const { hash, error } = await createSignBroadcast(
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast(
           {
             messageType: SIGNING_MESSAGE_TYPES.CLAIM_REWARDS,
             message: {
@@ -560,7 +546,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeUnStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.UNSTAKE,
           message: {
             from: [this.dataModal.operator_address],
@@ -587,7 +574,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeReStaking = async () => {
         this.isLoading = true;
-        const { hash, error } = await createSignBroadcast({
+        // const { hash, error } = await createSignBroadcast({
+        const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {
             src_address: this.dataModal.operator_address,
@@ -661,7 +649,8 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     this.checkHashAction(hash);
     if (error) {
       if (error != 'Request rejected') {
-        this.toastr.error(error);
+        let errorMessage = this.mappingErrorService.checkMappingError('', error);
+        this.toastr.error(errorMessage);
       }
       this.resetData();
     } else {
@@ -677,7 +666,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     let numberCode = res?.data?.tx_response?.code;
     message = res?.data?.tx_response?.raw_log || message;
     message = this.mappingErrorService.checkMappingError(message, numberCode);
-    this.isLoadingAction = false;
     if (numberCode !== undefined) {
       if (!!!numberCode && numberCode === CodeTransaction.Success) {
         setTimeout(() => {
@@ -697,20 +685,46 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
 
   resetData() {
     this.isLoading = false;
-    this.modalReference?.close();
+    // this.modalReference?.close();
     this.isHandleStake = false;
     this.isClaimRewardLoading = false;
-    this.isLoadingAction = false;
-    this.urlAction = '';
   }
 
   checkHashAction(hash) {
     const myInterval = setInterval(() => {
       if (hash) {
-        this.urlAction = 'transaction/' + hash;
-        this.isLoadingAction = true;
+        this.toastr.loading(hash);
+        this.isLoading = false;
+        this.modalReference?.close();
         clearInterval(myInterval);
       }
     }, 500);
+  }
+
+  getDataUndelegate() {
+    this.validatorService.validatorsListUndelegateWallet(this.userAddress).subscribe((res) => {
+      let listUnDelegator = res;
+      if (listUnDelegator) {
+        this.lstUndelegate = [];
+        const now = new Date();
+        listUnDelegator.data.account_unbonding.forEach((data) => {
+          data.entries.forEach((f) => {
+            f['validator_identity'] = data.validator_description?.description?.identity;
+            f.balance = f.balance / NUMBER_CONVERT;
+            f.validator_address = data.validator_address;
+            f.validator_name = this.lstValidatorOrigin.find((i) => i.operator_address === f.validator_address)?.title;
+            f.jailed = data.validator_description?.jailed || false;
+            let timeConvert = new Date(f.completion_time);
+            if (now < timeConvert) {
+              this.lstUndelegate.push(f);
+            }
+          });
+        });
+
+        this.lstUndelegate = this.lstUndelegate.sort((a, b) => {
+          return this.compare(a.completion_time, b.completion_time, true);
+        });
+      }
+    });
   }
 }
