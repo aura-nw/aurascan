@@ -124,19 +124,19 @@ export const MENU: MenuItem[] = [
       label: 'Soulbound Token',
       link: '/soulbound',
       icon: 'users-three',
-    }
+    },
     // {
     //   id: 2,
     //   label: 'Multi-send',
     //   link: '/fee',
     //   icon: 'users-three',
     // },
-    // {
-    //   id: 3,
-    //   label: 'Fee Grant',
-    //   link: '/fee',
-    //   icon: 'gas-pump',
-    // }
+    {
+      id: 3,
+      label: 'Fee Grant',
+      link: '/fee',
+      icon: 'gas-pump',
+    }
     ]
   },
 ];

@@ -350,7 +350,7 @@
             </span>
             <span class="text--primary fw-normal"> {{ denom }} </span>
           </div>
-          <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
                 type="number"
                 [max]="globals.maxNumberInput"
@@ -359,7 +359,7 @@
                 (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
-                  class="button button-flat button--xs button--sm-mob button-max body-02"
+                  class="button button-flat button--sm button-max body-02"
                   type="button"
                   (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
@@ -369,11 +369,11 @@
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
-          <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-2 mr-4">
               <button
-                  class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
+                  class="button button-primary active button-flat button--sm button-max fw-semibold"
                   type="button"
                   (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
@@ -430,11 +430,11 @@
               </span>
               <span class="text--primary"> {{ denom }} </span>
             </div>
-            <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+            <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-2 mr-4">
                 <button
-                    class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
+                    class="button button-primary active button-flat button--sm button-max fw-semibold"
                     type="button"
                     (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX
