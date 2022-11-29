@@ -70,7 +70,7 @@
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balanceOf | number: global.formatNumberToken }}
+                            {{ data[template.matColumnDef] | balanceOf | mask: 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>
@@ -82,7 +82,7 @@
                         <div *ngSwitchCase="'spendable'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balanceOf | number: global.formatNumberToken }}
+                            {{ data[template.matColumnDef] | balanceOf | mask: 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>

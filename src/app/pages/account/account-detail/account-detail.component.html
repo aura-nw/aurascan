@@ -157,12 +157,12 @@
                                 </div>
                               </div>
                               <div *ngSwitchCase="'fee'">
-                                {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                                {{ data[template.matColumnDef] | mask: 'separator.6' }}
                                 <span class="text--primary">{{ denom }}</span>
                               </div>
                               <div *ngSwitchCase="'amount'">
                                 <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                                  {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                                  {{ data[template.matColumnDef] | mask: 'separator.6' }}
                                   <span class="text--primary">{{ data?.denom }}</span>
                                 </ng-container>
                                 <ng-template #displayNonNumber>
@@ -319,7 +319,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
                     <span class="h5 h6-mob mb-0 text--gray-1">{{
-                      currentAccountDetail?.total | number: global.formatNumberToken
+                      currentAccountDetail?.total | mask: 'separator.6'
                     }}</span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -330,7 +330,7 @@
                         <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
                       </div>
                       <span class="text--gray-1 body body-01-mob fw-500 fw-normal-mob">{{
-                        item.amount | number: global.formatNumberToken
+                        +item.amount | mask: 'separator.6'
                       }}</span>
                     </div>
                   </ng-container>
