@@ -113,24 +113,24 @@ export const MENU: MenuItem[] = [
       // }
     ]
   },
-  // {
-  //   id: 5,
-  //   label: 'MENUITEMS.MORE',
-  //   icon: 'list',
-  //   name: MenuName.More,
-  //   subItems: [
-  //   {
-  //     id: 1,
-  //     label: 'Fee Grant',
-  //     link: '/fee-grant',
-  //     icon: 'gas-pump',
-  //   },
-  //   // {
-  //   //   id: 2,
-  //   //   label: 'Multi-send',
-  //   //   link: '/fee',
-  //   //   icon: 'users-three',
-  //   // }
-  //   ]
-  // },
+  {
+    id: 5,
+    label: 'MENUITEMS.MORE',
+    icon: 'list',
+    name: MenuName.More,
+    subItems: [
+    {
+      id: 1,
+      label: 'Fee Grant',
+      link: '/fee-grant',
+      icon: 'gas-pump',
+    },
+    // {
+    //   id: 2,
+    //   label: 'Multi-send',
+    //   link: '/fee',
+    //   icon: 'users-three',
+    // }
+    ]
+  },
 ];
