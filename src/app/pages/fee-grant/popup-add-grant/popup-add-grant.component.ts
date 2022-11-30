@@ -22,8 +22,10 @@ export class PopupAddGrantComponent implements OnInit {
   currDate;
   errorSpendLimit = false;
   isInvalidAddress = false;
+  isInvalidPeriod = false;
   formValid = false;
   isSubmit = false;
+  dayConvert = 24 * 60 * 60;
 
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
@@ -138,7 +140,7 @@ export class PopupAddGrantComponent implements OnInit {
           grantee: grantee_address?.trim(),
           spendLimit: amount,
           expiration: expiration_time ? timeEndDate : null,
-          period: period_day ? period_day * 24 * 60 * 60 : undefined,
+          period: period_day ? period_day * this.dayConvert : undefined,
           periodSpendLimit: period_amount,
           isPeriodic: this.periodShow,
           isInstantiate: isInstantiate,
@@ -173,16 +175,18 @@ export class PopupAddGrantComponent implements OnInit {
 
   checkFromValid(): boolean {
     const granter = this.walletService.wallet?.bech32Address;
-    const { grantee_address, period_amount, period_day, amount } = this.grantForm.value;
+    const { grantee_address, expiration_time, period_amount, period_day, amount } = this.grantForm.value;
 
     this.formValid = false;
     this.isInvalidAddress = false;
-    if (
-      this.isSubmit &&
-      !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
-    ) {
-      this.isInvalidAddress = true;
-      return false;
+    if (grantee_address?.length > 0) {
+      if (
+        this.isSubmit &&
+        !(grantee_address?.length >= LENGTH_CHARACTER.ADDRESS && grantee_address?.trim().startsWith(this.prefixAdd))
+      ) {
+        this.isInvalidAddress = true;
+        return false;
+      }
     }
 
     if (!granter || !grantee_address) {
@@ -190,6 +194,7 @@ export class PopupAddGrantComponent implements OnInit {
     }
 
     this.errorSpendLimit = false;
+    this.isInvalidPeriod = false;
     if (this.periodShow) {
       if (amount && amount < period_amount) {
         this.errorSpendLimit = true;
@@ -198,6 +203,14 @@ export class PopupAddGrantComponent implements OnInit {
 
       if (!period_amount || !period_day) {
         return false;
+      }
+
+      if (expiration_time && period_day) {
+        let temp = +period_day - 1 > 0 ? (+period_day - 1) * this.dayConvert * 1000 : 0;
+        if (+expiration_time.getTime() < +new Date().getTime() + temp) {
+          this.isInvalidPeriod = true;
+          return false;
+        }
       }
     }
 
@@ -214,5 +227,10 @@ export class PopupAddGrantComponent implements OnInit {
       return;
     }
     this.grantForm.controls['period_day'].setValue(event.target.value);
+  }
+
+  removeTime() {
+    this.grantForm.controls['expiration_time'].setValue(null);
+    this.checkFromValid();
   }
 }
