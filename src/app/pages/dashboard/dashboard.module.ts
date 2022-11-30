@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgxMaskModule } from 'ngx-mask';
+import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { MaterialModule } from 'src/app/app.module';
@@ -17,7 +17,7 @@ import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import {CommonService} from "src/app/core/services/common.service";
+import { CommonService } from 'src/app/core/services/common.service';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -39,6 +39,6 @@ import {CommonService} from "src/app/core/services/common.service";
     TranslateModule,
     TableNoDataModule,
   ],
-  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService],
+  providers: [DatePipe, BlockService, TransactionService, DecimalPipe, ProposalService, CommonService, MaskPipe],
 })
 export class DashboardModule {}

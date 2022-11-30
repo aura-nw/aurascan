@@ -4,10 +4,11 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { PAGE_EVENT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
+import { NUMBER_CONVERT, PAGE_EVENT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
+import { SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -16,6 +17,7 @@ import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { getFee } from 'src/app/core/utils/signing/fee';
 import { Globals } from 'src/app/global/global';
 import { PopupAddGrantComponent } from 'src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component';
 import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup-revoke.component';
@@ -60,8 +62,10 @@ export class MyGranteesComponent implements OnInit {
   nextKey = null;
   currentKey = null;
   currentAddress = null;
-  maxBalance = 0;
+  maxBalance = '0';
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
     public commonService: CommonService,
@@ -233,7 +237,11 @@ export class MyGranteesComponent implements OnInit {
 
   getMaxBalance() {
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
-      this.maxBalance = +res.data?.available + +res.data?.stake_reward;
+      this.maxBalance = (
+        +res.data?.available +
+        +res.data?.delegable_vesting -
+        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
+      ).toFixed(6);
     });
   }
 }

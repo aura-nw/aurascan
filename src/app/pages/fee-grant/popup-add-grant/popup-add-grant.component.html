@@ -27,10 +27,7 @@
               type="text"
               class="form-control form-check-input"
               (ngModelChange)="checkFromValid()"
-              [class.form-control--error]="
-                grantForm.get('grantee_address')?.invalid &&
-                (grantForm.get('grantee_address')?.dirty || grantForm.get('grantee_address')?.touched)
-              " />
+              [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
             <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
           </div>
         </div>
@@ -81,7 +78,11 @@
                 [matDatepicker]="picker"
                 [min]="currDate"
                 [style]="'max-width: 90%'"
+                (ngModelChange)="checkFromValid()"
                 formControlName="expiration_time" />
+              <button class="mr-1 button" *ngIf="grantForm.get('expiration_time')?.value" (click)="removeTime()">
+                <img src="assets/icons/icons-svg/white/close.svg" alt="" />
+              </button>
               <div class="mr-5 h6 mb-0 text--primary position-relative">
                 <i class="ph-calendar-blank-fill cursor-pointer" (click)="picker.open()"></i>
                 <mat-datepicker #picker></mat-datepicker>
@@ -174,6 +175,9 @@
                   (ngModelChange)="checkFromValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
+                <div class="error" *ngIf="isInvalidPeriod">
+                  The first period end time need to be sooner than Expiration Time
+                </div>
               </div>
             </div>
           </div>
@@ -242,9 +246,7 @@
                     [formGroupName]="i"
                     class="input-group input-group--simply form-check-input pr-0"
                     [class.form-control--error]="
-                      grantForm.get('execute_contract')?.controls[i].get('address')?.invalid &&
-                      (grantForm.get('execute_contract')?.controls[i].get('address')?.dirty ||
-                        grantForm.get('execute_contract')?.controls[i].get('address')?.touched)
+                      grantForm.get('execute_contract')?.controls[i].get('address')?.invalid && isSubmit
                     ">
                     <input
                       #address
@@ -290,10 +292,7 @@
         <button class="button button--md button-pill button-outline" type="button" (click)="dialogRef.close()">
           <span>Cancel</span>
         </button>
-        <button
-          class="button button--md button-pill button-flat ml-4"
-          type="submit"
-          [disabled]="!formValid">
+        <button class="button button--md button-pill button-flat ml-4" type="submit" [disabled]="!formValid">
           <span>Grant</span>
         </button>
       </div>
