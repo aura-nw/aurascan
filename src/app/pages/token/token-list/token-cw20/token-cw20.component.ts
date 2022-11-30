@@ -83,6 +83,7 @@ export class TokenCw20Component implements OnInit {
           change: Number(data.price_change_percentage_24h.toString()),
           isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
           holders: +data.holders,
+          holderChange: Number(data.holders_change_percentage_24h.toString()),
         });
       });
 
