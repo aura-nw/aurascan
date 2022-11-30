@@ -1,4 +1,4 @@
-import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
@@ -16,7 +16,7 @@ import { WSService } from 'src/app/core/services/ws.service';
 export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
   contractTxHash = '';
-  @ViewChild('version') versionSelect:any;
+  @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
 
@@ -31,10 +31,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
 
-    if (
-      this.contractAddress.trim().length === 0 ||
-      this.contractTxHash.trim().length === 0
-    ) {
+    if (this.contractAddress.trim().length === 0 || this.contractTxHash.trim().length === 0) {
       this.router.navigate(['contracts']);
     }
   }
@@ -95,7 +92,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
         const data = res?.data;
         if (data) {
-          switch (data?.Code) {
+          switch (data?.Data?.ErrorCode) {
             case 'SUCCESSFUL':
               this.dlgServiceOpen();
               this.wSService.subscribeVerifyContract(
