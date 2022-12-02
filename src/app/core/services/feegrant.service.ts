@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
+import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -17,12 +18,16 @@ export class FeeGrantService extends CommonService {
   getListFeeGrants(filterSearch, currentAddress, nextKey = null, isGranter = false): Observable<any> {
     let granter;
     let grantee;
+    let isSearchAddress = true;
+    if (filterSearch['textSearch']?.length === LENGTH_CHARACTER.TRANSACTION) {
+      isSearchAddress = false;
+    }
     if (isGranter) {
       grantee = currentAddress;
-      granter = filterSearch['textSearch'];
+      granter = isSearchAddress ? filterSearch['textSearch'] : null;
     } else {
       granter = currentAddress;
-      grantee = filterSearch['textSearch'];
+      grantee = isSearchAddress ? filterSearch['textSearch'] : null;
     }
     const params = _({
       chainid: this.chainInfo.chainId,
@@ -31,6 +36,7 @@ export class FeeGrantService extends CommonService {
       status: 'Available',
       pageLimit: 100,
       nextKey: nextKey,
+      txhash: !isSearchAddress ? filterSearch['textSearch'] : null
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
