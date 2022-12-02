@@ -45,8 +45,7 @@
                 (focus)="addClassFocus(amount)"
                 [clickOutsideEnabled]="true"
                 (clickOutside)="removeClassFocus(amount)"
-                type="number"
-                [max]="1000000"
+                mask="separator.6"
                 (ngModelChange)="checkFromValid()"
                 formControlName="amount" />
               <div class="d-flex align-items-center mr-2">
@@ -138,9 +137,8 @@
                   (focus)="addClassFocus(period_amount)"
                   [clickOutsideEnabled]="true"
                   (clickOutside)="removeClassFocus(period_amount)"
-                  type="number"
                   [placeholder]="'Amount'"
-                  [max]="1000000"
+                  mask="separator.6"
                   (ngModelChange)="checkFromValid()"
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
@@ -175,9 +173,9 @@
                   (ngModelChange)="checkFromValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
-                <div class="error" *ngIf="isInvalidPeriod">
-                  The first period end time need to be sooner than Expiration Time
-                </div>
+              </div>
+              <div class="error" *ngIf="isInvalidPeriod">
+                The first period end time need to be sooner than Expiration Time
               </div>
             </div>
           </div>
