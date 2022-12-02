@@ -100,7 +100,7 @@ export class MyGranteesComponent implements OnInit {
   /**
    * ngOnDestroy
    */
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
 
@@ -130,7 +130,7 @@ export class MyGranteesComponent implements OnInit {
       (res) => {
         const { code, data } = res;
         if (code === 200) {
-          this.nextKey = res.data.nextKey;
+          this.nextKey = res.data.nextKey || null;
           data.grants.forEach((element) => {
             element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
             element.limit = element?.spend_limit?.amount || '0';
@@ -141,7 +141,11 @@ export class MyGranteesComponent implements OnInit {
             }
           });
 
-          if (this.dataSource?.data?.length > 0 && this.pageData.pageIndex != 0) {
+          if (
+            this.dataSource?.data?.length > 0 &&
+            this.dataSource.data.length !== data.grants.length &&
+            this.pageData.pageIndex != 0
+          ) {
             this.dataSource.data = [...this.dataSource.data, ...data.grants];
           } else {
             this.dataSource.data = [...data.grants];

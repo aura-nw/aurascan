@@ -95,7 +95,7 @@ export class MyGrantersComponent implements OnInit {
       .subscribe((res) => {
         const { code, data } = res;
         if (code === 200) {
-          this.nextKey = res.data.nextKey;
+          this.nextKey = res.data.nextKey || null;
           data.grants.forEach((element) => {
             element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
             element.limit = element?.spend_limit?.amount || '0';
