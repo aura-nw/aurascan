@@ -13,6 +13,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   templateUrl: './popup-add-grant.component.html',
   styleUrls: ['./popup-add-grant.component.scss'],
 })
+
 export class PopupAddGrantComponent implements OnInit {
   grantForm;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -189,19 +190,17 @@ export class PopupAddGrantComponent implements OnInit {
       }
     }
 
-    this.errorSpendLimit = false;
-    this.isInvalidPeriod = false;
     if (this.periodShow) {
-      if (amount && amount < period_amount) {
+      this.errorSpendLimit = false;
+      if (amount && +amount < +period_amount) {
         this.errorSpendLimit = true;
-        return false;
       }
 
+      this.isInvalidPeriod = false;
       if (expiration_time && period_day) {
         let temp = +period_day - 1 > 0 ? (+period_day - 1) * this.dayConvert * 1000 : 0;
         if (+expiration_time.getTime() < +new Date().getTime() + temp) {
           this.isInvalidPeriod = true;
-          return false;
         }
       }
 
@@ -210,7 +209,7 @@ export class PopupAddGrantComponent implements OnInit {
       }
     }
 
-    if (!granter || !grantee_address) {
+    if (!granter || !grantee_address || this.errorSpendLimit || this.isInvalidPeriod) {
       return false;
     }
 
