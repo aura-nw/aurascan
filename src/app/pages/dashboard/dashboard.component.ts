@@ -138,8 +138,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       bottomColor: 'rgba(119, 182, 188, 0.01)',
       priceFormat: {
         type: 'price',
-        precision: 6,
-        minMove: 0.000001,
+        precision: 4,
+        minMove: 0.0001,
       },
     });
     this.initTooltip();
