@@ -51,6 +51,8 @@ export class MyGrantersComponent implements OnInit {
   nextKey = null;
   currentKey = null;
   currentAddress = null;
+  filterSearch = {};
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
@@ -85,47 +87,49 @@ export class MyGrantersComponent implements OnInit {
   }
 
   getListGrant() {
-    let filterSearch = {};
-    filterSearch['textSearch'] = '';
-    filterSearch['isGranter'] = true;
-    filterSearch['isActive'] = this.isActive;
+    this.filterSearch['isGranter'] = true;
+    this.filterSearch['isActive'] = this.isActive;
 
-    this.feeGrantService.getListFeeGrants(filterSearch, this.currentAddress, this.nextKey, true).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        this.nextKey = res.data.nextKey;
-        data.grants.forEach((element) => {
-          element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
-          element.limit = element?.spend_limit?.amount || '0';
-          element.spendable = element?.amount?.amount || '0';
-          element.reason = element?.status;
-          if (element.reason === 'Available' && element?.expired) {
-            element.reason = 'Expired';
+    this.feeGrantService
+      .getListFeeGrants(this.filterSearch, this.currentAddress, this.nextKey, true)
+      .subscribe((res) => {
+        const { code, data } = res;
+        if (code === 200) {
+          this.nextKey = res.data.nextKey;
+          data.grants.forEach((element) => {
+            element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
+            element.limit = element?.spend_limit?.amount || '0';
+            element.spendable = element?.amount?.amount || '0';
+            element.reason = element?.status;
+            if (element.reason === 'Available' && element?.expired) {
+              element.reason = 'Expired';
+            }
+          });
+
+          if (this.dataSource?.data?.length > 0 && this.pageData.pageIndex != 0) {
+            this.dataSource.data = [...this.dataSource.data, ...data.grants];
+          } else {
+            this.dataSource.data = [...data.grants];
           }
-        });
-
-        if (this.dataSource?.data?.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...data.grants];
-        } else {
-          this.dataSource.data = [...data.grants];
+          this.pageData.length = this.dataSource.data.length;
         }
-        this.pageData.length = this.dataSource.data.length;
-      }
-      this.loading = false;
-    });
+        this.loading = false;
+      });
   }
 
   searchToken(): void {
     this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
-      this.dataSource.data = null;
+      this.dataSource.data = [];
+      this.filterSearch['textSearch'] = this.textSearch;
       this.getListGrant();
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.dataSource.data = null;
+    this.filterSearch['textSearch'] = '';
+    this.dataSource.data = [];
     this.getListGrant();
   }
 
