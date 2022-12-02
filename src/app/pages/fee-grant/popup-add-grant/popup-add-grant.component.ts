@@ -189,19 +189,11 @@ export class PopupAddGrantComponent implements OnInit {
       }
     }
 
-    if (!granter || !grantee_address) {
-      return false;
-    }
-
     this.errorSpendLimit = false;
     this.isInvalidPeriod = false;
     if (this.periodShow) {
       if (amount && amount < period_amount) {
         this.errorSpendLimit = true;
-        return false;
-      }
-
-      if (!period_amount || !period_day) {
         return false;
       }
 
@@ -212,6 +204,14 @@ export class PopupAddGrantComponent implements OnInit {
           return false;
         }
       }
+
+      if (!period_amount || !period_day) {
+        return false;
+      }
+    }
+
+    if (!granter || !grantee_address) {
+      return false;
     }
 
     this.isSubmit = false;
@@ -222,7 +222,7 @@ export class PopupAddGrantComponent implements OnInit {
   validatePeriodDay(event: any) {
     const regex = new RegExp(/[0-9]/g);
     let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    if (!regex.test(key)) {
+    if (!regex.test(key) || this.grantForm?.value['period_day']?.toString().length >= 5) {
       event.preventDefault();
       return;
     }
