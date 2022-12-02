@@ -7,7 +7,7 @@
   <ng-container *ngFor="let tab of TAB; index as index">
     <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
       <a ngbNavLink (click)="changeType(tab.id === 0)" class="fw-semibold">
-        <span>{{ tab.value }}</span>
+        <span>{{ tab.value | uppercase }}</span>
       </a>
     </li>
   </ng-container>
