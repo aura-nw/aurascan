@@ -10,6 +10,7 @@ interface RedisResponse {
   Message: string;
   ContractAddress: string;
   Verified: boolean;
+  CodeId: number;
 }
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class WSService {
 
   registered = false;
 
-  contractAddress = '';
+  codeId: number;
 
   constructor(private environmentService: EnvironmentService, private toastr: NgxToastrService) {
     this.wsData = new BehaviorSubject<any>(null);
@@ -82,10 +83,10 @@ export class WSService {
     });
   }
 
-  subscribeVerifyContract(contractAdr: string, callBack?: () => void, tabCallBack?: () => void) {
+  subscribeVerifyContract(codeId: number, callBack?: () => void, tabCallBack?: () => void) {
     this.connect();
 
-    this.contractAddress = `${contractAdr}`;
+    this.codeId = codeId;
 
     const wsData = { event: 'eventVerifyContract' };
 
@@ -102,8 +103,10 @@ export class WSService {
         Message: '',
         Verified: false,
         ContractAddress: null,
+        CodeId: null
       };
-      if (redisResponse.ContractAddress === this.contractAddress && this.contractAddress) {
+
+      if (redisResponse.CodeId === this.codeId && this.codeId) {
         callBack && callBack();
         if (redisResponse.Verified) {
           this.toastr
@@ -118,19 +121,22 @@ export class WSService {
               resMessages = 'Smart contract source code or compiler version is incorrect';
               break;
             case 'E002':
-              resMessages = 'Provided wasm file is incorrect';
+              resMessages = 'Error zip contract source code';
               break;
             case 'E003':
               resMessages = 'Internal error';
               break;
-            case 'E008':
-              resMessages = 'Contract git URL not found';
+            case 'E006':
+              resMessages = 'Cannot find github repository of this contract';
               break;
-            case 'E009':
+            case 'E007':
               resMessages = 'Commit not found';
               break;
+            case 'E008':
+              resMessages = 'Missing Cargo.lock file';
+              break;
             default:
-              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.ContractAddress}`;
+              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.CodeId}`;
               break;
           }
           this.toastr
@@ -140,7 +146,7 @@ export class WSService {
               tabCallBack && tabCallBack();
             });
         }
-        this.contractAddress = null;
+        this.codeId = null;
       }
     });
   }
