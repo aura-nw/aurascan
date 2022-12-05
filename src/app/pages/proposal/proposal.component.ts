@@ -7,9 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { CommonService } from 'src/app/core/services/common.service';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from '../../../app/global/global';
-import { MESSAGE_WARNING, PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
+import { PROPOSAL_STATUS, PROPOSAL_VOTE, VOTE_OPTION } from '../../core/constants/proposal.constant';
 import { EnvironmentService } from '../../core/data-services/environment.service';
 import { TableTemplate } from '../../core/models/common.model';
 import { IProposal } from '../../core/models/proposal.model';
@@ -66,7 +65,6 @@ export class ProposalComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     private proposalService: ProposalService,
-    private validatorService: ValidatorService,
     public dialog: MatDialog,
     public global: Globals,
     public walletService: WalletService,
@@ -204,36 +202,22 @@ export class ProposalComponent implements OnInit {
 
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
-
       if (account) {
-        this.validatorService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
-          let warning: MESSAGE_WARNING;
-
-          const { created_at } = data.result ? data.result : { created_at: null };
-          warning = created_at
-            ? +moment(created_at).format('x') < +moment(item.voting_start_time).format('x')
-              ? null
-              : MESSAGE_WARNING.LATE
-            : MESSAGE_WARNING.NOT_PARTICIPATE;
-
-          this.openDialog({
-            id,
-            title,
-            warning,
-            voteValue: warning ? null : item.vote_option,
-            idx: index,
-          });
+        this.openDialog({
+          id,
+          title,
+          voteValue: item.vote_option || null,
+          idx: index,
         });
       }
     } else {
-      // this.getListProposal(null);
       this.getFourLastedProposal();
     }
   }
 
   openDialog(data): void {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
-      width: data.warning ? '500px' : '431px',
+      width: '431px',
       data: data,
     });
 

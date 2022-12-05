@@ -1,5 +1,3 @@
-import { MESSAGE_WARNING } from '../constants/proposal.constant';
-
 export interface IListVoteQuery {
   proposalid: number;
   pageLimit: number;
@@ -61,7 +59,6 @@ export interface IVotingDialog {
   id: number;
   title: string;
   voteValue: string;
-  warning?: MESSAGE_WARNING;
 }
 
 export interface IVotingInfo {
