@@ -13,7 +13,6 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   templateUrl: './popup-add-grant.component.html',
   styleUrls: ['./popup-add-grant.component.scss'],
 })
-
 export class PopupAddGrantComponent implements OnInit {
   grantForm;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -209,7 +208,7 @@ export class PopupAddGrantComponent implements OnInit {
       }
     }
 
-    if (!granter || !grantee_address || this.errorSpendLimit || this.isInvalidPeriod) {
+    if (!granter || !grantee_address) {
       return false;
     }
 
