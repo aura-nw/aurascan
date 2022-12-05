@@ -77,11 +77,6 @@ export const PROPOSAL_VOTE = [
   },
 ];
 
-export enum MESSAGE_WARNING {
-  NOT_PARTICIPATE = 'NOT_PARTICIPATE',
-  LATE = 'LATE',
-}
-
 export const VOTING_FINAL_STATUS = [
   {
     key: VOTING_STATUS.PROPOSAL_STATUS_REJECTED,
