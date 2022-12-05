@@ -26,7 +26,7 @@
               formControlName="grantee_address"
               type="text"
               class="form-control form-check-input"
-              (ngModelChange)="checkFromValid()"
+              (ngModelChange)="checkFormValid()"
               [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
             <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
           </div>
@@ -46,16 +46,9 @@
                 [clickOutsideEnabled]="true"
                 (clickOutside)="removeClassFocus(amount)"
                 mask="separator.6"
-                (ngModelChange)="checkFromValid()"
+                separatorLimit="9999"
+                (ngModelChange)="checkFormValid()"
                 formControlName="amount" />
-              <div class="d-flex align-items-center mr-2">
-                <button
-                  class="button button-flat button--sm button-max body-02"
-                  type="button"
-                  (click)="getMaxToken('amount')">
-                  Max
-                </button>
-              </div>
               <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
             </div>
           </div>
@@ -77,7 +70,7 @@
                 [matDatepicker]="picker"
                 [min]="currDate"
                 [style]="'max-width: 90%'"
-                (ngModelChange)="checkFromValid()"
+                (ngModelChange)="checkFormValid()"
                 formControlName="expiration_time" />
               <button class="mr-1 button" *ngIf="grantForm.get('expiration_time')?.value" (click)="removeTime()">
                 <img src="assets/icons/icons-svg/white/close.svg" alt="" />
@@ -139,7 +132,8 @@
                   (clickOutside)="removeClassFocus(period_amount)"
                   [placeholder]="'Amount'"
                   mask="separator.6"
-                  (ngModelChange)="checkFromValid()"
+                  separatorLimit="9999"
+                  (ngModelChange)="checkFormValid()"
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
                   <button
@@ -166,11 +160,10 @@
                   (focus)="addClassFocus(period_day)"
                   [clickOutsideEnabled]="true"
                   (clickOutside)="removeClassFocus(period_day)"
-                  type="number"
-                  (keypress)="validatePeriodDay($event)"
                   [placeholder]="'Number of days'"
-                  [max]="1000000"
-                  (ngModelChange)="checkFromValid()"
+                  mask="separator.0"
+                  separatorLimit="99999"
+                  (ngModelChange)="checkFormValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
               </div>
