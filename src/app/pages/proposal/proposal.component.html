@@ -9,7 +9,9 @@
               <div class="d-flex justify-content-between align-items-start">
                 <a [routerLink]="[lastedItem.proposal_id]" class="fw-semibold">
                   <div class="text--gray-3 h2 d-block mb-0">#{{ lastedItem.proposal_id }}</div>
-                  <div class="text--white h2 d-block mb-0 pr-3">{{ lastedItem.content.title }}</div>
+                  <div class="text--white h2 d-block mb-0 pr-3">
+                    <div class="title-desk">{{ lastedItem.content.title }}</div>
+                  </div>
                 </a>
                 <div
                   *ngIf="getStatus(lastedItem.status)"
@@ -25,24 +27,24 @@
                       {{
                         lastedItem.proposer_name
                           ? lastedItem.proposer_name
-                          : (lastedItem.proposer_address | cutStringPipe: 8:8)
+                          : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
                       }}</a
                     >
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting Start</div>
                     <div class="text--gray-1 body-02 d-flex align-items-center">
-                      <span>{{ lastedItem.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
-                      <span>{{ lastedItem.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                   <div class="d-flex mb-2">
                     <div class="content-body fw-500">Voting End</div>
                     <div class="text--gray-1 body-02 d-flex align-items-center">
-                      <span>{{ lastedItem.voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical mx-2"></div>
-                      <span>{{ lastedItem.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -53,27 +55,27 @@
                     <li
                       class="primary"
                       [style.width]="lastedItem.tally?.yes + '%'"
-                      matTooltip="Yes {{ lastedItem.tally?.yes | number: global.formatNumber2Decimal }}%"
+                      matTooltip="Yes {{ lastedItem.tally?.yes | number : global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
                     <li
                       class="danger"
                       *ngIf="lastedItem.tally?.no"
                       [style.width]="lastedItem.tally?.no + '%'"
-                      matTooltip="No {{ lastedItem.tally?.no | number: global.formatNumber2Decimal }}%"
+                      matTooltip="No {{ lastedItem.tally?.no | number : global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
                     <li
                       class="info"
                       *ngIf="lastedItem.tally?.no_with_veto"
                       [style.width]="lastedItem.tally?.no_with_veto + '%'"
                       matTooltip="No with veto {{
-                        lastedItem.tally?.no_with_veto | number: global.formatNumber2Decimal
+                        lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal
                       }}%"
                       [matTooltipPosition]="'above'"></li>
                     <li
                       class="secondary"
                       *ngIf="lastedItem.tally?.abstain"
                       [style.width]="lastedItem.tally?.abstain + '%'"
-                      matTooltip="Abstain {{ lastedItem.tally?.abstain | number: global.formatNumber2Decimal }}%"
+                      matTooltip="Abstain {{ lastedItem.tally?.abstain | number : global.formatNumber2Decimal }}%"
                       [matTooltipPosition]="'above'"></li>
                   </ul>
                 </div>
@@ -103,7 +105,7 @@
                           lastedItem.tally?.no,
                           lastedItem.tally?.no_with_veto,
                           lastedItem.tally?.abstain
-                        ).value | number: global.formatNumber2Decimal
+                        ).value | number : global.formatNumber2Decimal
                       }}% </span
                     >&nbsp;
                   </div>
@@ -177,24 +179,24 @@
                       {{
                         lastedItem.proposer_name
                           ? lastedItem.proposer_name
-                          : (lastedItem.proposer_address | cutStringPipe: 8:8)
+                          : (lastedItem.proposer_address | cutStringPipe : 8 : 8)
                       }}
                     </a>
                   </div>
                   <div class="d-flex justify-content-between mb-3 small-body">
                     <div class="text--gray-4">Voting Start</div>
                     <div class="text--white d-flex align-items-center">
-                      <span>{{ lastedItem.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ lastedItem.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_start_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between small-body">
                     <div class="text--gray-4">Voting End</div>
                     <div class="text--white d-flex align-items-center">
-                      <span>{{ lastedItem.voting_end_time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ lastedItem.voting_end_time | customDate: 'HH:mm:ss' }}</span>
+                      <span>{{ lastedItem.voting_end_time | customDate : 'HH:mm:ss' }}</span>
                     </div>
                   </div>
                 </div>
@@ -204,27 +206,27 @@
                       <li
                         class="primary"
                         [style.width]="lastedItem.tally?.yes + '%'"
-                        matTooltip="Yes {{ lastedItem.tally?.yes | number: global.formatNumber2Decimal }}%"
+                        matTooltip="Yes {{ lastedItem.tally?.yes | number : global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
                       <li
                         class="danger"
                         *ngIf="lastedItem.tally?.no"
                         [style.width]="lastedItem.tally?.no + '%'"
-                        matTooltip="No {{ lastedItem.tally?.no | number: global.formatNumber2Decimal }}%"
+                        matTooltip="No {{ lastedItem.tally?.no | number : global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
                       <li
                         class="info"
                         *ngIf="lastedItem.tally?.no_with_veto"
                         [style.width]="lastedItem.tally?.no_with_veto + '%'"
                         matTooltip="No with veto {{
-                          lastedItem.tally?.no_with_veto | number: global.formatNumber2Decimal
+                          lastedItem.tally?.no_with_veto | number : global.formatNumber2Decimal
                         }}%"
                         [matTooltipPosition]="'above'"></li>
                       <li
                         class="secondary"
                         *ngIf="lastedItem.tally.abstain"
                         [style.width]="lastedItem.tally.abstain + '%'"
-                        matTooltip="Abstain {{ lastedItem.tally.abstain | number: global.formatNumber2Decimal }}%"
+                        matTooltip="Abstain {{ lastedItem.tally.abstain | number : global.formatNumber2Decimal }}%"
                         [matTooltipPosition]="'above'"></li>
                     </ul>
                   </div>
@@ -254,7 +256,7 @@
                             lastedItem.tally?.no,
                             lastedItem.tally?.no_with_veto,
                             lastedItem.tally.abstain
-                          ).value | number: global.formatNumber2Decimal
+                          ).value | number : global.formatNumber2Decimal
                         }}%
                       </span>
                     </div>
@@ -327,9 +329,9 @@
             <th mat-header-cell *matHeaderCellDef>Voting Start</th>
             <td mat-cell *matCellDef="let element">
               <div class="body-02 d-flex align-items-center">
-                <span>{{ element.voting_start_time | customDate: 'yyyy-MM-dd' }}</span>
+                <span>{{ element.voting_start_time | customDate : 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
-                <span>{{ element.voting_start_time | customDate: 'HH:mm:ss' }}</span>
+                <span>{{ element.voting_start_time | customDate : 'HH:mm:ss' }}</span>
               </div>
             </td>
           </ng-container>
@@ -339,9 +341,9 @@
             <th mat-header-cell *matHeaderCellDef>Submit Time</th>
             <td mat-cell *matCellDef="let element">
               <div class="body-02 d-flex align-items-center">
-                <span>{{ element.submit_time | customDate: 'yyyy-MM-dd' }}</span>
+                <span>{{ element.submit_time | customDate : 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical mx-2"></div>
-                <span>{{ element.submit_time | customDate: 'HH:mm:ss' }}</span>
+                <span>{{ element.submit_time | customDate : 'HH:mm:ss' }}</span>
               </div>
             </td>
           </ng-container>
@@ -350,7 +352,7 @@
           <ng-container matColumnDef="totalDeposit">
             <th mat-header-cell *matHeaderCellDef>Total Deposit</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.total_deposit[0].amount | mask: 'separator.6' }}
+              {{ element.total_deposit[0].amount | mask : 'separator.6' }}
               <span class="text--primary">{{ denom }}</span>
             </td>
           </ng-container>
@@ -402,10 +404,10 @@
                 class: 'card__date text--gray-1 body-01',
                 info:
                   '<span>' +
-                  (data.voting_start_time | customDate: 'yyyy-MM-dd') +
+                  (data.voting_start_time | customDate : 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.voting_start_time | customDate: 'HH:mm:ss') +
+                  (data.voting_start_time | customDate : 'HH:mm:ss') +
                   '</span>'
               },
               {
@@ -413,10 +415,10 @@
                 class: 'card__date text--gray-1 body-01',
                 info:
                   '<span>' +
-                  (data.voting_end_time | customDate: 'yyyy-MM-dd') +
+                  (data.voting_end_time | customDate : 'yyyy-MM-dd') +
                   '</span>' +
                   '<span>' +
-                  (data.voting_end_time | customDate: 'HH:mm:ss') +
+                  (data.voting_end_time | customDate : 'HH:mm:ss') +
                   '</span>'
               }
             ]"></app-card-mob-simple>
