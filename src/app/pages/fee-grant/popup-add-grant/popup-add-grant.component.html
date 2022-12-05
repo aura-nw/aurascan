@@ -46,7 +46,7 @@
                 [clickOutsideEnabled]="true"
                 (clickOutside)="removeClassFocus(amount)"
                 mask="separator.6"
-                separatorLimit="10000"
+                separatorLimit="9999"
                 (ngModelChange)="checkFromValid()"
                 formControlName="amount" />
               <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
@@ -132,6 +132,7 @@
                   (clickOutside)="removeClassFocus(period_amount)"
                   [placeholder]="'Amount'"
                   mask="separator.6"
+                  separatorLimit="9999"
                   (ngModelChange)="checkFromValid()"
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
