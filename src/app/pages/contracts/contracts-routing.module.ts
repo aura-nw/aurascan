@@ -20,7 +20,7 @@ const routes: Routes = [
     component: ContractsRegisterComponent,
   },
   {
-    path: 'verify/:addressId/:txHash',
+    path: 'verify/:addressId/:code_id',
     component: ContractsVerifyComponent
   },
   {

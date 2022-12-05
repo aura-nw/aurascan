@@ -15,7 +15,7 @@ import { WSService } from 'src/app/core/services/ws.service';
 })
 export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
-  contractTxHash = '';
+  code_id = '';
   @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
@@ -29,9 +29,9 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
-    this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
+    this.code_id = this.route.snapshot.paramMap.get('code_id');
 
-    if (this.contractAddress.trim().length === 0 || this.contractTxHash.trim().length === 0) {
+    if (this.contractAddress.trim().length === 0 || this.code_id.trim().length === 0) {
       this.router.navigate(['contracts']);
     }
   }
@@ -92,11 +92,11 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
       this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
         const data = res?.data;
         if (data) {
-          switch (data?.Data?.ErrorCode) {
+          switch (data?.Code) {
             case 'SUCCESSFUL':
               this.dlgServiceOpen();
               this.wSService.subscribeVerifyContract(
-                contractData.contract_address,
+                Number(this.code_id),
                 () => {
                   this.contractService.loadContractDetail(contractData.contract_address);
                 },
