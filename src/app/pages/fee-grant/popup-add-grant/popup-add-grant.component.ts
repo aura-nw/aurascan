@@ -204,7 +204,7 @@ export class PopupAddGrantComponent implements OnInit {
         }
       }
 
-      if (!period_amount || !period_day) {
+      if (!period_amount || !period_day || this.errorSpendLimit || this.isInvalidPeriod) {
         return false;
       }
     }
