@@ -26,7 +26,7 @@
               formControlName="grantee_address"
               type="text"
               class="form-control form-check-input"
-              (ngModelChange)="checkFromValid()"
+              (ngModelChange)="checkFormValid()"
               [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
             <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
           </div>
@@ -47,7 +47,7 @@
                 (clickOutside)="removeClassFocus(amount)"
                 mask="separator.6"
                 separatorLimit="9999"
-                (ngModelChange)="checkFromValid()"
+                (ngModelChange)="checkFormValid()"
                 formControlName="amount" />
               <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
             </div>
@@ -70,7 +70,7 @@
                 [matDatepicker]="picker"
                 [min]="currDate"
                 [style]="'max-width: 90%'"
-                (ngModelChange)="checkFromValid()"
+                (ngModelChange)="checkFormValid()"
                 formControlName="expiration_time" />
               <button class="mr-1 button" *ngIf="grantForm.get('expiration_time')?.value" (click)="removeTime()">
                 <img src="assets/icons/icons-svg/white/close.svg" alt="" />
@@ -133,7 +133,7 @@
                   [placeholder]="'Amount'"
                   mask="separator.6"
                   separatorLimit="9999"
-                  (ngModelChange)="checkFromValid()"
+                  (ngModelChange)="checkFormValid()"
                   formControlName="period_amount" />
                 <div class="d-flex align-items-center mr-2">
                   <button
@@ -163,7 +163,7 @@
                   [placeholder]="'Number of days'"
                   mask="separator.0"
                   separatorLimit="99999"
-                  (ngModelChange)="checkFromValid()"
+                  (ngModelChange)="checkFormValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
               </div>

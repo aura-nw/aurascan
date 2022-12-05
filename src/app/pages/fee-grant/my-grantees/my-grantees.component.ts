@@ -11,7 +11,6 @@ import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { AccountService } from 'src/app/core/services/account.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -26,7 +25,6 @@ import { PopupRevokeComponent } from 'src/app/pages/fee-grant/popup-revoke/popup
   templateUrl: './my-grantees.component.html',
   styleUrls: ['./my-grantees.component.scss'],
 })
-
 export class MyGranteesComponent implements OnInit {
   loading = true;
   isActive = true;
@@ -205,7 +203,7 @@ export class MyGranteesComponent implements OnInit {
 
   async changeType(type: boolean) {
     this.isActive = type;
-    this.dataSource.data = null;
+    this.dataSource.data = [];
     this.nextKey = null;
     await this.getGranteesData();
   }
