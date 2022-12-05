@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { MESSAGE_WARNING } from 'src/app/core/constants/proposal.constant';
+import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -10,8 +10,6 @@ import { MappingErrorService } from 'src/app/core/services/mapping-error.service
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { createSignBroadcast } from 'src/app/core/utils/signing/transaction-manager';
-import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-proposal-vote',
@@ -41,7 +39,6 @@ export class ProposalVoteComponent implements OnInit {
 
   async proposalVote() {
     this.isLoading = true;
-    // const { hash, error } = await createSignBroadcast({
     const { hash, error } = await this.walletService.signAndBroadcast({
       messageType: SIGNING_MESSAGE_TYPES.VOTE,
       message: {
@@ -58,7 +55,6 @@ export class ProposalVoteComponent implements OnInit {
 
     if (hash) {
       this.toastr.loading(hash);
-      // this.dialogRef.close({ keyVote: this.keyVote });
       this.dialogRef.close();
       setTimeout(() => {
         this.checkDetailTx(hash, 'Error Voting');
@@ -89,14 +85,5 @@ export class ProposalVoteComponent implements OnInit {
 
   closeVoteForm() {
     this.dialogRef.close('canceled');
-  }
-
-  onClick(): void {
-    if (this.data.warning === MESSAGE_WARNING.LATE) {
-      this.dialogRef.close();
-    } else {
-      this.route.navigate(['validators']);
-      this.dialogRef.close();
-    }
   }
 }

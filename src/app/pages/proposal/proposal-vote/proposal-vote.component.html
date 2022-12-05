@@ -1,4 +1,4 @@
-<div (clickOutside)="closeVoteForm()">
+<div>
     <ng-container *ngIf="!data.warning">
         <div class="d-flex">
             <img [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3" alt="" width="24px" height="24px" (click)="closeVoteForm()" class="d-lg-none">
@@ -25,32 +25,5 @@
                 </button>
             </div>
         </form>
-    </ng-container>
-
-    <ng-container *ngIf="data.warning">
-        <div class="mx-auto mt-5">
-            <div class="d-flex justify-content-center">
-                <img [src]="'assets/icons/icons-svg/color/info.svg' | imageS3" alt="" width="24px" height="24px">
-            </div>
-            <div class="body-03 text--gray-1 mb-5 mt-3 warning-content">
-                {{
-                data.warning === 'NOT_PARTICIPATE' ?
-                    'You don\'t have the right to vote on this proposal because you are a unbonded Aura holder. Staking now to have the right to vote on other later proposals.' :
-                    'You don\'t have the right to vote on this proposal because the voting period of this proposal started before you stake Aura.'
-                }}
-            </div>
-
-            <div class="d-flex justify-content-center align-items-center gap-3">
-                <button class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4 text--white" *ngIf="data.warning === 'NOT_PARTICIPATE'"
-                        (click)="dialogRef.close()">
-                    <span>Cancel</span>
-                </button>
-                <button class="button button--sm button--md-mob button-fixed button-pill button-outline text--white" (click)="onClick()">
-                    <span>
-                        {{ data.warning === 'NOT_PARTICIPATE' ? 'Stake' : 'OK'}}
-                    </span>
-                </button>
-            </div>
-        </div>
     </ng-container>
 </div>
