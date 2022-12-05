@@ -87,7 +87,7 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   getMaxToken(controlName: string) {
-    this.grantForm.controls[controlName].setValue(this.data['maxBalance']);
+    this.grantForm.controls[controlName].setValue(this.grantForm.controls['amount']?.value);
   }
 
   closeDialog(hash = null) {
@@ -215,16 +215,6 @@ export class PopupAddGrantComponent implements OnInit {
     this.isSubmit = false;
     this.formValid = true;
     return true;
-  }
-
-  validatePeriodDay(event: any) {
-    const regex = new RegExp(/[0-9]/g);
-    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    if (!regex.test(key) || this.grantForm?.value['period_day']?.toString().length >= 5) {
-      event.preventDefault();
-      return;
-    }
-    this.grantForm.controls['period_day'].setValue(event.target.value);
   }
 
   removeTime() {

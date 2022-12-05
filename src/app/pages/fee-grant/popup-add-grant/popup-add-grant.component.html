@@ -46,16 +46,9 @@
                 [clickOutsideEnabled]="true"
                 (clickOutside)="removeClassFocus(amount)"
                 mask="separator.6"
+                separatorLimit="10000"
                 (ngModelChange)="checkFromValid()"
                 formControlName="amount" />
-              <div class="d-flex align-items-center mr-2">
-                <button
-                  class="button button-flat button--sm button-max body-02"
-                  type="button"
-                  (click)="getMaxToken('amount')">
-                  Max
-                </button>
-              </div>
               <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
             </div>
           </div>
@@ -166,10 +159,9 @@
                   (focus)="addClassFocus(period_day)"
                   [clickOutsideEnabled]="true"
                   (clickOutside)="removeClassFocus(period_day)"
-                  type="number"
-                  (keypress)="validatePeriodDay($event)"
                   [placeholder]="'Number of days'"
-                  [max]="1000000"
+                  mask="separator.0"
+                  separatorLimit="99999"
                   (ngModelChange)="checkFromValid()"
                   formControlName="period_day" />
                 <div class="input-group-append h6 fw-normal mb-0">days</div>
