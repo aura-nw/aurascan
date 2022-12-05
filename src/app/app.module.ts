@@ -56,6 +56,7 @@ import { BlankModule } from './pages/blank/blank.module';
 import { TokenService } from './core/services/token.service';
 import { GlobalErrorHandler } from './core/helpers/global-error';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FeeGrantService } from './core/services/feegrant.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -164,6 +165,7 @@ export class MaterialModule {}
     },
     CommonService,
     TokenService,
+    FeeGrantService
   ],
   bootstrap: [AppComponent],
 })
