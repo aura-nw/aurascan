@@ -12,6 +12,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import * as _ from 'lodash';
+import { formatWithSchema } from '../../../../core/helpers/date';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -429,5 +430,13 @@ export class TransactionMessagesComponent implements OnInit {
         jsonData[0]?.events.find((f) => f.type === 'instantiate')?.attributes?.find((f) => f.key === key)?.value || '';
       return result;
     } catch (e) {}
+  }
+
+  getDateValue(time) {
+    if (time) {
+      return formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC);
+    } else {
+      return '-';
+    }
   }
 }
