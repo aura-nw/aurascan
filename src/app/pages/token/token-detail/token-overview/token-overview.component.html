@@ -28,10 +28,10 @@
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
-                  <span class="small-body">${{ tokenDetail.price | mask: 'separator.6' }}</span>
+                  <span class="small-body">${{ +tokenDetail.price | mask: 'separator.6' }}</span>
                   <span class="caption fw-normal text--gray-5 ml-1">
                     <ng-container *ngIf="global.price.aura">
-                      @{{ tokenDetail.price / global.price.aura || 0 | mask: 'separator.6' }}
+                      @{{ +tokenDetail.price / +global.price.aura || 0 | mask: 'separator.6' }}
                     </ng-container>
                     <ng-container *ngIf="!global.price.aura">-</ng-container>
                     {{ denom }}
