@@ -215,8 +215,9 @@ export class PopupAddGrantComponent implements OnInit {
 
       this.isInvalidPeriod = false;
       if (expiration_time && period_day) {
+        let date = new Date(expiration_time.toISOString());
         let temp = +period_day - 1 > 0 ? (+period_day - 1) * this.dayConvert * 1000 : 0;
-        if (+expiration_time.getTime() < +new Date().getTime() + temp) {
+        if (+date.getTime() < +new Date().getTime() + temp) {
           this.isInvalidPeriod = true;
         }
       }
