@@ -319,7 +319,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
                     <span class="h5 h6-mob mb-0 text--gray-1">{{
-                      currentAccountDetail?.total | mask: 'separator.6'
+                      +currentAccountDetail?.total | mask: 'separator.6'
                     }}</span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
