@@ -160,7 +160,7 @@ export class MyGrantersComponent implements OnInit {
 
   async changeType(type: boolean) {
     this.isActive = type;
-    this.dataSource.data = null;
+    this.dataSource.data = [];
     this.nextKey = null;
     await this.getGrantersData();
   }
