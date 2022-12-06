@@ -42,13 +42,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  getContractDetail(): void {
-    this.contractService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
-      this.contractDetail = res?.data;
-      this.contractDetail.balance = balanceOf(this.contractDetail?.balance);
-      this.contractDetail.price = this.contractDetail?.balance * this.priceToken || 0;
-    });
-  }
+
 
   copyData(): void {
     let text = this.contractAddress.toString();

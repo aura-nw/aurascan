@@ -1,12 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 
 @Component({
   selector: 'app-popup-add-grant',
@@ -25,6 +28,7 @@ export class PopupAddGrantComponent implements OnInit {
   isInvalidPeriod = false;
   formValid = false;
   isSubmit = false;
+  isRevoking = false;
   dayConvert = 24 * 60 * 60;
 
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -36,6 +40,9 @@ export class PopupAddGrantComponent implements OnInit {
     public environmentService: EnvironmentService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
+    private feeGrantService: FeeGrantService,
+    private dialog: MatDialog,
+    public translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -87,7 +94,8 @@ export class PopupAddGrantComponent implements OnInit {
   }
 
   getMaxToken(controlName: string) {
-    this.grantForm.controls[controlName].setValue(this.data['maxBalance']);
+    this.grantForm.controls[controlName].setValue(this.grantForm.controls['amount']?.value);
+    this.errorSpendLimit = false;
   }
 
   closeDialog(hash = null) {
@@ -100,7 +108,7 @@ export class PopupAddGrantComponent implements OnInit {
       this.grantForm.controls['period_amount'].setValidators([Validators.required]);
       this.grantForm.controls['period_day'].setValidators([Validators.required]);
     }
-    this.checkFromValid();
+    this.checkFormValid();
   }
 
   changeContractsActive(isAll: boolean) {
@@ -109,7 +117,7 @@ export class PopupAddGrantComponent implements OnInit {
 
   async onSubmit() {
     this.isSubmit = true;
-    const check = this.checkFromValid();
+    const check = this.checkFormValid();
     if (!check) {
       return;
     }
@@ -125,6 +133,16 @@ export class PopupAddGrantComponent implements OnInit {
       isExecute,
       execute_contract,
     } = this.grantForm.value;
+
+    // if (granter && grantee_address) {
+    //   const req = await this.feeGrantService.checkAddressValid(granter, grantee_address);
+    //   this.isRevoking = false;
+    //   if (req.data?.data?.grants?.length > 0) {
+    //     this.isRevoking = true;
+    //     this.showRevoke(grantee_address, granter);
+    //     return;
+    //   }
+    // }
 
     const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
     const executeStaking = async () => {
@@ -173,7 +191,7 @@ export class PopupAddGrantComponent implements OnInit {
     e.parentElement.classList.remove('border-white');
   }
 
-  checkFromValid(): boolean {
+  checkFormValid(): boolean {
     const granter = this.walletService.wallet?.bech32Address;
     const { grantee_address, expiration_time, period_amount, period_day, amount } = this.grantForm.value;
 
@@ -217,18 +235,29 @@ export class PopupAddGrantComponent implements OnInit {
     return true;
   }
 
-  validatePeriodDay(event: any) {
-    const regex = new RegExp(/[0-9]/g);
-    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    if (!regex.test(key) || this.grantForm?.value['period_day']?.toString().length >= 5) {
-      event.preventDefault();
-      return;
-    }
-    this.grantForm.controls['period_day'].setValue(event.target.value);
-  }
-
   removeTime() {
     this.grantForm.controls['expiration_time'].setValue(null);
-    this.checkFromValid();
+    this.checkFormValid();
+  }
+
+  showRevoke(granteeAddress: string, granterAddress: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    dialogConfig.data = {
+      granterAddress: granterAddress,
+      granteeAddress: granteeAddress,
+    };
+    let dialogRef = this.dialog.open(PopupRevokeComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.toastr.loading(result);
+        setTimeout(() => {
+          this.isRevoking = false;
+          let message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
+          this.toastr.success(message);
+        }, 4000);
+      }
+    });
   }
 }
