@@ -20,7 +20,7 @@
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="item?.amount[0]?.amount > 0">
-              {{ item?.amount[0]?.amount | balanceOf | mask: 'separator.6' }}
+              {{ item?.amount[0]?.amount | balanceOf | mask : 'separator.6' }}
               <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
@@ -55,7 +55,7 @@
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            {{ item?.coins[0]?.amount | balanceOf | mask: 'separator.6' }}
+            {{ item?.coins[0]?.amount | balanceOf | mask : 'separator.6' }}
             <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
@@ -151,13 +151,13 @@
               <div class="col-12 col-lg-9 text--gray-1">
                 <ng-container *ngIf="item['@type'] === eTransType.GetReward">
                   <ng-container *ngIf="listAmountClaim[i] > 0">
-                    {{ listAmountClaim[i] | mask: 'separator.6' }}
+                    {{ listAmountClaim[i] | mask : 'separator.6' }}
                     <span class="text--primary">{{ denom }}</span>
                   </ng-container>
                   <ng-container *ngIf="listAmountClaim[i] == 0"> - </ng-container>
                 </ng-container>
                 <ng-container *ngIf="item['@type'] !== eTransType.GetReward">
-                  {{ item.amount?.amount | balanceOf | mask: 'separator.6' }}
+                  {{ item.amount?.amount | balanceOf | mask : 'separator.6' }}
                   <span class="text--primary">{{ denom }}</span>
                 </ng-container>
               </div>
@@ -189,7 +189,7 @@
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="amount > 0 || amountCommission > 0 || listAmountClaim[0] > 0; else noValues">
-              {{ amountCommission || listAmountClaim[0] || amount | mask: 'separator.6' }}
+              {{ amountCommission || listAmountClaim[0] || amount | mask : 'separator.6' }}
               <span class="text--primary">{{ denom }}</span>
             </ng-container>
             <ng-template #noValues> - </ng-template>
@@ -198,7 +198,7 @@
         <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            {{ amountClaim | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+            {{ amountClaim | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
       </div>
@@ -220,7 +220,7 @@
         <div class="row mb-3 body-01">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
           <div class="col-12 col-lg-9 text--gray-1">
-            {{ commissionAutoClaim | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+            {{ commissionAutoClaim | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </div>
         </div>
       </div>
@@ -272,7 +272,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0">
             0.000000 <span class="text--primary">{{ denom }}</span></ng-container
@@ -333,7 +333,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
@@ -341,7 +341,7 @@
       <div class="row mb-3 body-01" *ngIf="amountClaim > 0">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Auto Claim Reward</div>
         <div class="col-12 col-lg-9 text--gray-1">
-          {{ amountClaim | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+          {{ amountClaim | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
         </div>
       </div>
     </div>
@@ -363,7 +363,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
@@ -438,7 +438,7 @@
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Min Self Delegation</div>
         <div class="col-12 col-lg-9 text--gray-1">
-          {{ transactionDetail?.messages[0]?.min_self_delegation | mask: 'separator.6' }}
+          {{ transactionDetail?.messages[0]?.min_self_delegation | mask : 'separator.6' }}
         </div>
       </div>
       <app-messages-item
@@ -460,7 +460,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
         <div class="col-12 col-lg-9 text--gray-1">
           <ng-container *ngIf="amount > 0">
-            {{ amount | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+            {{ amount | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-container *ngIf="amount == 0"> - </ng-container>
         </div>
@@ -488,19 +488,19 @@
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
-          {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent: global.formatNumber2Decimal }}
+          {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent : global.formatNumber2Decimal }}
         </div>
       </div>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
         <div class="col-9">
-          {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent: global.formatNumber2Decimal }}
+          {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent : global.formatNumber2Decimal }}
         </div>
       </div>
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Commission Max Change Rate</div>
         <div class="col-12 col-lg-9">
-          {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent: global.formatNumber2Decimal }}
+          {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent : global.formatNumber2Decimal }}
         </div>
       </div>
       <app-messages-item
@@ -551,7 +551,7 @@
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Spend Limit</div>
         <div class="col-12 col-lg-9">
           <ng-container *ngIf="spendLimitAmount > 0; else noValues">
-            {{ spendLimitAmount | balanceOf | mask: 'separator.6' }}
+            {{ spendLimitAmount | balanceOf | mask : 'separator.6' }}
             <span class="text--primary">{{ denom }}</span>
           </ng-container>
           <ng-template #noValues> - </ng-template>
@@ -560,15 +560,14 @@
       <app-messages-item
         [label]="'Expiration'"
         [value]="
-          commonService.getDateValue(
+          getDateValue(
             transactionDetail?.messages[0]?.allowance?.basic?.expiration ||
               transactionDetail?.messages[0]?.allowance?.expiration ||
               transactionDetail?.messages[0]?.allowance?.allowance?.allowance?.expiration ||
               transactionDetail?.messages[0]?.allowance?.allowance?.expiration ||
               transactionDetail?.messages[0]?.allowance?.allowance?.allowance?.basic?.expiration ||
-              transactionDetail?.messages[0]?.allowance?.allowance?.basic?.expiration,
-            false
-          )[0] || '-'
+              transactionDetail?.messages[0]?.allowance?.allowance?.basic?.expiration
+          ) || '-'
         "></app-messages-item>
       <div class="row mb-3 body-01" *ngIf="typeGrantAllowance === 'Periodic'">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Period Spend Limit</div>
@@ -579,7 +578,7 @@
               transactionDetail?.messages[0]?.allowance?.period_spend_limit[0].amount ||
               0
               | balanceOf
-              | mask: 'separator.6'
+              | mask : 'separator.6'
           }}
           <span class="text--primary">{{ denom }}</span>
         </div>
@@ -664,7 +663,7 @@
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask: 'separator.6' }}
+        {{ transactionDetail?.tx?.tx?.body?.messages[0]?.token?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
@@ -686,7 +685,7 @@
     <div class="row mb-3 body-01" *ngIf="ibcData?.receive?.denom">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ ibcData?.amount | balanceOf | mask: 'separator.6' }}
+        {{ ibcData?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--primary">{{ ibcData?.receive?.denom }}</span>
       </div>
     </div>
@@ -720,7 +719,7 @@
     <div class="row mb-3 body-01">
       <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Amount</div>
       <div class="col-12 col-lg-9">
-        {{ ibcData?.acknowledgement?.amount | balanceOf | mask: 'separator.6' }}
+        {{ ibcData?.acknowledgement?.amount | balanceOf | mask : 'separator.6' }}
         <span class="text--primary">{{ denom }}</span>
       </div>
     </div>
@@ -888,11 +887,11 @@
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
-                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe: 8:8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe : 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </a>
                     <span *ngIf="item.denom !== denom">
-                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe: 8:8 }}</span>
+                      <span class="d-lg-none">{{ item.tx_hash | cutStringPipe : 8 : 8 }}</span>
                       <span class="d-none d-lg-block">{{ item.tx_hash }}</span>
                     </span>
                   </div>
@@ -907,9 +906,9 @@
                       {{ commonService.getDateValue(item.time)[0] }}
                     </div>
                     <div class="d-flex justify-content-end align-items-center ml-2">
-                      <span>({{ item.time | customDate: 'yyyy-MM-dd' }}</span>
+                      <span>({{ item.time | customDate : 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-1 mx-md-2"></div>
-                      <span>{{ item.time | customDate: 'HH:mm:ss' }})</span>
+                      <span>{{ item.time | customDate : 'HH:mm:ss' }})</span>
                     </div>
                   </div>
                 </div>
