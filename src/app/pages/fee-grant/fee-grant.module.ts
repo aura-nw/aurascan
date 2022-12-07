@@ -20,6 +20,7 @@ import { FeeGrantComponent } from './fee-grant.component';
 import { MyGranteesComponent } from './my-grantees/my-grantees.component';
 import { MyGrantersComponent } from './my-granters/my-granters.component';
 import { PopupAddGrantComponent } from './popup-add-grant/popup-add-grant.component';
+import { PopupNoticeComponent } from './popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
 
 @NgModule({
@@ -29,6 +30,7 @@ import { PopupRevokeComponent } from './popup-revoke/popup-revoke.component';
     MyGrantersComponent,
     PopupAddGrantComponent,
     PopupRevokeComponent,
+    PopupNoticeComponent
   ],
   imports: [
     CommonModule,
