@@ -1,5 +1,5 @@
 <div class="box-contract text--white">
-  <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed && contractDetail && !isVerifying">
+  <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && !isVerifying">
     <div class="d-flex fw-500 content-contract">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -19,7 +19,7 @@
     <div class="mt-3 content-info caption fw-normal">{{ contractDetail.tx_hash }}</div>
   </ng-container>
 
-  <ng-container *ngIf="contractTypeData === contractVerifyType.Unverifed && contractDetail && isVerifying">
+  <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && isVerifying">
     <div class="d-flex fw-normal content-contract">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -33,7 +33,7 @@
     </div>
     <div class="mt-3 content-info caption fw-normal">{{ contractDetail.tx_hash }}</div>
   </ng-container>
-  <ng-container *ngIf="contractTypeData !== contractVerifyType.Unverifed">
+  <ng-container *ngIf="contractTypeData !== contractVerifyType.Unverified">
     <div class="button-tab-group">
       <button
         class="button-tab"

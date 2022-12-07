@@ -166,7 +166,7 @@
                     <ng-container *ngSwitchCase="'contract_address'">
                       <div class="d-flex align-items-center">
                         <img
-                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
+                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverified"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="contract_verification"
                           class="mr-2"
@@ -174,7 +174,7 @@
                           height="16px" />
                         <a
                           [routerLink]="['/contracts/', data[template.matColumnDef]]"
-                          [class.ml-6]="data['contract_verification'] === contractVerifyType.Unverifed"
+                          [class.ml-6]="data['contract_verification'] === contractVerifyType.Unverified"
                           [class.disabled-link]="!data[template.matColumnDef]">
                           {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                         </a>

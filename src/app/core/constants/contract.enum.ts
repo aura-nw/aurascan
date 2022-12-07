@@ -7,9 +7,8 @@ export enum ContractTab {
 }
 
 export enum ContractVerifyType {
-  Unverifed = 'UNVERIFIED',
-  Similar_Match = 'SIMILAR MATCH',
-  Exact_Match = 'EXACT MATCH',
+  Unverified = 'UNVERIFIED',
+  Verified = 'VERIFIED',
 }
 
 export enum ContractTransactionType {

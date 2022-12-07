@@ -34,6 +34,13 @@ export class TokenOverviewComponent implements OnInit {
       this.tokenDetail['isValueUp'] = false;
       this.tokenDetail.change = Number(this.tokenDetail.change.toString().substring(1));
     }
+
+    this.tokenDetail['holderChange'] = this.tokenDetail.holders_change_percentage_24h || 0;
+    this.tokenDetail['isHolderUp'] = true;
+    if (this.tokenDetail.holderChange < 0) {
+      this.tokenDetail['isHolderUp'] = false;
+      this.tokenDetail.holderChange = Number(this.tokenDetail.holderChange.toString().substring(1));
+    }
   }
 
   getTotalHolder() {
