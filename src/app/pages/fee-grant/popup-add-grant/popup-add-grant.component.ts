@@ -9,6 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
 import { PopupRevokeComponent } from '../popup-revoke/popup-revoke.component';
 
 @Component({
@@ -134,15 +135,15 @@ export class PopupAddGrantComponent implements OnInit {
       execute_contract,
     } = this.grantForm.value;
 
-    // if (granter && grantee_address) {
-    //   const req = await this.feeGrantService.checkAddressValid(granter, grantee_address);
-    //   this.isRevoking = false;
-    //   if (req.data?.data?.grants?.length > 0) {
-    //     this.isRevoking = true;
-    //     this.showRevoke(grantee_address, granter);
-    //     return;
-    //   }
-    // }
+    if (granter && grantee_address) {
+      const req = await this.feeGrantService.checkAddressValid(granter, grantee_address);
+      this.isRevoking = false;
+      if (req.data?.data?.grants?.length > 0) {
+        this.isRevoking = true;
+        this.showNotice(grantee_address, granter);
+        return;
+      }
+    }
 
     const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
     const executeStaking = async () => {
@@ -239,6 +240,18 @@ export class PopupAddGrantComponent implements OnInit {
   removeTime() {
     this.grantForm.controls['expiration_time'].setValue(null);
     this.checkFormValid();
+  }
+
+  showNotice(granteeAddress: string, granterAddress: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    let dialogRef = this.dialog.open(PopupNoticeComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.showRevoke(granteeAddress, granterAddress);
+      }
+    });
   }
 
   showRevoke(granteeAddress: string, granterAddress: string) {

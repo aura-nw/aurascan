@@ -1,7 +1,7 @@
 <div class="card card-grant">
   <div class="card-header">
     <div class="d-flex justify-content-between align-items-center">
-      <div class="h1 mb-0 text--white w-100">Add New Grant</div>
+      <div class="h1 mb-0 text--white w-100 fw-700">Add New Grant</div>
       <img
         class="icon-close"
         [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
@@ -20,7 +20,7 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <label for="grantee_address" class="form-label required text--gray-1 body-01">Grantee's address</label>
+            <label for="grantee_address" class="form-label required body-01">Grantee's address</label>
             <input
               id="grantee_address"
               formControlName="grantee_address"
@@ -37,7 +37,7 @@
       <div class="row mt-6">
         <div class="col-12">
           <div class="form-group">
-            <label for="amount" class="form-label text--gray-1 body-01">Spend Limit Amount</label>
+            <label for="amount" class="form-label body-01">Spend Limit Amount</label>
             <div class="input-group form-check-input pr-0">
               <input
                 id="amount"
@@ -58,7 +58,7 @@
       <div class="row mt-6">
         <div class="col-12">
           <div class="expiration_time">
-            <label for="amount" class="form-label text--gray-1 body-01">Expiration Time</label>
+            <label for="amount" class="form-label body-01">Expiration Time</label>
             <div class="input-group input-group--simply form-check-input pr-0">
               <input
                 readOnly
@@ -86,7 +86,7 @@
       <!-- Periodically granted -->
       <div class="row mt-6">
         <div class="col-6 col-lg-4">
-          <label class="form-label required text--gray-1 body-01 mb-0">Periodically granted</label>
+          <label class="form-label required body-01 mb-0">Periodically granted</label>
         </div>
         <div class="col-6 col-lg-auto">
           <div class="d-flex align-items-center">
@@ -98,7 +98,7 @@
                 class="radio-box radio-box--dark"
                 [checked]="periodShow"
                 (change)="changePeriodStage(true)" />
-              <label for="granted" class="text--gray-1 ml-2 mb-0 text-justify">Yes</label>
+              <label for="granted" class="ml-2 mb-0 text-justify">Yes</label>
             </div>
             <div class="form-group d-flex align-items-center ml-8">
               <input
@@ -108,7 +108,7 @@
                 class="radio-box radio-box--dark"
                 [checked]="!periodShow"
                 (change)="changePeriodStage(false)" />
-              <label for="not-granted" class="text--gray-1 ml-2 mb-0 text-justify">No</label>
+              <label for="not-granted" class="ml-2 mb-0 text-justify">No</label>
             </div>
           </div>
         </div>
@@ -118,9 +118,7 @@
         <div class="col-12">
           <div class="card-explain">
             <div class="form-group">
-              <label for="period_amount" class="form-label text--gray-1 body-01 required"
-                >Period Spend Limit Amount</label
-              >
+              <label for="period_amount" class="form-label body-01 required">Period Spend Limit Amount</label>
               <div
                 class="input-group form-check-input pr-0"
                 [class.form-control--error]="grantForm.get('period_amount')?.invalid && isSubmit">
@@ -150,7 +148,7 @@
               </div>
             </div>
             <div class="form-group mt-4">
-              <label for="period_day" class="form-label text--gray-1 body-01 required">Period</label>
+              <label for="period_day" class="form-label body-01 required">Period</label>
               <div
                 class="input-group form-check-input pr-0"
                 [class.form-control--error]="grantForm.get('period_day')?.invalid && isSubmit">
@@ -177,7 +175,7 @@
       <!-- Allowed Activities -->
       <div class="row mt-6">
         <div class="col-6 col-lg-4">
-          <label class="form-label text--gray-1 body-01 mb-0">Allowed Activities</label>
+          <label class="form-label body-01 mb-0">Allowed Activities</label>
         </div>
         <div class="col-6 col-lg-auto">
           <div class="d-lg-flex align-items-center">
@@ -187,9 +185,7 @@
                 id="instantiate-contract"
                 class="check-box check-box--dark"
                 formControlName="isInstantiate" />
-              <label for="instantiate-contract" class="text--gray-1 ml-2 mb-0 text-justify">
-                Instantiate Contract
-              </label>
+              <label for="instantiate-contract" class="ml-2 mb-0 text-justify"> Instantiate Contract </label>
             </div>
 
             <div class="form-group d-flex align-items-center">
@@ -198,7 +194,7 @@
                 id="execute-contract"
                 class="check-box check-box--dark"
                 formControlName="isExecute" />
-              <label for="execute-contract" class="text--gray-1 ml-2 mb-0 text-justify"> Execute Contract </label>
+              <label for="execute-contract" class="ml-2 mb-0 text-justify"> Execute Contract </label>
             </div>
           </div>
         </div>
@@ -216,7 +212,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="allContractAllowActive"
                   (change)="changeContractsActive(true)" />
-                <label for="all" class="text--gray-1 ml-2 mb-0 text-justify">All smart contracts</label>
+                <label for="all" class="ml-2 mb-0 text-justify">All smart contracts</label>
               </div>
               <div class="form-group d-flex align-items-center ml-lg-2 mt-4 mt-lg-0">
                 <input
@@ -226,7 +222,7 @@
                   class="radio-box radio-box--dark"
                   [checked]="!allContractAllowActive"
                   (change)="changeContractsActive(false)" />
-                <label for="specified" class="text--gray-1 ml-2 mb-0 text-justify">Specified smart contracts</label>
+                <label for="specified" class="ml-2 mb-0 text-justify">Specified smart contracts</label>
               </div>
             </div>
             <div *ngIf="!allContractAllowActive">
@@ -259,7 +255,7 @@
                 class="button mt-8 mb-4 d-flex align-items-center justify-content-center button-add mx-auto"
                 (click)="addContracts()">
                 <i class="ph-plus-fill text--white"></i>
-                <span class="h5 mb-0 fw-normal text--gray-1 ml-2">Add more</span>
+                <span class="h5 mb-0 fw-normal text--gray-light ml-2">Add more</span>
               </button>
             </div>
           </div>
