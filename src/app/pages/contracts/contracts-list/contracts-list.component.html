@@ -116,7 +116,7 @@
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverifed"
+                          *ngIf="data['contract_verification'] !== contractVerifyType.Unverified"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="contract_verification"
                           width="16px"
@@ -138,12 +138,12 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
-                    <div class="d-flex align-items-center ml-1" *ngIf='data[template.matColumnDef] !== contractVerifyType.Unverifed'>
+                    <div class="d-flex align-items-center ml-1" *ngIf='data[template.matColumnDef] !== contractVerifyType.Unverified'>
                       <span>{{ data['verified_at'] | customDate: 'yyyy-MM-dd' }}</span>
                       <div class="divider divider-vertical divider-lighter mx-2"></div>
                       <span>{{ data['verified_at'] | customDate: 'HH:mm:ss' }}</span>
                     </div>
-                    <div *ngIf='data[template.matColumnDef] === contractVerifyType.Unverifed'>-</div>
+                    <div *ngIf='data[template.matColumnDef] === contractVerifyType.Unverified'>-</div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
                     {{ (data[template.matColumnDef] | cutStringPipe: 16) || '-' }}

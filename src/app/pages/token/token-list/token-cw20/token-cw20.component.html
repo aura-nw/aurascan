@@ -88,7 +88,7 @@
                     <a [routerLink]="['/tokens/token', element.contract_address]" class="text--primary">
                       {{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span>
                     </a>
-                    <div class="h6 caption-mob mb-0 text--gray-6 pr-5 desc">{{ element.description }}</div>
+                    <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">{{ element.description }}</div>
                   </div>
                 </div>
               </td>
@@ -99,11 +99,11 @@
               <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Price</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <ng-container *ngIf="element.price; else noData">
-                  <div class="mb-1">${{ element.price | mask: 'separator.6' }}</div>
-                  <div class="caption text--gray-5" *ngIf="global.price.btc">
+                  <div class="mb-1 text--gray-1">${{ element.price | mask: 'separator.6' }}</div>
+                  <div class="body-02 fw-normal text--gray-5" *ngIf="global.price.btc">
                     {{ element.price / global.price.btc || 0 | mask: 'separator.6' }} BTC
                   </div>
-                  <div class="caption text--gray-5" *ngIf="global.price.aura">
+                  <div class="body-02 fw-normal text--gray-5" *ngIf="global.price.aura">
                     {{ element.price / global.price.aura || 0 | mask: 'separator.6' }} {{ denom }}
                   </div>
                 </ng-container>
@@ -115,7 +115,7 @@
               <th mat-header-cell *matHeaderCellDef class="" mat-sort-header>Change (%)</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 <div
-                  [ngStyle]="{ color: element.isValueUp ? '#5EE69D' : '#E65E5E' }"
+                  [ngStyle]="{ color: element.isValueUp ? '#67C091' : '#D5625E' }"
                   class="d-flex"
                   *ngIf="element.change; else noData">
                   <ng-container *ngIf="element.isValueUp">
@@ -164,7 +164,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-10">Holders</th>
               <td mat-cell *matCellDef="let element" class="vertical-align-top py-4">
                 {{ element.holders | number: global.formatNumberOnlyDecimal }}<br />
-                <span [ngStyle]="{ color: element.isHolderUp ? '#5EE69D' : '#E65E5E' }" class="d-flex mt-1">
+                <span [ngStyle]="{ color: element.isHolderUp ? '#67C091' : '#D5625E' }" class="d-flex mt-1">
                   <ng-container *ngIf="element.isHolderUp">
                     <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
                   </ng-container>
