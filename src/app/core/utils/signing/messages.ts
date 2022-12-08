@@ -231,7 +231,7 @@ export function GrantMsgAllowance(
 
     const allowedContractMsg = {
       allowance: allowance,
-      allowedAddress,
+      allowedAddress: allowedAddress.length > 0 ? allowedAddress : [],
     };
 
     const allowedContractEncode = AllowedContractAllowance.encode(allowedContractMsg).finish();
@@ -242,7 +242,7 @@ export function GrantMsgAllowance(
     };
 
     msgAllowance = MsgGrantAllowance.fromPartial({
-      allowance: allowedAddress.length > 0 ? allowedContract : allowance,
+      allowance: allowedContract,
       grantee,
       granter,
     });
