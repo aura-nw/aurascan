@@ -1,4 +1,4 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
@@ -74,7 +74,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     this.searchSubscription = this.searchSubject
       .asObservable()
       .pipe(
-        tap(console.log),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((text) => {
@@ -124,35 +123,10 @@ export class ContractsListComponent implements OnInit, OnDestroy {
             item.type = CONTRACT_RESULT.TBD;
           }
         });
-        if (this.textSearch) {
-          this.filterSearchData = res.data;
-        }
         this.dataSource = res.data;
         this.dataSearch = res.data;
       }
     });
-  }
-
-  searchToken(): void {
-    this.filterSearchData = [];
-
-    if (this.textSearch && this.textSearch.length > 0) {
-      this.showBoxSearch = true;
-      let payload = {
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-
-      this.contractService.getListContract(payload).subscribe((res) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.filterSearchData = res.data;
-        }
-      });
-    }
   }
 
   paginatorEmit(event): void {
@@ -185,11 +159,5 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     this.textSearch = '';
     this.showBoxSearch = false;
     this.filterSearchData = [];
-    if (this.urlParam) {
-      this.router.navigate(['/contracts']);
-      this.getListContract();
-    } else {
-      this.searchToken();
-    }
   }
 }
