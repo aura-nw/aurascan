@@ -1,10 +1,12 @@
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
@@ -19,7 +21,7 @@ import { Globals } from '../../../global/global';
   templateUrl: './contracts-list.component.html',
   styleUrls: ['./contracts-list.component.scss'],
 })
-export class ContractsListComponent implements OnInit {
+export class ContractsListComponent implements OnInit, OnDestroy {
   textSearch = '';
   searchMobVisible = false;
   templates: Array<TableTemplate> = [
@@ -45,6 +47,9 @@ export class ContractsListComponent implements OnInit {
   urlParam = '';
   showBoxSearch = false;
 
+  searchSubject = new Subject<string>();
+  searchSubscription: Subscription;
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
@@ -55,12 +60,46 @@ export class ContractsListComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.urlParam = params.param;
     });
     this.textSearch = this.urlParam ? this.urlParam : '';
     this.getListContract();
+
+    this.searchSubscription = this.searchSubject
+      .asObservable()
+      .pipe(
+        tap(console.log),
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((text) => {
+          this.showBoxSearch = true;
+
+          this.textSearch = text;
+          let payload = {
+            limit: 0,
+            offset: 0,
+            keyword: this.textSearch,
+          };
+
+          this.filterSearchData = [];
+
+          return this.contractService.getListContract(payload);
+        }),
+      )
+      .subscribe((res) => {
+        if (res?.data?.length > 0) {
+          res.data.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          });
+          this.filterSearchData = res.data;
+        }
+      });
   }
 
   getListContract() {
@@ -96,7 +135,7 @@ export class ContractsListComponent implements OnInit {
 
   searchToken(): void {
     this.filterSearchData = [];
-    this.textSearch !== '';
+
     if (this.textSearch && this.textSearch.length > 0) {
       this.showBoxSearch = true;
       let payload = {

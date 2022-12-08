@@ -11,7 +11,7 @@
         placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
-        (ngModelChange)="searchToken()"
+        (ngModelChange)="searchSubject.next($event)"
         (keyup.enter)="handleLink()"
         name="search"
         autocomplete="off" />
