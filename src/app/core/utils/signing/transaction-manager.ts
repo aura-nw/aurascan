@@ -4,6 +4,7 @@ import { messageCreators } from './messages';
 import { getSigner } from './signer';
 import { getFee } from './fee';
 import { ChainInfo } from '@keplr-wallet/types';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
 export async function createSignBroadcast(
   {
@@ -23,7 +24,10 @@ export async function createSignBroadcast(
   } else {
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message, network);
-    const fee: StdFee = getNetworkFee(network, messageType, validatorsCount);
+    // const fee: StdFee = getNetworkFee(network, messageType, validatorsCount);
+    const fee = await getNetworkFee(network, senderAddress, messagesSend, '');
+    console.log('fee estimate', messageType, fee);
+    
     let client;
 
     if (coin98Client) {
@@ -53,7 +57,15 @@ export async function createSignBroadcast(
   }
 }
 
-export function getNetworkFee(network, messageType, validatorsCount?: number): StdFee {
+export async function getNetworkFee(network, address, messageType, memo): Promise<any> {
+  console.log(network);
+  const signer = window.getOfflineSignerOnlyAmino(network.chainId);
+  const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
+  // console.log(messageType);
+  
+  const gasEstimation = await onlineClient.simulate(address, [messageType], '');
+  console.log(gasEstimation);
+  
   return {
     amount: [
       {
@@ -61,9 +73,21 @@ export function getNetworkFee(network, messageType, validatorsCount?: number): S
         amount: '1',
       },
     ],
-    gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
+    gas: (+gasEstimation * 1.3).toString(),
   };
 }
+
+// export function getNetworkFee(network, messageType, validatorsCount?: number): StdFee {
+//   return {
+//     amount: [
+//       {
+//         denom: network.currencies[0].coinMinimalDenom,
+//         amount: '1',
+//       },
+//     ],
+//     gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
+//   };
+// }
 
 export function assertIsBroadcastTxSuccess(res): DeliverTxResponse {
   if (!res) throw new Error(`Error sending transaction`);

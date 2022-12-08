@@ -1,3 +1,4 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 
 const MessageType = TRANSACTION_TYPE_ENUM;
@@ -12,7 +13,7 @@ enum EFees {
   Default = '400000',
 }
 
-export function getFee(messageType: TRANSACTION_TYPE_ENUM | string, validatorsCount?: number): string {
+export async function getFee(messageType: TRANSACTION_TYPE_ENUM | string, validatorsCount?: number): Promise<any> {
   switch (TRANSACTION_TYPE_ENUM[messageType]) {
     case MessageType.Send:
       return EFees.Send;

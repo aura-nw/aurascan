@@ -263,7 +263,7 @@ export class WalletService implements OnDestroy {
       return this.makeSignDocData(senderAddress, {
         msgs,
         chain_id: chainId,
-        fee: getNetworkFee(network, messageType, validatorsCount),
+        fee: getNetworkFee(network, senderAddress, msgs, ''),
         memo: '',
       })
         .toPromise()
