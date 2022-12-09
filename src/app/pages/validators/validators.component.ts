@@ -462,11 +462,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   checkAmountStaking(): void {
     let amountCheck;
     if (this.dataDelegate.dialogMode === this.dialogMode.Delegate) {
-      amountCheck = (
-        +this.dataDelegate.availableToken +
-          +this.dataDelegate.delegableVesting -
-          (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT || 0
-      ).toFixed(6);
+      amountCheck = this.getMaxAmountDelegate();
     } else if (
       this.dataDelegate.dialogMode === this.dialogMode.Redelegate ||
       this.dataDelegate.dialogMode === this.dialogMode.Undelegate
@@ -474,7 +470,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       amountCheck = this.dataDelegate.validatorDetail.amount_staked;
     }
     this.isExceedAmount = false;
-    if (this.amountFormat > amountCheck) {
+    if (+this.amountFormat > +amountCheck) {
       this.isExceedAmount = true;
     } else {
       this.isHandleStake = true;
@@ -623,11 +619,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   getMaxToken(type): void {
     if (type === this.dialogMode.Delegate) {
       //check amout for high fee
-      let amountCheck = (
-        Number(this.dataDelegate.availableToken) +
-        Number(this.dataDelegate.delegableVesting) -
-        (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
-      ).toFixed(6);
+      let amountCheck = this.getMaxAmountDelegate();
       if (Number(amountCheck) < 0) {
         this.isExceedAmount = true;
         this.errorExceedAmount = true;
@@ -639,6 +631,15 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     } else if (type === this.dialogMode.Redelegate) {
       this.amountFormat = this.dataDelegate.availableToken;
     }
+  }
+
+  getMaxAmountDelegate() {
+    let amount = (
+      Number(this.dataDelegate.availableToken) +
+      Number(this.dataDelegate.delegableVesting) -
+      (Number(getFee(SIGNING_MESSAGE_TYPES.STAKE)) * this.chainInfo.gasPriceStep.high) / NUMBER_CONVERT
+    ).toFixed(6);
+    return amount;
   }
 
   setCommissionTitle(label: string) {
