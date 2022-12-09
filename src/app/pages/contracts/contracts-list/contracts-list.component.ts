@@ -9,6 +9,7 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -47,6 +48,9 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   urlParam = '';
   showBoxSearch = false;
 
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+
   searchSubject = new Subject<string>();
   searchSubscription: Subscription;
 
@@ -58,6 +62,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     private route: ActivatedRoute,
+    private environmentService: EnvironmentService
   ) {}
 
   ngOnDestroy(): void {
