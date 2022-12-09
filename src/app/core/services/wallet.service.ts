@@ -10,15 +10,15 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { EAccountType } from 'src/app/core/constants/account.enum';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
-import { getFee } from 'src/app/core/utils/signing/fee';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
-import { LAST_USED_PROVIDER, SIGNING_MESSAGE_TYPES, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
-import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
+import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
+import { Decimal } from '@cosmjs/math';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -344,17 +344,22 @@ export class WalletService implements OnDestroy {
     return this.coin98Client.signArbitrary(this.wallet.bech32Address, base64String);
   }
 
-  execute(userAddress, contract_address, msg) {
+  async execute(userAddress, contract_address, msg) {
     let signer;
+    let gasStep = this.chainInfo?.gasPriceStep?.average || 0.0025;
 
-    const fee: any = {
-      amount: [
-        {
-          denom: this.chainInfo.currencies[0].coinMinimalDenom,
-          amount: '1',
-        },
-      ],
-      gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
+    //convert gasPrice to Decimal
+    let pow = 1;
+    while (!Number.isInteger(gasStep)) {
+      gasStep = gasStep * Math.pow(10, pow);
+      pow++;
+    }
+
+    const fee = {
+      gasPrice: {
+        amount: Decimal.fromAtomics(gasStep.toString(), pow),
+        denom: this.chainInfo.currencies[0].coinMinimalDenom,
+      },
     };
 
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
@@ -363,8 +368,8 @@ export class WalletService implements OnDestroy {
       signer = window.getOfflineSignerOnlyAmino(this.chainId);
     }
 
-    return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer).then((client) =>
-      client.execute(userAddress, contract_address, msg, fee),
+    return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
+      client.execute(userAddress, contract_address, msg, 'auto'),
     );
   }
 
