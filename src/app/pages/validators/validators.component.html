@@ -148,7 +148,7 @@
                           <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
                         </div>
                         <div *ngSwitchCase="'participation'">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] + '/' + data['target_count']}}
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
