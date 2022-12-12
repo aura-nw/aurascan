@@ -1,11 +1,10 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
 import { ChainInfo } from '@keplr-wallet/types';
+import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 import { KEPLR_ERRORS } from '../../constants/wallet.constant';
 import { messageCreators } from './messages';
 import { getSigner } from './signer';
-import { Decimal } from '@cosmjs/math';
-import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
 
 export async function createSignBroadcast(
   {
@@ -70,12 +69,14 @@ export async function getNetworkFee(network, address, messageType, memo = ''): P
     Array.isArray(messageType) ? messageType : [messageType],
     '',
   );
+  let gasPrice = network.gasPriceStep.average.toString() + network.currencies[0].coinMinimalDenom;
+  let calGasPrice = calculateFee(Math.round(gasEstimation * multiGas), gasPrice);
 
   return {
     amount: [
       {
         denom: network.currencies[0].coinMinimalDenom,
-        amount: network.gasPriceStep.average,
+        amount: (calGasPrice?.amount[0]?.amount || network.gasPriceStep.average)?.toString(),
       },
     ],
     gas: Math.round(gasEstimation * multiGas).toString(),
