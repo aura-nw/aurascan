@@ -22,7 +22,7 @@ export class PopupAddGrantComponent implements OnInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   periodShow = false;
   contractType: 'instantiate' | 'execute';
-  allContractAllowActive = true;
+  allContractAllowActive = false;
   currDate;
   errorSpendLimit = false;
   isInvalidAddress = false;
@@ -194,7 +194,7 @@ export class PopupAddGrantComponent implements OnInit {
 
   checkFormValid(): boolean {
     const granter = this.walletService.wallet?.bech32Address;
-    const { grantee_address, expiration_time, period_amount, period_day, amount } = this.grantForm.value;
+    const { grantee_address, expiration_time, period_amount, period_day, amount, isExecute, execute_contract } = this.grantForm.value;
 
     this.formValid = false;
     this.isInvalidAddress = false;
@@ -229,6 +229,11 @@ export class PopupAddGrantComponent implements OnInit {
     }
 
     if (!granter || !grantee_address) {
+      return false;
+    }
+
+    //new flow check execute contract
+    if (isExecute && !(execute_contract?.length >= 1 && execute_contract[0]?.address?.length > 0)) {
       return false;
     }
 
