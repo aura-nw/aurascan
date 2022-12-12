@@ -183,7 +183,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
         this.rawData = res.data;
         res.data.forEach((val) => {
           val.vote_count = val.vote_count || 0;
-          val.participation = val.vote_count + '/' + val.target_count;
+          val.participation = val.vote_count;
           val.power = val.power / NUMBER_CONVERT;
           val.up_time = Number(val.up_time.replace('%', ''));
         });
