@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { Decimal } from '@cosmjs/math';
+import { StdFee } from '@cosmjs/stargate';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -18,7 +20,6 @@ import { WalletStorage } from '../models/wallet';
 import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
-import { Decimal } from '@cosmjs/math';
 
 export type WalletKey = Partial<Key> | AccountResponse;
 
@@ -245,7 +246,7 @@ export class WalletService implements OnDestroy {
     });
   }
 
-  signAndBroadcast(
+  async signAndBroadcast(
     {
       messageType,
       message,
@@ -259,11 +260,12 @@ export class WalletService implements OnDestroy {
     let signingClient;
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
-
+      const fee: StdFee = await getNetworkFee(network, senderAddress, msgs, '');
+      
       return this.makeSignDocData(senderAddress, {
         msgs,
         chain_id: chainId,
-        fee: getNetworkFee(network, senderAddress, msgs, ''),
+        fee: fee,
         memo: '',
       })
         .toPromise()

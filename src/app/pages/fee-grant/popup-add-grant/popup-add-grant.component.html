@@ -26,6 +26,7 @@
               formControlName="grantee_address"
               type="text"
               class="form-control form-check-input"
+              placeholder="Grantee's address"
               (ngModelChange)="checkFormValid()"
               [class.form-control--error]="grantForm.get('grantee_address')?.invalid && isSubmit" />
             <div class="error" *ngIf="isInvalidAddress">This is not aura's externally owned account</div>
@@ -47,6 +48,7 @@
                 (clickOutside)="removeClassFocus(amount)"
                 mask="separator.6"
                 separatorLimit="9999"
+                placeholder="Amount"
                 (ngModelChange)="checkFormValid()"
                 formControlName="amount" />
               <div class="input-group-append h6 fw-normal mb-0">{{ denom }}</div>
@@ -70,6 +72,7 @@
                 [matDatepicker]="picker"
                 [min]="currDate"
                 [style]="'max-width: 90%'"
+                placeholder="yyyy-mm-dd"
                 (ngModelChange)="checkFormValid()"
                 formControlName="expiration_time" />
               <button class="mr-1 button" *ngIf="grantForm.get('expiration_time')?.value" (click)="removeTime()">
@@ -177,11 +180,11 @@
       <!-- Allowed Activities -->
       <div class="row mt-6">
         <div class="col-6 col-lg-4">
-          <label class="form-label required  body-01 mb-0">Allowed Activities</label>
+          <label class="form-label body-01 mb-0">Allowed Activities</label>
         </div>
         <div class="col-6 col-lg-auto">
           <div class="d-lg-flex align-items-center">
-            <div class="form-group d-flex align-items-center mr-4 mb-4 mb-lg-0">
+            <!-- <div class="form-group d-flex align-items-center mr-4 mb-4 mb-lg-0">
               <input
                 type="checkbox"
                 id="instantiate-contract"
@@ -190,14 +193,15 @@
               <label for="instantiate-contract" class=" ml-2 mb-0 text-justify">
                 Instantiate Contract
               </label>
-            </div>
+            </div> -->
 
             <div class="form-group d-flex align-items-center">
               <input
                 type="checkbox"
                 id="execute-contract"
                 class="check-box check-box--dark"
-                formControlName="isExecute" />
+                formControlName="isExecute"
+                (ngModelChange)="checkFormValid()"/>
               <label for="execute-contract" class=" ml-2 mb-0 text-justify"> Execute Contract </label>
             </div>
           </div>
@@ -207,7 +211,7 @@
       <div class="row mt-4" *ngIf="grantForm.get('isExecute').value">
         <div class="col-12">
           <div class="card-explain">
-            <div class="d-lg-flex align-items-center">
+            <!-- <div class="d-lg-flex align-items-center">
               <div class="form-group d-flex align-items-center">
                 <input
                   type="radio"
@@ -228,7 +232,8 @@
                   (change)="changeContractsActive(false)" />
                 <label for="specified" class=" ml-2 mb-0 text-justify">Specified smart contracts</label>
               </div>
-            </div>
+            </div> -->
+            Specified smart contracts
             <div *ngIf="!allContractAllowActive">
               <div class="divider divider-horizontal mt-4"></div>
               <div formArrayName="execute_contract">
@@ -246,6 +251,7 @@
                       (clickOutside)="removeClassFocus(address)"
                       [placeholder]="'Contract address.'"
                       formControlName="address"
+                      (ngModelChange)="checkFormValid()"
                       type="text"
                       class="form-control" />
                     <button class="mr-5 button" *ngIf="i > 0" (click)="removeContract(i)">
