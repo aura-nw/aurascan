@@ -37,14 +37,11 @@
                     {{ denom }}
                   </span>
 
-                  <span [ngStyle]="{ color: tokenDetail.isValueUp ? '#67C091' : '#D5625E' }" class="ml-2">
-                    (<ng-container *ngIf="tokenDetail.isValueUp">
-                      <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
-                    </ng-container>
-                    <ng-container *ngIf="!tokenDetail.isValueUp">
-                      <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
-                    </ng-container>
-                    <span class="ml-1">{{ tokenDetail.change | number : global.formatNumber2Decimal }}%</span>)
+                  <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
+                    (<span class=""
+                      >{{ tokenDetail.isValueUp ? '+' : '-'
+                      }}{{ tokenDetail.change | number : global.formatNumber2Decimal }}%</span
+                    >)
                   </span>
                 </div>
               </div>
@@ -80,7 +77,11 @@
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
               <div class="text--gray-5 body-02">FULLY DILUTED MARKET CAP</div>
               <div class="body-02 text--gray-1">
-                ${{ tokenDetail.fully_diluted_market_cap | number : global.formatNumber2Decimal }}
+                {{
+                  +tokenDetail.max_total_supply > 0
+                    ? '$' + (tokenDetail.fully_diluted_market_cap | number : global.formatNumber2Decimal)
+                    : '-'
+                }}
               </div>
             </div>
           </div>
@@ -94,16 +95,12 @@
             <div class="body-02 text--gray-1">
               {{ tokenDetail?.holder || 0 }}
               <span
-                class="ml-2"
-                *ngIf="!tokenDetail.isNFTContract"
-                [ngStyle]="{ color: tokenDetail.isHolderUp ? '#67C091' : '#D5625E' }">
-                (<ng-container *ngIf="tokenDetail.isHolderUp">
-                  <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
-                </ng-container>
-                <ng-container *ngIf="!tokenDetail.isHolderUp">
-                  <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
-                </ng-container>
-                <span class="ml-1">{{ tokenDetail.holderChange | number : global.formatNumber2Decimal }}%</span>)
+                class="ml-1 {{ tokenDetail.isHolderUp ? 'text--green-3' : 'text--red-3' }}"
+                *ngIf="!tokenDetail.isNFTContract">
+                (<span class=""
+                  >{{ tokenDetail.isHolderUp ? '+' : '-'
+                  }}{{ tokenDetail.holderChange | number : global.formatNumber2Decimal }}%</span
+                >)
               </span>
             </div>
           </div>

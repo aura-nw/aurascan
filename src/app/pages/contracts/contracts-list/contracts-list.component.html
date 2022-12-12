@@ -36,7 +36,7 @@
           <div class="txt-title-search">Contracts</div>
           <ng-container *ngFor="let item of filterSearchData">
             <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
-              <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+              <img [src]="item.image || defaultLogoToken" class="logo-token rounded-circle" />
               <div class="ml-3">
                 <div class="d-flex align-items-center">
                   <span class="text-clamp">{{ item.contract_name || '-' }}</span>
