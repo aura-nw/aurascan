@@ -122,7 +122,7 @@
                   class="d-flex {{ element.isValueUp ? 'text--green-3' : 'text--red-3' }}"
                   *ngIf="element.change; else noData">
                   <span class=""
-                    >{{ element.isValueUp ? '+' : '-' }}{{ element.change | number : global.formatNumber2Decimal }}%
+                    >{{ element.isValueUp ? '+' : '' }}{{ element.change | number : global.formatNumber2Decimal }}%
                   </span>
                 </div>
               </td>
@@ -165,7 +165,7 @@
                 {{ element.holders | number : global.formatNumberOnlyDecimal }}<br />
                 <span class="d-flex mt-1 {{ element.isHolderUp ? 'text--green-3' : 'text--red-3' }}">
                   <span class=""
-                    >{{ element.isHolderUp ? '+' : '-'
+                    >{{ element.isHolderUp ? '+' : ''
                     }}{{ element.holderChange | number : global.formatNumber2Decimal }}%</span
                   >
                 </span>
