@@ -38,8 +38,8 @@
             </button>
           </div>
         </form>
-        <div class="mt-4 mt-lg-0 text--gray-1" *ngIf="dataSource.data">
-          {{ dataSource.data.length }} transaction{{ dataSource.data.length > 0 ? 's' : '' }} found
+        <div class="mt-4 mt-lg-0 text--gray-1">
+          {{ dataSource?.data?.length || 0 }} transaction{{ dataSource?.data?.length > 0 ? 's' : '' }} found
         </div>
       </div>
       <div class="mt-4">
@@ -70,7 +70,7 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'timestamp'">
-                          {{ commonService.getDateValue(data[template.matColumnDef], false)[1] }}
+                          {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
                         </div>
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>

@@ -12,7 +12,7 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 
 @Component({
-  selector: 'app-account-table',
+  selector: 'app-account-detail-table',
   templateUrl: './account-detail-table.component.html',
   styleUrls: ['./account-detail-table.component.scss'],
 })

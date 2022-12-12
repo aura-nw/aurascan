@@ -10,6 +10,14 @@
     -webkit-box-orient: vertical;
   }
 
+  .title-desk {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
   &__content {
     .content-body {
       min-width: 140px;
