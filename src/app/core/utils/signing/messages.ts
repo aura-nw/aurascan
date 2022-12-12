@@ -217,20 +217,26 @@ export function GrantMsgAllowance(
       });
     }
 
-    const allowanceValue = {
-      allowance: itemAllowance,
-      allowedMessages: allowedMessages,
-    };
+    //comment allow message for version 0.45
+    // const allowanceValue = {
+    //   allowance: itemAllowance,
+    //   allowedMessages: allowedMessages,
+    // };
 
-    const allowanceEncode = AllowedMsgAllowance.encode(allowanceValue as any).finish();
+    // const allowanceEncode = AllowedMsgAllowance.encode(allowanceValue as any).finish();
 
-    const allowance = {
-      typeUrl: TRANSACTION_TYPE_ENUM.AllowedMsgAllowance,
-      value: Uint8Array.from(allowanceEncode),
-    };
+    // const allowance = {
+    //   typeUrl: TRANSACTION_TYPE_ENUM.AllowedMsgAllowance,
+    //   value: Uint8Array.from(allowanceEncode),
+    // };
+
+    // const allowedContractMsg = {
+    //   allowance: allowance,
+    //   allowedAddress: allowedAddress.length > 0 ? allowedAddress : [],
+    // };
 
     const allowedContractMsg = {
-      allowance: allowance,
+      allowance: itemAllowance,
       allowedAddress: allowedAddress.length > 0 ? allowedAddress : [],
     };
 
