@@ -55,7 +55,7 @@ export async function createSignBroadcast(
   }
 }
 
-export async function getNetworkFee(network, address, messageType, memo = ''): Promise<any> {
+export async function getNetworkFee(network, address, messageType, memo = ''): Promise<StdFee> {
   const signer = window.getOfflineSignerOnlyAmino(network.chainId);
 
   //set default for multi gas
