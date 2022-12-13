@@ -74,9 +74,9 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
 
   if (itemMessage && amount >= 0) {
     amount = amount / NUMBER_CONVERT || 0;
-    amountFormat = arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward ? amount : 'More';
+    amountFormat = amount;
     if (
-      type === TRANSACTION_TYPE_ENUM.GetReward ||
+      (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg?.length > 1) ||
       type === TRANSACTION_TYPE_ENUM.MultiSend ||
       type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount
     ) {
@@ -126,7 +126,7 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
-      tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
+      tokenId = arrayMsg?.length > 1 ? 'More' : itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Burn;
