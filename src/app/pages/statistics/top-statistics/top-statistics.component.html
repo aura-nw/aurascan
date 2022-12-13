@@ -1,15 +1,16 @@
 <app-pagetitle title="Top statistics"></app-pagetitle>
 <section class="top-statistics">
   <!-- Tab List-->
-  <ul ngbNav
+  <ul
+    ngbNav
     #customNav="ngbNav"
     [activeId]="0"
     class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap mb-4 mb-lg-6">
     <ng-container *ngFor="let tab of TABS; index as index">
       <li [ngbNavItem]="index">
         <a class="account__tab-item" ngbNavLink (click)="currentTab = tab.label">
-          <span class="{{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}" >
-              {{ tab.label }}
+          <span class="{{ customNav.activeId === index ? 'text--white' : 'text--gray-light' }}">
+            {{ tab.label }}
           </span>
         </a>
       </li>
@@ -20,5 +21,4 @@
     <app-top-statistic-overview *ngIf="currentTab === 'Overview'"></app-top-statistic-overview>
     <app-top-statistic-transaction *ngIf="currentTab === 'Transactions'"></app-top-statistic-transaction>
   </div>
-
 </section>
