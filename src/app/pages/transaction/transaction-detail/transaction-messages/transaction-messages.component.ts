@@ -233,13 +233,16 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   displayMsgRaw(): void {
-    const obj = this.transactionDetail?.tx?.tx?.body?.messages[0];
-    this.objMsgContract = Object.keys(obj).reduce((newObj, key) => {
-      if (key === 'msg' || key === 'funds') {
-        newObj[key] = obj[key];
-      }
-      return newObj;
-    }, {});
+    this.objMsgContract = _.get(this.transactionDetail.tx.tx.body, 'messages').map((element) => {
+      const msg = _.get(element, 'msg');
+      const funds = _.get(element, 'funds');
+      return { msg, funds };
+    });
+
+    //get first data if array = 1
+    if (this.objMsgContract.length === 1) {
+      this.objMsgContract = this.objMsgContract[0];
+    }
   }
 
   checkStoreCode(): void {
