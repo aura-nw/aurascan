@@ -2,8 +2,9 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import ExcelExport from 'export-xlsx';
-import { createChart } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
+import { MaskPipe } from 'ngx-mask';
 import { Subscription, timer } from 'rxjs';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -14,7 +15,7 @@ import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
-import {CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE} from '../../core/constants/common.constant';
+import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
 import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
@@ -53,8 +54,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
 
-  chart = null;
-  areaSeries = null;
+  chart: IChartApi = null;
+  areaSeries: ISeriesApi<'Area'> = null;
   chartData;
   chartDataExp = [];
 
@@ -85,6 +86,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     public datepipe: DatePipe,
     private proposalService: ProposalService,
+    private maskService: MaskPipe,
   ) {}
 
   ngOnInit(): void {
@@ -136,8 +138,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       bottomColor: 'rgba(119, 182, 188, 0.01)',
       priceFormat: {
         type: 'price',
-        precision: 6,
-        minMove: 0.000001,
+        precision: 4,
+        minMove: 0.0001,
       },
     });
     this.initTooltip();
@@ -179,10 +181,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         table1: this.chartDataExp,
       },
     ];
-    this.areaSeries.setData(arr);
-    this.chart.timeScale().fitContent();
     this.min = Math.min(...transactionData);
     this.max = Math.max(...transactionData);
+
+    this.areaSeries.applyOptions({
+      priceFormat: {
+        type: this.isPrice ? 'price' : 'volume',
+      },
+      autoscaleInfoProvider: {
+        priceRange: { min: this.min, max: this.max },
+      },
+    });
+
+    this.areaSeries.setData(arr);
+    this.chart.timeScale().fitContent();
+    this.chart.priceScale().applyOptions({
+      autoScale: true,
+    });
   }
 
   //get all data for dashboard
@@ -248,12 +263,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getCoinInfo(type: string) {
     this.initTooltip();
     this.chartRange = type;
-    this.commonService.getTokenByCoinId(this.chartRange, this.tokenIdGetPrice.AURA).subscribe(res => {
+    this.commonService.getTokenByCoinId(this.chartRange, this.tokenIdGetPrice.AURA).subscribe((res) => {
       //update data common
       this.getInfoCommon();
-      if(res?.data?.length > 0) {
+      if (res?.data?.length > 0) {
         this.tokenInfo = res.data;
-        const dataX = (this.isPrice) ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
+        const dataX = this.isPrice ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
         let dataY = res.data.map((i) => i.timestamp);
         this.drawChart(dataX, dataY);
       }
@@ -306,7 +321,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       fileName: (this.isPrice ? 'Price_' : 'Volume_') + this.currDate,
       workSheets: [
         {
-          sheetName: (this.isPrice ? 'Price' : 'Volume'),
+          sheetName: this.isPrice ? 'Price' : 'Volume',
           startingRowNumber: 2,
           gapBetweenTwoTables: 2,
           tableSettings: {
@@ -338,7 +353,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   initTooltip() {
     const container = document.getElementById('chart');
     const toolTip = document.createElement('div');
-    const label = this.isPrice ? 'Price' : 'Volume'
+    const label = this.isPrice ? 'Price' : 'Volume';
     toolTip.className = 'floating-tooltip-2';
     container.appendChild(toolTip);
 
@@ -354,20 +369,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       ) {
         toolTip.style.display = 'none';
       } else {
-        const timestamp = moment.unix(param.time - 25200); // GMT+7
+        const timestamp = moment.unix((param.time as number) - 25200); // GMT+7
         const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
         toolTip.style.display = 'block';
         const price = param.seriesPrices.get(this.areaSeries);
         toolTip.innerHTML =
           '' +
-          '<div class="floating-tooltip__header">'+label+'</div>' +
+          '<div class="floating-tooltip__header">' +
+          label +
+          '</div>' +
           '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
-          price +
+          this.maskService.transform(price as number, 'separator') +
           '</div><div>' +
           dateStr +
           '' +
           '</div></div>';
-        const coordinate = this.areaSeries.priceToCoordinate(price);
+        const coordinate = this.areaSeries.priceToCoordinate(price as number);
         let shiftedCoordinate = param.point.x - 50;
         if (coordinate === null) {
           return;
@@ -400,7 +417,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             const { yes, no, no_with_veto, abstain } = pro?.tally;
             let totalVote = +yes + +no + +no_with_veto + +abstain;
             if (this.voting_Period_arr[index].tally) {
-              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0 ;
+              this.voting_Period_arr[index].tally.yes = (+yes * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.no = (+no * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote || 0;
               this.voting_Period_arr[index].tally.abstain = (+abstain * 100) / totalVote || 0;
@@ -423,11 +440,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let bonded_tokens;
     let supply;
     setInterval(() => {
-      if(!inflation && !bonded_tokens && !supply) {
+      if (!inflation && !bonded_tokens && !supply) {
         inflation = this.getDataHeader().inflation.slice(0, -1);
         bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
         supply = this.getDataHeader().supply.toString().slice(0, -1);
-        this.staking_APR = (inflation * (1 - communityTax)) / (bonded_tokens/supply*100);
+        this.staking_APR = (inflation * (1 - communityTax)) / ((bonded_tokens / supply) * 100);
       }
     }, 500);
   }

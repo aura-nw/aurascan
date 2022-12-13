@@ -139,7 +139,7 @@
             <div class="col-6">Voting Power</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.power | number: global.formatNumberToken }}</span>
+                <span class="text--gray-1">{{ currentValidatorDetail?.power | mask: 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
@@ -158,7 +158,7 @@
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
                 <span class="text--gray-1">{{
-                  currentValidatorDetail?.self_bonded | number: global.formatNumberToken
+                  currentValidatorDetail?.self_bonded | mask: 'separator.6'
                 }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
@@ -356,7 +356,7 @@
                               {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
-                              {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                              {{ data[template.matColumnDef] | mask: 'separator.6' }}
                               <span class="text--primary">{{ denom }}</span>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -387,7 +387,7 @@
                           label: 'Amount',
                           class: 'body-01 text--gray-1',
                           info:
-                            (data.amount | number: global.formatNumberToken) +
+                            (data.amount | mask: 'separator.6') +
                             '<span class=text--primary> ' +
                             denom +
                             '</span>'
@@ -447,7 +447,7 @@
                               *ngSwitchCase="'amount'"
                               [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
                               {{ data['isStakeMode'] ? '+' : '-' }}
-                              {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                              {{ data[template.matColumnDef] | mask: 'separator.6' }}
                             </div>
                             <a
                               *ngSwitchCase="'height'"

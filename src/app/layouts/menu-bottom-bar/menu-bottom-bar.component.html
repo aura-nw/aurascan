@@ -27,7 +27,7 @@
           context: {data: { idx: idx, id: 'resourceBtn', iconId: 'resourceIcon', textId: 'resourceText', label: item.label, icon: item.icon, popContent: popContent3}}">
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="item.name === menuName.More">
+        <ng-container *ngIf="item.name === menuName.More && wallet">
           <ng-container *ngTemplateOutlet="btnDropdown;
           context: {data: { idx: idx, id: 'moreBtn', iconId: 'moreIcon', textId: 'moreText', label: item.label, icon: item.icon, popContent: popContent4}}">
           </ng-container>

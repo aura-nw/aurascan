@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
 import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
 import {LoadingImageModule} from "src/app/shared/components/loading-image/loading-image.module";
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
@@ -29,7 +30,8 @@ import {LoadingImageModule} from "src/app/shared/components/loading-image/loadin
         RouterModule,
         TableNoDataModule,
         PaginatorModule,
-        LoadingImageModule
+        LoadingImageModule,
+        NgxMaskModule
     ],
   exports: [AccountDetailTableComponent]
 })

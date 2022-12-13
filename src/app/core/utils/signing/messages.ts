@@ -6,6 +6,7 @@ import { BasicAllowance, PeriodicAllowance, AllowedMsgAllowance } from 'cosmjs-t
 import { Timestamp } from 'cosmjs-types/google/protobuf/timestamp';
 import { Duration } from 'cosmjs-types/google/protobuf/duration';
 import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
+import AllowedContractAllowance from './custom-feegrant';
 // Staking
 export function Delegate(senderAddress, { to, amount }, network: ChainInfo) {
   /* istanbul ignore next */
@@ -216,19 +217,38 @@ export function GrantMsgAllowance(
       });
     }
 
-    const allowanceValue = {
+    //comment allow message for version 0.45
+    // const allowanceValue = {
+    //   allowance: itemAllowance,
+    //   allowedMessages: allowedMessages,
+    // };
+
+    // const allowanceEncode = AllowedMsgAllowance.encode(allowanceValue as any).finish();
+
+    // const allowance = {
+    //   typeUrl: TRANSACTION_TYPE_ENUM.AllowedMsgAllowance,
+    //   value: Uint8Array.from(allowanceEncode),
+    // };
+
+    // const allowedContractMsg = {
+    //   allowance: allowance,
+    //   allowedAddress: allowedAddress.length > 0 ? allowedAddress : [],
+    // };
+
+    const allowedContractMsg = {
       allowance: itemAllowance,
-      allowedMessages: allowedMessages,
-      allowedAddress: allowedAddress,
+      allowedAddress: allowedAddress.length > 0 ? allowedAddress : [],
     };
 
-    const allowance = {
-      typeUrl: TRANSACTION_TYPE_ENUM.AllowedMsgAllowance,
-      value: Uint8Array.from(AllowedMsgAllowance.encode(allowanceValue as any).finish()),
+    const allowedContractEncode = AllowedContractAllowance.encode(allowedContractMsg).finish();
+
+    const allowedContract = {
+      typeUrl: TRANSACTION_TYPE_ENUM.AllowedContractAllowance,
+      value: Uint8Array.from(allowedContractEncode),
     };
 
     msgAllowance = MsgGrantAllowance.fromPartial({
-      allowance: allowance,
+      allowance: allowedContract,
       grantee,
       granter,
     });

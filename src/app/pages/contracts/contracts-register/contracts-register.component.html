@@ -51,7 +51,7 @@
                       {{ item.code_id }} - {{ item.type }} Contract -
                       <span
                         [ngStyle]="{
-                          color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#E65E5E' : '#5EE69D'
+                          color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#D5625E' : '#67C091'
                         }">
                         {{ item.result }}
                       </span>
@@ -106,7 +106,7 @@
                       {{ item.code_id }} - {{ item.type }} Contract -
                       <span
                               [ngStyle]="{
-                          color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#E65E5E' : '#5EE69D'
+                          color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#D5625E' : '#67C091'
                         }">
                         {{ item.result }}
                       </span>
@@ -129,7 +129,7 @@
           <ng-container *ngFor="let template of templates; index as i">
             <ng-container [matColumnDef]="template.matColumnDef">
               <th mat-header-cell *matHeaderCellDef>
-                <div [innerHTML]="template.headerCellDef | translate" [style.width]="'180px'"></div>
+                <div [innerHTML]="template.headerCellDef | translate"></div>
               </th>
               <ng-container *ngIf="pageData?.length > 0">
                 <td mat-cell *matCellDef="let data">
@@ -150,8 +150,8 @@
                             data['result'] === 'TBD'
                               ? '#5E84E6'
                               : data['result'] === 'Incorrect'
-                              ? '#E65E5E'
-                              : '#5EE69D'
+                              ? '#D5625E'
+                              : '#67C091'
                         }">
                         {{ data[template.matColumnDef] }}
                       </div>
@@ -211,7 +211,7 @@
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Result Registration</span>
-            <span [ngStyle]="{color: data['result'] === 'TBD' ? '#9DA8FF' : data['result'] === 'Incorrect' ? '#FA8684' : '#5EE69D'}">{{ data.result }}</span>
+            <span [ngStyle]="{color: data['result'] === 'TBD' ? '#9DA8FF' : data['result'] === 'Incorrect' ? '#FA8684' : '#67C091'}">{{ data.result }}</span>
           </div>
           <div class="d-flex justify-content-between mt-3">
             <span class="text--gray-4">Time Registered</span>

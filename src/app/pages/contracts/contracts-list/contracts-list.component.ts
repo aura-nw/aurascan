@@ -1,12 +1,15 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -19,7 +22,7 @@ import { Globals } from '../../../global/global';
   templateUrl: './contracts-list.component.html',
   styleUrls: ['./contracts-list.component.scss'],
 })
-export class ContractsListComponent implements OnInit {
+export class ContractsListComponent implements OnInit, OnDestroy {
   textSearch = '';
   searchMobVisible = false;
   templates: Array<TableTemplate> = [
@@ -45,6 +48,12 @@ export class ContractsListComponent implements OnInit {
   urlParam = '';
   showBoxSearch = false;
 
+  image_s3 = this.environmentService.configValue.image_s3;
+  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+
+  searchSubject = new Subject<string>();
+  searchSubscription: Subscription;
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
@@ -53,7 +62,12 @@ export class ContractsListComponent implements OnInit {
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     private route: ActivatedRoute,
+    private environmentService: EnvironmentService
   ) {}
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -61,6 +75,35 @@ export class ContractsListComponent implements OnInit {
     });
     this.textSearch = this.urlParam ? this.urlParam : '';
     this.getListContract();
+
+    this.searchSubscription = this.searchSubject
+      .asObservable()
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((text) => {
+          this.showBoxSearch = true;
+
+          this.textSearch = text;
+          let payload = {
+            limit: 0,
+            offset: 0,
+            keyword: this.textSearch,
+          };
+
+          this.filterSearchData = [];
+
+          return this.contractService.getListContract(payload);
+        }),
+      )
+      .subscribe((res) => {
+        if (res?.data?.length > 0) {
+          res.data.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          });
+          this.filterSearchData = res.data;
+        }
+      });
   }
 
   getListContract() {
@@ -85,35 +128,10 @@ export class ContractsListComponent implements OnInit {
             item.type = CONTRACT_RESULT.TBD;
           }
         });
-        if (this.textSearch) {
-          this.filterSearchData = res.data;
-        }
         this.dataSource = res.data;
         this.dataSearch = res.data;
       }
     });
-  }
-
-  searchToken(): void {
-    this.filterSearchData = [];
-    this.textSearch !== '';
-    if (this.textSearch && this.textSearch.length > 0) {
-      this.showBoxSearch = true;
-      let payload = {
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-
-      this.contractService.getListContract(payload).subscribe((res) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.filterSearchData = res.data;
-        }
-      });
-    }
   }
 
   paginatorEmit(event): void {
@@ -146,11 +164,5 @@ export class ContractsListComponent implements OnInit {
     this.textSearch = '';
     this.showBoxSearch = false;
     this.filterSearchData = [];
-    if (this.urlParam) {
-      this.router.navigate(['/contracts']);
-      this.getListContract();
-    } else {
-      this.searchToken();
-    }
   }
 }

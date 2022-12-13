@@ -4,13 +4,13 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
+import { Subject, Subscription } from 'rxjs';
 import { PAGE_EVENT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { AccountService } from 'src/app/core/services/account.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -60,8 +60,12 @@ export class MyGranteesComponent implements OnInit {
   nextKey = null;
   currentKey = null;
   currentAddress = null;
-  maxBalance = 0;
+  filterSearch = {};
+  destroyed$ = new Subject();
+  timerUnSub: Subscription;
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
     public commonService: CommonService,
@@ -73,7 +77,6 @@ export class MyGranteesComponent implements OnInit {
     public translate: TranslateService,
     private transactionService: TransactionService,
     private walletService: WalletService,
-    private accountService: AccountService,
   ) {}
 
   ngOnInit() {
@@ -81,12 +84,23 @@ export class MyGranteesComponent implements OnInit {
       if (wallet) {
         this.currentAddress = wallet.bech32Address;
         this.getGranteesData();
-        this.getMaxBalance();
       } else {
         this.loading = false;
         this.currentAddress = null;
       }
     });
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+
+    if (this.timerUnSub) {
+      this.timerUnSub.unsubscribe();
+    }
   }
 
   getGranteesData() {
@@ -102,47 +116,63 @@ export class MyGranteesComponent implements OnInit {
   }
 
   getListGrant() {
-    let filterSearch = {};
-    filterSearch['textSearch'] = this.textSearch;
-    filterSearch['isGranter'] = false;
-    filterSearch['isActive'] = this.isActive;
+    const halftime = 30000;
+    this.filterSearch['isGranter'] = false;
+    this.filterSearch['isActive'] = this.isActive;
 
-    this.feeGrantService.getListFeeGrants(filterSearch, this.currentAddress, this.nextKey, false).subscribe((res) => {
-      const { code, data } = res;
-      if (code === 200) {
-        this.nextKey = res.data.nextKey;
-        data.grants.forEach((element) => {
-          element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
-          element.limit = element?.spend_limit?.amount || '0';
-          element.spendable = element?.amount?.amount || '0';
-          element.reason = element?.status;
-          if (element.reason === 'Available' && element?.expired) {
-            element.reason = 'Expired';
+    this.feeGrantService.getListFeeGrants(this.filterSearch, this.currentAddress, this.nextKey, false).subscribe(
+      (res) => {
+        const { code, data } = res;
+        if (code === 200) {
+          this.nextKey = res.data.nextKey || null;
+          data.grants.forEach((element) => {
+            element.type = _.find(TYPE_TRANSACTION, { label: element.type })?.value;
+            element.limit = element?.spend_limit?.amount || '0';
+            element.spendable = element?.amount?.amount || '0';
+            element.reason = element?.status;
+            if (element.reason === 'Available' && element?.expired) {
+              element.reason = 'Expired';
+            }
+          });
+
+          if (
+            this.dataSource?.data?.length > 0 &&
+            this.dataSource.data.length !== data.grants.length &&
+            this.pageData.pageIndex != 0
+          ) {
+            this.dataSource.data = [...this.dataSource.data, ...data.grants];
+          } else {
+            this.dataSource.data = [...data.grants];
           }
-        });
-
-        if (this.dataSource?.data?.length > 0 && this.pageData.pageIndex != 0) {
-          this.dataSource.data = [...this.dataSource.data, ...data.grants];
-        } else {
-          this.dataSource.data = [...data.grants];
+          this.pageData.length = this.dataSource.data.length;
         }
-        this.pageData.length = this.dataSource.data.length;
-      }
-      this.loading = false;
-    });
+        this.loading = false;
+
+        setTimeout(() => {
+          this.getListGrant();
+        }, halftime);
+      },
+      (error) => {
+        setTimeout(() => {
+          this.getListGrant();
+        }, halftime);
+      },
+    );
   }
 
   searchToken(): void {
     this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
-      this.dataSource.data = null;
+      this.dataSource.data = [];
+      this.filterSearch['textSearch'] = this.textSearch;
       this.getListGrant();
     }
   }
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.dataSource.data = null;
+    this.filterSearch['textSearch'] = '';
+    this.dataSource.data = [];
     this.getListGrant();
   }
 
@@ -173,7 +203,7 @@ export class MyGranteesComponent implements OnInit {
 
   async changeType(type: boolean) {
     this.isActive = type;
-    this.dataSource.data = null;
+    this.dataSource.data = [];
     this.nextKey = null;
     await this.getGranteesData();
   }
@@ -201,7 +231,6 @@ export class MyGranteesComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'grant-overlay-panel';
     dialogConfig.disableClose = true;
-    dialogConfig.data = { maxBalance: this.maxBalance };
     let dialogRef = this.dialog.open(PopupAddGrantComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -229,11 +258,5 @@ export class MyGranteesComponent implements OnInit {
         this.toastr.error(message);
       }
     }
-  }
-
-  getMaxBalance() {
-    this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
-      this.maxBalance = +res.data?.available + +res.data?.stake_reward;
-    });
   }
 }

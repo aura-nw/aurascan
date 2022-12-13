@@ -41,7 +41,7 @@
                 </th>
               </ng-container>
               <ng-container *ngSwitchCase="'quantity'">
-                <th mat-header-cell *matHeaderCellDef class="col-per-15">
+                <th mat-header-cell *matHeaderCellDef class="col-per-25">
                   <div [innerHTML]="template.headerCellDef | translate" class="text-uppercase pl-8 pl-lg-0"></div>
                 </th>
               </ng-container>
@@ -76,7 +76,7 @@
                       >
                     </ng-container>
                     <ng-container *ngSwitchCase="'balance'">
-                      {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                      {{ data[template.matColumnDef] | mask: 'separator.6' }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'amount'">
                       {{ data[template.matColumnDef] || 0 }}

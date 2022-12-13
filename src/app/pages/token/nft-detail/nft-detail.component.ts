@@ -44,7 +44,7 @@ export class NFTDetailComponent implements OnInit {
   contractAddress = '';
   nftDetail: any;
   typeTransaction = TYPE_TRANSACTION;
-  contractType = ContractVerifyType.Exact_Match;
+
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;

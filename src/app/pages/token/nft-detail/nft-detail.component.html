@@ -6,24 +6,16 @@
         <div class="nft-img__contain w-100 h-100">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
-              <img *ngIf="!nftType || isError" [src]="defaultImgToken"/>
-              <img
-                  *ngIf="nftType === 'img' && isError === false"
-                  (error)="error()"
-                  [src]="this.nftUrl"/>
+              <img *ngIf="!nftType || isError" [src]="defaultImgToken" />
+              <img *ngIf="nftType === 'img' && isError === false" (error)="error()" [src]="this.nftUrl" />
               <app-custom-video-player
-                  [videoSrc]="this.nftUrl"
-                  [showControl]="true"
-                  *ngIf="nftType === 'video'"
-                  [isDetail]="true">
+                [videoSrc]="this.nftUrl"
+                [showControl]="true"
+                *ngIf="nftType === 'video'"
+                [isDetail]="true">
               </app-custom-video-player>
-              <app-model-view
-                  *ngIf="nftType === '3d'"
-                  [modelUrl]="this.nftUrl"
-                  [disablePan]="false">
-              </app-model-view>
-              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl">
-              </app-audio-player>
+              <app-model-view *ngIf="nftType === '3d'" [modelUrl]="this.nftUrl" [disablePan]="false"> </app-model-view>
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl"> </app-audio-player>
             </div>
           </div>
         </div>
@@ -47,14 +39,15 @@
                   width="24px"
                   height="24px"
                   class="mr-1 object-fit--none" /> -->
-                <a class="body-01 text--primary break-word"
-                   [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
-                    nftDetail?.name
-                  }}</a>
+                <a
+                  class="body-01 text--primary break-word"
+                  [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]"
+                  >{{ nftDetail?.name }}</a
+                >
               </div>
             </div>
             <button
-                class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0">
+              class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0">
               <span>Un-equip</span>
             </button>
           </div>
@@ -124,53 +117,50 @@
                   {{ nftDetail?.owner }}
                 </a>
                 <img
-                    [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                    class="ml-2 cursor-pointer btn-copy"
-                    alt=""
-                    matTooltip="Copied!"
-                    #owner="matTooltip"
-                    (mouseenter)="$event.stopImmediatePropagation()"
-                    (mouseleave)="$event.stopImmediatePropagation()"
-                    (click)="copyData(nftDetail?.owner); owner.toggle()"/>
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #owner="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.owner); owner.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body">
               <div class="label-detail text--gray-5">Contract Address:</div>
               <div class="d-flex align-items-center position-relative">
                 <img
-                    *ngIf="contractType !== contractVerifyType.Unverifed"
-                    [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                    class="mr-2"
-                    alt="contract_verification"/>
+                  [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
+                  class="mr-2"
+                  alt="contract_verification" />
                 <a class="text--primary g-ellipsis" [routerLink]="['/contracts', nftDetail?.contract_address]">
                   {{ nftDetail?.contract_address }}</a
                 >
                 <img
-                    [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                    class="ml-2 cursor-pointer btn-copy"
-                    alt=""
-                    matTooltip="Copied!"
-                    #address="matTooltip"
-                    (mouseenter)="$event.stopImmediatePropagation()"
-                    (mouseleave)="$event.stopImmediatePropagation()"
-                    (click)="copyData(nftDetail?.contract_address); address.toggle()"/>
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #address="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.contract_address); address.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body" *ngIf="isSoulBound">
               <div class="label-detail text--gray-5">Atlestor:</div>
               <div class="d-flex align-items-center">
-                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.atlestor]">
-                  Network Admin</a
-                >
+                <a class="text--primary g-ellipsis" [routerLink]="['/account', nftDetail?.atlestor]"> Network Admin</a>
                 <img
-                    [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                    class="ml-2 cursor-pointer btn-copy"
-                    alt=""
-                    matTooltip="Copied!"
-                    #atlestor="matTooltip"
-                    (mouseenter)="$event.stopImmediatePropagation()"
-                    (mouseleave)="$event.stopImmediatePropagation()"
-                    (click)="copyData(nftDetail?.atlestor); atlestor.toggle()"/>
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #atlestor="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.atlestor); atlestor.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body" *ngIf="!isSoulBound">
@@ -180,14 +170,14 @@
                   {{ nftDetail?.creator }}</a
                 >
                 <img
-                    [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                    class="ml-2 cursor-pointer btn-copy"
-                    alt=""
-                    matTooltip="Copied!"
-                    #creator="matTooltip"
-                    (mouseenter)="$event.stopImmediatePropagation()"
-                    (mouseleave)="$event.stopImmediatePropagation()"
-                    (click)="copyData(nftDetail?.creator); creator.toggle()"/>
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #creator="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.creator); creator.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -195,14 +185,14 @@
               <div class="d-flex align-items-center">
                 <span class="text--gray-1 fw-normal-mob">{{ nftDetail?.token_id }}</span>
                 <img
-                    [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                    class="ml-2 cursor-pointer btn-copy"
-                    alt=""
-                    matTooltip="Copied!"
-                    #tokenId="matTooltip"
-                    (mouseenter)="$event.stopImmediatePropagation()"
-                    (mouseleave)="$event.stopImmediatePropagation()"
-                    (click)="copyData(nftDetail?.token_id); tokenId.toggle()"/>
+                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                  class="ml-2 cursor-pointer btn-copy"
+                  alt=""
+                  matTooltip="Copied!"
+                  #tokenId="matTooltip"
+                  (mouseenter)="$event.stopImmediatePropagation()"
+                  (mouseleave)="$event.stopImmediatePropagation()"
+                  (click)="copyData(nftDetail?.token_id); tokenId.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body">
@@ -260,10 +250,10 @@
     </div>
     <div class="table-responsive aura-table-contain mt-2 mt-lg-3" style="height: 600px">
       <table
-          *ngIf="dataSource?.data?.length > 0; else noValues"
-          mat-table
-          [dataSource]="dataSource"
-          class="aura-table nft-detail-table">
+        *ngIf="dataSource?.data?.length > 0; else noValues"
+        mat-table
+        [dataSource]="dataSource"
+        class="aura-table nft-detail-table">
         <ng-container *ngFor="let template of templates; index as i">
           <ng-container [matColumnDef]="template.matColumnDef">
             <th mat-header-cell *matHeaderCellDef class="">
@@ -274,12 +264,12 @@
               <ng-container [ngSwitch]="template.matColumnDef">
                 <ng-container *ngSwitchCase="'popover'">
                   <button
-                      mat-icon-button
-                      aria-label="Contract Transaction Detail"
-                      placement="right"
-                      [ngbPopover]="popContent"
-                      popoverClass="custom-popover">
-                    <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16"/>
+                    mat-icon-button
+                    aria-label="Contract Transaction Detail"
+                    placement="right"
+                    [ngbPopover]="popContent"
+                    popoverClass="custom-popover">
+                    <img [src]="'assets/images/icons/token-detail.png' | imageS3" alt="" width="16" height="16" />
                   </button>
                   <ng-template #popContent class="popContent">
                     <app-contract-popover [popoverData]="getPopoverData(data)"></app-contract-popover>
@@ -287,7 +277,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'tx_hash'">
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
                 </ng-container>
                 <ng-container *ngSwitchCase="'status'">
@@ -313,42 +303,45 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'from_address'">
                   <a
-                      class="text--primary content-transfer"
-                      [routerLink]="['/account', data[template.matColumnDef]]"
-                      *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                    class="text--primary content-transfer"
+                    [routerLink]="['/account', data[template.matColumnDef]]"
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
+                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
-                      data[template.matColumnDef] | cutStringPipe: 8:8
-                    }}</span>
+                    data[template.matColumnDef] | cutStringPipe : 8 : 8
+                  }}</span>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img
-                      [src]="'assets/images/icons/arrow-right.png' | imageS3"
-                      width="14"
-                      height="9"
-                      class="ml-10 ml-lg-15"/>
+                    [src]="'assets/images/icons/arrow-right.png' | imageS3"
+                    width="14"
+                    height="9"
+                    class="ml-10 ml-lg-15" />
                 </ng-container>
                 <ng-container *ngSwitchCase="'to_address'">
                   <img
-                      [src]="'assets/images/icons/token-contract.svg' | imageS3"
-                      *ngIf="isContractAddress(data.type, data.to_address)"
-                      alt=""
-                      width="16px"
-                      height="16px"/>
+                    [src]="'assets/images/icons/token-contract.svg' | imageS3"
+                    *ngIf="isContractAddress(data.type, data.to_address)"
+                    alt=""
+                    width="16px"
+                    height="16px" />
                   <a
-                      class="text--primary"
-                      [routerLink]="[data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account', data[template.matColumnDef]]"
-                      *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                    class="text--primary"
+                    [routerLink]="[
+                      data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account',
+                      data[template.matColumnDef]
+                    ]"
+                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
+                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                      data[template.matColumnDef] | cutStringPipe: 8:8
-                    }}</span>
+                    data[template.matColumnDef] | cutStringPipe : 8 : 8
+                  }}</span>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] || '-' }} {{ denom }}
+                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }} {{ denom }}
                   </span>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>

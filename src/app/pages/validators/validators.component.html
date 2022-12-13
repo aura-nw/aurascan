@@ -148,7 +148,7 @@
                           <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
                         </div>
                         <div *ngSwitchCase="'participation'">
-                          {{ data[template.matColumnDef] }}
+                          {{ data[template.matColumnDef] + '/' + data['target_count']}}
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
@@ -333,7 +333,7 @@
         <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
-            <span>({{ dataModal?.power | number: globals.formatNumberToken }}</span>
+            <span>({{ dataModal?.power | mask: 'separator.6' }}</span>
             <span class="text--primary ml-1">{{ denom }}</span
             >)
           </div>
@@ -346,7 +346,7 @@
           <div class="mt-2 h6 text--white mb-0">
             <span>Available for undelegation</span>
             <span class="ml-3 fw-normal">
-              {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
+              {{ dataDelegate?.validatorDetail?.amount_staked | mask: 'separator.6' }}
             </span>
             <span class="text--primary fw-normal"> {{ denom }} </span>
           </div>
@@ -426,7 +426,7 @@
             <div class="mt-6 body-01 body-02-mob">
               <span class="fw-500">Available for redelegation</span>
               <span class="ml-3">
-                {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
+                {{ dataDelegate?.validatorDetail?.amount_staked | mask: 'separator.6' }}
               </span>
               <span class="text--primary"> {{ denom }} </span>
             </div>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgxMaskModule } from 'ngx-mask';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { CustomVideoPlayerModule } from 'src/app/shared/components/custom-video-player/custom-video-player.module';
@@ -42,6 +43,7 @@ import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.compo
     NgbNavModule,
     CustomVideoPlayerModule,
     NftCardModule,
+    NgxMaskModule,
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })
