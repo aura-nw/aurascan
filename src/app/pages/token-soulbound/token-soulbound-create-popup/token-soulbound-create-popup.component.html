@@ -2,64 +2,83 @@
   <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
     <div class="h1 mb-0 fw-bold text--white">Create New</div>
     <img
-        [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
-        alt=""
-        width="24px"
-        height="24px"
-        class="cursor-pointer"
-        (click)="closeDialog()" />
+      [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+      alt=""
+      width="24px"
+      height="24px"
+      class="cursor-pointer"
+      (click)="closeDialog()" />
   </div>
   <div class="card-body body-01">
     <div>
       <div>Attestor’s Address</div>
-      <div class="mt-2 address-text">{{data.attestorAddress}}</div>
+      <div class="mt-2 address-text">{{ data.attestorAddress }}</div>
     </div>
     <div class="mt-4 mt-lg-6">
       <div>Contract Address</div>
-      <div class="mt-2 address-text">{{data.contractAddress}}</div>
+      <div class="mt-2 address-text">{{ data.contractAddress }}</div>
     </div>
-    <form [formGroup]="createSBTokenForm" (ngSubmit)="onSubmit()"
-          class="aura-form single-input-field" autocomplete="off">
+    <form
+      [formGroup]="createSBTokenForm"
+      (ngSubmit)="onSubmit()"
+      class="aura-form single-input-field"
+      autocomplete="off">
       <!-- Soulbound Token URI -->
       <div class="form-group mt-4 mt-lg-6">
         <label for="soulboundTokenURI" class="form-label required body-01">Soulbound Token URI</label>
-        <input id="soulboundTokenURI"
-               formControlName="soulboundTokenURI"
-               type="text"
-               class="form-control form-check-input body-01"
-               [placeholder]="'https://...'"
-               [class.form-control--error]="createSBTokenForm.get('soulboundTokenURI')?.invalid &&
-               (createSBTokenForm.get('soulboundTokenURI')?.dirty || createSBTokenForm.get('soulboundTokenURI')?.touched)"/>
-        <div class="error"
-             *ngIf="createSBTokenForm.get('soulboundTokenURI')?.hasError('required') &&
-             (createSBTokenForm.get('soulboundTokenURI')?.dirty || createSBTokenForm.get('soulboundTokenURI')?.touched)">
+        <input
+          id="soulboundTokenURI"
+          formControlName="soulboundTokenURI"
+          type="text"
+          class="form-control form-check-input body-01"
+          [placeholder]="'https://...'"
+          [class.form-control--error]="
+            createSBTokenForm.get('soulboundTokenURI')?.invalid &&
+            (createSBTokenForm.get('soulboundTokenURI')?.dirty || createSBTokenForm.get('soulboundTokenURI')?.touched)
+          " />
+        <div
+          class="error"
+          *ngIf="
+            createSBTokenForm.get('soulboundTokenURI')?.hasError('required') &&
+            (createSBTokenForm.get('soulboundTokenURI')?.dirty || createSBTokenForm.get('soulboundTokenURI')?.touched)
+          ">
           Soulbound Token URI is required!
         </div>
       </div>
       <!-- Receiver’s Address -->
       <div class="form-group mt-4 mt-lg-6">
         <label for="receiverAddress" class="form-label required body-01">Receiver’s Address</label>
-        <input id="receiverAddress"
-               formControlName="receiverAddress"
-               type="text"
-               class="form-control form-check-input body-01"
-               [placeholder]="'aura...'"
-               [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid &&
-               (createSBTokenForm.get('receiverAddress')?.dirty || createSBTokenForm.get('receiverAddress')?.touched)"/>
-        <div class="error"
-             *ngIf="createSBTokenForm.get('receiverAddress')?.hasError('required') &&
-             (createSBTokenForm.get('receiverAddress')?.dirty || createSBTokenForm.get('receiverAddress')?.touched)">
+        <input
+          id="receiverAddress"
+          formControlName="receiverAddress"
+          type="text"
+          class="form-control form-check-input body-01"
+          [placeholder]="'aura...'"
+          [class.form-control--error]="
+            createSBTokenForm.get('receiverAddress')?.invalid &&
+            (createSBTokenForm.get('receiverAddress')?.dirty || createSBTokenForm.get('receiverAddress')?.touched)
+          " />
+        <div
+          class="error"
+          *ngIf="
+            createSBTokenForm.get('receiverAddress')?.hasError('required') &&
+            (createSBTokenForm.get('receiverAddress')?.dirty || createSBTokenForm.get('receiverAddress')?.touched)
+          ">
           Receiver’s Address is required!
         </div>
       </div>
+
       <!-- Button group -->
       <div class="d-flex align-items-center justify-content-end mt-8">
-        <button class="button button-pill button-outline button--md" type="button"
-                (click)="closeDialog()"><span>Cancel</span></button>
-        <button class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
-                [disabled]="!createSBTokenForm.valid"
-                type="submit">
-          <span>Create</span></button>
+        <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
+          <span>Cancel</span>
+        </button>
+        <button
+          class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
+          [disabled]="!createSBTokenForm.valid"
+          type="submit">
+          <span>Create</span>
+        </button>
       </div>
     </form>
   </div>

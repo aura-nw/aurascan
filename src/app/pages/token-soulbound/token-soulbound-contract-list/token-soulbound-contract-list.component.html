@@ -1,4 +1,4 @@
-<app-pagetitle title="Soulbound Token"></app-pagetitle>
+<h1 class="mb-0 text--white">Soulbound Token</h1>
 <section class="mt-6">
   <div class="card">
     <div class="card-body">
@@ -8,26 +8,26 @@
         <form class="aura-form single-input-field search-form-sbcontract" #searchForm>
           <div class="input-group">
             <input
-                type="text"
-                class="form-control"
-                placeholder="Search for Tx Hash, Address or Status"
-                [(ngModel)]="textSearch"
-                [maxLength]="maxLengthSearch"
-                (keyup)="searchToken()"
-                name="search"
-                autocomplete="off" />
+              type="text"
+              class="form-control"
+              placeholder="Search for Contract Address"
+              [(ngModel)]="textSearch"
+              [maxLength]="maxLengthSearch"
+              (keyup.enter)="searchToken()"
+              name="search"
+              autocomplete="off" />
             <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
+              type="submit"
+              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              (click)="searchToken()">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
-                type="reset"
-                class="btn-reset cursor-pointer {{
-                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
-                }}"
-                (click)="resetSearch()">
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetSearch()">
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
@@ -46,42 +46,45 @@
             </ng-container>
 
             <!-- Contract address -->
-            <ng-container matColumnDef="address">
-              <th mat-header-cell *matHeaderCellDef class="col-per-25">CONTRACT ADDRESS</th>
+            <ng-container matColumnDef="contract_address">
+              <th mat-header-cell *matHeaderCellDef class="col-per-30">CONTRACT ADDRESS</th>
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex align-items-center">
                   <i class="ph-file-text h1 mb-0 text--gray-5"></i>
-                  <a class="ml-2 hover-link" [routerLink]="['/contracts', element.address]">{{element.address | cutStringPipe: 8 : 8}}</a>
+                  <a class="ml-2 hover-link" [routerLink]="['contract', element.contract_address]">{{
+                    element.contract_address | cutStringPipe : 8 : 8
+                  }}</a>
                 </div>
               </td>
             </ng-container>
 
             <!-- Create data -->
-            <ng-container matColumnDef="createData">
+            <ng-container matColumnDef="total">
               <th mat-header-cell *matHeaderCellDef class="">CREATED DATA</th>
-              <td mat-cell *matCellDef="let element" class="py-4">{{ element.createData }}</td>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.total }}</td>
             </ng-container>
 
             <!-- Claimed QTY -->
-            <ng-container matColumnDef="claimedQTY">
+            <ng-container matColumnDef="claimed_qty">
               <th mat-header-cell *matHeaderCellDef class="">CLAIMED QTY</th>
-              <td mat-cell *matCellDef="let element" class="py-4">{{ element.claimedQTY }}</td>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.claimed_qty }}</td>
             </ng-container>
 
             <!-- Unclaimed QTY -->
-            <ng-container matColumnDef="unclaimedQTY">
+            <ng-container matColumnDef="unclaimed_qty">
               <th mat-header-cell *matHeaderCellDef class="">UNCLAIMED QTY</th>
-              <td mat-cell *matCellDef="let element" class="py-4">{{ element.unclaimedQTY }}</td>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.unclaimed_qty }}</td>
             </ng-container>
 
             <!-- Action -->
             <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef class="col-per-13"></th>
               <td mat-cell *matCellDef="let element" class="py-4">
-                <a class="button border-radius--sm button-outline button--sm"
-                   [routerLink]="['contract', element.address]">
-                  <span>Create New</span>
-                </a>
+                <button
+                  class="button border-radius--sm button-outline button--sm text--white"
+                  (click)="openDialog(element.contract_address)">
+                  Create New
+                </button>
               </td>
             </ng-container>
 
@@ -95,10 +98,10 @@
           </table>
         </div>
         <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
         </app-paginator>
       </ng-container>
 
@@ -106,7 +109,6 @@
         <app-loading-sprint *ngIf="loading"></app-loading-sprint>
         <app-table-no-data *ngIf="!loading"></app-table-no-data>
       </ng-template>
-
     </div>
   </div>
 </section>

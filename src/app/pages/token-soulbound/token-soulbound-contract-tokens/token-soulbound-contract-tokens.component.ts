@@ -9,6 +9,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {
   TokenSoulboundCreatePopupComponent
 } from "src/app/pages/token-soulbound/token-soulbound-create-popup/token-soulbound-create-popup.component";
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 
 @Component({
   selector: 'app-token-soulbound-contract-tokens',
@@ -16,7 +17,6 @@ import {
   styleUrls: ['./token-soulbound-contract-tokens.component.scss']
 })
 export class TokenSoulboundContractTokensComponent implements OnInit {
-
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   pageData: PageEvent = {
@@ -27,9 +27,9 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
-    { matColumnDef: 'tokenURI', headerCellDef: 'tokenURI' },
-    { matColumnDef: 'receiver', headerCellDef: 'receiver' },
-    { matColumnDef: 'tokenID', headerCellDef: 'tokenID' },
+    { matColumnDef: 'token_uri', headerCellDef: 'token_uri' },
+    { matColumnDef: 'receiver_address', headerCellDef: 'receiver_address' },
+    { matColumnDef: 'token_id', headerCellDef: 'token_id' },
     { matColumnDef: 'status', headerCellDef: 'status' }
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -61,6 +61,7 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog,
+    private soulboundService: SoulboundService
   ) { }
 
   ngOnInit(): void {
@@ -72,60 +73,36 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
   }
 
   searchToken() {}
+
   resetSearch() {
     this.textSearch = '';
   }
+
   paginatorEmit(event): void {
     this.dataSource.paginator = event;
   }
+
   pageEvent(e: PageEvent): void {
     this.pageData.pageIndex = e.pageIndex;
     this.getListToken();
   }
 
-  getListToken() {
+  getListToken(keySearch = '') {
     this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.textSearch,
+      keyword: keySearch,
     };
 
-    // call API
-    // this.dataSource = new MatTableDataSource<any>(res.data);
-    // this.pageData.length = res.meta.count;
+    this.soulboundService.getSBContractDetail(payload).subscribe((res) => {
+      this.loading = true;
 
-    //mockData
-    this.dataSource.data = [
-      {
-        id: 1,
-        tokenURI: 'http://192.168.20.213:5000/',
-        receiver: 'aura12sfanz3wvw8gmeh5fc9sg9hkp399n9qk7jr3yjywyru27ga7kynsz2xsy7',
-        tokenID: 6690,
-        status: 'Unclaimed'
-      },
-      {
-        id: 2,
-        tokenURI: 'http://192.168.20.213:5000/',
-        receiver: 'aura12sfanz3wvw8gmeh5fc9sg9hkp399n9qk7jr3yjywyru27ga7kynsz2xsy7',
-        tokenID: 7190,
-        status: 'Unequipped'
-      },
-      {
-        id: 3,
-        tokenURI: 'http://192.168.20.213:5000/',
-        receiver: 'aura12sfanz3wvw8gmeh5fc9sg9hkp399n9qk7jr3yjywyru27ga7kynsz2xsy7',
-        tokenID: 4590,
-        status: 'Equipped'
-      },
-      {
-        id: 4,
-        tokenURI: 'http://192.168.20.213:5000/',
-        receiver: 'aura12sfanz3wvw8gmeh5fc9sg9hkp399n9qk7jr3yjywyru27ga7kynsz2xsy7',
-        tokenID: 2190,
-        status: 'Equipped'
+      if (res.data.length > 0) {
+        this.dataSource.data = res.data;
+        this.pageData.length = res.meta.count;
       }
-    ]
+    });
     this.loading = false;
   }
 
@@ -140,7 +117,6 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
-        console.log(result)
         // call API post data here
           // then check response, if response message is successfull -> load dataTable again
           // setTimeout(() => {

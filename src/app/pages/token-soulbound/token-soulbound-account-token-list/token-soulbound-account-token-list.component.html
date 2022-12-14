@@ -19,16 +19,16 @@
             </div>
             <div class="button button--xxs button-circle ml-2" id="popupCopy">
               <img
-                  [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-                  class=""
-                  alt=""
-                  width="12px"
-                  height="12px"
-                  matTooltip="Copied!"
-                  #tooltip="matTooltip"
-                  (mouseenter)="$event.stopImmediatePropagation()"
-                  (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyMessage(tokenAddress); tooltip.toggle()"/>
+                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                class=""
+                alt=""
+                width="12px"
+                height="12px"
+                matTooltip="Copied!"
+                #tooltip="matTooltip"
+                (mouseenter)="$event.stopImmediatePropagation()"
+                (mouseleave)="$event.stopImmediatePropagation()"
+                (click)="copyMessage(tokenAddress); tooltip.toggle()" />
             </div>
           </div>
         </div>
@@ -38,30 +38,30 @@
             <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline">235 SBT</span>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
-                  [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
-                  alt=""
-                  width="30px"
-                  height="30px"
-                  (click)="viewQrAddress(modalManage)"/>
+                [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
+                alt=""
+                width="30px"
+                height="30px"
+                (click)="viewQrAddress(modalManage)" />
             </div>
           </div>
         </div>
       </div>
       <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="soulboundFeatureList.length > 0">
         <app-soulbound-feature-tokens
-            [extend]="false"
-            [soulboundList]="soulboundFeatureList"
-            [accountAddress]="tokenAddress"></app-soulbound-feature-tokens>
+          [extend]="false"
+          [soulboundList]="soulboundFeatureList"
+          [accountAddress]="tokenAddress"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
   <!-- Main -->
   <div class="d-flex justify-content-between tab-wrapper tab-contract">
     <ul
-        ngbNav
-        #customNav="ngbNav"
-        [activeId]="activeId"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="activeId"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
           <a ngbNavLink (click)="activeId = tab.key">
@@ -71,9 +71,8 @@
       </ng-container>
     </ul>
   </div>
-  <app-token-soulbound-equipped *ngIf="activeId===0"></app-token-soulbound-equipped>
-  <app-token-soulbound-unequipped *ngIf="activeId===1"></app-token-soulbound-unequipped>
-
+  <app-token-soulbound-equipped *ngIf="activeId === 0"></app-token-soulbound-equipped>
+  <app-token-soulbound-unequipped *ngIf="activeId === 1"></app-token-soulbound-unequipped>
 </section>
 
 <!-- QR code popup-->
@@ -81,11 +80,11 @@
   <div class="box-address">
     <div class="txt-right mb-4">
       <img
-          [src]="'assets/images/icons/close-popup.png' | imageS3"
-          alt=""
-          width="14"
-          height="14"
-          (click)="closePopup()"/>
+        [src]="'assets/images/icons/close-popup.png' | imageS3"
+        alt=""
+        width="14"
+        height="14"
+        (click)="closePopup()" />
     </div>
     <app-qr [address]="tokenAddress || ''"></app-qr>
   </div>

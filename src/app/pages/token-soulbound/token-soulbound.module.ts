@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { TokenSoulboundRoutingModule } from './token-soulbound-routing.module';
 import { TokenSoulboundContractListComponent } from './token-soulbound-contract-list/token-soulbound-contract-list.component';
 import { TokenSoulboundContractTokensComponent } from './token-soulbound-contract-tokens/token-soulbound-contract-tokens.component';
@@ -10,17 +9,17 @@ import { TokenSoulboundAccountTokenEquipedComponent } from './token-soulbound-ac
 import { TokenSoulboundUnequippedComponent } from './token-soulbound-account-token-list/token-soulbound-unequipped/token-soulbound-unequipped.component';
 import { TokenSoulboundEquippedComponent } from './token-soulbound-account-token-list/token-soulbound-equipped/token-soulbound-equipped.component';
 import { TokenSoulboundDetailPopupComponent } from './token-soulbound-detail-popup/token-soulbound-detail-popup.component';
-import {SharedModule} from "src/app/shared/shared.module";
-import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {CommonPipeModule} from "src/app/core/pipes/common-pipe.module";
-import {MatTableModule} from "@angular/material/table";
-import {PaginatorModule} from "src/app/shared/components/paginator/paginator.module";
-import {TranslateModule} from "@ngx-translate/core";
-import {TableNoDataModule} from "src/app/shared/components/table-no-data/table-no-data.module";
-import {QrModule} from "src/app/shared/components/qr/qr.module";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
-
+import { SharedModule } from 'src/app/shared/shared.module';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
+import { MatTableModule } from '@angular/material/table';
+import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
+import { QrModule } from 'src/app/shared/components/qr/qr.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,7 @@ import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
     TokenSoulboundAccountTokenEquipedComponent,
     TokenSoulboundUnequippedComponent,
     TokenSoulboundEquippedComponent,
-    TokenSoulboundDetailPopupComponent
+    TokenSoulboundDetailPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -46,8 +45,8 @@ import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
     ReactiveFormsModule,
     QrModule,
     MatTooltipModule,
-    NgbNavModule
+    NgbNavModule,
   ],
-  providers: [FormBuilder]
+  providers: [FormBuilder, SoulboundService],
 })
-export class TokenSoulboundModule { }
+export class TokenSoulboundModule {}

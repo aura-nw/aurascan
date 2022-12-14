@@ -296,7 +296,6 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
-        console.log(result)
         // call API post data here
         // then check response, if response message is successfull -> load dataTable again
         // setTimeout(() => {

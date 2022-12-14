@@ -134,7 +134,7 @@ export const MENU: MenuItem[] = [
     {
       id: 3,
       label: 'Fee Grant',
-      link: '/fee',
+      link: '/fee-grant',
       icon: 'gas-pump',
     }
     ]

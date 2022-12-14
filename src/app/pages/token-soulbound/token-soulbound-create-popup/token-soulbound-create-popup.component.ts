@@ -7,8 +7,10 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   templateUrl: './token-soulbound-create-popup.component.html',
   styleUrls: ['./token-soulbound-create-popup.component.scss']
 })
+
 export class TokenSoulboundCreatePopupComponent implements OnInit {
   createSBTokenForm: FormGroup;
+  isSubmit = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,4 +36,7 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     this.dialogRef.close(this.createSBTokenForm.value);
   }
 
+  checkFormValid(): boolean {
+    return true;
+  }
 }
