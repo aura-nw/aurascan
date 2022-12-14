@@ -1,5 +1,4 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -30,7 +29,7 @@ export class ContractsSmartListComponent implements OnInit {
     { matColumnDef: 'contract_address', headerCellDef: 'Address' },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'project_name', headerCellDef: 'Project' },
+    // { matColumnDef: 'project_name', headerCellDef: 'Project' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'verified_at', headerCellDef: 'Verified' },
@@ -71,7 +70,6 @@ export class ContractsSmartListComponent implements OnInit {
     public global: Globals,
     private router: Router,
     private contractService: ContractService,
-    private datePipe: DatePipe,
     private layout: BreakpointObserver,
     public walletService: WalletService,
     public commonService: CommonService,
