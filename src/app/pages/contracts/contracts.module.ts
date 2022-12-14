@@ -9,9 +9,6 @@ import { DateFnsModule } from 'ngx-date-fns';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
-import { ContractsListComponent } from 'src/app/pages/contracts/contracts-list/contracts-list.component';
-import { ContractsRoutingModule } from 'src/app/pages/contracts/contracts-routing.module';
-import { ContractsTransactionsComponent } from 'src/app/pages/contracts/contracts-transactions/contracts-transactions.component';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
@@ -27,11 +24,12 @@ import { ReadContractModule } from './contracts-detail/contracts-contents/contra
 import { WriteContractModule } from './contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { ContractsDetailComponent } from './contracts-detail/contracts-detail.component';
 import { ContractsOverviewCardComponent } from './contracts-detail/contracts-overview-card/contracts-overview-card.component';
+import { ContractsListComponent } from './contracts-list/contracts-list.component';
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
+import { ContractsRoutingModule } from './contracts-routing.module';
+import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
 import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
-import { ContractsDeployMainnetComponent } from './contracts-deploy-mainnet/contracts-deploy-mainnet.component';
-import { ContractsSmartListComponent } from './contracts-smart-list/contracts-smart-list.component';
 
 @NgModule({
   declarations: [
@@ -46,8 +44,6 @@ import { ContractsSmartListComponent } from './contracts-smart-list/contracts-sm
     ContractsVerifyComponent,
     CompilerOutputComponent,
     ContractsRegisterComponent,
-    ContractsDeployMainnetComponent,
-    ContractsSmartListComponent,
   ],
   imports: [
     CommonModule,
@@ -70,7 +66,7 @@ import { ContractsSmartListComponent } from './contracts-smart-list/contracts-sm
     SharedModule,
     ClickOutsideModule,
     WriteContractModule,
-    ReadContractModule
+    ReadContractModule,
   ],
   providers: [ContractService],
 })
