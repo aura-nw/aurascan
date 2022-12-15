@@ -29,7 +29,7 @@
             class="form-control"
             id="link"
             maxlength="200"
-            placeholder="https://github.com/..." />
+            placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
           <ng-container *ngIf="formControls['link'].touched">
             <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
             <div class="error" *ngIf="formControls['link'].errors?.maxlength">
