@@ -118,7 +118,6 @@ export class MyGrantersComponent implements OnInit {
   }
 
   searchToken(): void {
-    this.textSearch !== '';
     if (this.textSearch && this.textSearch.length > 0) {
       this.dataSource.data = [];
       this.filterSearch['textSearch'] = this.textSearch;
