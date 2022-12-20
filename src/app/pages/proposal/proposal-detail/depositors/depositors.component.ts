@@ -12,11 +12,12 @@ import { ProposalService } from '../../../../../app/core/services/proposal.servi
 })
 export class DepositorsComponent implements OnInit {
   @Input() proposalId: number;
-  voteDataList: any[] = [];
+  depositorsList: any[] = [];
   loading = true;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   nextKey = '';
+  dataLenght = 0;
 
   constructor(
     private proposalService: ProposalService,
@@ -26,20 +27,30 @@ export class DepositorsComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.getDepositorsList();
+    this.loading = false;
+  }
+
+  getDepositorsList(): void {
     const payload = {
       proposalId: this.proposalId,
       pageLimit: 100,
       nextKey: this.nextKey,
     };
     this.proposalService.getDepositors(payload).subscribe((res) => {
+      let dataList: any[] = [];
       if (res?.data?.transactions?.length > 0) {
-        this.voteDataList = res?.data?.transactions?.filter(
+        if (this.dataLenght === 0) {
+          this.dataLenght = res.data.count;
+        }
+        dataList = res?.data?.transactions?.filter(
           (transaction) =>
             transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
             (transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx &&
               transaction?.tx_response?.tx?.body?.messages[0]?.initial_deposit?.length > 0),
         );
-        this.voteDataList.forEach((item) => {
+
+        dataList.forEach((item) => {
           if (item.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.SubmitProposalTx) {
             item.depositors = item.tx_response?.tx?.body?.messages[0]?.proposer;
             item.amount = balanceOf(item.tx_response?.tx?.body?.messages[0].initial_deposit[0].amount);
@@ -50,9 +61,17 @@ export class DepositorsComponent implements OnInit {
           item.txhash = item?.tx_response?.txhash;
           item.timestamp = item?.tx_response?.timestamp;
         });
+        if (this.depositorsList.length > 0) {
+          this.depositorsList = [...this.depositorsList, ...dataList];
+        } else {
+          this.depositorsList = dataList;
+        }
         this.nextKey = res.data?.nextKey;
       }
     });
-    this.loading = false;
+  }
+
+  loadMore($event): void {
+    this.getDepositorsList();
   }
 }
