@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { combineLatest } from 'rxjs';
-import { debounceTime, map, tap } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 import { IListVoteQuery } from '../../../../core/models/proposal.model';
 import { ProposalService } from '../../../../core/services/proposal.service';
