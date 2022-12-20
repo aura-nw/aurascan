@@ -1,10 +1,10 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
-import { ChainInfo } from '@keplr-wallet/types';
-import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
-import { KEPLR_ERRORS } from '../../constants/wallet.constant';
-import { messageCreators } from './messages';
-import { getSigner } from './signer';
+import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate';
+import {calculateFee, DeliverTxResponse, SigningStargateClient, StdFee} from '@cosmjs/stargate';
+import {ChainInfo} from '@keplr-wallet/types';
+import {TRANSACTION_TYPE_ENUM} from '../../constants/transaction.enum';
+import {KEPLR_ERRORS} from '../../constants/wallet.constant';
+import {messageCreators} from './messages';
+import {getSigner} from './signer';
 
 export async function createSignBroadcast(
   {
@@ -64,11 +64,16 @@ export async function getNetworkFee(network, address, messageType, memo = ''): P
   }
 
   const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
-  const gasEstimation = await onlineClient.simulate(
-    address,
-    Array.isArray(messageType) ? messageType : [messageType],
-    '',
-  );
+  let gasEstimation = 0;
+  try {
+    gasEstimation = await onlineClient.simulate(
+      address,
+      Array.isArray(messageType) ? messageType : [messageType],
+      '',
+    );
+  } catch (e) {
+    gasEstimation = 100000;
+  }
   let gasPrice = network.gasPriceStep.average.toString() + network.currencies[0].coinMinimalDenom;
   let calGasPrice = calculateFee(Math.round(gasEstimation * multiGas), gasPrice);
 
