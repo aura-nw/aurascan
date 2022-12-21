@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -21,10 +19,19 @@ export class ProposalService extends CommonService {
     super(http, environmentService);
   }
 
-  getVotes(proposalId: string | number, voter: string, limit: string | number, offset: string | number) {
-    return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.TX}/txs?events=proposal_vote.proposal_id%3D%27${proposalId}%27&events=transfer.sender%3D%27${voter}%27&pagination.offset=${offset}&pagination.limit=${limit}&order_by=ORDER_BY_DESC`,
-    );
+  getVotes(payload) {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      searchValue: payload.proposalId,
+      searchType: 'proposal_vote',
+      searchKey: 'proposal_id',
+      ['queryAnd[]']: 'transfer.sender='+payload.wallet,
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${this.indexerUrl}/transaction`, { params });
   }
 
   getValidatorVotesFromIndexer(proposalid): Observable<any> {

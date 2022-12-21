@@ -109,10 +109,15 @@ export class ProposalComponent implements OnInit {
 
             const getVoted = async () => {
               if (addr) {
-                const res = await this.proposalService.getVotes(pro.proposal_id, addr, 10, 0);
-                pro.vote_option = this.voteConstant.find(
-                  (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
-                )?.voteOption;
+                const payload = {
+                  proposalId: pro.proposal_id,
+                  wallet: addr,
+                };
+                this.proposalService.getVotes(payload).subscribe((res) => {
+                  pro.vote_option = this.voteConstant.find(
+                    (s) => s.key === res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+                  )?.voteOption;
+                });
               }
             };
             getVoted();
