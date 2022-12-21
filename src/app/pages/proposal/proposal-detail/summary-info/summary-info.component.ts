@@ -313,23 +313,27 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         setTimeout(() => {
           this.proposalService.reloadList();
           this.getProposalDetail();
+          this.getVotedProposal();
         }, 3000);
-        this.getVotedProposal();
       }
     });
   }
 
-  async getVotedProposal() {
+  getVotedProposal() {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
-      const res = await this.proposalService.getVotes(this.proposalId, addr, 10, 0);
-
-      this.proposalVotes = this.voteConstant.find(
-        (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
-      )?.voteOption;
-      this.voteValue = {
-        keyVote: res.data?.txs[0]?.body?.messages[0]?.option,
+      const payload = {
+        proposalId: this.proposalId,
+        wallet: addr,
       };
+      this.proposalService.getVotes(payload).subscribe((res) => {
+        this.proposalVotes = this.voteConstant.find(
+          (s) => s.key === res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+        )?.voteOption;
+        this.voteValue = {
+          keyVote: res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+        };
+      });
     } else {
       this.proposalVotes = null;
     }
