@@ -24,6 +24,20 @@ export class ValidatorService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/validators`);
   }
 
+  validatorsFromIndexer(address : string): Observable<any> {
+    const params = _({
+      chainid: this.chainInfo.chainId,
+      operatorAddress: address
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+
+    return this.http.get<any>(`${this.indexerUrl}/validator`, {
+      params,
+    });
+  }
+
   validatorsDetail(address: string): Observable<any> {
     this.setURL();
     return this.http.get<any>(`${this.apiUrl}/validators/${address}`);
@@ -51,7 +65,9 @@ export class ValidatorService extends CommonService {
   }
 
   validatorsListUndelegateWallet(address: string): Observable<any> {
-    return this.http.get<any>(`${this.indexerUrl}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`);
+    return this.http.get<any>(
+      `${this.indexerUrl}/account-unbonds?chainid=${this.chainInfo.chainId}&address=${address}`,
+    );
   }
 
   delegators(limit: string | number, offset: string | number, address: string) {
