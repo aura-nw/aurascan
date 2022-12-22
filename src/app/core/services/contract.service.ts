@@ -19,7 +19,9 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  apiUrl = `${this.environmentService.configValue.beUri}`;
+  // apiUrl = `${this.environmentService.configValue.beUri}`;
+  apiUrl = 'http://10.9.0.57:3000/api/v1' || `${this.environmentService.configValue.beUri}`;
+
   apiAdminUrl = `${this.environmentService.configValue.urlAdmin}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
@@ -102,5 +104,9 @@ export class ContractService extends CommonService {
 
   createContractRequest(data: DeployContractListReq) {
     return this.http.post<any>(`${this.apiAdminUrl}/request/create`, data);
+  }
+
+  getNFTDetail(contractAddress: string, tokenId): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
   }
 }

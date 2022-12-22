@@ -4,32 +4,32 @@
     <div class="card-body">
       <!-- Title -->
       <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4">
-        <div class="body text--gray-4 mt-4 mt-lg-0" *ngIf="tokenList && tokenList.length > 0">
-          {{countSelected ?? 0}} of {{tokenList.length}} item{{tokenList.length > 1 ? 's' : ''}} selected
+        <div class="body text--gray-4 mt-4 mt-lg-0">
+          A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
         </div>
         <form class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
           <div class="input-group">
             <input
-                type="text"
-                class="form-control"
-                placeholder="Search for Tx Hash, Address or Status"
-                [(ngModel)]="textSearch"
-                [maxLength]="maxLengthSearch"
-                (keyup)="searchToken()"
-                name="search"
-                autocomplete="off" />
+              type="text"
+              class="form-control"
+              placeholder="Search for Token Name or Token ID"
+              [(ngModel)]="textSearch"
+              [maxLength]="maxLengthSearch"
+              (keyup.enter)="searchToken()"
+              name="search"
+              autocomplete="off" />
             <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
+              type="submit"
+              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              (click)="searchToken()">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
-                type="reset"
-                class="btn-reset cursor-pointer {{
-                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
-                }}"
-                (click)="resetSearch()">
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetSearch()">
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
             </button>
           </div>
@@ -40,40 +40,52 @@
       </div>
       <div *ngIf="!loading">
         <!-- Token list -->
-        <div class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
-             *ngIf="tokenList.length > 0; else noValues">
-          <div class="nft-cards__col col" *ngFor="let token of showData">
+        <div
+          class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+          *ngIf="soulboundData.data.length > 0; else noValues">
+          <div class="nft-cards__col col" *ngFor="let token of soulboundData.data">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item nft-cards__item--unclaimed">
-                  <div class="token-cards__img">
-                    <img src="{{token.img}}" alt="{{token.name}}">
-                    <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="!token.isClaimed">Unclaimed</div>
+                <div class="token-cards__img">
+                  <img
+                    src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
+                    alt="{{ token.token_name }}" />
+                  <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
+                    Unclaimed
                   </div>
-                  <div class="pt-2 pb-2 px-2">
-                    <div class="nft__info">
-                      <span class="body mr-1 text--gray-1">Token:</span>
-                      <span>Aureliana</span>
-                    </div>
+                </div>
+                <div class="pt-2 pb-2 px-2">
+                  <div class="nft__info">
+                    <span class="body mr-1 text--gray-1">Token ID:</span>
+                    <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
                   </div>
-                  <div class="px-2 d-lg-none position-relative">
-                    <button class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed button-review--mob mb-2"
-                            (click)="openDialogDetail()">
-                      <span class="caption fw-normal">Preview</span>
-                    </button>
+                  <div class="nft__info">
+                    <span class="body mr-1 text--gray-1">Token:</span>
+                    <span>{{ token.token_name }}</span>
                   </div>
-                  <button class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"
-                    (click)="openDialogDetail()">
-                    <span>Preview</span>
+                </div>
+                <div class="px-2 d-lg-none position-relative">
+                  <button
+                    class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed button-review--mob mb-2"
+                    (click)="getSBTDetail(token.contract_address, token.token_id)">
+                    <span class="caption fw-normal">Preview</span>
                   </button>
                 </div>
+                <button
+                  class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"
+                  (click)="getSBTDetail(token.contract_address, token.token_id)">
+                  <span>Preview</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <app-paginator *ngIf="tokenList.length > 20"
-                       [length]="pageData?.length"
-                       [pageSize]="pageData?.pageSize"
-                       (paginator)="paginatorEmit($event)"
-                       (pageEvent)="pageEvent($event)">
+        <app-paginator
+          *ngIf="tokenList.length > 20"
+          [length]="pageData?.length"
+          [pageSize]="pageData?.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
         </app-paginator>
         <ng-template #noValues>
           <app-table-no-data *ngIf="!loading"></app-table-no-data>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
   selector: 'app-token-soulbound-account-token-list',
@@ -8,48 +10,40 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./token-soulbound-account-token-list.component.scss'],
 })
 export class TokenSoulboundAccountTokenListComponent implements OnInit {
-  tokenAddress;
+  userAddress = '';
   modalReference: any;
-  soulboundFeatureList = [
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-  ];
+  totalSBT = 0;
+  soulboundFeatureList = [];
   activeId = 0;
+  walletAddress = '';
   TABS = [
     {
       key: 0,
       value: 'Equipped',
     },
-    {
-      key: 1,
-      value: 'Unequipped',
-    },
   ];
-  constructor(private route: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private modalService: NgbModal,
+    private walletService: WalletService,
+  ) {}
 
   ngOnInit(): void {
-    this.tokenAddress = this.route.snapshot.paramMap.get('address');
-    if (!this.tokenAddress || (this.tokenAddress && this.tokenAddress.trim().length === 0)) {
+    this.userAddress = this.route.snapshot.paramMap.get('address');
+
+    if (!this.userAddress || (this.userAddress && this.userAddress.trim().length === 0)) {
       this.router.navigate(['/']);
     }
+
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.walletAddress = wallet.bech32Address;
+        // if (this.userAddress === this.walletAddress) {
+          this.TABS.push({ key: 1, value: 'Unequipped' });
+        // }
+      }
+    });
   }
 
   viewQrAddress(staticDataModal: any): void {
@@ -64,6 +58,7 @@ export class TokenSoulboundAccountTokenListComponent implements OnInit {
   closePopup() {
     this.modalReference.close();
   }
+
   copyMessage(text: string) {
     const dummy = document.createElement('textarea');
     document.body.appendChild(dummy);

@@ -7,15 +7,15 @@
     <div class="d-flex px-4 py-4 pt-lg-6 pb-lg-6 px-lg-0 flex-wrap flex-lg-nowrap">
       <div class="d-none d-lg-block">
         <div class="qr-code d-inline-block pl-6 pr-6">
-          <app-qr [address]="tokenAddress || ''"></app-qr>
+          <app-qr [address]="userAddress || ''"></app-qr>
         </div>
       </div>
-      <div class="d-flex flex-column py-lg-6 w-100 px-md-6">
+      <div class="d-flex flex-column py-lg-6 col-4 px-md-6">
         <div class="">
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
           <div class="d-flex align-items-center">
-            <div class="body text--gray-1" id="tokenAddress">
-              <span class="break-word">{{ tokenAddress }}</span>
+            <div class="body text--gray-1" id="userAddress">
+              <span class="break-word">{{ userAddress }}</span>
             </div>
             <div class="button button--xxs button-circle ml-2" id="popupCopy">
               <img
@@ -28,14 +28,14 @@
                 #tooltip="matTooltip"
                 (mouseenter)="$event.stopImmediatePropagation()"
                 (mouseleave)="$event.stopImmediatePropagation()"
-                (click)="copyMessage(tokenAddress); tooltip.toggle()" />
+                (click)="copyMessage(userAddress); tooltip.toggle()" />
             </div>
           </div>
         </div>
         <div class="mt-6 mt-lg-4">
-          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Total Value</div>
+          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Total Equipped Badges</div>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
-            <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline">235 SBT</span>
+            <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline">{{ totalSBT }} SBT</span>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
                 [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
@@ -47,11 +47,8 @@
           </div>
         </div>
       </div>
-      <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="soulboundFeatureList.length > 0">
-        <app-soulbound-feature-tokens
-          [extend]="false"
-          [soulboundList]="soulboundFeatureList"
-          [accountAddress]="tokenAddress"></app-soulbound-feature-tokens>
+      <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="userAddress">
+        <app-soulbound-feature-tokens [extend]="false" [accountAddress]="userAddress"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
@@ -71,7 +68,9 @@
       </ng-container>
     </ul>
   </div>
-  <app-token-soulbound-equipped *ngIf="activeId === 0"></app-token-soulbound-equipped>
+  <app-token-soulbound-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event"></app-token-soulbound-equipped>
+  <!-- <app-token-soulbound-unequipped
+    *ngIf="activeId === 1 && walletAddress === userAddress"></app-token-soulbound-unequipped> -->
   <app-token-soulbound-unequipped *ngIf="activeId === 1"></app-token-soulbound-unequipped>
 </section>
 
@@ -86,6 +85,6 @@
         height="14"
         (click)="closePopup()" />
     </div>
-    <app-qr [address]="tokenAddress || ''"></app-qr>
+    <app-qr [address]="userAddress || ''"></app-qr>
   </div>
 </ng-template>

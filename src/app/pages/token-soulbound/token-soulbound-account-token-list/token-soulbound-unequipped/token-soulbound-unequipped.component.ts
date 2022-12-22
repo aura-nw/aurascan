@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {MAX_LENGTH_SEARCH_TOKEN} from "src/app/core/constants/token.constant";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {PAGE_EVENT} from "src/app/core/constants/common.constant";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatDialog} from "@angular/material/dialog";
-import {
-  TokenSoulboundDetailPopupComponent
-} from "src/app/pages/token-soulbound/token-soulbound-detail-popup/token-soulbound-detail-popup.component";
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
+import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { TokenSoulboundDetailPopupComponent } from 'src/app/pages/token-soulbound/token-soulbound-detail-popup/token-soulbound-detail-popup.component';
 
 @Component({
   selector: 'app-token-soulbound-unequipped',
   templateUrl: './token-soulbound-unequipped.component.html',
-  styleUrls: ['./token-soulbound-unequipped.component.scss']
+  styleUrls: ['./token-soulbound-unequipped.component.scss'],
 })
 export class TokenSoulboundUnequippedComponent implements OnInit {
   textSearch = '';
@@ -22,285 +25,248 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: false
+      isClaimed: false,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: false
+      isClaimed: false,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: false
+      isClaimed: false,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: false
+      isClaimed: false,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: false
+      isClaimed: false,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: false
+      isClaimed: false,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
     {
       id: 3933,
       name: 'Aureliana',
       address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
       img: 'assets/images/soulboundToken.png',
-      isClaimed: true
+      isClaimed: true,
     },
-  ]
-  countSelected = 0;
+  ];
   loading = false;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
     pageSize: 20,
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
-  // nftData param use for paginator
-  nftData: MatTableDataSource<any> = new MatTableDataSource();
+  // soulboundData param use for paginator
+  soulboundData: MatTableDataSource<any> = new MatTableDataSource();
   showData: any[];
   nextKey = null;
   currentKey = null;
+  currentAddress = '';
+  sbType = SB_TYPE;
+  isClick = false;
 
   constructor(
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    private soulboundService: SoulboundService,
+    private route: ActivatedRoute,
+    public commonService: CommonService,
+    private contractService: ContractService,
+  ) {}
 
   ngOnInit(): void {
-    this.getTokenData();
+    this.route.params.subscribe((params) => {
+      if (params?.address) {
+        this.currentAddress = params?.address;
+        this.getListSB();
+      }
+    });
   }
-  searchToken() {}
+
+  searchToken() {
+    this.getListSB(this.textSearch);
+  }
+
   resetSearch() {
     this.textSearch = '';
+    this.getListSB();
   }
-  getTokenData() {
+
+  getListSB(keySearch = '') {
     this.loading = true;
-    // params call API
-    // let payload = {
-    //   pageLimit: 100,
-    //   token_id: '',
-    //   owner: '',
-    //   contractAddress: this.contractAddress,
-    //   nextKey: this.nextKey,
-    // };
-    this.nftData.data = this.tokenList;
-    this.tokenList.filter((token)=> {
-      if(token.isClaimed) {
-        this.countSelected++;
-      }
-    })
-    this.showData = this.nftData.data.slice(
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-    );
-    this.pageData.length = this.nftData.data.length;
+    const payload = {
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
+      receiverAddress: this.currentAddress,
+      keyword: keySearch?.trim(),
+    };
+
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
+      this.soulboundData.data = res.data;
+      this.pageData.length = res.meta.count;
+    });
     this.loading = false;
   }
 
-  pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.pageData = e;
-    this.showData = this.nftData.data.slice(
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-    );
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
-      this.getTokenData();
-      this.currentKey = this.nextKey;
+  paginatorEmit(event): void {
+    if (this.soulboundData) {
+      this.soulboundData.paginator = event;
     }
   }
 
-  paginatorEmit(e: MatPaginator): void {
-    if (this.nftData.paginator) {
-      e.page.next({
-        length: this.nftData.paginator.length,
-        pageIndex: 0,
-        pageSize: this.nftData.paginator.pageSize,
-        previousPageIndex: this.nftData.paginator.pageIndex,
-      });
-      this.nftData.paginator = e;
-    } else this.nftData.paginator = e;
+  pageEvent(e: PageEvent): void {
+    this.pageData.pageIndex = e.pageIndex;
+    this.getListSB();
   }
 
-  xpaginatorEmit(e): void {
-    this.nftData.paginator = e;
+  getSBTDetail(contractAddress, tokenID) {
+    this.isClick = true;
+    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+      this.isClick = false;
+      if (res) {
+        this.openDialogDetail(res.data);
+      }
+    });
   }
 
-  openDialogDetail() {
-    const tokenData = {
-      name: 'The Picaroons',
-      img: 'assets/images/soulboundToken.png',
-      desc: 'Soulbound Token given to the validators in accompany with Aura Network throughout Euphoria Testnet duration. We appreciate your contribution and hope we will come alongside together in long term. Soulbound Token given to the validators in accompany with Aura Network throughout Euphoria Testnet duration. We appreciate your contribution and hope we will come alongside together in long term.Soulbound Token given to the validators in accompany with Aura Network throughout Euphoria Testnet duration.',
-      properties: [
-        {
-          label: 'Style',
-          detail: 'Vintage'
-        },
-        {
-          label: 'Goal',
-          detail: 'Sale'
-        },
-        {
-          label: 'Size',
-          detail: '3x4'
-        },
-        {
-          label: 'Time',
-          detail: '2022'
-        },
-        {
-          label: 'Serie',
-          detail: 'A'
-        },
-        {
-          label: 'Function',
-          detail: 'Test'
-        }
-      ]
-    };
+  openDialogDetail(SBT) {
     let dialogRef = this.dialog.open(TokenSoulboundDetailPopupComponent, {
       panelClass: 'TokenSoulboundDetailPopup',
-      data: tokenData,
+      data: SBT,
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
-        // call API post data here
-        // then check response, if response message is successfull -> load dataTable again
-        // setTimeout(() => {
-        // this.getListToken();
-        // }, 3000);
       }
     });
   }

@@ -13,6 +13,11 @@ import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { TokenService } from 'src/app/core/services/token.service';
 import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { getKeplr } from 'src/app/core/utils/keplr';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -38,7 +43,7 @@ export class NFTDetailComponent implements OnInit {
   ];
 
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  isSoulBound = true;
+  isSoulBound = false;
   loading = false;
   nftId = '';
   contractAddress = '';
@@ -60,6 +65,7 @@ export class NFTDetailComponent implements OnInit {
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  network = this.environmentService.configValue.chain_info;
 
   constructor(
     public commonService: CommonService,
@@ -68,12 +74,16 @@ export class NFTDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private tokenService: TokenService,
     private router: ActivatedRoute,
+    private soulboundService: SoulboundService,
+    private walletService: WalletService,
+    private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
-    this.getNFTDetail();
+    // this.getNFTDetail();
+    this.getSBTDetail();
     this.getDataTable();
   }
 
@@ -99,6 +109,16 @@ export class NFTDetailComponent implements OnInit {
       if (this.nftDetail.image && this.nftUrl == '') {
         this.nftUrl = this.nftDetail.image?.link_s3 || '';
       }
+      this.loading = false;
+    });
+  }
+
+  async getSBTDetail() {
+    this.loading = true;
+    const encoded = encodeURIComponent(this.nftId);
+    this.soulboundService.getSBTDetail(encoded).subscribe((res) => {
+      this.nftDetail = res;
+      this.isSoulBound = true;
       this.loading = false;
     });
   }
@@ -181,5 +201,27 @@ export class NFTDetailComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  async updatePickSBT(isPick) {
+    const minter = this.walletService.wallet?.bech32Address;
+    const keplr = await getKeplr();
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, isPick);
+
+    const payload = {
+      signature: dataKeplr.signature,
+      msg: isPick,
+      pubKey: dataKeplr.pub_key.value,
+      id: this.nftDetail?.token_id,
+    };
+
+    this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
+      if (res?.code) {
+        let msgError = res?.message.toString() || 'Error';
+        this.toastr.error(msgError);
+      } else {
+        this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
+      }
+    });
   }
 }

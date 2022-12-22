@@ -1,5 +1,5 @@
 <h1 class="mb-0 text--white">Soulbound Token</h1>
-<section class="mt-6">
+<section class="mt-6" *ngIf="currentAddress; else noValues">
   <div class="card">
     <div class="card-body">
       <!-- Title -->
@@ -21,33 +21,54 @@
         <div class="body text--gray-4 mt-4 mt-lg-0">
           A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
         </div>
-        <form class="aura-form single-input-field search-form-sblist" #searchForm>
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search for TokenURI, Address, Token ID or Status"
-              [(ngModel)]="textSearch"
-              [maxLength]="maxLengthSearch"
-              (keyup)="searchToken()"
-              name="search"
-              autocomplete="off" />
-            <button
-              type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-              (click)="searchToken()">
-              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
-            <button
-              type="reset"
-              class="btn-reset cursor-pointer {{
-                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
-              }}"
-              (click)="resetSearch()">
-              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-            </button>
+        <div class="row col-6 justify-content-end">
+          <div class="box-input col-3">
+            <mat-form-field appearance="fill" soulbound>
+              <mat-select
+                class="list-token"
+                placeholder="Select a type contract"
+                panelClass="contractPanel"
+                (selectionChange)="searchToken()"
+                [(value)]="selectedType"
+                [disableOptionCentering]="true">
+                <mat-option *ngFor="let item of lstTypeSB" [value]="item.key">
+                  <div class="d-flex option-contain">
+                    <div class="option-lable">
+                      <span>{{ item.value | translate }}</span>
+                    </div>
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
-        </form>
+          <form class="aura-form single-input-field search-form-sblist" #searchForm>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for TokenURI, Address, Token ID or Status"
+                [(ngModel)]="textSearch"
+                [maxLength]="maxLengthSearch"
+                (keyup.enter)="searchToken()"
+                name="search"
+                autocomplete="off" />
+              <button
+                type="submit"
+                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                (click)="searchToken()">
+                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+              <button
+                type="reset"
+                class="btn-reset cursor-pointer {{
+                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                }}"
+                (click)="resetSearch()">
+                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
       <!-- Table -->
       <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
@@ -66,7 +87,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">TOKEN URI</th>
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex align-items-center">
-                  <a class="hover-link" href="{{ element.token_uri }}">{{ element.token_uri }}</a>
+                  <a class="hover-link" href="{{ element.token_uri }}">{{ element.token_uri | cutStringPipe : 40 }}</a>
                 </div>
               </td>
             </ng-container>
@@ -121,11 +142,11 @@
           (pageEvent)="pageEvent($event)">
         </app-paginator>
       </ng-container>
-
-      <ng-template #noValues>
-        <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-        <app-table-no-data *ngIf="!loading"></app-table-no-data>
-      </ng-template>
     </div>
   </div>
 </section>
+
+<ng-template #noValues>
+  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+  <app-table-no-data *ngIf="!loading"></app-table-no-data>
+</ng-template>

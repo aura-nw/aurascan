@@ -10,7 +10,7 @@
           <app-qr [address]="currentAddress || ''"> </app-qr>
         </div>
       </div>
-      <div class="d-flex flex-column py-lg-6 w-100 px-md-6">
+      <div class="d-flex flex-column py-lg-6 col-4 px-md-6">
         <div class="">
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
           <div class="d-flex align-items-center">
@@ -36,7 +36,7 @@
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Total Value</div>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
             <span class="h1 mb-0 fw-bold mb-0 text-gradient d-inline" *ngIf="!isNoData"
-              >$ {{ totalValueToken + totalValueNft || 0 | number: global.formatNumber2Decimal }}</span
+              >$ {{ totalValueToken + totalValueNft || 0 | number : global.formatNumber2Decimal }}</span
             >
             <img
               [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
@@ -56,11 +56,11 @@
           </div>
         </div>
       </div>
-      <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="soulboundList.length > 0">
+      <div class="soulbound-feature-tokens mt-6 mt-lg-0"  *ngIf="totalSBT > 0">
         <app-soulbound-feature-tokens
-            [extend]="true"
-            [soulboundList]="soulboundList"
-            [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
+          [extend]="true"
+          [accountAddress]="currentAddress"
+          (totalSBT)="totalSBT = $event"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
       <!-- Soulbound Tokens -->
-      <app-soulbound-token></app-soulbound-token>
+      <!-- <app-soulbound-token></app-soulbound-token> -->
       <!-- Coin & Token-->
       <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ totalAssets || 0 }})</h2>
       <app-token-table
@@ -136,7 +136,7 @@
                                 *ngSwitchCase="'tx_hash'"
                                 class="text--primary cursor-pointer hash-link"
                                 [routerLink]="['/transaction', data['tx_hash']]">
-                                {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                                {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                               </a>
                               <a
                                 *ngSwitchCase="'height'"
@@ -165,12 +165,12 @@
                                 </div>
                               </div>
                               <div *ngSwitchCase="'fee'">
-                                {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                                {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                                 <span class="text--primary">{{ denom }}</span>
                               </div>
                               <div *ngSwitchCase="'amount'">
                                 <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                                  {{ +data[template.matColumnDef] | mask: 'separator.6' }}
+                                  {{ +data[template.matColumnDef] | mask : 'separator.6' }}
                                   <span class="text--primary">{{ data?.denom }}</span>
                                 </ng-container>
                                 <ng-template #displayNonNumber>
@@ -267,7 +267,7 @@
                 <!-- Redelegations-->
                 <div *ngIf="currentStake === stakeMode.Redelegations">
                   <div class="my-3" *ngIf="pageDataRedelegation?.length > 0">
-                    1. {{ 'NOTICE.REDELEGATE_WAITING' | translate: { timeStaking: timeStaking } }}<br />
+                    1. {{ 'NOTICE.REDELEGATE_WAITING' | translate : { timeStaking: timeStaking } }}<br />
                     2. {{ 'NOTICE.NUMBER_REDELEGATE' | translate }}
                   </div>
                   <app-account-detail-table
@@ -327,7 +327,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="h2 h3-mob mb-0 text--gray-1">{{ denom }}</span>
                     <span class="h5 h6-mob mb-0 text--gray-1">{{
-                      +currentAccountDetail?.total | mask: 'separator.6'
+                      +currentAccountDetail?.total | mask : 'separator.6'
                     }}</span>
                   </div>
                   <ng-container *ngFor="let item of chartCustomOptions; let last = last">
@@ -338,7 +338,7 @@
                         <span class="text--gray-5 body body-01-mob fw-500 fw-normal-mob">{{ item.name }}</span>
                       </div>
                       <span class="text--gray-1 body body-01-mob fw-500 fw-normal-mob">{{
-                        +item.amount | mask: 'separator.6'
+                        +item.amount | mask : 'separator.6'
                       }}</span>
                     </div>
                   </ng-container>

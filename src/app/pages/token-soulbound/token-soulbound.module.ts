@@ -20,6 +20,8 @@ import { QrModule } from 'src/app/shared/components/qr/qr.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
+import { MaterialModule } from 'src/app/app.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
     QrModule,
     MatTooltipModule,
     NgbNavModule,
+    MaterialModule,
   ],
   providers: [FormBuilder, SoulboundService],
 })

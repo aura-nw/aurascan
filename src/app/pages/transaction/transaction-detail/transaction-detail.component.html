@@ -1,67 +1,33 @@
-<div class="mb-4 mb-md-6">
-  <app-pagetitle title="Transaction Details"></app-pagetitle>
-</div>
 <!-- Tabs -->
-<ul
-  ngbNav
-  #customNav="ngbNav"
-  [activeId]="isRawData ? 1 : 0"
-  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
-  <ng-container *ngFor="let tab of TAB; index as index">
-    <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-      <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-        <span>{{ tab.value }}</span>
-      </a>
-    </li>
-  </ng-container>
-</ul>
+<div class="d-lg-flex justify-content-between align-items-center mb-4 mb-lg-6">
+  <h1 class="text--white mb-0">Transaction Details</h1>
+  <div class="button-switch-stage button-fixed mt-4 mt-lg-0">
+    <button class="button" [class.active]="!isRawData" (click)="changeType(false)">Summary</button>
+    <button class="button" [class.active]="isRawData" (click)="changeType(true)">JSON</button>
+  </div>
+</div>
 
-<div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-  <div class="card-body body">
-    <div class="d-lg-none mb-4">
-      <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-      <!-- Tabs -->
-      <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
-        <ng-container *ngFor="let tab of TAB; index as index">
-          <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-            <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-              <span>{{ tab.value }}</span>
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-    <div *ngIf="!isRawData" [ngClass]="{ 'card-info': breakpoint.value.matches }">
-      <div class="row box-error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
-        <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ transaction?.chainid }}</div>
-      </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">TxHash</div>
-        <div class="col-auto col-lg-9 text--gray-1">
-          <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
-          <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe : 8 : 8 }}</span>
-        </div>
-      </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Status</div>
-        <div class="col-auto col-lg-9 d-flex align-items-center">
+<div *ngIf="loading" class="m-auto mt-10">
+  <app-loading-sprint></app-loading-sprint>
+</div>
+
+<ng-container *ngIf="!loading">
+  <ng-container *ngIf="transaction; else noValues">
+    <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
+      <div class="d-flex align-items-baseline">
+        <h2 id="popupCopy" class="card-header mb-0 text--white pb-0 pr-0">
+          {{ !isRawData ? 'Information' : 'Raw Data' }}
+        </h2>
+        <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
           <img
-            [src]="
-              transaction?.code == codeTransaction.Success
-                ? ('assets/icons/icons-svg/color/success.svg' | imageS3)
-                : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-            "
-            width="20px"
-            height="20px" />
-          <span class="ml-2 {{ transaction?.status === 'Success' ? 'text--green-3' : 'text--red-3' }}">{{
-            transaction?.status | uppercase
-          }}</span>
-        </div>
+            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+            alt=""
+            matTooltip="Copied!"
+            #tooltip="matTooltip"
+            (mouseenter)="$event.stopImmediatePropagation()"
+            (mouseleave)="$event.stopImmediatePropagation()"
+            (click)="copyData(transaction.tx); tooltip.toggle()" />
+        </button>
       </div>
       <div class="card-body body py-4">
         <div *ngIf="!isRawData">
@@ -132,42 +98,30 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4">Fee</div>
-        <div class="col-auto col-lg-9 text--gray-1">
-          {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
-        </div>
-      </div>
-      <div class="row body-02 body-01-mob justify-content-between justify-content-lg-start">
-        <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
-          <div>Gas</div>
-          <div class="ml-md-1">(used / wanted)</div>
-        </div>
-        <div class="col-auto col-lg-9 text--gray-1">
-          {{ transaction?.gas_used | number }} / {{ transaction?.gas_wanted | number }}
-        </div>
+
+        <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1" [innerHtml]="transaction.tx | appJson"></pre>
       </div>
     </div>
 
-    <pre *ngIf="isRawData" id="json" class="raw-content text--gray-1 px-4" [innerHtml]="transaction.tx | appJson"></pre>
-  </div>
-</div>
+    <div class="card text--white" *ngIf="!isRawData && transaction?.messages">
+      <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
+    </div>
 
-<div class="card text--white" *ngIf="!isRawData && transaction?.messages">
-  <app-transaction-messages [transactionDetail]="transaction"> </app-transaction-messages>
-</div>
+    <div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
+      <div class="card-header title-small">Read</div>
+      <div class="card-body py-4">
+        <ngx-json-viewer [json]="!isRawData && transaction?.read_set"></ngx-json-viewer>
+      </div>
+    </div>
 
-<div class="card text--white" *ngIf="!isRawData && transaction?.read_set">
-  <div class="card-header title-small">Read</div>
-  <div class="card-body">
-    <ngx-json-viewer [json]="!isRawData && transaction?.read_set"></ngx-json-viewer>
-  </div>
-</div>
-
-<div class="card text--white" *ngIf="!isRawData && transaction?.write_set">
-  <div class="card-header title-small">Write</div>
-  <div class="card-body" *ngIf="transaction?.write_set">
-    <ngx-json-viewer [json]="transaction?.write_set"></ngx-json-viewer>
-  </div>
-</div>
+    <div class="card text--white" *ngIf="!isRawData && transaction?.write_set">
+      <div class="card-header title-small">Write</div>
+      <div class="card-body py-4" *ngIf="transaction?.write_set">
+        <ngx-json-viewer [json]="transaction?.write_set"></ngx-json-viewer>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
+</ng-container>

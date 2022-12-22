@@ -1,5 +1,5 @@
 <h1 class="mb-0 text--white">Soulbound Token</h1>
-<section class="mt-6">
+<section class="mt-6" *ngIf="currentAddress; else noValues">
   <div class="card">
     <div class="card-body">
       <!-- Title -->
@@ -104,11 +104,11 @@
           (pageEvent)="pageEvent($event)">
         </app-paginator>
       </ng-container>
-
-      <ng-template #noValues>
-        <app-loading-sprint *ngIf="loading"></app-loading-sprint>
-        <app-table-no-data *ngIf="!loading"></app-table-no-data>
-      </ng-template>
     </div>
   </div>
 </section>
+
+<ng-template #noValues>
+  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+  <app-table-no-data *ngIf="!loading"></app-table-no-data>
+</ng-template>

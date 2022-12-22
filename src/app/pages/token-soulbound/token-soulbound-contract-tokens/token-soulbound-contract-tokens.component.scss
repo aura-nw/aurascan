@@ -43,7 +43,8 @@
     th:first-child {
       min-width: 80px;
     }
-    th:nth-child(2),th:nth-child(3), {
+    th:nth-child(2),
+    th:nth-child(3) {
       min-width: 250px;
     }
   }
@@ -63,6 +64,56 @@
 ::ng-deep {
   .cdk-overlay-dark-backdrop {
     background: var(--aura-black);
-    opacity: .85 !important;
+    opacity: 0.85 !important;
+  }
+  .mat-form-field[soulbound] {
+    width: 100%;
+    background-color: var(--aura-gray-9);
+    border-radius: 4px;
+    display: flex;
+    height: 48px;
+
+    .mat-form-field-wrapper {
+      width: 100%;
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-flex {
+      padding: 2px 0.75em 0 0.75em;
+      background: transparent;
+    }
+
+    .mat-form-field-infix {
+      padding: 2px 0 0.75em 0;
+    }
+
+    .mat-select-placeholder,
+    mat-select-trigger {
+      position: relative;
+      color: var(--aura-gray-5);
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+    }
+
+    .mat-select-value {
+      color: var(--aura-gray-1);
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-select-arrow-wrapper {
+      transform: translateY(-5%);
+
+      .mat-select-arrow {
+        border: solid #e6e7e8;
+        border-width: 0 2.3px 2.3px 0;
+        display: inline-block;
+        padding: 2.8px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+    }
   }
 }
