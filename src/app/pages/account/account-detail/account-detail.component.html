@@ -10,12 +10,13 @@
           <app-qr [address]="currentAddress || ''"> </app-qr>
         </div>
       </div>
-      <div class="d-flex flex-column py-lg-6 col-4 px-md-6">
+      <div class="d-flex flex-column py-lg-6 col-lg-4 col-12 px-md-6">
         <div class="">
           <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Address</div>
           <div class="d-flex align-items-center">
             <div class="body text--gray-1" id="currentAddress">
-              <span class="break-word">{{ currentAddress }}</span>
+              <span class="d-md-flex d-none">{{ currentAddress }}</span>
+              <span class="d-md-none d-flex">{{ currentAddress | cutStringPipe: 8:8 }}</span>
             </div>
             <div class="button button--xxs button-circle ml-2" id="popupCopy">
               <img

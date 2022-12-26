@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -18,6 +18,7 @@ import { getKeplr } from 'src/app/core/utils/keplr';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-nft-detail',
@@ -77,13 +78,14 @@ export class NFTDetailComponent implements OnInit {
     private soulboundService: SoulboundService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
+    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
-    // this.getNFTDetail();
-    this.getSBTDetail();
+    this.getNFTDetail();
+    // this.getSBTDetail();
     this.getDataTable();
   }
 
@@ -94,34 +96,38 @@ export class NFTDetailComponent implements OnInit {
   getNFTDetail() {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
-    this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
+    this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
+      if (this.nftDetail.type === ContractRegisterType.CW721) {
+        if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
+          this.nftDetail['isDisplayName'] = true;
+          this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+        }
 
-      if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
-        this.nftDetail['isDisplayName'] = true;
-        this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
+        this.nftType = checkTypeFile(this.nftDetail);
+        if (this.nftDetail.animation && this.nftDetail.animation?.content_type) {
+          this.nftUrl = this.nftDetail.animation?.link_s3 || '';
+        }
+        if (this.nftDetail.image && this.nftUrl == '') {
+          this.nftUrl = this.nftDetail.image?.link_s3 || '';
+        }
+      } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
+        this.isSoulBound = true;
       }
 
-      this.nftType = checkTypeFile(this.nftDetail);
-      if (this.nftDetail.animation && this.nftDetail.animation?.content_type) {
-        this.nftUrl = this.nftDetail.animation?.link_s3 || '';
-      }
-      if (this.nftDetail.image && this.nftUrl == '') {
-        this.nftUrl = this.nftDetail.image?.link_s3 || '';
-      }
       this.loading = false;
     });
   }
 
-  async getSBTDetail() {
-    this.loading = true;
-    const encoded = encodeURIComponent(this.nftId);
-    this.soulboundService.getSBTDetail(encoded).subscribe((res) => {
-      this.nftDetail = res;
-      this.isSoulBound = true;
-      this.loading = false;
-    });
-  }
+  // async getSBTDetail() {
+  //   this.loading = true;
+  //   const encoded = encodeURIComponent(this.nftId);
+  //   this.soulboundService.getSBTDetail(encoded).subscribe((res) => {
+  //     this.nftDetail = res;
+  //     this.isSoulBound = true;
+  //     this.loading = false;
+  //   });
+  // }
 
   async getDataTable(nextKey = null) {
     let filterData = {};

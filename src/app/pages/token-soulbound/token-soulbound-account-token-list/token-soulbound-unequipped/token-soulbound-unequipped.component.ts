@@ -254,7 +254,7 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       this.isClick = false;
-      if (res) {
+      if (res?.data) {
         this.openDialogDetail(res.data);
       }
     });

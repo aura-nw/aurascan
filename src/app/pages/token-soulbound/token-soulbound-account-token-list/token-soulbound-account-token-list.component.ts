@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
@@ -16,10 +17,11 @@ export class TokenSoulboundAccountTokenListComponent implements OnInit {
   soulboundFeatureList = [];
   activeId = 0;
   walletAddress = '';
+  // TABS = [];
   TABS = [
     {
       key: 0,
-      value: 'Equipped',
+      value: SB_TYPE.EQUIPPED,
     },
   ];
   constructor(
@@ -39,9 +41,9 @@ export class TokenSoulboundAccountTokenListComponent implements OnInit {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.walletAddress = wallet.bech32Address;
-        // if (this.userAddress === this.walletAddress) {
-          this.TABS.push({ key: 1, value: 'Unequipped' });
-        // }
+        if (this.userAddress === this.walletAddress) {
+          this.TABS.push({ key: 1, value: SB_TYPE.UNEQUIPPED });
+        }
       }
     });
   }

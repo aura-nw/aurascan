@@ -1,13 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { TranslateService } from '@ngx-translate/core';
 import { MESSAGES_CODE, MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { ESigningType } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getKeplr } from 'src/app/core/utils/keplr';
+import { getSigner } from 'src/app/core/utils/signing/signer';
+const amino = require('@cosmjs/amino');
 
 @Component({
   selector: 'app-token-soulbound-detail-popup',
@@ -44,29 +48,78 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
   async equipSB() {
     this.currentAddress = this.walletService.wallet?.bech32Address;
     const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, this.currentAddress, this.soulboundDetail.token_id);
+    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, this.currentAddress, this.soulboundDetail.token_id);
 
-    const payload = {
-      signature: dataKeplr.signature,
-      msg: this.soulboundDetail.token_id,
-      pubKey: dataKeplr.pub_key.value,
-      id: this.soulboundDetail.token_id,
-      status: this.soulboundDetail.status,
-    };
+    // let messageToSign = this.createMessageToSign(
+    //   this.network.chainId,
+    //   'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
+    //   this.currentAddress,
+    //   this.soulboundDetail.token_uri,
+    // );
+    // console.log(messageToSign);
+
+    // const signedDoc = await keplr.signAmino(this.network.chainId, this.currentAddress, messageToSign);
+
+    // console.log(signedDoc);
+
+    // const messageToSign = this.createMessageToSign(chainID, active, passive, uri);
 
     if (this.currentAddress) {
       const msgExecute = {
         take: {
-          from: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
+          from: this.soulboundDetail.minter_address,
           uri: this.soulboundDetail.token_uri,
           signature: {
-            hrp: 'aura',
-            pub_key: dataKeplr.pub_key.value,
-            signature: dataKeplr.signature,
+            hrp: 'utaura',
+            pub_key: this.soulboundDetail.pub_key,
+            signature: this.soulboundDetail.signature,
           },
         },
       };
+
+      console.log(msgExecute);
+      this.walletService.walletExecute(
+        this.walletService.wallet.bech32Address,
+        this.soulboundDetail.contract_address,
+        msgExecute,
+      );
+      // const signer = getSigner(ESigningType.Keplr, this.walletService.chainInfo.chainId)
+      //   .then((signer) => {
+      //     return SigningCosmWasmClient.connectWithSigner(this.walletService.chainInfo.rpc, signer);
+      //   })
+      //   .then((client) => {
+      //     return client.execute(
+      //       this.walletService.wallet.bech32Address,
+      //       this.soulboundDetail.contract_address,
+      //       msgExecute,
+      //       {
+      //         amount: [
+      //           {
+      //             amount: '0.0025',
+      //             denom: 'utaura',
+      //           },
+      //         ],
+      //         gas: '500000',
+      //       },
+      //     );
+      //   })
+      //   .then((e) => {
+      //     console.log('eee', e);
+      //   })
+      //   .catch((err) => {
+      //     console.log('rrr', err);
+      //   });
+
+      // this.execute(msgExecute);
     }
+
+    // const payload = {
+    //   signature: dataKeplr.signature,
+    //   msg: this.soulboundDetail.token_id,
+    //   pubKey: dataKeplr.pub_key.value,
+    //   id: this.soulboundDetail.token_id,
+    //   status: this.soulboundDetail.status,
+    // };
 
     // this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
     //   if (res?.code) {

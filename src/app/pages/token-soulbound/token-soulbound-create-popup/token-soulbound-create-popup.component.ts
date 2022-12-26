@@ -7,6 +7,8 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getKeplr } from 'src/app/core/utils/keplr';
+import { serializeSignDoc } from '@cosmjs/amino';
+const amino = require('@cosmjs/amino');
 
 @Component({
   selector: 'app-token-soulbound-create-popup',
@@ -47,11 +49,40 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     const { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
 
     const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, this.data.currentAddress, receiverAddress);
+    // const AGREEMENT = 'Agreement(address active,address passive,string tokenURI)';
+    // let data = AGREEMENT + receiverAddress + minter + soulboundTokenURI;
+
+    let data = this.createMessageToSign(this.network.chainId, receiverAddress, minter, soulboundTokenURI);
+
+    let dataJson = {
+      account_number: '0',
+      chain_id: 'aura-testnet-2',
+      fee: {
+        amount: [],
+        gas: '0',
+      },
+      memo: '',
+      msgs: {
+        type: 'sign/MsgSignData',
+        value: {
+          data: 'Agreement(address active,address passive,string tokenURI)aura1fqj2redmssckrdeekhkcvd2kzp9f4nks4fctrtaura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0nhttps://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu',
+          signer: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
+        },
+      },
+      sequence: '0',
+    };
+
+    // let dataKeplr = await keplr.signAmino(this.network.chainId, minter, dataJson);
+    // console.log(dataKeplr);
+
+    console.log(JSON.stringify(data));
+
+    let dataTest = serializeSignDoc(data);
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, JSON.stringify(dataJson));
 
     const payload = {
       signature: dataKeplr.signature,
-      msg: receiverAddress,
+      msg: data,
       pubKey: dataKeplr.pub_key.value,
       contract_address: this.data.contractAddress,
       receiver_address: receiverAddress,
@@ -62,6 +93,26 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     this.executeCreate(payload);
   }
 
+  createMessageToSign(chainID, active, passive, uri) {
+    const AGREEMENT = 'Agreement(address active,address passive,string tokenURI)';
+
+    // create message to sign based on concating AGREEMENT, signer, receiver, and uri
+    const message = {
+      type: 'sign/MsgSignData',
+      value: {
+        signer: passive,
+        data: AGREEMENT + active + passive + uri,
+      },
+    };
+
+    const fee = {
+      gas: '0',
+      amount: [],
+    };
+
+    return amino.makeSignDoc(message, fee, chainID, '', 0, 0);
+  }
+
   checkFormValid(): boolean {
     return true;
   }
@@ -69,8 +120,8 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
   executeCreate(payload) {
     this.soulboundService.createSBToken(payload).subscribe(
       (res) => {
-        if (res?.Code) {
-          let msgError = res?.Message.toString() || 'Error';
+        if (res?.code) {
+          let msgError = res?.message.toString() || 'Error';
           this.toastr.error(msgError);
         } else {
           this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
