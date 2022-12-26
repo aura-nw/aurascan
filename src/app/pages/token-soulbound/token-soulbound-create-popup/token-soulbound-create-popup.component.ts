@@ -77,12 +77,13 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
 
     console.log(JSON.stringify(data));
 
-    let dataTest = serializeSignDoc(data);
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, JSON.stringify(dataJson));
-
+    // let dataTest = serializeSignDoc(data);
+    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, JSON.stringify(dataJson));
+    const message = "Create NFT token";
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
     const payload = {
       signature: dataKeplr.signature,
-      msg: data,
+      msg: message,
       pubKey: dataKeplr.pub_key.value,
       contract_address: this.data.contractAddress,
       receiver_address: receiverAddress,
