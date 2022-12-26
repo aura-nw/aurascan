@@ -58,13 +58,13 @@
                           *ngSwitchCase="'tx_hash'"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/transaction', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</span>
+                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                         </a>
                         <a
                           *ngSwitchCase="'grantee'"
                           class="text--primary cursor-pointer"
                           [routerLink]="['/account', data[template.matColumnDef]]">
-                          <span>{{ data[template.matColumnDef] | cutStringPipe: 8:8 }}</span>
+                          <span>{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span>
                         </a>
                         <div *ngSwitchCase="'type'">
                           {{ data[template.matColumnDef] }}
@@ -75,19 +75,23 @@
                         <div *ngSwitchCase="'limit'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balanceOf | mask: 'separator.6' }}
+                            {{ data[template.matColumnDef] | balanceOf | mask : 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>
                         <div *ngSwitchCase="'expiration'">
-                          {{
-                            data[template.matColumnDef] ? (data[template.matColumnDef] | customDate: 'yyyy-MM-dd') : '-'
-                          }}
+                          <span class="{{ data['expired'] && isActive ? 'text--red-3' : '' }}">
+                            {{
+                              data[template.matColumnDef]
+                                ? (data[template.matColumnDef] | customDate : 'yyyy-MM-dd')
+                                : '-'
+                            }}
+                          </span>
                         </div>
                         <div *ngSwitchCase="'spendable'">
                           <ng-container *ngIf="+data[template.matColumnDef] == 0"> - </ng-container>
                           <ng-container *ngIf="+data[template.matColumnDef] > 0">
-                            {{ data[template.matColumnDef] | balanceOf | mask: 'separator.6' }}
+                            {{ data[template.matColumnDef] | balanceOf | mask : 'separator.6' }}
                             <span class="ml-1">{{ denom }}</span>
                           </ng-container>
                         </div>
