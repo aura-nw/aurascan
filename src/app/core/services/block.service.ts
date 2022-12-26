@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
-import { LCD_COSMOS } from '../constants/url.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -52,15 +50,5 @@ export class BlockService extends CommonService {
     this.setURL();
     const date = new Date();
     return this.http.get<any>(`${this.apiUrl}/metrics/transactions?range=${type}&timezone=${date.getTimezoneOffset()}`);
-  }
-
-  getBlockMiss(limit: number) {
-    return axios.get(
-      `${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos?pagination.limit=${limit}&pagination.reverse=true`,
-    );
-  }
-
-  getBlockMissByConsAddress(cons_address: string) {
-    return axios.get(`${this.chainInfo.rest}/${LCD_COSMOS.SLASHING}/signing_infos/${cons_address}`);
   }
 }

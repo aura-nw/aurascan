@@ -1,9 +1,10 @@
-import { DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
-import { KEPLR_ERRORS } from '../../constants/wallet.constant';
-import { messageCreators } from './messages';
-import { getSigner } from './signer';
-import { getFee } from './fee';
-import { ChainInfo } from '@keplr-wallet/types';
+import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate';
+import {calculateFee, DeliverTxResponse, SigningStargateClient, StdFee} from '@cosmjs/stargate';
+import {ChainInfo} from '@keplr-wallet/types';
+import {TRANSACTION_TYPE_ENUM} from '../../constants/transaction.enum';
+import {KEPLR_ERRORS} from '../../constants/wallet.constant';
+import {messageCreators} from './messages';
+import {getSigner} from './signer';
 
 export async function createSignBroadcast(
   {
@@ -23,8 +24,7 @@ export async function createSignBroadcast(
   } else {
     // success
     const messagesSend = messageCreators[messageType](senderAddress, message, network);
-
-    const fee: StdFee = getNetworkFee(network, messageType, validatorsCount);
+    const fee: StdFee = await getNetworkFee(network, senderAddress, messagesSend, '');
     let client;
 
     if (coin98Client) {
@@ -54,15 +54,37 @@ export async function createSignBroadcast(
   }
 }
 
-export function getNetworkFee(network, messageType, validatorsCount?: number): StdFee {
+export async function getNetworkFee(network, address, messageType, memo = ''): Promise<StdFee> {
+  const signer = window.getOfflineSignerOnlyAmino(network.chainId);
+
+  //set default for multi gas
+  let multiGas = 1.3;
+  if (messageType?.typeUrl === TRANSACTION_TYPE_ENUM.MsgRevokeAllowance) {
+    multiGas = 1.4;
+  }
+
+  const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
+  let gasEstimation = 0;
+  try {
+    gasEstimation = await onlineClient.simulate(
+      address,
+      Array.isArray(messageType) ? messageType : [messageType],
+      '',
+    );
+  } catch (e) {
+    gasEstimation = 100000;
+  }
+  let gasPrice = network.gasPriceStep.average.toString() + network.currencies[0].coinMinimalDenom;
+  let calGasPrice = calculateFee(Math.round(gasEstimation * multiGas), gasPrice);
+
   return {
     amount: [
       {
         denom: network.currencies[0].coinMinimalDenom,
-        amount: '1',
+        amount: (calGasPrice?.amount[0]?.amount || network.gasPriceStep.average)?.toString(),
       },
     ],
-    gas: validatorsCount ? getFee(messageType, validatorsCount) : getFee(messageType),
+    gas: Math.round(gasEstimation * multiGas).toString(),
   };
 }
 

@@ -70,7 +70,7 @@
                     <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                       <ng-container [ngSwitch]="template.matColumnDef">
                         <ng-container *ngSwitchCase="'amountToken'">
-                          {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                          {{ data[template.matColumnDef] | mask : 'separator.6' }}
                         </ng-container>
                         <ng-container *ngSwitchCase="'status'">
                           <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
@@ -95,7 +95,7 @@
                         </ng-container>
                         <ng-container *ngSwitchCase="'tx_hash'">
                           <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                            {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                            {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                           </a>
                         </ng-container>
                         <ng-container *ngSwitchCase="'from_address'">
@@ -104,10 +104,10 @@
                               class="text--primary txt-from-address content-transfer"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                               *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
-                              data[template.matColumnDef] | cutStringPipe: 8:8
+                              data[template.matColumnDef] | cutStringPipe : 8 : 8
                             }}</span>
                             <span class="content-transfer" *ngIf="!data[template.matColumnDef]"> - </span>
                             <ng-container *ngIf="!isSearchAddress">
@@ -141,10 +141,10 @@
                               class="text--primary"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                               *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
-                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                              data[template.matColumnDef] | cutStringPipe: 8:8
+                              data[template.matColumnDef] | cutStringPipe : 8 : 8
                             }}</span>
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
                           </div>
@@ -152,19 +152,23 @@
                         <ng-container *ngSwitchCase="'details'">
                           <button
                             class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                            [disabled]="!data.token_id"
+                            [disabled]="!data.token_id || data['status'] === 'Fail' || data['token_id'] === 'More'"
                             [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                             <span>View NFT</span>
                           </button>
                         </ng-container>
                         <ng-container *ngSwitchCase="'token_id'">
+                          <span *ngIf="data['token_id']?.length === 0"> - </span>
+                          <span *ngIf="data['token_id'] === 'More'"> More </span>
+                          <span class="text--primary" *ngIf="data['status'] === 'Fail'">
+                            {{ data[template.matColumnDef] | stringEllipsis : 16 }}
+                          </span>
                           <a
                             class="text--primary"
                             href="/tokens/token/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
-                            *ngIf="data['token_id']?.length > 0">
-                            {{ data[template.matColumnDef] | stringEllipsis: 16 }}
+                            *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
+                            {{ data[template.matColumnDef] | stringEllipsis : 16 }}
                           </a>
-                          <span *ngIf="data['token_id']?.length === 0"> - </span>
                         </ng-container>
                         <div *ngSwitchCase="'action'">
                           <button

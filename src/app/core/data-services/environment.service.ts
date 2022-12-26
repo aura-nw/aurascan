@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChainInfo } from '@keplr-wallet/types';
 import { BehaviorSubject } from 'rxjs';
-import { ChainsInfo } from 'src/app/core/constants/wallet.constant';
+
 export interface IConfiguration {
   fabric: string;
   beUri: string;
@@ -60,7 +60,7 @@ export class EnvironmentService {
       .toPromise()
       .then((config: any) => {
         const chainId = config['chainId'] || 'serenity-testnet-001';
-        const chain_info = config['chain_info']?.chainId ? config['chain_info'] : ChainsInfo?.chainId;
+        const chain_info = config['chain_info'];
 
         const data: IConfiguration = {
           fabric: config['fabric'],

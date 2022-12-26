@@ -20,5 +20,7 @@
     *ngIf="tokenDetail"
     [tokenDetail]="tokenDetail"
     [contractAddress]="contractAddress"
-    (resultLength)="getLength($event)"></app-token-content>
+    (resultLength)="getLength($event)"
+    (hasMore)="getMoreTx($event)">
+  </app-token-content>
 </ng-container>

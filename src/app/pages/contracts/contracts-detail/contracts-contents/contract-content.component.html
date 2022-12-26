@@ -11,11 +11,11 @@
             ngbNavLink
             (click)="changeTab(tab.key)"
             [class.verify-contract]="
-              tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed
+              tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverified
             ">
             <span class="tab-title h5 mb-0 text-uppercase">{{ tab.value }}</span>
             <img class="ml-2"
-              *ngIf="tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverifed"
+              *ngIf="tab.key === contractTab.Contract && contractTypeData !== contractVerifyType.Unverified"
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"

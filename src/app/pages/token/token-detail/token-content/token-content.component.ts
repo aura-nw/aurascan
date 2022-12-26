@@ -18,6 +18,7 @@ export class TokenContentComponent implements OnInit {
   @Input() tokenDetail: any;
   @Input() contractAddress: string;
   @Output() resultLength = new EventEmitter<any>();
+  @Output() hasMore = new EventEmitter<any>();
 
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
@@ -137,5 +138,9 @@ export class TokenContentComponent implements OnInit {
       this.infoSearch['balance'] = this.tokenDetail.isNFTContract ? data?.tokens?.length : data?.balance;
       this.infoSearch['balance'] = this.infoSearch['balance'] || 0;
     } catch (error) {}
+  }
+
+  getMoreTx(event) {
+    this.hasMore.emit(event);
   }
 }

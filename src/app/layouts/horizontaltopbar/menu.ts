@@ -68,13 +68,13 @@ export const MENU: MenuItem[] = [
     icon: 'coins',
     name: MenuName.Token,
     subItems: [
-      // {
-      //     id: 1,
-      //     label: 'CW-20 Top Tokens',
-      //     link: '/tokens',
-      //     name: MenuName.TokenCW20,
-      //     icon: 'coins',
-      // },
+      {
+          id: 1,
+          label: 'CW-20 Top Tokens',
+          link: '/tokens',
+          name: MenuName.TokenCW20,
+          icon: 'coins',
+      },
       {
         id: 2,
         label: 'CW-721 Top Tokens',
@@ -113,24 +113,24 @@ export const MENU: MenuItem[] = [
       // }
     ]
   },
-  // {
-  //   id: 5,
-  //   label: 'MENUITEMS.MORE',
-  //   icon: 'list',
-  //   name: MenuName.More,
-  //   subItems: [
-  //   {
-  //     id: 1,
-  //     label: 'Fee Grant',
-  //     link: '/fee',
-  //     icon: 'gas-pump',
-  //   },
-  //   {
-  //     id: 2,
-  //     label: 'Multi-send',
-  //     link: '/fee',
-  //     icon: 'users-three',
-  //   }
-  //   ]
-  // },
+  {
+    id: 5,
+    label: 'MENUITEMS.MORE',
+    icon: 'list',
+    name: MenuName.More,
+    subItems: [
+    {
+      id: 1,
+      label: 'Fee Grant',
+      link: '/fee-grant',
+      icon: 'gas-pump',
+    },
+    // {
+    //   id: 2,
+    //   label: 'Multi-send',
+    //   link: '/fee',
+    //   icon: 'users-three',
+    // }
+    ]
+  },
 ];

@@ -7,9 +7,8 @@ export enum ContractTab {
 }
 
 export enum ContractVerifyType {
-  Unverifed = 'UNVERIFIED',
-  Similar_Match = 'SIMILAR MATCH',
-  Exact_Match = 'EXACT MATCH',
+  Unverified = 'UNVERIFIED',
+  Verified = 'VERIFIED',
 }
 
 export enum ContractTransactionType {
@@ -21,4 +20,5 @@ export enum ContractTransactionType {
 export enum ContractRegisterType {
   CW20 = 'CW20',
   CW721 = 'CW721',
+  CW4973 = 'CW4973',
 }

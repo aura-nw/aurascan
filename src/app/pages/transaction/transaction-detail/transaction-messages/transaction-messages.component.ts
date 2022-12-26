@@ -12,6 +12,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import * as _ from 'lodash';
+import { formatWithSchema } from '../../../../core/helpers/date';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -56,6 +57,8 @@ export class TransactionMessagesComponent implements OnInit {
   };
   numberListSend = 5;
   dataTimeOut = {};
+  spendLimitAmount = 0;
+  typeGrantAllowance = 'Basic';
 
   listIBCProgress = [];
 
@@ -95,6 +98,29 @@ export class TransactionMessagesComponent implements OnInit {
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
     ) {
       this.displayMsgRaw();
+    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.MsgGrantAllowance) {
+      let type;
+      if (this.transactionDetail?.messages[0]?.allowance?.allowance?.allowance) {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.allowance.['@type']");
+      } else if (this.transactionDetail?.messages[0]?.allowance?.allowance) {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "allowance.['@type']");
+      } else {
+        type = _.get(this.transactionDetail?.messages[0]?.allowance, "['@type']");
+      }
+      if (type.indexOf('Periodic') > 0) {
+        this.typeGrantAllowance = 'Periodic';
+      }
+
+      this.spendLimitAmount =
+        _.get(this.transactionDetail?.messages[0]?.allowance, 'basic.spend_limit[0].amount') ||
+        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.basic.spend_limit[0].amount') ||
+        _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.basic.spend_limit[0].amount');
+      if (this.typeGrantAllowance === 'Basic') {
+        this.spendLimitAmount =
+          _.get(this.transactionDetail?.messages[0]?.allowance, 'spend_limit[0].amount') ||
+          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.spend_limit[0].amount') ||
+          _.get(this.transactionDetail?.messages[0]?.allowance, 'allowance.allowance.spend_limit[0].amount');
+      }
     } else if (
       //get data if type = IBC
       this.transactionDetail?.type.toLowerCase().indexOf('ibc') > -1
@@ -207,13 +233,16 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   displayMsgRaw(): void {
-    const obj = this.transactionDetail?.tx?.tx?.body?.messages[0];
-    this.objMsgContract = Object.keys(obj).reduce((newObj, key) => {
-      if (key === 'msg' || key === 'funds') {
-        newObj[key] = obj[key];
-      }
-      return newObj;
-    }, {});
+    this.objMsgContract = _.get(this.transactionDetail.tx.tx.body, 'messages').map((element) => {
+      const msg = _.get(element, 'msg');
+      const funds = _.get(element, 'funds');
+      return { msg, funds };
+    });
+
+    //get first data if array = 1
+    if (this.objMsgContract.length === 1) {
+      this.objMsgContract = this.objMsgContract[0];
+    }
   }
 
   checkStoreCode(): void {
@@ -222,7 +251,7 @@ export class TransactionMessagesComponent implements OnInit {
       if (jsonData && jsonData[0]) {
         const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.StoreCode);
         if (temp) {
-          this.storeCodeId = temp[0]?.attributes.find(k => k.key === "code_id")?.value || 0;
+          this.storeCodeId = temp[0]?.attributes.find((k) => k.key === 'code_id')?.value || 0;
         }
       }
     } catch (e) {}
@@ -404,5 +433,13 @@ export class TransactionMessagesComponent implements OnInit {
         jsonData[0]?.events.find((f) => f.type === 'instantiate')?.attributes?.find((f) => f.key === key)?.value || '';
       return result;
     } catch (e) {}
+  }
+
+  getDateValue(time) {
+    if (time) {
+      return formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC);
+    } else {
+      return '-';
+    }
   }
 }

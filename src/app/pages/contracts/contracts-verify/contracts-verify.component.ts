@@ -1,4 +1,4 @@
-import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
@@ -15,8 +15,8 @@ import { WSService } from 'src/app/core/services/ws.service';
 })
 export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
-  contractTxHash = '';
-  @ViewChild('version') versionSelect:any;
+  code_id = '';
+  @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
 
@@ -29,12 +29,9 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     private toastr: NgxToastrService,
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
-    this.contractTxHash = this.route.snapshot.paramMap.get('txHash');
+    this.code_id = this.route.snapshot.paramMap.get('code_id');
 
-    if (
-      this.contractAddress.trim().length === 0 ||
-      this.contractTxHash.trim().length === 0
-    ) {
+    if (this.contractAddress.trim().length === 0 || this.code_id.trim().length === 0) {
       this.router.navigate(['contracts']);
     }
   }
@@ -99,7 +96,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
             case 'SUCCESSFUL':
               this.dlgServiceOpen();
               this.wSService.subscribeVerifyContract(
-                contractData.contract_address,
+                Number(this.code_id),
                 () => {
                   this.contractService.loadContractDetail(contractData.contract_address);
                 },

@@ -1,4 +1,4 @@
-@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "SFPro") {
+@mixin mono-font-size($font-size, $line-height, $font-weight, $font: "Inter") {
   font-size: #{$font-size}rem !important;
   line-height: #{$line-height}rem !important;
   font-weight: $font-weight !important;
@@ -97,6 +97,7 @@ $textColors: (
   "black",
   "gray-light",
   "gray-1",
+  "gray-2",
   "gray-3",
   "gray-4",
   "gray-5",
@@ -114,6 +115,9 @@ $textColors: (
     color: var(--aura-#{$color}) !important;
   }
 }
+.fw-700 {
+  font-weight: 700 !important;
+}
 .fw-semibold {
   font-weight: 600 !important;
 }
@@ -122,7 +126,14 @@ $textColors: (
   font-weight: 500 !important;
 }
 
+.fw-normal {
+  font-weight: 400 !important;
+}
+
 @media (max-width: 991.98px) {
+  .fw-700-mob {
+    font-weight: 700 !important;
+  }
   .fw-semibold-mob {
     font-weight: 600 !important;
   }

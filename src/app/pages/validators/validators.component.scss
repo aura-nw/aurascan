@@ -199,13 +199,6 @@ form.search-form-validators {
   }
 }
 
-.button-max {
-  border-radius: 2px;
-  padding: 0 var(--spacer-4);
-  display: flex;
-  align-items: center;
-}
-
 .modal.validator-modal {
   @media (max-width: 991.99px) {
     .modal-dialog {

@@ -32,3 +32,16 @@
     z-index: 1090;
   }
 }
+.grant-overlay-panel {
+  @media (max-width: 567px) {
+    max-width: 100vw !important;
+  }
+  .mat-dialog-container {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}

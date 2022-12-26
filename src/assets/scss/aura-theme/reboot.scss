@@ -75,8 +75,8 @@ a {
   background: var(--aura-gray-8);
   color: var(--aura-gray-light);
   border-radius: 4px;
-  height: 32px;
-  padding: 8px 16px 0;
+  height: 34px;
+  padding: 0 16px;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,10 +84,9 @@ a {
     background: var(--aura-gray-9);
     padding: 8px 16px;
   }
-  @media (max-width: 375px) {
-    max-width: 100px; 
-  }
-  display: inline;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 app-paginator {
   overflow: hidden;

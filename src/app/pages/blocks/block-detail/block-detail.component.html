@@ -15,10 +15,36 @@
 </ul>
 
 <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+  <div class="d-flex align-items-baseline">
+    <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0" id="popupCopy">
+      {{ !isRawData ? 'Information' : 'Raw Data' }}
+    </h2>
+    <button class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex" *ngIf="isRawData">
+      <img
+        [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+        alt=""
+        matTooltip="Copied!"
+        #tooltip="matTooltip"
+        (mouseenter)="$event.stopImmediatePropagation()"
+        (mouseleave)="$event.stopImmediatePropagation()"
+        (click)="copyData(item?.json_data); tooltip.toggle()" />
+    </button>
+  </div>
   <div class="card-body body">
     <div class="d-lg-none mb-4">
-      <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+      <div class="d-flex align-items-baseline">
+        <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+        <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
+          <img
+            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+            alt=""
+            matTooltip="Copied!"
+            #tooltip="matTooltip"
+            (mouseenter)="$event.stopImmediatePropagation()"
+            (mouseleave)="$event.stopImmediatePropagation()"
+            (click)="copyData(item?.json_data); tooltip.toggle()" />
+        </button>
+      </div>
       <!-- Tabs -->
       <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
         <ng-container *ngFor="let tab of TAB; index as index">
@@ -143,11 +169,11 @@
                       </div>
                     </div>
                     <div *ngSwitchCase="'fee'">
-                      {{ data[template.matColumnDef] }} <span class="text--primary">{{ denom }}</span>
+                      {{ +data[template.matColumnDef] | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
                     </div>
                     <div *ngSwitchCase="'amount'">
                       <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                        {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                        {{ data[template.matColumnDef] | mask: 'separator.6' }}
                         <span class="text--primary">{{ data?.denom }}</span>
                       </ng-container>
                       <ng-template #displayNonNumber>
@@ -192,7 +218,7 @@
               label: 'Amount',
               info:
                 data.amount > 0
-                  ? (data.amount | number: global.formatNumberToken) + '<span class=text--primary> ' + denom + '</span>'
+                  ? (data.amount | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
                   : checkAmountValue(data.amount, data.tx_hash)
             },
             { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }

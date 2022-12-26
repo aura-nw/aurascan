@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -80,9 +80,10 @@ export class TokenCw20Component implements OnInit {
           volume: +data.volume_24h,
           price: +data.price,
           isValueUp: data.price_change_percentage_24h < 0 ? false : true,
-          change: Number(data.price_change_percentage_24h.toString().substring(1)),
+          change: Number(data.price_change_percentage_24h.toString()),
           isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
           holders: +data.holders,
+          holderChange: Number(data.holders_change_percentage_24h.toString()),
         });
       });
 
@@ -157,15 +158,15 @@ export class TokenCw20Component implements OnInit {
       this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
 
-    if (sort.active === 'holders') {
-      let lstUp = this.sortedData
-        .filter((data) => data.isValueUp)
-        ?.sort((a, b) => this.compare(a.holders, b.holders, isAsc));
-      let lstDown = this.sortedData
-        .filter((data) => !data.isValueUp)
-        .sort((a, b) => this.compare(a.holders, b.holders, !isAsc));
-      this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
-    }
+    // if (sort.active === 'holders') {
+    //   let lstUp = this.sortedData
+    //     .filter((data) => data.isValueUp)
+    //     ?.sort((a, b) => this.compare(a.holders, b.holders, isAsc));
+    //   let lstDown = this.sortedData
+    //     .filter((data) => !data.isValueUp)
+    //     .sort((a, b) => this.compare(a.holders, b.holders, !isAsc));
+    //   this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
+    // }
 
     let dataFilter = this.sortedData;
     this.pageData = {

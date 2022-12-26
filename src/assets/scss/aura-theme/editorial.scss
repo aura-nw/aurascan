@@ -31,6 +31,7 @@
     display: block;
   }
   ul {
+    padding-left: var(--spacer-4);
     list-style: unset !important;
     li {
       margin-bottom: var(--spacer-1);

@@ -8,6 +8,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxMaskModule } from 'ngx-mask';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonPipeModule } from '../../../core/pipes/common-pipe.module';
 import { TableNoDataModule } from '../../../shared/components/table-no-data/table-no-data.module';
@@ -27,7 +28,8 @@ import { PopupDelegateComponent } from './popup-delegate.component';
     SimplebarAngularModule,
     RouterModule,
     TableNoDataModule,
-    FormsModule
+    FormsModule,
+    NgxMaskModule
   ],
   exports: [PopupDelegateComponent]
 })

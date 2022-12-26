@@ -44,7 +44,7 @@
                     <ng-container *ngSwitchCase="'amount'">
                       {{
                         (template.isShort ? shortenAddress(data[template.matColumnDef]) : data[template.matColumnDef])
-                          | number: global.formatNumberToken || '-'
+                          | mask: 'separator.6' || '-'
                       }}
                       <span class="text--primary ml-1">{{ denom }}</span>
                     </ng-container>
@@ -222,7 +222,7 @@
                   class: 'h6 mb-0 text--gray-1',
                   info: data.amount
                     ? '<span class=mr-1>' +
-                      (data.amount | number: global.formatNumberToken) +
+                      (data.amount | mask: 'separator.6') +
                       '</span><span class=text--primary>' +
                       denom +
                       '</span>'
@@ -260,7 +260,8 @@
     [length]="length"
     [pageSize]="pageSize"
     (paginator)="paginatorEmit($event)"
-    (pageEvent)="pageEvent($event)"></app-paginator>
+    (pageEvent)="pageEvent($event)">
+  </app-paginator>
   <ng-template #noValues>
     <app-table-no-data></app-table-no-data>
   </ng-template>

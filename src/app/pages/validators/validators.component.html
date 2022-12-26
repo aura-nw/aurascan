@@ -1,15 +1,15 @@
 <div class="validator-container" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="user-wallet-info">
     <app-user-wallet-info
-        [breakpoint]="breakpoint"
-        [userAddress]="userAddress"
-        [arrayDelegate]="arrayDelegate"
-        [dataDelegate]="dataDelegate"
-        [lstUndelegate]="lstUndelegate"
-        [modalManage]="modalManage"
-        [denom]="denom"
-        [isLoading]="isClaimRewardLoading"
-        (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
+      [breakpoint]="breakpoint"
+      [userAddress]="userAddress"
+      [arrayDelegate]="arrayDelegate"
+      [dataDelegate]="dataDelegate"
+      [lstUndelegate]="lstUndelegate"
+      [modalManage]="modalManage"
+      [denom]="denom"
+      [isLoading]="isClaimRewardLoading"
+      (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
 
   <div class="card box-validators">
@@ -18,25 +18,25 @@
       <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">
         <div class="input-group">
           <input
-              type="text"
-              class="form-control"
-              placeholder="Search validator"
-              [(ngModel)]="textSearch"
-              (ngModelChange)="searchValidator()"
-              name="search"
-              autocomplete="off" />
+            type="text"
+            class="form-control"
+            placeholder="Search validator"
+            [(ngModel)]="textSearch"
+            (ngModelChange)="searchValidator()"
+            name="search"
+            autocomplete="off" />
           <button
-              type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-              (click)="searchValidator()">
+            type="submit"
+            class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+            (click)="searchValidator()">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
-              type="reset"
-              class="btn-reset cursor-pointer {{
+            type="reset"
+            class="btn-reset cursor-pointer {{
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
-              (click)="textSearch = ''; searchValidator()">
+            (click)="textSearch = ''; searchValidator()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
@@ -46,11 +46,11 @@
     <div class="card-body pt-0">
       <!-- tab -->
       <ul
-          ngbNav
-          #customNav="ngbNav"
-          [activeId]="0"
-          class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
-          [class.mobile-tab]="breakpoint.value.matches">
+        ngbNav
+        #customNav="ngbNav"
+        [activeId]="0"
+        class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified flex-nowrap"
+        [class.mobile-tab]="breakpoint.value.matches">
         <ng-container *ngFor="let tab of TABS; index as index">
           <li [ngbNavItem]="index">
             <a ngbNavLink (click)="changeType(tab.key)">
@@ -63,25 +63,25 @@
       <form class="aura-form single-input-field search-form-validators my-4" *ngIf="breakpoint.value.matches">
         <div class="input-group">
           <input
-              type="text"
-              class="form-control"
-              placeholder="Search validator"
-              [(ngModel)]="textSearch"
-              (ngModelChange)="searchValidator()"
-              name="search"
-              autocomplete="off" />
+            type="text"
+            class="form-control"
+            placeholder="Search validator"
+            [(ngModel)]="textSearch"
+            (ngModelChange)="searchValidator()"
+            name="search"
+            autocomplete="off" />
           <button
-              type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-              (click)="searchValidator()">
+            type="submit"
+            class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+            (click)="searchValidator()">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
-              type="reset"
-              class="btn-reset cursor-pointer {{
+            type="reset"
+            class="btn-reset cursor-pointer {{
               !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
             }}"
-              (click)="textSearch = ''; searchValidator()">
+            (click)="textSearch = ''; searchValidator()">
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
@@ -91,13 +91,13 @@
         <ng-container *ngIf="!breakpoint.value.matches">
           <div class="table-responsive mt-6">
             <table
-                mat-table
-                matSort
-                [dataSource]="dataSource"
-                class="aura-table"
-                (matSortChange)="sortData($event)"
-                ng-container
-                *ngIf="!searchNullData; else noValues">
+              mat-table
+              matSort
+              [dataSource]="dataSource"
+              class="aura-table"
+              (matSortChange)="sortData($event)"
+              ng-container
+              *ngIf="!searchNullData; else noValues">
               <ng-container *ngFor="let template of templates; index as i">
                 <ng-container [matColumnDef]="template.matColumnDef" [ngSwitch]="template.matColumnDef">
                   <ng-container *ngSwitchCase="'percent_power'">
@@ -123,10 +123,10 @@
                   <ng-container *ngSwitchCase="'up_time'" class="pr-5 col-per-25">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
                       <div
-                          [innerHTML]="template.headerCellDef | translate"
-                          matTooltipPosition="above"
-                          matTooltip="Signed Blocks Window for the last {{ numBlock }} Blocks"
-                          #tooltip="matTooltip"></div>
+                        [innerHTML]="template.headerCellDef | translate"
+                        matTooltipPosition="above"
+                        matTooltip="Signed Blocks Window for the last {{ numBlock }} Blocks"
+                        #tooltip="matTooltip"></div>
                     </th>
                   </ng-container>
                   <ng-container *ngSwitchDefault>
@@ -141,31 +141,31 @@
                           {{ data[template.matColumnDef] }}
                         </div>
                         <div *ngSwitchCase="'commission'" class="">
-                          {{ data[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                          {{ data[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                         </div>
                         <div *ngSwitchCase="'power'" class="py-4">
                           {{ data[template.matColumnDef] | number }}<br />
                           <span class="percent-vote text--gray-5 mt-1">{{ data['percent_power'] + '%' }}</span>
                         </div>
                         <div *ngSwitchCase="'participation'">
-                          {{ data[template.matColumnDef] + '/' + data['target_count']}}
+                          {{ data[template.matColumnDef] + '/' + data['target_count'] }}
                         </div>
                         <div *ngSwitchCase="'up_time'" class="pr-10">
                           <ng-container *ngIf="data['status'] === statusValidator.Active">
-                            {{ calculatorUpTime(data['cons_address']) | number: globals.formatNumber2Decimal }}%
+                            {{ calculatorUpTime(data['cons_address']) | number : globals.formatNumber2Decimal }}%
                           </ng-container>
                           <ng-container *ngIf="data['status'] !== statusValidator.Active"> 0.00% </ng-container>
                         </div>
                         <a
-                            *ngSwitchCase="'title'"
-                            class="text--primary cursor-pointer text-clamp box-title-validator pl-5"
-                            [routerLink]="['/validators', data.operator_address]">
+                          *ngSwitchCase="'title'"
+                          class="text--primary cursor-pointer text-clamp box-title-validator pl-5"
+                          [routerLink]="['/validators', data.operator_address]">
                           <div class="avatar-wrapper validator-avatar-wrapper pl-5">
                             <div class="validator-avatar">
                               <app-loading-image
-                                  [appClass]="data['jailed'] ? 'jailed' : ''"
-                                  [identity]="data.identity"
-                                  [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
+                                [appClass]="data['jailed'] ? 'jailed' : ''"
+                                [identity]="data.identity"
+                                [srcImg]="getValidatorAvatar(data.operator_address)"></app-loading-image>
                             </div>
                           </div>
                           <span [class.text-jailed]="data['jailed']">
@@ -175,19 +175,19 @@
                         <div *ngSwitchCase="'percent_power'" class="box-percent-power">
                           <div class="cumulative-share_container">
                             <div
-                                class="cumulative-share_cum"
-                                [ngStyle]="{ width: data.cumulative_share_before + '%' }"></div>
+                              class="cumulative-share_cum"
+                              [ngStyle]="{ width: data.cumulative_share_before + '%' }"></div>
                             <div class="cumulative-share_fill" [ngStyle]="{ width: data.cumulative_share + '%' }"></div>
                             <span>{{ data['cumulative_share_after'] + '%' }}</span>
                           </div>
                         </div>
                         <div *ngSwitchCase="'action'">
                           <button
-                              type="button"
-                              class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
-                              [disabled]="clicked"
-                              *ngIf="data['status'] === statusValidator.Active"
-                              (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
+                            type="button"
+                            class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
+                            [disabled]="clicked"
+                            *ngIf="data['status'] === statusValidator.Active"
+                            (click)="viewPopupDetail(modalManage, data.operator_address, dialogMode.Delegate, true)">
                             <span class="fw-500 body-02 text--gray-1">Delegate</span>
                           </button>
                         </div>
@@ -215,20 +215,20 @@
                   <div class="cursor-pointer table-header__title">
                     <div class="d-flex body-mob text--primary fw-semibold">
                       <a
-                          class="box-title-validator text--primary g-flex-start-center"
-                          [routerLink]="['/validators', validator.operator_address]">
+                        class="box-title-validator text--primary g-flex-start-center"
+                        [routerLink]="['/validators', validator.operator_address]">
                         <div class="avatar-wrapper">
                           <span class="validator-avatar">
                             <app-loading-image
-                                [identity]="validator['identity']"
-                                [appClass]="validator['jailed'] ? 'jailed' : ''"
-                                [srcImg]="getValidatorAvatar(validator['operator_address'])">
+                              [identity]="validator['identity']"
+                              [appClass]="validator['jailed'] ? 'jailed' : ''"
+                              [srcImg]="getValidatorAvatar(validator['operator_address'])">
                             </app-loading-image>
                           </span>
                           <div
-                              class="rank-wrapper _small"
-                              *ngIf="validator['rank']"
-                              [class._jailed]="validator['jailed']">
+                            class="rank-wrapper _small"
+                            *ngIf="validator['rank']"
+                            [class._jailed]="validator['jailed']">
                             <div class="box-rank _small _fill">
                               <span> {{ validator['rank'] }} </span>
                             </div>
@@ -242,11 +242,11 @@
                   </div>
                   <div class="table-header__action">
                     <button
-                        type="button"
-                        class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
-                        [disabled]="clicked"
-                        *ngIf="validator['status'] === statusValidator.Active"
-                        (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
+                      type="button"
+                      class="button button--sm button-pill button-outline button-outline__in-card ml-auto"
+                      [disabled]="clicked"
+                      *ngIf="validator['status'] === statusValidator.Active"
+                      (click)="viewPopupDetail(modalManage, validator.operator_address, dialogMode.Delegate, true)">
                       <span class="text--gray-1 body-02-mob">Delegate</span>
                     </button>
                   </div>
@@ -254,21 +254,21 @@
                 <div class="table-body body-01 pb-0">
                   <ng-container *ngFor="let template of templates; index as idx">
                     <div
-                        class="table-body__item d-flex justify-content-between text--gray-4 mb-3"
-                        *ngIf="!template?.desktopOnly">
+                      class="table-body__item d-flex justify-content-between text--gray-4 mb-3"
+                      *ngIf="!template?.desktopOnly">
                       <span>{{ template['headerCellDef'] }}</span>
 
                       <div class="body-01 text--gray-4 text-end">
                         <ng-container [ngSwitch]="template['headerCellDef']">
                           <ng-container *ngSwitchCase="'Voting Power'">
                             <h5 class="mb-1 text--gray-1">
-                              {{ validator.power | number: globals.formatNumberOnlyDecimal }}
+                              {{ validator.power | number : globals.formatNumberOnlyDecimal }}
                             </h5>
                             <div>{{ validator['percent_power'] + '%' }}</div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Commission'">
                             <div class="text--gray-1">
-                              {{ validator[template.matColumnDef] | percent: globals.formatNumber2Decimal }}
+                              {{ validator[template.matColumnDef] | percent : globals.formatNumber2Decimal }}
                             </div>
                           </ng-container>
                           <ng-container *ngSwitchCase="'Uptime'">
@@ -303,20 +303,20 @@
   <ng-template #modalManage let-modal (clickOutside)="closeDialog(modal)">
     <div class="box-staking aura-form">
       <img
-          [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3"
-          alt=""
-          class="d-lg-none mb-6"
-          width="24px"
-          height="24px"
-          (click)="closeDialog(modal)" />
+        [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3"
+        alt=""
+        class="d-lg-none mb-6"
+        width="24px"
+        height="24px"
+        (click)="closeDialog(modal)" />
       <div class="mb-4 mb-xl-6">
         <div class="mb-4 d-flex align-items-center">
           <div class="avatar-wrapper">
             <div class="validator-avatar large">
               <app-loading-image
-                  [appClass]="dataModal['jailed'] ? 'jailed' : ''"
-                  [identity]="dataModal.identity"
-                  [srcImg]="getValidatorAvatar(dataModal.operator_address)">
+                [appClass]="dataModal['jailed'] ? 'jailed' : ''"
+                [identity]="dataModal.identity"
+                [srcImg]="getValidatorAvatar(dataModal.operator_address)">
               </app-loading-image>
             </div>
           </div>
@@ -325,14 +325,14 @@
               <span class="modal__title">{{ dataModal?.title }}</span>
             </div>
             <div class="h6 body-02-mob mb-0 text--gray-1">
-              Commission - {{ dataModal?.commission | percent: globals.formatNumber2Decimal }}
+              Commission - {{ dataModal?.commission | percent : globals.formatNumber2Decimal }}
             </div>
           </div>
         </div>
         <div class="body-01 text--gray-5">
           <div class="mb-1">
             <span>Voting power - {{ dataModal?.percent_power }}%</span>&nbsp;
-            <span>({{ dataModal?.power | number: globals.formatNumberToken }}</span>
+            <span>({{ dataModal?.power | mask : 'separator.6' }}</span>
             <span class="text--primary ml-1">{{ denom }}</span
             >)
           </div>
@@ -345,22 +345,22 @@
           <div class="mt-2 h6 text--white mb-0">
             <span>Available for undelegation</span>
             <span class="ml-3 fw-normal">
-              {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
+              {{ dataDelegate?.validatorDetail?.amount_staked | mask : 'separator.6' }}
             </span>
             <span class="text--primary fw-normal"> {{ denom }} </span>
           </div>
-          <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input
-                type="number"
-                [max]="globals.maxNumberInput"
-                [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
-                [(ngModel)]="amountFormat"
-                (blur)="resetCheck()" />
+              type="number"
+              [max]="globals.maxNumberInput"
+              [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }"
+              [(ngModel)]="amountFormat"
+              (blur)="resetCheck()" />
             <div class="d-flex align-items-center mr-2 mr-lg-4">
               <button
-                  class="button button-flat button--xs button--sm-mob button-max body-02"
-                  type="button"
-                  (click)="getMaxToken(dialogMode.Undelegate)">
+                class="button button-flat button--sm button-max body-02"
+                type="button"
+                (click)="getMaxToken(dialogMode.Undelegate)">
                 MAX
               </button>
             </div>
@@ -368,13 +368,13 @@
           </div>
         </div>
         <ng-container *ngIf="dataDelegate.dialogMode === dialogMode.Delegate">
-          <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
             <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
             <div class="d-flex align-items-center py-2 mr-4">
               <button
-                  class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
-                  type="button"
-                  (click)="getMaxToken(dialogMode.Delegate)">
+                class="button button-primary active button-flat button--sm button-max fw-semibold"
+                type="button"
+                (click)="getMaxToken(dialogMode.Delegate)">
                 MAX
               </button>
             </div>
@@ -389,34 +389,34 @@
           <div class="h6 body-02-mob mb-3 text--white">Redelegate to:</div>
           <mat-form-field appearance="fill" dense>
             <mat-select
-                class="list-token"
-                placeholder="Select validator"
-                panelClass="commissionPanel"
-                [(value)]="selectedValidator"
-                [disableOptionCentering]="true">
+              class="list-token"
+              placeholder="Select validator"
+              panelClass="commissionPanel"
+              [(value)]="selectedValidator"
+              [disableOptionCentering]="true">
               <mat-select-trigger>{{ commissionLabel }}</mat-select-trigger>
               <mat-option
-                  *ngFor="let item of lstReValidator; let last = last"
-                  [class.mb-2]="!last"
-                  [value]="item.operator_address"
-                  (click)="setCommissionTitle(item.title)">
+                *ngFor="let item of lstReValidator; let last = last"
+                [class.mb-2]="!last"
+                [value]="item.operator_address"
+                (click)="setCommissionTitle(item.title)">
                 <div class="d-flex option-contain align-items-center justify-content-between">
                   <div
-                      class="option-label d-flex align-items-center text--gray-1"
-                      [ngClass]="{ active: item.isStaking === 1 }">
+                    class="option-label d-flex align-items-center text--gray-1"
+                    [ngClass]="{ active: item.isStaking === 1 }">
                     <div class="avatar-wrapper">
                       <div class="validator-avatar">
                         <app-loading-image
-                            [appClass]="item['jailed'] ? 'jailed' : ''"
-                            [identity]="item.identity"
-                            [srcImg]="getValidatorAvatar(item.operator_address)">
+                          [appClass]="item['jailed'] ? 'jailed' : ''"
+                          [identity]="item.identity"
+                          [srcImg]="getValidatorAvatar(item.operator_address)">
                         </app-loading-image>
                       </div>
                     </div>
                     <span class="option__name">{{ item.title | translate }}</span>
                   </div>
                   <div class="option-label text--gray-1">
-                    Commission - {{ item.commission | translate | percent: globals.formatNumber2Decimal }}
+                    Commission - {{ item.commission | translate | percent : globals.formatNumber2Decimal }}
                   </div>
                 </div>
               </mat-option>
@@ -426,17 +426,17 @@
             <div class="mt-6 body-01 body-02-mob">
               <span class="fw-500">Available for redelegation</span>
               <span class="ml-3">
-                {{ dataDelegate?.validatorDetail?.amount_staked | number: globals.formatNumberToken }}
+                {{ dataDelegate?.validatorDetail?.amount_staked | mask : 'separator.6' }}
               </span>
               <span class="text--primary"> {{ denom }} </span>
             </div>
-            <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+            <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
               <input type="number" [(ngModel)]="amountFormat" [max]="globals.maxNumberInput" (blur)="resetCheck()" />
               <div class="d-flex align-items-center py-2 mr-4">
                 <button
-                    class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
-                    type="button"
-                    (click)="getMaxToken(dialogMode.Undelegate)">
+                  class="button button-primary active button-flat button--sm button-max fw-semibold"
+                  type="button"
+                  (click)="getMaxToken(dialogMode.Undelegate)">
                   MAX
                 </button>
               </div>
@@ -448,124 +448,124 @@
       <div class="mt-6">
         <ng-container [ngSwitch]="dataDelegate.dialogMode">
           <div
-              *ngSwitchCase="dialogMode.Manage"
-              class="d-flex justify-content-between justify-content-sm-end button-group-selection">
+            *ngSwitchCase="dialogMode.Manage"
+            class="d-flex justify-content-between justify-content-sm-end button-group-selection">
             <div class="dropdown aura-dropdown mr-4 btn-item">
               <button
-                  class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-dropdown w-100"
-                  type="button"
-                  id="delegateAction"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-dropdown w-100"
+                type="button"
+                id="delegateAction"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
                 <span>Select Action</span>
               </button>
               <ul class="dropdown-menu aura-dropdown-menu delegateAction" aria-labelledby="delegateAction">
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Undelegate)">
                   <img
-                      class="mr-2"
-                      [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                      alt=""
-                      width="20"
-                      height="20"
-                      *ngIf="isLoading" />
+                    class="mr-2"
+                    [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                    alt=""
+                    width="20"
+                    height="20"
+                    *ngIf="isLoading" />
                   <button type="button" class="button p-0">Undelegate</button>
                 </li>
                 <li class="dropdown-item cursor-pointer" (click)="changeTypePopup(dialogMode.Redelegate)">
                   <img
-                      class="mr-2"
-                      [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                      alt=""
-                      width="20"
-                      height="20"
-                      *ngIf="isLoading" />
+                    class="mr-2"
+                    [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                    alt=""
+                    width="20"
+                    height="20"
+                    *ngIf="isLoading" />
                   <button type="button" class="button p-0">Redelegate</button>
                 </li>
               </ul>
             </div>
             <button
-                type="button"
-                class="button button--sm button--md-mob button-pill button-outline button-outline--gradient d-flex btn-item"
-                (click)="changeTypePopup(dialogMode.Delegate)">
+              type="button"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient d-flex btn-item"
+              (click)="changeTypePopup(dialogMode.Delegate)">
               <img
-                  class="mr-2"
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  width="20"
-                  height="20"
-                  *ngIf="isLoading" />
+                class="mr-2"
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span>Delegate</span>
             </button>
           </div>
           <div
-              *ngSwitchCase="dialogMode.Undelegate"
-              class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            *ngSwitchCase="dialogMode.Undelegate"
+            class="d-flex align-items-center justify-content-center justify-content-lg-end">
             <button
-                type="button"
-                class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4"
-                (click)="changeTypePopup(dialogMode.Manage)">
+              type="button"
+              class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4"
+              (click)="changeTypePopup(dialogMode.Manage)">
               <span>Back</span>
             </button>
             <button
-                type="button"
-                class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
-                (click)="handleUndelegate()"
-                [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+              type="button"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
+              (click)="handleUndelegate()"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img
-                  class="mr-2"
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  width="20"
-                  height="20"
-                  *ngIf="isLoading" />
+                class="mr-2"
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span>Undelegate</span>
             </button>
           </div>
           <div
-              *ngSwitchCase="dialogMode.Delegate"
-              class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            *ngSwitchCase="dialogMode.Delegate"
+            class="d-flex align-items-center justify-content-center justify-content-lg-end">
             <button
-                type="button"
-                class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4"
-                (click)="!isOpenStaking ? changeTypePopup(dialogMode.Manage) : closeDialog(modal)"
-                *ngIf="!isOpenStaking">
+              type="button"
+              class="button button--sm button--md-mob button-fixed button-pill button-outline mr-4"
+              (click)="!isOpenStaking ? changeTypePopup(dialogMode.Manage) : closeDialog(modal)"
+              *ngIf="!isOpenStaking">
               <span>Back</span>
             </button>
             <button
-                type="button"
-                class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
-                (click)="handleStaking()"
-                [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+              type="button"
+              class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
+              (click)="handleStaking()"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img
-                  class="mr-2"
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  width="20"
-                  height="20"
-                  *ngIf="isLoading" />
+                class="mr-2"
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span>Delegate</span>
             </button>
           </div>
           <div
-              *ngSwitchCase="dialogMode.Redelegate"
-              class="d-flex align-items-center justify-content-center justify-content-lg-end">
+            *ngSwitchCase="dialogMode.Redelegate"
+            class="d-flex align-items-center justify-content-center justify-content-lg-end">
             <button
-                type="button"
-                class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4"
-                (click)="changeTypePopup(dialogMode.Manage)">
+              type="button"
+              class="button button--sm button--md-mob button-pill button-outline button-fixed mr-4"
+              (click)="changeTypePopup(dialogMode.Manage)">
               <span>Back</span>
             </button>
             <button
-                type="button"
-                class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
-                (click)="handleRedelegate()"
-                [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+              type="button"
+              class="button button--sm button--md-mob button-pill button-outline button-outline--gradient button-fixed d-flex"
+              (click)="handleRedelegate()"
+              [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
               <img
-                  class="mr-2"
-                  [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-                  alt=""
-                  width="20"
-                  height="20"
-                  *ngIf="isLoading" />
+                class="mr-2"
+                [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+                alt=""
+                width="20"
+                height="20"
+                *ngIf="isLoading" />
               <span>Redelegate</span>
             </button>
           </div>

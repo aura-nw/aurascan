@@ -5,9 +5,14 @@
       <app-loading-sprint></app-loading-sprint>
     </div>
     <div *ngIf="!loading">
-      <app-proposal-table *ngIf="voteDataList.length > 0"
-              [type]="'DEPOSITORS'" [data]="voteDataList" [length]="voteDataList.length"></app-proposal-table>
-      <div *ngIf="voteDataList.length === 0">
+      <app-proposal-table
+        *ngIf="depositorsList.length > 0"
+        [type]="'DEPOSITORS'"
+        [data]="depositorsList"
+        [length]="dataLenght"
+        (loadMore)="loadMore($event)">
+      </app-proposal-table>
+      <div *ngIf="depositorsList.length === 0">
         <app-table-no-data></app-table-no-data>
       </div>
     </div>
