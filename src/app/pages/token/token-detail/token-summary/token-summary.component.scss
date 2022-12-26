@@ -1,9 +1,5 @@
 .box-token-info {
   table.aura-basic-table {
-    @media (min-width: 992px) {
-      min-height: 280px;
-    }
-
     tr,
     td {
       color: var(--aura-contract);

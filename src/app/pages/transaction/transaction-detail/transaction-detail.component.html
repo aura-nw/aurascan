@@ -14,7 +14,19 @@
 <ng-container *ngIf="!loading">
   <ng-container *ngIf="transaction; else noValues">
     <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-      <h2 class="card-header mb-0 text--white pb-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+      <div class="d-flex align-items-baseline">
+        <h2 id="popupCopy" class="card-header mb-0 text--white pb-0 pr-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+        <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
+          <img
+            [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+            alt=""
+            matTooltip="Copied!"
+            #tooltip="matTooltip"
+            (mouseenter)="$event.stopImmediatePropagation()"
+            (mouseleave)="$event.stopImmediatePropagation()"
+            (click)="copyData(transaction.tx); tooltip.toggle()" />
+        </button>
+      </div>
       <div class="card-body body py-4">
         <div *ngIf="!isRawData">
           <div class="row box-error" *ngIf="errorMessage">
@@ -71,7 +83,7 @@
           <div class="row mb-3 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Fee</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01">
-              {{ transaction?.fee }} <span class="text--primary">{{ denom }}</span>
+              {{ +transaction?.fee | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
             </div>
           </div>
           <div class="row body justify-content-between justify-content-lg-start">

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { makeSignDoc, StdSignDoc } from '@cosmjs/amino';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { Decimal } from '@cosmjs/math';
+import { StdFee } from '@cosmjs/stargate';
 import { ChainInfo, Keplr, Key } from '@keplr-wallet/types';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -10,13 +12,12 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { EAccountType } from 'src/app/core/constants/account.enum';
 import { AccountResponse, Coin98Client } from 'src/app/core/utils/coin98-client';
-import { getFee } from 'src/app/core/utils/signing/fee';
 import { messageCreators } from 'src/app/core/utils/signing/messages';
 import { createSignBroadcast, getNetworkFee } from 'src/app/core/utils/signing/transaction-manager';
-import { LAST_USED_PROVIDER, SIGNING_MESSAGE_TYPES, WALLET_PROVIDER } from '../constants/wallet.constant';
+import { LAST_USED_PROVIDER, WALLET_PROVIDER } from '../constants/wallet.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { WalletStorage } from '../models/wallet';
-import { getKeplr, handleErrors, keplrSuggestChain } from '../utils/keplr';
+import { getKeplr, handleErrors } from '../utils/keplr';
 import local from '../utils/storage/local';
 import { NgxToastrService } from './ngx-toastr.service';
 
@@ -245,7 +246,7 @@ export class WalletService implements OnDestroy {
     });
   }
 
-  signAndBroadcast(
+  async signAndBroadcast(
     {
       messageType,
       message,
@@ -259,11 +260,12 @@ export class WalletService implements OnDestroy {
     let signingClient;
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       const msgs = messageCreators[messageType](senderAddress, message, network);
-
+      const fee: StdFee = await getNetworkFee(network, senderAddress, msgs, '');
+      
       return this.makeSignDocData(senderAddress, {
         msgs,
         chain_id: chainId,
-        fee: getNetworkFee(network, messageType, validatorsCount),
+        fee: fee,
         memo: '',
       })
         .toPromise()
@@ -308,13 +310,14 @@ export class WalletService implements OnDestroy {
   private makeSignDocData(address, signDoc: Partial<StdSignDoc>): Observable<StdSignDoc> {
     return this.http.get(`${this.urlIndexer}/account-info?address=${address}&chainId=${signDoc.chain_id}`).pipe(
       map((res) => {
-        const accountAuth = _.get(res, 'data.account_auth.result');
+        let accountAuth;
+        accountAuth = _.get(res, 'data.account_auth.result');
         let account: {
           account_number: number | string;
           sequence: number | string;
         };
 
-        if (accountAuth.type === EAccountType.BaseAccount) {
+        if (accountAuth && accountAuth.type === EAccountType.BaseAccount) {
           account = accountAuth.value;
         } else {
           account = _.get(accountAuth, 'value.base_vesting_account.base_account');
@@ -343,17 +346,22 @@ export class WalletService implements OnDestroy {
     return this.coin98Client.signArbitrary(this.wallet.bech32Address, base64String);
   }
 
-  execute(userAddress, contract_address, msg) {
+  async execute(userAddress, contract_address, msg) {
     let signer;
+    let gasStep = this.chainInfo?.gasPriceStep?.average || 0.0025;
 
-    const fee: any = {
-      amount: [
-        {
-          denom: this.chainInfo.currencies[0].coinMinimalDenom,
-          amount: '1',
-        },
-      ],
-      gas: getFee(SIGNING_MESSAGE_TYPES.WRITE_CONTRACT),
+    //convert gasPrice to Decimal
+    let pow = 1;
+    while (!Number.isInteger(gasStep)) {
+      gasStep = gasStep * Math.pow(10, pow);
+      pow++;
+    }
+
+    const fee = {
+      gasPrice: {
+        amount: Decimal.fromAtomics(gasStep.toString(), pow),
+        denom: this.chainInfo.currencies[0].coinMinimalDenom,
+      },
     };
 
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
@@ -362,8 +370,8 @@ export class WalletService implements OnDestroy {
       signer = window.getOfflineSignerOnlyAmino(this.chainId);
     }
 
-    return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer).then((client) =>
-      client.execute(userAddress, contract_address, msg, fee),
+    return SigningCosmWasmClient.connectWithSigner(this.chainInfo.rpc, signer, fee).then((client) =>
+      client.execute(userAddress, contract_address, msg, 'auto'),
     );
   }
 

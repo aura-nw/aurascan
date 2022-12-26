@@ -86,7 +86,7 @@
                   </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'numb'">
-                  {{ data[template.matColumnDef] | number: global.formatNumberToken }}
+                  {{ data[template.matColumnDef] | mask: 'separator.6' }}
                 </ng-container>
                 <ng-container *ngSwitchCase="'time-distance'">
                   {{ data[template.matColumnDef] | dfnsFormatDistanceToNowStrictPure }}

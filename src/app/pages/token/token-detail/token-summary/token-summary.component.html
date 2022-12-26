@@ -67,20 +67,22 @@
             <div class="d-flex align-items-center py-2">
               <div class="first-col text--gray-5">Official Site:</div>
               <div>
-                 <a class="text--primary break-word" *ngIf="projectDetail && projectDetail.official_project_website"
+                -
+                 <!-- <a class="text--primary break-word" *ngIf="projectDetail && projectDetail.official_project_website"
                     [href]="sanitize(projectDetail.official_project_website)">{{projectDetail.official_project_website}}</a>
-                <span *ngIf="!projectDetail || (projectDetail && !projectDetail.official_project_website)">-</span>
+                <span *ngIf="!projectDetail || (projectDetail && !projectDetail.official_project_website)">-</span> -->
               </div>
             </div>
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="border_none">
+          <td colspan="2">
             <div class="d-flex align-items-center py-2">
               <div class="first-col text--gray-5 mb-1">Social Profiles:</div>
               <div>
-                <span *ngIf="!projectDetail">-</span>
-                <div class="d-flex flex-wrap social-group">
+                -
+                <!-- <span *ngIf="!projectDetail">-</span> -->
+                <!-- <div class="d-flex flex-wrap social-group">
                   <a href="{{projectDetail.whitepaper}}" *ngIf="projectDetail?.whitepaper" target="_blank">
                     <i class="ph-file-pdf"></i>
                   </a>
@@ -117,13 +119,10 @@
                   <a href="{{projectDetail.bitcointalk}}" *ngIf="projectDetail?.bitcointalk" target="_blank">
                     <i class="ph-currency-btc"></i>
                   </a>
-                </div>
+                </div> -->
               </div>
             </div>
           </td>
-        </tr>
-        <tr *ngIf="tokenDetail.isNFTContract" class="d-none d-lg-table-row">
-          <td colspan="2"></td>
         </tr>
       </table>
 </div>

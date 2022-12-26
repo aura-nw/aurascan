@@ -1,4 +1,3 @@
-
 export enum TypeTransaction {
   IBCTransfer = 'IBC Transfer',
   IBCReceived = 'IBC Received',
@@ -36,7 +35,11 @@ export enum TypeTransaction {
   SubmitProposalTx = 'Submit Proposal',
   GetRewardCommission = 'Get Reward Commission',
   PeriodicVestingAccount = 'Periodic Vesting',
-  Fail = 'Fail'
+  BasicAllowance = 'Basic',
+  PeriodicAllowance = 'Periodic',
+  MsgGrantAllowance = 'Grant Allowance',
+  MsgRevokeAllowance = 'Revoke Allowance',
+  Fail = 'Fail',
 }
 
 export enum TRANSACTION_TYPE_ENUM {
@@ -75,23 +78,29 @@ export enum TRANSACTION_TYPE_ENUM {
   SubmitProposalTx = '/cosmos.gov.v1beta1.MsgSubmitProposal',
   GetRewardCommission = '/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission',
   PeriodicVestingAccount = '/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount',
-  Fail = 'FAILED'
+  BasicAllowance = '/cosmos.feegrant.v1beta1.BasicAllowance',
+  PeriodicAllowance = '/cosmos.feegrant.v1beta1.PeriodicAllowance',
+  MsgGrantAllowance = '/cosmos.feegrant.v1beta1.MsgGrantAllowance',
+  MsgRevokeAllowance = '/cosmos.feegrant.v1beta1.MsgRevokeAllowance',
+  AllowedMsgAllowance = '/cosmos.feegrant.v1beta1.AllowedMsgAllowance',
+  AllowedContractAllowance = '/cosmos.feegrant.v1beta1.AllowedContractAllowance',
+  Fail = 'FAILED',
 }
 
 export enum StatusTransaction {
   Success = 'Success',
-  Fail = 'Fail'
+  Fail = 'Fail',
 }
 
 export enum CodeTransaction {
-  Success = 0
+  Success = 0,
 }
 
 export enum ModeExecuteTransaction {
   Default = 'default',
   Mint = 'mint',
   Burn = 'burn',
-  Buy = 'buy'
+  Buy = 'buy',
 }
 
 export enum pipeTypeData {

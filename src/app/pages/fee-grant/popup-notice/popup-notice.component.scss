@@ -1,0 +1,9 @@
+.card {
+  width: 330px;
+  i.icon-warning {
+    font-size: 32px;
+  }
+  @media (min-width: 992px) {
+    width: 655px;
+  }
+}

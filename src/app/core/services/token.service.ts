@@ -67,7 +67,7 @@ export class TokenService extends CommonService {
       tokenId: payload.token_id,
       contractAddress: payload.contractAddress,
       pageLimit: payload.pageLimit,
-      nextKey: payload.nextKey,
+      pageOffset: payload.pageOffset,
       countTotal: true,
       contractType: 'CW721',
       isBurned: false,

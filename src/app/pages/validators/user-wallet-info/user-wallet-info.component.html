@@ -8,7 +8,7 @@
             <span class="body-02 body-01-mob text--gray-3">Available Balance: </span>
             <h6 class="mb-0">
               <span class="text--gray-1">
-                {{ dataDelegate.availableToken || 0 | number: globals.formatNumberToken }}
+                {{ +dataDelegate.availableToken || 0 | mask: 'separator.6' }}
               </span>
               <span class="ml-1 text--primary">{{ denom }}</span>
             </h6>
@@ -17,7 +17,7 @@
             <span class="body-02 body-01-mob text--gray-3">Total Staked: </span>
             <h6 class="mb-0">
               <span class="text--gray-1">
-                {{ dataDelegate.delegatedToken || 0 | number: globals.formatNumberToken }}
+                {{ +dataDelegate.delegatedToken || 0 | mask: 'separator.6' }}
               </span>
               <span class="ml-1 text--primary">{{ denom }}</span>
             </h6>
@@ -37,7 +37,7 @@
               height="20"
               *ngIf="isLoading" />
             <span class="text--black"
-              >Claim Reward: {{ dataDelegate.stakingToken || 0 | number: globals.formatNumberToken }}</span
+              >Claim Reward: {{ +dataDelegate.stakingToken || 0 | mask: 'separator.6' }}</span
             >
             <span class="ml-1 text--black">{{ denom }}</span>
           </button>
@@ -81,11 +81,11 @@
                   <div>
                     <ng-container [ngSwitch]="template.matColumnDef">
                       <div *ngSwitchCase="'amount_staked'" class="pl-lg-1">
-                        {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                        {{ data[template.matColumnDef] | mask: 'separator.6' }}
                         <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'pending_reward'">
-                        {{ data[template.matColumnDef] | number: globals.formatNumberToken }}
+                        {{ data[template.matColumnDef] | mask: 'separator.6' }}
                         <span class="text--primary">{{ denom }}</span>
                       </div>
                       <div *ngSwitchCase="'action'" class="py-4">
@@ -166,7 +166,7 @@
                     <span>{{ template['headerCellDef'] }}</span>
                     <div>
                       <span class="text--white">
-                        {{ validator[template.matColumnDef] | number: globals.formatNumberToken }}</span
+                        {{ validator[template.matColumnDef] | mask: 'separator.6' }}</span
                       >
                       <span *ngIf="template['headerCellDef']" class="ml-2 text--primary">
                         {{ denom }}
@@ -208,7 +208,7 @@
           </div>
           <div class="col-9 text--gray-1 body-02 pl-0 pl-lg-1">
             <div>
-              <span>{{ validator.balance | number: globals.formatNumberToken }}</span>
+              <span>{{ validator.balance | mask: 'separator.6' }}</span>
               <span class="text--primary ml-2">{{ denom }}</span>
             </div>
             <div class="text--gray-5">
@@ -240,7 +240,7 @@
                 <span [class.text-jailed]="validator['jailed']">{{ validator.validator_name }}</span>
               </a>
               <div class="body-01 text-end">
-                <span class="text--white">{{ validator.balance | number: globals.formatNumberToken }}</span>
+                <span class="text--white">{{ validator.balance | mask: 'separator.6' }}</span>
                 <span class="text--primary ml-2">{{ denom }}</span>
               </div>
             </div>

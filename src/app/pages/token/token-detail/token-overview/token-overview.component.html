@@ -19,43 +19,37 @@
         </td>
       </tr>
 
-      <tr>
+      <tr *ngIf="!tokenDetail.isNFTContract">
         <td colspan="2" class="py-2">
           <div class="d-flex">
-            <div class="{{ !tokenDetail.isNFTContract ? 'flex-item' : 'd-flex d-lg-block' }}">
+            <div class="flex-item">
               <div class="text--gray-5 body-02 fixed-col">
                 <span>Price:</span>
               </div>
               <div class="body-02">
                 <div class="text--gray-1">
-                  <span class="small-body">${{ tokenDetail.price | number: global.formatNumber2Decimal }}</span>
-                  <span class="caption fw-normal text--gray-5 ml-1">
+                  <span class="small-body">${{ +tokenDetail.price | mask : 'separator.6' }}</span>
+                  <span class="caption fw-normal text--gray-5">
                     <ng-container *ngIf="global.price.aura">
-                      @{{ tokenDetail.price / global.price.aura || 0 | number: global.formatNumberToken }}
+                      @{{ +tokenDetail.price / +global.price.aura || 0 | mask : 'separator.2' }}
                     </ng-container>
                     <ng-container *ngIf="!global.price.aura">-</ng-container>
                     {{ denom }}
                   </span>
 
-                  <span [ngStyle]="{ color: tokenDetail.isValueUp ? '#5EE69D' : '#E65E5E' }" *ngIf="tokenDetail.change">
-                    (<ng-container *ngIf="tokenDetail.isValueUp">
-                      <img [src]="'assets/images/icons/arrow-up.svg' | imageS3" />
-                    </ng-container>
-                    <ng-container *ngIf="!tokenDetail.isValueUp">
-                      <img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />
-                    </ng-container>
-                    <span class="ml-1">{{ tokenDetail.change | number: global.formatNumber2Decimal }} %</span>)
+                  <span class="ml-1 {{ tokenDetail.isValueUp ? 'text--green-3' : 'text--red-3' }}">
+                    (<span class=""
+                      >{{ tokenDetail.isValueUp ? '+' : '-'
+                      }}{{ tokenDetail.change | number : global.formatNumber2Decimal }}%</span
+                    >)
                   </span>
                 </div>
-                <!--                  <span class="caption fw-normal-mob ml-2 text&#45;&#45;light-gray">@0.000068 {{ denom }}</span>-->
-                <!--                  <br class="d-lg-none" />-->
-                <!--                  <span class="text-danger ml-2">(-0,87%)</span>-->
               </div>
             </div>
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
               <div class="text--gray-5 body-02">CIRCULATING SUPPLY MARKET CAP</div>
               <div class="body-02 text--gray-1">
-                ${{ tokenDetail.circulating_market_cap | number: global.formatNumber2Decimal }}
+                ${{ tokenDetail.circulating_market_cap | number : global.formatNumber2Decimal }}
               </div>
             </div>
           </div>
@@ -71,19 +65,26 @@
               <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
-                  {{ tokenDetail.max_total_supply | number: global.formatNumberToken }}
+                  <ng-container *ngIf="+tokenDetail.max_total_supply === 0">-</ng-container>
+                  <ng-container *ngIf="+tokenDetail.max_total_supply !== 0">
+                    {{ +tokenDetail.max_total_supply | mask : 'separator.6' }}
+                    <span class="ml-1">{{ tokenDetail.symbol || tokenDetail.name }}</span>
+                  </ng-container>
                 </ng-container>
                 <ng-container *ngIf="tokenDetail.isNFTContract">
-                  {{ tokenDetail.num_tokens | number: global.formatNumberOnlyDecimal }}
+                  {{ tokenDetail.num_tokens | number : global.formatNumberOnlyDecimal }}
                 </ng-container>
-                <span class="ml-1">{{ tokenDetail.symbol || tokenDetail.name }}</span>
               </div>
             </div>
 
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
               <div class="text--gray-5 body-02">FULLY DILUTED MARKET CAP</div>
               <div class="body-02 text--gray-1">
-                ${{ tokenDetail.fully_diluted_market_cap | number: global.formatNumber2Decimal }}
+                ${{
+                  +tokenDetail.max_total_supply === 0
+                    ? (tokenDetail.circulating_market_cap | number : global.formatNumber2Decimal)
+                    : (tokenDetail.fully_diluted_market_cap | number : global.formatNumber2Decimal)
+                }}
               </div>
             </div>
           </div>
@@ -96,9 +97,14 @@
             <div class="body-02 text--gray-5 fixed-col">Holders:</div>
             <div class="body-02 text--gray-1">
               {{ tokenDetail?.holder || 0 }}
-              <!-- <span class="text-danger ml-1" *ngIf="!isNFTContract"
-                  >(<img [src]="'assets/images/icons/arrow-down.svg' | imageS3" />-0,02%)</span
-                > -->
+              <span
+                class="ml-1 {{ tokenDetail.isHolderUp ? 'text--green-3' : 'text--red-3' }}"
+                *ngIf="!tokenDetail.isNFTContract">
+                (<span class=""
+                  >{{ tokenDetail.isHolderUp ? '+' : '-'
+                  }}{{ tokenDetail.holderChange | number : global.formatNumber2Decimal }}%</span
+                >)
+              </span>
             </div>
           </div>
         </td>
@@ -108,7 +114,9 @@
         <td colspan="2" *ngIf="!params">
           <div class="d-flex">
             <div class="body-02 text--gray-5 fixed-col">Transfers:</div>
-            <div class="body-02 text--gray-1">{{ tokenDetail.totalTransfer || 0 }}</div>
+            <div class="body-02 text--gray-1">
+              <span *ngIf="tokenDetail.hasMoreTx">More than </span>{{ tokenDetail.totalTransfer || 0 }}
+            </div>
           </div>
         </td>
       </tr>

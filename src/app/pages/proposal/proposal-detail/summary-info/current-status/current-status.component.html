@@ -32,7 +32,7 @@
           {{ proposalDetail.currentYesPercent | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-5 col-lg-4 text-end h6 mb-0 fw-normal text--gray-5 body-02-mob">
-          {{ proposalDetail.pro_votes_yes | number: global.formatNumberToken }}
+          {{ proposalDetail.pro_votes_yes | mask: 'separator.6' }}
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
           {{ proposalDetail.currentNoPercent | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5 body-02-mob">
-          {{ proposalDetail.pro_votes_no | number: global.formatNumberToken }}
+          {{ proposalDetail.pro_votes_no | mask: 'separator.6' }}
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
           {{ proposalDetail.currentNoWithVetoPercent | number: global.formatNumber2Decimal }}%
         </div>
         <div class="col-5 col-lg-4 flex-shrink-0 text-end h6 mb-0 fw-normal text--gray-5 body-02-mob">
-          {{ proposalDetail.pro_votes_no_with_veto | number: global.formatNumberToken }}
+          {{ proposalDetail.pro_votes_no_with_veto | mask: 'separator.6' }}
         </div>
       </div>
     </div>

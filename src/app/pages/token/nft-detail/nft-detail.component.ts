@@ -44,7 +44,7 @@ export class NFTDetailComponent implements OnInit {
   contractAddress = '';
   nftDetail: any;
   typeTransaction = TYPE_TRANSACTION;
-  contractType = ContractVerifyType.Exact_Match;
+
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;
@@ -112,8 +112,18 @@ export class NFTDetailComponent implements OnInit {
       res?.data?.data?.transactions.forEach((trans) => {
         trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
       });
-      this.dataSource.data = res.data?.data?.transactions;
-      this.pageData.length = res.data?.data?.count;
+      let txs = [];
+      res.data?.data?.transactions.forEach((element, index) => {
+        txs.push(element);
+        if (element.type === 'buy') {
+          let txTransfer = { ...element };
+          txTransfer['type'] = 'transfer';
+          txTransfer['price'] = 0;
+          txs.push(txTransfer);
+        }
+      });
+      this.dataSource.data = txs;
+      this.pageData.length = txs?.length;
     }
     this.loading = false;
   }

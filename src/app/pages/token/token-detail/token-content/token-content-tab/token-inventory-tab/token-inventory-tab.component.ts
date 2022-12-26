@@ -23,12 +23,9 @@ export class TokenInventoryComponent implements OnInit {
   nftData: MatTableDataSource<any> = new MatTableDataSource();
   contractAddress = '';
   keyWord = '';
-  nextKey = null;
-  currentKey = null;
-
   dataSourceMobile: any[];
-
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
+  isMoreTx = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,10 +49,10 @@ export class TokenInventoryComponent implements OnInit {
     this.loading = true;
     let payload = {
       pageLimit: 100,
+      pageOffset: this.pageData.pageIndex * this.pageData.pageSize,
       token_id: '',
       owner: '',
       contractAddress: this.contractAddress,
-      nextKey: this.nextKey,
     };
 
     if (this.keyWord) {
@@ -66,41 +63,41 @@ export class TokenInventoryComponent implements OnInit {
       }
     }
 
+    if (payload.pageOffset > 100) {
+      payload.pageOffset = 100;
+    }
+
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      this.nextKey = res.data.nextKey;
       const cw721Asset = _.get(res, 'data.assets.CW721');
+      this.pageData.length = _.get(res, 'data.assets.CW721.count');
+
       if (this.nftData.data.length > 0) {
         this.nftData.data = [...this.nftData.data, ...cw721Asset.asset];
       } else {
         this.nftData.data = [...cw721Asset.asset];
       }
-
       this.dataSourceMobile = this.nftData.data.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
         this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
       );
-      this.pageData.length = this.nftData.data.length;
+
+      if (this.pageData.length > 200) {
+        this.pageData.length = 200;
+      } else {
+        if (this.pageData.length === this.nftData.data.length) {
+          this.isMoreTx = false;
+        }
+      }
       this.loading = false;
     });
   }
 
-  xpageEvent(e: PageEvent): void {
-    this.pageData.pageIndex = e.pageIndex;
-    this.getNftData();
-  }
-
   pageEvent(e: PageEvent): void {
-    const { length, pageIndex, pageSize } = e;
-    const next = length <= (pageIndex + 2) * pageSize;
-    this.pageData = e;
-    this.dataSourceMobile = this.nftData.data.slice(
-      this.pageData.pageIndex * this.pageData.pageSize,
-      this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-    );
-
-    if (next && this.nextKey && this.currentKey !== this.nextKey) {
+    if (e.pageIndex * e.pageSize >= this.nftData.data.length) {
+      this.pageData = e;
       this.getNftData();
-      this.currentKey = this.nextKey;
+    } else {
+      this.dataSourceMobile = this.nftData.data.slice(e.pageIndex * e.pageSize, e.pageIndex * e.pageSize + e.pageSize);
     }
   }
 
@@ -114,10 +111,6 @@ export class TokenInventoryComponent implements OnInit {
       });
       this.nftData.paginator = e;
     } else this.nftData.paginator = e;
-  }
-
-  xpaginatorEmit(e): void {
-    this.nftData.paginator = e;
   }
 
   handleRouterLink(e: Event, link, params?): void {

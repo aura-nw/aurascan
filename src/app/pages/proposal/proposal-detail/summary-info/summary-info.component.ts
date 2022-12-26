@@ -5,10 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { map, mergeMap } from 'rxjs/operators';
-import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Globals } from '../../../../../app/global/global';
 import {
-  MESSAGE_WARNING,
   PROPOSAL_STATUS,
   PROPOSAL_VOTE,
   VOTING_FINAL_STATUS,
@@ -50,7 +48,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private proposalService: ProposalService,
-    private validatorService: ValidatorService,
     public global: Globals,
     private walletService: WalletService,
     public dialog: MatDialog,
@@ -118,7 +115,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.pro_total_vote || 0;
             const voted = this.proposalDetail.pro_total_vote - this.proposalDetail.pro_votes_abstain;
             const voted_percent = (voted * 100) / this.proposalDetail.total_bonded_token;
-            const voted_abstain_percent = (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token;
+            const voted_abstain_percent =
+              (this.proposalDetail.pro_votes_abstain * 100) / this.proposalDetail.total_bonded_token;
 
             this.proposalDetail = {
               ...this.proposalDetail,
@@ -128,7 +126,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
               abstainPercent,
               voted_percent,
               voted,
-              voted_abstain_percent
+              voted_abstain_percent,
             };
             this.parsingProposalStatus(this.proposalDetail);
 
@@ -293,21 +291,10 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     if (expiredTime > 0) {
       const account = this.walletService.getAccount();
       if (account) {
-        this.validatorService.getStakeInfo(account.bech32Address).subscribe(({ data }) => {
-          let warning: MESSAGE_WARNING;
-          const { created_at } = data.result ? data.result : { created_at: null };
-          warning = created_at
-            ? +moment(created_at).format('x') < +moment(proposalDetail.voting_start_time).format('x')
-              ? null
-              : MESSAGE_WARNING.LATE
-            : MESSAGE_WARNING.NOT_PARTICIPATE;
-
-          this.openDialog({
-            id,
-            title,
-            warning,
-            voteValue: this.voteConstant?.find((s) => s.key === this.voteValue?.keyVote)?.voteOption || null,
-          });
+        this.openDialog({
+          id,
+          title,
+          voteValue: this.voteConstant?.find((s) => s.key === this.voteValue?.keyVote)?.voteOption || null,
         });
       }
     } else {
@@ -317,7 +304,7 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
 
   openDialog(data): void {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
-      width: data.warning ? '500px' : '431px',
+      width: '431px',
       data: data,
     });
 
@@ -326,23 +313,27 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         setTimeout(() => {
           this.proposalService.reloadList();
           this.getProposalDetail();
+          this.getVotedProposal();
         }, 3000);
-        this.getVotedProposal();
       }
     });
   }
 
-  async getVotedProposal() {
+  getVotedProposal() {
     const addr = this.walletService.wallet?.bech32Address || null;
     if (addr) {
-      const res = await this.proposalService.getVotes(this.proposalId, addr, 10, 0);
-
-      this.proposalVotes = this.voteConstant.find(
-        (s) => s.key === res?.data?.txs[0]?.body?.messages[0]?.option,
-      )?.voteOption;
-      this.voteValue = {
-        keyVote: res.data?.txs[0]?.body?.messages[0]?.option,
+      const payload = {
+        proposalId: this.proposalId,
+        wallet: addr,
       };
+      this.proposalService.getVotes(payload).subscribe((res) => {
+        this.proposalVotes = this.voteConstant.find(
+          (s) => s.key === res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+        )?.voteOption;
+        this.voteValue = {
+          keyVote: res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+        };
+      });
     } else {
       this.proposalVotes = null;
     }

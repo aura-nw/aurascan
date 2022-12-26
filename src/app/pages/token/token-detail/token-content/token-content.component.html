@@ -17,7 +17,7 @@
               alt=""
               width="18px"
               height="18px" />
-            FILTER BY TOKEN HOLDER
+            FILTER BY ADDRESS
           </div>
           <a
             class="body-02 text--primary"
@@ -31,14 +31,15 @@
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <span *ngIf="!tokenDetail?.isNFTContract">
-            {{ infoSearch['balance'] || 0 | number: global.formatNumberToken }} {{ tokenDetail.name }}
+            {{ infoSearch['balance'] || 0 | mask: 'separator.6' }}
+            {{ tokenDetail.symbol || tokenDetail.name }}
           </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
           ${{ +infoSearch['balance'] * tokenDetail.price | number: global.formatNumber2Decimal }} (
-          {{ (infoSearch['balance'] * tokenDetail.price) / global.price.aura | number: global.formatNumberToken }}
+          {{ (infoSearch['balance'] * tokenDetail.price) / global.price.aura | mask: 'separator.6' }}
           {{ denom }})
         </div>
       </div>
@@ -59,7 +60,7 @@
             <img
               class="ml-2"
               *ngIf="
-                tab.key === tokenTab.Contract && tokenDetail.contract_verification !== contractVerifyType.Unverifed
+                tab.key === tokenTab.Contract && tokenDetail.contract_verification !== contractVerifyType.Unverified
               "
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
@@ -109,7 +110,9 @@
       [keyWord]="textSearch"
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
-      (resultLength)="getLength($event)"></app-token-transfers-tab>
+      (resultLength)="getLength($event)"
+      (hasMore)="getMoreTx($event)">
+    </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="countCurrent === tokenTab.Holders"
       [keyWord]="textSearch"

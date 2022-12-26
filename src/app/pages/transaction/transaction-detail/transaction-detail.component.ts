@@ -10,6 +10,7 @@ import { CommonService } from '../../../core/services/common.service';
 import { MappingErrorService } from '../../../core/services/mapping-error.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { convertDataTransaction, Globals } from '../../../global/global';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -50,6 +51,7 @@ export class TransactionDetailComponent implements OnInit {
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
+    private clipboard: Clipboard
   ) {}
 
   ngOnInit(): void {
@@ -98,8 +100,22 @@ export class TransactionDetailComponent implements OnInit {
       );
     }
   }
-
+  
   changeType(type: boolean): void {
     this.isRawData = type;
+  }
+
+  copyData(text: string): void {
+    var dummy = document.createElement('textarea');
+    document.body.appendChild(dummy);
+    this.clipboard.copy(JSON.stringify(text, null, 2));
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+    // fake event click out side copy button
+    // this event for hidden tooltip
+    setTimeout(function (){
+      document.getElementById('popupCopy').click();
+    }, 800)
   }
 }
