@@ -37,7 +37,6 @@ export class FeeGrantService extends CommonService {
       status: 'Available',
       pageLimit: 100,
       nextKey: nextKey,
-      expired: false,
       txhash: !isSearchAddress ? filterSearch['textSearch'] : null,
     })
       .omitBy(_.isNull)
