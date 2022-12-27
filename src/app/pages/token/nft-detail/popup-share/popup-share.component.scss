@@ -6,11 +6,15 @@
   .header-box-share {
     background: var(--aura-gray-9);
     border-radius: 12px 12px 0px 0px;
-    padding: var(--spacer-6);
+    padding: var(--spacer-3);
+    @media (min-width: 992px) {
+      padding: var(--spacer-6);
+    }
   }
 
-  .card-body {
-    padding: 0px 24px 37px 24px;
+  .card-share-body {
+    padding: 24px 0px;
+    // border-bottom: 1px solid black;
   }
 
   .card {
@@ -33,6 +37,34 @@
   .btn-copy {
     min-width: 125px;
   }
+
+  .icon-telegram.icon--light-gray {
+    &::before {
+      background: url("../../../../../assets/icons/icons-svg/white/telegram-white.svg") no-repeat center;
+      background-size: contain;
+    }
+  };
+
+  .icon-twitter.icon--light-gray {
+    &::before {
+      background: url("../../../../../assets/icons/icons-svg/white/twitter-white.svg") no-repeat center;
+      background-size: contain;
+    }
+  };
+
+  .icon-discord.icon--light-gray {
+    &::before {
+      background: url("../../../../../assets/icons/icons-svg/white/discord-white.svg") no-repeat center;
+      background-size: contain;
+    }
+  };
+
+  .icon-fb-circle.icon--light-gray {
+    &::before {
+      background: url("../../../../../assets/icons/icons-svg/white/fb-white.svg") no-repeat center;
+      background-size: contain;
+    }
+  };
 
   @media (min-width: 992px) {
     width: 470px;

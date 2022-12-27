@@ -81,10 +81,12 @@ export class PopupShareComponent implements OnInit {
   }
 
   mouseEnter(item: string) {
+    document.getElementById(item).classList.remove('icon--light-gray');
     document.getElementById(item).classList.add('icon--multi-color');
   }
 
   mouseLeave(item : string){
+    document.getElementById(item).classList.add('icon--light-gray');
     document.getElementById(item).classList.remove('icon--multi-color');
   }
 }
