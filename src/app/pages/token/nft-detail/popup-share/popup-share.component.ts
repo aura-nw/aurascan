@@ -49,7 +49,7 @@ export class PopupShareComponent implements OnInit {
     // fake event click out side copy button
     // this event for hidden tooltip
     setTimeout(function () {
-      document.getElementById('currentAddress').click();
+      document.getElementById('shareContent').click();
     }, 800);
   }
 
@@ -81,10 +81,12 @@ export class PopupShareComponent implements OnInit {
   }
 
   mouseEnter(item: string) {
+    document.getElementById(item).classList.remove('icon--light-gray');
     document.getElementById(item).classList.add('icon--multi-color');
   }
 
-  mouseLeave(item : string){
+  mouseLeave(item: string) {
+    document.getElementById(item).classList.add('icon--light-gray');
     document.getElementById(item).classList.remove('icon--multi-color');
   }
 }

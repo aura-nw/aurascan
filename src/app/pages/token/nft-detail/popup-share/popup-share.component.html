@@ -1,61 +1,63 @@
 <div class="card box-share">
   <div class="card-header card-header-gray header-box-share">
     <div class="d-flex justify-content-between align-items-center">
-      <div class="h1 h2-mob mb-0 ml-2 text--white w-100 fw-700">Share this with your friends!</div>
+      <div class="h2 h3-mob mb-0 text--white w-100 text-header" id="shareContent">Share with your friends!</div>
       <img
         class="icon-close"
-        [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+        [src]="'assets/icons/icons-svg/white/close-model.svg' | imageS3"
         alt=""
         (click)="closeDialog()" />
     </div>
   </div>
-  <div class="card-body">
-    <div class="body-01 d-flex col-12 justify-content-center pb-10 pt-12">
-      <div class="d-flex col-lg-9 col-11 justify-content-between box-item-share">
-        <a
-          href="javascript:void(0)"
-          (mouseenter) ="mouseEnter('telegram') "
-          (mouseleave) ="mouseLeave('telegram')"
-          (click)="executeShareLink(modeShare.telegram)"
-          target="_blank"
-          class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-          <i class="mx-3 aura-icon icon-telegram" id="telegram"></i>
-        </a>
-        <a
-          href="javascript:void(0)"
-          (mouseenter) ="mouseEnter('facebook') "
-          (mouseleave) ="mouseLeave('facebook')"
-          (click)="executeShareLink(modeShare.facebook)"
-          target="_blank"
-          class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-          <i class="mx-3 aura-icon icon-fb-circle" id="facebook"></i>
-        </a>
-        <a
-          href="javascript:void(0)"
-          (mouseenter) ="mouseEnter('twitter') "
-          (mouseleave) ="mouseLeave('twitter')"
-          (click)="executeShareLink(modeShare.twitter)"
-          target="_blank"
-          class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-          <i class="mx-3 aura-icon icon-twitter" id="twitter"></i>
-        </a>
-        <a
-          href="https://discord.com/app"
-          (mouseenter) ="mouseEnter('discord')"
-          (mouseleave) ="mouseLeave('discord')"
-          target="_blank"
-          class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-          <i class="mx-3 aura-icon icon-discord" id="discord"></i>
-        </a>
-      </div>
+  <div class="">
+    <div class="body-01 d-flex col-12 justify-content-center py-6 box-item-share">
+      <a
+        href="javascript:void(0)"
+        (mouseenter)="mouseEnter('telegram')"
+        (mouseleave)="mouseLeave('telegram')"
+        (click)="executeShareLink(modeShare.telegram)"
+        target="_blank"
+        class="button button-outline button-outline--gradient button-outline__in-card button-circle">
+        <i class="mx-3 aura-icon icon-telegram icon--light-gray" id="telegram"></i>
+      </a>
+      <a
+        href="javascript:void(0)"
+        (mouseenter)="mouseEnter('facebook')"
+        (mouseleave)="mouseLeave('facebook')"
+        (click)="executeShareLink(modeShare.facebook)"
+        target="_blank"
+        class="button button-outline button-outline--gradient button-outline__in-card button-circle">
+        <i class="mx-3 aura-icon icon-fb-circle icon--light-gray" id="facebook"></i>
+      </a>
+      <a
+        href="javascript:void(0)"
+        (mouseenter)="mouseEnter('twitter')"
+        (mouseleave)="mouseLeave('twitter')"
+        (click)="executeShareLink(modeShare.twitter)"
+        target="_blank"
+        class="button button-outline button-outline--gradient button-outline__in-card button-circle">
+        <i class="mx-3 aura-icon icon-twitter icon--light-gray" id="twitter"></i>
+      </a>
+      <a
+        href="https://discord.com/app"
+        (mouseenter)="mouseEnter('discord')"
+        (mouseleave)="mouseLeave('discord')"
+        target="_blank"
+        class="button button-outline button-outline--gradient button-outline__in-card button-circle">
+        <i class="mx-3 aura-icon icon-discord icon--light-gray" id="discord"></i>
+      </a>
     </div>
-    <div class="d-flex align-items-center justify-content-end">
-      <input type="text" class="form-check-input text--gray-4" [(ngModel)]="shareLink" autocomplete="off" readOnly/>
+    <div class="d-flex align-items-center justify-content-end box-footer">
+      <input type="text" class="form-check-input text--gray-4" [(ngModel)]="shareLink" autocomplete="off" disabled />
       <div class="ml-4">
         <button
           type="button"
-          class="button button--md button-pill button-flat d-flex btn-copy"
-          (click)="copyMessage(shareLink)">
+          matTooltip="Copied!"
+          #tooltip="matTooltip"
+          (mouseenter)="$event.stopImmediatePropagation()"
+          (mouseleave)="$event.stopImmediatePropagation()"
+          class="button button--md button--sm-mob button-outline button-outline--gradient button-outline__in-card button-pill d-flex btn-copy"
+          (click)="copyMessage(shareLink); tooltip.toggle()">
           <span>Copy link</span>
         </button>
       </div>
