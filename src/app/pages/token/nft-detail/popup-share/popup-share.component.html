@@ -18,7 +18,7 @@
         (click)="executeShareLink(modeShare.telegram)"
         target="_blank"
         class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-        <i class="mx-3 aura-icon icon-telegram icon--light-gray" id="telegram"></i>
+        <i class="aura-icon icon-telegram icon--light-gray" id="telegram"></i>
       </a>
       <a
         href="javascript:void(0)"
@@ -27,7 +27,7 @@
         (click)="executeShareLink(modeShare.facebook)"
         target="_blank"
         class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-        <i class="mx-3 aura-icon icon-fb-circle icon--light-gray" id="facebook"></i>
+        <i class="aura-icon icon-fb-circle icon--light-gray" id="facebook"></i>
       </a>
       <a
         href="javascript:void(0)"
@@ -36,7 +36,7 @@
         (click)="executeShareLink(modeShare.twitter)"
         target="_blank"
         class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-        <i class="mx-3 aura-icon icon-twitter icon--light-gray" id="twitter"></i>
+        <i class="aura-icon icon-twitter icon--light-gray" id="twitter"></i>
       </a>
       <a
         href="https://discord.com/app"
@@ -44,11 +44,11 @@
         (mouseleave)="mouseLeave('discord')"
         target="_blank"
         class="button button-outline button-outline--gradient button-outline__in-card button-circle">
-        <i class="mx-3 aura-icon icon-discord icon--light-gray" id="discord"></i>
+        <i class="aura-icon icon-discord icon--light-gray" id="discord"></i>
       </a>
     </div>
     <div class="d-flex align-items-center justify-content-end box-footer">
-      <input type="text" class="form-check-input text--gray-4" [(ngModel)]="shareLink" autocomplete="off" disabled />
+      <input type="text" class="form-check-input input-share text--gray-4" [(ngModel)]="shareLink" autocomplete="off" disabled />
       <div class="ml-4">
         <button
           type="button"
@@ -56,7 +56,7 @@
           #tooltip="matTooltip"
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
-          class="button button--md button--sm-mob button-outline button-outline--gradient button-outline__in-card button-pill d-flex btn-copy"
+          class="button button--md button--xs-mob button-outline button-outline--gradient button-outline__in-card button-pill d-flex btn-copy"
           (click)="copyMessage(shareLink); tooltip.toggle()">
           <span>Copy link</span>
         </button>
