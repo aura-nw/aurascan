@@ -7,7 +7,7 @@
           <span class="mr-2">#{{ nftDetail?.token_id }}</span>
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
-        <button class="button btn-share ml-2" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+        <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
           <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" />
         </button>
         <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
@@ -49,7 +49,7 @@
                 </span>
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
-              <button class="button btn-share ml-2" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+              <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
                 <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" />
               </button>
               <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
