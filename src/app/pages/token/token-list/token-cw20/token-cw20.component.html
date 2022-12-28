@@ -88,7 +88,8 @@
                   <img class="rounded-circle" [src]="element.image || defaultLogoToken" width="18" height="18" />
                   <div class="ml-3">
                     <a [routerLink]="['/tokens/token', element.contract_address]" class="text--primary">
-                      {{ element.name }} <span *ngIf="element.symbol">({{ element.symbol }})</span>
+                      {{ element.name | stringEllipsis : 16 }}
+                      <span *ngIf="element.symbol">({{ element.symbol }})</span>
                     </a>
                     <div class="body-02 fw-normal caption-mob mb-0 text--gray-6 pr-5 desc">
                       {{ element.description }}
