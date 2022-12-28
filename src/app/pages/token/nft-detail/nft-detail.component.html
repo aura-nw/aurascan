@@ -7,6 +7,9 @@
           <span class="mr-2">#{{ nftDetail?.token_id }}</span>
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
+        <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" />
+        </button>
         <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
       </h1>
       <div class="mt-2">
@@ -23,23 +26,15 @@
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img">
               <img *ngIf="!nftType || isError" [src]="defaultImgToken" />
-              <img
-                *ngIf="nftType === 'img' && isError === false"
-                (error)="error()"
-                [src]="this.nftUrl" />
+              <img *ngIf="nftType === 'img' && isError === false" (error)="error()" [src]="this.nftUrl" />
               <app-custom-video-player
                 [videoSrc]="this.nftUrl"
                 [showControl]="true"
                 *ngIf="nftType === 'video'"
                 [isDetail]="true">
               </app-custom-video-player>
-              <app-model-view
-                *ngIf="nftType === '3d'"
-                [modelUrl]="this.nftUrl"
-                [disablePan]="false">
-              </app-model-view>
-              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl">
-              </app-audio-player>
+              <app-model-view *ngIf="nftType === '3d'" [modelUrl]="this.nftUrl" [disablePan]="false"> </app-model-view>
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl"> </app-audio-player>
             </div>
           </div>
         </div>
@@ -48,12 +43,15 @@
         <div class="d-lg-flex flex-column justify-content-between h-100">
           <div class="d-none d-lg-block">
             <div class="d-flex align-items-center">
-              <h1 class="fw-semibold sub-text text--white mb-0 mr-1">
-                <ng-container *ngIf="!nftDetail?.isDisplayName">
+              <h1 class="fw-semibold sub-text text--white mb-0 mr-2">
+                <span *ngIf="!nftDetail?.isDisplayName">
                   {{ nftDetail?.name }} #{{ nftDetail?.token_id }}
-                </ng-container>
+                </span>
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
+              <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
+                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" />
+              </button>
               <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
             </div>
             <div class="my-5">
@@ -62,9 +60,11 @@
                 width="24px"
                 height="24px"
                 class="mr-1 object-fit--none" /> -->
-              <a class="h6 mb-0 text--primary break-word" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
-                nftDetail?.name
-              }}</a>
+              <a
+                class="h6 mb-0 text--primary break-word"
+                [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]"
+                >{{ nftDetail?.name }}</a
+              >
             </div>
           </div>
           <!-- Desktop card info -->
@@ -240,7 +240,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'tx_hash'">
                   <a class="text--primary" [routerLink]="['/transaction', data.tx_hash]">
-                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
                 </ng-container>
                 <ng-container *ngSwitchCase="'status'">
@@ -269,10 +269,10 @@
                     class="text--primary content-transfer"
                     [routerLink]="['/account', data[template.matColumnDef]]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Mint && data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Mint" class="content-transfer">{{
-                    data[template.matColumnDef] | cutStringPipe: 8:8
+                    data[template.matColumnDef] | cutStringPipe : 8 : 8
                   }}</span>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                   <img
@@ -290,18 +290,21 @@
                     height="16px" />
                   <a
                     class="text--primary"
-                    [routerLink]="[data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account', data[template.matColumnDef]]"
+                    [routerLink]="[
+                      data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account',
+                      data[template.matColumnDef]
+                    ]"
                     *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                    {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
                   <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                    data[template.matColumnDef] | cutStringPipe: 8:8
+                    data[template.matColumnDef] | cutStringPipe : 8 : 8
                   }}</span>
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
                   <span *ngIf="data[template.matColumnDef]">
-                    {{ data[template.matColumnDef] | mask: 'separator.6' || '-' }} {{ denom }}
+                    {{ data[template.matColumnDef] | mask : 'separator.6' || '-' }} {{ denom }}
                   </span>
                 </ng-container>
                 <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>

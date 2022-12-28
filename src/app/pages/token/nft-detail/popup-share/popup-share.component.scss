@@ -1,0 +1,86 @@
+.box-share {
+  width: 90%;
+  margin: auto;
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.9);
+  border-radius: var(--spacer-3);
+  .header-box-share {
+    background: var(--aura-gray-9);
+    border-radius: 12px 12px 0px 0px;
+    padding: var(--spacer-4);
+    @media (min-width: 992px) {
+      padding: var(--spacer-6);
+    }
+  }
+
+  .card {
+    i.icon-warning {
+      font-size: 32px;
+    }
+  }
+
+  .box-item-share {
+    border-bottom: 1px solid #363843;
+    .button-circle {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    a {
+      margin: 0px var(--spacer-3);
+      @media (min-width: 992px) {
+        margin: 0px var(--spacer-5);
+      }
+    }
+  }
+
+  .box-footer {
+    padding: var(--spacer-4);
+    input {
+      margin-top: 0px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-copy {
+      min-width: 125px;
+    }
+    @media (min-width: 992px) {
+      padding: var(--spacer-6);
+    }
+  }
+
+  .icon-telegram.icon--light-gray {
+    &::before {
+      background: url('../../../../../assets/icons/icons-svg/white/telegram-white.svg') no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  .icon-twitter.icon--light-gray {
+    &::before {
+      background: url('../../../../../assets/icons/icons-svg/white/twitter-white.svg') no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  .icon-discord.icon--light-gray {
+    &::before {
+      background: url('../../../../../assets/icons/icons-svg/white/discord-white.svg') no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  .icon-fb-circle.icon--light-gray {
+    &::before {
+      background: url('../../../../../assets/icons/icons-svg/white/fb-white.svg') no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  @media (min-width: 992px) {
+    width: 500px;
+  }
+}

@@ -13,6 +13,8 @@ import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { TokenService } from 'src/app/core/services/token.service';
 import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { PopupShareComponent } from './popup-share/popup-share.component';
 
 @Component({
   selector: 'app-nft-detail',
@@ -68,6 +70,7 @@ export class NFTDetailComponent implements OnInit {
     private environmentService: EnvironmentService,
     private tokenService: TokenService,
     private router: ActivatedRoute,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -181,5 +184,11 @@ export class NFTDetailComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  shareNFT() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    let dialogRef = this.dialog.open(PopupShareComponent, dialogConfig);
   }
 }
