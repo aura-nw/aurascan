@@ -13,6 +13,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -77,6 +78,7 @@ export class MyGranteesComponent implements OnInit {
     public translate: TranslateService,
     private transactionService: TransactionService,
     private walletService: WalletService,
+    private mappingErrorService: MappingErrorService,
   ) {}
 
   ngOnInit() {
@@ -220,7 +222,7 @@ export class MyGranteesComponent implements OnInit {
       if (result) {
         this.toastr.loading(result);
         setTimeout(() => {
-          this.checkDetailTx(result);
+          this.mappingErrorService.checkDetailTx(result).then(() => this.getListGrant());
         }, 2000);
       }
     });
@@ -236,26 +238,10 @@ export class MyGranteesComponent implements OnInit {
       if (result) {
         this.toastr.loading(result);
         setTimeout(() => {
-          this.checkDetailTx(result);
+          this.mappingErrorService.checkDetailTx(result).then(() => this.getListGrant());
         }, 2000);
       }
     });
   }
 
-  async checkDetailTx(id) {
-    const res = await this.transactionService.txsDetailLcd(id);
-    let numberCode = res?.data?.tx_response?.code;
-    let message = res?.data?.tx_response?.raw_log;
-    if (numberCode !== undefined) {
-      if (!!!numberCode && numberCode === CodeTransaction.Success) {
-        message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
-        this.toastr.success(message);
-        setTimeout(() => {
-          this.getListGrant();
-        }, TIME_OUT_CALL_API);
-      } else {
-        this.toastr.error(message);
-      }
-    }
-  }
 }

@@ -20,6 +20,7 @@ import { TokenService } from '../../core/services/token.service';
 import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
+import { PopupShareComponent } from './nft-detail/popup-share/popup-share.component';
 import { TokenContractTabComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
 import { TokenHoldersTabComponent } from './token-detail/token-content/token-content-tab/token-holders-tab/token-holders-tab.component';
 import { TokenInfoTabComponent } from './token-detail/token-content/token-content-tab/token-info-tab/token-info-tab.component';
@@ -53,6 +54,7 @@ import { TokenRoutingModule } from './token-routing.module';
     TokenHoldingNftComponent,
     TokenInventoryComponent,
     NFTDetailComponent,
+    PopupShareComponent
   ],
   imports: [
     CommonModule,
