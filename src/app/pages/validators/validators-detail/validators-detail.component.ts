@@ -7,12 +7,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { fromHex, toBech32 } from '@cosmjs/encoding';
 import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
@@ -79,6 +81,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   nextKeyBlock = null;
   currentNextKeyBlock = null;
   isOpenDialog = false;
+  totalSBT = 0;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -90,25 +93,25 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   soulboundList = [
     {
       img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
     },
     {
       img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
     },
     {
       img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
     },
     {
       img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
     },
     {
       img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
-    }
-  ]
+      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
+    },
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -120,11 +123,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
+    private soulboundService: SoulboundService,
   ) {}
 
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-
+    this.getTotalSBT();
     this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
@@ -134,7 +138,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }, 10000);
   }
 
-  loadData(){
+  loadData() {
     this.getDetail();
     this.getListBlockWithOperator();
     this.getListDelegator();
@@ -385,7 +389,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }
-  
+
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
     if (editor && this.currentValidatorDetail) {
@@ -398,7 +402,18 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.isOpenDialog = true;
   }
 
-  updateStatus(event){
+  updateStatus(event) {
     this.isOpenDialog = event;
+  }
+
+  getTotalSBT() {
+    const payload = {
+      receiverAddress: this.currentAddress,
+      limit: LIMIT_NUM_SBT,
+    };
+
+    this.soulboundService.getSBTPick(payload).subscribe((res) => {
+      this.soulboundList = res.data;
+    });
   }
 }

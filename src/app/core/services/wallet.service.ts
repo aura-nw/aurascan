@@ -385,6 +385,7 @@ export class WalletService implements OnDestroy {
   walletExecute(userAddress, contractAddress, data) {
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
+    let result = false;
     let feeGas = {
       amount: [
         {

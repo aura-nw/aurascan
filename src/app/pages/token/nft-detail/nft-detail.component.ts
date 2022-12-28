@@ -209,14 +209,23 @@ export class NFTDetailComponent implements OnInit {
     return false;
   }
 
-  async updatePickSBT(isPick) {
-    const minter = this.walletService.wallet?.bech32Address;
+  async unEquipSBT() {
+    const user = this.walletService.wallet?.bech32Address;
     const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, isPick);
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, 'un-equip');
+
+    const executeTakeMsg = {
+      unequip: {
+        token_id: this.nftDetail.token_id,
+      },
+    };
+
+    console.log(executeTakeMsg);
+    this.walletService.walletExecute(user, this.nftDetail.contract_address, executeTakeMsg);
 
     const payload = {
       signature: dataKeplr.signature,
-      msg: isPick,
+      msg: true,
       pubKey: dataKeplr.pub_key.value,
       id: this.nftDetail?.token_id,
     };

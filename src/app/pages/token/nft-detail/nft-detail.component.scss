@@ -15,6 +15,10 @@
   border-radius: 4px;
 }
 
+.card-header {
+  border-bottom-color: var(--aura-gray-9);
+}
+
 .content-transfer {
   min-width: 170px;
   display: inline-block;

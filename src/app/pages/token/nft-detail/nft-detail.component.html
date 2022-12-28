@@ -32,16 +32,14 @@
       <div class="col-12 col-lg-8 pl-lg-3">
         <div class="d-lg-flex flex-column justify-content-between h-100">
           <div class="d-lg-flex justify-content-between">
-            <div>
-              <div class="d-flex align-items-center">
-                <h1 class="fw-bold sub-text text--white mb-0 mr-1">
-                  <ng-container *ngIf="!nftDetail?.isDisplayName">
-                    {{ nftDetail?.name || nftDetail?.token_name }} #{{ nftDetail?.token_id }}
-                  </ng-container>
-                  <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
-                </h1>
-                <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
-              </div>
+            <div class="d-flex align-items-center">
+              <h1 class="fw-bold sub-text text--white mb-0 mr-1">
+                <ng-container *ngIf="!nftDetail?.isDisplayName">
+                  {{ nftDetail?.name || nftDetail?.token_name }} #{{ nftDetail?.token_id | cutStringPipe : 8 : 8 }}
+                </ng-container>
+                <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
+              </h1>
+              <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
               <div class="mt-1 mt-lg-2 mb-4">
                 <!-- <img
                   [src]="nftDetail?.image || defaultLogoToken"
@@ -56,15 +54,11 @@
               </div>
             </div>
             <ng-container *ngIf="isSoulBound">
-              <button *ngIf="nftDetail.picked"
+              <button
+                *ngIf="nftDetail.picked"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="updatePickSBT(true)">
+                (click)="unEquipSBT()">
                 <span>Un-equip</span>
-              </button>
-              <button *ngIf="!nftDetail.picked"
-                class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="updatePickSBT(false)">
-                <span>Equip</span>
               </button>
             </ng-container>
           </div>
@@ -234,14 +228,17 @@
           <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Properties</div>
           <div class="card-body pt-0">
             <div class="row text--gray-1 sb-props px-2">
-              <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
-                <div class="col-4 mt-4 mt-lg-6">
-                  <div class="card-info py-4 text-center">
-                    <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
-                    <div class="mt-2 caption">{{ prop.value | stringEllipsis : 13 }}</div>
+              <ng-container *ngIf="nftDetail?.ipfs?.attributes">
+                <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
+                  <div class="col-4 mt-4 mt-lg-6">
+                    <div class="card-info py-4 text-center">
+                      <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
+                      <div class="mt-2 caption">{{ prop.value | stringEllipsis : 13 }}</div>
+                    </div>
                   </div>
-                </div>
+                </ng-container>
               </ng-container>
+              <ng-container *ngIf="!nftDetail?.ipfs?.attributes">-</ng-container>
             </div>
           </div>
         </div>
@@ -250,7 +247,7 @@
         <div class="card card--sb-information mb-0">
           <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Description</div>
           <div class="card-body text--gray-1 body-03 sb-props">
-            {{ nftDetail?.ipfs?.description }}
+            {{ nftDetail?.ipfs?.description || '-' }}
           </div>
         </div>
       </div>

@@ -93,14 +93,15 @@
       <div class="divider divider-horizontal mt-4"></div>
     </div>
     <div class="card-body body-01 pt-2 text--gray-4">
-      <div class="row mt-4" *ngIf="currentAddress">
+      <div class="row mt-4" *ngIf="soulboundList && soulboundList.length > 0">
         <div class="col-12">
           <!-- Aura Marking Milestone -->
           <div class="body-01 text--gray-4 mb-2">Aura Marking Milestone</div>
           <div class="soulbound-feature-tokens mt-2">
             <app-soulbound-feature-tokens
-                [extend]="false"
-                [accountAddress]="currentAddress"></app-soulbound-feature-tokens>
+              [extend]="false"
+              [accountAddress]="currentAddress"
+              (totalSBT)="totalSBT = $event"></app-soulbound-feature-tokens>
           </div>
         </div>
       </div>
@@ -119,7 +120,7 @@
           <div class="row mt-3">
             <div class="col-6">Commission</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
-              {{ currentValidatorDetail?.commission | percent: global.formatNumber2Decimal }}
+              {{ currentValidatorDetail?.commission | percent : global.formatNumber2Decimal }}
             </div>
           </div>
           <!-- Uptime -->
@@ -127,7 +128,7 @@
             <div class="col-6">Uptime</div>
             <div class="col-6 text--gray-1 text-end text-lg-start">
               <ng-container *ngIf="currentValidatorDetail['status'] === statusValidator.Active">
-                {{ currentValidatorDetail?.up_time | number: global.formatNumber2Decimal }}%
+                {{ currentValidatorDetail?.up_time | number : global.formatNumber2Decimal }}%
               </ng-container>
               <ng-container *ngIf="currentValidatorDetail['status'] !== statusValidator.Active"> 0.00% </ng-container>
             </div>
@@ -139,7 +140,7 @@
             <div class="col-6">Voting Power</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.power | mask: 'separator.6' }}</span>
+                <span class="text--gray-1">{{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
@@ -157,9 +158,7 @@
             <div class="col-6">Self Bonded</div>
             <div class="col-6 text-end text-lg-start d-xl-flex">
               <div>
-                <span class="text--gray-1">{{
-                  currentValidatorDetail?.self_bonded | mask: 'separator.6'
-                }}</span>
+                <span class="text--gray-1">{{ currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
                 <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
               </div>
               <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
@@ -208,7 +207,7 @@
                               *ngSwitchCase="'block_hash'"
                               class="text--primary cursor-pointer"
                               [routerLink]="['/blocks', data.height]">
-                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <a
                               *ngSwitchCase="'height'"
@@ -248,10 +247,10 @@
                           class: 'card__date text--gray-1 body-01-mob',
                           info:
                             '<span>' +
-                            (data.timestamp | customDate: 'yyyy-MM-dd') +
+                            (data.timestamp | customDate : 'yyyy-MM-dd') +
                             '</span>' +
                             '<span>' +
-                            (data.timestamp | customDate: 'HH:mm:ss') +
+                            (data.timestamp | customDate : 'HH:mm:ss') +
                             '</span>'
                         }
                       ]"></app-card-mob-simple>
@@ -305,7 +304,7 @@
                         ? 'none'
                         : '#5EE6D0'
                   }"
-                  [routerLink]="['/blocks',itemBlock?.height]"
+                  [routerLink]="['/blocks', itemBlock?.height]"
                   currentitem="false"
                   matTooltip="{{ itemBlock?.height || 0 }}"
                   [matTooltipPosition]="'above'">
@@ -353,10 +352,10 @@
                               *ngSwitchCase="'delegator_address'"
                               class="text--primary cursor-pointer"
                               [routerLink]="['/account', data.delegator_address]">
-                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <div *ngSwitchCase="'amount'">
-                              {{ data[template.matColumnDef] | mask: 'separator.6' }}
+                              {{ data[template.matColumnDef] | mask : 'separator.6' }}
                               <span class="text--primary">{{ denom }}</span>
                             </div>
                             <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
@@ -380,17 +379,13 @@
                       [link]="'/account/' + data.delegator_address"
                       [content]="[
                         {
-                          label: data.delegator_address | cutStringPipe: 6:6,
+                          label: data.delegator_address | cutStringPipe : 6 : 6,
                           info: ''
                         },
                         {
                           label: 'Amount',
                           class: 'body-01 text--gray-1',
-                          info:
-                            (data.amount | mask: 'separator.6') +
-                            '<span class=text--primary> ' +
-                            denom +
-                            '</span>'
+                          info: (data.amount | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
                         }
                       ]"></app-card-mob-simple>
                   </div>
@@ -441,13 +436,13 @@
                               *ngSwitchCase="'tx_hash'"
                               class="text--primary cursor-pointer hash-link"
                               [routerLink]="['/transaction', data['tx_hash']]">
-                              {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
+                              {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
                             <div
                               *ngSwitchCase="'amount'"
                               [ngStyle]="{ color: data['isStakeMode'] ? '#7D8CFF' : '#D5625E' }">
                               {{ data['isStakeMode'] ? '+' : '-' }}
-                              {{ data[template.matColumnDef] | mask: 'separator.6' }}
+                              {{ data[template.matColumnDef] | mask : 'separator.6' }}
                             </div>
                             <a
                               *ngSwitchCase="'height'"
@@ -483,7 +478,7 @@
                             '<a class=text--primary href=/transaction/' +
                             data.tx_hash +
                             '>' +
-                            (data.tx_hash | cutStringPipe: 6:6) +
+                            (data.tx_hash | cutStringPipe : 6 : 6) +
                             '</a>'
                         },
                         { label: 'Amount', info: checkAmountStaking(data.amount, data.isStakeMode) },
@@ -492,10 +487,10 @@
                           class: 'card__date text--gray-1 body-01-mob',
                           info:
                             '<span>' +
-                            (data.timestamp | customDate: 'yyyy-MM-dd') +
+                            (data.timestamp | customDate : 'yyyy-MM-dd') +
                             '</span>' +
                             '<span>' +
-                            (data.timestamp | customDate: 'HH:mm:ss') +
+                            (data.timestamp | customDate : 'HH:mm:ss') +
                             '</span>'
                         }
                       ]"></app-card-mob-simple>

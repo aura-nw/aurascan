@@ -106,7 +106,7 @@
               </a>
             </li>
             <li class="nav-item dropdown mx-5 mx-lg-8 mx-xl-12" *ngIf="i > 0" routerLinkActive="active">
-              <ng-container *ngIf="item.name === 'More' && wallet || item.name !== 'More'">
+              <ng-container *ngIf="(item.name === 'More' && wallet) || item.name !== 'More'">
                 <button
                   (click)="onMenuClick($event)"
                   class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
@@ -115,21 +115,23 @@
                     <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
                   </div>
                   <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
-                    <a
-                      [routerLink]="subMenu.link"
-                      class="d-flex align-items-center mb-0 nav-link__item"
-                      routerLinkActive="active"
-                      [class.active]="
-                        '/' + subMenu.link.split('/')[1] == '/' + router.url.split('/')[1] &&
-                        menuLink[i].includes('/' + router.url.split('/')[1])
-                      "
-                      *ngFor="let subMenu of item.subItems">
-                      <!-- Menu token has special icon -->
-                      <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
-                      <!-- . -->
-                      <i class="ph-{{ subMenu.icon }}" *ngIf="subMenu.name !== menuName.TokenCW721"></i>
-                      <span class="ml-2">{{ subMenu.label | translate }}</span>
-                    </a>
+                    <ng-container *ngFor="let subMenu of item.subItems">
+                      <a
+                        *ngIf="subMenu.label !== 'Soulbound Token' || subMenu.label === 'Soulbound Token'"
+                        [routerLink]="subMenu.link"
+                        class="d-flex align-items-center mb-0 nav-link__item"
+                        routerLinkActive="active"
+                        [class.active]="
+                          '/' + subMenu.link.split('/')[1] == '/' + router.url.split('/')[1] &&
+                          menuLink[i].includes('/' + router.url.split('/')[1])
+                        ">
+                        <!-- Menu token has special icon -->
+                        <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
+                        <!-- . -->
+                        <i class="ph-{{ subMenu.icon }}" *ngIf="subMenu.name !== menuName.TokenCW721"></i>
+                        <span class="ml-2">{{ subMenu.label | translate }}</span>
+                      </a>
+                    </ng-container>
                   </span>
                 </button>
               </ng-container>

@@ -49,41 +49,42 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     const { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
 
     const keplr = await getKeplr();
+    keplr.enable(this.network.chainId);
     // const AGREEMENT = 'Agreement(address active,address passive,string tokenURI)';
     // let data = AGREEMENT + receiverAddress + minter + soulboundTokenURI;
 
     let data = this.createMessageToSign(this.network.chainId, receiverAddress, minter, soulboundTokenURI);
 
-    let dataJson = {
-      account_number: '0',
-      chain_id: 'aura-testnet-2',
-      fee: {
-        amount: [],
-        gas: '0',
-      },
-      memo: '',
-      msgs: {
-        type: 'sign/MsgSignData',
-        value: {
-          data: 'Agreement(address active,address passive,string tokenURI)aura1fqj2redmssckrdeekhkcvd2kzp9f4nks4fctrtaura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0nhttps://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu',
-          signer: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
-        },
-      },
-      sequence: '0',
-    };
+    // let dataJson = {
+    //   account_number: '0',
+    //   chain_id: 'aura-testnet-2',
+    //   fee: {
+    //     amount: [],
+    //     gas: '0',
+    //   },
+    //   memo: '',
+    //   msgs: {
+    //     type: 'sign/MsgSignData',
+    //     value: {
+    //       data: 'Agreement(address active,address passive,string tokenURI)aura1fqj2redmssckrdeekhkcvd2kzp9f4nks4fctrtaura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0nhttps://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu',
+    //       signer: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
+    //     },
+    //   },
+    //   sequence: '0',
+    // };
 
     // let dataKeplr = await keplr.signAmino(this.network.chainId, minter, dataJson);
     // console.log(dataKeplr);
 
     console.log(JSON.stringify(data));
 
-    // let dataTest = serializeSignDoc(data);
-    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, JSON.stringify(dataJson));
-    const message = "Create NFT token";
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
+    let dataTest = serializeSignDoc(data);
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, dataTest);
+    // const message = "Create NFT token";
+    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
     const payload = {
       signature: dataKeplr.signature,
-      msg: message,
+      msg: data,
       pubKey: dataKeplr.pub_key.value,
       contract_address: this.data.contractAddress,
       receiver_address: receiverAddress,
