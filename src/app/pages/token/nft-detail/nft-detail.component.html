@@ -8,7 +8,7 @@
         </ng-container>
         <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
         <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
-          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" />
+          <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
         </button>
         <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
       </h1>
@@ -44,13 +44,11 @@
           <div class="d-none d-lg-block">
             <div class="d-flex align-items-center">
               <h1 class="fw-semibold sub-text text--white mb-0 mr-2">
-                <span *ngIf="!nftDetail?.isDisplayName">
-                  {{ nftDetail?.name }} #{{ nftDetail?.token_id }}
-                </span>
+                <span *ngIf="!nftDetail?.isDisplayName"> {{ nftDetail?.name }} #{{ nftDetail?.token_id }} </span>
                 <ng-container *ngIf="nftDetail?.isDisplayName"> {{ nftDetail?.nftName }} </ng-container>
               </h1>
               <button class="button btn-share" *ngIf="!nftDetail?.is_burned" (click)="shareNFT()">
-                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" />
+                <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
               </button>
               <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
             </div>

@@ -19,7 +19,7 @@
   }
 
   .box-item-share {
-    border-bottom: 1px solid #363843;
+    border-bottom: 1px solid var(--aura-gray-9);
     .button-circle {
       border-radius: 50%;
       width: 48px;
@@ -34,21 +34,37 @@
         margin: 0px var(--spacer-5);
       }
     }
+    .aura-icon {
+      font-size: 24px;
+      margin: 0px 10px;
+    }
   }
 
   .box-footer {
     padding: var(--spacer-4);
-    input {
+    .input-share {
       margin-top: 0px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: var(--aura-gray-4) !important;
+      background-color: var(--aura-gray-10) !important;
+      border: 1px solid var(--aura-gray-8) !important;
+      border-radius: 8px;
     }
     .btn-copy {
-      min-width: 125px;
+      padding: 8px 16px;
+      min-width: 88px;
+      @media (min-width: 992px) {
+        padding: var(--spacer-6);
+      }
     }
     @media (min-width: 992px) {
       padding: var(--spacer-6);
+      .btn-copy {
+        padding: 10px 24px;
+        min-width: 120px;
+      }
     }
   }
 
