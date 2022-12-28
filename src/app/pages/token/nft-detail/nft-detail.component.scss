@@ -109,6 +109,14 @@
   }
 }
 
+.btn-share {
+  padding: 0px;
+  &:hover {
+    border-radius: 10px;
+    background-color: var(--aura-gray-9);
+  }
+}
+
 .nft-detail-table.aura-table th.mat-header-cell:nth-child(5) {
   min-width: 150px;
 }
@@ -137,6 +145,7 @@
   border-radius: 50%;
   background-color: var(--aura-gray-9);
 }
+
 .card--sb-information {
   @media (min-width: 991.98px) {
     height: 100%;
@@ -146,10 +155,12 @@
   @media (min-width: 991.98px) {
     max-height: 130px;
     overflow-y: auto;
-.btn-share {
-  padding: 0px;
-  &:hover {
-    border-radius: 10px;
-    background-color: #363843;
+    .btn-share {
+      padding: 0px;
+      &:hover {
+        border-radius: 10px;
+        background-color: #363843;
+      }
+    }
   }
 }

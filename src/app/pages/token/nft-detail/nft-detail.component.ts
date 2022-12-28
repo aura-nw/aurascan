@@ -215,7 +215,7 @@ export class NFTDetailComponent implements OnInit {
   async unEquipSBT() {
     const user = this.walletService.wallet?.bech32Address;
     const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, 'un-equip');
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, this.nftDetail.token_id);
 
     const executeTakeMsg = {
       unequip: {
