@@ -146,5 +146,10 @@
   @media (min-width: 991.98px) {
     max-height: 130px;
     overflow-y: auto;
+.btn-share {
+  padding: 0px;
+  &:hover {
+    border-radius: 10px;
+    background-color: #363843;
   }
 }

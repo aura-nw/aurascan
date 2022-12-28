@@ -59,6 +59,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { FeeGrantService } from './core/services/feegrant.service';
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import { SoulboundService } from './core/services/soulbound.service';
+import { MappingErrorService } from './core/services/mapping-error.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -181,6 +182,7 @@ export class MaterialModule {}
     TokenService,
     FeeGrantService,
     SoulboundService,
+    MappingErrorService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

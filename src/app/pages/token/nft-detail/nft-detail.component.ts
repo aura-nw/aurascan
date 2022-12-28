@@ -19,6 +19,8 @@ import { WalletService } from 'src/app/core/services/wallet.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { PopupShareComponent } from './popup-share/popup-share.component';
 
 @Component({
   selector: 'app-nft-detail',
@@ -79,6 +81,7 @@ export class NFTDetailComponent implements OnInit {
     private walletService: WalletService,
     private toastr: NgxToastrService,
     private contractService: ContractService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -238,5 +241,11 @@ export class NFTDetailComponent implements OnInit {
         this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
       }
     });
+  }
+
+  shareNFT() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    let dialogRef = this.dialog.open(PopupShareComponent, dialogConfig);
   }
 }

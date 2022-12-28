@@ -34,18 +34,16 @@ export class FeeGrantService extends CommonService {
       chainid: this.chainInfo.chainId,
       granter: granter,
       grantee: grantee,
-      status: 'Available',
+      status: filterSearch['isActive'] ? 'Available' : 'Use up,Revoked,Fail',
       pageLimit: 100,
       nextKey: nextKey,
-      expired: false,
       txhash: !isSearchAddress ? filterSearch['textSearch'] : null,
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
       .value();
 
-    let urlLink = filterSearch['isActive'] ? 'get-grants' : 'get-grants-inactive';
-    return this.http.get<any>(`${this.indexerUrl}/feegrant/${urlLink}`, {
+    return this.http.get<any>(`${this.indexerUrl}/feegrant/get-grants`, {
       params,
     });
   }
