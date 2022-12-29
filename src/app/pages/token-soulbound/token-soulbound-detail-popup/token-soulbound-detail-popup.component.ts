@@ -38,7 +38,6 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.soulboundDetail);
   }
 
   error(): void {
@@ -81,7 +80,6 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
         },
       };
 
-      console.log(msgExecute);
       this.walletService.walletExecute(
         this.walletService.wallet.bech32Address,
         this.soulboundDetail.contract_address,
@@ -89,33 +87,6 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
       );
 
       // await this.verifySignature()
-
-      // const signer = getSigner(ESigningType.Keplr, this.walletService.chainInfo.chainId)
-      //   .then((signer) => {
-      //     return SigningCosmWasmClient.connectWithSigner(this.walletService.chainInfo.rpc, signer);
-      //   })
-      //   .then((client) => {
-      //     return client.execute(
-      //       this.walletService.wallet.bech32Address,
-      //       this.soulboundDetail.contract_address,
-      //       msgExecute,
-      //       {
-      //         amount: [
-      //           {
-      //             amount: '0.0025',
-      //             denom: 'utaura',
-      //           },
-      //         ],
-      //         gas: '500000',
-      //       },
-      //     );
-      //   })
-      //   .then((e) => {
-      //     console.log('eee', e);
-      //   })
-      //   .catch((err) => {
-      //     console.log('rrr', err);
-      //   });
 
       // this.execute(msgExecute);
     }

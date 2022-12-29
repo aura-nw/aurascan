@@ -117,7 +117,7 @@
                   <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
                     <ng-container *ngFor="let subMenu of item.subItems">
                       <a
-                        *ngIf="subMenu.label !== 'Soulbound Token' || subMenu.label === 'Soulbound Token'"
+                        *ngIf="subMenu.label !== 'Soulbound Token' || (subMenu.label === 'Soulbound Token' && lengthSBT > 0)"
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item"
                         routerLinkActive="active"

@@ -8,6 +8,7 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { getKeplr } from 'src/app/core/utils/keplr';
 import { serializeSignDoc } from '@cosmjs/amino';
+import { isContract } from 'src/app/core/utils/common/validation';
 const amino = require('@cosmjs/amino');
 
 @Component({
@@ -17,7 +18,7 @@ const amino = require('@cosmjs/amino');
 })
 export class TokenSoulboundCreatePopupComponent implements OnInit {
   createSBTokenForm: FormGroup;
-  isSubmit = false;
+  isAddressInvalid = false;
   network = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -44,14 +45,21 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     this.dialogRef.close('canceled');
   }
 
+  resetCheck() {
+    this.isAddressInvalid = false;
+  }
+
   async onSubmit() {
     const minter = this.walletService.wallet?.bech32Address;
     const { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
 
+    if (!isContract(receiverAddress)) {
+      this.isAddressInvalid = true;
+      return;
+    }
+
     const keplr = await getKeplr();
     keplr.enable(this.network.chainId);
-    // const AGREEMENT = 'Agreement(address active,address passive,string tokenURI)';
-    // let data = AGREEMENT + receiverAddress + minter + soulboundTokenURI;
 
     let data = this.createMessageToSign(this.network.chainId, receiverAddress, minter, soulboundTokenURI);
 
@@ -76,12 +84,9 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     // let dataKeplr = await keplr.signAmino(this.network.chainId, minter, dataJson);
     // console.log(dataKeplr);
 
-    console.log(JSON.stringify(data));
-
     let dataTest = serializeSignDoc(data);
     let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, dataTest);
-    // const message = "Create NFT token";
-    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
+
     const payload = {
       signature: dataKeplr.signature,
       msg: data,
@@ -113,10 +118,6 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     };
 
     return amino.makeSignDoc(message, fee, chainID, '', 0, 0);
-  }
-
-  checkFormValid(): boolean {
-    return true;
   }
 
   executeCreate(payload) {

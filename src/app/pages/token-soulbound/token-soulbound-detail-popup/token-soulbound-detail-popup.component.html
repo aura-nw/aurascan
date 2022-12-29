@@ -14,7 +14,11 @@
       <div class="col-12 col-lg-5">
         <div class="nft__img">
           <img
-            [src]="soulboundDetail?.ipfs?.image ? (soulboundDetail?.ipfs?.image | replaceIpfs) : commonService.getDefaultImg()" />
+            [src]="
+              soulboundDetail?.ipfs?.image
+                ? (soulboundDetail?.ipfs?.image | replaceIpfs)
+                : commonService.getDefaultImg()
+            " />
         </div>
       </div>
       <div class="col-12 col-lg-7 mt-4 mt-lg-0">
@@ -29,12 +33,15 @@
     <div class="divider divider-horizontal my-6"></div>
     <div class="h5 mb-4 text--white">Properties</div>
     <div class="row">
-      <div class="col-4 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
-        <div class="nft__prop">
-          <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
-          <div class="h5 mb-0 text--gray-1">{{ prop.value | stringEllipsis : 13 }}</div>
+      <ng-container *ngIf="soulboundDetail.ipfs?.attributes">
+        <div class="col-4 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
+          <div class="nft__prop">
+            <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
+            <div class="h5 mb-0 text--gray-1">{{ prop.value | stringEllipsis : 13 }}</div>
+          </div>
         </div>
-      </div>
+      </ng-container>
+      <span *ngIf="!soulboundDetail.ipfs?.attributes" class="px-1 px-lg-2">-</span>
     </div>
   </div>
   <div class="divider divider-horizontal"></div>

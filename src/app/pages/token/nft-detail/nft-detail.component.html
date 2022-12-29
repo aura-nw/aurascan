@@ -62,18 +62,6 @@
                 <img [src]="'assets/icons/icons-svg/white/share.svg' | imageS3" alt="" width="40" height="40" />
               </button>
               <span class="burnt-tag" *ngIf="nftDetail?.is_burned">Burnt</span>
-              <div class="mt-1 mt-lg-2 mb-4">
-                <!-- <img
-                  [src]="nftDetail?.image || defaultLogoToken"
-                  width="24px"
-                  height="24px"
-                  class="mr-1 object-fit--none" /> -->
-                <a
-                  class="body-01 text--primary break-word"
-                  [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]"
-                  >{{ nftDetail?.name }}</a
-                >
-              </div>
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
@@ -83,6 +71,18 @@
                 <span>Un-equip</span>
               </button>
             </ng-container>
+          </div>
+          <div class="mt-1 mt-lg-2 mb-4">
+            <!-- <img
+              [src]="nftDetail?.image || defaultLogoToken"
+              width="24px"
+              height="24px"
+              class="mr-1 object-fit--none" /> -->
+            <a
+              class="body-01 text--primary break-word"
+              [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]"
+              >{{ nftDetail?.name }}</a
+            >
           </div>
           <!-- Desktop card info -->
           <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">

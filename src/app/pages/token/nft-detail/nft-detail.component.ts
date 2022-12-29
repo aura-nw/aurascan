@@ -17,10 +17,12 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { getKeplr } from 'src/app/core/utils/keplr';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
+import { MESSAGES_CODE, MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PopupShareComponent } from './popup-share/popup-share.component';
+import { TranslateService } from '@ngx-translate/core';
+import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -82,6 +84,7 @@ export class NFTDetailComponent implements OnInit {
     private toastr: NgxToastrService,
     private contractService: ContractService,
     private dialog: MatDialog,
+    public translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -115,22 +118,15 @@ export class NFTDetailComponent implements OnInit {
           this.nftUrl = this.nftDetail.image?.link_s3 || '';
         }
       } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
+        if (this.nftDetail.status === SB_TYPE.UNCLAIMED) {
+          this.route.navigate(['/']);
+        }
         this.isSoulBound = true;
       }
 
       this.loading = false;
     });
   }
-
-  // async getSBTDetail() {
-  //   this.loading = true;
-  //   const encoded = encodeURIComponent(this.nftId);
-  //   this.soulboundService.getSBTDetail(encoded).subscribe((res) => {
-  //     this.nftDetail = res;
-  //     this.isSoulBound = true;
-  //     this.loading = false;
-  //   });
-  // }
 
   async getDataTable(nextKey = null) {
     let filterData = {};
@@ -213,18 +209,49 @@ export class NFTDetailComponent implements OnInit {
   }
 
   async unEquipSBT() {
-    const user = this.walletService.wallet?.bech32Address;
-    const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, this.nftDetail.token_id);
-
     const executeTakeMsg = {
       unequip: {
         token_id: this.nftDetail.token_id,
       },
     };
 
-    console.log(executeTakeMsg);
-    this.walletService.walletExecute(user, this.nftDetail.contract_address, executeTakeMsg);
+    this.execute(executeTakeMsg);
+  }
+
+  async execute(data) {
+    const user = this.walletService.wallet?.bech32Address;
+
+    let msgError = MESSAGES_CODE_CONTRACT[5].Message;
+    msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
+    try {
+      this.walletService
+        .execute(user, this.nftDetail.contract_address, data)
+        .then((e) => {
+          if ((e as any).result?.error) {
+            this.toastr.error(msgError);
+          } else {
+            if ((e as any)?.transactionHash) {
+              this.toastr.loading((e as any)?.transactionHash);
+              this.updateStatusSBT(user);
+              setTimeout(() => {
+                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+              }, 4000);
+            }
+          }
+        })
+        .catch((error) => {
+          if (!error.toString().includes('Request rejected')) {
+            this.toastr.error(msgError);
+          }
+        });
+    } catch (error) {
+      this.toastr.error(`Error: ${msgError}`);
+    }
+  }
+
+  async updateStatusSBT(user: string) {
+    const keplr = await getKeplr();
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, this.nftDetail.token_id);
 
     const payload = {
       signature: dataKeplr.signature,

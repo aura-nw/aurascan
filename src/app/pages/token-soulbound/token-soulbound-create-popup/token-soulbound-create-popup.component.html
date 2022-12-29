@@ -21,6 +21,7 @@
     <form
       [formGroup]="createSBTokenForm"
       (ngSubmit)="onSubmit()"
+      #ngForm="ngForm"
       class="aura-form single-input-field"
       autocomplete="off">
       <!-- Soulbound Token URI -->
@@ -32,10 +33,7 @@
           type="text"
           class="form-control form-check-input body-01"
           [placeholder]="'https://ipfs.io/ipfs..'"
-          [class.form-control--error]="createSBTokenForm.get('soulboundTokenURI')?.invalid && isSubmit" />
-        <div class="error" *ngIf="createSBTokenForm.get('soulboundTokenURI')?.hasError('required') && isSubmit">
-          Soulbound Token URI is required!
-        </div>
+          [class.form-control--error]="createSBTokenForm.get('soulboundTokenURI')?.invalid && ngForm.submitted" />
       </div>
       <!-- Receiver’s Address -->
       <div class="form-group mt-4 mt-lg-6">
@@ -46,10 +44,9 @@
           type="text"
           class="form-control form-check-input body-01"
           [placeholder]="'aura...'"
-          [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && isSubmit" />
-        <div class="error" *ngIf="createSBTokenForm.get('receiverAddress')?.hasError('required') && isSubmit">
-          Receiver’s Address is required!
-        </div>
+          (ngModelChange)="resetCheck()"
+          [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && ngForm.submitted" />
+        <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">This is not aura's externally owned account</div>
       </div>
 
       <!-- Button group -->
@@ -59,7 +56,7 @@
         </button>
         <button
           class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
-          [disabled]="!createSBTokenForm.valid"
+          [disabled]="!createSBTokenForm.valid || isAddressInvalid"
           type="submit">
           <span>Create</span>
         </button>

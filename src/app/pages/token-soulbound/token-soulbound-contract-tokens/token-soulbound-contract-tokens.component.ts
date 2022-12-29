@@ -96,8 +96,7 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       minterAddress: this.currentAddress,
       contractAddress: this.contractAddress,
-      keyword: keySearch ? encodeURIComponent(keySearch) : '',
-      // keyword: keySearch?.trim(),
+      keyword: keySearch?.trim(),
       status: this.selectedType,
     };
 
