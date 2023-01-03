@@ -59,65 +59,24 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
     }
 
     const keplr = await getKeplr();
-    keplr.enable(this.network.chainId);
-
-    let data = this.createMessageToSign(this.network.chainId, receiverAddress, minter, soulboundTokenURI);
-
-    // let dataJson = {
-    //   account_number: '0',
-    //   chain_id: 'aura-testnet-2',
-    //   fee: {
-    //     amount: [],
-    //     gas: '0',
-    //   },
-    //   memo: '',
-    //   msgs: {
-    //     type: 'sign/MsgSignData',
-    //     value: {
-    //       data: 'Agreement(address active,address passive,string tokenURI)aura1fqj2redmssckrdeekhkcvd2kzp9f4nks4fctrtaura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0nhttps://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu',
-    //       signer: 'aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n',
-    //     },
-    //   },
-    //   sequence: '0',
-    // };
-
-    // let dataKeplr = await keplr.signAmino(this.network.chainId, minter, dataJson);
-    // console.log(dataKeplr);
-
-    let dataTest = serializeSignDoc(data);
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, dataTest);
+    const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
+    const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
 
     const payload = {
       signature: dataKeplr.signature,
-      msg: data,
+      msg: message,
       pubKey: dataKeplr.pub_key.value,
       contract_address: this.data.contractAddress,
       receiver_address: receiverAddress,
       token_uri: soulboundTokenURI,
     };
 
+    console.log('payload:', payload);
+    
+
     this.dialogRef.close();
     this.executeCreate(payload);
-  }
-
-  createMessageToSign(chainID, active, passive, uri) {
-    const AGREEMENT = 'Agreement(address active,address passive,string tokenURI)';
-
-    // create message to sign based on concating AGREEMENT, signer, receiver, and uri
-    const message = {
-      type: 'sign/MsgSignData',
-      value: {
-        signer: passive,
-        data: AGREEMENT + active + passive + uri,
-      },
-    };
-
-    const fee = {
-      gas: '0',
-      amount: [],
-    };
-
-    return amino.makeSignDoc(message, fee, chainID, '', 0, 0);
   }
 
   executeCreate(payload) {

@@ -68,7 +68,7 @@
   }
   .mat-form-field[soulbound] {
     width: 100%;
-    background-color: var(--aura-gray-9);
+    // background-color: var(--aura-gray-9);
     border-radius: 4px;
     display: flex;
     height: 48px;
@@ -80,7 +80,7 @@
 
     .mat-form-field-flex {
       padding: 2px 0.75em 0 0.75em;
-      background: transparent;
+      background: var(--aura-black);
     }
 
     .mat-form-field-infix {

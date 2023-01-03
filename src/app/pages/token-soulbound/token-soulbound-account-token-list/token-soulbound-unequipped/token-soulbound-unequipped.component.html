@@ -51,7 +51,7 @@
                     src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
                     alt="{{ token.token_name }}" />
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
-                    Unclaimed
+                    {{ sbType.UNCLAIMED }}
                   </div>
                 </div>
                 <div class="pt-2 pb-2 px-2">

@@ -22,7 +22,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 import { TranslateService } from '@ngx-translate/core';
-import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -103,6 +103,8 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
+      console.log('nft detail:', res);
+      
       this.nftDetail = res.data;
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
@@ -208,24 +210,55 @@ export class NFTDetailComponent implements OnInit {
     return false;
   }
 
+  getSBTPick() {
+    const payload = {
+      receiverAddress: this.nftDetail?.receiver_address,
+      limit: LIMIT_NUM_SBT,
+    };
+
+    this.soulboundService.getSBTPick(payload).subscribe((res) => {
+      let lengthPick = res.data.filter((k) => k.picked === true)?.length || 0;
+      console.log(lengthPick);
+      if (lengthPick <= 1) {
+        this.toastr.error(
+          "Currently, you don't have any unclaimed SBT Token so you can not un-pick the last picked SBT Token in your account",
+        );
+      } else {
+        this.unEquipSBT();
+      }
+    });
+  }
+
   async unEquipSBT() {
-    const executeTakeMsg = {
+    const executeUnEquipMsg = {
       unequip: {
         token_id: this.nftDetail.token_id,
       },
     };
 
-    this.execute(executeTakeMsg);
+    this.execute(executeUnEquipMsg);
   }
 
   async execute(data) {
     const user = this.walletService.wallet?.bech32Address;
+    console.log(user);
+    console.log(this.nftDetail.contract_address);
+    console.log(data);
 
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
+    let feeGas = {
+      amount: [
+        {
+          amount: (this.network.gasPriceStep?.average || 0.0025).toString(),
+          denom: this.network.currencies[0].coinMinimalDenom,
+        },
+      ],
+      gas: '200000',
+    };
     try {
       this.walletService
-        .execute(user, this.nftDetail.contract_address, data)
+        .execute(user, this.nftDetail.contract_address, data, feeGas)
         .then((e) => {
           if ((e as any).result?.error) {
             this.toastr.error(msgError);
@@ -240,6 +273,8 @@ export class NFTDetailComponent implements OnInit {
           }
         })
         .catch((error) => {
+          console.log(error);
+          
           if (!error.toString().includes('Request rejected')) {
             this.toastr.error(msgError);
           }

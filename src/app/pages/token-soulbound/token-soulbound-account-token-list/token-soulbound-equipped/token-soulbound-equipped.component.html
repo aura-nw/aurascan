@@ -46,7 +46,6 @@
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data">
             <div class="nft-cards__item-border">
               <a href="javascript:void(0)" (click)="linkSBDetail(token?.contract_address, token?.token_id)">
-                <!-- <a href="javascript:void(0)"> -->
                 <div class="nft-cards__item">
                   <div class="token-cards__img">
                     <img
@@ -56,11 +55,11 @@
                       alt="{{ token.token_name }}" />
                     <i
                       class="ph-bookmark-simple-thin token__bookmark token__bookmark--unequipped"
-                      (click)="updatePick(token.id)"
+                      (click)="getSBTDetail(token.contract_address, token.token_id)"
                       *ngIf="!token.picked"></i>
                     <i
                       class="ph-bookmark-simple-fill token__bookmark token__bookmark--equipped"
-                      (click)="updatePick(token.id)"
+                      (click)="getSBTDetail(token.contract_address, token.token_id, false)"
                       *ngIf="token.picked"></i>
                   </div>
                   <div class="pt-2 pb-4 px-2">

@@ -19,169 +19,7 @@ import { TokenSoulboundDetailPopupComponent } from 'src/app/pages/token-soulboun
 export class TokenSoulboundUnequippedComponent implements OnInit {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  tokenList = [
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isClaimed: true,
-    },
-  ];
+  tokenList = [];
   loading = false;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -254,6 +92,8 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       this.isClick = false;
+      console.log(res);
+
       if (res?.data) {
         this.openDialogDetail(res.data);
       }
@@ -265,8 +105,12 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
       panelClass: 'TokenSoulboundDetailPopup',
       data: SBT,
     });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
+        setTimeout(() => {
+          this.getListSB();
+        }, 2000);
       }
     });
   }

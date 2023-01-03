@@ -67,7 +67,7 @@
               <button
                 *ngIf="nftDetail.picked"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
-                (click)="unEquipSBT()">
+                (click)="getSBTPick()">
                 <span>Un-equip</span>
               </button>
             </ng-container>
@@ -161,7 +161,7 @@
                   #owner="matTooltip"
                   (mouseenter)="$event.stopImmediatePropagation()"
                   (mouseleave)="$event.stopImmediatePropagation()"
-                  (click)="copyData(nftDetail?.owner); owner.toggle()" />
+                  (click)="copyData(nftDetail?.owner || nftDetail?.receiver_address); owner.toggle()" />
               </div>
             </div>
             <div class="card__ntf-detail-item body">

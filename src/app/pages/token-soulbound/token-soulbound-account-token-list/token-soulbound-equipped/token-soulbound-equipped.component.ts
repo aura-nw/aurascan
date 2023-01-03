@@ -10,6 +10,8 @@ import { getKeplr } from 'src/app/core/utils/keplr';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 
 @Component({
   selector: 'app-token-soulbound-equipped',
@@ -21,169 +23,7 @@ export class TokenSoulboundEquippedComponent implements OnInit {
 
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  tokenList = [
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: true,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: false,
-    },
-    {
-      id: 3933,
-      name: 'Aureliana',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0ytagx',
-      img: 'assets/images/soulboundToken.png',
-      isSelected: true,
-    },
-  ];
+  tokenList = [];
   countSelected = 0;
   loading = false;
   pageData: PageEvent = {
@@ -206,6 +46,8 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     private environmentService: EnvironmentService,
     private walletService: WalletService,
     public commonService: CommonService,
+    private contractService: ContractService,
+    private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -218,7 +60,7 @@ export class TokenSoulboundEquippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.getListSB(this.textSearch)
+    this.getListSB(this.textSearch);
   }
 
   resetSearch() {
@@ -233,10 +75,12 @@ export class TokenSoulboundEquippedComponent implements OnInit {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.userAddress,
       isEquipToken: true,
-      keyword: keySearch?.trim()
+      keyword: keySearch?.trim(),
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
+      console.log(res);
+
       this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
@@ -256,26 +100,41 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     this.getListSB();
   }
 
-  async updatePick(id, pick = true) {
+  getSBTDetail(contractAddress, tokenID, pick = true) {
+    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+      if (res?.data) {
+        this.updatePick(res.data, pick);
+      }
+    });
+  }
+
+  async updatePick(data, pick = true) {
     const currentAddress = this.walletService.wallet?.bech32Address;
-    const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, currentAddress, id.toString());
+    // const keplr = await getKeplr();
+    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, currentAddress, data.token_id.toString());
 
     const payload = {
-      signature: dataKeplr.signature,
-      msg: id.toString(),
-      pubKey: dataKeplr.pub_key.value,
-      id: id,
-      picked: pick,
+      signature: data.signature,
+      msg: data.token_id.toString(),
+      pubKey: data.pub_key,
+      id: data.token_id,
+      picked: true || pick,
     };
 
     this.soulboundService.pickSBToken(payload).subscribe((res) => {
-      this.getListSB();
+      console.log(res);
+      if (res.code) {
+        this.toastr.error(res.message);
+      } else {
+        setTimeout(() => {
+          this.getListSB();
+        }, 4000);
+      }
     });
   }
 
   linkSBDetail(contractAddress, tokenID) {
     let encode = encodeURIComponent(tokenID);
-    window.location.href = `/tokens/token-nft/${contractAddress}/${encode}`;
+    // window.location.href = `/tokens/token-nft/${contractAddress}/${encode}`;
   }
 }

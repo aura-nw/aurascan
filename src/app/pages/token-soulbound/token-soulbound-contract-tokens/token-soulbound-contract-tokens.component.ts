@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { from } from 'rxjs';
 import { delay, mergeMap } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { SOUL_BOUND_TYPE } from 'src/app/core/constants/soulbound.constant';
+import { SB_TYPE, SOUL_BOUND_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -40,6 +40,7 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
   currentAddress = '';
   selectedType = '';
   lstTypeSB = SOUL_BOUND_TYPE;
+  sbType = SB_TYPE;
 
   constructor(
     private route: ActivatedRoute,
@@ -123,6 +124,4 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
       }
     });
   }
-
-  checkInput() {}
 }

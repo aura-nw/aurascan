@@ -113,13 +113,13 @@
               <th mat-header-cell *matHeaderCellDef class="">STATUS</th>
               <td mat-cell *matCellDef="let element" class="py-4 pl-5 fw-normal">
                 <div [ngSwitch]="element.status">
-                  <div *ngSwitchCase="'Equipped'" class="text--green-3 token-status">
+                  <div *ngSwitchCase="sbType.EQUIPPED" class="text--green-3 token-status">
                     {{ element.status }}
                   </div>
-                  <div *ngSwitchCase="'Unequipped'" class="text--red-3 token-status">
+                  <div *ngSwitchCase="sbType.UNEQUIPPED" class="text--red-3 token-status">
                     {{ element.status }}
                   </div>
-                  <div *ngSwitchCase="'Unclaimed'" class="text--yellow-3 token-status">
+                  <div *ngSwitchCase="sbType.UNCLAIMED" class="text--yellow-3 token-status">
                     {{ element.status }}
                   </div>
                 </div>

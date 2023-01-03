@@ -202,28 +202,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   totalValueNft = 0;
   totalAssets = 0;
   totalSBT = 0;
-  // soulboundList = [
-  //   {
-  //     img: 'assets/images/soulboundToken.png',
-  //     address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
-  //   },
-  //   {
-  //     img: 'assets/images/soulboundToken.png',
-  //     address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
-  //   },
-  //   {
-  //     img: 'assets/images/soulboundToken.png',
-  //     address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
-  //   },
-  //   {
-  //     img: 'assets/images/soulboundToken.png',
-  //     address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
-  //   },
-  //   {
-  //     img: 'assets/images/soulboundToken.png',
-  //     address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22'
-  //   }
-  // ]
 
   constructor(
     private transactionService: TransactionService,
@@ -259,7 +237,6 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.dataSourceReDelegation = new MatTableDataSource();
         this.dataSource = new MatTableDataSource();
 
-        this.getSBTPick();
         this.loadDataTemp();
         this.getAccountDetail();
         this.getTxsFromHoroscope();
@@ -272,6 +249,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
+        this.getSBTPick();
       }
     });
 
@@ -538,6 +516,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       limit: LIMIT_NUM_SBT,
     };
 
+    console.log('payload ne:', payload);
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
       this.totalSBT = res.meta.count;
     });

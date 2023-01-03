@@ -87,28 +87,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
-  soulboundList = [
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-    {
-      img: 'assets/images/soulboundToken.png',
-      address: 'aura1uqlvry8tdypf0wxk9j5cyc0sghuuujnn82g0jgmjmcy5dg6ex6zs0yta22',
-    },
-  ];
+  soulboundList = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -125,7 +104,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.getTotalSBT();
     this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
@@ -163,6 +141,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           up_time: 100,
         };
 
+        this.getTotalSBT();
         this.getBlocksMiss(this.currentAddress);
       },
       (error) => {
@@ -397,12 +376,16 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
   getTotalSBT() {
     const payload = {
-      receiverAddress: this.currentAddress,
+      receiverAddress: this.currentValidatorDetail.acc_address,
       limit: LIMIT_NUM_SBT,
     };
 
+    console.log(payload);
+    console.log(this.currentValidatorDetail);
+    
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.soulboundList = res.data;
+      this.soulboundList = res.data.filter(k => k.picked === true);
+      console.log(this.soulboundList);
     });
   }
 }
