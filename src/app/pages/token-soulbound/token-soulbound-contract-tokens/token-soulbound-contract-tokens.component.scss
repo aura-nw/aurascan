@@ -7,20 +7,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  @media (max-width: 992px) {
-    max-width: 400px;
-    span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-  @media (max-width: 768px) {
-    max-width: 300px;
-  }
-  @media (max-width: 576px) {
-    max-width: 90px;
-  }
 }
 .search-form-sblist {
   width: 100%;
@@ -62,16 +48,16 @@
   }
 }
 ::ng-deep {
-  .cdk-overlay-dark-backdrop {
-    background: var(--aura-black);
-    opacity: 0.85 !important;
-  }
   .mat-form-field[soulbound] {
-    width: 100%;
-    // background-color: var(--aura-gray-9);
-    border-radius: 4px;
+    background-color: var(--aura-gray-9);
+    border-radius: 8px;
     display: flex;
+    align-items: center;
+    width: 150px;
     height: 48px;
+    @media (min-width: 991.98px) {
+      width: 100%;
+    }
 
     .mat-form-field-wrapper {
       width: 100%;
@@ -79,12 +65,12 @@
     }
 
     .mat-form-field-flex {
-      padding: 2px 0.75em 0 0.75em;
-      background: var(--aura-black);
+      padding: 0 0.75em 0 0.75em;
+      background: transparent;
     }
 
     .mat-form-field-infix {
-      padding: 2px 0 0.75em 0;
+      padding: 0 0 0.75em 0;
     }
 
     .mat-select-placeholder,
@@ -107,7 +93,7 @@
       transform: translateY(-5%);
 
       .mat-select-arrow {
-        border: solid #e6e7e8;
+        border: solid #E6E7E8;
         border-width: 0 2.3px 2.3px 0;
         display: inline-block;
         padding: 2.8px;
@@ -115,5 +101,21 @@
         -webkit-transform: rotate(45deg);
       }
     }
+  }
+
+  .contractPanel {
+    background: #25252C;
+    min-width: calc(100% + 20px) !important;
+    transform: translate3D(5px, 40px, 0) !important;
+    padding: var(--spacer-1) 0 !important;
+    border-radius: 8px;
+
+    @media (min-width: 992px) {
+      padding: var(--spacer-4) 0 !important;
+    }
+  }
+  .mat-option,
+  .mat-option.mat-active {
+    color: var(--aura-gray-1);
   }
 }

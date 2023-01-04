@@ -128,8 +128,7 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     });
   }
 
-  linkSBDetail(contractAddress, tokenID) {
-    let encode = encodeURIComponent(tokenID);
-    // window.location.href = `/tokens/token-nft/${contractAddress}/${encode}`;
+  encodeURI(tokenID) {
+    return encodeURIComponent(tokenID);
   }
 }

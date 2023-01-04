@@ -7,11 +7,12 @@
         <div class="d-flex align-items-center">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
           <div class="ml-2 contract-address h4 mb-0">
-            <span>{{ contractAddress }}</span>
+            <span class="d-lg-none">{{ contractAddress | stringEllipsis: 8}}</span>
+            <span class="d-none d-lg-block">{{ contractAddress }}</span>
           </div>
         </div>
         <button
-          class="button button-outline button-outline--gradient button-outline__in-card button--md button--sm-mob button-pill"
+          class="button button-outline button-outline--gradient button-outline__in-card button--md button--sm-mob button-pill px-2 px-lg-6"
           (click)="openDialog()">
           <span>Create New</span>
         </button>
@@ -21,53 +22,57 @@
         <div class="body text--gray-4 mt-4 mt-lg-0">
           A total of {{ pageData?.length | number }} record{{ pageData?.length > 1 ? 's' : '' }} found
         </div>
-        <div class="row col-6 justify-content-end">
-          <div class="box-input col-3">
-            <mat-form-field appearance="fill" soulbound>
-              <mat-select
-                class="list-token"
-                placeholder="Select a type contract"
-                panelClass="contractPanel"
-                (selectionChange)="searchToken()"
-                [(value)]="selectedType"
-                [disableOptionCentering]="true">
-                <mat-option *ngFor="let item of lstTypeSB" [value]="item.key">
-                  <div class="d-flex option-contain">
-                    <div class="option-lable">
-                      <span>{{ item.value | translate }}</span>
+        <div class="col-12 col-lg-6">
+          <div class="row justify-content-lg-end">
+            <div class="box-input col-12 col-lg-3 mb-4 mb-lg-0">
+              <mat-form-field appearance="fill" soulbound>
+                <mat-select
+                    class="list-token"
+                    placeholder="Select a type contract"
+                    panelClass="contractPanel"
+                    (selectionChange)="searchToken()"
+                    [(value)]="selectedType"
+                    [disableOptionCentering]="true">
+                  <mat-option *ngFor="let item of lstTypeSB" [value]="item.key">
+                    <div class="d-flex option-contain">
+                      <div class="option-lable">
+                        <span>{{ item.value | translate }}</span>
+                      </div>
                     </div>
-                  </div>
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <form class="aura-form single-input-field search-form-sblist" #searchForm>
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search for Token URI, Address or Token ID"
-                [(ngModel)]="textSearch"
-                [maxLength]="maxLengthSearch"
-                (keyup.enter)="searchToken()"
-                name="search"
-                autocomplete="off" />
-              <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
-                <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
-              </button>
-              <button
-                type="reset"
-                class="btn-reset cursor-pointer {{
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-lg-auto">
+              <form class="aura-form single-input-field search-form-sblist" #searchForm>
+                <div class="input-group">
+                  <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search for Token URI, Address or Token ID"
+                      [(ngModel)]="textSearch"
+                      [maxLength]="maxLengthSearch"
+                      (keyup.enter)="searchToken()"
+                      name="search"
+                      autocomplete="off" />
+                  <button
+                      type="submit"
+                      class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                      (click)="searchToken()">
+                    <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+                  </button>
+                  <button
+                      type="reset"
+                      class="btn-reset cursor-pointer {{
                   !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
                 }}"
-                (click)="resetSearch()">
-                <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
-              </button>
+                      (click)="resetSearch()">
+                    <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
       <!-- Table -->
