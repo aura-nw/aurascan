@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="soulbound-feature-tokens mt-6 mt-lg-0"  *ngIf="totalSBT > 0">
+      <div class="mt-6 mt-lg-0 {{ totalSBT > 0 ? 'soulbound-feature-tokens' : '' }}" >
         <app-soulbound-feature-tokens
           [extend]="true"
           [accountAddress]="currentAddress"
@@ -89,8 +89,6 @@
     </ul>
     <!-- Assets-->
     <ng-container *ngIf="currentTab === tabsData.Assets">
-      <!-- Soulbound Tokens -->
-      <!-- <app-soulbound-token></app-soulbound-token> -->
       <!-- Coin & Token-->
       <h2 class="mb-4 mb-lg-3 text--white">Coins & Tokens ({{ totalAssets || 0 }})</h2>
       <app-token-table

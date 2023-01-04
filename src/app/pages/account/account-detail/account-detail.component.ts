@@ -226,8 +226,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
-      if (params?.id) {
-        this.currentAddress = params?.id;
+      if (params?.address) {
+        this.currentAddress = params?.address;
         this.transactionLoading = true;
         this.accDetailLoading = true;
 
@@ -516,9 +516,11 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       limit: LIMIT_NUM_SBT,
     };
 
-    console.log('payload ne:', payload);
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.totalSBT = res.meta.count;
+      if (this.currentAddress !== this.userAddress) {
+        res.data = res.data.filter((k) => k.picked === true);
+      }
+      this.totalSBT = res.data.length;
     });
   }
 }

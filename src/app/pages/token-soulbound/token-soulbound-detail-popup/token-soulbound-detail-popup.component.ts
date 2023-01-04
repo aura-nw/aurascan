@@ -53,15 +53,6 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
           },
         },
       };
-
-      console.log(msgExecute);
-
-      // this.walletService.walletExecute(
-      //   this.walletService.wallet.bech32Address,
-      //   this.soulboundDetail.contract_address,
-      //   msgExecute,
-      // );
-
       this.execute(msgExecute);
     }
 
@@ -101,9 +92,6 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
               setTimeout(() => {
                 this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
                 this.dialogRef.close();
-                // this.checkDetailTx
-
-                // this.mappingErrorService.checkDetailTx((e as any)?.transactionHash).then(() => this.getListGrant());
               }, 4000);
             }
           }

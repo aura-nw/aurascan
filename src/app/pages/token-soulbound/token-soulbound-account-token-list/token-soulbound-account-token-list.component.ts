@@ -17,7 +17,14 @@ export class TokenSoulboundAccountTokenListComponent implements OnInit {
   soulboundFeatureList = [];
   activeId = 0;
   walletAddress = '';
-  TABS = [
+  TABS = [];
+  TAB_EQUIPPED = [
+    {
+      key: 0,
+      value: SB_TYPE.EQUIPPED,
+    },
+  ];
+  TAB_ALL = [
     {
       key: 0,
       value: SB_TYPE.EQUIPPED,
@@ -42,16 +49,15 @@ export class TokenSoulboundAccountTokenListComponent implements OnInit {
       this.router.navigate(['/']);
     }
 
-    // this.walletService.wallet$.subscribe((wallet) => {
-    //   if (wallet) {
-    //     if (wallet?.bech32Address !== this.userAddress) {
-    //       delete this.TABS[1];
-    //     } else {
-    //       // window.location.reload();
-    //       this.TABS.push({ key: 1, value: SB_TYPE.UNEQUIPPED });
-    //     }
-    //   }
-    // });
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        if (wallet?.bech32Address !== this.userAddress) {
+          this.TABS = this.TAB_EQUIPPED;
+        } else {
+          this.TABS = this.TAB_ALL;
+        }
+      }
+    });
   }
 
   viewQrAddress(staticDataModal: any): void {

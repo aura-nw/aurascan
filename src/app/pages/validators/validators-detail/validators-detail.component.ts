@@ -379,13 +379,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       receiverAddress: this.currentValidatorDetail.acc_address,
       limit: LIMIT_NUM_SBT,
     };
-
-    console.log(payload);
-    console.log(this.currentValidatorDetail);
     
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
       this.soulboundList = res.data.filter(k => k.picked === true);
-      console.log(this.soulboundList);
     });
   }
 }

@@ -79,8 +79,6 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
-      console.log(res);
-
       this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
@@ -110,8 +108,6 @@ export class TokenSoulboundEquippedComponent implements OnInit {
 
   async updatePick(data, pick = true) {
     const currentAddress = this.walletService.wallet?.bech32Address;
-    // const keplr = await getKeplr();
-    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, currentAddress, data.token_id.toString());
 
     const payload = {
       signature: data.signature,
@@ -122,7 +118,6 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     };
 
     this.soulboundService.pickSBToken(payload).subscribe((res) => {
-      console.log(res);
       if (res.code) {
         this.toastr.error(res.message);
       } else {

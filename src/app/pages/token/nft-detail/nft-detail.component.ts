@@ -218,7 +218,6 @@ export class NFTDetailComponent implements OnInit {
 
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
       let lengthPick = res.data.filter((k) => k.picked === true)?.length || 0;
-      console.log(lengthPick);
       if (lengthPick <= 1) {
         this.toastr.error(
           "Currently, you don't have any unclaimed SBT Token so you can not un-pick the last picked SBT Token in your account",
@@ -241,10 +240,6 @@ export class NFTDetailComponent implements OnInit {
 
   async execute(data) {
     const user = this.walletService.wallet?.bech32Address;
-    console.log(user);
-    console.log(this.nftDetail.contract_address);
-    console.log(data);
-
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
     let feeGas = {

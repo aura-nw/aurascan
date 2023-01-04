@@ -10,7 +10,6 @@ import { Globals } from 'src/app/global/global';
   templateUrl: './soulbound-token.component.html',
   styleUrls: ['./soulbound-token.component.scss'],
 })
-
 export class SoulboundTokenComponent implements OnInit {
   @Input() address: string;
 
@@ -40,22 +39,6 @@ export class SoulboundTokenComponent implements OnInit {
       offset: this.pageData.pageSize * this.pageData.pageIndex,
       keyword: this.searchValue,
     };
-    this.assetSoulBound = [
-      {
-        contract_address: 'aura1206t3say4u6p5dnwpagzjz77qmt0uyx2dsew4sncm9j7w7lxjjxs4xheh9',
-        token_id: 'ID16909',
-        uri: '',
-        name: 'Euphoria Companion',
-        status: 'On-chain',
-      },
-      {
-        contract_address: 'aura1206t3say4u6p5dnwpagzjz77qmt0uyx2dsew4sncm9j7w7lxjjxs4xheh9',
-        token_id: 'ID16909',
-        uri: '',
-        name: 'Euphoria Companion',
-        status: 'On-chain',
-      },
-    ];
 
     if (this.pageData) {
       this.pageData.length = this.assetSoulBound?.length || 0;
