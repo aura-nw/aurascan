@@ -70,8 +70,6 @@
     </ul>
   </div>
   <app-token-soulbound-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event"></app-token-soulbound-equipped>
-  <!-- <app-token-soulbound-unequipped
-    *ngIf="activeId === 1 && walletAddress === userAddress"></app-token-soulbound-unequipped> -->
   <app-token-soulbound-unequipped *ngIf="activeId === 1"></app-token-soulbound-unequipped>
 </section>
 

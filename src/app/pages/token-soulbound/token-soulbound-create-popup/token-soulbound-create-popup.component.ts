@@ -72,9 +72,6 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
       token_uri: soulboundTokenURI,
     };
 
-    console.log('payload:', payload);
-    
-
     this.dialogRef.close();
     this.executeCreate(payload);
   }

@@ -48,7 +48,10 @@ export class TokenService extends CommonService {
       .value();
 
     if (filterData?.keyWord) {
-      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
+      if (
+        filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
+        filterData?.keyWord == filterData?.keyWord.toUpperCase()
+      ) {
         params['txHash'] = filterData?.keyWord;
       } else if (filterData['isSearchWallet']) {
         params['addressInContract'] = filterData?.keyWord;

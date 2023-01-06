@@ -62,6 +62,7 @@ export class NFTDetailComponent implements OnInit {
   nftType: string;
   isError = false;
   nftUrl = '';
+  sbType = SB_TYPE;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -91,7 +92,6 @@ export class NFTDetailComponent implements OnInit {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
     this.nftId = this.router.snapshot.paramMap.get('nftId');
     this.getNFTDetail();
-    // this.getSBTDetail();
     this.getDataTable();
   }
 
@@ -103,8 +103,6 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
-      console.log('nft detail:', res);
-      
       this.nftDetail = res.data;
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
@@ -120,7 +118,7 @@ export class NFTDetailComponent implements OnInit {
           this.nftUrl = this.nftDetail.image?.link_s3 || '';
         }
       } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
-        if (this.nftDetail.status === SB_TYPE.UNCLAIMED) {
+        if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
           this.route.navigate(['/']);
         }
         this.isSoulBound = true;
@@ -217,10 +215,10 @@ export class NFTDetailComponent implements OnInit {
     };
 
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      let lengthPick = res.data.filter((k) => k.picked === true)?.length || 0;
-      if (lengthPick <= 1) {
+      let lengthSBT = res.data.filter((k) => k.picked)?.length || 0;
+      if (lengthSBT < 2) {
         this.toastr.error(
-          "Currently, you don't have any unclaimed SBT Token so you can not un-pick the last picked SBT Token in your account",
+          'You can not un-equip the last picked SBT in your account. In order to un-equip this token, you need to pick another equipped SBT first then un-equip it later',
         );
       } else {
         this.unEquipSBT();
@@ -242,6 +240,18 @@ export class NFTDetailComponent implements OnInit {
     const user = this.walletService.wallet?.bech32Address;
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
+
+    const keplr = await getKeplr();
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, this.nftDetail.token_id);
+
+    const payload = {
+      signature: dataKeplr.signature,
+      msg: true,
+      pubKey: dataKeplr.pub_key.value,
+      id: this.nftDetail?.token_id,
+      status: this.sbType.PENDING,
+    };
+
     let feeGas = {
       amount: [
         {
@@ -251,6 +261,7 @@ export class NFTDetailComponent implements OnInit {
       ],
       gas: '200000',
     };
+
     try {
       this.walletService
         .execute(user, this.nftDetail.contract_address, data, feeGas)
@@ -260,16 +271,14 @@ export class NFTDetailComponent implements OnInit {
           } else {
             if ((e as any)?.transactionHash) {
               this.toastr.loading((e as any)?.transactionHash);
-              this.updateStatusSBT(user);
               setTimeout(() => {
                 this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
+                this.updateStatusSBT(payload);
               }, 4000);
             }
           }
         })
         .catch((error) => {
-          console.log(error);
-          
           if (!error.toString().includes('Request rejected')) {
             this.toastr.error(msgError);
           }
@@ -279,25 +288,8 @@ export class NFTDetailComponent implements OnInit {
     }
   }
 
-  async updateStatusSBT(user: string) {
-    const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, this.nftDetail.token_id);
-
-    const payload = {
-      signature: dataKeplr.signature,
-      msg: true,
-      pubKey: dataKeplr.pub_key.value,
-      id: this.nftDetail?.token_id,
-    };
-
-    this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
-      if (res?.code) {
-        let msgError = res?.message.toString() || 'Error';
-        this.toastr.error(msgError);
-      } else {
-        this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
-      }
-    });
+  async updateStatusSBT(payload: any) {
+    this.soulboundService.updatePickSBToken(payload);
   }
 
   shareNFT() {

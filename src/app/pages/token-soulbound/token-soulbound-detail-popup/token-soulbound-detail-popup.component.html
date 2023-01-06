@@ -14,11 +14,17 @@
       <div class="col-12 col-lg-5">
         <div class="nft__img">
           <img
-            [src]="
+            *ngIf="!soulboundDetail?.ipfs?.animation_url"
+            src="{{
               soulboundDetail?.ipfs?.image
                 ? (soulboundDetail?.ipfs?.image | replaceIpfs)
                 : commonService.getDefaultImg()
-            " />
+            }}" />
+          <app-custom-video-player
+            [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
+            [showControl]="true"
+            *ngIf="soulboundDetail?.ipfs?.animation_url">
+          </app-custom-video-player>
         </div>
       </div>
       <div class="col-12 col-lg-7 mt-4 mt-lg-0">
@@ -34,10 +40,17 @@
     <div class="h5 mb-4 text--white">Properties</div>
     <div class="row">
       <ng-container *ngIf="soulboundDetail.ipfs?.attributes">
-        <div class="col-4 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
+        <div class="col-4 col-lg-3 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
           <div class="nft__prop">
             <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
-            <div class="h5 mb-0 text--gray-1">{{ prop.value | stringEllipsis : 13 }}</div>
+            <div class="h5 mb-0 text--gray-1">
+              <span class="d-none d-lg-flex">
+                {{ prop.value | stringEllipsis : 13 }}
+              </span>
+              <span class="d-flex d-lg-none">
+                {{ prop.value | stringEllipsis : 5 }}
+              </span>
+            </div>
           </div>
         </div>
       </ng-container>

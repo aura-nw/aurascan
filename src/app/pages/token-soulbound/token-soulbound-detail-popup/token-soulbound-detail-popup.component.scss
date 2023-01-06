@@ -3,6 +3,9 @@
   box-shadow: none;
   padding: 0;
 }
+.card-header {
+  background-color: var(--aura-gray-9);
+}
 .card {
   @media (max-width: 992px) {
     max-height: 80vh;

@@ -116,6 +116,27 @@
     background-color: var(--aura-gray-9);
   }
 }
+.box-prop {
+  padding: 16px 0px 20px 16px;
+  @media (min-width: 991.98px) {
+    padding: 24px 0px 16px 24px;
+  }
+}
+.box-prop-item {
+  padding: 16px 16px 0px 16px;
+  @media (min-width: 991.98px) {
+    padding: 24px 24px 0px 24px;
+    max-height: 130px;
+    overflow-y: auto;
+    .btn-share {
+      padding: 0px;
+      &:hover {
+        border-radius: 10px;
+        background-color: #363843;
+      }
+    }
+  }
+}
 
 .nft-detail-table.aura-table th.mat-header-cell:nth-child(5) {
   min-width: 150px;
@@ -152,15 +173,4 @@
   }
 }
 .sb-props {
-  @media (min-width: 991.98px) {
-    max-height: 130px;
-    overflow-y: auto;
-    .btn-share {
-      padding: 0px;
-      &:hover {
-        border-radius: 10px;
-        background-color: #363843;
-      }
-    }
-  }
 }

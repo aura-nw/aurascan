@@ -25,6 +25,7 @@ import { DelegateItemComponent } from './validators-detail/delegate-item/delegat
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
 import { ValidatorsComponent } from './validators.component';
+import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { ValidatorsComponent } from './validators.component';
     MatTooltipModule,
     LoadingImageModule,
     NgbNavModule,
+    SoulboundFeatureTokensModule
   ],
   providers: [CommonService, BlockService, TransactionService, AccountService, MappingErrorService, DecimalPipe],
 })

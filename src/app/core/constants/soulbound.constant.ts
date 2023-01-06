@@ -1,9 +1,9 @@
-import { ContractRegisterType } from './contract.enum';
 
 export enum SB_TYPE {
   UNCLAIMED = 'Unclaimed',
   EQUIPPED = 'Equipped',
   UNEQUIPPED = 'Unequipped',
+  PENDING = 'Pending'
 }
 
 export const SOUL_BOUND_TYPE = [

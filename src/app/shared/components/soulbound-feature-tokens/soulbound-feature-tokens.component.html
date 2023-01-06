@@ -1,4 +1,4 @@
-<div class="text-end" *ngIf="soulboundList && soulboundList.length > 0">
+<div class="text-end" *ngIf="soulboundList && soulboundList?.length > 0">
   <div class="soulbound-list">
     <ng-container *ngFor="let token of soulboundList; let last = last">
       <div class="soulbound__item">
@@ -13,7 +13,6 @@
               class="soulbound-img" />
           </a>
         </ng-container>
-        <!-- <ng-container *ngIf="!token.picked"> -->
         <ng-container *ngIf="!token.picked">
           <div class="nft-card nft__unclaimed">
             <div class="position-relative">
@@ -28,7 +27,7 @@
               </button>
             </div>
 
-            <div class="text-center text--yellow-3">{{ sbType.UNCLAIMED }}</div>
+            <div class="text-center text--yellow-3 mt-3">{{ sbType.UNCLAIMED }}</div>
           </div>
         </ng-container>
       </div>

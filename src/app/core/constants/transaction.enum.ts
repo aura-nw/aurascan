@@ -101,6 +101,8 @@ export enum ModeExecuteTransaction {
   Mint = 'mint',
   Burn = 'burn',
   Buy = 'buy',
+  Take = 'take',
+  UnEquip = 'unequip'
 }
 
 export enum pipeTypeData {

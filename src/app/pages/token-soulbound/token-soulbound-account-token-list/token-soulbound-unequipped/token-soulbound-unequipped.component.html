@@ -48,8 +48,14 @@
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
                   <img
+                    *ngIf="!token.animation_url"
                     src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
                     alt="{{ token.token_name }}" />
+                  <app-custom-video-player
+                    [videoSrc]="token.animation_url | replaceIpfs"
+                    [showControl]="true"
+                    *ngIf="token.animation_url">
+                  </app-custom-video-player>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
                     {{ sbType.UNCLAIMED }}
                   </div>

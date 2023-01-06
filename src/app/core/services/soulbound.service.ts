@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { EnvironmentService } from '../data-services/environment.service';
@@ -10,7 +9,7 @@ import { CommonService } from './common.service';
 export class SoulboundService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
-  apiUrl = 'http://10.9.0.57:3000/api/v1' || `${this.environmentService.configValue.beUri}`;
+  apiUrl = `${this.environmentService.configValue.beUri}`;
 
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);

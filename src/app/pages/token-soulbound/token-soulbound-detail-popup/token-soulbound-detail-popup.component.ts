@@ -55,26 +55,6 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
       };
       this.execute(msgExecute);
     }
-
-
-    // const payload = {
-    //   signature: dataKeplr.signature,
-    //   msg: this.soulboundDetail.token_id,
-    //   pubKey: dataKeplr.pub_key.value,
-    //   id: this.soulboundDetail.token_id,
-    //   status: this.soulboundDetail.status,
-    // };
-
-    // this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
-    //   if (res?.code) {
-    //     let msgError = res?.message.toString() || 'Error';
-    //     this.toastr.error(msgError);
-    //   } else {
-    //     this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
-    //     this.dialogRef.close();
-    //   }
-    //   // this.getListSB();
-    // });
   }
 
   execute(data) {

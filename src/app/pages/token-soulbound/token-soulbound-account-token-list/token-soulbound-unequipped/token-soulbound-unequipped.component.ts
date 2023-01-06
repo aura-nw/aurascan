@@ -9,6 +9,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { TokenSoulboundDetailPopupComponent } from 'src/app/pages/token-soulbound/token-soulbound-detail-popup/token-soulbound-detail-popup.component';
 
 @Component({
@@ -92,8 +93,6 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       this.isClick = false;
-      console.log(res);
-
       if (res?.data) {
         this.openDialogDetail(res.data);
       }
@@ -108,10 +107,13 @@ export class TokenSoulboundUnequippedComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
-        setTimeout(() => {
-          this.getListSB();
-        }, 2000);
+        this.getListSB();
       }
     });
+  }
+
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }

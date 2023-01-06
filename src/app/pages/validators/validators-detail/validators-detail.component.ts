@@ -141,7 +141,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           up_time: 100,
         };
 
-        this.getTotalSBT();
+        this.getTotalSBT(this.currentValidatorDetail.acc_address);
         this.getBlocksMiss(this.currentAddress);
       },
       (error) => {
@@ -374,9 +374,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.isOpenDialog = event;
   }
 
-  getTotalSBT() {
+  getTotalSBT(address) {
     const payload = {
-      receiverAddress: this.currentValidatorDetail.acc_address,
+      receiverAddress: address,
       limit: LIMIT_NUM_SBT,
     };
     

@@ -23,6 +23,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   sbType = SB_TYPE;
   wallet = null;
   userAddress = null;
+  timerGetUpTime: any;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -30,28 +31,39 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     private dialog: MatDialog,
     private walletService: WalletService,
     private router: ActivatedRoute,
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.userAddress = this.router.snapshot.paramMap.get('address');
     this.walletService.wallet$.subscribe((wallet) => {
       this.wallet = wallet?.bech32Address;
-      if (!this.soulboundListData) {
-        this.getSBTPick();
-      } else {
-        this.soulboundList = this.soulboundListData;
-      }
+      this.getData();
+      this.timerGetUpTime = setInterval(() => {
+        this.getData();
+      }, 30000);
     });
   }
 
-  ngOnInit(): void {}
+  getData() {
+    if (this.soulboundListData) {
+      this.soulboundList = this.soulboundListData;
+    } else {
+      setTimeout(() => {
+        this.getSBTPick();
+      }, 1000);
+    }
+  }
 
   getSBTPick() {
+    let address = this.accountAddress || this.userAddress;
+
     const payload = {
-      receiverAddress: this.userAddress,
+      receiverAddress: (address),
       limit: LIMIT_NUM_SBT,
     };
 
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      if (this.wallet !== this.userAddress) {
+      if (this.wallet !== address) {
         res.data = res.data.filter((k) => k.picked === true);
       }
       this.soulboundList = res.data;

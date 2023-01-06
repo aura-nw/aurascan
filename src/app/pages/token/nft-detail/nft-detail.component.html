@@ -27,9 +27,15 @@
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <ng-container *ngIf="isSoulBound">
                 <img
-                  [src]="
+                  *ngIf="!nftDetail?.ipfs?.animation_url"
+                  src="{{
                     nftDetail?.ipfs?.image ? (nftDetail?.ipfs?.image | replaceIpfs) : commonService.getDefaultImg()
-                  " />
+                  }}" />
+                <app-custom-video-player
+                  [videoSrc]="nftDetail?.ipfs?.animation_url | replaceIpfs"
+                  [showControl]="true"
+                  *ngIf="nftDetail?.ipfs?.animation_url">
+                </app-custom-video-player>
               </ng-container>
               <ng-container *ngIf="!isSoulBound"
                 ><img *ngIf="!nftType || isError" [src]="defaultImgToken" />
@@ -65,7 +71,7 @@
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
-                *ngIf="nftDetail.picked"
+                *ngIf="nftDetail.status === sbType.EQUIPPED"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
                 (click)="getSBTPick()">
                 <span>Un-equip</span>
@@ -254,12 +260,12 @@
     <div class="row mt-4 flex-column-reverse flex-lg-row" *ngIf="isSoulBound">
       <div class="col-12 col-lg-4 mt-4 mt-lg-0">
         <div class="card card--sb-information mb-0">
-          <div class="card-header card-header--has-border h2 text--white pt-4 pb-5 pt-lg-6 pb-lg-4">Properties</div>
-          <div class="card-body pt-0">
-            <div class="row text--gray-1 sb-props px-2">
+          <div class="card-header card-header--has-border h2 text--white box-prop">Properties</div>
+          <div class="box-prop-item">
+            <div class="row text--gray-1 sb-props m-0">
               <ng-container *ngIf="nftDetail?.ipfs?.attributes">
                 <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
-                  <div class="col-4 mt-4 mt-lg-6">
+                  <div class="col-4 mb-lg-6 mb-4">
                     <div class="card-info py-4 text-center">
                       <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
                       <div class="mt-2 caption">{{ prop.value | stringEllipsis : 13 }}</div>
@@ -399,12 +405,6 @@
         </tr>
       </table>
     </div>
-    <!-- <app-paginator
-      [length]="pageData?.length"
-      [pageSize]="pageData?.pageSize"
-      (paginator)="paginatorEmit($event)"
-      (pageEvent)="handlePageEvent($event)">
-    </app-paginator> -->
     <ng-template #noValues></ng-template>
   </div>
 </ng-container>

@@ -1,17 +1,18 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ActivatedRoute } from '@angular/router';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { getKeplr } from 'src/app/core/utils/keplr';
+import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { getKeplr } from 'src/app/core/utils/keplr';
 
 @Component({
   selector: 'app-token-soulbound-equipped',
@@ -38,6 +39,7 @@ export class TokenSoulboundEquippedComponent implements OnInit {
   currentKey = null;
   userAddress = '';
   sbType = SB_TYPE;
+  walletAddress = null;
   network = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -51,6 +53,10 @@ export class TokenSoulboundEquippedComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.walletAddress = this.walletService.wallet?.bech32Address;
+    });
+
     this.route.params.subscribe((params) => {
       if (params?.address) {
         this.userAddress = params?.address;
@@ -107,21 +113,23 @@ export class TokenSoulboundEquippedComponent implements OnInit {
   }
 
   async updatePick(data, pick = true) {
-    const currentAddress = this.walletService.wallet?.bech32Address;
+    const keplr = await getKeplr();
+    let dataKeplr = await keplr.signArbitrary(this.network.chainId, this.walletAddress, data.token_id);
 
     const payload = {
-      signature: data.signature,
+      signature: dataKeplr.signature,
       msg: data.token_id.toString(),
-      pubKey: data.pub_key,
+      pubKey: dataKeplr.pub_key.value,
       id: data.token_id,
-      picked: true || pick,
+      picked: pick,
     };
 
     this.soulboundService.pickSBToken(payload).subscribe((res) => {
-      if (res.code) {
+      if (res.code && res.code !== 200) {
         this.toastr.error(res.message);
       } else {
         setTimeout(() => {
+          this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
           this.getListSB();
         }, 4000);
       }

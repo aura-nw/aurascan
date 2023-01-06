@@ -7,8 +7,8 @@
         <div class="d-flex align-items-center">
           <div class="h2 h3-mob fw-semibold mb-0 text--white">Contract</div>
           <div class="ml-2 contract-address h4 mb-0">
-            <span class="d-lg-none">{{ contractAddress | stringEllipsis: 8}}</span>
-            <span class="d-none d-lg-block">{{ contractAddress }}</span>
+            <span class="d-lg-none body-mob fw-semibold">{{ contractAddress | stringEllipsis : 8 }}</span>
+            <span class="d-none d-lg-block fw-semibold">{{ contractAddress }}</span>
           </div>
         </div>
         <button
@@ -27,12 +27,12 @@
             <div class="box-input col-12 col-lg-3 mb-4 mb-lg-0">
               <mat-form-field appearance="fill" soulbound>
                 <mat-select
-                    class="list-token"
-                    placeholder="Select a type contract"
-                    panelClass="contractPanel"
-                    (selectionChange)="searchToken()"
-                    [(value)]="selectedType"
-                    [disableOptionCentering]="true">
+                  class="list-token"
+                  placeholder="Select a type contract"
+                  panelClass="contractPanel"
+                  (selectionChange)="searchToken()"
+                  [(value)]="selectedType"
+                  [disableOptionCentering]="true">
                   <mat-option *ngFor="let item of lstTypeSB" [value]="item.key">
                     <div class="d-flex option-contain">
                       <div class="option-lable">
@@ -47,27 +47,31 @@
               <form class="aura-form single-input-field search-form-sblist" #searchForm>
                 <div class="input-group">
                   <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Search for Token URI, Address or Token ID"
-                      [(ngModel)]="textSearch"
-                      [maxLength]="maxLengthSearch"
-                      (keyup.enter)="searchToken()"
-                      name="search"
-                      autocomplete="off" />
+                    type="text"
+                    class="form-control"
+                    placeholder="Search for Token URI, Address or Token ID"
+                    [(ngModel)]="textSearch"
+                    [maxLength]="maxLengthSearch"
+                    (keyup.enter)="searchToken()"
+                    name="search"
+                    autocomplete="off" />
                   <button
-                      type="submit"
-                      class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                      (click)="searchToken()">
+                    type="submit"
+                    class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+                    (click)="searchToken()">
                     <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
                   </button>
                   <button
-                      type="reset"
-                      class="btn-reset cursor-pointer {{
-                  !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
-                }}"
-                      (click)="resetSearch()">
-                    <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+                    type="reset"
+                    class="btn-reset cursor-pointer {{
+                      !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                    }}"
+                    (click)="resetSearch()">
+                    <img
+                      [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3"
+                      alt=""
+                      width="24"
+                      height="24" />
                   </button>
                 </div>
               </form>

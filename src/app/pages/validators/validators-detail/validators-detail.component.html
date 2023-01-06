@@ -100,9 +100,8 @@
           <div class="soulbound-feature-tokens mt-2">
             <app-soulbound-feature-tokens
               [extend]="false"
-              [accountAddress]="currentAddress"
-              [soulboundListData]="soulboundList"
-              (totalSBT)="totalSBT = $event"></app-soulbound-feature-tokens>
+              [accountAddress]="currentValidatorDetail.acc_address"
+              [soulboundListData]="soulboundList"></app-soulbound-feature-tokens>
           </div>
         </div>
       </div>

@@ -22,6 +22,7 @@ import { AccountDetailComponent } from './account-detail.component';
 import { NftListComponent } from './nft-list/nft-list.component';
 import { TokenTableComponent } from './token-table/token-table.component';
 import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.component';
+import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
   declarations: [AccountDetailComponent, TokenTableComponent, NftListComponent, SoulboundTokenComponent],
@@ -44,6 +45,7 @@ import { SoulboundTokenComponent } from './soulbound-token/soulbound-token.compo
     CustomVideoPlayerModule,
     NftCardModule,
     NgxMaskModule,
+    SoulboundFeatureTokensModule
   ],
   providers: [TransactionService, AccountService, DecimalPipe],
 })

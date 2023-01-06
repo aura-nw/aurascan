@@ -381,41 +381,4 @@ export class WalletService implements OnDestroy {
   suggestChain(w: Keplr) {
     return w.experimentalSuggestChain(this.chainInfo);
   }
-
-  walletExecute(userAddress, contractAddress, data) {
-    let msgError = MESSAGES_CODE_CONTRACT[5].Message;
-    msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-    let result = false;
-    let feeGas = {
-      amount: [
-        {
-          amount: '0.0025',
-          denom: 'utaura',
-        },
-      ],
-      gas: '200000',
-    };
-    try {
-      this.execute(userAddress, contractAddress, data, feeGas)
-        .then((e) => {
-          if ((e as any).result?.error) {
-            this.toastr.error(msgError);
-          } else {
-            if ((e as any)?.transactionHash) {
-              this.toastr.loading((e as any)?.transactionHash);
-              setTimeout(() => {
-                this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-              }, 4000);
-            }
-          }
-        })
-        .catch((error) => {
-          if (!error.toString().includes('Request rejected')) {
-            this.toastr.error(msgError);
-          }
-        });
-    } catch (error) {
-      this.toastr.error(`Error: ${msgError}`);
-    }
-  }
 }

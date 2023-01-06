@@ -20,8 +20,11 @@ import { QrModule } from 'src/app/shared/components/qr/qr.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { MaterialModule } from 'src/app/app.module';
+import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
+import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
+import { CustomVideoPlayerModule } from 'src/app/shared/components/custom-video-player/custom-video-player.module';
+import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,9 @@ import { MaterialModule } from 'src/app/app.module';
     MatTooltipModule,
     NgbNavModule,
     MaterialModule,
+    NftCardModule,
+    CustomVideoPlayerModule,
+    SoulboundFeatureTokensModule
   ],
   providers: [FormBuilder, SoulboundService],
 })
