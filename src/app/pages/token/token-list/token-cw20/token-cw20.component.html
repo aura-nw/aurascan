@@ -106,7 +106,12 @@
                 <ng-container *ngIf="element.price; else noData">
                   <div class="mb-1 text--gray-1">${{ element.price | mask : 'separator.6' }}</div>
                   <div class="body-02 fw-normal text--gray-5" *ngIf="global.price.btc">
-                    {{ element.price / global.price.btc || 0 | mask : 'separator.6' }} BTC
+                    {{
+                      element.price / global.price.btc < 0.000001
+                        ? '0.000000'
+                        : (element.price / global.price.btc | mask : 'separator.6')
+                    }}
+                    BTC
                   </div>
                   <div class="body-02 fw-normal text--gray-5" *ngIf="global.price.aura">
                     {{ element.price / global.price.aura || 0 | mask : 'separator.6' }} {{ denom }}
