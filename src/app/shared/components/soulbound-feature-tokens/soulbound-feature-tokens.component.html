@@ -15,7 +15,7 @@
         </ng-container>
         <ng-container *ngIf="!token.picked">
           <div class="nft-card nft__unclaimed">
-            <div class="position-relative">
+            <div class="position-relative text-center">
               <img
                 src="{{ token.token_img ? replaceImgIpfs(token.token_img) : commonService.getDefaultImg() }}"
                 alt=""

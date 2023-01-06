@@ -20,7 +20,6 @@ import { PaginatorModule } from '../../shared/components/paginator/paginator.mod
 import { TableNoDataModule } from '../../shared/components/table-no-data/table-no-data.module';
 import { PopupDelegateModule } from './popup-delegate/popup-delegate.module';
 import { UserWalletInfoComponent } from './user-wallet-info/user-wallet-info.component';
-import { MilestoneComponent } from './milestone/milestone.component';
 import { DelegateItemComponent } from './validators-detail/delegate-item/delegate-item.component';
 import { ValidatorsDetailComponent } from './validators-detail/validators-detail.component';
 import { ValidatorsRoutingModule } from './validators-routing.module';
@@ -32,7 +31,6 @@ import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulboun
     ValidatorsComponent,
     ValidatorsDetailComponent,
     UserWalletInfoComponent,
-    MilestoneComponent,
     DelegateItemComponent,
   ],
   imports: [
