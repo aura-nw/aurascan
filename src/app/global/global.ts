@@ -133,6 +133,17 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       } else if (method === ModeExecuteTransaction.Mint) {
         fromAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Mint;
+      } else if (method === ModeExecuteTransaction.Take) {
+        fromAddress = itemMessage.msg?.take?.from;
+        toAddress = itemMessage.sender;
+        try {
+          const data = JSON.parse(rawLog);
+          tokenId =
+            data[0]?.events[data[0]?.events?.length - 1]?.attributes.find((k) => k.key === 'token_id')?.value || null;
+        } catch (e) {}
+      } else if (method === ModeExecuteTransaction.UnEquip) {
+        toAddress = NULL_ADDRESS;
+        modeExecute = ModeExecuteTransaction.UnEquip;
       } else if (method === ModeExecuteTransaction.Buy) {
         fromAddress = null;
         toAddress = itemMessage.sender;

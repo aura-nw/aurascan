@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 
 @Component({
   selector: 'app-contract-info-card',
@@ -7,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ContractInfoCardComponent implements OnInit {
   @Input() contractDetail: any;
+  contractRegisterType = ContractRegisterType;
   constructor() {}
 
   ngOnInit(): void {}

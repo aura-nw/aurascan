@@ -140,19 +140,32 @@
                             <a
                               class="text--primary"
                               href="/tokens/{{ linkToken }}/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
-                              *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
+                              *ngIf="
+                                data.modeExecute !== modeExecuteTransaction.Burn &&
+                                data.modeExecute !== modeExecuteTransaction.UnEquip &&
+                                data[template.matColumnDef]
+                              ">
                               {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                             </a>
-                            <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                              data[template.matColumnDef] | cutStringPipe : 8 : 8
-                            }}</span>
+                            <span
+                              *ngIf="
+                                data.modeExecute === modeExecuteTransaction.Burn ||
+                                data.modeExecute === modeExecuteTransaction.UnEquip
+                              "
+                              >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span
+                            >
                             <span *ngIf="!data[template.matColumnDef]"> - </span>
                           </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'details'">
                           <button
                             class="button button--sm button-outline button-outline--gradient button-outline__in-card button-pill"
-                            [disabled]="!data.token_id || data['status'] === 'Fail' || data['token_id'] === 'More'"
+                            [disabled]="
+                              !data.token_id ||
+                              data['status'] === 'Fail' ||
+                              data['token_id'] === 'More' ||
+                              data.modeExecute === modeExecuteTransaction.UnEquip
+                            "
                             [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
                             <span>View NFT</span>
                           </button>

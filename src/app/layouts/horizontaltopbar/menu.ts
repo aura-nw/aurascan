@@ -121,16 +121,22 @@ export const MENU: MenuItem[] = [
     subItems: [
     {
       id: 1,
-      label: 'Fee Grant',
-      link: '/fee-grant',
-      icon: 'gas-pump',
+      label: 'Soulbound Token',
+      link: '/soulbound',
+      icon: 'users-three',
     },
     // {
     //   id: 2,
     //   label: 'Multi-send',
     //   link: '/fee',
     //   icon: 'users-three',
-    // }
+    // },
+    {
+      id: 3,
+      label: 'Fee Grant',
+      link: '/fee-grant',
+      icon: 'gas-pump',
+    }
     ]
   },
 ];

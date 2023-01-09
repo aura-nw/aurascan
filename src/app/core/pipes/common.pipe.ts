@@ -78,3 +78,10 @@ export class BalanceOf implements PipeTransform {
     return +(new BigNumber(amount).toNumber() / Math.pow(10, 6)).toFixed(decimal);
   }
 }
+
+@Pipe({ name: 'replaceIpfs' })
+export class ReplaceIpfs implements PipeTransform {
+  transform(value: string): string {
+    return 'https://ipfs.io/' + value.replace('://', '/')
+  }
+}
