@@ -9,7 +9,7 @@ const routes: Routes = [
   //   component: LoginComponent
   // },
   {
-    path: ':id', component: LayoutComponent, loadChildren: () => import('./account-detail/account-detail.module').then(m => m.AccountDetailModule)
+    path: ':address', component: LayoutComponent, loadChildren: () => import('./account-detail/account-detail.module').then(m => m.AccountDetailModule)
   },
   // {
   //   path: 'register',

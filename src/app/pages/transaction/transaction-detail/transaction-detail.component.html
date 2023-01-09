@@ -15,7 +15,9 @@
   <ng-container *ngIf="transaction; else noValues">
     <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
       <div class="d-flex align-items-baseline">
-        <h2 id="popupCopy" class="card-header mb-0 text--white pb-0 pr-0">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+        <h2 id="popupCopy" class="card-header mb-0 text--white pb-0 pr-0">
+          {{ !isRawData ? 'Information' : 'Raw Data' }}
+        </h2>
         <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
           <img
             [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
@@ -40,7 +42,7 @@
             <div class="col-auto col-lg-2 text--gray-4">TxHash</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01">
               <span class="d-none d-lg-block">{{ transaction?.tx_hash }}</span>
-              <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe: 8:8 }}</span>
+              <span class="d-lg-none">{{ transaction?.tx_hash | cutStringPipe : 8 : 8 }}</span>
             </div>
           </div>
           <div class="row mb-3 body justify-content-between justify-content-lg-start">
@@ -73,9 +75,9 @@
               <div>{{ commonService.getDateValue(transaction?.timestamp)[0] }}</div>
               <div class="d-flex align-items-center ml-1 text--gray-4">
                 <span>(</span>
-                <span>{{ transaction?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
+                <span>{{ transaction?.timestamp | customDate : 'yyyy-MM-dd' }}</span>
                 <div class="divider divider-vertical divider-lighter mx-2"></div>
-                <span>{{ transaction?.timestamp | customDate: 'HH:mm:ss' }}</span>
+                <span>{{ transaction?.timestamp | customDate : 'HH:mm:ss' }}</span>
                 <span>)</span>
               </div>
             </div>
@@ -83,7 +85,7 @@
           <div class="row mb-3 body justify-content-between justify-content-lg-start">
             <div class="col-auto col-lg-2 text--gray-4">Fee</div>
             <div class="col-auto col-lg-10 text--gray-1 body-01">
-              {{ +transaction?.fee | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
+              {{ +transaction?.fee | mask : 'separator.6' }} <span class="text--primary">{{ denom }}</span>
             </div>
           </div>
           <div class="row body justify-content-between justify-content-lg-start">

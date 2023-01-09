@@ -11,19 +11,21 @@ export class NftCardComponent implements OnInit {
   @Input() nftType: string;
   @Input() nftLink: string;
   @Input() nftId: string;
+  @Input() nftUrl: string = '';
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
-  nftUrl = '';
 
   constructor(private environmentService: EnvironmentService) {}
 
   ngOnInit(): void {
-    if (this.nftItem.animation && this.nftItem.animation?.content_type) {
-      this.nftUrl = this.nftItem.animation?.link_s3 || '';
-    }
-    if (this.nftItem.image && this.nftUrl == '') {
-      this.nftUrl = this.nftItem.image?.link_s3 || '';
+    if (!this.nftUrl) {
+      if (this.nftItem.animation && this.nftItem.animation?.content_type) {
+        this.nftUrl = this.nftItem.animation?.link_s3 || '';
+      }
+      if (this.nftItem.image && this.nftUrl == '') {
+        this.nftUrl = this.nftItem.image?.link_s3 || '';
+      }
     }
   }
 

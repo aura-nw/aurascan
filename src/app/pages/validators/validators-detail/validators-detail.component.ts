@@ -6,12 +6,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
@@ -75,12 +77,18 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentNextKey = null;
   nextKeyBlock = null;
   currentNextKeyBlock = null;
+  isOpenDialog = false;
+  totalSBT = 0;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  chainInfo = this.environmentService.configValue.chain_info;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  soulboundList = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -91,20 +99,25 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
+    private soulboundService: SoulboundService,
   ) {}
 
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.getDetail();
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+    this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
     }, 30000);
     this.timerGetBlockMiss = setInterval(() => {
       this.getBlocksMiss(this.currentAddress);
     }, 10000);
+  }
+
+  loadData() {
+    this.getDetail();
+    this.getListBlockWithOperator();
+    this.getListDelegator();
+    this.getListPower();
   }
 
   ngOnDestroy() {
@@ -124,9 +137,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           ...res.data,
           self_bonded: balanceOf(res.data.self_bonded),
           power: balanceOf(res.data.power),
+          identity: res?.data?.identity,
           up_time: 100,
         };
 
+        this.getTotalSBT(this.currentValidatorDetail.acc_address);
         this.getBlocksMiss(this.currentAddress);
       },
       (error) => {
@@ -255,7 +270,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
           return { tx_hash, amount, isStakeMode, height, timestamp };
         });
-        if (this.dataSourcePower.data.length > 0) {
+        if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
           this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
         } else {
           this.dataSourcePower.data = [...txs];
@@ -349,5 +364,24 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
       return;
     }
+  }
+
+  openDialog() {
+    this.isOpenDialog = true;
+  }
+
+  updateStatus(event) {
+    this.isOpenDialog = event;
+  }
+
+  getTotalSBT(address) {
+    const payload = {
+      receiverAddress: address,
+      limit: LIMIT_NUM_SBT,
+    };
+    
+    this.soulboundService.getSBTPick(payload).subscribe((res) => {
+      this.soulboundList = res.data.filter(k => k.picked === true);
+    });
   }
 }

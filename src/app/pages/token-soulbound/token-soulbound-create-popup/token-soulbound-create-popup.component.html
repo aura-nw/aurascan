@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
+    <div class="h1 mb-0 fw-bold text--white">Create New</div>
+    <img
+      [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+      alt=""
+      width="24px"
+      height="24px"
+      class="cursor-pointer"
+      (click)="closeDialog()" />
+  </div>
+  <div class="card-body body-01">
+    <div>
+      <div>Attestor’s Address</div>
+      <div class="mt-2 address-text">{{ data.currentAddress }}</div>
+    </div>
+    <div class="mt-4 mt-lg-6">
+      <div>Contract Address</div>
+      <div class="mt-2 address-text">{{ data.contractAddress }}</div>
+    </div>
+    <form
+      [formGroup]="createSBTokenForm"
+      (ngSubmit)="onSubmit()"
+      #ngForm="ngForm"
+      class="aura-form single-input-field"
+      autocomplete="off">
+      <!-- Soulbound Token URI -->
+      <div class="form-group mt-4 mt-lg-6">
+        <label for="soulboundTokenURI" class="form-label required body-01">Soulbound Token URI</label>
+        <input
+          id="soulboundTokenURI"
+          formControlName="soulboundTokenURI"
+          type="text"
+          class="form-control form-check-input body-01"
+          [placeholder]="'https://ipfs.io/ipfs..'"
+          [class.form-control--error]="createSBTokenForm.get('soulboundTokenURI')?.invalid && ngForm.submitted" />
+      </div>
+      <!-- Receiver’s Address -->
+      <div class="form-group mt-4 mt-lg-6">
+        <label for="receiverAddress" class="form-label required body-01">Receiver’s Address</label>
+        <input
+          id="receiverAddress"
+          formControlName="receiverAddress"
+          type="text"
+          class="form-control form-check-input body-01"
+          [placeholder]="'aura...'"
+          (ngModelChange)="resetCheck()"
+          [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && ngForm.submitted" />
+        <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">This is not aura's externally owned account</div>
+      </div>
+
+      <!-- Button group -->
+      <div class="d-flex align-items-center justify-content-end mt-8">
+        <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
+          <span>Cancel</span>
+        </button>
+        <button
+          class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
+          [disabled]="!createSBTokenForm.valid || isAddressInvalid"
+          type="submit">
+          <span>Create</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

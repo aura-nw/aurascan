@@ -60,12 +60,12 @@
           <td colspan="2">
             <ng-container *ngIf="contractDetail.token_name && contractDetail.token_symbol">
               <a class="text--primary break-word" [routerLink]="['/token', contractDetail?.contract_address]"
-                *ngIf="!(contractDetail.type === 'CW721')"
+                *ngIf="contractDetail.type === contractRegisterType.CW20"
                 [routerLink]="['/tokens/token', contractDetail?.contract_address]">
                 {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
               </a>
               <a
-                *ngIf="contractDetail.type === 'CW721'"
+                *ngIf="contractDetail.type !== contractRegisterType.CW20"
                 class="text--primary break-word"
                 [routerLink]="['/tokens/token-nft', contractDetail?.contract_address]">
                 {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
