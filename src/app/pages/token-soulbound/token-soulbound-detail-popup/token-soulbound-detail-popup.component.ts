@@ -2,9 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
@@ -20,12 +18,10 @@ export class TokenSoulboundDetailPopupComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
     public dialogRef: MatDialogRef<TokenSoulboundDetailPopupComponent>,
-    private environmentService: EnvironmentService,
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
-    private mappingErrorService: MappingErrorService
   ) {}
 
   ngOnInit(): void {}

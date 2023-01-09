@@ -123,7 +123,7 @@ export const MENU: MenuItem[] = [
       id: 1,
       label: 'Soulbound Token',
       link: '/soulbound',
-      icon: 'users-three',
+      icon: 'medal',
     },
     // {
     //   id: 2,
