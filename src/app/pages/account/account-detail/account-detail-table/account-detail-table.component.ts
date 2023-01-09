@@ -69,16 +69,6 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
     }
   }
 
-  // handlePageEvent(event: any): void {
-  //   if (this.pageData.pageSize !== event.pageSize) {
-  //     event.pageIndex = 0;
-  //   }
-  //   this.pageData.pageIndex = event.pageIndex;
-  //   this.pageData.pageSize = event.pageSize;
-  //   event.pageEventType = this.pageEventType;
-  //   this.pageEvent.emit(event);
-  // }
-
   paginatorEmit(event: MatPaginator): void {
     this.dataSource.paginator = event;
   }
