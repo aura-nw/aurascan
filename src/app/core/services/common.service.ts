@@ -115,4 +115,8 @@ export class CommonService {
     this.setURL();
     return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
   }
+
+  getDefaultImg(){
+    return this._environmentService.configValue.image_s3 + 'images/aura__ntf-default-img.png';
+  }
 }

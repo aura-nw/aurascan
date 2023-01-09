@@ -234,7 +234,9 @@
                             </div>
                           </div>
                         </div>
-                        <h5 class="text--primary mb-0" [class.text-jailed]="validator['jailed']">
+                        <h5
+                          class="text--primary mb-0"
+                          [class.text-title]="validator?.jailed && validator['status'] !== statusValidator.Active">
                           {{ validator.title }}
                         </h5>
                       </a>

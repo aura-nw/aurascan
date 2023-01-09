@@ -15,6 +15,10 @@
   border-radius: 4px;
 }
 
+.card-header {
+  border-bottom-color: var(--aura-gray-9);
+}
+
 .content-transfer {
   min-width: 170px;
   display: inline-block;
@@ -42,6 +46,11 @@
       top: 0;
       left: 0;
       object-fit: contain;
+    }
+    &.nft-soulbound__img {
+      &:before {
+        padding-top: 73.426573%;
+      }
     }
   }
   @media (max-width: 991.98px) {
@@ -71,7 +80,7 @@
       border-top: none;
     }
     .label-detail {
-      min-width: 150px;
+      min-width: 140px;
     }
     .g-ellipsis {
       width: unset;
@@ -96,6 +105,35 @@
       top: 0;
       left: 0;
       right: 0;
+    }
+  }
+}
+
+.btn-share {
+  padding: 0px;
+  &:hover {
+    border-radius: 10px;
+    background-color: var(--aura-gray-9);
+  }
+}
+.box-prop {
+  padding: 16px 0px 20px 16px;
+  @media (min-width: 991.98px) {
+    padding: 24px 0px 16px 24px;
+  }
+}
+.box-prop-item {
+  padding: 16px 16px 0px 16px;
+  @media (min-width: 991.98px) {
+    padding: 24px 24px 0px 24px;
+    max-height: 130px;
+    overflow-y: auto;
+    .btn-share {
+      padding: 0px;
+      &:hover {
+        border-radius: 10px;
+        background-color: #363843;
+      }
     }
   }
 }
@@ -128,10 +166,11 @@
   border-radius: 50%;
   background-color: var(--aura-gray-9);
 }
-.btn-share {
-  padding: 0px;
-  &:hover {
-    border-radius: 10px;
-    background-color: #363843;
+
+.card--sb-information {
+  @media (min-width: 991.98px) {
+    height: 100%;
   }
+}
+.sb-props {
 }

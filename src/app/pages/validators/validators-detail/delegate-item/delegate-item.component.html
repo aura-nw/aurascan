@@ -1,0 +1,80 @@
+<div class="col-lg-6">
+  <ng-template #modalManage let-modal>
+    <div class="box-staking aura-form">
+      <img
+        [src]="'assets/icons/icons-svg/white/arrow-left.svg' | imageS3"
+        alt=""
+        class="d-lg-none mb-6"
+        width="24px"
+        height="24px"
+        (click)="closeDialog()" />
+      <div class="mb-4 mb-xl-6">
+        <div class="mb-4 d-flex align-items-center">
+          <div class="avatar-wrapper">
+            <div class="validator-avatar large">
+              <app-loading-image
+                [identity]="currentValidatorDetail?.identity"
+                [srcImg]="getValidatorAvatar(currentValidatorDetail?.operator_address)">
+              </app-loading-image>
+            </div>
+          </div>
+          <div class="ml-2">
+            <div class="h1 mb-0 text-gradient fw-bolder d-inline-block">
+              <span class="modal__title">{{ currentValidatorDetail?.title }}</span>
+            </div>
+            <div class="h6 body-02-mob mb-0 text--gray-1">
+              Commission - {{ currentValidatorDetail?.commission | percent: globals.formatNumber2Decimal }}
+            </div>
+          </div>
+        </div>
+        <div class="body-01 text--gray-5">
+          <div class="mb-1">
+            <span>Voting power - {{ currentValidatorDetail?.percent_power }}%</span>&nbsp;
+            <span>({{ currentValidatorDetail?.power | number: globals.formatNumberToken }}</span>
+            <span class="text--primary ml-1">{{ denom }}</span
+            >)
+          </div>
+          <div>Delegators - {{ totalDelegator }}</div>
+        </div>
+      </div>
+      <div>
+        <popup-delegate [data]="dataDelegate"></popup-delegate>
+
+        <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+          <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
+          <div class="d-flex align-items-center py-2 mr-4">
+            <button
+              class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
+              type="button"
+              (click)="getMaxToken()">
+              MAX
+            </button>
+          </div>
+          <div class="input-group-append fw-500 text--primary">{{ denom }}</div>
+        </div>
+        <div *ngIf="errorExceedAmount" class="text--danger mt-3">
+          Insufficient available balance for transaction fee
+        </div>
+
+        <div class="mt-6 d-flex align-items-center justify-content-center justify-content-lg-end">
+          <button
+            type="button"
+            class="button button--sm button--md-mob button-fixed button-pill button-outline button-outline--gradient d-flex"
+            (click)="handleStaking()"
+            [disabled]="isExceedAmount || !(amountFormat && amountFormat > 0) || isHandleStake">
+            <img
+              class="mr-2"
+              [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
+              alt=""
+              width="20"
+              height="20"
+              *ngIf="isLoading" />
+            <span>Delegate</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<button id="buttonOpenDialog" class="d-none" (click)="viewPopupDetail(modalManage)">Close</button>

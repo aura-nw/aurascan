@@ -1,0 +1,14 @@
+.nft-cards__item-border {
+  position: relative;
+  .token__bookmark {
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 2.4rem;
+    color: #82ECDA;
+    @media (min-width: 992px) {
+      font-size: 3.6rem;
+    }
+  }
+}

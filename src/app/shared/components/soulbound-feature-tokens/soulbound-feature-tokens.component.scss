@@ -1,0 +1,65 @@
+.soulbound-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  @media (min-width: 375px) {
+    width: 60px;
+    height: 60px;
+  }
+  @media (min-width: 767.98px) and (max-width: 992px) {
+    width: 100px;
+    height: 100px;
+  }
+  @media (min-width: 1440px) {
+    width: 100px;
+    height: 100px;
+  }
+}
+.btn-preview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.35s ease-in-out;
+}
+.soulbound-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  .soulbound__item {
+    .nft-card {
+      min-height: 120px;
+      max-width: 100px;
+    }
+    padding: var(--spacer-2) var(--spacer-4);
+    &:not(:last-child) {
+      @media (min-width: 1200px) {
+        margin-right: var(--spacer-1);
+      }
+      @media (min-width: 1600px) {
+        margin-right: var(--spacer-2);
+      }
+    }
+    &:hover {
+      background: rgba(54, 56, 67, 0.5);
+      border-radius: 8px;
+      .btn-preview {
+        opacity: 1;
+      }
+    }
+  }
+}
+.nft__unclaimed {
+  img {
+    transition: unset;
+  }
+  @media (min-width: 991.98px) {
+    &:hover img {
+      opacity: 0.5;
+      border: solid 1px var(--aura-gray-8);
+      background-image: unset;    
+    }    
+  }
+}
