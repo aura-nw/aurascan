@@ -1,14 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { getKeplr } from 'src/app/core/utils/keplr';
-import { serializeSignDoc } from '@cosmjs/amino';
 import { isContract } from 'src/app/core/utils/common/validation';
+import { getKeplr } from 'src/app/core/utils/keplr';
 const amino = require('@cosmjs/amino');
 
 @Component({
@@ -83,7 +81,7 @@ export class TokenSoulboundCreatePopupComponent implements OnInit {
           let msgError = res?.message.toString() || 'Error';
           this.toastr.error(msgError);
         } else {
-          this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
+          this.toastr.success('Soulbound record added sucessfully');
         }
       },
       (error) => {
