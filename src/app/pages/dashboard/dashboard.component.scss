@@ -163,13 +163,6 @@ ul {
     overflow-y: auto !important;
   }
 }
-
-.card__item {
-  min-height: 260px;
-}
-.card__summary-info {
-  min-height: 470px;
-}
 .card-child {
   background: rgba(19, 20, 25, 0.4);
   border-radius: 8px;
@@ -225,16 +218,19 @@ i.icon-info {
   font-size: 40px;
 }
 i.icon-brand {
-  font-size: 40px;
+  font-size: 32px;
 }
-
+.w-md-100 {
+  @media (max-width: 1199.98px) {
+    width: 100%;
+  }
+}
 img.icon-brand {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   object-fit: cover;
 }
 .voting-period-btn--disable {
-  display: flex;
   align-items: center;
   padding: 8px 16px;
   width: 100%;
@@ -246,6 +242,11 @@ img.icon-brand {
   line-height: 18px;
   border: 1px solid #494C58;
   border-radius: 8px;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
 }
 .summary-info {
   line-height: 1.8rem !important;

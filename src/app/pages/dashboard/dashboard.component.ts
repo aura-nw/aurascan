@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
     // config chart
     this.chart = createChart(document.getElementById('chart'), {
-      height: 244,
+      height: 380,
       crosshair: {
         horzLine: {
           visible: false,

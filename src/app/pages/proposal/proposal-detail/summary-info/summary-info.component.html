@@ -1,6 +1,6 @@
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="card" *ngIf="proposalDetail">
-    <div class="card-header bg-transparent border-bottom pb-0" *ngIf="!breakpoint.value.matches">
+    <div class="card-header bg-transparent pb-0" *ngIf="!breakpoint.value.matches">
       <div class="d-flex justify-content-between">
         <h2>
           <div class="text--gray-3">#{{ proposalId }}</div>
