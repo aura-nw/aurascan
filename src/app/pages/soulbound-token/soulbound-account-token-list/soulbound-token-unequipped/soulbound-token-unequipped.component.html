@@ -1,11 +1,11 @@
 <section class="mt-4 mt-lg-6">
-  <h2 class="text--white">Equipped SBT</h2>
+  <h2 class="text--white">Un-equipped SBT</h2>
   <div class="card">
     <div class="card-body">
       <!-- Title -->
       <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4">
         <div class="body text--gray-4 mt-4 mt-lg-0">
-          {{ countSelected ?? 0 }} of {{ pageData?.length }} item{{ pageData?.length > 1 ? 's' : '' }} selected
+          A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
         </div>
         <form class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
           <div class="input-group">
@@ -41,45 +41,44 @@
       <div *ngIf="!loading">
         <!-- Token list -->
         <div
-          class="nft-cards token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+          class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           *ngIf="soulboundData.data.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data">
             <div class="nft-cards__item-border">
-              <a href="/tokens/token-nft/{{ token?.contract_address }}/{{ encodeURI(token?.token_id) }}">
-                <div class="nft-cards__item">
-                  <div class="token-cards__img">
-                    <img
-                      *ngIf="!token.animation_url"
-                      src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
-                      alt="{{ token.token_name }}" />
-                    <app-custom-video-player
-                      [videoSrc]="token.animation_url | replaceIpfs"
-                      [showControl]="true"
-                      *ngIf="token.animation_url">
-                    </app-custom-video-player>
-                  </div>
-                  <div class="pt-2 pb-4 px-2">
-                    <div class="nft__info">
-                      <span class="body mr-1 text--gray-1">Token ID:</span>
-                      <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
-                    </div>
-                    <div class="nft__info caption fw-normal">
-                      <span class="body mr-1 text--gray-1">Token:</span>
-                      <span>{{ token.token_name }}</span>
-                    </div>
+              <div class="nft-cards__item nft-cards__item--unclaimed">
+                <div class="token-cards__img">
+                  <img
+                    *ngIf="!token.animation_url"
+                    src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
+                    alt="{{ token.token_name }}" />
+                  <app-custom-video-player
+                    [videoSrc]="token.animation_url | replaceIpfs"
+                    [showControl]="false"
+                    *ngIf="token.animation_url">
+                  </app-custom-video-player>
+                  <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
+                    {{ sbType.UNCLAIMED }}
                   </div>
                 </div>
-              </a>
-              <ng-container *ngIf="userAddress === walletAddress">
-                <i
-                  class="ph-bookmark-simple-thin token__bookmark token__bookmark--unequipped"
-                  (click)="getSBTDetail(token.contract_address, token.token_id)"
-                  *ngIf="!token.picked"></i>
-                <i
-                  class="ph-bookmark-simple-fill token__bookmark token__bookmark--equipped"
-                  (click)="getSBTDetail(token.contract_address, token.token_id, false)"
-                  *ngIf="token.picked"></i>
-              </ng-container>
+                <div class="box-nft-info">
+                  <div class="nft__info">
+                    <span class="body mr-1 text--gray-1">Token:</span>
+                    <span>{{ token.token_name }}</span>
+                  </div>
+                </div>
+                <div class="px-2 d-lg-none position-relative">
+                  <button
+                    class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed button-review--mob mb-2"
+                    (click)="getSBTDetail(token.contract_address, token.token_id)">
+                    <span class="caption fw-normal">Preview</span>
+                  </button>
+                </div>
+                <button
+                  class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"
+                  (click)="getSBTDetail(token.contract_address, token.token_id)">
+                  <span>Preview</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

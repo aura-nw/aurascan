@@ -11,14 +11,14 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { TokenSoulboundCreatePopupComponent } from 'src/app/pages/token-soulbound/token-soulbound-create-popup/token-soulbound-create-popup.component';
+import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
 @Component({
-  selector: 'app-token-soulbound-contract-tokens',
-  templateUrl: './token-soulbound-contract-tokens.component.html',
-  styleUrls: ['./token-soulbound-contract-tokens.component.scss'],
+  selector: 'app-soulbound-token-contract',
+  templateUrl: './soulbound-token-contract.component.html',
+  styleUrls: ['./soulbound-token-contract.component.scss'],
 })
-export class TokenSoulboundContractTokensComponent implements OnInit {
+export class SoulboundTokenContractComponent implements OnInit {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   pageData: PageEvent = {
@@ -109,7 +109,7 @@ export class TokenSoulboundContractTokensComponent implements OnInit {
   }
 
   openDialog(): void {
-    let dialogRef = this.dialog.open(TokenSoulboundCreatePopupComponent, {
+    let dialogRef = this.dialog.open(SoulboundTokenCreatePopupComponent, {
       panelClass: 'TokenSoulboundCreatePopup',
       data: {
         currentAddress: this.currentAddress,

@@ -5,7 +5,7 @@ import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constan
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { TokenSoulboundDetailPopupComponent } from 'src/app/pages/token-soulbound/token-soulbound-detail-popup/token-soulbound-detail-popup.component';
+import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-token/soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 
 @Component({
   selector: 'app-soulbound-feature-tokens',
@@ -87,7 +87,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   }
 
   openDialogDetail(SBT) {
-    let dialogRef = this.dialog.open(TokenSoulboundDetailPopupComponent, {
+    let dialogRef = this.dialog.open(SoulboundTokenDetailPopupComponent, {
       panelClass: 'TokenSoulboundDetailPopup',
       data: SBT,
     });

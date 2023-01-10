@@ -7,17 +7,17 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
-  selector: 'app-token-soulbound-detail-popup',
-  templateUrl: './token-soulbound-detail-popup.component.html',
-  styleUrls: ['./token-soulbound-detail-popup.component.scss'],
+  selector: 'app-soulbound-token-detail-popup',
+  templateUrl: './soulbound-token-detail-popup.component.html',
+  styleUrls: ['./soulbound-token-detail-popup.component.scss'],
 })
-export class TokenSoulboundDetailPopupComponent implements OnInit {
+export class SoulboundTokenDetailPopupComponent implements OnInit {
   isError = false;
   currentAddress = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
-    public dialogRef: MatDialogRef<TokenSoulboundDetailPopupComponent>,
+    public dialogRef: MatDialogRef<SoulboundTokenDetailPopupComponent>,
     public commonService: CommonService,
     private walletService: WalletService,
     private toastr: NgxToastrService,

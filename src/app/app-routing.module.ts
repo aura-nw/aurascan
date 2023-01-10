@@ -59,7 +59,7 @@ const routes: Routes = [
   {
     path: 'soulbound',
     component: LayoutComponent,
-    loadChildren: () => import('./pages/token-soulbound/token-soulbound.module').then((m) => m.TokenSoulboundModule) },
+    loadChildren: () => import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule) },
   { path: '**', redirectTo: '' },
 ];
 

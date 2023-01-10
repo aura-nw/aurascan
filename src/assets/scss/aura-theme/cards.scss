@@ -9,6 +9,7 @@
   &__item-border {
     display: block;
     border-radius: var(--spacer-2);
+    overflow: hidden;
     box-shadow: 2px 1000px 1px #141416 inset;
     transition: border-color .35s ease-in-out;
     padding: 0;
@@ -93,8 +94,8 @@
   }
   &.token-cards {
     .nft-cards__item {
-      padding: 0;
-      background-color: var(--aura-gray-10);
+      // padding: 0;
+      // background-color: var(--aura-gray-10);
     }
     .token-cards__img {
       border-top-left-radius: 8px;
@@ -110,7 +111,7 @@
         object-fit: contain;
       }
       @media (min-width: 991.98px) {
-        min-height: 237px;
+        min-height: 270px;
         img {
           width: 160px;
           height: 160px;
