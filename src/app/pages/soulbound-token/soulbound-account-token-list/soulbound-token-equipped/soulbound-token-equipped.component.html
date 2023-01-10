@@ -45,7 +45,6 @@
           *ngIf="soulboundData.data.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data">
             <div class="nft-cards__item-border">
-              <a href="/tokens/token-nft/{{ token?.contract_address }}/{{ encodeURI(token?.token_id) }}">
                 <div class="nft-cards__item">
                   <div class="token-cards__img">
                     <img
@@ -54,11 +53,11 @@
                       alt="{{ token.token_name }}" />
                     <app-custom-video-player
                       [videoSrc]="token.animation_url | replaceIpfs"
-                      [showControl]="true"
+                      [showControl]="false"
                       *ngIf="token.animation_url">
                     </app-custom-video-player>
                   </div>
-                  <div class="pt-2 pb-4 px-2">
+                  <a href="/tokens/token-nft/{{ token?.contract_address }}/{{ token?.token_id }}" class="box-nft-info d-block">
                     <div class="nft__info">
                       <span class="body mr-1 text--gray-1">Token ID:</span>
                       <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
@@ -67,9 +66,8 @@
                       <span class="body mr-1 text--gray-1">Token:</span>
                       <span>{{ token.token_name }}</span>
                     </div>
-                  </div>
+                  </a>
                 </div>
-              </a>
               <ng-container *ngIf="userAddress === walletAddress">
                 <i
                   class="ph-bookmark-simple-thin token__bookmark token__bookmark--unequipped"

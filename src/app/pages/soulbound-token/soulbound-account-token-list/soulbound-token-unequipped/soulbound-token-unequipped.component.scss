@@ -23,9 +23,22 @@
   transition: opacity .35s ease-in-out;
 }
 
+.nft-cards__item {
+  padding: 0;
+  .token-cards__img{
+    padding: 8px;
+  }
+}
+
+.box-nft-info {
+  background-color: var(--aura-gray-10);
+  padding: 16px 0px 16px 8px;
+}
+
 .nft__unclaimed {
   .nft-cards__item-border {
     transition: unset;
+    position: relative;
     @media (min-width: 991.98px) {
       &:hover {
         border: solid 1px var(--aura-gray-8);

@@ -10,6 +10,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 
 @Component({
   selector: 'app-soulbound-token-unequipped',
@@ -99,7 +100,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   openDialogDetail(SBT) {
-    let dialogRef = this.dialog.open(SoulboundTokenUnequippedComponent, {
+    let dialogRef = this.dialog.open(SoulboundTokenDetailPopupComponent, {
       panelClass: 'TokenSoulboundDetailPopup',
       data: SBT,
     });

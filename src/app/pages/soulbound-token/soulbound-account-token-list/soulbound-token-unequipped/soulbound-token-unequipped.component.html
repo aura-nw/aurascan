@@ -53,18 +53,14 @@
                     alt="{{ token.token_name }}" />
                   <app-custom-video-player
                     [videoSrc]="token.animation_url | replaceIpfs"
-                    [showControl]="true"
+                    [showControl]="false"
                     *ngIf="token.animation_url">
                   </app-custom-video-player>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
                     {{ sbType.UNCLAIMED }}
                   </div>
                 </div>
-                <div class="pt-2 pb-2 px-2">
-                  <div class="nft__info">
-                    <span class="body mr-1 text--gray-1">Token ID:</span>
-                    <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
-                  </div>
+                <div class="box-nft-info">
                   <div class="nft__info">
                     <span class="body mr-1 text--gray-1">Token:</span>
                     <span>{{ token.token_name }}</span>
@@ -87,7 +83,6 @@
           </div>
         </div>
         <app-paginator
-          *ngIf="tokenList.length > 20"
           [length]="pageData?.length"
           [pageSize]="pageData?.pageSize"
           (paginator)="paginatorEmit($event)"
