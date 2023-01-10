@@ -10,14 +10,14 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { TokenSoulboundCreatePopupComponent } from '../token-soulbound-create-popup/token-soulbound-create-popup.component';
+import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
 @Component({
-  selector: 'app-token-soulbound-contract-list',
-  templateUrl: './token-soulbound-contract-list.component.html',
-  styleUrls: ['./token-soulbound-contract-list.component.scss'],
+  selector: 'app-soulbound-contract-list',
+  templateUrl: './soulbound-contract-list.component.html',
+  styleUrls: ['./soulbound-contract-list.component.scss'],
 })
-export class TokenSoulboundContractListComponent implements OnInit {
+export class SoulboundContractListComponent implements OnInit {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   pageData: PageEvent = {
@@ -91,7 +91,7 @@ export class TokenSoulboundContractListComponent implements OnInit {
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
       if (res.data.length > 0) {
         this.dataSource.data = res.data;
-        this.pageData.length = res.meta.count;
+        this.pageData.length = res.meta;
       } else {
         // this.router.navigate(['/']);
       }
@@ -100,7 +100,7 @@ export class TokenSoulboundContractListComponent implements OnInit {
   }
 
   openDialog(contract_address): void {
-    let dialogRef = this.dialog.open(TokenSoulboundCreatePopupComponent, {
+    let dialogRef = this.dialog.open(SoulboundTokenCreatePopupComponent, {
       panelClass: 'TokenSoulboundCreatePopup',
       data: {
         currentAddress: this.currentAddress,

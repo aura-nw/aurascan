@@ -1,31 +1,25 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { getKeplr } from 'src/app/core/utils/keplr';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
-  selector: 'app-token-soulbound-equipped',
-  templateUrl: './token-soulbound-equipped.component.html',
-  styleUrls: ['./token-soulbound-equipped.component.scss'],
+  selector: 'app-soulbound-token-unequipped',
+  templateUrl: './soulbound-token-unequipped.component.html',
+  styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
-export class TokenSoulboundEquippedComponent implements OnInit {
-  @Output() totalSBT = new EventEmitter<number>();
-
+export class SoulboundTokenUnequippedComponent implements OnInit {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   tokenList = [];
-  countSelected = 0;
   loading = false;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -37,29 +31,22 @@ export class TokenSoulboundEquippedComponent implements OnInit {
   showData: any[];
   nextKey = null;
   currentKey = null;
-  userAddress = '';
+  currentAddress = '';
   sbType = SB_TYPE;
-  walletAddress = null;
-  network = this.environmentService.configValue.chain_info;
+  isClick = false;
 
   constructor(
+    public dialog: MatDialog,
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
-    private environmentService: EnvironmentService,
-    private walletService: WalletService,
     public commonService: CommonService,
     private contractService: ContractService,
-    private toastr: NgxToastrService,
   ) {}
 
   ngOnInit(): void {
-    this.walletService.wallet$.subscribe((wallet) => {
-      this.walletAddress = this.walletService.wallet?.bech32Address;
-    });
-
     this.route.params.subscribe((params) => {
       if (params?.address) {
-        this.userAddress = params?.address;
+        this.currentAddress = params?.address;
         this.getListSB();
       }
     });
@@ -79,16 +66,13 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      receiverAddress: this.userAddress,
-      isEquipToken: true,
+      receiverAddress: this.currentAddress,
       keyword: keySearch?.trim(),
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
-      this.countSelected = res.data.filter((k) => k.picked)?.length || 0;
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
-      this.totalSBT.emit(this.pageData.length);
     });
     this.loading = false;
   }
@@ -104,39 +88,31 @@ export class TokenSoulboundEquippedComponent implements OnInit {
     this.getListSB();
   }
 
-  getSBTDetail(contractAddress, tokenID, pick = true) {
+  getSBTDetail(contractAddress, tokenID) {
+    this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
+      this.isClick = false;
       if (res?.data) {
-        this.updatePick(res.data, pick);
+        this.openDialogDetail(res.data);
       }
     });
   }
 
-  async updatePick(data, pick = true) {
-    const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, this.walletAddress, data.token_id);
+  openDialogDetail(SBT) {
+    let dialogRef = this.dialog.open(SoulboundTokenUnequippedComponent, {
+      panelClass: 'TokenSoulboundDetailPopup',
+      data: SBT,
+    });
 
-    const payload = {
-      signature: dataKeplr.signature,
-      msg: data.token_id.toString(),
-      pubKey: dataKeplr.pub_key.value,
-      id: data.token_id,
-      picked: pick,
-    };
-
-    this.soulboundService.pickSBToken(payload).subscribe((res) => {
-      if (res.code && res.code !== 200) {
-        this.toastr.error(res.message);
-      } else {
-        setTimeout(() => {
-          this.toastr.success(MESSAGES_CODE.SUCCESSFUL.Message);
-          this.getListSB();
-        }, 4000);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== 'canceled') {
+        this.getListSB();
       }
     });
   }
 
-  encodeURI(tokenID) {
-    return encodeURIComponent(tokenID);
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }

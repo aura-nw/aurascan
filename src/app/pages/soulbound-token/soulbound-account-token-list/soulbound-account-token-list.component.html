@@ -69,8 +69,8 @@
       </ng-container>
     </ul>
   </div>
-  <app-token-soulbound-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event"></app-token-soulbound-equipped>
-  <app-token-soulbound-unequipped *ngIf="activeId === 1"></app-token-soulbound-unequipped>
+  <app-soulbound-token-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event"></app-soulbound-token-equipped>
+  <app-soulbound-token-unequipped *ngIf="activeId === 1"></app-soulbound-token-unequipped>
 </section>
 
 <!-- QR code popup-->
