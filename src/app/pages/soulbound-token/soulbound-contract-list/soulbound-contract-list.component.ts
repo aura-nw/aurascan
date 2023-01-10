@@ -89,12 +89,8 @@ export class SoulboundContractListComponent implements OnInit {
     };
 
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
-      if (res.data.length > 0) {
-        this.dataSource.data = res.data;
-        this.pageData.length = res.meta;
-      } else {
-        // this.router.navigate(['/']);
-      }
+      this.dataSource.data = res.data;
+      this.pageData.length = res.meta.count;
     });
     this.loading = false;
   }

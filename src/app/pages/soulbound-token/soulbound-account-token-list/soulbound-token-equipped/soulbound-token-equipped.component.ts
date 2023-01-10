@@ -135,8 +135,4 @@ export class SoulboundTokenEquippedComponent implements OnInit {
       }
     });
   }
-
-  encodeURI(tokenID) {
-    return encodeURIComponent(tokenID);
-  }
 }
