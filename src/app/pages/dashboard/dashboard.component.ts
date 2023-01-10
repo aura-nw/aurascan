@@ -5,7 +5,8 @@ import ExcelExport from 'export-xlsx';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
-import { Subscription, timer } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ProposalService } from 'src/app/core/services/proposal.service';
@@ -56,7 +57,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   chart: IChartApi = null;
   areaSeries: ISeriesApi<'Area'> = null;
-  chartData;
   chartDataExp = [];
 
   toolTipWidth = 80;
@@ -64,7 +64,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   toolTipMargin = 15;
 
   min = 0;
-  max = 99999;
+  max = 1000;
 
   currDate;
   SETTINGS_FOR_EXPORT;
@@ -76,6 +76,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   staking_APR = 0;
   tokenIdGetPrice = TOKEN_ID_GET_PRICE;
   tokenInfo;
+
+  originalData = [];
+  originalDataArr = [];
+  logicalRangeChange$ = new Subject<{ from: number; to: number }>();
+
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
@@ -92,7 +97,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getInfoData();
     const halftime = 60000;
-    this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
+    // this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
     // config chart
     this.chart = createChart(document.getElementById('chart'), {
       height: 244,
@@ -122,16 +127,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       timeScale: {
         timeVisible: true,
         secondsVisible: true,
+        fixRightEdge: true,
       },
     });
-    this.areaSeries = this.chart.addAreaSeries({
-      autoscaleInfoProvider: () => ({
-        priceRange: {
-          minValue: this.min,
-          maxValue: this.max,
-        },
-      }),
-    });
+    this.areaSeries = this.chart.addAreaSeries({});
     this.areaSeries.applyOptions({
       lineColor: '#5EE6D0',
       topColor: 'rgba(136,198,203,0.12)',
@@ -145,55 +144,114 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.initTooltip();
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
+    this.subscribeVisibleLogicalRangeChange();
+  }
+
+  subscribeVisibleLogicalRangeChange() {
+    this.logicalRangeChange$.pipe(debounceTime(500)).subscribe(({ from, to }) => {
+      // offset 5 record
+      if (from <= 5) {
+        const minDate = new Date(this.originalData[0].timestamp).toISOString();
+        this.commonService
+          .getTokenMetrics({
+            range: this.chartRange,
+            coinId: this.tokenIdGetPrice.AURA,
+            minDate,
+          })
+          .subscribe((res) => {
+            //update data common
+            if (res?.data?.length > 0) {
+              this.tokenInfo = res.data;
+              const { dataX, dataY } = this.parseDataFromApi(res.data);
+
+              const chartData = this.makeChartData(dataX, dataY);
+
+              this.originalData = [...res?.data, ...this.originalData];
+              this.originalDataArr = [...chartData, ...this.originalDataArr];
+
+              this.areaSeries.setData(this.originalDataArr);
+            }
+          });
+      }
+    });
+  }
+
+  chartEvent() {
+    this.chart.timeScale().subscribeVisibleLogicalRangeChange(({ from, to }) => {
+      this.logicalRangeChange$.next({ from, to });
+    });
+  }
+
+  timeToUnix(originalTime, offsetTimezone = 0) {
+    return Math.floor(new Date(originalTime).getTime() / 1000) + offsetTimezone;
+  }
+
+  makeChartData(data: number[], time: any[]) {
+    return time.map((el, index) => ({
+      value: data[index],
+      time: this.timeToUnix(el, 25200), // 2520s GMT+7
+    }));
+  }
+
+  parseDataFromApi(dta: any[]) {
+    const parseData = dta.map((el) => ({
+      dataX: this.isPrice ? el.current_price : el.total_volume,
+      dataY: el.timestamp,
+    }));
+    return {
+      dataX: parseData.map((el) => el.dataX),
+      dataY: parseData.map((el) => el.dataY),
+    };
   }
 
   drawChart(data, dateTime) {
-    this.chartData = null;
     this.chartDataExp = [];
     let arr = []; // drawing chart array
     let arrPrint = []; // exporting data array
 
     // convert timeStamp to UNIX Timestamp format (for hour timeBar)
-    dateTime.forEach((date, index) => {
-      const ts = Math.floor(new Date(date).getTime() / 1000);
-      const temp = { value: data[index], time: ts + 25200 }; // GMT+7
-      arr.push(temp);
-    });
-    // push data to export csv array
-    data.forEach((element, index) => {
-      const temp = { value: element, time: dateTime[index] };
-      arrPrint.push(temp);
-    });
+    // dateTime.forEach((date, index) => {
+    //   const ts = Math.floor(new Date(date).getTime() / 1000);
+    //   const temp = { value: data[index], time: ts + 25200 }; // GMT+7
+    //   arr.push(temp);
+    // });
 
-    this.chartData = arr;
-    let transactionData = [];
-    // setup data for export
-    arrPrint.forEach((data) => {
-      const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
-      this.chartDataExp.push({
-        date: dateF,
-        value: +data.value,
-      });
-      transactionData.push(+data.value);
-    });
-    this.chartDataExp = [
-      {
-        table1: this.chartDataExp,
-      },
-    ];
-    this.min = Math.min(...transactionData);
-    this.max = Math.max(...transactionData);
+    arr = this.makeChartData(data, dateTime);
+
+    this.originalDataArr = arr;
+
+    // push data to export csv array
+    // data.forEach((element, index) => {
+    //   const temp = { value: element, time: dateTime[index] };
+    //   arrPrint.push(temp);
+    // });
+
+    // this.chartData = arr;
+    // let transactionData = [];
+    // // setup data for export
+    // arrPrint.forEach((data) => {
+    //   const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
+    //   this.chartDataExp.push({
+    //     date: dateF,
+    //     value: +data.value,
+    //   });
+    //   transactionData.push(+data.value);
+    // });
+
+    // this.chartDataExp = [
+    //   {
+    //     table1: this.chartDataExp,
+    //   },
+    // ];
 
     this.areaSeries.applyOptions({
       priceFormat: {
         type: this.isPrice ? 'price' : 'volume',
       },
-      autoscaleInfoProvider: {
-        priceRange: { min: this.min, max: this.max },
-      },
     });
 
     this.areaSeries.setData(arr);
+
     this.chart.timeScale().fitContent();
     this.chart.priceScale().applyOptions({
       autoScale: true,
@@ -263,16 +321,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getCoinInfo(type: string) {
     this.initTooltip();
     this.chartRange = type;
-    this.commonService.getTokenByCoinId(this.chartRange, this.tokenIdGetPrice.AURA).subscribe((res) => {
-      //update data common
-      this.getInfoCommon();
-      if (res?.data?.length > 0) {
-        this.tokenInfo = res.data;
-        const dataX = this.isPrice ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
-        let dataY = res.data.map((i) => i.timestamp);
-        this.drawChart(dataX, dataY);
-      }
-    });
+    this.commonService
+      .getTokenMetrics({
+        range: this.chartRange,
+        coinId: this.tokenIdGetPrice.AURA,
+      })
+      .subscribe((res) => {
+        //update data common
+        this.getInfoCommon();
+        if (res?.data?.length > 0) {
+          this.tokenInfo = res.data;
+          const dataX = this.isPrice ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
+          let dataY = res.data.map((i) => i.timestamp);
+          this.originalData = [...this.originalData, ...res?.data];
+          this.drawChart(dataX, dataY);
+
+          this.chartEvent();
+        }
+      });
   }
 
   getInfoCommon(): void {
