@@ -10,18 +10,18 @@ import { getKeplr } from 'src/app/core/utils/keplr';
 const amino = require('@cosmjs/amino');
 
 @Component({
-  selector: 'app-token-soulbound-create-popup',
-  templateUrl: './token-soulbound-create-popup.component.html',
-  styleUrls: ['./token-soulbound-create-popup.component.scss'],
+  selector: 'app-soulbound-token-create-popup',
+  templateUrl: './soulbound-token-create-popup.component.html',
+  styleUrls: ['./soulbound-token-create-popup.component.scss'],
 })
-export class TokenSoulboundCreatePopupComponent implements OnInit {
+export class SoulboundTokenCreatePopupComponent implements OnInit {
   createSBTokenForm: FormGroup;
   isAddressInvalid = false;
   network = this.environmentService.configValue.chain_info;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<TokenSoulboundCreatePopupComponent>,
+    public dialogRef: MatDialogRef<SoulboundTokenCreatePopupComponent>,
     private environmentService: EnvironmentService,
     private walletService: WalletService,
     private soulboundService: SoulboundService,

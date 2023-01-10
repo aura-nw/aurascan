@@ -7,6 +7,9 @@
   background-color: var(--aura-gray-9);
 }
 .card {
+  .nft__img {
+    background-color: var(--aura-gray-9);
+  }
   @media (max-width: 992px) {
     max-height: 80vh;
     &-body {
@@ -18,7 +21,7 @@
   }
 }
 .nft {
-  &__img{
+  &__img {
     background: var(--aura-gray-9);
     border: 0.717647px solid #363843;
     border-radius: 11.4824px;

@@ -380,7 +380,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.lengthSBT = 0;
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
       if (res.data.length > 0) {
-        this.lengthSBT = res.meta;
+        this.lengthSBT = res.meta.count;
       }
     });
   }

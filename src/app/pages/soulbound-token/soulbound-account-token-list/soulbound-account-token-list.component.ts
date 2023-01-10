@@ -5,11 +5,11 @@ import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { WalletService } from 'src/app/core/services/wallet.service';
 
 @Component({
-  selector: 'app-token-soulbound-account-token-list',
-  templateUrl: './token-soulbound-account-token-list.component.html',
-  styleUrls: ['./token-soulbound-account-token-list.component.scss'],
+  selector: 'app-soulbound-account-token-list',
+  templateUrl: './soulbound-account-token-list.component.html',
+  styleUrls: ['./soulbound-account-token-list.component.scss'],
 })
-export class TokenSoulboundAccountTokenListComponent implements OnInit {
+export class SoulboundAccountTokenListComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   totalSBT = 0;
