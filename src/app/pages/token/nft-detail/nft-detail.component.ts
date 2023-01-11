@@ -292,7 +292,7 @@ export class NFTDetailComponent implements OnInit {
               this.toastr.loading((e as any)?.transactionHash);
               setTimeout(() => {
                 this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
-                this.updateStatusSBT(payload);
+                this.updateStatusSBT(payload, user);
               }, 4000);
             }
           }
@@ -307,8 +307,10 @@ export class NFTDetailComponent implements OnInit {
     }
   }
 
-  async updateStatusSBT(payload: any) {
-    this.soulboundService.updatePickSBToken(payload);
+  async updateStatusSBT(payload: any, address) {
+    this.soulboundService.updatePickSBToken(payload).subscribe((res) => {
+      window.location.href = '/account/' + address;
+    });
   }
 
   shareNFT() {
