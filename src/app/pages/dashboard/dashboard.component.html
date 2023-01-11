@@ -63,15 +63,14 @@
                   <div class="mb-2 body-03 text--gray-1">Price</div>
                   <div class="text--white h4 mb-0 fw-semibold">
                     <span>{{
-                      tokenInfo?.length > 0
-                      ? ('$'+(tokenInfo[tokenInfo.length-1]?.current_price | number: '1.2-4')) : '-'}}</span>
-                    <span *ngIf="tokenInfo?.length > 0"
-                      class="ml-1 body
-                      {{tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3'}}">
-                      {{(tokenInfo[tokenInfo.length-1].price_change_percentage_24h) ?
+                      tokenInfo
+                      ? ('$'+(tokenInfo?.current_price | number: '1.2-4')) : '-'}}</span>
+                    <span *ngIf="tokenInfo"
+                      class="ml-1 body {{tokenInfo.price_change_percentage_24h > 0 ? 'text--green-3' : 'text--red-3'}}">
+                      {{(tokenInfo.price_change_percentage_24h) ?
                       ('('+
-                      (tokenInfo[tokenInfo.length-1].price_change_percentage_24h > 0 ? '+' : '') +
-                      (tokenInfo[tokenInfo.length-1].price_change_percentage_24h | number: '1.2-2') +
+                      (tokenInfo.price_change_percentage_24h > 0 ? '+' : '') +
+                      (tokenInfo.price_change_percentage_24h | number: '1.2-2') +
                       '%)') : ''}}
                     </span>
                   </div>
@@ -84,7 +83,7 @@
                 <div class="ml-4">
                   <div class="mb-2 body-03 text--gray-1">Market Cap</div>
                   <div class="text--white h4 mb-0 fw-semibold">
-                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].market_cap | number : '1.0-0'))
+                    <span>{{tokenInfo ? ('$'+(tokenInfo.market_cap | number : '1.0-0'))
                       : '-'}}</span>
                   </div>
                 </div>
@@ -96,7 +95,7 @@
                 <div class="ml-4">
                   <div class="mb-2 body-03 text--gray-1">24h Vol Trading</div>
                   <div class="text--white h4 mb-0 fw-semibold">
-                    <span>{{tokenInfo?.length > 0 ? ('$'+(tokenInfo[tokenInfo.length-1].total_volume | number :
+                    <span>{{tokenInfo ? ('$'+(tokenInfo.total_volume | number :
                       '1.0-0')) : '-'}}</span>
                   </div>
                 </div>
@@ -135,13 +134,13 @@
                     </button>
                   </div>
                   <div class="divider divider-vertical mx-3 mx-md-4"></div>
-                  <button class="button" (click)="chartDataExport()">
+                  <button class="button" (click)="exportChart()">
                     <i class="ph-download-simple-fill h3 mb-0 text--gray-1"></i>
                   </button>
                 </div>
               </div>
             </div>
-            <div class="w-100" *ngIf="chartOptions">
+            <div class="w-100">
               <div id="chart"></div>
             </div>
           </div>

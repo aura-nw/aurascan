@@ -1,7 +1,6 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import ExcelExport from 'export-xlsx';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
@@ -9,17 +8,18 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { timeToUnix } from 'src/app/core/helpers/date';
+import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { TRANSACTION_TYPE_ENUM } from '../../../app/core/constants/transaction.enum';
 import { TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
-import { balanceOf } from '../../core/utils/common/parsing';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
-import { ChartOptions, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   chartRange = CHART_RANGE.M_60;
   chartRangeData = CHART_RANGE;
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
-  public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
+  // public chartOptions: Partial<ChartOptions> = DASHBOARD_CHART_OPTIONS;
 
   templatesBlock: Array<TableTemplate> = [
     { matColumnDef: 'height', headerCellDef: 'Height' },
@@ -67,7 +67,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   max = 1000;
 
   currDate;
-  SETTINGS_FOR_EXPORT;
   isPrice = true;
 
   curr_voting_Period;
@@ -75,7 +74,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   staking_APR = 0;
   tokenIdGetPrice = TOKEN_ID_GET_PRICE;
-  tokenInfo;
+  tokenInfo: {
+    coinId: string;
+    current_price: number;
+    market_cap: number;
+    max_supply: number;
+    price_change_percentage_24h: number;
+    timestamp: string;
+    total_volume: number;
+  };
 
   originalData = [];
   originalDataArr = [];
@@ -92,58 +99,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     public datepipe: DatePipe,
     private proposalService: ProposalService,
     private maskService: MaskPipe,
+    private token: TokenService,
   ) {}
 
   ngOnInit(): void {
     this.getInfoData();
     const halftime = 60000;
     // this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
-    // config chart
-    this.chart = createChart(document.getElementById('chart'), {
-      height: 244,
-      crosshair: {
-        horzLine: {
-          visible: false,
-        },
-      },
-      layout: {
-        backgroundColor: '#24262e',
-        textColor: '#868a97',
-      },
-      grid: {
-        vertLines: {
-          color: '#363843',
-        },
-        horzLines: {
-          color: '#363843',
-        },
-      },
-      leftPriceScale: {
-        visible: true,
-      },
-      rightPriceScale: {
-        visible: false,
-      },
-      timeScale: {
-        timeVisible: true,
-        secondsVisible: true,
-        fixRightEdge: true,
-      },
-    });
-    this.areaSeries = this.chart.addAreaSeries({});
-    this.areaSeries.applyOptions({
-      lineColor: '#5EE6D0',
-      topColor: 'rgba(136,198,203,0.12)',
-      bottomColor: 'rgba(119, 182, 188, 0.01)',
-      priceFormat: {
-        type: 'price',
-        precision: 4,
-        minMove: 0.0001,
-      },
-    });
-    this.initTooltip();
+
+    this.initChart();
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
+  }
+
+  // config chart
+  initChart() {
+    this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
+    this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+    // this.areaSeries.applyOptions();
+    this.initTooltip();
+
     this.subscribeVisibleLogicalRangeChange();
   }
 
@@ -161,7 +136,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           .subscribe((res) => {
             //update data common
             if (res?.data?.length > 0) {
-              this.tokenInfo = res.data;
               const { dataX, dataY } = this.parseDataFromApi(res.data);
 
               const chartData = this.makeChartData(dataX, dataY);
@@ -182,14 +156,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  timeToUnix(originalTime, offsetTimezone = 0) {
-    return Math.floor(new Date(originalTime).getTime() / 1000) + offsetTimezone;
-  }
-
   makeChartData(data: number[], time: any[]) {
     return time.map((el, index) => ({
       value: data[index],
-      time: this.timeToUnix(el, 25200), // 2520s GMT+7
+      time: timeToUnix(el, 25200), // 2520s GMT+7
     }));
   }
 
@@ -204,45 +174,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     };
   }
 
-  drawChart(data, dateTime) {
+  drawChartFirstTime(data, dateTime) {
     this.chartDataExp = [];
     let arr = []; // drawing chart array
-    let arrPrint = []; // exporting data array
-
-    // convert timeStamp to UNIX Timestamp format (for hour timeBar)
-    // dateTime.forEach((date, index) => {
-    //   const ts = Math.floor(new Date(date).getTime() / 1000);
-    //   const temp = { value: data[index], time: ts + 25200 }; // GMT+7
-    //   arr.push(temp);
-    // });
 
     arr = this.makeChartData(data, dateTime);
 
     this.originalDataArr = arr;
-
-    // push data to export csv array
-    // data.forEach((element, index) => {
-    //   const temp = { value: element, time: dateTime[index] };
-    //   arrPrint.push(temp);
-    // });
-
-    // this.chartData = arr;
-    // let transactionData = [];
-    // // setup data for export
-    // arrPrint.forEach((data) => {
-    //   const dateF = this.datepipe.transform(data.time, 'dd-MM-yyyy:HH-mm-ss');
-    //   this.chartDataExp.push({
-    //     date: dateF,
-    //     value: +data.value,
-    //   });
-    //   transactionData.push(+data.value);
-    // });
-
-    // this.chartDataExp = [
-    //   {
-    //     table1: this.chartDataExp,
-    //   },
-    // ];
 
     this.areaSeries.applyOptions({
       priceFormat: {
@@ -260,20 +198,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   //get all data for dashboard
   getInfoData() {
+    this.getMarketInfo();
     this.getListBlock();
     this.getListTransaction();
     setTimeout(() => {
-      // new
       this.getCoinInfo(this.chartRange);
-      // old
-      // this.updateBlockAndTxs(this.chartRange);
     }, 1000);
     this.cdr.detectChanges();
   }
 
-  /**
-   * ngOnDestroy
-   */
+  getMarketInfo() {
+    this.token.getTokenMarket().subscribe((res) => {
+      const { data } = res;
+      if (data) {
+        this.tokenInfo = data;
+      }
+    });
+  }
+
   ngOnDestroy(): void {
     if (this.timerUnSub) {
       this.timerUnSub.unsubscribe();
@@ -314,7 +256,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getInfoCommon();
       const data1 = res.data.map((i) => i.total);
       let categories = res.data.map((i) => i.timestamp);
-      this.drawChart(data1, categories);
+      this.drawChartFirstTime(data1, categories);
     });
   }
 
@@ -330,11 +272,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         //update data common
         this.getInfoCommon();
         if (res?.data?.length > 0) {
-          this.tokenInfo = res.data;
-          const dataX = this.isPrice ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
-          let dataY = res.data.map((i) => i.timestamp);
+          // const dataX = this.isPrice ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
+          // let dataY = res.data.map((i) => i.timestamp);
+
+          // const {} =
+          const { dataX, dataY } = this.parseDataFromApi(res.data);
+
           this.originalData = [...this.originalData, ...res?.data];
-          this.drawChart(dataX, dataY);
+          this.drawChartFirstTime(dataX, dataY);
 
           this.chartEvent();
         }
@@ -347,73 +292,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  checkAmountValue(message: any[], txHash: string, type: string) {
-    let eTransType = TRANSACTION_TYPE_ENUM;
-    if (message?.length > 1) {
-      return `<a class="text--primary" [routerLink]="['/transaction', ` + txHash + `]">More</a>`;
-    } else if (message?.length === 0 || (message?.length === 1 && !message[0]?.amount)) {
-      return '-';
-    } else {
-      let amount = message[0]?.amount[0]?.amount;
-      //check type is Delegate/Undelegate/Redelegate
-      if (type === eTransType.Delegate || type === eTransType.Undelegate || type === eTransType.Redelegate) {
-        amount = message[0]?.amount?.amount;
-      }
-      return (
-        this.numberPipe.transform(balanceOf(amount), this.global.formatNumberToken) +
-        `<span class=text--primary> ${this.denom} </span>`
-      );
-    }
-  }
+  exportChart() {
+    const exportData = this.originalData.map((item) => {
+      const dateF = this.datepipe.transform(new Date(item.timestamp), 'dd-MM-yyyy:HH-mm-ss');
+      return {
+        date: dateF,
+        value: this.isPrice ? item.current_price : item.total_volume,
+      };
+    });
 
-  chartDataExport() {
-    let type;
-    switch (this.chartRange) {
-      case '60m':
-        type = 'in 60 minutes';
-        break;
-      case '24h':
-        type = 'in about 24 hours';
-        break;
-      case '30d':
-        type = 'in 30 days';
-        break;
-      case '12M':
-        type = 'in 12 months';
-        break;
-    }
-    this.SETTINGS_FOR_EXPORT = {
-      // Table settings
-      fileName: (this.isPrice ? 'Price_' : 'Volume_') + this.currDate,
-      workSheets: [
+    exportChart(
+      [
         {
-          sheetName: this.isPrice ? 'Price' : 'Volume',
-          startingRowNumber: 2,
-          gapBetweenTwoTables: 2,
-          tableSettings: {
-            table1: {
-              tableTitle: (this.isPrice ? 'Price' : 'Volume') + ' value ' + type,
-              headerDefinition: [
-                {
-                  name: 'Date',
-                  key: 'date',
-                },
-                {
-                  name: 'Value',
-                  key: 'value',
-                },
-              ],
-            },
-          },
+          table1: exportData,
         },
       ],
-    };
-    const excelExport = new ExcelExport();
-    excelExport.downloadExcel(this.SETTINGS_FOR_EXPORT, this.chartDataExp);
-  }
-
-  businessDayToString(businessDay) {
-    return businessDay.year + '-' + businessDay.month + '-' + businessDay.day;
+      this.chartRange,
+      this.isPrice,
+      this.currDate,
+    );
   }
 
   initTooltip() {
