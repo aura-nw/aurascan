@@ -40,9 +40,10 @@
     <div class="h5 mb-4 text--white">Properties</div>
     <div class="row">
       <ng-container *ngIf="soulboundDetail.ipfs?.attributes">
-        <div class="col-4 col-lg-3 mb-4 px-1 px-lg-2">
-          <ng-container *ngIf="isObject(soulboundDetail.ipfs?.attributes)">
-            <div class="nft__prop" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
+        <span *ngIf="!isObject(soulboundDetail.ipfs?.attributes)" class="px-1 px-lg-2">-</span>
+        <ng-container *ngIf="isObject(soulboundDetail.ipfs?.attributes)">
+          <div class="col-4 col-lg-3 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
+            <div class="nft__prop">
               <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
               <div class="h5 mb-0 text--gray-1">
                 <span class="d-none d-lg-flex">
@@ -53,9 +54,8 @@
                 </span>
               </div>
             </div>
-          </ng-container>
-          <span *ngIf="!isObject(soulboundDetail.ipfs?.attributes)">-</span>
-        </div>
+          </div>
+        </ng-container>
       </ng-container>
       <span *ngIf="!soulboundDetail.ipfs?.attributes" class="px-1 px-lg-2">-</span>
     </div>
