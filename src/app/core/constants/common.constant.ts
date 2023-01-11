@@ -60,8 +60,8 @@ export const NUM_BLOCK = 10000;
 
 export const CHART_RANGE = {
   M_60: '60m',
-  H_24: '24h',
-  D_30: '30d',
+  H_24: '24H',
+  D_30: '30D',
   MONTH_12: '12M',
 };
 
