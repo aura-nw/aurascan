@@ -19,7 +19,7 @@ export const DASHBOARD_CHART_OPTIONS: Partial<ChartOptions> = {
     },
   ],
   chart: {
-    height: 333,
+    height: 408,
     type: 'area',
     toolbar: {
       tools: {
