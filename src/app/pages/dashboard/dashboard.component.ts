@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
-import { Subject } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
-  // timerUnSub: Subscription;
+  timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
@@ -105,10 +105,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.getInfoData();
-    const halftime = 60000;
-    // this.timerUnSub = timer(halftime, halftime).subscribe(() => this.getInfoData());
+    const period = 60000;
+    this.timerUnSub = timer(period, period)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.getInfoData());
 
     this.initChart();
+
+    this.getCoinInfo(this.chartRange);
     this.currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
     this.getVotingPeriod();
   }
@@ -127,12 +131,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
       // offset 5 record
       if (from <= 5) {
-        const minDate = new Date(this.originalData[0].timestamp).toISOString();
+        const maxDate = new Date(this.originalData[0].timestamp).toISOString();
         this.token
           .getTokenMetrics({
             range: this.chartRange,
             coinId: this.tokenIdGetPrice.AURA,
-            minDate,
+            maxDate,
           })
           .subscribe((res) => {
             //update data common
@@ -202,9 +206,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getMarketInfo();
     this.getListBlock();
     this.getListTransaction();
-    setTimeout(() => {
-      this.getCoinInfo(this.chartRange);
-    }, 1000);
+    // setTimeout(() => {
+    //   this.getCoinInfo(this.chartRange);
+    // }, 1000);
     this.cdr.detectChanges();
   }
 
@@ -261,6 +265,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getCoinInfo(type: string) {
+    this.originalData = [];
+    this.originalDataArr = [];
     this.initTooltip();
     this.chartRange = type;
     this.token
