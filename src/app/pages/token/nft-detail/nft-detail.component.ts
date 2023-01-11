@@ -121,29 +121,34 @@ export class NFTDetailComponent implements OnInit {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
           this.route.navigate(['/']);
         }
+        this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
         this.isSoulBound = true;
       }
 
-       //Facebook Meta Tags
-       document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
-       document
-         .querySelectorAll('meta[property=og\\:title]')[0]
-         .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
-       document
-         .querySelectorAll('meta[property=og\\:description]')[0]
-         .setAttribute('content', this.nftDetail?.ipfs?.description);
+      // document.querySelectorAll('link[as=image]')[0].setAttribute('href', this.nftUrl);
+      // //Facebook Meta Tags
+      // document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
+      // document
+      //   .querySelectorAll('meta[property=og\\:title]')[0]
+      //   .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
+      // document
+      //   .querySelectorAll('meta[property=og\\:description]')[0]
+      //   .setAttribute('content', this.nftDetail?.ipfs?.description);
+      // document
+      //   .querySelectorAll('meta[property=og\\:url]')[0]
+      //   .setAttribute('content', this.nftDetail?.ipfs?.description);
 
-       //Twitter Meta Tags
-       document.querySelectorAll('meta[name=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
-       document
-         .querySelectorAll('meta[name=twitter\\:title]')[0]
-         .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
+      // //Twitter Meta Tags
+      // document.querySelectorAll('meta[name=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
+      // document
+      //   .querySelectorAll('meta[name=twitter\\:title]')[0]
+      //   .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
 
-       //Google / Search Engine Tags
-       document.querySelectorAll('meta[itemprop=image]')[0].setAttribute('content', this.nftUrl);
-       document
-         .querySelectorAll('meta[itemprop=description]')[0]
-         .setAttribute('content', this.nftDetail?.ipfs?.description);
+      // //Google / Search Engine Tags
+      // document.querySelectorAll('meta[itemprop=image]')[0].setAttribute('content', this.nftUrl);
+      // document
+      //   .querySelectorAll('meta[itemprop=description]')[0]
+      //   .setAttribute('content', this.nftDetail?.ipfs?.description);
 
       this.loading = false;
     });
@@ -323,5 +328,9 @@ export class NFTDetailComponent implements OnInit {
 
   isObject(data) {
     return typeof data === 'object' && data !== null;
+  }
+
+  replaceImgIpfs(value) {
+    return 'https://ipfs.io/' + value.replace('://', '/');
   }
 }
