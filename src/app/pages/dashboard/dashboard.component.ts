@@ -1,11 +1,11 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import * as moment from 'moment';
 import { MaskPipe } from 'ngx-mask';
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { VOTING_STATUS } from 'src/app/core/constants/proposal.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { timeToUnix } from 'src/app/core/helpers/date';
@@ -26,7 +26,7 @@ import { DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   chartRange = CHART_RANGE.M_60;
   chartRangeData = CHART_RANGE;
   PAGE_SIZE = PAGE_EVENT.PAGE_SIZE;
@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   displayedColumnsTx: string[] = this.templatesTx.map((dta) => dta.matColumnDef);
   dataSourceTx: MatTableDataSource<any> = new MatTableDataSource();
   dataTx: any[];
-  timerUnSub: Subscription;
+  // timerUnSub: Subscription;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
@@ -88,12 +88,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   originalDataArr = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
 
+  destroy$ = new Subject();
+
   constructor(
     public commonService: CommonService,
     private blockService: BlockService,
     private transactionService: TransactionService,
     public global: Globals,
-    private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
     private cdr: ChangeDetectorRef,
     public datepipe: DatePipe,
@@ -123,11 +124,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   subscribeVisibleLogicalRangeChange() {
-    this.logicalRangeChange$.pipe(debounceTime(500)).subscribe(({ from, to }) => {
+    this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
       // offset 5 record
       if (from <= 5) {
         const minDate = new Date(this.originalData[0].timestamp).toISOString();
-        this.commonService
+        this.token
           .getTokenMetrics({
             range: this.chartRange,
             coinId: this.tokenIdGetPrice.AURA,
@@ -217,9 +218,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    if (this.timerUnSub) {
-      this.timerUnSub.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getListBlock(): void {
@@ -263,7 +263,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getCoinInfo(type: string) {
     this.initTooltip();
     this.chartRange = type;
-    this.commonService
+    this.token
       .getTokenMetrics({
         range: this.chartRange,
         coinId: this.tokenIdGetPrice.AURA,

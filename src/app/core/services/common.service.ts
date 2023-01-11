@@ -116,24 +116,6 @@ export class CommonService {
     return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
   }
 
-  getTokenMetrics({
-    range,
-    coinId,
-    minDate = new Date().toISOString(),
-  }: {
-    range: string;
-    coinId: string;
-    minDate?: string;
-  }) {
-    return this._http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: {
-        range,
-        coinId,
-        minDate,
-      },
-    });
-  }
-
   getDefaultImg() {
     return this._environmentService.configValue.image_s3 + 'images/aura__ntf-default-img.png';
   }
