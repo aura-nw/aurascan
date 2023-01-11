@@ -12,7 +12,7 @@
                 <a href="https://www.coingecko.com/en/coins/aura-network" target="_blank"
                   class="ml-2 button button--sm button-ghost button-ghost--sm" matTooltip="Open CoinGecko"
                   [matTooltipPosition]="'above'" [matTooltipClass]="'dashboard-tooltip'">
-                  <i class="ph-arrow-square-out-fill text--primary h1 mb-0"></i>
+                  <i class="ph-arrow-square-out-fill text--primary body-01 h1-mob mb-0"></i>
                 </a>
               </div>
               <div class="divider divider-vertical d-none d-xl-block"></div>
@@ -65,7 +65,7 @@
               </div>
             </div>
           </div>
-          <div class="align-items-center mt-8 mb-3">
+          <div class="align-items-center mt-6 mb-3">
             <div class="d-lg-flex flex-wrap mb-4">
               <!-- Tabs -->
               <div class="button-switch-stage button-switch-stage__1">
@@ -81,7 +81,7 @@
                   <div class="button-switch-stage button-switch-stage__2">
                     <button type="button" [class.active]="chartRange === chartRangeData.M_60"
                       (click)="getCoinInfo(chartRangeData.M_60)">
-                      <span>60M</span>
+                      <span>60m</span>
                     </button>
                     <button type="button" [class.active]="chartRange === chartRangeData.H_24"
                       (click)="getCoinInfo(chartRangeData.H_24)">
@@ -118,12 +118,9 @@
               <i class="ph-cube-light icon-brand text--gray-3"></i>
               <div class="ml-4">
                 <div class="body text--gray-1">Height</div>
-                <div *ngIf="global?.dataHeader?.block_height > 0" class="h5 mb-0 text--white d-xl-none mt-2">
-                  {{ global?.dataHeader?.block_height || 0 | number }}
-                </div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.block_height > 0" class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
+            <div *ngIf="global?.dataHeader?.block_height > 0" class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.block_height || 0 | number }}
             </div>
           </div>
@@ -133,12 +130,9 @@
               <i class="ph-graph-light icon-brand text--gray-3"></i>
               <div class="ml-4">
                 <div class="body text--gray-1">Community Pool</div>
-                <div class="h5 mb-0 text--white d-xl-none mt-2">
-                  {{ global?.dataHeader?.community_pool_format || 0}}
-                </div>
               </div>
             </div>
-            <div class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
+            <div class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.community_pool_format || 0}}
             </div>
           </div>
@@ -148,13 +142,10 @@
               <i class="ph-file-light icon-brand text--gray-3"></i>
               <div class="ml-4">
                 <div class="body text--gray-1">Transactions</div>
-                <div *ngIf="global?.dataHeader?.total_txs_num >= 0" class="h5 mb-0 text--white d-xl-none mt-2">
-                  {{ global?.dataHeader?.total_txs_num | number }}
-                </div>
               </div>
             </div>
             <div *ngIf="global?.dataHeader?.total_txs_num >= 0"
-              class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
+              class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.total_txs_num | number }}
             </div>
           </div>
@@ -167,12 +158,9 @@
               <img src="assets/icons/icons-svg/basic/bonded-token.svg" alt="" class="icon-brand" />
               <div class="ml-4">
                 <div class="body text--gray-1">Bonded Token</div>
-                <div *ngIf="global?.dataHeader?.bonded_tokens" class="h5 mb-0 text--white d-xl-none mt-2">
-                  {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
-                </div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
+            <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
             </div>
           </div>
@@ -182,12 +170,9 @@
               <img src="assets/icons/icons-svg/basic/chart-col-up.svg" alt="" class="icon-brand" />
               <div class="ml-4">
                 <div class="body text--gray-1">Inflation rate</div>
-                <div *ngIf="global?.dataHeader?.inflation" class="h5 mb-0 text--white d-xl-none mt-2">
-                  {{ global?.dataHeader?.inflation }}
-                </div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.inflation" class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
+            <div *ngIf="global?.dataHeader?.inflation" class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.inflation }}
             </div>
           </div>
@@ -197,12 +182,9 @@
               <img src="assets/icons/icons-svg/basic/staking-coins.svg" alt="" class="icon-brand" />
               <div class="ml-4">
                 <div class="body text--gray-1">Staking APR</div>
-                <div class="h5 mb-0 text--white d-xl-none mt-2">
-                  {{staking_APR.toFixed(2) || 0}}%
-                </div>
               </div>
             </div>
-            <div class="h4 mb-0 fw-semibold text--white d-none d-xl-block">
+            <div class="h4 mb-0 fw-semibold text--white">
               {{staking_APR.toFixed(2) || 0}}%
             </div>
           </div>
@@ -216,7 +198,7 @@
               <div class="dropdown aura-dropdown w-100" *ngIf="voting_Period_arr.length > 0">
                 <button class="button voting-dropdown-button button-pill button-outline button-dropdown w-100"
                   type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span class="body">{{
+                  <span class="body text-start">{{
                     curr_voting_Period ? curr_voting_Period.content.title : voting_Period_arr[0].content.title
                     }}</span>
                 </button>
