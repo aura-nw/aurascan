@@ -34,6 +34,7 @@
                 <app-custom-video-player
                   [videoSrc]="nftDetail?.ipfs?.animation_url | replaceIpfs"
                   [showControl]="true"
+                  [isDetail]="true"
                   *ngIf="nftDetail?.ipfs?.animation_url">
                 </app-custom-video-player>
               </ng-container>
@@ -261,21 +262,24 @@
       <div class="col-12 col-lg-4 mt-4 mt-lg-0">
         <div class="card card--sb-information mb-0">
           <div class="card-header card-header--has-border h2 text--white box-prop">Properties</div>
-          <div class="box-prop-item">
-            <div class="row text--gray-1 sb-props m-0">
-              <ng-container *ngIf="nftDetail?.ipfs?.attributes">
-                <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
-                  <div class="col-4 mb-lg-6 mb-4">
-                    <div class="card-info py-4 text-center">
-                      <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
-                      <div class="mt-2 caption">{{ prop.value | stringEllipsis : 13 }}</div>
+          <ng-container *ngIf="nftDetail?.ipfs?.attributes">
+            <ng-container *ngIf="isObject(nftDetail.ipfs?.attributes)">
+              <div class="box-prop-item">
+                <div class="row text--gray-1 sb-props m-0">
+                  <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
+                    <div class="col-4 mb-lg-6 mb-4">
+                      <div class="card-info py-4 text-center">
+                        <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
+                        <div class="mt-2 caption">{{ prop.value | stringEllipsis : 13 }}</div>
+                      </div>
                     </div>
-                  </div>
-                </ng-container>
-              </ng-container>
-              <ng-container *ngIf="!nftDetail?.ipfs?.attributes">-</ng-container>
-            </div>
-          </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+            <span *ngIf="!isObject(nftDetail.ipfs?.attributes)" class="pl-4 pl-lg-6 pt-2">-</span>
+          </ng-container>
+          <span *ngIf="!nftDetail?.ipfs?.attributes" class="pl-4 pl-lg-6 pt-2">-</span>
         </div>
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">

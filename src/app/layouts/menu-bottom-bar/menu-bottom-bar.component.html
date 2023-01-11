@@ -101,9 +101,11 @@
 </ng-template>
 <!-- menu link template-->
 <ng-template #menuItem let-data="data">
-  <li class="menu-item">
+  <li class="menu-item" (click)="popover.close()">
     <a class="menu-link"
-       [routerLink]="data.link" routerLinkActive="active">
+       [class.active]="checkMenuActive(data.link)"
+       [routerLink]="data.link"
+    >
       <i class="ph-{{ data.icon }} h3 mr-2 mb-0"></i>
       <div class="body fw-semibold">{{ data.label | translate }}</div>
     </a>

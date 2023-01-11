@@ -95,17 +95,17 @@
       <div class="collapse navbar-collapse active" id="topnav-menu-content">
         <ul class="navbar-nav w-100 align-items-center">
           <ng-container *ngFor="let item of menuItems; let i = index">
-            <li class="nav-item dropdown mr-5 mr-lg-8 mr-xl-12" *ngIf="i === 0" routerLinkActive="active">
+            <li class="nav-item dropdown mr-5 mr-lg-8 mr-xl-12" *ngIf="i === 0">
               <a
                 class="nav-link d-flex align-items-center mb-0"
                 [routerLink]="item.link"
-                [class.active]="(router.url === '/' || router.url === '/dashboard') && item.link === '/dashboard'"
+                [class.active]="checkMenuActive(item.link)"
                 role="button">
                 <i class="ph-{{ item.icon }}"></i>
                 <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
               </a>
             </li>
-            <li class="nav-item dropdown mx-5 mx-lg-8 mx-xl-12" *ngIf="i > 0" routerLinkActive="active">
+            <li class="nav-item dropdown mx-5 mx-lg-8 mx-xl-12" *ngIf="i > 0">
               <ng-container *ngIf="(item.name === 'More' && wallet) || item.name !== 'More'">
                 <button
                   (click)="onMenuClick($event)"
@@ -120,11 +120,7 @@
                         *ngIf="subMenu.label !== 'Soulbound Token' || (subMenu.label === 'Soulbound Token' && lengthSBT > 0)"
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item"
-                        routerLinkActive="active"
-                        [class.active]="
-                          '/' + subMenu.link.split('/')[1] == '/' + router.url.split('/')[1] &&
-                          menuLink[i].includes('/' + router.url.split('/')[1])
-                        ">
+                        [class.active]="checkMenuActive(subMenu.link)">
                         <!-- Menu token has special icon -->
                         <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
                         <!-- . -->
