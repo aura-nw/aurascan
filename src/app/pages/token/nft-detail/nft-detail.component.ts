@@ -124,25 +124,27 @@ export class NFTDetailComponent implements OnInit {
         this.isSoulBound = true;
       }
 
-      //Facebook Meta Tags
-      document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
-      document
-        .querySelectorAll('meta[property=og\\:title]')[0]
-        .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
-      document
-        .querySelectorAll('meta[property=og\\:description]')[0]
-        .setAttribute('content', this.nftDetail?.ipfs?.description);
+       //Facebook Meta Tags
+       document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
+       document
+         .querySelectorAll('meta[property=og\\:title]')[0]
+         .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
+       document
+         .querySelectorAll('meta[property=og\\:description]')[0]
+         .setAttribute('content', this.nftDetail?.ipfs?.description);
 
-      //Twitter Meta Tags
-      document.querySelectorAll('meta[property=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
-      document
-        .querySelectorAll('meta[property=twitter\\:title]')[0]
-        .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
+       //Twitter Meta Tags
+       document.querySelectorAll('meta[name=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
+       document
+         .querySelectorAll('meta[name=twitter\\:title]')[0]
+         .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
 
-      //Google / Search Engine Tags
-      document
-        .querySelectorAll('meta[property=description]')[0]
-        .setAttribute('content', this.nftDetail?.ipfs?.description);
+       //Google / Search Engine Tags
+       document.querySelectorAll('meta[itemprop=image]')[0].setAttribute('content', this.nftUrl);
+       document
+         .querySelectorAll('meta[itemprop=description]')[0]
+         .setAttribute('content', this.nftDetail?.ipfs?.description);
+
       this.loading = false;
     });
   }
