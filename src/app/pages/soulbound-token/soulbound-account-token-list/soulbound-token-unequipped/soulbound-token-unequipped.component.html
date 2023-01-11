@@ -12,7 +12,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Search for Token Name or Token ID"
+              placeholder="Search for Token Name"
               [(ngModel)]="textSearch"
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
@@ -75,7 +75,8 @@
                 </div>
                 <button
                   class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"
-                  (click)="getSBTDetail(token.contract_address, token.token_id)">
+                  (click)="getSBTDetail(token.contract_address, token.token_id)"
+                  [disabled]="isClick">
                   <span>Preview</span>
                 </button>
               </div>
