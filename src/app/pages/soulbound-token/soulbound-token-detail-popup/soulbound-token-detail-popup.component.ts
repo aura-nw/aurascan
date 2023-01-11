@@ -81,4 +81,8 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
       this.toastr.error(`Error: ${msgError}`);
     }
   }
+
+  isObject(data){
+    return typeof data === 'object' && data !== null
+  }
 }

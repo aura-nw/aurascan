@@ -381,7 +381,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     };
     
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.soulboundList = res.data.filter(k => k.picked === true);
+      this.soulboundList = res.data.filter(k => k.picked);
     });
   }
 }
