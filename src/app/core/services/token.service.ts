@@ -104,4 +104,26 @@ export class TokenService extends CommonService {
   getPriceToken(tokenId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
   }
+
+  getTokenMarket(coinId = 'aura-network') {
+    return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinid=${coinId}`);
+  }
+
+  getTokenMetrics({
+    range,
+    coinId,
+    minDate = new Date().toISOString(),
+  }: {
+    range: string;
+    coinId: string;
+    minDate?: string;
+  }) {
+    return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
+      params: {
+        range,
+        coinId,
+        minDate,
+      },
+    });
+  }
 }
