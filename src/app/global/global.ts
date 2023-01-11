@@ -126,7 +126,11 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
-      tokenId = arrayMsg?.length > 1 ? 'More' : itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
+      if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint']) {
+        tokenId = 'More';
+      } else {
+        tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
+      }
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Burn;

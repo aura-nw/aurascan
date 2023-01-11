@@ -297,4 +297,8 @@ export class NFTDetailComponent implements OnInit {
     dialogConfig.panelClass = 'grant-overlay-panel';
     let dialogRef = this.dialog.open(PopupShareComponent, dialogConfig);
   }
+
+  isObject(data){
+    return typeof data === 'object' && data !== null
+  }
 }
