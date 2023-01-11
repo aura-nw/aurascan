@@ -58,13 +58,13 @@
                     </app-custom-video-player>
                   </div>
                   <a href="/tokens/token-nft/{{ token?.contract_address }}/{{ token?.token_id }}" class="box-nft-info d-block">
-                    <div class="nft__info">
-                      <span class="body mr-1 text--gray-1">Token ID:</span>
-                      <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
-                    </div>
-                    <div class="nft__info caption fw-normal">
-                      <span class="body mr-1 text--gray-1">Token:</span>
+                    <div class="nft__info body-01 fw-normal">
+                      <span class="mr-1 text--gray-1">Token:</span>
                       <span>{{ token.token_name }}</span>
+                    </div>
+                    <div class="nft__info body-01 fw-normal mt-1">
+                      <span class="mr-1 text--gray-1">Token ID:</span>
+                      <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
                     </div>
                   </a>
                 </div>
