@@ -87,6 +87,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   originalData = [];
   originalDataArr = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
+  endData = false;
 
   destroy$ = new Subject();
 
@@ -130,7 +131,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   subscribeVisibleLogicalRangeChange() {
     this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
       // offset 5 record
-      if (from <= 5) {
+      if (from <= 5 && !this.endData) {
         const maxDate = new Date(this.originalData[0].timestamp).toISOString();
         this.token
           .getTokenMetrics({
@@ -149,6 +150,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               this.originalDataArr = [...chartData, ...this.originalDataArr];
 
               this.areaSeries.setData(this.originalDataArr);
+            } else {
+              this.endData = true;
             }
           });
       }
@@ -267,6 +270,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getCoinInfo(type: string) {
     this.originalData = [];
     this.originalDataArr = [];
+    this.endData = false;
+
     this.initTooltip();
     this.chartRange = type;
     this.token
