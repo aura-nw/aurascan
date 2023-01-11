@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
-    <div class="h2 mb-0 fw-bold text--white">{{ soulboundDetail.name ?? 'Token detail' }}</div>
+    <div class="h2 mb-0 fw-bold text--white">{{ soulboundDetail?.ipfs?.name ?? 'Token detail' }}</div>
     <img
       src="assets/icons/icons-svg/white/close.svg"
       alt=""
@@ -22,7 +22,7 @@
             }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
-            [showControl]="true"
+            [showControl]="false"
             *ngIf="soulboundDetail?.ipfs?.animation_url">
           </app-custom-video-player>
         </div>
