@@ -92,10 +92,10 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   getSBTDetail(contractAddress, tokenID) {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
-      this.isClick = false;
       if (res?.data) {
         this.openDialogDetail(res.data);
       }
+      this.isClick = false;
     });
   }
 

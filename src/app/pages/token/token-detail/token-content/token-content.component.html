@@ -106,7 +106,7 @@
   <div class="mt-lg-3">
     <app-token-transfers-tab
       *ngIf="countCurrent === ''"
-      [isNFTContract]="tokenDetail?.isNFTContract"
+      [typeContract]="tokenDetail?.type"
       [keyWord]="textSearch"
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
