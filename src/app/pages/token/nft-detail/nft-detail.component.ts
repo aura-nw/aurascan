@@ -122,6 +122,10 @@ export class NFTDetailComponent implements OnInit {
           this.route.navigate(['/']);
         }
         this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
+        if(this.nftDetail.ipfs?.name){
+          this.nftDetail['isDisplayName'] = true;
+          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name|| '';
+        }
         this.isSoulBound = true;
       }
 

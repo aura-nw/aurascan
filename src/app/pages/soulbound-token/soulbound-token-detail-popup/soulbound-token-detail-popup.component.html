@@ -22,7 +22,8 @@
             }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
-            [showControl]="false"
+            [showControl]="true"
+            [isDetail]="true"
             *ngIf="soulboundDetail?.ipfs?.animation_url">
           </app-custom-video-player>
         </div>

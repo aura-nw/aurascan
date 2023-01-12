@@ -13,6 +13,8 @@ import { Globals } from 'src/app/global/global';
 export class TokenOverviewComponent implements OnInit {
   @Input() tokenDetail: any;
   params = '';
+  contractType = ContractRegisterType;
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   constructor(
     public global: Globals,
