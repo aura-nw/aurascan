@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnIni
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
 import { parseDataTransaction } from 'src/app/core/utils/common/info-common';
@@ -24,7 +25,7 @@ import { Globals } from '../../../../../../global/global';
   styleUrls: ['./token-transfers-tab.component.scss'],
 })
 export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
-  @Input() isNFTContract: boolean;
+  @Input() typeContract: string;
   @Input() contractAddress: string;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
@@ -71,6 +72,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   linkToken = 'token';
   nextKey = null;
   currentKey = null;
+  contractType = ContractRegisterType;
 
   coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -95,7 +97,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
-    if (this.isNFTContract) {
+    if (this.typeContract !== this.contractType.CW20) {
       this.linkToken = 'token-nft';
     }
   }
@@ -141,7 +143,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.isNFTContract ? this.NFTTemplates : this.noneNFTTemplates;
+    return this.typeContract !== this.contractType.CW20 ? this.NFTTemplates : this.noneNFTTemplates;
   }
 
   shortenAddress(address: string): string {
@@ -166,7 +168,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   }
 
   getNFTDetail(data) {
-    if (this.isNFTContract) {
+    if (this.typeContract !== this.contractType.CW20) {
       this.tokenService.getNFTDetail(this.contractAddress, data.token_id).subscribe((res) => {
         this.nftDetail = res.data;
       });

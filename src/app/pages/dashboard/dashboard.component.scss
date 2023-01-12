@@ -73,7 +73,19 @@
     padding: 8px;
   }
   .tv-lightweight-charts table tr:last-child {
-    border-top: 1.5px solid #FFA741;
+    //border-top: 1.5px solid #FFA741;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 1.5px;
+      z-index: 2;
+      background: linear-gradient(113.1deg, #5EE6D0 13.45%, #BFC6FF 50.33%, #FFBA69 85.05%);
+    }
   }
 }
 .button-switch-stage {

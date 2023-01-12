@@ -381,12 +381,20 @@
                       data[template.matColumnDef]?.length > lengthNormalAddress ? '/contracts' : '/account',
                       data[template.matColumnDef]
                     ]"
-                    *ngIf="data.modeExecute !== modeExecuteTransaction.Burn && data[template.matColumnDef]">
+                    *ngIf="
+                      data.modeExecute !== modeExecuteTransaction.Burn &&
+                      data.modeExecute !== modeExecuteTransaction.UnEquip &&
+                      data[template.matColumnDef]
+                    ">
                     {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
                   </a>
-                  <span *ngIf="data.modeExecute === modeExecuteTransaction.Burn">{{
-                    data[template.matColumnDef] | cutStringPipe : 8 : 8
-                  }}</span>
+                  <span
+                    *ngIf="
+                      data.modeExecute === modeExecuteTransaction.Burn ||
+                      data.modeExecute === modeExecuteTransaction.UnEquip
+                    "
+                    >{{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}</span
+                  >
                   <span *ngIf="!data[template.matColumnDef]"> - </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'price'">
