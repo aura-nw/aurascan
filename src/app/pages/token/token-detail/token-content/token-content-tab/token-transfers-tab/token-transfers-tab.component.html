@@ -167,7 +167,8 @@
                               data.modeExecute === modeExecuteTransaction.UnEquip
                             "
                             [routerLink]="['/tokens/token-nft', contractAddress, data.token_id]">
-                            <span>View NFT</span>
+                            <span *ngIf="typeContract === contractType.CW721">View NFT</span>
+                            <span *ngIf="typeContract === contractType.CW4973">View SBT</span>
                           </button>
                         </ng-container>
                         <ng-container *ngSwitchCase="'token_id'">
