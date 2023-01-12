@@ -73,7 +73,19 @@
     padding: 8px;
   }
   .tv-lightweight-charts table tr:last-child {
-    border-top: 1.5px solid #FFA741;
+    //border-top: 1.5px solid #FFA741;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 1.5px;
+      z-index: 2;
+      background: linear-gradient(113.1deg, #5EE6D0 13.45%, #BFC6FF 50.33%, #FFBA69 85.05%);
+    }
   }
 }
 .button-switch-stage {
@@ -163,13 +175,6 @@ ul {
     overflow-y: auto !important;
   }
 }
-
-.card__item {
-  min-height: 260px;
-}
-.card__summary-info {
-  min-height: 470px;
-}
 .card-child {
   background: rgba(19, 20, 25, 0.4);
   border-radius: 8px;
@@ -225,16 +230,19 @@ i.icon-info {
   font-size: 40px;
 }
 i.icon-brand {
-  font-size: 40px;
+  font-size: 32px;
 }
-
+.w-md-100 {
+  @media (max-width: 1199.98px) {
+    width: 100%;
+  }
+}
 img.icon-brand {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   object-fit: cover;
 }
 .voting-period-btn--disable {
-  display: flex;
   align-items: center;
   padding: 8px 16px;
   width: 100%;
@@ -246,6 +254,11 @@ img.icon-brand {
   line-height: 18px;
   border: 1px solid #494C58;
   border-radius: 8px;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
 }
 .summary-info {
   line-height: 1.8rem !important;
