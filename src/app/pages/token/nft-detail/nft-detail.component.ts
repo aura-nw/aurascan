@@ -23,7 +23,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PopupShareComponent } from './popup-share/popup-share.component';
 import { TranslateService } from '@ngx-translate/core';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-nft-detail',
@@ -87,33 +86,7 @@ export class NFTDetailComponent implements OnInit {
     private contractService: ContractService,
     private dialog: MatDialog,
     public translate: TranslateService,
-    public meta: Meta,
-  ) {
-    const abc = this.meta.getTag('itemprop="image"');
-    console.log(abc);
-    const content =
-      'https://nft-ipfs-indexer.s3.ap-southeast-1.amazonaws.com/bafkreick52zzoayfrr4se2pb2sw2ll5s4xtstfuzeoiajqlskjsywo2uqa';
-    this.meta.updateTag(
-      {
-        content,
-      },
-      'itemprop="image"',
-    );
-
-    this.meta.updateTag(
-      {
-        content,
-      },
-      'property="og:image"',
-    );
-
-    this.meta.updateTag(
-      {
-        content,
-      },
-      'name="twitter:image"',
-    );
-  }
+  ) {}
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
@@ -149,9 +122,9 @@ export class NFTDetailComponent implements OnInit {
           this.route.navigate(['/']);
         }
         this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
-        if (this.nftDetail.ipfs?.name) {
+        if(this.nftDetail.ipfs?.name){
           this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || '';
+          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name|| '';
         }
         this.isSoulBound = true;
       }
@@ -162,50 +135,27 @@ export class NFTDetailComponent implements OnInit {
   }
 
   setImagePreview() {
-    const abc = this.meta.getTag('itemprop="image"');
-    console.log(abc);
+    document.querySelectorAll('link[as=image]')[0].setAttribute('href', this.nftUrl);
+    //Facebook Meta Tags
+    document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
+    document
+      .querySelectorAll('meta[property=og\\:title]')[0]
+      .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
+    document
+      .querySelectorAll('meta[property=og\\:description]')[0]
+      .setAttribute('content', this.nftDetail?.ipfs?.description);
 
-    this.meta.updateTag(
-      {
-        content: this.nftUrl,
-      },
-      'itemprop="image"',
-    );
+    //Twitter Meta Tags
+    document.querySelectorAll('meta[name=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
+    document
+      .querySelectorAll('meta[name=twitter\\:title]')[0]
+      .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
 
-    this.meta.updateTag(
-      {
-        content: this.nftUrl,
-      },
-      'property="og:image"',
-    );
-
-    this.meta.updateTag(
-      {
-        content: this.nftUrl,
-      },
-      'name="twitter:image"',
-    );
-    // document.querySelectorAll('link[as=image]')[0].setAttribute('href', this.nftUrl);
-    // //Facebook Meta Tags
-    // document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
-    // document
-    //   .querySelectorAll('meta[property=og\\:title]')[0]
-    //   .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
-    // document
-    //   .querySelectorAll('meta[property=og\\:description]')[0]
-    //   .setAttribute('content', this.nftDetail?.ipfs?.description);
-
-    // //Twitter Meta Tags
-    // document.querySelectorAll('meta[name=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
-    // document
-    //   .querySelectorAll('meta[name=twitter\\:title]')[0]
-    //   .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
-
-    // //Google / Search Engine Tags
-    // document.querySelectorAll('meta[itemprop=image]')[0].setAttribute('content', this.nftUrl);
-    // document
-    //   .querySelectorAll('meta[itemprop=description]')[0]
-    //   .setAttribute('content', this.nftDetail?.ipfs?.description);
+    //Google / Search Engine Tags
+    document.querySelectorAll('meta[itemprop=image]')[0].setAttribute('content', this.nftUrl);
+    document
+      .querySelectorAll('meta[itemprop=description]')[0]
+      .setAttribute('content', this.nftDetail?.ipfs?.description);
   }
 
   async getDataTable(nextKey = null) {
