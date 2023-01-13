@@ -109,21 +109,18 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
   }
 
-  getTokenMetrics({
-    range,
-    coinId,
-    maxDate = new Date().toISOString(),
-  }: {
-    range: string;
-    coinId: string;
-    maxDate?: string;
-  }) {
+  getTokenMetrics({ range, coinId, maxDate }: { range: string; coinId: string; maxDate?: string }) {
     return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: {
-        range,
-        coinId,
-        maxDate,
-      },
+      params: maxDate
+        ? {
+            range,
+            coinId,
+            maxDate,
+          }
+        : {
+            range,
+            coinId,
+          },
     });
   }
 }
