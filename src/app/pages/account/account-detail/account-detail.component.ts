@@ -518,7 +518,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
       if (this.currentAddress !== this.userAddress) {
-        res.data = res.data.filter((k) => k.picked === true);
+        res.data = res.data.filter((k) => k.picked);
       }
       this.totalSBT = res.data.length;
     });
