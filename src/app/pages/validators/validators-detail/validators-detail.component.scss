@@ -137,6 +137,9 @@ form.search-form {
 }
 
 ::ng-deep .soulbound-feature-tokens app-soulbound-feature-tokens .soulbound-list {
+  .nft-card {
+    min-height: fit-content !important;
+  }
   @media (min-width: 991.98px) {
     justify-content: start;
   }
