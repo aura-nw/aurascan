@@ -17,7 +17,7 @@ import { Globals } from '../../../../../../global/global';
 export class TokenHoldersTabComponent implements OnInit {
   @Input() keyWord = '';
   @Input() contractAddress: string;
-  @Input() isNFTContract: boolean;
+  @Input() typeContract: string;
   @Input() tokenDetail: any;
 
   CW20Templates: Array<TableTemplate> = [
@@ -45,6 +45,7 @@ export class TokenHoldersTabComponent implements OnInit {
   loading = true;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   tokenType = ContractRegisterType.CW20;
+  contractType = ContractRegisterType;
   numberTopHolder = 100;
   totalQuantity = 0;
   numberTop = 0;
@@ -58,8 +59,7 @@ export class TokenHoldersTabComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.isNFTContract) {
-      this.tokenType = ContractRegisterType.CW721;
+    if (this.typeContract !== ContractRegisterType.CW20) {
       this.getQuantity();
     } else {
       this.getListTokenHolder(this.tokenType);
@@ -70,7 +70,7 @@ export class TokenHoldersTabComponent implements OnInit {
 
   getListTokenHolder(tokenType: string) {
     this.loading = true;
-    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, tokenType, this.contractAddress).subscribe((res) => {
+    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe((res) => {
       if (res && res.data?.resultAsset?.length > 0) {
         this.totalHolder = res.data?.resultCount;
         if (this.totalHolder > this.numberTopHolder) {
@@ -102,7 +102,7 @@ export class TokenHoldersTabComponent implements OnInit {
   }
 
   getTemplate(): Array<TableTemplate> {
-    return this.isNFTContract ? this.CW721Templates : this.CW20Templates;
+    return this.typeContract !== ContractRegisterType.CW20 ? this.CW721Templates : this.CW20Templates;
   }
 
   paginatorEmit(event): void {
