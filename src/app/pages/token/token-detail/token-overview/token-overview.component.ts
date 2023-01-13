@@ -46,8 +46,7 @@ export class TokenOverviewComponent implements OnInit {
   }
 
   getTotalHolder() {
-    let tokenType = this.tokenDetail?.isNFTContract ? ContractRegisterType.CW721 : ContractRegisterType.CW20;
-    this.tokenService.getListTokenHolder(20, 0, tokenType, this.tokenDetail?.contract_address).subscribe((res) => {
+    this.tokenService.getListTokenHolder(20, 0, this.tokenDetail.type, this.tokenDetail?.contract_address).subscribe((res) => {
       if (res && res.data?.resultAsset?.length > 0) {
         this.tokenDetail['holder'] = res.data?.resultCount || 0;
       }
