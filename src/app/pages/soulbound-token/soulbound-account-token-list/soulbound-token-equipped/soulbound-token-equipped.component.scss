@@ -4,6 +4,13 @@
     padding: 0;
     .token-cards__img{
       padding: 8px;
+      app-model-view {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
     }
   }
   .token__bookmark {
@@ -20,5 +27,7 @@
   .box-nft-info{
     background-color: var(--aura-gray-10);
     padding: 8px 0px 16px 8px;
+    position: relative;
+    z-index: 1;
   }
 }
