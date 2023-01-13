@@ -253,7 +253,7 @@
                   <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
                     <div class="col-4 mb-lg-6 mb-4">
                       <div class="card-info py-4 text-center">
-                        <div class="caption fw-normal">
+                        <div class="caption fw-normal text--white">
                           <span class="d-none d-lg-block">
                             {{ prop.trait_type | stringEllipsis : 13 }}
                           </span>
@@ -261,7 +261,7 @@
                             {{ prop.trait_type | stringEllipsis : 6 }}
                           </span>
                         </div>
-                        <div class="mt-2 caption">
+                        <div class="mt-2 caption text--white">
                           <span class="d-none d-lg-block">
                             {{ prop.value | stringEllipsis : 13 }}
                           </span>
