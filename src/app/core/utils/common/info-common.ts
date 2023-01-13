@@ -77,14 +77,17 @@ export function parseDataTransaction(trans: any, coinMinimalDenom: string, token
 }
 
 export function checkTypeFile(nft: any) {
-  let nftType = '';
+  let nftType = nft.img_type || '';
   let content_type = '';
-  if (nft?.animation) {
-    nftType = nft?.animation?.content_type || '';
+  if (!nftType) {
+    if (nft?.animation) {
+      nftType = nft?.animation?.content_type || '';
+    }
+    if (nft?.image && nftType == '') {
+      nftType = nft?.image?.content_type || '';
+    }
   }
-  if (nft?.image && nftType == '') {
-    nftType = nft?.image?.content_type || '';
-  }
+
   switch (nftType) {
     case 'video/webm':
     case 'video/mp4':
@@ -95,7 +98,7 @@ export function checkTypeFile(nft: any) {
     case 'image/gif':
     case 'application/xml':
     case 'image/svg+xml':
-    case 'image/webp': 
+    case 'image/webp':
       content_type = 'img';
       break;
     case 'model/gltf-binary':

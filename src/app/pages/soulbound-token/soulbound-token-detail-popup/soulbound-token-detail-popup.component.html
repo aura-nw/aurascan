@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header card-header-gray d-flex align-items-center justify-content-between">
-    <div class="h2 mb-0 fw-bold text--white">{{ soulboundDetail?.ipfs?.name ?? 'Token detail' }}</div>
+    <div class="h2 h4-mob mb-0 fw-bold text--white">{{ soulboundDetail?.ipfs?.name ?? 'Token detail' }}</div>
     <img
       src="assets/icons/icons-svg/white/close.svg"
       alt=""
@@ -13,25 +13,35 @@
     <div class="row">
       <div class="col-12 col-lg-5">
         <div class="nft__img">
+          <img *ngIf="!soulboundDetail.img_type && !soulboundDetail?.ipfs?.animation_url" [src]="commonService.getDefaultImg()" alt="" />
           <img
-            *ngIf="!soulboundDetail?.ipfs?.animation_url"
-            src="{{
-              soulboundDetail?.ipfs?.image
-                ? (soulboundDetail?.ipfs?.image | replaceIpfs)
-                : commonService.getDefaultImg()
-            }}" />
+            *ngIf="getTypeFile(soulboundDetail) === 'img' && !soulboundDetail?.ipfs?.animation_url"
+            src="{{ soulboundDetail?.ipfs.image ? (soulboundDetail?.ipfs.image | replaceIpfs) : commonService.getDefaultImg() }}"
+            alt="{{ soulboundDetail.token_name }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
             [showControl]="true"
             [isDetail]="true"
             *ngIf="soulboundDetail?.ipfs?.animation_url">
           </app-custom-video-player>
+          <app-model-view
+            *ngIf="getTypeFile(soulboundDetail) === '3d'"
+            [link]=""
+            [modelUrl]="soulboundDetail.ipfs.image | replaceIpfs"
+            [disablePan]="false">
+          </app-model-view>
+          <app-audio-player
+            *ngIf="getTypeFile(soulboundDetail) === 'audio'"
+            [link]=""
+            [src]="soulboundDetail?.ipfs?.image | replaceIpfs"
+            [nftId]="">
+          </app-audio-player>
         </div>
       </div>
       <div class="col-12 col-lg-7 mt-4 mt-lg-0">
         <div class="nft__desc">
           <div class="h5 text--white">Description</div>
-          <div class="mt-4 mt-lg-2 body text--gray-1">
+          <div class="mt-4 mt-lg-2 body text--gray-1 box-desc">
             {{ soulboundDetail.ipfs?.description || '-' }}
           </div>
         </div>
@@ -45,8 +55,15 @@
         <ng-container *ngIf="isObject(soulboundDetail.ipfs?.attributes)">
           <div class="col-4 col-lg-3 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
             <div class="nft__prop">
-              <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
-              <div class="h5 mb-0 text--gray-1">
+              <div class="caption fw-normal">
+                <span class="d-none d-lg-flex">
+                  {{ prop.trait_type | stringEllipsis : 13 }}
+                </span>
+                <span class="d-flex d-lg-none">
+                  {{ prop.trait_type | stringEllipsis : 6 }}
+                </span>
+              </div>
+              <div class="h5 body-mob fw-semibold mb-0 text--gray-1">
                 <span class="d-none d-lg-flex">
                   {{ prop.value | stringEllipsis : 13 }}
                 </span>

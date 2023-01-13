@@ -5,6 +5,7 @@ import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constan
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 import { SoulboundTokenDetailPopupComponent } from 'src/app/pages/soulbound-token/soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 
 @Component({
@@ -64,7 +65,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
       if (this.wallet !== address) {
-        res.data = res.data.filter((k) => k.picked === true);
+        res.data = res.data.filter((k) => k.picked);
       }
       this.soulboundList = res.data;
       this.totalSBT.emit(res.meta.count);
@@ -101,5 +102,10 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   linkSBDetail(contractAddress, tokenID) {
     let encode = encodeURIComponent(tokenID);
     window.location.href = `/tokens/token-nft/${contractAddress}/${encode}`;
+  }
+
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }

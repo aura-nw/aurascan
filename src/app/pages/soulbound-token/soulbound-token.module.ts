@@ -8,8 +8,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MaterialModule } from 'src/app/app.module';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { CustomVideoPlayerModule } from 'src/app/shared/components/custom-video-player/custom-video-player.module';
+import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 import { QrModule } from 'src/app/shared/components/qr/qr.module';
 import { SoulboundFeatureTokensModule } from 'src/app/shared/components/soulbound-feature-tokens/soulbound-feature-tokens.module';
@@ -53,6 +55,8 @@ import { SoulboundTokenRoutingModule } from './soulbound-token-routing.module';
     NftCardModule,
     CustomVideoPlayerModule,
     SoulboundFeatureTokensModule,
+    ModelViewModule,
+    AudioPlayerModule,
   ],
   providers: [FormBuilder, SoulboundService],
 })

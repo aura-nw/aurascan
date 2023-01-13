@@ -104,13 +104,13 @@ export class NFTDetailComponent implements OnInit {
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
+      this.nftType = checkTypeFile(this.nftDetail);
+      
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
           this.nftDetail['isDisplayName'] = true;
           this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
         }
-
-        this.nftType = checkTypeFile(this.nftDetail);
         if (this.nftDetail.animation && this.nftDetail.animation?.content_type) {
           this.nftUrl = this.nftDetail.animation?.link_s3 || '';
         }
@@ -121,7 +121,7 @@ export class NFTDetailComponent implements OnInit {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
           this.route.navigate(['/']);
         }
-        this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
+        this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
         if(this.nftDetail.ipfs?.name){
           this.nftDetail['isDisplayName'] = true;
           this.nftDetail['nftName'] = this.nftDetail.ipfs?.name|| '';

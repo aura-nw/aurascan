@@ -9,6 +9,13 @@
 .card {
   .nft__img {
     background-color: var(--aura-gray-9);
+    app-model-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
   }
   @media (max-width: 992px) {
     max-height: 80vh;
@@ -20,10 +27,17 @@
     width: 800px;
   }
 }
+.box-desc {
+  overflow-y: scroll;
+  max-height: 130px;
+  @media (min-width: 991.98px) {
+    max-height: fit-content;
+  }
+}
 .nft {
   &__img {
     background: var(--aura-gray-9);
-    border: 0.717647px solid #363843;
+    border: 0.717647px solid var(--aura-gray-9);
     border-radius: 11.4824px;
     display: flex;
     align-items: center;
@@ -55,7 +69,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--aura-gray-1);
+    color: var(--aura-white);
     padding: var(--spacer-2) 0;
   }
 }

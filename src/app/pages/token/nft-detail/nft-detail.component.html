@@ -25,32 +25,16 @@
         <div class="nft-img__contain w-100 h-100">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
-              <ng-container *ngIf="isSoulBound">
-                <img
-                  *ngIf="!nftDetail?.ipfs?.animation_url"
-                  src="{{
-                    nftDetail?.ipfs?.image ? (nftDetail?.ipfs?.image | replaceIpfs) : commonService.getDefaultImg()
-                  }}" />
-                <app-custom-video-player
-                  [videoSrc]="nftDetail?.ipfs?.animation_url | replaceIpfs"
-                  [showControl]="true"
-                  [isDetail]="true"
-                  *ngIf="nftDetail?.ipfs?.animation_url">
-                </app-custom-video-player>
-              </ng-container>
-              <ng-container *ngIf="!isSoulBound"
-                ><img *ngIf="!nftType || isError" [src]="defaultImgToken" />
-                <img *ngIf="nftType === 'img' && isError === false" (error)="error()" [src]="this.nftUrl" />
-                <app-custom-video-player
-                  [videoSrc]="this.nftUrl"
-                  [showControl]="true"
-                  *ngIf="nftType === 'video'"
-                  [isDetail]="true">
-                </app-custom-video-player>
-                <app-model-view *ngIf="nftType === '3d'" [modelUrl]="this.nftUrl" [disablePan]="false">
-                </app-model-view>
-                <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl"> </app-audio-player
-              ></ng-container>
+              <img *ngIf="(!nftType && !nftDetail.ipfs?.animation_url) || isError" [src]="defaultImgToken" />
+              <img *ngIf="nftType === 'img' && isError === false" (error)="error()" [src]="this.nftUrl" />
+              <app-custom-video-player
+                [videoSrc]="this.nftUrl"
+                [showControl]="true"
+                *ngIf="nftType === 'video' || nftDetail.ipfs?.animation_url"
+                [isDetail]="true">
+              </app-custom-video-player>
+              <app-model-view *ngIf="nftType === '3d'" [modelUrl]="this.nftUrl" [disablePan]="false"> </app-model-view>
+              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl"> </app-audio-player>
             </div>
           </div>
         </div>
@@ -265,12 +249,26 @@
           <ng-container *ngIf="nftDetail?.ipfs?.attributes">
             <ng-container *ngIf="isObject(nftDetail.ipfs?.attributes)">
               <div class="box-prop-item">
-                <div class="row text--gray-1 sb-props m-0">
+                <div class="row text--gray-1 m-0">
                   <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
                     <div class="col-4 mb-lg-6 mb-4">
                       <div class="card-info py-4 text-center">
-                        <div class="caption fw-normal">{{ prop.trait_type | stringEllipsis : 13 }}</div>
-                        <div class="mt-2 caption">{{ prop.value | stringEllipsis : 13 }}</div>
+                        <div class="caption fw-normal">
+                          <span class="d-none d-lg-block">
+                            {{ prop.trait_type | stringEllipsis : 13 }}
+                          </span>
+                          <span class="d-block d-lg-none">
+                            {{ prop.trait_type | stringEllipsis : 6 }}
+                          </span>
+                        </div>
+                        <div class="mt-2 caption">
+                          <span class="d-none d-lg-block">
+                            {{ prop.value | stringEllipsis : 13 }}
+                          </span>
+                          <span class="d-block d-lg-none">
+                            {{ prop.value | stringEllipsis : 5 }}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </ng-container>

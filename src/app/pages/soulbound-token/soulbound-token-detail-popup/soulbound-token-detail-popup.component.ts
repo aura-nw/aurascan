@@ -5,6 +5,7 @@ import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-soulbound-token-detail-popup',
@@ -84,5 +85,10 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
 
   isObject(data){
     return typeof data === 'object' && data !== null
+  }
+
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }

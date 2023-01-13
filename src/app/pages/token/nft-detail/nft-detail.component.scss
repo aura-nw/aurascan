@@ -34,6 +34,13 @@
     position: relative;
     overflow: hidden;
     width: 100%;
+    ::ng-deep {
+      app-audio-player {
+        .img-audio {
+          height: 100%;
+        }
+      }
+    }
     &:before {
       content: '';
       display: block;
@@ -132,7 +139,7 @@
       padding: 0px;
       &:hover {
         border-radius: 10px;
-        background-color: #363843;
+        background-color: var(--aura-gray-9);
       }
     }
   }
@@ -143,13 +150,16 @@
 }
 @media (max-width: 991.99px) {
   .nft-detail-table.aura-table th.mat-header-cell:nth-child(1) {
-    min-width: 80px;
-  }
-  .nft-detail-table.aura-table th.mat-header-cell:not(:nth-child(1)) {
     min-width: 200px;
   }
+  .nft-detail-table.aura-table th.mat-header-cell:not(:nth-child(1)) {
+    min-width: 180px;
+  }
   .nft-detail-table.aura-table th.mat-header-cell:nth-child(4) {
-    min-width: 280px;
+    min-width: 220px;
+  }
+  .nft-detail-table.aura-table th.mat-header-cell:nth-child(5) {
+    min-width: 270px;
   }
 }
 .btn-copy {
@@ -172,5 +182,8 @@
     height: 100%;
   }
 }
+
 .sb-props {
+  max-height: 130px;
+  overflow-y: scroll;
 }
