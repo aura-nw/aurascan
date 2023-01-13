@@ -72,7 +72,7 @@ export class TokenService extends CommonService {
       pageLimit: payload.pageLimit,
       pageOffset: payload.pageOffset,
       countTotal: true,
-      contractType: 'CW721',
+      contractType: payload.contractType,
       isBurned: false,
     })
       .omitBy(_.isNull)
