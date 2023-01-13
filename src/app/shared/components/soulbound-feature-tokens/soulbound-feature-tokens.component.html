@@ -12,7 +12,7 @@
               [src]="commonService.getDefaultImg()"
               class="soulbound-img" />
             <img
-              *ngIf="getTypeFile(token) === 'img'"
+              *ngIf="getTypeFile(token) === 'img' || getTypeFile(token) === 'video'"
               src="{{ token.token_img ? replaceImgIpfs(token.token_img) : commonService.getDefaultImg() }}"
               alt=""
               class="soulbound-img" />
@@ -26,7 +26,7 @@
                 [src]="commonService.getDefaultImg()"
                 class="soulbound-img" />
               <img
-                *ngIf="getTypeFile(token) === 'img'"
+                *ngIf="getTypeFile(token) === 'img' || getTypeFile(token) === 'video'"
                 src="{{ token.token_img ? replaceImgIpfs(token.token_img) : commonService.getDefaultImg() }}"
                 alt=""
                 class="soulbound-img" />
