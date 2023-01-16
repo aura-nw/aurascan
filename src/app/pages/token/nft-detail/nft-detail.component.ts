@@ -97,8 +97,6 @@ export class NFTDetailComponent implements OnInit {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
-        console.log(this.userAddress);
-        
       } else {
         this.userAddress = null;
       }
