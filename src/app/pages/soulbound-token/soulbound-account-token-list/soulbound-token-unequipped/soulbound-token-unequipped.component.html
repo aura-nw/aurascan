@@ -65,9 +65,10 @@
                   </app-model-view>
                   <app-audio-player
                     *ngIf="getTypeFile(token) === 'audio'"
-                    [link]="''"
+                    [link]="'#'"
                     [src]="token.token_img | replaceIpfs"
-                    [nftId]="">
+                    [nftId]=""
+                    [disableLink]="true">
                   </app-audio-player>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
                     {{ sbType.UNCLAIMED }}
