@@ -49,10 +49,9 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     }
 
     this.walletService.wallet$.subscribe((wallet) => {
+      this.TABS = this.TAB_EQUIPPED;
       if (wallet) {
-        if (wallet?.bech32Address !== this.userAddress) {
-          this.TABS = this.TAB_EQUIPPED;
-        } else {
+        if (wallet?.bech32Address === this.userAddress) {
           this.TABS = this.TAB_ALL;
         }
       }

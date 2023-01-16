@@ -84,7 +84,7 @@
     <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
       <span>Cancel</span>
     </button>
-    <button class="button button-pill button-flat button--md ml-4" type="button" (click)="equipSB()">
+    <button class="button button-pill button-flat button--md ml-4" type="button" [disabled]="isLoading" (click)="equipSB()">
       <span>Equip</span>
     </button>
   </div>
