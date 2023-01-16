@@ -15,6 +15,7 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 export class SoulboundTokenDetailPopupComponent implements OnInit {
   isError = false;
   currentAddress = '';
+  isLoading = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
@@ -36,6 +37,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   }
 
   async equipSB() {
+    this.isLoading = true;
     this.currentAddress = this.walletService.wallet?.bech32Address;
 
     if (this.currentAddress) {
@@ -67,6 +69,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
             if ((e as any)?.transactionHash) {
               this.toastr.loading((e as any)?.transactionHash);
               setTimeout(() => {
+                this.isLoading = false;
                 this.toastr.success(this.translate.instant('NOTICE.SUCCESS_TRANSACTION'));
                 this.dialogRef.close();
               }, 4000);
