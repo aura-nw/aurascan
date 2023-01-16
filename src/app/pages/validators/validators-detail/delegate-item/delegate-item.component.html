@@ -40,7 +40,7 @@
       <div>
         <popup-delegate [data]="dataDelegate"></popup-delegate>
 
-        <div class="input-group mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
+        <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
           <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
           <div class="d-flex align-items-center py-2 mr-4">
             <button
