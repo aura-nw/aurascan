@@ -1,5 +1,6 @@
 import { ChartOptions, DeepPartial, ISeriesApi, SeriesPartialOptionsMap } from 'lightweight-charts';
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexStroke, ApexTooltip, ApexDataLabels } from 'ng-apexcharts';
+import { RangeType } from 'src/app/core/models/common.model';
 
 // export type ChartOptions = {
 //   series: ApexAxisChartSeries;
@@ -87,7 +88,7 @@ export const DASHBOARD_CHART_OPTIONS: DeepPartial<ChartOptions> = {
   timeScale: {
     timeVisible: true,
     secondsVisible: true,
-    fixRightEdge: true,
+    minBarSpacing: 5,
   },
 };
 
@@ -99,5 +100,39 @@ export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'
     type: 'price',
     precision: 4,
     minMove: 0.0001,
+  },
+};
+
+export const CHART_CONFIG: {
+  [key: string]: {
+    initRange: number;
+    type: RangeType;
+    value: number;
+    unit: string;
+  };
+} = {
+  ['60m']: {
+    initRange: 20,
+    type: RangeType.minute,
+    value: 1440,
+    unit: 'm',
+  },
+  ['24h']: {
+    initRange: 24,
+    type: RangeType.hour,
+    value: 360,
+    unit: 'h',
+  },
+  ['30d']: {
+    initRange: 30,
+    type: RangeType.day,
+    value: 365,
+    unit: 'd',
+  },
+  ['12M']: {
+    initRange: 12,
+    type: RangeType.month,
+    value: 60,
+    unit: 'M',
   },
 };
