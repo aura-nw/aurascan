@@ -62,31 +62,29 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     const keplr = await getKeplr();
     const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
     const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
-    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
 
-    let coin98Client = new Coin98Client(this.network);
-    // let temp = Buffer.from(message, 'base64');
-    console.log(btoa(encodeURIComponent(message)));
+    let dataWallet;
+    if (this.walletService.isMobileMatched && !this.walletService.checkExistedCoin98()) {
+      let coin98Client = new Coin98Client(this.network);
+      dataWallet = await coin98Client.signArbitrary(minter, message);
+    } else {
+      dataWallet = await keplr.signArbitrary(this.network.chainId, minter, message);
+    }
 
-    let msgBase64 = btoa(encodeURIComponent(message));
+    console.log(dataWallet);
+    this.toastr.success(JSON.stringify(dataWallet));
     
-    let test = await coin98Client.signArbitrary(minter, msgBase64);
-    console.log(test);
-    
-    this.toastr.success(JSON.stringify(test));
-    this.toastr.error(JSON.parse(test.toString()));
+    const payload = {
+      signature: dataWallet['signature'],
+      msg: message,
+      pubKey: dataWallet['pub_key']?.value,
+      contract_address: this.data.contractAddress,
+      receiver_address: receiverAddress,
+      token_uri: soulboundTokenURI,
+    };
 
-    // const payload = {
-    //   signature: dataKeplr.signature,
-    //   msg: message,
-    //   pubKey: dataKeplr.pub_key.value,
-    //   contract_address: this.data.contractAddress,
-    //   receiver_address: receiverAddress,
-    //   token_uri: soulboundTokenURI,
-    // };
-
-    // this.dialogRef.close();
-    // this.executeCreate(payload);
+    this.dialogRef.close();
+    this.executeCreate(payload);
   }
 
   executeCreate(payload) {
