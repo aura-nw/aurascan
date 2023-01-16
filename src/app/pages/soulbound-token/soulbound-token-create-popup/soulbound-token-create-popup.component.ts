@@ -63,17 +63,8 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
     const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
 
-    let dataWallet;
-    if (this.walletService.isMobileMatched && !this.walletService.checkExistedCoin98()) {
-      let coin98Client = new Coin98Client(this.network);
-      dataWallet = await coin98Client.signArbitrary(minter, message);
-    } else {
-      dataWallet = await keplr.signArbitrary(this.network.chainId, minter, message);
-    }
+    let dataWallet = this.walletService.getSignWallet(minter, message);
 
-    console.log(dataWallet);
-    this.toastr.success(JSON.stringify(dataWallet));
-    
     const payload = {
       signature: dataWallet['signature'],
       msg: message,
