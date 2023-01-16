@@ -118,19 +118,35 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       toAddress = addressContract;
       break;
     case eTransType.ExecuteContract:
-      method = Object.keys(itemMessage.msg)[0];
+      method = 'mint';
+      itemMessage.msg = itemMessage.msg || '';
+      if (itemMessage.msg) {
+        method = Object.keys(itemMessage.msg)[0];
+      }
+
       value = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.amount || 0;
-      fromAddress = itemMessage.sender;
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
+
       if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint']) {
         tokenId = 'More';
       } else {
         tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
       }
+
+      if (!toAddress) {
+        try {
+          const json = JSON.parse(rawLog);
+          const data = json[0]?.events[json[0]?.events?.length - 1]?.attributes;
+          toAddress = data.find((k) => k.key === 'owner')?.value || null;
+          tokenId = tokenId || data.find((k) => k.key === 'token_id')?.value || null;
+        } catch (e) {}
+      }
+      fromAddress = itemMessage.sender;
+
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Burn;
