@@ -65,7 +65,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   min = 0;
   max = 1000;
-
   currDate;
   isPrice = true;
 
@@ -88,7 +87,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   originalDataArr = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
-
   destroy$ = new Subject();
 
   constructor(
@@ -122,7 +120,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   initChart() {
     this.chart = createChart(document.getElementById('chart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
-    // this.areaSeries.applyOptions();
     this.initTooltip();
 
     this.subscribeVisibleLogicalRangeChange();
@@ -143,12 +140,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             //update data common
             if (res?.data?.length > 0) {
               const { dataX, dataY } = this.parseDataFromApi(res.data);
-
               const chartData = this.makeChartData(dataX, dataY);
 
               this.originalData = [...res?.data, ...this.originalData];
               this.originalDataArr = [...chartData, ...this.originalDataArr];
-
               this.areaSeries.setData(this.originalDataArr);
             } else {
               this.endData = true;
@@ -209,9 +204,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getMarketInfo();
     this.getListBlock();
     this.getListTransaction();
-    // setTimeout(() => {
-    //   this.getCoinInfo(this.chartRange);
-    // }, 1000);
     this.cdr.detectChanges();
   }
 
@@ -283,15 +275,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         //update data common
         this.getInfoCommon();
         if (res?.data?.length > 0) {
-          // const dataX = this.isPrice ? res.data.map((i) => i.current_price) : res.data.map((i) => i.total_volume);
-          // let dataY = res.data.map((i) => i.timestamp);
-
-          // const {} =
           const { dataX, dataY } = this.parseDataFromApi(res.data);
 
           this.originalData = [...this.originalData, ...res?.data];
           this.drawChartFirstTime(dataX, dataY);
-
           this.chartEvent();
         }
       });
@@ -418,7 +405,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         inflation = this.getDataHeader().inflation.slice(0, -1);
         bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
         supply = this.getDataHeader().supply.toString().slice(0, -1);
-        this.staking_APR = (inflation * (1 - communityTax)) / ((bonded_tokens / supply) * 100);
+        this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply));
       }
     }, 500);
   }
