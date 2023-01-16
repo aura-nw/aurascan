@@ -159,3 +159,10 @@ export class TableTemplate2 {
   idColumnDef?: string;
   headerWidth?: number;
 }
+
+export enum RangeType {
+  month = 'mo',
+  day = 'd',
+  hour = 'h',
+  minute = 'm',
+}

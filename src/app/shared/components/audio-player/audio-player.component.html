@@ -1,6 +1,6 @@
 <div class="audio-player audio-player--has-link" [class.isoClass]="browserEnv === 'ios' && !link">
   <img [src]="defaultImgToken" *ngIf="link">
-  <a href="{{link}}" *ngIf="link"></a>
+  <a href="{{link}}" *ngIf="link" [class.disable-link]="disableLink"></a>
   <audio id="{{nftId}}"
       [controls]="!link"
       #audio loop>
