@@ -7,6 +7,9 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { isContract } from 'src/app/core/utils/common/validation';
 import { getKeplr } from 'src/app/core/utils/keplr';
+import { Coin98Client } from 'src/app/core/utils/coin98-client';
+import { sha256 } from 'js-sha256';
+import { toBase64 } from '@cosmjs/encoding';
 const amino = require('@cosmjs/amino');
 
 @Component({
@@ -59,19 +62,31 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     const keplr = await getKeplr();
     const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
     const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
+    // let dataKeplr = await keplr.signArbitrary(this.network.chainId, minter, message);
 
-    const payload = {
-      signature: dataKeplr.signature,
-      msg: message,
-      pubKey: dataKeplr.pub_key.value,
-      contract_address: this.data.contractAddress,
-      receiver_address: receiverAddress,
-      token_uri: soulboundTokenURI,
-    };
+    let coin98Client = new Coin98Client(this.network);
+    // let temp = Buffer.from(message, 'base64');
+    console.log(btoa(encodeURIComponent(message)));
 
-    this.dialogRef.close();
-    this.executeCreate(payload);
+    let msgBase64 = btoa(encodeURIComponent(message));
+    
+    let test = await coin98Client.signArbitrary(minter, msgBase64);
+    console.log(test);
+    
+    this.toastr.success(JSON.stringify(test));
+    this.toastr.error(JSON.parse(test.toString()));
+
+    // const payload = {
+    //   signature: dataKeplr.signature,
+    //   msg: message,
+    //   pubKey: dataKeplr.pub_key.value,
+    //   contract_address: this.data.contractAddress,
+    //   receiver_address: receiverAddress,
+    //   token_uri: soulboundTokenURI,
+    // };
+
+    // this.dialogRef.close();
+    // this.executeCreate(payload);
   }
 
   executeCreate(payload) {
