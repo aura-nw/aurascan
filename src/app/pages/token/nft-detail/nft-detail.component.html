@@ -56,7 +56,7 @@
             </div>
             <ng-container *ngIf="isSoulBound">
               <button
-                *ngIf="nftDetail.status === sbType.EQUIPPED"
+                *ngIf="nftDetail.status === sbType.EQUIPPED && userAddress === nftDetail?.receiver_address"
                 class="button button--md button-fixed button-outline button-outline--gradient button-pill mb-4 mb-lg-0 col-2"
                 (click)="getSBTPick()">
                 <span>Un-equip</span>
@@ -255,7 +255,7 @@
                       <div class="card-info py-4 text-center">
                         <div class="caption fw-normal text--white">
                           <span class="d-none d-lg-block">
-                            {{ prop.trait_type | stringEllipsis : 13 }}
+                            {{ prop.trait_type | stringEllipsis : 12 }}
                           </span>
                           <span class="d-block d-lg-none">
                             {{ prop.trait_type | stringEllipsis : 6 }}
@@ -263,7 +263,7 @@
                         </div>
                         <div class="mt-2 caption text--white">
                           <span class="d-none d-lg-block">
-                            {{ prop.value | stringEllipsis : 13 }}
+                            {{ prop.value | stringEllipsis : 12 }}
                           </span>
                           <span class="d-block d-lg-none">
                             {{ prop.value | stringEllipsis : 5 }}
