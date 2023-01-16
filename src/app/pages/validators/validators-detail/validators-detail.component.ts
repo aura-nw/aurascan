@@ -15,6 +15,7 @@ import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
@@ -100,6 +101,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
     private soulboundService: SoulboundService,
+    private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
@@ -244,7 +246,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe((res) => {
       const { code, data } = res;
-
       this.nextKey = data.nextKey || null;
 
       if (code === 200) {
@@ -367,7 +368,13 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   openDialog() {
-    this.isOpenDialog = true;
+    const view = async () => {
+      const account = this.walletService.getAccount();
+      if (account && account.bech32Address) {
+        this.isOpenDialog = true;
+      }
+    };
+    view();
   }
 
   updateStatus(event) {

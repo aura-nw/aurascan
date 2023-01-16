@@ -152,7 +152,9 @@ export class ContractTableComponent implements OnInit, OnChanges {
           to = contract.messages[0].contract;
           break;
         default:
-          method = Object.keys(contract.messages[0].msg)[0];
+          if (contract.messages[0]?.msg) {
+            method = Object.keys(contract.messages[0]?.msg)[0];
+          }
           value = 0;
           from = contract.messages[0].sender;
           to = contract.messages[0].contract;
