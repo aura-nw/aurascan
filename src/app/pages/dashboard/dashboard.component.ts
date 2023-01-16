@@ -444,7 +444,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         inflation = this.getDataHeader().inflation.slice(0, -1);
         bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
         supply = this.getDataHeader().supply.toString().slice(0, -1);
-        this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply)) * 100;
+        this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply));
       }
     }, 500);
   }
