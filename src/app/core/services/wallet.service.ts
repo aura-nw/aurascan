@@ -386,7 +386,7 @@ export class WalletService implements OnDestroy {
     let dataWallet;
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       let coin98Client = new Coin98Client(this.chainInfo);
-      dataWallet = await coin98Client.signArbitrary(minter, message);
+      dataWallet = await coin98Client.signArbitrary(minter, message)['result'];
     } else {
       const keplr = await getKeplr();
       dataWallet = await keplr.signArbitrary(this.chainInfo.chainId, minter, message);
