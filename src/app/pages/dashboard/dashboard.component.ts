@@ -13,13 +13,13 @@ import { exportChart } from 'src/app/core/helpers/export';
 import { ProposalService } from 'src/app/core/services/proposal.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { getInfo } from 'src/app/core/utils/common/info-common';
-import { TableTemplate } from '../../../app/core/models/common.model';
+import { RangeType, TableTemplate } from '../../../app/core/models/common.model';
 import { BlockService } from '../../../app/core/services/block.service';
 import { CommonService } from '../../../app/core/services/common.service';
 import { TransactionService } from '../../../app/core/services/transaction.service';
 import { CHART_RANGE, PAGE_EVENT, TOKEN_ID_GET_PRICE } from '../../core/constants/common.constant';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../global/global';
-import { DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
+import { CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS } from './dashboard-chart-options';
 
 @Component({
   selector: 'app-dashboard',
@@ -87,6 +87,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   originalDataArr = [];
   logicalRangeChange$ = new Subject<{ from: number; to: number }>();
   endData = false;
+
   destroy$ = new Subject();
 
   constructor(
@@ -127,28 +128,38 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   subscribeVisibleLogicalRangeChange() {
     this.logicalRangeChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(({ from, to }) => {
-      // offset 5 record
-      if (from <= 5 && !this.endData) {
-        const maxDate = new Date(this.originalData[0].timestamp).toISOString();
-        this.token
-          .getTokenMetrics({
-            range: this.chartRange,
-            coinId: this.tokenIdGetPrice.AURA,
-            maxDate,
-          })
-          .subscribe((res) => {
-            //update data common
-            if (res?.data?.length > 0) {
-              const { dataX, dataY } = this.parseDataFromApi(res.data);
-              const chartData = this.makeChartData(dataX, dataY);
+      if (from <= 0 && !this.endData) {
+        const { value, unit } = CHART_CONFIG[this.chartRange];
 
-              this.originalData = [...res?.data, ...this.originalData];
-              this.originalDataArr = [...chartData, ...this.originalDataArr];
-              this.areaSeries.setData(this.originalDataArr);
-            } else {
-              this.endData = true;
-            }
-          });
+        const max = moment(this.originalData[0].timestamp)
+          .subtract(1, unit as any)
+          .valueOf();
+
+        const min = moment(this.originalData[0].timestamp)
+          .subtract(1, unit as any)
+          .subtract(value, unit as any)
+          .valueOf();
+
+        const payload = {
+          coinId: this.tokenIdGetPrice.AURA,
+          rangeType: CHART_CONFIG[this.chartRange].type,
+          min,
+          max,
+        };
+
+        this.token.getTokenMetrics(payload).subscribe((res) => {
+          //update data common
+          if (res?.data?.length > 0) {
+            const { dataX, dataY } = this.parseDataFromApi(res.data);
+            const chartData = this.makeChartData(dataX, dataY);
+
+            this.originalData = [...res?.data, ...this.originalData];
+            this.originalDataArr = [...chartData, ...this.originalDataArr];
+            this.areaSeries.setData(this.originalDataArr);
+          } else {
+            this.endData = true;
+          }
+        });
       }
     });
   }
@@ -193,7 +204,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.areaSeries.setData(arr);
 
-    this.chart.timeScale().fitContent();
+    const chartLength = arr.length - 1;
+
+    if (chartLength <= CHART_CONFIG[this.chartRange].initRange) {
+      this.chart.timeScale().fitContent();
+    } else {
+      this.chart.timeScale().setVisibleLogicalRange({
+        from: chartLength - CHART_CONFIG[this.chartRange].initRange,
+        to: chartLength,
+      });
+    }
+
     this.chart.priceScale().applyOptions({
       autoScale: true,
     });
@@ -266,22 +287,31 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.initTooltip();
     this.chartRange = type;
-    this.token
-      .getTokenMetrics({
-        range: this.chartRange,
-        coinId: this.tokenIdGetPrice.AURA,
-      })
-      .subscribe((res) => {
-        //update data common
-        this.getInfoCommon();
-        if (res?.data?.length > 0) {
-          const { dataX, dataY } = this.parseDataFromApi(res.data);
 
-          this.originalData = [...this.originalData, ...res?.data];
-          this.drawChartFirstTime(dataX, dataY);
-          this.chartEvent();
-        }
-      });
+    const { value, unit } = CHART_CONFIG[this.chartRange];
+    const max = moment().valueOf();
+    const min = moment()
+      .subtract(value, unit as any)
+      .valueOf();
+
+    const payload = {
+      coinId: this.tokenIdGetPrice.AURA,
+      rangeType: CHART_CONFIG[this.chartRange].type,
+      min,
+      max,
+    };
+
+    this.token.getTokenMetrics(payload).subscribe((res) => {
+      //update data common
+      this.getInfoCommon();
+      if (res?.data?.length > 0) {
+        const { dataX, dataY } = this.parseDataFromApi(res.data);
+
+        this.originalData = [...this.originalData, ...res?.data];
+        this.drawChartFirstTime(dataX, dataY);
+        this.chartEvent();
+      }
+    });
   }
 
   getInfoCommon(): void {
@@ -405,7 +435,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         inflation = this.getDataHeader().inflation.slice(0, -1);
         bonded_tokens = this.getDataHeader().bonded_tokens.toString().slice(0, -1);
         supply = this.getDataHeader().supply.toString().slice(0, -1);
-        this.staking_APR = ((inflation * (1 - communityTax)) / (bonded_tokens / supply));
+        this.staking_APR = (inflation * (1 - communityTax)) / (bonded_tokens / supply);
       }
     }, 500);
   }
