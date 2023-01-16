@@ -68,6 +68,7 @@ export class NFTDetailComponent implements OnInit {
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
+  userAddress = '';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
@@ -93,6 +94,15 @@ export class NFTDetailComponent implements OnInit {
     this.nftId = this.router.snapshot.paramMap.get('nftId');
     this.getNFTDetail();
     this.getDataTable();
+    this.walletService.wallet$.subscribe((wallet) => {
+      if (wallet) {
+        this.userAddress = wallet.bech32Address;
+        console.log(this.userAddress);
+        
+      } else {
+        this.userAddress = null;
+      }
+    });
   }
 
   error(): void {
