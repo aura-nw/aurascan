@@ -278,7 +278,7 @@ export class NFTDetailComponent implements OnInit {
     const user = this.walletService.wallet?.bech32Address;
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-    let dataWallet = this.walletService.getSignWallet(user, this.nftDetail.token_id);
+    let dataWallet = await this.walletService.getWalletSign(user, this.nftDetail.token_id);
 
     const payload = {
       signature: dataWallet['signature'],

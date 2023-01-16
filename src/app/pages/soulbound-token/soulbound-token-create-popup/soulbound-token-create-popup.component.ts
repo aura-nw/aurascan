@@ -59,11 +59,9 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
       return;
     }
 
-    const keplr = await getKeplr();
     const AGREEMENT = 'Agreement(string chain_id,address active,address passive,string tokenURI)';
     const message = AGREEMENT + this.network.chainId + receiverAddress + minter + soulboundTokenURI;
-
-    let dataWallet = this.walletService.getSignWallet(minter, message);
+    let dataWallet = await this.walletService.getWalletSign(minter, message);
 
     const payload = {
       signature: dataWallet['signature'],
