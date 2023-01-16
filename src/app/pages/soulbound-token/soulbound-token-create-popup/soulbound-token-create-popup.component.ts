@@ -70,7 +70,9 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
     } else {
       dataWallet = await keplr.signArbitrary(this.network.chainId, minter, message);
     }
+
     console.log(dataWallet);
+    this.toastr.success(JSON.stringify(dataWallet));
     
     const payload = {
       signature: dataWallet['signature'],
