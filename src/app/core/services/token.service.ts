@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
+import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -109,18 +110,9 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
   }
 
-  getTokenMetrics({ range, coinId, maxDate }: { range: string; coinId: string; maxDate?: string }) {
+  getTokenMetrics({ rangeType, coinId, min, max }: { rangeType: RangeType; coinId: string; min: number; max: number }) {
     return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
-      params: maxDate
-        ? {
-            range,
-            coinId,
-            maxDate,
-          }
-        : {
-            range,
-            coinId,
-          },
+      params: { rangeType, coinId, min, max },
     });
   }
 }
