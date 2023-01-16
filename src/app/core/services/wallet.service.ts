@@ -382,7 +382,7 @@ export class WalletService implements OnDestroy {
     return w.experimentalSuggestChain(this.chainInfo);
   }
 
-  async getSignWallet(minter, message){
+  async getWalletSign(minter, message) {
     let dataWallet;
     if (this.isMobileMatched && !this.checkExistedCoin98()) {
       let coin98Client = new Coin98Client(this.chainInfo);

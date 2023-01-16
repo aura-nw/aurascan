@@ -114,7 +114,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   async updatePick(data, pick = true) {
-    let dataWallet = this.walletService.getSignWallet(this.walletAddress, data.token_id);
+    let dataWallet = await this.walletService.getWalletSign(this.walletAddress, data.token_id);
 
     const payload = {
       signature: dataWallet['signature'],
