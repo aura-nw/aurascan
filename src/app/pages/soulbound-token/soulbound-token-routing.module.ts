@@ -9,14 +9,14 @@ const routes: Routes = [
     path: '',
     component: SoulboundContractListComponent,
   },
-  {
-    path: 'contract/:address',
-    component: SoulboundTokenContractComponent,
-  },
-  {
-    path: 'account/:address',
-    component: SoulboundAccountTokenListComponent,
-  },
+  // {
+  //   path: 'contract/:address',
+  //   component: SoulboundTokenContractComponent,
+  // },
+  // {
+  //   path: 'account/:address',
+  //   component: SoulboundAccountTokenListComponent,
+  // },
 ];
 
 @NgModule({

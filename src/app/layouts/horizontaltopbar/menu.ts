@@ -119,12 +119,12 @@ export const MENU: MenuItem[] = [
     icon: 'list',
     name: MenuName.More,
     subItems: [
-    {
-      id: 1,
-      label: 'Soulbound Token',
-      link: '/soulbound',
-      icon: 'medal',
-    },
+    // {
+    //   id: 1,
+    //   label: 'Soulbound Token',
+    //   link: '/soulbound',
+    //   icon: 'medal',
+    // },
     // {
     //   id: 2,
     //   label: 'Multi-send',
