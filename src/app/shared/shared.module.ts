@@ -4,6 +4,8 @@ import { CardMobSimpleComponent } from './components/cards/card-mob-simple/card-
 import { CardMobSimpleModule } from './components/cards/card-mob-simple/card-mob-simple.module';
 import { LoadingSprintComponent } from './components/loading-sprint/loading-sprint.component';
 import { PagetitleComponent } from './components/pagetitle/pagetitle.component';
+import { SoulboundFeatureTokensComponent } from './components/soulbound-feature-tokens/soulbound-feature-tokens.component';
+import { SoulboundFeatureTokensModule } from './components/soulbound-feature-tokens/soulbound-feature-tokens.module';
 
 @NgModule({
   declarations: [
@@ -12,8 +14,9 @@ import { PagetitleComponent } from './components/pagetitle/pagetitle.component';
   ],
   imports: [
     CommonModule,
-    CardMobSimpleModule
+    CardMobSimpleModule,
+    SoulboundFeatureTokensModule
   ],
-    exports: [PagetitleComponent, LoadingSprintComponent, CardMobSimpleComponent]
+  exports: [PagetitleComponent, LoadingSprintComponent, CardMobSimpleComponent]
 })
 export class SharedModule { }

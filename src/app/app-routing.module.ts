@@ -56,6 +56,10 @@ const routes: Routes = [
   },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
+  {
+    path: 'soulbound',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule) },
   { path: '**', redirectTo: '' },
 ];
 

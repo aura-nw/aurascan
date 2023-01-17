@@ -1,11 +1,11 @@
- import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { formatDistanceToNowStrict } from 'date-fns';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DATEFORMAT } from '../constants/common.constant';
+import { CHART_RANGE, DATEFORMAT } from '../constants/common.constant';
 import { STATUS_VALIDATOR } from '../constants/validator.enum';
 import { EnvironmentService } from '../data-services/environment.service';
 import { formatTimeInWords, formatWithSchema } from '../helpers/date';
@@ -39,10 +39,10 @@ export class CommonService {
     return this._http.get<any>(`${this.apiUrl}/status`);
   }
 
-  getParamFromIndexer(){
+  getParamFromIndexer() {
     const params = _({
       chainid: this.chainInfo.chainId,
-      module: 'gov'
+      module: 'gov',
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
@@ -102,7 +102,7 @@ export class CommonService {
     return result;
   }
 
-  isValidatorJailed(jail, status){
+  isValidatorJailed(jail, status) {
     let result = jail && status === STATUS_VALIDATOR.Jail ? true : false;
     return result;
   }
@@ -111,8 +111,12 @@ export class CommonService {
     return axios.get(`${this._environmentService.configValue.chain_info.rest}/cosmos/distribution/v1beta1/params`);
   }
 
-  getTokenByCoinId(range: string, id: string){
+  getTokenByCoinId(range: string, id: string) {
     this.setURL();
     return this._http.get<any>(`${this.apiUrl}/metrics/token?range=${range}&coidId=${id}`);
+  }
+
+  getDefaultImg() {
+    return this._environmentService.configValue.image_s3 + 'images/aura__ntf-default-img.png';
   }
 }

@@ -1,13 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateModule } from '@angular/material/core';
+import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -45,20 +47,19 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnvironmentService } from './core/data-services/environment.service';
-import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
+import { GlobalErrorHandler } from './core/helpers/global-error';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { DEFAULT_TIMEOUT, RequestTimeoutHttpInterceptor } from './core/helpers/timeout.interceptor';
+import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { CommonService } from './core/services/common.service';
+import { FeeGrantService } from './core/services/feegrant.service';
+import { MappingErrorService } from './core/services/mapping-error.service';
+import { SoulboundService } from './core/services/soulbound.service';
+import { TokenService } from './core/services/token.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { BlankModule } from './pages/blank/blank.module';
-import { TokenService } from './core/services/token.service';
-import { GlobalErrorHandler } from './core/helpers/global-error';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { FeeGrantService } from './core/services/feegrant.service';
-import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-import { MappingErrorService } from './core/services/mapping-error.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -180,6 +181,7 @@ export class MaterialModule {}
     CommonService,
     TokenService,
     FeeGrantService,
+    SoulboundService,
     MappingErrorService,
     {
       provide: DateAdapter,
