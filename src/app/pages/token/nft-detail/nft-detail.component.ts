@@ -278,14 +278,12 @@ export class NFTDetailComponent implements OnInit {
     const user = this.walletService.wallet?.bech32Address;
     let msgError = MESSAGES_CODE_CONTRACT[5].Message;
     msgError = msgError ? msgError.charAt(0).toUpperCase() + msgError.slice(1) : 'Error';
-
-    const keplr = await getKeplr();
-    let dataKeplr = await keplr.signArbitrary(this.network.chainId, user, this.nftDetail.token_id);
+    let dataWallet = await this.walletService.getWalletSign(user, this.nftDetail.token_id);
 
     const payload = {
-      signature: dataKeplr.signature,
+      signature: dataWallet['signature'],
       msg: true,
-      pubKey: dataKeplr.pub_key.value,
+      pubKey: dataWallet['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
     };
