@@ -381,4 +381,17 @@ export class WalletService implements OnDestroy {
   suggestChain(w: Keplr) {
     return w.experimentalSuggestChain(this.chainInfo);
   }
+
+  async getWalletSign(minter, message) {
+    let dataWallet;
+    if (this.isMobileMatched && !this.checkExistedCoin98()) {
+      let coin98Client = new Coin98Client(this.chainInfo);
+      let temp = await coin98Client.signArbitrary(minter, message);
+      dataWallet = temp['result'];
+    } else {
+      const keplr = await getKeplr();
+      dataWallet = await keplr.signArbitrary(this.chainInfo.chainId, minter, message);
+    }
+    return dataWallet;
+  }
 }
