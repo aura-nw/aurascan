@@ -119,18 +119,24 @@ export const MENU: MenuItem[] = [
     icon: 'list',
     name: MenuName.More,
     subItems: [
-    {
-      id: 1,
-      label: 'Fee Grant',
-      link: '/fee-grant',
-      icon: 'gas-pump',
-    },
+    // {
+    //   id: 1,
+    //   label: 'Soulbound Token',
+    //   link: '/soulbound',
+    //   icon: 'medal',
+    // },
     // {
     //   id: 2,
     //   label: 'Multi-send',
     //   link: '/fee',
     //   icon: 'users-three',
-    // }
+    // },
+    {
+      id: 3,
+      label: 'Fee Grant',
+      link: '/fee-grant',
+      icon: 'gas-pump',
+    }
     ]
   },
 ];

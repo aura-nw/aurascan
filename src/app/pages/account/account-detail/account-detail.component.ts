@@ -9,6 +9,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import local from '../../../../app/core/utils/storage/local';
@@ -19,7 +21,7 @@ import {
   PageEventType,
   StakeModeAccount,
   TabsAccount,
-  WalletAcount
+  WalletAcount,
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
@@ -199,6 +201,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   totalValueToken = 0;
   totalValueNft = 0;
   totalAssets = 0;
+  totalSBT = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -210,6 +213,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     private layout: BreakpointObserver,
     private modalService: NgbModal,
     private environmentService: EnvironmentService,
+    private soulboundService: SoulboundService,
   ) {
     this.chartOptions = CHART_OPTION();
   }
@@ -222,8 +226,8 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.timeStaking = (Number(this.timeStaking) / DATE_TIME_WITH_MILLISECOND).toString();
     this.chartCustomOptions = [...ACCOUNT_WALLET_COLOR];
     this.route.params.subscribe((params) => {
-      if (params?.id) {
-        this.currentAddress = params?.id;
+      if (params?.address) {
+        this.currentAddress = params?.address;
         this.transactionLoading = true;
         this.accDetailLoading = true;
 
@@ -246,6 +250,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
       }
+      // this.getSBTPick();
     });
 
     let retrievedObject = localStorage.getItem('accountDetail');
@@ -349,7 +354,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
-      
+
       if (res.data.code === 200 && !res.data?.data) {
         this.isNoData = true;
         return;
@@ -503,5 +508,19 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
 
   reloadData() {
     location.reload();
+  }
+
+  getSBTPick() {
+    const payload = {
+      receiverAddress: this.currentAddress,
+      limit: LIMIT_NUM_SBT,
+    };
+
+    this.soulboundService.getSBTPick(payload).subscribe((res) => {
+      if (this.userAddress && this.currentAddress !== this.userAddress) {
+        res.data = res.data.filter((k) => k.picked);
+      }
+      this.totalSBT = res.data.length;
+    });
   }
 }

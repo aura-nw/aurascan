@@ -11,7 +11,7 @@
   ></video>
 
   <div *ngIf="!isDetail">
-    <a href="{{link}}">
+    <a href="{{link}}" *ngIf="link">
       <video
           *ngIf="videoSrc"
           loop
@@ -24,6 +24,17 @@
           controlslist="nodownload noplaybackrate"
       ></video>
     </a>
+    <video
+        *ngIf="videoSrc && !link"
+        loop
+        #video id="{{nftId}}"
+        videoPlayInViewport
+        [controls]="showControl"
+        [src]="videoSrc"
+        disablePictureInPicture
+        playsinline
+        controlslist="nodownload noplaybackrate"
+    ></video>
     <div *ngIf="showCustomControl" class="control-container">
       <button class="button control__button"
               *ngIf="paused"

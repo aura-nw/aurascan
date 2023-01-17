@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { LENGTH_CHARACTER } from '../constants/common.constant';
 import { EnvironmentService } from '../data-services/environment.service';
+import { RangeType } from '../models/common.model';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -48,7 +49,10 @@ export class TokenService extends CommonService {
       .value();
 
     if (filterData?.keyWord) {
-      if (filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION) {
+      if (
+        filterData?.keyWord.length === LENGTH_CHARACTER.TRANSACTION &&
+        filterData?.keyWord == filterData?.keyWord.toUpperCase()
+      ) {
         params['txHash'] = filterData?.keyWord;
       } else if (filterData['isSearchWallet']) {
         params['addressInContract'] = filterData?.keyWord;
@@ -69,7 +73,7 @@ export class TokenService extends CommonService {
       pageLimit: payload.pageLimit,
       pageOffset: payload.pageOffset,
       countTotal: true,
-      contractType: 'CW721',
+      contractType: payload.contractType,
       isBurned: false,
     })
       .omitBy(_.isNull)
@@ -100,5 +104,15 @@ export class TokenService extends CommonService {
 
   getPriceToken(tokenId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/cw20-tokens/price/${tokenId}`);
+  }
+
+  getTokenMarket(coinId = 'aura-network') {
+    return this.http.get<any>(`${this.apiUrl}/metrics/token-market?coinId=${coinId}`);
+  }
+
+  getTokenMetrics({ rangeType, coinId, min, max }: { rangeType: RangeType; coinId: string; min: number; max: number }) {
+    return this.http.get<any>(`${this.apiUrl}/metrics/token`, {
+      params: { rangeType, coinId, min, max },
+    });
   }
 }

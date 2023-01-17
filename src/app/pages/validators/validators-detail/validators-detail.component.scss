@@ -3,6 +3,14 @@
 .validator-detail {
   max-width: 100%
 }
+.soulbound-feature-tokens {
+  background: rgba(19, 20, 25, 0.5);
+  border-radius: 8px;
+  padding: var(--spacer-2);
+  @media (min-width: 991.98px) {
+    padding: var(--spacer-6);
+  }
+}
 
 .article-1.uptime-content {
   white-space: pre-wrap;
@@ -125,5 +133,14 @@ form.search-form {
     .align-items-center.d-flex.justify-content-between.small-body:first-child > div {
       color: var(--aura-primary) !important;
     }
+  }
+}
+
+::ng-deep .soulbound-feature-tokens app-soulbound-feature-tokens .soulbound-list {
+  .nft-card {
+    min-height: fit-content !important;
+  }
+  @media (min-width: 991.98px) {
+    justify-content: start;
   }
 }

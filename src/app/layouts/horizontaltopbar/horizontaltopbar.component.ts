@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
 import { ResponseDto } from '../../core/models/common.model';
 import { EventService } from '../../core/services/event.service';
@@ -42,6 +43,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   menuName = MenuName;
   menuLink = [];
   wallet = null;
+  lengthSBT = 0;
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
 
   /**
@@ -74,6 +76,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
     private contractService: ContractService,
+    private soulboundService: SoulboundService,
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -84,6 +87,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     this.walletService.wallet$.subscribe((wallet) => {
       this.wallet = wallet;
       if (wallet) {
+        this.getListSmartContract(wallet.bech32Address);
         this.menuItems.forEach((item) => {
           if (item.name === this.menuName.Account) {
             // check if item is account
@@ -364,5 +368,41 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
         this.menuLink.push(arr);
       }
     }
+  }
+
+  getListSmartContract(currentAddress) {
+    const payload = {
+      limit: 10,
+      offset: 0,
+      minterAddress: currentAddress,
+    };
+
+    this.lengthSBT = 0;
+    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
+      if (res.data.length > 0) {
+        this.lengthSBT = res.meta.count;
+      }
+    });
+  }
+
+  checkMenuActive(menuLink: string) {
+    if((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
+      return true;
+    }
+
+    if(!menuLink.includes('/tokens')) {
+      if(menuLink === ('/' + this.router.url.split('/')[1]) && this.router.url.includes(menuLink)) {
+        return true;
+      }
+    }
+
+    if(menuLink === '/tokens' && (this.router.url == ('/tokens') ||  this.router.url.includes('/tokens/token/')) ) {
+      return true;
+    }
+
+    if(menuLink === '/tokens/tokens-nft' && (this.router.url == ('/tokens/tokens-nft') ||  this.router.url.includes('/tokens/token-nft')) ) {
+      return true;
+    }
+    return false;
   }
 }
