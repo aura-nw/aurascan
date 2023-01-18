@@ -110,8 +110,9 @@ export class NFTDetailComponent implements OnInit {
   getNFTDetail() {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
-    this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
+    this.tokenService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
+      this.nftDetail['type'] = this.nftDetail.type || ContractRegisterType.CW721;
       this.nftType = checkTypeFile(this.nftDetail);
       
       if (this.nftDetail.type === ContractRegisterType.CW721) {
