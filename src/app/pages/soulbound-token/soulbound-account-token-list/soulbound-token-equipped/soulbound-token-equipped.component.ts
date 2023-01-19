@@ -140,4 +140,8 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     let nftType = checkTypeFile(nft);
     return nftType;
   }
+
+  handleRouterLink(link): void {
+    window.location.href = link;
+  }
 }
