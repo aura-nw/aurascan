@@ -25,7 +25,7 @@
         <div class="nft-img__contain w-100 h-100">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
-              <img *ngIf="!nftType" [src]="defaultImgToken" />
+              <img *ngIf="!nftType && !nftDetail.ipfs?.animation_url" [src]="defaultImgToken" />
               <img *ngIf="nftType === 'img' && isError === false" (error)="error()" [src]="this.nftUrl" />
               <app-custom-video-player
                 [videoSrc]="this.nftUrl"
