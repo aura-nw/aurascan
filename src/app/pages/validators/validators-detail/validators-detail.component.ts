@@ -4,16 +4,18 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromHex, toBech32 } from '@cosmjs/encoding';
 import * as _ from 'lodash';
 import { NUM_BLOCK } from 'src/app/core/constants/common.constant';
+import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { BlockService } from 'src/app/core/services/block.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { convertDataBlock, getAmount, Globals } from 'src/app/global/global';
 import { balanceOf } from '../../../core/utils/common/parsing';
 const marked = require('marked');
@@ -35,7 +37,6 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   pageIndexBlock = 0;
   pageIndexDelegator = 0;
   pageIndexPower = 0;
-
   statusValidator = STATUS_VALIDATOR;
 
   dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
@@ -73,17 +74,22 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   numberLastBlock = 100;
   timerGetUpTime: any;
   timerGetBlockMiss: any;
-  consAddress: string;
   nextKey = null;
   currentNextKey = null;
   nextKeyBlock = null;
   currentNextKeyBlock = null;
+  isOpenDialog = false;
+  totalSBT = 0;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  chainInfo = this.environmentService.configValue.chain_info;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixConsAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixConsAddr;
+  coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
+  soulboundList = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -94,20 +100,26 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     private layout: BreakpointObserver,
     private numberPipe: DecimalPipe,
     private environmentService: EnvironmentService,
+    private soulboundService: SoulboundService,
+    private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
     this.currentAddress = this.route.snapshot.paramMap.get('id');
-    this.getDetail();
-    this.getListBlockWithOperator();
-    this.getListDelegator();
-    this.getListPower();
+    this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
     }, 30000);
     this.timerGetBlockMiss = setInterval(() => {
-      this.getBlocksMiss(this.consAddress);
+      this.getBlocksMiss(this.currentAddress);
     }, 10000);
+  }
+
+  loadData() {
+    this.getDetail();
+    this.getListBlockWithOperator();
+    this.getListDelegator();
+    this.getListPower();
   }
 
   ngOnDestroy() {
@@ -127,14 +139,12 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           ...res.data,
           self_bonded: balanceOf(res.data.self_bonded),
           power: balanceOf(res.data.power),
+          identity: res?.data?.identity,
           up_time: 100,
         };
 
-        //convert to consAddress LCD and find block miss
-        if (this.currentValidatorDetail?.cons_address) {
-          this.consAddress = toBech32(this.prefixConsAdd, fromHex(this.currentValidatorDetail?.cons_address));
-          this.getBlocksMiss(this.consAddress);
-        }
+        this.getTotalSBT(this.currentValidatorDetail.acc_address);
+        this.getBlocksMiss(this.currentAddress);
       },
       (error) => {
         this.router.navigate(['/']);
@@ -173,7 +183,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         const block = _.get(data, 'blocks').map((element) => {
           const height = _.get(element, 'block.header.height');
           const block_hash = _.get(element, 'block_id.hash');
-          const isMissed = 0
+          const isMissed = 0;
           return { height, block_hash, isMissed };
         });
         this.arrayUpTime = block;
@@ -182,18 +192,17 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  async getBlocksMiss(consAddress) {
+  getBlocksMiss(operatorAddress) {
     //check is active validator
     if (this.currentValidatorDetail?.status === this.statusValidator.Active) {
-      const res = await this.blockService.getBlockMissByConsAddress(consAddress);
-
-      //cal percent if exit arr block miss
-      if (Number(res.data?.val_signing_info?.missed_blocks_counter) > 0) {
-        this.blocksMissDetail = res.data?.val_signing_info;
-        this.calculatorUpTime();
-      }
+      this.validatorService.validatorsFromIndexer(operatorAddress).subscribe((res) => {
+        //cal percent if exit arr block miss
+        if (Number(res.data?.validators?.val_signing_info?.missed_blocks_counter) > 0) {
+          this.blocksMissDetail = res.data?.validators?.val_signing_info;
+          this.calculatorUpTime();
+        }
+      });
     }
-
     this.getListUpTime();
   }
 
@@ -237,17 +246,13 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     }
     this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe((res) => {
       const { code, data } = res;
-
       this.nextKey = data.nextKey || null;
 
       if (code === 200) {
         const txs = _.get(data, 'transactions').map((element) => {
           let isStakeMode = false;
-
           const tx_hash = _.get(element, 'tx_response.txhash');
-
           const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
-
           const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
           if (
             _type === TRANSACTION_TYPE_ENUM.Delegate ||
@@ -266,7 +271,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
 
           return { tx_hash, amount, isStakeMode, height, timestamp };
         });
-        if (this.dataSourcePower.data.length > 0) {
+        if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
           this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
         } else {
           this.dataSourcePower.data = [...txs];
@@ -326,7 +331,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
         const next = length <= (pageIndex + 2) * pageSize;
         if (next && this.nextKey && this.currentNextKey !== this.nextKey) {
           this.getListPower(this.nextKey);
-          this.currentNextKey =  this.nextKey;
+          this.currentNextKey = this.nextKey;
         }
         this.pageIndexPower = page.pageIndex;
         break;
@@ -353,12 +358,37 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   getValidatorAvatar(validatorAddress: string): string {
     return this.validatorService.getValidatorAvatar(validatorAddress);
   }
-  
+
   ngAfterViewChecked(): void {
     const editor = document.getElementById('marked');
     if (editor && this.currentValidatorDetail) {
       editor.innerHTML = marked.parse(this.currentValidatorDetail.details);
       return;
     }
+  }
+
+  openDialog() {
+    const view = async () => {
+      const account = this.walletService.getAccount();
+      if (account && account.bech32Address) {
+        this.isOpenDialog = true;
+      }
+    };
+    view();
+  }
+
+  updateStatus(event) {
+    this.isOpenDialog = event;
+  }
+
+  getTotalSBT(address) {
+    const payload = {
+      receiverAddress: address,
+      limit: LIMIT_NUM_SBT,
+    };
+    
+    this.soulboundService.getSBTPick(payload).subscribe((res) => {
+      this.soulboundList = res.data.filter(k => k.picked);
+    });
   }
 }

@@ -25,16 +25,13 @@
         <span class="button__title d-none d-lg-block body-mob">{{ ng.wallet?.name?.length > 10 ? ng.wallet?.name.slice(0, 10) + '...' : ng.wallet?.name}}</span>
       </button>
       <ul class="dropdown-menu aura-dropdown-menu" aria-labelledby="walletMenu">
-        <li class="dropdown-item small-text-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">
+        <li class="dropdown-item caption-mob" [routerLink]="['/account', ng.wallet?.bech32Address]">
           <a>Account Details</a>
         </li>
-        <li class="dropdown-item small-text-mob" [routerLink]="['/contracts/register']">
+        <li class="dropdown-item caption-mob" [routerLink]="['/contracts/register']">
           <a>Register Contract</a>
         </li>
-        <li class="dropdown-item small-text-mob" [routerLink]="['/contracts/smart-contract-list']">
-          <a>Deploy to mainnet</a>
-        </li>
-        <li class="dropdown-item small-text-mob" (click)="disconnect()">
+        <li class="dropdown-item caption-mob" (click)="disconnect()">
           <button type="button" class="button p-0">Log out</button>
         </li>
       </ul>

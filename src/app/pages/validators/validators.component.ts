@@ -9,7 +9,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { BlockService } from 'src/app/core/services/block.service';
 import { getFee } from 'src/app/core/utils/signing/fee';
 import { NUMBER_CONVERT, NUM_BLOCK, TIME_OUT_CALL_API } from '../../../app/core/constants/common.constant';
 import { CodeTransaction } from '../../../app/core/constants/transaction.enum';
@@ -93,7 +92,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   isLoading = false;
   isClaimRewardLoading = false;
   _routerSubscription: Subscription;
-
   destroyed$ = new Subject();
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
 
@@ -123,11 +121,9 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     private layout: BreakpointObserver,
     private scroll: ViewportScroller,
     private environmentService: EnvironmentService,
-    private blockService: BlockService,
   ) {}
 
   ngOnInit(): void {
-    // this.loadDataTemp();
     this.getBlocksMiss();
 
     this.walletService.wallet$.subscribe((wallet) => {
@@ -161,20 +157,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
       this.timerUnSub.unsubscribe();
     }
   }
-
-  // loadDataTemp(): void {
-  //   //get data from client for wallet info
-  //   let retrievedObject = localStorage.getItem('dataInfoWallet');
-  //   let data = JSON.parse(retrievedObject);
-  //   if (data) {
-  //     this.dataDelegate = JSON.parse(data?.dataDelegate);
-  //     //check wallet is staked
-  //     if (Number(this.dataDelegate?.delegatedToken) > 0) {
-  //       this.lstUndelegate = JSON.parse(data?.lstUndelegate);
-  //       this.arrayDelegate = JSON.parse(data?.arrayDelegate);
-  //     }
-  //   }
-  // }
 
   getList(): void {
     this.validatorService.validators().subscribe((res: ResponseDto) => {
@@ -215,15 +197,16 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  async getBlocksMiss() {
-    const res = await this.blockService.getBlockMiss(NUM_BLOCK);
-    let arrTemp = res.data.info.filter((k) => Number(k.missed_blocks_counter) > 0);
-    if (arrTemp?.length > 0) {
-      arrTemp.forEach((block) => {
-        block['hex_address'] = toHex(fromBech32(block?.address).data);
-      });
-      this.arrBlocksMiss = arrTemp;
-    }
+  getBlocksMiss() {
+    this.validatorService.validatorsFromIndexer(null).subscribe((res) => {
+      let arrTemp = res.data.validators.filter((k) => Number(k.val_signing_info.missed_blocks_counter) > 0);
+      if (arrTemp?.length > 0) {
+        arrTemp.forEach((block) => {
+          block['hex_address'] = toHex(fromBech32(block?.val_signing_info?.address).data);
+        });
+        this.arrBlocksMiss = arrTemp;
+      }
+    });
   }
 
   calculatorUpTime(address) {
@@ -570,7 +553,6 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
     if (!this.isExceedAmount && this.amountFormat > 0) {
       const executeReStaking = async () => {
         this.isLoading = true;
-        // const { hash, error } = await createSignBroadcast({
         const { hash, error } = await this.walletService.signAndBroadcast({
           messageType: SIGNING_MESSAGE_TYPES.RESTAKE,
           message: {

@@ -123,9 +123,8 @@ export class NftListComponent implements OnChanges {
     }
   }
 
-  handleRouterLink(e: Event, link): void {
-    this.router.navigate(link);
-    e.preventDefault();
+  handleRouterLink(link): void {
+    window.location.href = link;
   }
 
   getTypeFile(nft: any) {

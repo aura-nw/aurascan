@@ -93,7 +93,7 @@
                   <div class="txt-title-search">Contracts</div>
                   <ng-container *ngFor="let item of filterSearchData">
                     <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
-                      <img [src]="'assets/images/icons/token-logo.png' | imageS3" class="logo-token" />
+                      <img [src]="item.image || defaultLogoToken" class="logo-token rounded-circle" />
                       <div class="ml-3">
                         <div class="d-flex align-items-center">
                           <span class="text-clamp">{{ item.contract_name || '-' }}</span>
@@ -153,11 +153,11 @@
                   <ng-container *ngIf="template.matColumnDef === 'contract_name'">
                     {{ (data[template.matColumnDef] | cutStringPipe : 16) || '-' }}
                   </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'project_name'">
+                  <!-- <ng-container *ngIf="template.matColumnDef === 'project_name'">
                     <a [routerLink]="['/project', data.request_id]" class="g-ellipsis-project">{{
                       data[template.matColumnDef]
                     }}</a>
-                  </ng-container>
+                  </ng-container> -->
                   <ng-container
                     *ngIf="
                       (!template.isUrl || data[template.matColumnDef] === '') &&

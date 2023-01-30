@@ -50,11 +50,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
   },
   {
-    path: 'project/:id',
-    component: LayoutComponent,
-    loadChildren: () => import('./pages/project/project.module').then((m) => m.ProjectModule),
-  },
-  {
     path: 'raw-data',
     loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
     pathMatch: 'full',
@@ -66,6 +61,10 @@ const routes: Routes = [
   },
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
+  {
+    path: 'soulbound',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule) },
   { path: '**', redirectTo: '' },
 ];
 

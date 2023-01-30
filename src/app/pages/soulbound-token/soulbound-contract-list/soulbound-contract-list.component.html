@@ -1,0 +1,114 @@
+<h1 class="mb-0 text--white">Soulbound Token</h1>
+<section class="mt-6" *ngIf="currentAddress; else noValues">
+  <div class="card">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center">
+        <div class="h2 mb-4 mb-lg-0 text--white">Smart Contracts</div>
+        <form class="aura-form single-input-field search-form-sbcontract" #searchForm>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for Contract Address"
+              [(ngModel)]="textSearch"
+              [maxLength]="maxLengthSearch"
+              (keyup.enter)="searchToken()"
+              name="search"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              (click)="searchToken()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- Table -->
+      <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
+        <div class="table-responsive aura-table-sctr mt-4">
+          <table mat-table [dataSource]="dataSource" class="aura-table">
+            <!-- Number Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>NO</th>
+              <td mat-cell *matCellDef="let element; let i = index" class="py-4">
+                <span>{{ pageData?.pageIndex * 20 + i + 1 }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Contract address -->
+            <ng-container matColumnDef="contract_address">
+              <th mat-header-cell *matHeaderCellDef class="col-per-30">CONTRACT ADDRESS</th>
+              <td mat-cell *matCellDef="let element" class="py-4">
+                <div class="d-flex align-items-center">
+                  <i class="ph-file-text h1 mb-0 text--gray-5"></i>
+                  <a class="ml-2 hover-link" [routerLink]="['contract', element.contract_address]">{{
+                    element.contract_address | cutStringPipe : 8 : 8
+                  }}</a>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Create data -->
+            <ng-container matColumnDef="total">
+              <th mat-header-cell *matHeaderCellDef class="">CREATED DATA</th>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.total }}</td>
+            </ng-container>
+
+            <!-- Claimed QTY -->
+            <ng-container matColumnDef="claimed_qty">
+              <th mat-header-cell *matHeaderCellDef class="">CLAIMED QTY</th>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.claimed_qty }}</td>
+            </ng-container>
+
+            <!-- Unclaimed QTY -->
+            <ng-container matColumnDef="unclaimed_qty">
+              <th mat-header-cell *matHeaderCellDef class="">UNCLAIMED QTY</th>
+              <td mat-cell *matCellDef="let element" class="py-4">{{ element.unclaimed_qty }}</td>
+            </ng-container>
+
+            <!-- Action -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef class="col-per-13"></th>
+              <td mat-cell *matCellDef="let element" class="py-4">
+                <button
+                  class="button border-radius--sm button-outline button--sm text--white"
+                  (click)="openDialog(element.contract_address)">
+                  Create New
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell g-no-data" colspan="9999">
+                {{ 'NO DATA' | translate }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<ng-template #noValues>
+  <app-loading-sprint *ngIf="loading"></app-loading-sprint>
+  <app-table-no-data *ngIf="!loading"></app-table-no-data>
+</ng-template>

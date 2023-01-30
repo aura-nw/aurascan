@@ -8,9 +8,9 @@
   audio {
     z-index: 12;
     object-fit: contain;
-    @media(max-width: 991.98px) {
+    // @media(max-width: 991.98px) {
       max-width: 100%;
-    }
+    // }
   }
   &.isoClass {
     @media(max-width: 991.98px) {
@@ -34,8 +34,15 @@
 }
 .img-audio {
   position: absolute;
+  object-fit: contain;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  height: 100%;
+}
+
+.disable-link{
+  pointer-events: none !important;
+  cursor: not-allowed;
 }

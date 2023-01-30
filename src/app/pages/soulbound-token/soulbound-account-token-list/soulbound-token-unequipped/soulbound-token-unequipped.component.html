@@ -1,0 +1,112 @@
+<section class="mt-4 mt-lg-6">
+  <h2 class="text--white">Un-equipped SBT</h2>
+  <div class="card">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="d-flex flex-column-reverse flex-lg-row justify-content-lg-between align-items-lg-center mb-4">
+        <div class="body text--gray-4 mt-4 mt-lg-0">
+          A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
+        </div>
+        <form class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search for Token Name"
+              [(ngModel)]="textSearch"
+              [maxLength]="maxLengthSearch"
+              (keyup.enter)="searchToken()"
+              name="search"
+              autocomplete="off" />
+            <button
+              type="submit"
+              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              (click)="searchToken()">
+              <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+            <button
+              type="reset"
+              class="btn-reset cursor-pointer {{
+                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+              }}"
+              (click)="resetSearch()">
+              <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
+            </button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="loading" class="m-auto mt-10">
+        <app-loading-sprint></app-loading-sprint>
+      </div>
+      <div *ngIf="!loading">
+        <!-- Token list -->
+        <div
+          class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
+          *ngIf="soulboundData.data.length > 0; else noValues">
+          <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
+            <div class="nft-cards__item-border">
+              <div class="nft-cards__item nft-cards__item--unclaimed">
+                <div class="token-cards__img">
+                  <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
+                  <img
+                    *ngIf="getTypeFile(token) === 'img' && !token.animation_url"
+                    src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
+                    alt="{{ token.token_name }}" />
+                  <app-custom-video-player
+                    [videoSrc]="token.animation_url | replaceIpfs"
+                    [showControl]="false"
+                    *ngIf="token.animation_url">
+                  </app-custom-video-player>
+                  <app-model-view
+                    *ngIf="getTypeFile(token) === '3d'"
+                    [modelUrl]="token.token_img | replaceIpfs"
+                    [link]=""
+                    [disablePan]="true">
+                  </app-model-view>
+                  <app-audio-player
+                    *ngIf="getTypeFile(token) === 'audio'"
+                    [link]="'#'"
+                    [src]="token.token_img | replaceIpfs"
+                    [nftId]=""
+                    [disableLink]="true">
+                  </app-audio-player>
+                  <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
+                    {{ sbType.UNCLAIMED }}
+                  </div>
+                </div>
+                <div class="box-nft-info">
+                  <div class="nft__info">
+                    <span class="body mr-1 text--gray-1">Token:</span>
+                    <span>{{ token.token_name }}</span>
+                  </div>
+                </div>
+                <div class="px-2 d-lg-none position-relative">
+                  <button
+                    class="button button-pill button--sm button-outline button-outline--gradient button-outline__in-card button-fixed button-review--mob mb-2"
+                    (click)="getSBTDetail(token.contract_address, token.token_id)">
+                    <span class="caption fw-normal">Preview</span>
+                  </button>
+                </div>
+                <button
+                  class="button button-pill button--lg button-flat btn-preview border_none fw-semibold d-none d-lg-block"
+                  (click)="getSBTDetail(token.contract_address, token.token_id)"
+                  [disabled]="isClick">
+                  <span>Preview</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-paginator
+          [length]="pageData?.length"
+          [pageSize]="pageData?.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+        <ng-template #noValues>
+          <app-table-no-data *ngIf="!loading"></app-table-no-data>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</section>

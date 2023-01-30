@@ -104,8 +104,8 @@ export const REGISTER_CONTRACT = [
     key: ContractRegisterType.CW721,
     value: ContractRegisterType.CW721,
   },
-  // {
-  //   key: ContractRegisterType.CW4973,
-  //   value: ContractRegisterType.CW4973,
-  // },
+  {
+    key: ContractRegisterType.CW4973,
+    value: ContractRegisterType.CW4973,
+  },
 ];

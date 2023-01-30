@@ -74,9 +74,9 @@ export function getAmount(arrayMsg, type, rawRog = '', coinMinimalDenom = '') {
 
   if (itemMessage && amount >= 0) {
     amount = amount / NUMBER_CONVERT || 0;
-    amountFormat = arrayMsg.length === 1 || type === TRANSACTION_TYPE_ENUM.GetReward ? amount : 'More';
+    amountFormat = amount;
     if (
-      type === TRANSACTION_TYPE_ENUM.GetReward ||
+      (type === TRANSACTION_TYPE_ENUM.GetReward && arrayMsg?.length > 1) ||
       type === TRANSACTION_TYPE_ENUM.MultiSend ||
       type === TRANSACTION_TYPE_ENUM.PeriodicVestingAccount
     ) {
@@ -118,21 +118,52 @@ export function getDataInfo(arrayMsg, addressContract, rawLog = '') {
       toAddress = addressContract;
       break;
     case eTransType.ExecuteContract:
-      method = Object.keys(itemMessage.msg)[0];
+      method = 'mint';
+      itemMessage.msg = itemMessage.msg || '';
+      if (itemMessage.msg) {
+        method = Object.keys(itemMessage.msg)[0];
+      }
+
       value = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.amount || 0;
-      fromAddress = itemMessage.sender;
       toAddress =
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.recipient ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.owner ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.spender ||
         itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.operator;
-      tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
+
+      if (arrayMsg?.length > 1 || itemMessage.msg['batch_mint']) {
+        tokenId = 'More';
+      } else {
+        tokenId = itemMessage.msg[Object.keys(itemMessage.msg)[0]]?.token_id || '';
+      }
+
+      if (!toAddress) {
+        try {
+          const json = JSON.parse(rawLog);
+          const data = json[0]?.events[json[0]?.events?.length - 1]?.attributes;
+          toAddress = data.find((k) => k.key === 'owner')?.value || null;
+          tokenId = tokenId || data.find((k) => k.key === 'token_id')?.value || null;
+        } catch (e) {}
+      }
+      fromAddress = itemMessage.sender;
+
       if (method === ModeExecuteTransaction.Burn) {
         toAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Burn;
       } else if (method === ModeExecuteTransaction.Mint) {
         fromAddress = NULL_ADDRESS;
         modeExecute = ModeExecuteTransaction.Mint;
+      } else if (method === ModeExecuteTransaction.Take) {
+        fromAddress = itemMessage.msg?.take?.from;
+        toAddress = itemMessage.sender;
+        try {
+          const data = JSON.parse(rawLog);
+          tokenId =
+            data[0]?.events[data[0]?.events?.length - 1]?.attributes.find((k) => k.key === 'token_id')?.value || null;
+        } catch (e) {}
+      } else if (method === ModeExecuteTransaction.UnEquip) {
+        toAddress = NULL_ADDRESS;
+        modeExecute = ModeExecuteTransaction.UnEquip;
       } else if (method === ModeExecuteTransaction.Buy) {
         fromAddress = null;
         toAddress = itemMessage.sender;

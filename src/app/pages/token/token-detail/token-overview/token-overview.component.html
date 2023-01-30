@@ -5,8 +5,9 @@
         <td class="h6 h3-mob mb-0">
           <span class="text--white">Overview </span>
           <span class="text--gray-light">
-            <ng-container *ngIf="!tokenDetail.isNFTContract">[CW-20]</ng-container>
-            <ng-container *ngIf="tokenDetail.isNFTContract">[CW-721]</ng-container>
+            <ng-container *ngIf="tokenDetail.type === contractType.CW20">[CW-20]</ng-container>
+            <ng-container *ngIf="tokenDetail.type=== contractType.CW721">[CW-721]</ng-container>
+            <ng-container *ngIf="tokenDetail.type === contractType.CW4973">[CW-4973]</ng-container>
           </span>
         </td>
         <td class="">
@@ -65,22 +66,25 @@
               <span class="text--gray-5 body-02 fixed-col">Max Total Supply:</span>
               <div class="body-02 text--gray-1">
                 <ng-container *ngIf="!tokenDetail.isNFTContract">
-                  {{ +tokenDetail.max_total_supply | mask : 'separator.6' }}
+                  <ng-container *ngIf="+tokenDetail.max_total_supply === 0">-</ng-container>
+                  <ng-container *ngIf="+tokenDetail.max_total_supply !== 0">
+                    {{ +tokenDetail.max_total_supply | mask : 'separator.6' }}
+                    <span class="ml-1">{{ tokenDetail.symbol || tokenDetail.name }}</span>
+                  </ng-container>
                 </ng-container>
                 <ng-container *ngIf="tokenDetail.isNFTContract">
                   {{ tokenDetail.num_tokens | number : global.formatNumberOnlyDecimal }}
                 </ng-container>
-                <span class="ml-1">{{ tokenDetail.symbol || tokenDetail.name }}</span>
               </div>
             </div>
 
             <div class="pl-4" *ngIf="!tokenDetail.isNFTContract">
               <div class="text--gray-5 body-02">FULLY DILUTED MARKET CAP</div>
               <div class="body-02 text--gray-1">
-                {{
-                  +tokenDetail.max_total_supply > 0
-                    ? '$' + (tokenDetail.fully_diluted_market_cap | number : global.formatNumber2Decimal)
-                    : '-'
+                ${{
+                  +tokenDetail.max_total_supply === 0
+                    ? (tokenDetail.circulating_market_cap | number : global.formatNumber2Decimal)
+                    : (tokenDetail.fully_diluted_market_cap | number : global.formatNumber2Decimal)
                 }}
               </div>
             </div>

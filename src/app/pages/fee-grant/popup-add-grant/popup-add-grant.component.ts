@@ -7,6 +7,7 @@ import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
+import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { PopupNoticeComponent } from '../popup-notice/popup-notice.component';
@@ -44,6 +45,7 @@ export class PopupAddGrantComponent implements OnInit {
     private feeGrantService: FeeGrantService,
     private dialog: MatDialog,
     public translate: TranslateService,
+    private mappingErrorService: MappingErrorService
   ) {}
 
   ngOnInit(): void {
@@ -273,8 +275,7 @@ export class PopupAddGrantComponent implements OnInit {
         this.toastr.loading(result);
         setTimeout(() => {
           this.isRevoking = false;
-          let message = this.translate.instant('NOTICE.SUCCESS_TRANSACTION');
-          this.toastr.success(message);
+          this.mappingErrorService.checkDetailTx(result);
         }, 4000);
       }
     });

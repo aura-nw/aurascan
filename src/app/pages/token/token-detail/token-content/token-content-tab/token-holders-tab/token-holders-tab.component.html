@@ -63,13 +63,13 @@
                     </ng-container>
                     <ng-container *ngSwitchCase="'owner'">
                       <a
-                        *ngIf="isNFTContract"
+                        *ngIf="this.typeContract !== contractType.CW20"
                         href="/tokens/token-nft/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                         class="text-clamp"
                         >{{ data[template.matColumnDef] }}</a
                       >
                       <a
-                        *ngIf="!isNFTContract"
+                        *ngIf="this.typeContract === contractType.CW20"
                         href="/tokens/token/{{ contractAddress }}?a={{ data[template.matColumnDef] }}"
                         class="text-clamp"
                         >{{ data[template.matColumnDef] }}</a
@@ -85,10 +85,10 @@
                       <div class="pl-8 pl-lg-0">{{ data[template.matColumnDef] || 0 }}</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'percent_hold'">
-                      <span *ngIf="!isNFTContract"
+                      <span *ngIf="this.typeContract === contractType.CW20"
                         >{{ data[template.matColumnDef] | number: global.formatNumber2Decimal }}%</span
                       >
-                      <ng-container *ngIf="isNFTContract">
+                      <ng-container *ngIf="this.typeContract !== contractType.CW20">
                         <span>{{ data.percent_hold || 0 | number: global.formatNumber2Decimal }} %</span>
                         <div class="percentage-bar mt-2">
                           <div class="percentage-bar__process" [style.width]="(data.width_chart || 0) + '%'"></div>

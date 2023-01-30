@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,8 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
   styleUrls: ['./token-inventory-tab.component.scss'],
 })
 export class TokenInventoryComponent implements OnInit {
+  @Input() typeContract: string;
+
   loading = true;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -52,13 +54,14 @@ export class TokenInventoryComponent implements OnInit {
       pageOffset: this.pageData.pageIndex * this.pageData.pageSize,
       token_id: '',
       owner: '',
+      contractType: this.typeContract,
       contractAddress: this.contractAddress,
     };
 
     if (this.keyWord) {
       if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
         payload.owner = this.keyWord;
-      } else if (this.keyWord?.length !== LENGTH_CHARACTER.TRANSACTION) {
+      } else if (!(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())) {
         payload.token_id = this.keyWord;
       }
     }
@@ -68,13 +71,13 @@ export class TokenInventoryComponent implements OnInit {
     }
 
     this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      const cw721Asset = _.get(res, 'data.assets.CW721');
-      this.pageData.length = _.get(res, 'data.assets.CW721.count');
+      const asset = _.get(res, `data.assets[${this.typeContract}]`);
+      this.pageData.length = _.get(res, `data.assets[${this.typeContract}].count`);
 
       if (this.nftData.data.length > 0) {
-        this.nftData.data = [...this.nftData.data, ...cw721Asset.asset];
+        this.nftData.data = [...this.nftData.data, ...asset.asset];
       } else {
-        this.nftData.data = [...cw721Asset.asset];
+        this.nftData.data = [...asset.asset];
       }
       this.dataSourceMobile = this.nftData.data.slice(
         this.pageData.pageIndex * this.pageData.pageSize,
