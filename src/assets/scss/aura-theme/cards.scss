@@ -101,12 +101,10 @@
       align-items: center;
       justify-content: center;
       background-color: var(--aura-black);
+      height: 270px;
       img {
         width: 100%;
         object-fit: contain;
-      }
-      @media (min-width: 991.98px) {
-        min-height: 270px;
       }
     }
   }
