@@ -61,7 +61,7 @@ export class TokenInventoryComponent implements OnInit {
     if (this.keyWord) {
       if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
         payload.owner = this.keyWord;
-      } else if (this.keyWord?.length !== LENGTH_CHARACTER.TRANSACTION) {
+      } else if (!(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())) {
         payload.token_id = this.keyWord;
       }
     }
