@@ -3,13 +3,13 @@
   .nft-cards__item {
     padding: 0;
     .token-cards__img{
-      padding: 8px;
-      app-model-view {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      ::ng-deep.control-container {
+        bottom: 6px;
       }
     }
   }
