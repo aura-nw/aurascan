@@ -82,7 +82,7 @@
                       {{ data[template.matColumnDef] || 0 }}
                     </ng-container>
                     <ng-container *ngSwitchCase="'quantity'">
-                      <div class="pl-8 pl-lg-0">{{ data[template.matColumnDef] || 0 }}</div>
+                      <div class="pl-8 pl-lg-0">{{ (data[template.matColumnDef] | number: global.formatNumberOnlyDecimal) || 0 }}</div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'percent_hold'">
                       <span *ngIf="this.typeContract === contractType.CW20"
