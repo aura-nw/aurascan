@@ -252,16 +252,7 @@ export class NFTDetailComponent implements OnInit {
       limit: LIMIT_NUM_SBT,
     };
 
-    this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      let checkData = res.data.filter((k) => k.picked);
-      if (checkData?.length < 2 && this.nftDetail.token_id === checkData[0].token_id) {
-        this.toastr.error(
-          'You can not un-equip the last picked SBT in your account. In order to un-equip this token, you need to pick another equipped SBT first then un-equip it later',
-        );
-      } else {
-        this.unEquipSBT();
-      }
-    });
+    this.unEquipSBT();
   }
 
   async unEquipSBT() {

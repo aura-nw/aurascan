@@ -8,11 +8,6 @@
             class="nft-card d-block"
             (click)="linkSBDetail(token.contract_address, token.token_id)">
             <img
-              *ngIf="(!token.img_type && !token.animation_url) || getTypeFile(token) !== 'img'"
-              [src]="commonService.getDefaultImg()"
-              class="soulbound-img" />
-            <img
-              *ngIf="getTypeFile(token) === 'img' || getTypeFile(token) === 'video'"
               src="{{ token.token_img ? replaceImgIpfs(token.token_img) : commonService.getDefaultImg() }}"
               alt=""
               class="soulbound-img" />
@@ -22,11 +17,6 @@
           <div class="nft-card nft__unclaimed">
             <div class="position-relative text-center">
               <img
-                *ngIf="(!token.img_type && !token.animation_url) || getTypeFile(token) !== 'img'"
-                [src]="commonService.getDefaultImg()"
-                class="soulbound-img" />
-              <img
-                *ngIf="getTypeFile(token) === 'img' || getTypeFile(token) === 'video'"
                 src="{{ token.token_img ? replaceImgIpfs(token.token_img) : commonService.getDefaultImg() }}"
                 alt=""
                 class="soulbound-img" />
@@ -37,7 +27,7 @@
               </button>
             </div>
 
-            <div class="text-center text--yellow-3 mt-3">{{ sbType.UNCLAIMED }}</div>
+            <div class="text-center text--yellow-3 mt-3">{{ token.status }}</div>
           </div>
         </ng-container>
       </div>
