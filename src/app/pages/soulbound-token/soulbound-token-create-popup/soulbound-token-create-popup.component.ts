@@ -6,11 +6,6 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { isContract } from 'src/app/core/utils/common/validation';
-import { getKeplr } from 'src/app/core/utils/keplr';
-import { Coin98Client } from 'src/app/core/utils/coin98-client';
-import { sha256 } from 'js-sha256';
-import { toBase64 } from '@cosmjs/encoding';
-const amino = require('@cosmjs/amino');
 
 @Component({
   selector: 'app-soulbound-token-create-popup',
@@ -20,6 +15,7 @@ const amino = require('@cosmjs/amino');
 export class SoulboundTokenCreatePopupComponent implements OnInit {
   createSBTokenForm: FormGroup;
   isAddressInvalid = false;
+  isCurrentAddress = false;
   network = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -48,6 +44,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
 
   resetCheck() {
     this.isAddressInvalid = false;
+    this.isCurrentAddress = false;
   }
 
   async onSubmit() {
@@ -56,6 +53,11 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
 
     if (!isContract(receiverAddress)) {
       this.isAddressInvalid = true;
+      return;
+    }
+
+    if (receiverAddress === minter) {
+      this.isCurrentAddress = true;
       return;
     }
 
