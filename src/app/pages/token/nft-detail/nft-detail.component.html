@@ -30,7 +30,7 @@
               <app-custom-video-player
                 [videoSrc]="this.nftUrl"
                 [showControl]="true"
-                *ngIf="nftType === 'video' || nftDetail.ipfs?.animation_url"
+                *ngIf="nftType === 'video'"
                 [isDetail]="true">
               </app-custom-video-player>
               <app-model-view *ngIf="nftType === '3d'" [modelUrl]="this.nftUrl" [disablePan]="false"> </app-model-view>

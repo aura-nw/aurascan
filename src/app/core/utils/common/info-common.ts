@@ -107,6 +107,7 @@ export function checkTypeFile(nft: any) {
     case 'audio/mpeg':
     case 'audio/vnd.wave':
     case 'audio/ogg':
+    case 'audio/wav':
       content_type = 'audio';
       break;
     default:

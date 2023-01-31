@@ -15,25 +15,25 @@
         <div class="nft__img">
           <img *ngIf="!soulboundDetail.img_type && !soulboundDetail?.ipfs?.animation_url" [src]="commonService.getDefaultImg()" alt="" />
           <img
-            *ngIf="getTypeFile(soulboundDetail) === 'img' && !soulboundDetail?.ipfs?.animation_url"
+            *ngIf="getTypeFile(soulboundDetail) === 'img'"
             src="{{ soulboundDetail?.ipfs.image ? (soulboundDetail?.ipfs.image | replaceIpfs) : commonService.getDefaultImg() }}"
             alt="{{ soulboundDetail.token_name }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
             [showControl]="true"
             [isDetail]="true"
-            *ngIf="soulboundDetail?.ipfs?.animation_url">
+            *ngIf="getTypeFile(soulboundDetail) === 'video'">
           </app-custom-video-player>
           <app-model-view
             *ngIf="getTypeFile(soulboundDetail) === '3d'"
             [link]=""
-            [modelUrl]="soulboundDetail.ipfs.image | replaceIpfs"
+            [modelUrl]="soulboundDetail.ipfs.animation_url | replaceIpfs"
             [disablePan]="false">
           </app-model-view>
           <app-audio-player
             *ngIf="getTypeFile(soulboundDetail) === 'audio'"
             [link]=""
-            [src]="soulboundDetail?.ipfs?.image | replaceIpfs"
+            [src]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
             [nftId]="">
           </app-audio-player>
         </div>
