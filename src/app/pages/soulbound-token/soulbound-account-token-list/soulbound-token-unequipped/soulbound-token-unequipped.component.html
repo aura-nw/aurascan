@@ -49,24 +49,24 @@
                 <div class="token-cards__img">
                   <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
                   <img
-                    *ngIf="getTypeFile(token) === 'img' && !token.animation_url"
-                    src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
+                    *ngIf="getTypeFile(token) === 'img'"
+                    src="{{ token.token_img ? ((token.animation_url || token.token_img) | replaceIpfs) : commonService.getDefaultImg() }}"
                     alt="{{ token.token_name }}" />
                   <app-custom-video-player
                     [videoSrc]="token.animation_url | replaceIpfs"
                     [showControl]="false"
-                    *ngIf="token.animation_url">
+                    *ngIf="getTypeFile(token) === 'video'">
                   </app-custom-video-player>
                   <app-model-view
                     *ngIf="getTypeFile(token) === '3d'"
-                    [modelUrl]="token.token_img | replaceIpfs"
+                    [modelUrl]="token.animation_url | replaceIpfs"
                     [link]=""
                     [disablePan]="true">
                   </app-model-view>
                   <app-audio-player
                     *ngIf="getTypeFile(token) === 'audio'"
                     [link]="'#'"
-                    [src]="token.token_img | replaceIpfs"
+                    [src]="token.animation_url | replaceIpfs"
                     [nftId]=""
                     [disableLink]="true">
                   </app-audio-player>
