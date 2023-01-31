@@ -110,7 +110,7 @@
                 <button
                   (click)="onMenuClick($event)"
                   class="button nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0">
-                  <div class="nav-link__item d-flex align-items-center mb-0">
+                  <div class="nav-link__item d-flex align-items-center mb-0 py-0">
                     <i class="ph-{{ item.icon }}"></i>
                     <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
                   </div>
@@ -119,7 +119,7 @@
                       <a
                         *ngIf="subMenu.label !== 'Soulbound Token' || (subMenu.label === 'Soulbound Token' && lengthSBT > 0)"
                         [routerLink]="subMenu.link"
-                        class="d-flex align-items-center mb-0 nav-link__item"
+                        class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         [class.active]="checkMenuActive(subMenu.link)">
                         <!-- Menu token has special icon -->
                         <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
