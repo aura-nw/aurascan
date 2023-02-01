@@ -5,9 +5,9 @@ export const AURA_PRICE_CHART_RANGE = {
 };
 
 export const AURA_TOP_STATISTIC_RANGE = {
-  D_1: '1 Day',
-  D_3: '3 Day',
-  D_7: '7 Day',
+  D_1: '1',
+  D_3: '3',
+  D_7: '7',
 };
 
 export const TABS_TITLE_TOP_STATISTICS = [

@@ -10,20 +10,8 @@ import { StatisticService } from 'src/app/core/services/statistic.service';
 export class TopStatisticsComponent implements OnInit {
   TABS = TABS_TITLE_TOP_STATISTICS;
   currentTab = TABS_TITLE_TOP_STATISTICS[0].label;
-  loading = true;
-  constructor(private statisticService: StatisticService) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.getDataStatis();
-  }
-
-  getDataStatis(){
-    let dayRange = 1;
-    let limit = 1;
-    this.statisticService.getListStatistic(dayRange, limit).subscribe((res) => {
-      console.log(res);
-      this.loading = false;
-    });
-  }
+  ngOnInit(): void {}
 
 }

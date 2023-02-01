@@ -5,6 +5,7 @@ import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
 import {TranslateService} from "@ngx-translate/core";
 import {createChart} from "lightweight-charts";
 import {STATISTIC_CHART_OPTIONS} from "../statistic-chart-options";
+import {StatisticService} from "src/app/core/services/statistic.service";
 @Component({
   selector: 'app-chart-stats',
   templateUrl: './chart-stats.component.html',
@@ -32,6 +33,7 @@ export class ChartStatsComponent implements OnInit {
       private http: HttpClient,
       private toastr: NgxToastrService,
       public translate: TranslateService,
+      private statisticService: StatisticService,
   ) { }
 
   ngOnInit() {

@@ -14,7 +14,7 @@ export class StatisticService extends CommonService {
     super(http, environmentService);
   }
 
-  getListStatistic(dayRange, limit): Observable<any> {
+  getListAccountStatistic(dayRange, limit): Observable<any> {
     const params = _({
       chainId: this.chainInfo.chainId,
       dayRange : dayRange,

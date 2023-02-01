@@ -3,6 +3,8 @@ import {AURA_TOP_STATISTIC_RANGE} from "src/app/core/constants/chart.constant";
 import {MatTableDataSource} from "@angular/material/table";
 import {TableTemplate} from "src/app/core/models/common.model";
 import {Globals} from "src/app/global/global";
+import {formatDate} from "@angular/common";
+import {StatisticService} from "src/app/core/services/statistic.service";
 
 @Component({
   selector: 'app-top-statistic-transaction',
@@ -12,6 +14,10 @@ import {Globals} from "src/app/global/global";
 export class TopStatisticTransactionComponent implements OnInit {
   rangeList = AURA_TOP_STATISTIC_RANGE;
   currentRange = AURA_TOP_STATISTIC_RANGE.D_1;
+  currentDay;
+  preDay;
+  loading = true;
+  transactionsData;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'rank' },
     { matColumnDef: 'address', headerCellDef: 'address' },
@@ -20,102 +26,43 @@ export class TopStatisticTransactionComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
 
-  AURASendersLoading = true;
   AURASendersDS = new MatTableDataSource<any>();
 
-  AURAReceiversLoading = true;
   AURAReceiversDS = new MatTableDataSource<any>();
 
-  TxnCountSentLoading = true;
   TxnCountSentDS = new MatTableDataSource<any>();
 
-  TxnCountReceivedLoading = true;
   TxnCountReceivedDS = new MatTableDataSource<any>();
 
-  readonly mockData = [
-    {
-      rank: 1,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 1452458,
-      percentage: 20
-    },
-    {
-      rank: 2,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 252458,
-      percentage: 15.81
-    },
-    {
-      rank: 3,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 8456270,
-      percentage: 45.11
-    },
-    {
-      rank: 4,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 5981200,
-      percentage: 78.15
-    },
-    {
-      rank: 5,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 120152,
-      percentage: 64.16
-    },
-    {
-      rank: 6,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 7598410,
-      percentage: 48.91
-    },
-    {
-      rank: 7,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 7450315,
-      percentage: 9.54
-    },
-    {
-      rank: 8,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 7845102,
-      percentage: 26.47
-    },
-    {
-      rank: 9,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 7841026,
-      percentage: 15.15
-    },
-    {
-      rank: 10,
-      address: 'C541637EC458AE58564A491F25E5D5321312BD4B9E15A7922B0887AF7C0E0A8D',
-      total: 3564812,
-      percentage: 82.12
-    }
-  ]
-
   constructor(
-      public global: Globals
+      public global: Globals,
+      private statisticService: StatisticService,
   ) {}
 
   ngOnInit(): void {
+    this.currentDay = formatDate(Date.now(),'dd-MMM','en-US');
     this.getTransactionData(this.currentRange)
   }
 
   getTransactionData(time: string) {
     this.currentRange = time;
-    // remove setTimeOut when call API
-    setTimeout(() => {
-      this.AURASendersDS.data = this.mockData;
-      this.AURASendersLoading = false;
-      this.AURAReceiversDS.data = this.mockData;
-      this.AURAReceiversLoading = false;
-      this.TxnCountSentDS.data = this.mockData;
-      this.TxnCountSentLoading = false;
-      this.TxnCountReceivedDS.data = this.mockData;
-      this.TxnCountReceivedLoading = false;
-    }, 500);
+    let day = new Date();
+    day.setDate(day.getDate() - (+this.currentRange));
+    this.preDay = formatDate(day,'dd-MMM','en-US');
+    this.statisticService.getListAccountStatistic(this.currentRange, 10).subscribe(res => {
+      this.loading = true;
+      if(res && res.data) {
+        this.transactionsData = res.data;
+        console.log(res.data)
+        this.AURASendersDS.data = res.data.top_aura_senders
+        this.AURAReceiversDS.data = res.data.top_aura_receivers
+        this.TxnCountSentDS.data = res.data.top_txn_count_sent
+        this.TxnCountReceivedDS.data = res.data.top_txn_count_received
+      } else {
+        this.transactionsData = null;
+      }
+      this.loading = false;
+    })
   }
 
 }
