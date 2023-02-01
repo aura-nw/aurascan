@@ -13,10 +13,17 @@
     <div class="row">
       <div class="col-12 col-lg-5">
         <div class="nft__img">
-          <img *ngIf="!soulboundDetail.img_type && !soulboundDetail?.ipfs?.animation_url" [src]="commonService.getDefaultImg()" alt="" />
+          <img
+            *ngIf="!soulboundDetail.img_type && !soulboundDetail?.ipfs?.animation_url"
+            [src]="commonService.getDefaultImg()"
+            alt="" />
           <img
             *ngIf="getTypeFile(soulboundDetail) === 'img'"
-            src="{{ soulboundDetail?.ipfs.image ? (soulboundDetail?.ipfs.image | replaceIpfs) : commonService.getDefaultImg() }}"
+            src="{{
+              soulboundDetail?.ipfs.image
+                ? (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs)
+                : commonService.getDefaultImg()
+            }}"
             alt="{{ soulboundDetail.token_name }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
@@ -84,7 +91,11 @@
     <button class="button button-pill button-outline button--md" type="button" (click)="closeDialog()">
       <span>Cancel</span>
     </button>
-    <button class="button button-pill button-flat button--md ml-4" type="button" [disabled]="isLoading" (click)="equipSB()">
+    <button
+      class="button button-pill button-flat button--md ml-4"
+      type="button"
+      [disabled]="isLoading"
+      (click)="equipSB()">
       <span>Equip</span>
     </button>
   </div>
