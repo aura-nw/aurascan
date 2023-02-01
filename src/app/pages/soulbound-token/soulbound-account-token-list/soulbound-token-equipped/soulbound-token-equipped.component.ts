@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
@@ -13,7 +13,6 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
-import { getKeplr } from 'src/app/core/utils/keplr';
 
 @Component({
   selector: 'app-soulbound-token-equipped',
@@ -22,7 +21,7 @@ import { getKeplr } from 'src/app/core/utils/keplr';
 })
 export class SoulboundTokenEquippedComponent implements OnInit {
   @Output() totalSBT = new EventEmitter<number>();
-
+  MEDIA_TYPE = MEDIA_TYPE;
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   tokenList = [];

@@ -22,19 +22,20 @@
     <div class="row p-lg-3">
       <!-- nft-media -->
       <div class="col-12 col-lg-4 my-4 my-md-0 pl-lg-0">
-        <div class="nft-img__contain w-100 h-100">
+        <div class="nft-img__contain w-100 h-100" (click)="expandMedia()">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img *ngIf="!nftType && !nftDetail.ipfs?.animation_url" [src]="defaultImgToken" />
-              <img *ngIf="nftType === 'img' && isError === false" (error)="error()" [src]="this.nftUrl" />
+              <img *ngIf="nftType === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="this.nftUrl" />
               <app-custom-video-player
                 [videoSrc]="this.nftUrl"
                 [showControl]="true"
-                *ngIf="nftType === 'video'"
+                *ngIf="nftType === MEDIA_TYPE.VIDEO"
                 [isDetail]="true">
               </app-custom-video-player>
-              <app-model-view *ngIf="nftType === '3d'" [modelUrl]="this.nftUrl" [disablePan]="false"> </app-model-view>
-              <app-audio-player *ngIf="nftType === 'audio'" [src]="this.nftUrl"> </app-audio-player>
+              <app-model-view *ngIf="nftType === MEDIA_TYPE._3D" [modelUrl]="this.nftUrl" [disablePan]="false">
+              </app-model-view>
+              <app-audio-player *ngIf="nftType === MEDIA_TYPE.AUDIO" [src]="this.nftUrl"> </app-audio-player>
             </div>
           </div>
         </div>
@@ -64,11 +65,6 @@
             </ng-container>
           </div>
           <div class="mt-1 mt-lg-2 mb-4 d-lg-flex d-none">
-            <!-- <img
-              [src]="nftDetail?.image || defaultLogoToken"
-              width="24px"
-              height="24px"
-              class="mr-1 object-fit--none" /> -->
             <a
               class="body-01 text--primary break-word"
               [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]"

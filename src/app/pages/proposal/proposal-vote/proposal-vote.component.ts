@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
 import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { ESigningType, SIGNING_MESSAGE_TYPES } from 'src/app/core/constants/wallet.constant';
@@ -28,7 +27,6 @@ export class ProposalVoteComponent implements OnInit {
     private environmentService: EnvironmentService,
     private toastr: NgxToastrService,
     private walletService: WalletService,
-    private route: Router,
     private transactionService: TransactionService,
     private mappingErrorService: MappingErrorService,
   ) {
