@@ -60,6 +60,7 @@ import { TokenService } from './core/services/token.service';
 import { Globals } from './global/global';
 import { LayoutsModule } from './layouts/layouts.module';
 import { BlankModule } from './pages/blank/blank.module';
+import { MediaExpandModule } from './shared/components/media-expand/media-expand.module';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -155,7 +156,8 @@ export class MaterialModule {}
     ReactiveFormsModule,
     FormsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MediaExpandModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

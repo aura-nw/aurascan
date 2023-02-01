@@ -50,22 +50,22 @@
                   <div class="token-cards__img">
                     <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
                     <img
-                        *ngIf="getTypeFile(token) === 'img'"
+                        *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
                         src="{{ token.token_img ? ((token.animation_url || token.token_img)  | replaceIpfs) : commonService.getDefaultImg() }}"
                         alt="{{ token.token_name }}" />
                     <app-custom-video-player
                         [videoSrc]="token.animation_url | replaceIpfs"
                         [showControl]="false"
-                        *ngIf="getTypeFile(token) === 'video'">
+                        *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
                     </app-custom-video-player>
                     <app-model-view
-                        *ngIf="getTypeFile(token) === '3d'"
+                        *ngIf="getTypeFile(token) === MEDIA_TYPE._3D"
                         [link]=""
                         [modelUrl]="token.animation_url | replaceIpfs"
                         [disablePan]="true">
                     </app-model-view>
                     <app-audio-player
-                        *ngIf="getTypeFile(token) === 'audio'"
+                        *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
                         [link]="'/tokens/token-nft/' + token?.contract_address + '/' + token?.token_id"
                         [src]="token.animation_url | replaceIpfs"
                         [nftId]="">
