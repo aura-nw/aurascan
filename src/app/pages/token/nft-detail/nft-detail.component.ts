@@ -1,28 +1,34 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LENGTH_CHARACTER, LIST_TYPE_CONTRACT_ADDRESS, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { TranslateService } from '@ngx-translate/core';
+import {
+  LENGTH_CHARACTER,
+  LIST_TYPE_CONTRACT_ADDRESS,
+  MEDIA_TYPE,
+  PAGE_EVENT,
+} from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
+import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { CommonService } from 'src/app/core/services/common.service';
-import { Globals } from 'src/app/global/global';
 import { IContractPopoverData } from 'src/app/core/models/contract.model';
-import { TokenService } from 'src/app/core/services/token.service';
-import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
-import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
-import { SoulboundService } from 'src/app/core/services/soulbound.service';
-import { getKeplr } from 'src/app/core/utils/keplr';
-import { WalletService } from 'src/app/core/services/wallet.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { MESSAGES_CODE, MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
+import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
+import { TokenService } from 'src/app/core/services/token.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
+import { checkTypeFile, parseDataTransaction } from 'src/app/core/utils/common/info-common';
+import { Globals } from 'src/app/global/global';
+import { MediaExpandComponent } from 'src/app/shared/components/media-expand/media-expand.component';
 import { PopupShareComponent } from './popup-share/popup-share.component';
-import { TranslateService } from '@ngx-translate/core';
-import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 
 @Component({
   selector: 'app-nft-detail',
@@ -53,7 +59,9 @@ export class NFTDetailComponent implements OnInit {
   nftId = '';
   contractAddress = '';
   nftDetail: any;
-  typeTransaction = TYPE_TRANSACTION;
+  MEDIA_TYPE = MEDIA_TYPE;
+  breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
+  isMobileMatched = false;
 
   contractVerifyType = ContractVerifyType;
   modeExecuteTransaction = ModeExecuteTransaction;
@@ -87,7 +95,14 @@ export class NFTDetailComponent implements OnInit {
     private contractService: ContractService,
     private dialog: MatDialog,
     public translate: TranslateService,
-  ) {}
+    private layout: BreakpointObserver,
+  ) {
+    this.breakpoint$.subscribe((state) => {
+      if (state) {
+        this.isMobileMatched = state.matches;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.contractAddress = this.router.snapshot.paramMap.get('contractAddress');
@@ -113,7 +128,7 @@ export class NFTDetailComponent implements OnInit {
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       this.nftDetail = res.data;
       this.nftType = checkTypeFile(this.nftDetail);
-      
+
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
           this.nftDetail['isDisplayName'] = true;
@@ -130,9 +145,9 @@ export class NFTDetailComponent implements OnInit {
           this.route.navigate(['/']);
         }
         this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
-        if(this.nftDetail.ipfs?.name){
+        if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name|| '';
+          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || '';
         }
         this.isSoulBound = true;
       }
@@ -251,7 +266,6 @@ export class NFTDetailComponent implements OnInit {
       receiverAddress: this.nftDetail?.receiver_address,
       limit: LIMIT_NUM_SBT,
     };
-
     this.unEquipSBT();
   }
 
@@ -261,7 +275,6 @@ export class NFTDetailComponent implements OnInit {
         token_id: this.nftDetail.token_id,
       },
     };
-
     this.execute(executeUnEquipMsg);
   }
 
@@ -333,5 +346,18 @@ export class NFTDetailComponent implements OnInit {
 
   replaceImgIpfs(value) {
     return 'https://ipfs.io/' + value.replace('://', '/');
+  }
+
+  expandMedia(): void {
+    if (!this.isMobileMatched) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = 'transparent-dialog';
+      dialogConfig.data = {
+        mediaType: this.nftType,
+        mediaSrc: this.nftUrl,
+      };
+      this.dialog.open(MediaExpandComponent, dialogConfig);
+    }
   }
 }

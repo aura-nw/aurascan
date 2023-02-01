@@ -10,3 +10,10 @@ $custom-typography: mat-typography-config(
 .mat-table {
     width: 100%;
 }
+
+
+.transparent-dialog .mat-dialog-container  
+{
+ background: transparent !important;
+ box-shadow: none
+}
