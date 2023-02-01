@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { CommonService } from 'src/app/core/services/common.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -16,6 +17,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   isError = false;
   currentAddress = '';
   isLoading = false;
+  MEDIA_TYPE = MEDIA_TYPE;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,

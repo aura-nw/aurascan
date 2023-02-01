@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { getAmount, getDataInfo } from 'src/app/global/global';
-import { NUMBER_CONVERT } from '../../constants/common.constant';
+import { MEDIA_TYPE, NUMBER_CONVERT } from '../../constants/common.constant';
 import { TYPE_TRANSACTION } from '../../constants/transaction.constant';
 import { CodeTransaction, StatusTransaction } from '../../constants/transaction.enum';
 import { balanceOf } from './parsing';
@@ -91,7 +91,7 @@ export function checkTypeFile(nft: any) {
   switch (nftType) {
     case 'video/webm':
     case 'video/mp4':
-      content_type = 'video';
+      content_type = MEDIA_TYPE.VIDEO;
       break;
     case 'image/png':
     case 'image/jpeg':
@@ -99,16 +99,16 @@ export function checkTypeFile(nft: any) {
     case 'application/xml':
     case 'image/svg+xml':
     case 'image/webp':
-      content_type = 'img';
+      content_type = MEDIA_TYPE.IMG;
       break;
     case 'model/gltf-binary':
-      content_type = '3d';
+      content_type = MEDIA_TYPE._3D;
       break;
     case 'audio/mpeg':
     case 'audio/vnd.wave':
     case 'audio/ogg':
     case 'audio/wav':
-      content_type = 'audio';
+      content_type = MEDIA_TYPE.AUDIO;
       break;
     default:
       content_type = '';

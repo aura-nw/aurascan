@@ -78,3 +78,10 @@ export const TOKEN_ID_GET_PRICE = {
 };
 
 export const LIST_TYPE_CONTRACT_ADDRESS = ['revoke_all', 'approve_all', 'revoke', 'approve'];
+
+export enum MEDIA_TYPE {
+  IMG = 'img',
+  VIDEO = 'video',
+  _3D = '3d',
+  AUDIO = 'audio',
+}
