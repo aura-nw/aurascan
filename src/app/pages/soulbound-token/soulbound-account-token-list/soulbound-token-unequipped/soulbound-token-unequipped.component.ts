@@ -107,7 +107,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
-        this.getListSB();
+        setTimeout(() => {
+          this.getListSB();
+        }, 4000);
       }
     });
   }
