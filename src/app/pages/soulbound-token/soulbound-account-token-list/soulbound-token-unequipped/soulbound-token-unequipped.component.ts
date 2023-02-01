@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -35,6 +35,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   currentAddress = '';
   sbType = SB_TYPE;
   isClick = false;
+  MEDIA_TYPE = MEDIA_TYPE;
 
   constructor(
     public dialog: MatDialog,

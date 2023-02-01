@@ -1,0 +1,17 @@
+<div class="dialog-container">
+  <div class="dialog-body">
+    <div class="media-wrapper" #card>
+      <img *ngIf="modalData?.mediaType === MEDIA_TYPE.IMG" [src]="modalData?.mediaSrc" />
+      <app-custom-video-player
+        *ngIf="modalData?.mediaType === MEDIA_TYPE.VIDEO"
+        control
+        autoplay
+        [isDetail]="true"
+        [videoSrc]="modalData?.mediaSrc">
+      </app-custom-video-player>
+      <app-audio-player *ngIf="modalData?.mediaType === MEDIA_TYPE.AUDIO" [src]="modalData?.mediaSrc">
+      </app-audio-player>
+      <app-model-view *ngIf="modalData?.mediaType === MEDIA_TYPE._3D" [modelUrl]="modalData?.mediaSrc"></app-model-view>
+    </div>
+  </div>
+</div>
