@@ -1,4 +1,4 @@
-import {ChartOptions} from "src/app/core/models/chart.model";
+import { ChartOptions } from 'src/app/core/models/chart.model';
 export const STATISTIC_CHART_OPTIONS: Partial<ChartOptions> = {
   series: [
     {
@@ -26,7 +26,7 @@ export const STATISTIC_CHART_OPTIONS: Partial<ChartOptions> = {
     enabled: false,
   },
   stroke: {
-    show: false
+    show: false,
   },
   xAxis: {
     type: 'datetime',
@@ -35,7 +35,7 @@ export const STATISTIC_CHART_OPTIONS: Partial<ChartOptions> = {
       datetimeUTC: false,
     },
     axisBorder: {
-      show: false
+      show: false,
     },
   },
 };

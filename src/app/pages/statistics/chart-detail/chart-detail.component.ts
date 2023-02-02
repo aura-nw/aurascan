@@ -1,22 +1,25 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
-import {TranslateService} from "@ngx-translate/core";
-import {StatisticService} from "src/app/core/services/statistic.service";
-import {createChart, IChartApi, ISeriesApi} from "lightweight-charts";
-import {CHART_CONFIG, DASHBOARD_AREA_SERIES_CHART_OPTIONS, DASHBOARD_CHART_OPTIONS} from "src/app/pages/dashboard/dashboard-chart-options";
-import {debounceTime, takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
-import {CHART_RANGE} from "src/app/core/constants/common.constant";
-import {timeToUnix} from "src/app/core/helpers/date";
-import {DatePipe, formatDate} from "@angular/common";
-import {exportStatisticChart} from 'src/app/core/helpers/export';
-import * as moment from "moment";
+import { DatePipe, formatDate } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import * as moment from 'moment';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { CHART_RANGE } from 'src/app/core/constants/common.constant';
+import { timeToUnix } from 'src/app/core/helpers/date';
+import { exportStatisticChart } from 'src/app/core/helpers/export';
+import { StatisticService } from 'src/app/core/services/statistic.service';
+import {
+  CHART_CONFIG,
+  DASHBOARD_AREA_SERIES_CHART_OPTIONS,
+  DASHBOARD_CHART_OPTIONS,
+} from 'src/app/pages/dashboard/dashboard-chart-options';
 
 @Component({
   selector: 'app-chart-detail',
   templateUrl: './chart-detail.component.html',
-  styleUrls: ['./chart-detail.component.scss']
+  styleUrls: ['./chart-detail.component.scss'],
 })
 export class ChartDetailComponent implements OnInit, OnDestroy {
   chartRange = CHART_RANGE.MONTH_12;
@@ -38,15 +41,18 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   minAmountDate;
 
   constructor(
-      private route: ActivatedRoute,
-      private router: Router,
-      private toastr: NgxToastrService,
-      public translate: TranslateService,
-      private statisticService: StatisticService,
-      public datepipe: DatePipe,
+    private route: ActivatedRoute,
+    private router: Router,
+    public translate: TranslateService,
+    private statisticService: StatisticService,
+    public datepipe: DatePipe,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
-    if(this.chartType !== 'daily-transactions' && this.chartType !== 'unique-addresses' && this.chartType !== 'cumulative-addresses') {
+    if (
+      this.chartType !== 'daily-transactions' &&
+      this.chartType !== 'unique-addresses' &&
+      this.chartType !== 'cumulative-addresses'
+    ) {
       this.router.navigate(['/']);
     }
   }
@@ -54,7 +60,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setDataWithChartType();
     this.getChartInfo(this.chartRange);
-
   }
 
   setDataWithChartType() {
@@ -85,7 +90,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   initChart() {
     this.chart = createChart(document.getElementById('dailyChart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
-    // this.initTooltip();
     this.subscribeVisibleLogicalRangeChange();
   }
 
@@ -94,42 +98,42 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
       if (from <= 0 && !this.endData) {
         this.prevYearNumber++;
         const currTime = new Date();
-        const max = Date.parse(currTime + "");
+        const max = Date.parse(currTime + '');
         const prevTime = new Date(currTime.getFullYear() - this.prevYearNumber, 0, 1);
-        const min = Date.parse(prevTime + "");
+        const min = Date.parse(prevTime + '');
 
-        this.statisticService.getDailyTxStatistic(this.payloadChartType, min, max).subscribe(res => {
-          if(res?.data?.extremeData) {
+        this.statisticService.getDailyTxStatistic(this.payloadChartType, min, max).subscribe((res) => {
+          if (res?.data?.extremeData) {
             this.minAmount = res?.data?.extremeData?.min?.amount;
             this.maxAmount = res?.data?.extremeData?.max?.amount;
             const dayMin = new Date(res?.data?.extremeData?.min?.date);
             const dayMax = new Date(res?.data?.extremeData?.max?.date);
-            this.minAmountDate = formatDate(dayMin,'dd/MM/yyyy','en-US');
-            this.maxAmountDate = formatDate(dayMax,'dd/MM/yyyy','en-US');
+            this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
+            this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
           }
-          if(res?.data?.dailyData?.length > 0) {
+          if (res?.data?.dailyData?.length > 0) {
             let dataY = [];
             let dataX = [];
-            res.data.dailyData.forEach(data => {
-              if(this.payloadChartType === 'daily_txs') {
+            res.data.dailyData.forEach((data) => {
+              if (this.payloadChartType === 'daily_txs') {
                 dataX.push(data.daily_txs);
               }
-              if(this.payloadChartType === 'unique_addresses') {
+              if (this.payloadChartType === 'unique_addresses') {
                 dataX.push(data.unique_addresses);
               }
-              if(this.payloadChartType === 'daily_active_addresses') {
+              if (this.payloadChartType === 'daily_active_addresses') {
                 dataX.push(data.daily_active_addresses);
               }
               dataY.push(data.date);
             });
             const chartData = this.makeChartData(dataX, dataY);
-            if(this.originalData.length === chartData.length) {
+            if (this.originalData.length === chartData.length) {
               this.endData = true;
             }
             // @ts-ignore
             this.areaSeries.setData(chartData);
           }
-        })
+        });
       }
     });
   }
@@ -139,30 +143,30 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     // this.initTooltip();
     this.chartRange = type;
     const currTime = new Date();
-    const max = Date.parse(currTime + "");
-    const prevTime = new Date(currTime.getFullYear() -1, 0, 1);
-    const min = Date.parse(prevTime + "");
+    const max = Date.parse(currTime + '');
+    const prevTime = new Date(currTime.getFullYear() - 1, 0, 1);
+    const min = Date.parse(prevTime + '');
 
-    this.statisticService.getDailyTxStatistic(this.payloadChartType, min, max).subscribe(res => {
-      if(res?.data?.extremeData) {
+    this.statisticService.getDailyTxStatistic(this.payloadChartType, min, max).subscribe((res) => {
+      if (res?.data?.extremeData) {
         this.minAmount = res?.data?.extremeData?.min?.amount;
         this.maxAmount = res?.data?.extremeData?.max?.amount;
         const dayMin = new Date(res?.data?.extremeData?.min?.date);
         const dayMax = new Date(res?.data?.extremeData?.max?.date);
-        this.minAmountDate = formatDate(dayMin,'dd/MM/yyyy','en-US');
-        this.maxAmountDate = formatDate(dayMax,'dd/MM/yyyy','en-US');
+        this.minAmountDate = formatDate(dayMin, 'dd/MM/yyyy', 'en-US');
+        this.maxAmountDate = formatDate(dayMax, 'dd/MM/yyyy', 'en-US');
       }
-      if(res?.data?.dailyData?.length > 0) {
+      if (res?.data?.dailyData?.length > 0) {
         let dataY = [];
         let dataX = [];
-        res.data.dailyData.forEach(data => {
-          if(this.payloadChartType === 'daily_txs') {
+        res.data.dailyData.forEach((data) => {
+          if (this.payloadChartType === 'daily_txs') {
             dataX.push(data.daily_txs);
           }
-          if(this.payloadChartType === 'unique_addresses') {
+          if (this.payloadChartType === 'unique_addresses') {
             dataX.push(data.unique_addresses);
           }
-          if(this.payloadChartType === 'daily_active_addresses') {
+          if (this.payloadChartType === 'daily_active_addresses') {
             dataX.push(data.daily_active_addresses);
           }
           dataY.push(data.date);
@@ -170,7 +174,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         this.drawChartFirstTime(dataX, dataY);
         this.chartEvent();
       }
-    })
+    });
   }
 
   drawChartFirstTime(data, dateTime) {
@@ -208,13 +212,13 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   exportChart() {
     console.log(this.originalData);
     const exportData = this.originalData.map((item) => {
-      const dateF = this.datepipe.transform(new Date(item.time *1000), 'dd-MM-yyyy:HH-mm-ss');
+      const dateF = this.datepipe.transform(new Date(item.time * 1000), 'dd-MM-yyyy:HH-mm-ss');
       return {
         date: dateF,
         value: item.value,
       };
     });
-    console.log(exportData)
+    console.log(exportData);
     const currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
 
     exportStatisticChart(

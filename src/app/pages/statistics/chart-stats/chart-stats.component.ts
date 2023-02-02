@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {ChartOptions} from "src/app/core/models/chart.model";
-import {HttpClient} from "@angular/common/http";
-import {NgxToastrService} from "src/app/core/services/ngx-toastr.service";
-import {TranslateService} from "@ngx-translate/core";
-import {createChart} from "lightweight-charts";
-import {STATISTIC_CHART_OPTIONS} from "../statistic-chart-options";
-import {StatisticService} from "src/app/core/services/statistic.service";
-import {forEach} from "lodash";
+import { TranslateService } from '@ngx-translate/core';
+import { createChart } from 'lightweight-charts';
+import { ChartOptions } from 'src/app/core/models/chart.model';
+import { StatisticService } from 'src/app/core/services/statistic.service';
+import { STATISTIC_CHART_OPTIONS } from '../statistic-chart-options';
 @Component({
   selector: 'app-chart-stats',
   templateUrl: './chart-stats.component.html',
-  styleUrls: ['./chart-stats.component.scss']
+  styleUrls: ['./chart-stats.component.scss'],
 })
 export class ChartStatsComponent implements OnInit {
   public chartOption: Partial<ChartOptions> = STATISTIC_CHART_OPTIONS;
-  chartID = ['dailyTransactionChart', 'uniqueAddressChart', 'dailyAddressChart']
+  chartID = ['dailyTransactionChart', 'uniqueAddressChart', 'dailyAddressChart'];
 
   dailyTransactionChart;
   dailyTransactionChartData;
@@ -31,16 +28,14 @@ export class ChartStatsComponent implements OnInit {
   max = 99999;
 
   currTime = new Date();
-  currTimeMs = Date.parse(this.currTime + "");
-  prevTime = new Date(this.currTime.getFullYear() -1, 0, 1);
-  prevTimeMs = Date.parse(this.prevTime + "");
+  currTimeMs = Date.parse(this.currTime + '');
+  prevTime = new Date(this.currTime.getFullYear() - 1, 0, 1);
+  prevTimeMs = Date.parse(this.prevTime + '');
 
   constructor(
-      private http: HttpClient,
-      private toastr: NgxToastrService,
-      public translate: TranslateService,
-      private statisticService: StatisticService,
-  ) { }
+    public translate: TranslateService,
+    private statisticService: StatisticService,
+  ) {}
 
   ngOnInit() {
     this.dailyTransactionChartInit();
@@ -66,15 +61,15 @@ export class ChartStatsComponent implements OnInit {
       },
       grid: {
         vertLines: {
-          visible: false
+          visible: false,
         },
         horzLines: {
-          visible: false
+          visible: false,
         },
       },
       leftPriceScale: {
         visible: true,
-        borderColor: '#494C58'
+        borderColor: '#494C58',
       },
       rightPriceScale: {
         visible: false,
@@ -82,21 +77,19 @@ export class ChartStatsComponent implements OnInit {
       timeScale: {
         timeVisible: false,
         secondsVisible: false,
-        borderColor: '#494C58'
+        borderColor: '#494C58',
       },
     });
-    this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({
-      autoscaleInfoProvider: () => ({
-        priceRange: {
-          minValue: this.min,
-          maxValue: this.max,
-        },
-      }),
-    });
+    this.dailyTransactionChartSeries = this.dailyTransactionChart.addAreaSeries({});
+
     this.dailyTransactionChartSeries.applyOptions({
       lineColor: '#2CB1F5',
       topColor: 'rgba(136,198,203,0.12)',
       bottomColor: 'rgba(119, 182, 188, 0.01)',
+    });
+
+    this.dailyTransactionChart.priceScale().applyOptions({
+      autoScale: true,
     });
   }
   uniqueAddressChartInit() {
@@ -114,15 +107,15 @@ export class ChartStatsComponent implements OnInit {
       },
       grid: {
         vertLines: {
-          visible: false
+          visible: false,
         },
         horzLines: {
-          visible: false
+          visible: false,
         },
       },
       leftPriceScale: {
         visible: true,
-        borderColor: '#494C58'
+        borderColor: '#494C58',
       },
       rightPriceScale: {
         visible: false,
@@ -130,21 +123,17 @@ export class ChartStatsComponent implements OnInit {
       timeScale: {
         timeVisible: false,
         secondsVisible: false,
-        borderColor: '#494C58'
+        borderColor: '#494C58',
       },
     });
-    this.uniqueAddressChartSeries = this.uniqueAddressChart.addAreaSeries({
-      autoscaleInfoProvider: () => ({
-        priceRange: {
-          minValue: this.min,
-          maxValue: this.max,
-        },
-      }),
-    });
+    this.uniqueAddressChartSeries = this.uniqueAddressChart.addAreaSeries({});
     this.uniqueAddressChartSeries.applyOptions({
       lineColor: '#2CB1F5',
       topColor: 'rgba(44, 177, 245, 0.2)',
       bottomColor: 'rgba(44, 177, 245, 0.08)',
+    });
+    this.uniqueAddressChart.priceScale().applyOptions({
+      autoScale: true,
     });
   }
   dailyAddressChartInit() {
@@ -162,15 +151,15 @@ export class ChartStatsComponent implements OnInit {
       },
       grid: {
         vertLines: {
-          visible: false
+          visible: false,
         },
         horzLines: {
-          visible: false
+          visible: false,
         },
       },
       leftPriceScale: {
         visible: true,
-        borderColor: '#494C58'
+        borderColor: '#494C58',
       },
       rightPriceScale: {
         visible: false,
@@ -178,22 +167,17 @@ export class ChartStatsComponent implements OnInit {
       timeScale: {
         timeVisible: true,
         secondsVisible: true,
-        borderColor: '#494C58'
+        borderColor: '#494C58',
       },
     });
-    this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({
-      autoscaleInfoProvider: () => ({
-        priceRange: {
-          minValue: this.min,
-          maxValue: this.max,
-        },
-      }),
-
-    });
+    this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({});
     this.dailyAddressChartSeries.applyOptions({
       lineColor: '#2CB1F5',
       topColor: 'rgba(44, 177, 245, 0.2)',
       bottomColor: 'rgba(44, 177, 245, 0)',
+    });
+    this.dailyAddressChart.priceScale().applyOptions({
+      autoScale: true,
     });
   }
 
@@ -228,39 +212,40 @@ export class ChartStatsComponent implements OnInit {
   }
 
   getDailyTransactionData() {
-    this.statisticService.getDailyTxStatistic("daily_txs", this.prevTimeMs, this.currTimeMs).subscribe(res => {
+    this.statisticService.getDailyTxStatistic('daily_txs', this.prevTimeMs, this.currTimeMs).subscribe((res) => {
       let valueArr = [];
       let timeArr = [];
-      res.data.dailyData.forEach(data => {
+      res.data.dailyData.forEach((data) => {
         valueArr.push(data.daily_txs);
         timeArr.push(data.date);
       });
       this.drawChart(valueArr, timeArr, 'dailyTrans');
-    })
+    });
   }
 
   getUniqueAddressData() {
-    this.statisticService.getDailyTxStatistic("unique_addresses", this.prevTimeMs, this.currTimeMs).subscribe(res => {
+    this.statisticService.getDailyTxStatistic('unique_addresses', this.prevTimeMs, this.currTimeMs).subscribe((res) => {
       let valueArr = [];
       let timeArr = [];
-      res.data.dailyData.forEach(data => {
+      res.data.dailyData.forEach((data) => {
         valueArr.push(data.unique_addresses);
         timeArr.push(data.date);
       });
       this.drawChart(valueArr, timeArr, 'uniqueAddress');
-    })
+    });
   }
 
   getDailyAddressData() {
-    this.statisticService.getDailyTxStatistic("daily_active_addresses", this.prevTimeMs, this.currTimeMs).subscribe(res => {
-      let valueArr = [];
-      let timeArr = [];
-      res.data.dailyData.forEach(data => {
-        valueArr.push(data.daily_active_addresses);
-        timeArr.push(data.date);
+    this.statisticService
+      .getDailyTxStatistic('daily_active_addresses', this.prevTimeMs, this.currTimeMs)
+      .subscribe((res) => {
+        let valueArr = [];
+        let timeArr = [];
+        res.data.dailyData.forEach((data) => {
+          valueArr.push(data.daily_active_addresses);
+          timeArr.push(data.date);
+        });
+        this.drawChart(valueArr, timeArr, 'dailyAddress');
       });
-      this.drawChart(valueArr, timeArr, 'dailyAddress');
-    })
   }
-
 }
