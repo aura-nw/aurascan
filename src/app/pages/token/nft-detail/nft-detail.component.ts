@@ -59,7 +59,6 @@ export class NFTDetailComponent implements OnInit {
   nftId = '';
   contractAddress = '';
   nftDetail: any;
-  typeTransaction = TYPE_TRANSACTION;
   MEDIA_TYPE = MEDIA_TYPE;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   isMobileMatched = false;
