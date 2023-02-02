@@ -217,8 +217,8 @@ export function convertDataTransaction(data, coinInfo) {
       lstType.forEach((type) => {
         if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {
           _type = type['@type'];
-          let dataEncode = atob(type?.packet?.data);
           try {
+            let dataEncode = atob(type?.packet?.data);
             const data = JSON.parse(dataEncode);
             denom = data.denom;
           } catch (e) {
