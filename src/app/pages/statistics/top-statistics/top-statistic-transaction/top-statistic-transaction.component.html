@@ -24,33 +24,35 @@
             <ng-container *ngIf="AURASendersDS?.data?.length > 0; else noValues">
               <div class="table-responsive">
                 <table mat-table [dataSource]="AURASendersDS" class="aura-table">
-                  <ng-container *ngFor="let template of templates">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-25">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                      <td mat-cell *matCellDef="let data; let i = index">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                            <div *ngSwitchCase="'rank'">
-                              {{ i + 1 }}
-                            </div>
-                            <div *ngSwitchCase="'address'">
-                              <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', data[template.matColumnDef]]">
-                                {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                              </a>
-                            </div>
-                            <div *ngSwitchCase="'total'">
-                              {{ data[template.matColumnDef] | number }}
-                            </div>
-                            <div *ngSwitchCase="'percentage'">
-                              {{ data[template.matColumnDef] }}%
-                            </div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="rank">
+                    <th mat-header-cell *matHeaderCellDef>rank</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                   </ng-container>
+                  <!-- address Column -->
+                  <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef>address</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
+                        {{ element.address | cutStringPipe: 8:8 }}
+                      </a>
+                    </td>
+                  </ng-container>
+                  <!-- Total aura Column -->
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <td mat-cell *matCellDef="let element">
+                     {{ element.result?.total_sent_tx?.amount ?? 0 }}
+                    </td>
+                  </ng-container>
+                  <!-- Percent Column -->
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <td mat-cell *matCellDef="let element">
+                     {{ element.result?.total_sent_tx?.percentage ?? 0 }}%
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
@@ -64,42 +66,46 @@
       </div>
     </div>
   </div>
+
+
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
         <h4 class="mb-0 text--gray-1">Top AURA Receivers</h4>
         <div class="mt-4">
           <div>
-            <ng-container *ngIf="AURAReceiversDS?.data?.length > 0; else noValues">
+            <ng-container *ngIf="AURASendersDS?.data?.length > 0; else noValues">
               <div class="table-responsive">
-                <table mat-table [dataSource]="AURAReceiversDS" class="aura-table">
-                  <ng-container *ngFor="let template of templates">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-25">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                            <div *ngSwitchCase="'rank'">
-                              {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'address'">
-                              <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', data[template.matColumnDef]]">
-                                {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                              </a>
-                            </div>
-                            <div *ngSwitchCase="'total'">
-                              {{ data[template.matColumnDef] | number }}
-                            </div>
-                            <div *ngSwitchCase="'percentage'">
-                              {{ data[template.matColumnDef] }}%
-                            </div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
+                <table mat-table [dataSource]="AURASendersDS" class="aura-table">
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="rank">
+                    <th mat-header-cell *matHeaderCellDef>rank</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                   </ng-container>
+                  <!-- address Column -->
+                  <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef>address</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
+                        {{ element.address | cutStringPipe: 8:8 }}
+                      </a>
+                    </td>
+                  </ng-container>
+                  <!-- Total aura Column -->
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.result?.total_received_tx?.amount ?? 0 }}
+                    </td>
+                  </ng-container>
+                  <!-- Percent Column -->
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.result?.total_received_tx?.percentage ?? 0 }}%
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
@@ -119,36 +125,38 @@
         <h4 class="mb-0 text--gray-1">Top Txn Count Sent</h4>
         <div class="mt-4">
           <div>
-            <ng-container *ngIf="TxnCountSentDS?.data?.length > 0; else noValues">
+            <ng-container *ngIf="AURASendersDS?.data?.length > 0; else noValues">
               <div class="table-responsive">
-                <table mat-table [dataSource]="TxnCountSentDS" class="aura-table">
-                  <ng-container *ngFor="let template of templates">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-25">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                            <div *ngSwitchCase="'rank'">
-                              {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'address'">
-                              <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', data[template.matColumnDef]]">
-                                {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                              </a>
-                            </div>
-                            <div *ngSwitchCase="'total'">
-                              {{ data[template.matColumnDef] | number }}
-                            </div>
-                            <div *ngSwitchCase="'percentage'">
-                              {{ data[template.matColumnDef] }}%
-                            </div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
+                <table mat-table [dataSource]="AURASendersDS" class="aura-table">
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="rank">
+                    <th mat-header-cell *matHeaderCellDef>rank</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                   </ng-container>
+                  <!-- address Column -->
+                  <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef>address</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
+                        {{ element.address | cutStringPipe: 8:8 }}
+                      </a>
+                    </td>
+                  </ng-container>
+                  <!-- Total aura Column -->
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.result?.total_sent_amount?.amount ?? 0 }}
+                    </td>
+                  </ng-container>
+                  <!-- Percent Column -->
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.result?.total_sent_amount?.percentage ?? 0 }}%
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
@@ -168,36 +176,38 @@
         <h4 class="mb-0 text--gray-1">Top Txn Count Received</h4>
         <div class="mt-4">
           <div>
-            <ng-container *ngIf="TxnCountReceivedDS?.data?.length > 0; else noValues">
+            <ng-container *ngIf="AURASendersDS?.data?.length > 0; else noValues">
               <div class="table-responsive">
-                <table mat-table [dataSource]="TxnCountReceivedDS" class="aura-table">
-                  <ng-container *ngFor="let template of templates">
-                    <ng-container [matColumnDef]="template.matColumnDef">
-                      <th mat-header-cell *matHeaderCellDef class="col-per-25">
-                        <div [innerHTML]="template.headerCellDef | translate"></div>
-                      </th>
-                      <td mat-cell *matCellDef="let data">
-                        <div>
-                          <ng-container [ngSwitch]="template.matColumnDef" class="fw-normal">
-                            <div *ngSwitchCase="'rank'">
-                              {{ data[template.matColumnDef] }}
-                            </div>
-                            <div *ngSwitchCase="'address'">
-                              <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', data[template.matColumnDef]]">
-                                {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                              </a>
-                            </div>
-                            <div *ngSwitchCase="'total'">
-                              {{ data[template.matColumnDef] | number }}
-                            </div>
-                            <div *ngSwitchCase="'percentage'">
-                              {{ data[template.matColumnDef] }}%
-                            </div>
-                          </ng-container>
-                        </div>
-                      </td>
-                    </ng-container>
+                <table mat-table [dataSource]="AURASendersDS" class="aura-table">
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="rank">
+                    <th mat-header-cell *matHeaderCellDef>rank</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                   </ng-container>
+                  <!-- address Column -->
+                  <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef>address</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a class="text--primary mr-5 mr-lg-10" [routerLink]="['/account', element.address]">
+                        {{ element.address | cutStringPipe: 8:8 }}
+                      </a>
+                    </td>
+                  </ng-container>
+                  <!-- Total aura Column -->
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.result?.total_received_amount?.amount ?? 0 }}
+                    </td>
+                  </ng-container>
+                  <!-- Percent Column -->
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef>percentage</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.result?.total_received_amount?.percentage ?? 0 }}%
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
@@ -211,4 +221,6 @@
       </div>
     </div>
   </div>
+
+
 </div>

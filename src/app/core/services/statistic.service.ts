@@ -27,4 +27,19 @@ export class StatisticService extends CommonService {
       params,
     });
   }
+
+  getDailyTxStatistic(property: "daily_txs" | "daily_active_addresses" | "unique_addresses", startDate, endDate): Observable<any> {
+    const params = _({
+      chainId: this.chainInfo.chainId,
+      property,
+      startDate,
+      endDate
+    })
+      .omitBy(_.isNull)
+      .omitBy(_.isUndefined)
+      .value();
+    return this.http.get<any>(`${this.indexerUrl}/daily-tx-statistics`, {
+      params,
+    });
+  }
 }

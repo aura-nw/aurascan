@@ -6,6 +6,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {createChart} from "lightweight-charts";
 import {STATISTIC_CHART_OPTIONS} from "../statistic-chart-options";
 import {StatisticService} from "src/app/core/services/statistic.service";
+import {forEach} from "lodash";
 @Component({
   selector: 'app-chart-stats',
   templateUrl: './chart-stats.component.html',
@@ -28,6 +29,11 @@ export class ChartStatsComponent implements OnInit {
   dailyAddressChartSeries;
   min = 0;
   max = 99999;
+
+  currTime = new Date();
+  currTimeMs = Date.parse(this.currTime + "");
+  prevTime = new Date(this.currTime.getFullYear() -1, 0, 1);
+  prevTimeMs = Date.parse(this.prevTime + "");
 
   constructor(
       private http: HttpClient,
@@ -182,6 +188,7 @@ export class ChartStatsComponent implements OnInit {
           maxValue: this.max,
         },
       }),
+
     });
     this.dailyAddressChartSeries.applyOptions({
       lineColor: '#2CB1F5',
@@ -221,24 +228,39 @@ export class ChartStatsComponent implements OnInit {
   }
 
   getDailyTransactionData() {
-    const valueArr = [3781369,3784834,3784344,3784311,3712344,11784344,3712432,12784344,2284344,1234344];
-    const timeArr = ['2022-10-31T00:00:00Z','2022-11-01T00:00:00Z','2022-11-02T00:00:00Z','2022-11-03T00:00:00Z','2022-11-08T00:00:00Z',
-               '2022-11-09T00:00:00Z','2022-11-10T00:00:00Z', '2022-11-12T00:00:00Z', '2022-11-14T00:00:00Z', '2022-11-21T00:00:00Z' ];
-    this.drawChart(valueArr, timeArr, 'dailyTrans');
+    this.statisticService.getDailyTxStatistic("daily_txs", this.prevTimeMs, this.currTimeMs).subscribe(res => {
+      let valueArr = [];
+      let timeArr = [];
+      res.data.dailyData.forEach(data => {
+        valueArr.push(data.daily_txs);
+        timeArr.push(data.date);
+      });
+      this.drawChart(valueArr, timeArr, 'dailyTrans');
+    })
   }
 
   getUniqueAddressData() {
-    const valueArr = [3781369,3784834,3784344,3784311,3712344,11784344,3712432,12784344,2284344,1234344];
-    const timeArr = ['2022-10-31T00:00:00Z','2022-11-01T00:00:00Z','2022-11-02T00:00:00Z','2022-11-03T00:00:00Z','2022-11-08T00:00:00Z',
-               '2022-11-09T00:00:00Z','2022-11-10T00:00:00Z', '2022-11-12T00:00:00Z', '2022-11-14T00:00:00Z', '2022-11-21T00:00:00Z' ];
-    this.drawChart(valueArr, timeArr, 'uniqueAddress');
+    this.statisticService.getDailyTxStatistic("unique_addresses", this.prevTimeMs, this.currTimeMs).subscribe(res => {
+      let valueArr = [];
+      let timeArr = [];
+      res.data.dailyData.forEach(data => {
+        valueArr.push(data.unique_addresses);
+        timeArr.push(data.date);
+      });
+      this.drawChart(valueArr, timeArr, 'uniqueAddress');
+    })
   }
 
   getDailyAddressData() {
-    const valueArr = [3781369,3784834,3784344,3784311,3712344,11784344,3712432,12784344,2284344,1234344];
-    const timeArr = ['2022-10-31T00:00:00Z','2022-11-01T00:00:00Z','2022-11-02T00:00:00Z','2022-11-03T00:00:00Z','2022-11-08T00:00:00Z',
-               '2022-11-09T00:00:00Z','2022-11-10T00:00:00Z', '2022-11-12T00:00:00Z', '2022-11-14T00:00:00Z', '2022-11-21T00:00:00Z' ];
-    this.drawChart(valueArr, timeArr, 'dailyAddress');
+    this.statisticService.getDailyTxStatistic("daily_active_addresses", this.prevTimeMs, this.currTimeMs).subscribe(res => {
+      let valueArr = [];
+      let timeArr = [];
+      res.data.dailyData.forEach(data => {
+        valueArr.push(data.daily_active_addresses);
+        timeArr.push(data.date);
+      });
+      this.drawChart(valueArr, timeArr, 'dailyAddress');
+    })
   }
 
 }

@@ -33,7 +33,6 @@ export class TopStatisticOverviewComponent implements OnInit {
       this.loading = true;
       if(res && res.data) {
         this.transactionsData = res.data;
-        console.log(res.data)
       } else {
         this.transactionsData = null;
       }

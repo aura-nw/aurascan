@@ -31,7 +31,7 @@
                 <span class="d-lg-none">{{ transactionsData.top_aura_senders[0].address | cutStringPipe: 6 : 6 }}</span>
               </a>
             </div>
-            <div class="body-01 text--gray-1">{{ transactionsData.top_aura_senders[0].one_day.total_sent_tx.amount }}</div>
+            <div class="body-01 text--gray-1">{{ transactionsData.top_aura_senders[0].result.total_sent_tx.amount }}</div>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
                 <span class="d-lg-none">{{ transactionsData.top_aura_receivers[0].address | cutStringPipe: 6 : 6 }}</span>
               </a>
             </div>
-            <div class="body-01 text--gray-1">{{ transactionsData.top_aura_receivers[0].one_day.total_received_tx.amount }}</div>
+            <div class="body-01 text--gray-1">{{ transactionsData.top_aura_receivers[0].result.total_received_tx.amount }}</div>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
                 <span class="d-lg-none">{{ transactionsData.top_txn_count_sent[0].address | cutStringPipe: 6 : 6 }}</span>
               </a>
             </div>
-            <div class="body-01 text--gray-1">{{ transactionsData.top_txn_count_sent[0].one_day.total_sent_amount.amount }}</div>
+            <div class="body-01 text--gray-1">{{ transactionsData.top_txn_count_sent[0].result.total_sent_amount.amount }}</div>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
                 <span class="d-lg-none">{{ transactionsData.top_txn_count_received[0].address | cutStringPipe: 6 : 6 }}</span>
               </a>
             </div>
-            <div class="body-01 text--gray-1">{{ transactionsData.top_txn_count_received[0].one_day.total_received_amount.amount }}</div>
+            <div class="body-01 text--gray-1">{{ transactionsData.top_txn_count_received[0].result.total_received_amount.amount }}</div>
           </div>
         </div>
       </div>

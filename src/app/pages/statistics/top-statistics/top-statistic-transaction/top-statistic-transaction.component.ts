@@ -21,7 +21,7 @@ export class TopStatisticTransactionComponent implements OnInit {
   templates: Array<TableTemplate> = [
     { matColumnDef: 'rank', headerCellDef: 'rank' },
     { matColumnDef: 'address', headerCellDef: 'address' },
-    { matColumnDef: 'total', headerCellDef: 'total aura' },
+    { matColumnDef: 'total', headerCellDef: 'total' },
     { matColumnDef: 'percentage', headerCellDef: 'percentage' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
@@ -53,7 +53,6 @@ export class TopStatisticTransactionComponent implements OnInit {
       this.loading = true;
       if(res && res.data) {
         this.transactionsData = res.data;
-        console.log(res.data)
         this.AURASendersDS.data = res.data.top_aura_senders
         this.AURAReceiversDS.data = res.data.top_aura_receivers
         this.TxnCountSentDS.data = res.data.top_txn_count_sent
