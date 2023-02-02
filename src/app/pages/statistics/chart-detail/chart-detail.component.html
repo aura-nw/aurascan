@@ -1,0 +1,75 @@
+<div class="container-fluid px-0">
+    <div class="row">
+        <app-pagetitle title="{{theTitle}}"></app-pagetitle>
+        <p class="text--gray-1 mt-5">The chart highlights the total number of transactions on the Aura Blockchain Network with daily individual breakdown</p>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
+                    <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
+                    <div>
+                        <span class="mr-1">Highest number of</span>
+                        <span class="mr-1 text--primary">{{maxAmount}}</span>
+                        <br class="d-lg-none">
+                        <span class="mr-1">transactions on</span>
+                        <span class="text--primary">09/07/2022</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
+                    <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
+                    <div>
+                        <span class="mr-1">Lowest numher of</span>
+                        <span class="mr-1 text--primary">{{minAmount}}</span>
+                        <br class="d-lg-none">
+                        <span class="mr-1">transactions on</span>
+                        <span class="text--primary">09/07/2022</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-lg-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="body-01 fw-semibold text--gray-1 d-none d-lg-block">{{theTitle}}</div>
+                                <div class="h3-mob mb-0 fw-normal text--gray-1 d-lg-none">{{theTitle}}</div>
+                                <button class="button chart__options d-lg-none" (click)="exportChart()">
+                                    <i class="ph-download-simple"></i>
+                                </button>
+                            </div>
+                            <div class="caption fw-normal d-lg-flex align-items-center">
+                                <div class="d-flex">
+                                    <span class="mr-1 text--gray-2">Source:</span>
+                                    <a href="aurascan.com" class="text--blue-3link">Aurascan.com</a>
+                                </div>
+                                <span class="dot mx-2 d-none d-lg-block"></span>
+                                <span class="text--gray-3">Click and drag in the plot area to zoom in</span>
+                            </div>
+                        </div>
+                        <button class="button chart__options d-none d-lg-block" (click)="exportChart()">
+                            <i class="ph-download-simple"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="divider divider-horizontal"></div>
+                <div class="card-body">
+                    <div class="w-100 chart-contain pl-1">
+                        <div id="dailyChart"></div>
+                        <div class="chart__name">
+                            <span class="text--gray-1 caption fw-normal">{{chartName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

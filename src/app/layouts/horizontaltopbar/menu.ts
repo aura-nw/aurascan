@@ -10,6 +10,7 @@ export enum MenuName {
   TokenCW20 = 'TokenCW20',
   TokenCW721 = 'TokenCW721',
   Statistic = 'Statistic',
+  ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
   Contract = 'Contract',
   Account = 'Account',
@@ -97,20 +98,20 @@ export const MENU: MenuItem[] = [
         link: '/contracts',
         name: MenuName.Contract
       },
-      // {
-      //   id: 2,
-      //   label: 'MENUITEMS.CHART-STATS',
-      //   link: '/statistics/charts-stats',
-      //   name: MenuName.ChartStats,
-      //   icon: 'line-segments',
-      // },
-      // {
-      //   id: 3,
-      //   label: 'MENUITEMS.TOP-STATISTICS',
-      //   link: '/statistics/top-statistic',
-      //   name: MenuName.TopStatistics,
-      //   icon: 'chart-line',
-      // }
+      {
+        id: 2,
+        label: 'MENUITEMS.CHART-STATS',
+        link: '/statistics/charts-stats',
+        name: MenuName.ChartStats,
+        icon: 'line-segments',
+      },
+      {
+        id: 3,
+        label: 'MENUITEMS.TOP-STATISTICS',
+        link: '/statistics/top-statistic',
+        name: MenuName.TopStatistics,
+        icon: 'chart-line',
+      }
     ]
   },
   {
@@ -138,5 +139,5 @@ export const MENU: MenuItem[] = [
       icon: 'gas-pump',
     }
     ]
-  },
+  }
 ];
