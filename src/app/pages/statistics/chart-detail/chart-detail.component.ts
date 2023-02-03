@@ -210,7 +210,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   }
 
   exportChart() {
-    console.log(this.originalData);
     const exportData = this.originalData.map((item) => {
       const dateF = this.datepipe.transform(new Date(item.time * 1000), 'dd-MM-yyyy:HH-mm-ss');
       return {
@@ -218,7 +217,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         value: item.value,
       };
     });
-    console.log(exportData);
     const currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
 
     exportStatisticChart(

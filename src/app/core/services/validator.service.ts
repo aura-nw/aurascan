@@ -27,7 +27,8 @@ export class ValidatorService extends CommonService {
   validatorsFromIndexer(address : string): Observable<any> {
     const params = _({
       chainid: this.chainInfo.chainId,
-      operatorAddress: address
+      operatorAddress: address,
+      pageLimit: 100
     })
       .omitBy(_.isNull)
       .omitBy(_.isUndefined)
