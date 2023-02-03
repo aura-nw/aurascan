@@ -96,5 +96,4 @@ export function exportStatisticChart(data: any, type: string, currDate: string) 
   } catch (e) {
     console.error(e);
   }
-
 }

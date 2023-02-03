@@ -38,6 +38,11 @@ export class MenuBottomBarComponent implements OnInit {
         this.menuLink.push(arr);
       }
     }
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+      // or
+      return true;
+    };
   }
 
   @HostListener('body:click', ['$event'])
@@ -90,6 +95,17 @@ export class MenuBottomBarComponent implements OnInit {
       menuLink === '/tokens/tokens-nft' &&
       (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
     ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/statistics/charts-stats' &&
+      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
+    ) {
+      return true;
+    }
+
+    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
       return true;
     }
     return false;
