@@ -103,6 +103,16 @@ export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'
   },
 };
 
+export const STATISTIC_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
+  lineColor: '#5EE6D0',
+  topColor: 'rgba(136,198,203,0.12)',
+  bottomColor: 'rgba(119, 182, 188, 0.01)',
+  priceFormat: {
+    precision: 0,
+    minMove: 1,
+  },
+};
+
 export const CHART_CONFIG: {
   [key: string]: {
     initRange: number;

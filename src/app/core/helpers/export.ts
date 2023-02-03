@@ -52,7 +52,6 @@ export function exportChart(data: any, range: string, isPrice: boolean, currDate
 
 export function exportStatisticChart(data: any, type: string, currDate: string) {
   let label = '';
-  console.log(type)
   switch (type) {
     case 'daily-transactions':
       label = 'Aura Daily Transactions Data';
@@ -97,5 +96,4 @@ export function exportStatisticChart(data: any, type: string, currDate: string) 
   } catch (e) {
     console.error(e);
   }
-
 }
