@@ -327,8 +327,8 @@ export class TransactionMessagesComponent implements OnInit {
           }
 
           if (this.ibcData['acknowledgement']) {
-            let dataEncode = atob(this.ibcData['acknowledgement']?.packet?.data);
             try {
+              let dataEncode = atob(this.ibcData['acknowledgement']?.packet?.data);
               const data = JSON.parse(dataEncode);
               this.ibcData['acknowledgement'] = {
                 ...this.ibcData['acknowledgement'],
