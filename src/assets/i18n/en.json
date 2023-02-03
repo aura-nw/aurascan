@@ -98,6 +98,7 @@
         "CHANEL": "Chanels",
         "USER_MANAGEMENT": "User management",
         "MORE": "More",
+        "STATISTICS": "Statistics",
         "APPS": {
             "TEXT": "Apps",
             "LIST": {
@@ -259,6 +260,7 @@
         "ERROR_REDELEGATE_INPROGRESS": "You must wait {{ timeStaking }} day(s) in order to be able to redelegate from the selected validator.",
         "ERROR_UNDELEGATE_TIME": "You can undelegate from the same validator only up to 7 times.",
         "SUCCESS_TRANSACTION": "Successful transaction!",
-        "SUBMIT_FORM_SUCCESS": "Submit form successfully!"
+        "SUBMIT_FORM_SUCCESS": "Submit form successfully!",
+        "CHART_WAIT_DATA": "Please wait for chart info"
     }
 }

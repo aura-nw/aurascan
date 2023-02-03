@@ -1,0 +1,19 @@
+a.text-link:hover {
+  color: var(--aura-green-3) !important;
+}
+section.chart-stats .chart-contain {
+  .chart__name {
+    z-index: 10;
+    @media (min-width: 992px) {
+      display: none;
+    }
+  }
+}
+.card-info {
+  @media (min-width: 991.98px) {
+    border: 1px solid transparent;
+    &:hover {
+      border: 1px solid var(--aura-gray-7);
+    }
+  }
+}
