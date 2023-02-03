@@ -96,10 +96,10 @@ export class ProposalService extends CommonService {
   }
 
   getVoteMessageByConstant(option: any) {
-    let result = '';
     if (typeof option === 'string') {
-      result = option;
+      return option;
     }
+    let result = '';
     switch (option) {
       case 1:
         result = VOTE_OPTION.VOTE_OPTION_YES;
