@@ -1,53 +1,51 @@
 <app-pagetitle title="Aura Charts & Statistics"></app-pagetitle>
 <section class="chart-stats mt-8 mt-lg-6">
-    <div class="card">
-        <div class="card-body">
-            <div class="container-fluid px-0">
-                <div class="h1 text--white mb-4">
-                    Blockchain Data
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid px-0">
+        <div class="h1 text--white mb-4">Blockchain Data</div>
+        <div class="row">
+          <div class="col-12 col-lg-4">
+            <div class="card-info px-4 py-4 px-lg-6">
+              <a [routerLink]="['/statistics/chart', 'daily-transactions']" class="text--gray-1 text-link">
+                <div class="body-01">Daily Transactions Chart</div>
+              </a>
+              <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
+                <div id="dailyTransactionChart"></div>
+                <div class="chart__name">
+                  <span class="text--gray-1 caption fw-normal">Transactions per Day</span>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-lg-4">
-                        <div class="card-info px-4 py-4 px-lg-6">
-                            <a [routerLink]="['/statistics/chart', 'daily-transactions']" class="text--gray-1 text-link">
-                                <div class="body-01">Daily Transactions Chart</div>
-                            </a>
-                            <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
-                                <div id="dailyTransactionChart"></div>
-                                <div class="chart__name">
-                                    <span class="text--gray-1 caption fw-normal">Transactions per Day</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4 mt-6 mt-lg-0">
-                        <div class="card-info px-4 py-4 px-lg-6">
-                            <a [routerLink]="['/statistics/chart', 'unique-addresses']" class="text--gray-1 text-link">
-                                <div class="body-01">Unique Addresses Chart</div>
-                            </a>
-                            <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
-                                <div id="uniqueAddressChart"></div>
-                                <div class="chart__name">
-                                    <span class="text--gray-1 caption fw-normal">Aura cumulative Address Growth</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-4 mt-6 mt-lg-0">
-                        <div class="card-info px-4 py-4 px-lg-6">
-                            <a [routerLink]="['/statistics/chart', 'cumulative-addresses']" class="text--gray-1 text-link">
-                                <div class="body-01">Aura cumulative Address Growth</div>
-                            </a>
-                            <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
-                                <div id="dailyAddressChart"></div>
-                                <div class="chart__name">
-                                    <span class="text--gray-1 caption fw-normal">Active Aura addresses per day</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
+          <div class="col-12 col-lg-4 mt-6 mt-lg-0">
+            <div class="card-info px-4 py-4 px-lg-6">
+              <a [routerLink]="['/statistics/chart', 'unique-addresses']" class="text--gray-1 text-link">
+                <div class="body-01">Unique Addresses Chart</div>
+              </a>
+              <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
+                <div id="uniqueAddressChart"></div>
+                <div class="chart__name">
+                  <span class="text--gray-1 caption fw-normal">Aura cumulative Address Growth</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4 mt-6 mt-lg-0">
+            <div class="card-info px-4 py-4 px-lg-6">
+              <a [routerLink]="['/statistics/chart', 'cumulative-addresses']" class="text--gray-1 text-link">
+                <div class="body-01">Daily Active Addresses Chart</div>
+              </a>
+              <div class="w-100 chart-contain pl-1 pl-lg-0 mt-4">
+                <div id="dailyAddressChart"></div>
+                <div class="chart__name">
+                  <span class="text--gray-1 caption fw-normal">Active Aura addresses per day</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>

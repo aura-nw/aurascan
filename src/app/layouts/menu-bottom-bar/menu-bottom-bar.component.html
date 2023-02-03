@@ -4,32 +4,86 @@
     <ng-container *ngFor="let item of menu; index as idx">
       <li class="menu-item">
         <ng-container *ngIf="item.name === menuName.Dashboard">
-          <a class="menu-link text-center d-block" (click)="overLayClickEvent()"
-             [routerLink]="item.link"
-             routerLinkActive="active"
-             [class.active]="router.url === '/' && item.link === '/dashboard'">
+          <a
+            class="menu-link text-center d-block"
+            (click)="overLayClickEvent()"
+            [routerLink]="item.link"
+            routerLinkActive="active"
+            [class.active]="router.url === '/' && item.link === '/dashboard'">
             <i class="ph-{{ item.icon }} mx-auto h3 mr-2 mb-0"></i>
             <div class="caption fw-500 d-block mt-1">{{ item.label | translate }}</div>
           </a>
         </ng-container>
         <ng-container *ngIf="item.name === menuName.BlockChain">
-          <ng-container *ngTemplateOutlet="btnDropdown;
-          context: {data: { idx: idx, id: 'blockChainBtn', iconId: 'blockChainIcon', textId: 'blockChainText', label: item.label, icon: item.icon, popContent: popContent1}}">
+          <ng-container
+            *ngTemplateOutlet="
+              btnDropdown;
+              context: {
+                data: {
+                  idx: idx,
+                  id: 'blockChainBtn',
+                  iconId: 'blockChainIcon',
+                  textId: 'blockChainText',
+                  label: item.label,
+                  icon: item.icon,
+                  popContent: popContent1
+                }
+              }
+            ">
           </ng-container>
         </ng-container>
         <ng-container *ngIf="item.name === menuName.Token">
-          <ng-container *ngTemplateOutlet="btnDropdown;
-          context: {data: { idx: idx, id: 'tokenBtn', iconId: 'tokenIcon', textId: 'tokenText', label: item.label, icon: item.icon, popContent: popContent2}}">
+          <ng-container
+            *ngTemplateOutlet="
+              btnDropdown;
+              context: {
+                data: {
+                  idx: idx,
+                  id: 'tokenBtn',
+                  iconId: 'tokenIcon',
+                  textId: 'tokenText',
+                  label: item.label,
+                  icon: item.icon,
+                  popContent: popContent2
+                }
+              }
+            ">
           </ng-container>
         </ng-container>
         <ng-container *ngIf="item.name === menuName.Resources">
-          <ng-container *ngTemplateOutlet="btnDropdown;
-          context: {data: { idx: idx, id: 'resourceBtn', iconId: 'resourceIcon', textId: 'resourceText', label: item.label, icon: item.icon, popContent: popContent3}}">
+          <ng-container
+            *ngTemplateOutlet="
+              btnDropdown;
+              context: {
+                data: {
+                  idx: idx,
+                  id: 'resourceBtn',
+                  iconId: 'resourceIcon',
+                  textId: 'resourceText',
+                  label: item.label,
+                  icon: item.icon,
+                  popContent: popContent3
+                }
+              }
+            ">
           </ng-container>
         </ng-container>
         <ng-container *ngIf="item.name === menuName.More && wallet">
-          <ng-container *ngTemplateOutlet="btnDropdown;
-          context: {data: { idx: idx, id: 'moreBtn', iconId: 'moreIcon', textId: 'moreText', label: item.label, icon: item.icon, popContent: popContent4}}">
+          <ng-container
+            *ngTemplateOutlet="
+              btnDropdown;
+              context: {
+                data: {
+                  idx: idx,
+                  id: 'moreBtn',
+                  iconId: 'moreIcon',
+                  textId: 'moreText',
+                  label: item.label,
+                  icon: item.icon,
+                  popContent: popContent4
+                }
+              }
+            ">
           </ng-container>
         </ng-container>
       </li>
@@ -41,8 +95,8 @@
   <div class="text--white box-menu" id="popContent1" *ngIf="menu[1]?.subItems">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menu[1].subItems">
-        <ng-container *ngTemplateOutlet="menuItem;
-          context: {data: { link: item.link, icon: item.icon, label: item.label}}">
+        <ng-container
+          *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
         </ng-container>
       </ng-container>
     </ul>
@@ -53,8 +107,8 @@
   <div class="text--white box-menu" id="popContent2" *ngIf="menu[2]?.subItems">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menu[2].subItems">
-        <ng-container *ngTemplateOutlet="menuItem;
-          context: {data: { link: item.link, icon: item.icon, label: item.label}}">
+        <ng-container
+          *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
         </ng-container>
       </ng-container>
     </ul>
@@ -65,8 +119,8 @@
   <div class="text--white box-menu" id="popContent3" *ngIf="menu[3]?.subItems">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menu[3].subItems">
-        <ng-container *ngTemplateOutlet="menuItem;
-          context: {data: { link: item.link, icon: item.icon, label: item.label}}">
+        <ng-container
+          *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
         </ng-container>
       </ng-container>
     </ul>
@@ -77,8 +131,8 @@
   <div class="text--white box-menu" id="popContent4" *ngIf="menu[4]?.subItems">
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menu[4].subItems">
-        <ng-container *ngTemplateOutlet="menuItem;
-          context: {data: { link: item.link, icon: item.icon, label: item.label}}">
+        <ng-container
+          *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
         </ng-container>
       </ng-container>
     </ul>
@@ -87,14 +141,19 @@
 
 <!-- btn dropdown template-->
 <ng-template #btnDropdown let-data="data">
-  <button id="{{ data.id }}"
-          class="button p-0 d-block menu-link text-center"
-          #popover="ngbPopover" (click)="popover.isOpen() ? overLayClickEvent() : null"
-          [ngbPopover]="data.popContent" (shown)="overlayPanel = true"
-          [autoClose]="'outside'"
-          [popoverClass]="'menu-dropdown-popover'"
-          [class.active]="popover.isOpen() ||
-            (menuLink[data.idx].includes('/' + router.url.split('/')[1]) && ('/' + router.url.split('/')[1]) !== '/')">
+  <button
+    id="{{ data.id }}"
+    class="button p-0 d-block menu-link text-center"
+    #popover="ngbPopover"
+    (click)="popover.isOpen() ? overLayClickEvent() : null"
+    [ngbPopover]="data.popContent"
+    (shown)="overlayPanel = true"
+    [autoClose]="'outside'"
+    [popoverClass]="'menu-dropdown-popover'"
+    [class.active]="
+      popover.isOpen() ||
+      (menuLink[data.idx].includes('/' + router.url.split('/')[1]) && '/' + router.url.split('/')[1] !== '/')
+    ">
     <i class="ph-{{ data.icon }} mx-auto h3 mb-0" id="{{ data.iconId }}"></i>
     <div class="caption d-block mt-1" id="{{ data.textId }}">{{ data.label | translate }}</div>
   </button>
@@ -102,10 +161,7 @@
 <!-- menu link template-->
 <ng-template #menuItem let-data="data">
   <li class="menu-item" (click)="popover.close()">
-    <a class="menu-link"
-       [class.active]="checkMenuActive(data.link)"
-       [routerLink]="data.link"
-    >
+    <a class="menu-link" [class.active]="checkMenuActive(data.link)" [routerLink]="data.link">
       <i class="ph-{{ data.icon }} h3 mr-2 mb-0"></i>
       <div class="body fw-semibold">{{ data.label | translate }}</div>
     </a>

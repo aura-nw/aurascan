@@ -14,6 +14,7 @@ import { StatisticsRoutingModule } from './statistics-routing.module';
 import { TopStatisticOverviewComponent } from './top-statistics/top-statistic-overview/top-statistic-overview.component';
 import { TopStatisticTransactionComponent } from './top-statistics/top-statistic-transaction/top-statistic-transaction.component';
 import { TopStatisticsComponent } from './top-statistics/top-statistics.component';
+import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TopStatisticsComponent } from './top-statistics/top-statistics.componen
     MatTableModule,
     TranslateModule,
     TableNoDataModule,
+    NgxMaskModule,
   ],
-  providers: [StatisticService],
+  providers: [StatisticService, MaskPipe],
 })
 export class StatisticsModule {}

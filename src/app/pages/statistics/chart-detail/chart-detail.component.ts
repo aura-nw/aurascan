@@ -2,7 +2,7 @@ import { DatePipe, formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi, SeriesPartialOptionsMap } from 'lightweight-charts';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -14,7 +14,9 @@ import {
   CHART_CONFIG,
   DASHBOARD_AREA_SERIES_CHART_OPTIONS,
   DASHBOARD_CHART_OPTIONS,
+  STATISTIC_AREA_SERIES_CHART_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
+import { MaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-chart-detail',
@@ -40,12 +42,16 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   maxAmountDate;
   minAmountDate;
 
+  toolTipWidth = 80;
+  toolTipHeight = 80;
+  toolTipMargin = 15;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     public translate: TranslateService,
     private statisticService: StatisticService,
     public datepipe: DatePipe,
+    private maskService: MaskPipe,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (
@@ -89,8 +95,9 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   // config chart
   initChart() {
     this.chart = createChart(document.getElementById('dailyChart'), DASHBOARD_CHART_OPTIONS);
-    this.areaSeries = this.chart.addAreaSeries(DASHBOARD_AREA_SERIES_CHART_OPTIONS);
+    this.areaSeries = this.chart.addAreaSeries(STATISTIC_AREA_SERIES_CHART_OPTIONS);
     this.subscribeVisibleLogicalRangeChange();
+    this.initTooltip();
   }
 
   subscribeVisibleLogicalRangeChange() {
@@ -140,7 +147,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
 
   getChartInfo(type: string) {
     this.endData = false;
-    // this.initTooltip();
     this.chartRange = type;
     const currTime = new Date();
     const max = Date.parse(currTime + '');
@@ -175,6 +181,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         this.chartEvent();
       }
     });
+    this.initTooltip();
   }
 
   drawChartFirstTime(data, dateTime) {
@@ -210,7 +217,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   }
 
   exportChart() {
-    console.log(this.originalData);
     const exportData = this.originalData.map((item) => {
       const dateF = this.datepipe.transform(new Date(item.time * 1000), 'dd-MM-yyyy:HH-mm-ss');
       return {
@@ -218,7 +224,6 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
         value: item.value,
       };
     });
-    console.log(exportData);
     const currDate = moment(new Date()).format('DDMMYYYY_HHMMSS');
 
     exportStatisticChart(
@@ -230,6 +235,62 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
       this.chartType,
       currDate,
     );
+  }
+
+  initTooltip() {
+    const container = document.getElementById('dailyChart');
+    const toolTip = document.createElement('div');
+    const label = 'Transaction';
+    toolTip.className = 'floating-tooltip-2';
+    container.appendChild(toolTip);
+
+    // update tooltip
+    this.chart.subscribeCrosshairMove((param) => {
+      if (
+        param.point === undefined ||
+        !param.time ||
+        param.point.x < 0 ||
+        param.point.x > container.clientWidth ||
+        param.point.y < 0 ||
+        param.point.y > container.clientHeight
+      ) {
+        toolTip.style.display = 'none';
+      } else {
+        const timestamp = moment.unix((param.time as number) - 25200); // GMT+7
+        const dateStr = timestamp.format('DD/MM/YYYY HH:mm:ss');
+        toolTip.style.display = 'block';
+        const price = param.seriesPrices.get(this.areaSeries);
+        toolTip.innerHTML =
+          '' +
+          '<div class="floating-tooltip__header">' +
+          label +
+          '</div>' +
+          '<div class="floating-tooltip__body"><div style="font-size: 14px; margin: 4px 0;">' +
+          this.maskService.transform(price as number, 'separator') +
+          '</div><div>' +
+          dateStr +
+          '' +
+          '</div></div>';
+        const coordinate = this.areaSeries.priceToCoordinate(price as number);
+        let shiftedCoordinate = param.point.x - 50;
+        if (coordinate === null) {
+          return;
+        }
+        shiftedCoordinate = Math.max(0, Math.min(container.clientWidth - this.toolTipWidth, shiftedCoordinate));
+        const coordinateY =
+          coordinate - this.toolTipHeight - this.toolTipMargin > 0
+            ? coordinate - this.toolTipHeight - this.toolTipMargin
+            : Math.max(
+                0,
+                Math.min(
+                  container.clientHeight - this.toolTipHeight - this.toolTipMargin,
+                  coordinate + this.toolTipMargin,
+                ),
+              );
+        toolTip.style.left = shiftedCoordinate + 'px';
+        toolTip.style.top = coordinateY + 'px';
+      }
+    });
   }
 
   ngOnDestroy(): void {

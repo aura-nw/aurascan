@@ -29,13 +29,10 @@ export class ChartStatsComponent implements OnInit {
 
   currTime = new Date();
   currTimeMs = Date.parse(this.currTime + '');
-  prevTime = new Date(this.currTime.getFullYear() - 1, 0, 1);
+  prevTime = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000);
   prevTimeMs = Date.parse(this.prevTime + '');
 
-  constructor(
-    public translate: TranslateService,
-    private statisticService: StatisticService,
-  ) {}
+  constructor(public translate: TranslateService, private statisticService: StatisticService) {}
 
   ngOnInit() {
     this.dailyTransactionChartInit();
@@ -64,7 +61,8 @@ export class ChartStatsComponent implements OnInit {
           visible: false,
         },
         horzLines: {
-          visible: false,
+          visible: true,
+          color: '#494C58',
         },
       },
       leftPriceScale: {
@@ -86,6 +84,11 @@ export class ChartStatsComponent implements OnInit {
       lineColor: '#2CB1F5',
       topColor: 'rgba(136,198,203,0.12)',
       bottomColor: 'rgba(119, 182, 188, 0.01)',
+      priceFormat: {
+        type: 'price',
+        precision: 0,
+        minMove: 1,
+      },
     });
 
     this.dailyTransactionChart.priceScale().applyOptions({
@@ -110,7 +113,8 @@ export class ChartStatsComponent implements OnInit {
           visible: false,
         },
         horzLines: {
-          visible: false,
+          visible: true,
+          color: '#494C58',
         },
       },
       leftPriceScale: {
@@ -131,6 +135,11 @@ export class ChartStatsComponent implements OnInit {
       lineColor: '#2CB1F5',
       topColor: 'rgba(44, 177, 245, 0.2)',
       bottomColor: 'rgba(44, 177, 245, 0.08)',
+      priceFormat: {
+        type: 'price',
+        precision: 0,
+        minMove: 1,
+      },
     });
     this.uniqueAddressChart.priceScale().applyOptions({
       autoScale: true,
@@ -154,7 +163,8 @@ export class ChartStatsComponent implements OnInit {
           visible: false,
         },
         horzLines: {
-          visible: false,
+          visible: true,
+          color: '#494C58',
         },
       },
       leftPriceScale: {
@@ -175,6 +185,11 @@ export class ChartStatsComponent implements OnInit {
       lineColor: '#2CB1F5',
       topColor: 'rgba(44, 177, 245, 0.2)',
       bottomColor: 'rgba(44, 177, 245, 0)',
+      priceFormat: {
+        type: 'price',
+        precision: 0,
+        minMove: 1,
+      },
     });
     this.dailyAddressChart.priceScale().applyOptions({
       autoScale: true,
