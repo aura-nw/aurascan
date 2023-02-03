@@ -117,7 +117,9 @@
                   <span class="nav-link__panel nav-link__panel-more" *ngIf="menuLink.length > 0">
                     <ng-container *ngFor="let subMenu of item.subItems">
                       <a
-                        *ngIf="subMenu.label !== 'Soulbound Token' || (subMenu.label === 'Soulbound Token' && lengthSBT > 0)"
+                        *ngIf="
+                          subMenu.label !== 'Soulbound Token' || (subMenu.label === 'Soulbound Token' && lengthSBT > 0)
+                        "
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         [class.active]="checkMenuActive(subMenu.link)">
@@ -128,26 +130,6 @@
                         <span class="ml-2">{{ subMenu.label | translate }}</span>
                       </a>
                     </ng-container>
-                    <!-- <a
-                      *ngIf="item.subItems && item.name === menuName.Statistic"
-                      (click)="onMenuClick($event)"
-                      class="nav-link dropdown-toggle arrow-none d-flex align-items-center mb-0"
-                      href="javascript: void(0);"
-                      role="button">
-                      <i class="icon icon-{{ item.icon }}"></i>
-                      <span class="ml-2 fw-semibold">{{ item.label | translate }}</span>
-                      <span class="nav-link__panel">
-                        <a
-                          [routerLink]="subMenu.link"
-                          *ngFor="let subMenu of item.subItems"
-                          [class.active]="
-                            (subMenu.name === menuName.ChartStats && router.url.includes('/charts-stats')) ||
-                            (subMenu.name === menuName.TopStatistics && router.url.includes('/top-statistic'))
-                          ">
-                          <span>{{ subMenu.label }}</span>
-                        </a>
-                      </span>
-                    </a> -->
                   </span>
                 </button>
               </ng-container>
