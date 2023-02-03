@@ -118,11 +118,6 @@ form.aura-form.single-input-field {
             }
           }
         }
-        &__item {
-          &:not(:first-child) {
-            border-top: 1px solid var(--aura-gray-9);
-          }
-        }
         &__sub-item {
           min-height: 48px;
         }
