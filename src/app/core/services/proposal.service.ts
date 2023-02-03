@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
+import { VOTE_OPTION } from '../constants/proposal.constant';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -92,5 +93,30 @@ export class ProposalService extends CommonService {
       .value();
 
     return this.http.get<any>(`${this.indexerUrl}/proposal`, { params });
+  }
+
+  getVoteMessageByConstant(option: any) {
+    let result = '';
+    if (typeof option === 'string') {
+      result = option;
+    }
+    switch (option) {
+      case 1:
+        result = VOTE_OPTION.VOTE_OPTION_YES;
+        break;
+      case 2:
+        result = VOTE_OPTION.VOTE_OPTION_ABSTAIN;
+        break;
+      case 3:
+        result = VOTE_OPTION.VOTE_OPTION_NO;
+        break;
+      case 4:
+        result = VOTE_OPTION.VOTE_OPTION_NO_WITH_VETO;
+        break;
+      default:
+        result = VOTE_OPTION.VOTE_OPTION_EMPTY;
+        break;
+    }
+    return result;
   }
 }
