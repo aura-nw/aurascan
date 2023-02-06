@@ -104,9 +104,9 @@ export const DASHBOARD_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'
 };
 
 export const STATISTIC_AREA_SERIES_CHART_OPTIONS: SeriesPartialOptionsMap['Area'] = {
-  lineColor: '#5EE6D0',
-  topColor: 'rgba(136,198,203,0.12)',
-  bottomColor: 'rgba(119, 182, 188, 0.01)',
+  lineColor: '#2CB1F5',
+  topColor: 'rgba(44, 177, 245, 0.2)',
+  bottomColor: 'rgba(44, 177, 245, 0.08)',
   priceFormat: {
     precision: 0,
     minMove: 1,
