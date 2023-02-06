@@ -20,7 +20,7 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
-        <h4 class="mb-0 text--gray-1">Top AURA Senders</h4>
+        <h4 class="mb-0 text--gray-1">Top {{ denom }} Senders</h4>
         <div class="mt-4">
           <div>
             <ng-container *ngIf="AURASendersDS?.data?.length > 0; else noValues">
@@ -42,9 +42,13 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <th mat-header-cell *matHeaderCellDef>total {{ denom }}</th>
                     <td mat-cell *matCellDef="let element">
-                      {{ (element.result?.total_sent_amount?.amount | mask : 'separator.2') ?? 0 }}
+                      {{
+                        (element.result?.total_sent_amount?.amount
+                          | convertUauraToAura : coinDecimals
+                          | mask : 'separator.6') ?? 0
+                      }}
                     </td>
                   </ng-container>
                   <!-- Percent Column -->
@@ -72,7 +76,7 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-body">
-        <h4 class="mb-0 text--gray-1">Top AURA Receivers</h4>
+        <h4 class="mb-0 text--gray-1">Top {{ denom }} Receivers</h4>
         <div class="mt-4">
           <div>
             <ng-container *ngIf="AURAReceiversDS?.data?.length > 0; else noValues">
@@ -94,9 +98,13 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <th mat-header-cell *matHeaderCellDef>total {{ denom }}</th>
                     <td mat-cell *matCellDef="let element">
-                      {{ (element.result?.total_received_amount?.amount | mask : 'separator.2') ?? 0 }}
+                      {{
+                        (element.result?.total_received_amount?.amount
+                          | convertUauraToAura : coinDecimals
+                          | mask : 'separator.6') ?? 0
+                      }}
                     </td>
                   </ng-container>
                   <!-- Percent Column -->
@@ -147,7 +155,7 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <th mat-header-cell *matHeaderCellDef>total Txn</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.result?.total_sent_tx?.amount | number) ?? 0 }}
                     </td>
@@ -198,7 +206,7 @@
                   </ng-container>
                   <!-- Total aura Column -->
                   <ng-container matColumnDef="total">
-                    <th mat-header-cell *matHeaderCellDef>total aura</th>
+                    <th mat-header-cell *matHeaderCellDef>total Txn</th>
                     <td mat-cell *matCellDef="let element">
                       {{ (element.result?.total_received_tx?.amount | number) ?? 0 }}
                     </td>

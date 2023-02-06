@@ -5,6 +5,7 @@ import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant'
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { Globals } from 'src/app/global/global';
+import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 
 @Component({
   selector: 'app-top-statistic-transaction',
@@ -12,6 +13,8 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./top-statistic-transaction.component.scss'],
 })
 export class TopStatisticTransactionComponent implements OnInit {
+  denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
+  coinDecimals = this.environmentService.configValue.chain_info.currencies[0].coinDecimals;
   rangeList = AURA_TOP_STATISTIC_RANGE;
   currentRange = AURA_TOP_STATISTIC_RANGE.D_1;
   currentDay;
@@ -34,7 +37,11 @@ export class TopStatisticTransactionComponent implements OnInit {
 
   TxnCountReceivedDS = new MatTableDataSource<any>();
 
-  constructor(public global: Globals, private statisticService: StatisticService) {}
+  constructor(
+    public global: Globals,
+    private statisticService: StatisticService,
+    private environmentService: EnvironmentService,
+  ) {}
 
   ngOnInit(): void {
     this.currentDay = formatDate(Date.now(), 'dd-MMM', 'en-US');
