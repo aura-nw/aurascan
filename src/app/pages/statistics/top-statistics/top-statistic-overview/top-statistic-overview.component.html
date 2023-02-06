@@ -23,8 +23,8 @@
       <div class="col-12 col-lg-6 mb-4" *ngIf="transactionsData.top_aura_senders">
         <div class="card-info px-6 py-6">
           <div class="d-flex justify-content-between align-items-center">
-            <div class="body text--gray-2">Top AURA Sender</div>
-            <div class="body text--gray-2">Total AURA</div>
+            <div class="body text--gray-2">Top {{ denom }} Sender</div>
+            <div class="body text--gray-2">Total {{ denom }}</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
@@ -40,7 +40,11 @@
               </a>
             </div>
             <div class="body-01 text--gray-1">
-              {{ (transactionsData.top_aura_senders[0].result.total_sent_amount.amount | mask : 'separator.6') ?? 0 }}
+              {{
+                (transactionsData.top_aura_senders[0].result.total_sent_amount.amount
+                  | convertUauraToAura : coinDecimals
+                  | mask : 'separator.6') ?? 0
+              }}
             </div>
           </div>
         </div>
@@ -48,8 +52,8 @@
       <div class="col-12 col-lg-6 mb-4" *ngIf="transactionsData.top_aura_receivers">
         <div class="card-info px-6 py-6">
           <div class="d-flex justify-content-between align-items-center">
-            <div class="body text--gray-2">Top AURA Receiver</div>
-            <div class="body text--gray-2">Total AURA</div>
+            <div class="body text--gray-2">Top {{ denom }} Receiver</div>
+            <div class="body text--gray-2">Total {{ denom }}</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="body">
@@ -66,7 +70,9 @@
             </div>
             <div class="body-01 text--gray-1">
               {{
-                (transactionsData.top_aura_receivers[0].result.total_received_amount.amount | mask : 'separator.2') ?? 0
+                (transactionsData.top_aura_receivers[0].result.total_received_amount.amount
+                  | convertUauraToAura : coinDecimals
+                  | mask : 'separator.6') ?? 0
               }}
             </div>
           </div>

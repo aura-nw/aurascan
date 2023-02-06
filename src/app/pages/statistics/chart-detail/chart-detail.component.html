@@ -22,12 +22,11 @@
             <span>
               {{ this.payloadChartType === 'unique_addresses' ? 'Highest increase of' : 'Highest number of' }}
             </span>
-            <span class="text--primary">{{ maxAmount }}</span>
+            <span class="text--primary">{{ maxAmount | number : global.formatNumberOnlyDecimal }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1">
-              {{ this.payloadChartType === 'unique_addresses' ? 'new addresses was recorded' : 'transactions' }}
-              on</span
-            >
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_txs'"> transactions on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'unique_addresses'"> new addresses was recorded on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_active_addresses'"> addresses on</span>
             <span class="text--primary">{{ maxAmountDate }}</span>
           </div>
         </div>
@@ -41,14 +40,11 @@
             <span>
               {{ this.payloadChartType === 'unique_addresses' ? 'Lowest increase of' : 'Lowest number of' }}
             </span>
-            <span class="mr-1 text--primary">{{ minAmount }}</span>
+            <span class="mr-1 text--primary">{{ minAmount | number : global.formatNumberOnlyDecimal }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1"
-              >{{
-                this.payloadChartType === 'unique_addresses' ? 'new addresses was recorded' : 'transactions'
-              }}
-              on</span
-            >
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_txs'">transactions on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'unique_addresses'">new addresses was recorded on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_active_addresses'">addresses on</span>
             <span class="text--primary">{{ minAmountDate }}</span>
           </div>
         </div>
