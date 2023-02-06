@@ -246,7 +246,18 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   initTooltip() {
     const container = document.getElementById('dailyChart');
     const toolTip = document.createElement('div');
-    const label = this.payloadChartType === 'unique_addresses' ? 'Addresses' : 'Transactions';
+    let label = '';
+    switch (this.payloadChartType) {
+      case 'daily_txs':
+        label = 'Transactions';
+        break;
+      case 'unique_addresses':
+        label = 'Unique Addresses';
+        break;
+      case 'daily_active_addresses':
+        label = 'Active Addresses';
+        break;
+    }
     toolTip.className = 'floating-tooltip-2';
     container.appendChild(toolTip);
 
