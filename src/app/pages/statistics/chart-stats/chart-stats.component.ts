@@ -82,8 +82,8 @@ export class ChartStatsComponent implements OnInit {
 
     this.dailyTransactionChartSeries.applyOptions({
       lineColor: '#2CB1F5',
-      topColor: 'rgba(136,198,203,0.12)',
-      bottomColor: 'rgba(119, 182, 188, 0.01)',
+      topColor: 'rgba(136,198,203,0)',
+      bottomColor: 'rgba(119, 182, 188, 0)',
       priceFormat: {
         type: 'price',
         precision: 0,
@@ -183,7 +183,7 @@ export class ChartStatsComponent implements OnInit {
     this.dailyAddressChartSeries = this.dailyAddressChart.addAreaSeries({});
     this.dailyAddressChartSeries.applyOptions({
       lineColor: '#2CB1F5',
-      topColor: 'rgba(44, 177, 245, 0.2)',
+      topColor: 'rgba(44, 177, 245, 0)',
       bottomColor: 'rgba(44, 177, 245, 0)',
       priceFormat: {
         type: 'price',

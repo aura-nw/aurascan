@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AURA_TOP_STATISTIC_RANGE } from 'src/app/core/constants/chart.constant';
 import { StatisticService } from 'src/app/core/services/statistic.service';
 import { formatDate } from '@angular/common';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-top-statistic-overview',
@@ -15,7 +16,7 @@ export class TopStatisticOverviewComponent implements OnInit {
   preDay;
   loading = true;
   transactionsData;
-  constructor(private statisticService: StatisticService) {}
+  constructor(public global: Globals, private statisticService: StatisticService) {}
 
   ngOnInit(): void {
     this.currentDay = formatDate(Date.now(), 'dd-MMM', 'en-US');
