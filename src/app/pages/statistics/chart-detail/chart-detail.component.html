@@ -19,10 +19,15 @@
         <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
           <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
           <div>
-            <span class="mr-1">Highest number of</span>
-            <span class="mr-1 text--primary">{{ maxAmount }}</span>
+            <span>
+              {{ this.payloadChartType === 'unique_addresses' ? 'Highest increase of' : 'Highest number of' }}
+            </span>
+            <span class="text--primary">{{ maxAmount }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1">transactions on</span>
+            <span class="mr-1">
+              {{ this.payloadChartType === 'unique_addresses' ? 'new addresses was recorded' : 'transactions' }}
+              on</span
+            >
             <span class="text--primary">{{ maxAmountDate }}</span>
           </div>
         </div>
@@ -33,10 +38,17 @@
         <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
           <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
           <div>
-            <span class="mr-1">Lowest numher of</span>
+            <span>
+              {{ this.payloadChartType === 'unique_addresses' ? 'Lowest increase of' : 'Lowest number of' }}
+            </span>
             <span class="mr-1 text--primary">{{ minAmount }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1">transactions on</span>
+            <span class="mr-1"
+              >{{
+                this.payloadChartType === 'unique_addresses' ? 'new addresses was recorded' : 'transactions'
+              }}
+              on</span
+            >
             <span class="text--primary">{{ minAmountDate }}</span>
           </div>
         </div>
@@ -65,9 +77,9 @@
                 <span class="text--gray-3">Click and drag in the plot area to zoom in</span>
               </div>
             </div>
-            <button class="button chart__options d-none d-lg-block" (click)="exportChart()">
-              <i class="ph-download-simple"></i>
-            </button>
+            <!--            <button class="button chart__options d-none d-lg-block" (click)="exportChart()">-->
+            <!--              <i class="ph-download-simple"></i>-->
+            <!--            </button>-->
           </div>
         </div>
         <div class="divider divider-horizontal"></div>
