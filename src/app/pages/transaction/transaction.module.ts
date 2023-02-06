@@ -16,6 +16,7 @@ import { TransactionComponent } from './transaction.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessagesItemComponent } from './transaction-detail/transaction-messages/messages-item/messages-item.component';
 import {NgxJsonViewerModule} from "ngx-json-viewer";
+import { ProposalService } from 'src/app/core/services/proposal.service';
 
 @NgModule({
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionMessagesComponent, MessagesItemComponent],
@@ -34,6 +35,6 @@ import {NgxJsonViewerModule} from "ngx-json-viewer";
     NgbNavModule,
     NgxJsonViewerModule,
   ],
-  providers: [TransactionService, MappingErrorService],
+  providers: [TransactionService, MappingErrorService, ProposalService],
 })
 export class TransactionModule {}

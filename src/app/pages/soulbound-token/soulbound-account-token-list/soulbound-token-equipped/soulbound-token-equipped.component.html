@@ -68,7 +68,8 @@
                         *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
                         [link]="'/tokens/token-nft/' + token?.contract_address + '/' + token?.token_id"
                         [src]="token.animation_url | replaceIpfs"
-                        [nftId]="">
+                        [nftId]=""
+                        [disableLink]="true">
                     </app-audio-player>
                   </div>
                 </div>

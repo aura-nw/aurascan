@@ -327,11 +327,12 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
         wallet: addr,
       };
       this.proposalService.getVotes(payload).subscribe((res) => {
-        this.proposalVotes = this.voteConstant.find(
-          (s) => s.key === res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
-        )?.voteOption;
+        const optionVote = this.proposalService.getVoteMessageByConstant(
+          res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+        );
+        this.proposalVotes = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
         this.voteValue = {
-          keyVote: res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+          keyVote: optionVote,
         };
       });
     } else {
