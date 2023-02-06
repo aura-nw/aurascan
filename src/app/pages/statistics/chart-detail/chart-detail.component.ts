@@ -17,6 +17,7 @@ import {
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 import { MaskPipe } from 'ngx-mask';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-chart-detail',
@@ -52,6 +53,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     private statisticService: StatisticService,
     public datepipe: DatePipe,
     private maskService: MaskPipe,
+    public global: Globals,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (
