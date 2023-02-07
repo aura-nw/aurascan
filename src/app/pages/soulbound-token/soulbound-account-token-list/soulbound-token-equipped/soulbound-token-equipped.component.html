@@ -1,5 +1,5 @@
 <section class="mt-4 mt-lg-6">
-  <h2 class="text--white">Equipped SBT</h2>
+  <h2 class="text--white">Equipped ABT</h2>
   <div class="card">
     <div class="card-body">
       <!-- Title -->
@@ -72,7 +72,7 @@
                     </app-model-view>
                     <app-audio-player
                       *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
-                      [link]="'/tokens/token-nft/' + token?.contract_address + '/' + token?.token_id"
+                      [link]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
                       [src]="token.animation_url | replaceIpfs"
                       [nftId]="'nft#' + i"
                       [disableLink]="true">
@@ -84,7 +84,7 @@
                     <span class="mr-1 text--gray-1">Token:</span>
                     <span
                       class="text--primary hover-link"
-                      (click)="handleRouterLink('/tokens/token-nft/' + token.contract_address + '/' + token?.token_id)"
+                      (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
                       >{{ token.token_name }}</span
                     >
                   </div>
@@ -92,7 +92,7 @@
                     <span class="mr-1 text--gray-1">Token ID:</span>
                     <span
                       class="text--primary hover-link"
-                      (click)="handleRouterLink('/tokens/token-nft/' + token.contract_address + '/' + token?.token_id)"
+                      (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
                       >{{ token.token_id | cutStringPipe : 8 : 8 }}</span
                     >
                   </div>

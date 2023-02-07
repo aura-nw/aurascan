@@ -9,6 +9,7 @@ export enum MenuName {
   Token = 'Token',
   TokenCW20 = 'TokenCW20',
   TokenCW721 = 'TokenCW721',
+  TokenCW4973 = 'TokenCW4973',
   Statistic = 'Statistic',
   ChartStats = 'Chart & Stats',
   TopStatistics = 'Top Statistics',
@@ -83,6 +84,13 @@ export const MENU: MenuItem[] = [
         name: MenuName.TokenCW721,
         icon: 'coins',
       },
+      {
+        id: 3,
+        label: 'CW-4973 Top Tokens',
+        link: '/tokens/token-abt',
+        name: MenuName.TokenCW4973,
+        icon: 'coins',
+      },
     ],
   },
   {
@@ -143,8 +151,8 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 2,
-        label: 'Soulbound Token',
-        link: '/soulbound',
+        label: 'Account Bound Token',
+        link: '/accountbound',
         icon: 'medal',
       },
     ],
@@ -215,6 +223,13 @@ export const MENU_MOB: MenuItem[] = [
         name: MenuName.TokenCW721,
         icon: 'coins',
       },
+      {
+        id: 3,
+        label: 'CW-4973 Top Tokens',
+        link: '/tokens/token-abt',
+        name: MenuName.TokenCW4973,
+        icon: 'coins',
+      },
     ],
   },
   {
@@ -266,8 +281,8 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 2,
-        label: 'Soulbound Token',
-        link: '/soulbound',
+        label: 'Account Bound Token',
+        link: '/accountbound',
         icon: 'medal',
       },
     ],

@@ -52,7 +52,6 @@ export class SoulboundService extends CommonService {
   }
 
   getSBTDetail(tokenID): Observable<any> {
-    const params = _(tokenID).omitBy(_.isNull).omitBy(_.isUndefined).value();
     return this.http.get<any>(`${this.apiUrl}/soulbound-token/tokens-detail/${tokenID}`);
   }
 
@@ -62,5 +61,12 @@ export class SoulboundService extends CommonService {
 
   updatePickSBToken(payload): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/soulbound-token`, payload);
+  }
+
+  getListABT(payload): Observable<any> {
+    const params = _(payload).omitBy(_.isNull).omitBy(_.isUndefined).value();
+    return this.http.get<any>(`${this.apiUrl}/soulbound-token/tokens-list`, {
+      params
+    });
   }
 }

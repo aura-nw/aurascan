@@ -99,6 +99,13 @@ export class MenuBottomBarComponent implements OnInit {
     }
 
     if (
+      menuLink === '/tokens/token-abt' &&
+      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
+    ) {
+      return true;
+    }
+
+    if (
       menuLink === '/statistics/charts-stats' &&
       (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
     ) {

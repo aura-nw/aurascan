@@ -101,7 +101,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   linkSBDetail(contractAddress, tokenID) {
     let encode = encodeURIComponent(tokenID);
-    window.location.href = `/tokens/token-nft/${contractAddress}/${encode}`;
+    window.location.href = `/tokens/token-abt/${contractAddress}/${encode}`;
   }
 
   getTypeFile(nft: any) {

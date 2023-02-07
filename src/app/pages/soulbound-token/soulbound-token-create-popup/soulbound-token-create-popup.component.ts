@@ -85,7 +85,7 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
           let msgError = res?.message.toString() || 'Error';
           this.toastr.error(msgError);
         } else {
-          this.toastr.success('Soulbound record added sucessfully');
+          this.toastr.success('Account Bound record added sucessfully');
         }
       },
       (error) => {
