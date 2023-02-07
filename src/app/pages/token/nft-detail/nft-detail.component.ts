@@ -71,6 +71,7 @@ export class NFTDetailComponent implements OnInit {
   isError = false;
   nftUrl = '';
   sbType = SB_TYPE;
+  linkToken = 'token-nft';
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
@@ -144,6 +145,7 @@ export class NFTDetailComponent implements OnInit {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
           this.route.navigate(['/']);
         }
+        this.linkToken = 'token-abt';
         this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
         if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
@@ -152,33 +154,8 @@ export class NFTDetailComponent implements OnInit {
         this.isSoulBound = true;
       }
 
-      this.setImagePreview();
       this.loading = false;
     });
-  }
-
-  setImagePreview() {
-    document.querySelectorAll('link[as=image]')[0].setAttribute('href', this.nftUrl);
-    //Facebook Meta Tags
-    document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', this.nftUrl);
-    document
-      .querySelectorAll('meta[property=og\\:title]')[0]
-      .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
-    document
-      .querySelectorAll('meta[property=og\\:description]')[0]
-      .setAttribute('content', this.nftDetail?.ipfs?.description);
-
-    //Twitter Meta Tags
-    document.querySelectorAll('meta[name=twitter\\:image]')[0].setAttribute('content', this.nftUrl);
-    document
-      .querySelectorAll('meta[name=twitter\\:title]')[0]
-      .setAttribute('content', this.nftDetail?.name || this.nftDetail?.token_name);
-
-    //Google / Search Engine Tags
-    document.querySelectorAll('meta[itemprop=image]')[0].setAttribute('content', this.nftUrl);
-    document
-      .querySelectorAll('meta[itemprop=description]')[0]
-      .setAttribute('content', this.nftDetail?.ipfs?.description);
   }
 
   async getDataTable(nextKey = null) {
