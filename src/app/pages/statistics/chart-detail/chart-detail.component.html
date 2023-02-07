@@ -19,10 +19,14 @@
         <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
           <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
           <div>
-            <span class="mr-1">Highest number of</span>
-            <span class="mr-1 text--primary">{{ maxAmount }}</span>
+            <span>
+              {{ this.payloadChartType === 'unique_addresses' ? 'Highest increase of' : 'Highest number of' }}
+            </span>
+            <span class="text--primary">{{ maxAmount | number : global.formatNumberOnlyDecimal }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1">transactions on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_txs'"> transactions on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'unique_addresses'"> new addresses was recorded on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_active_addresses'"> addresses on</span>
             <span class="text--primary">{{ maxAmountDate }}</span>
           </div>
         </div>
@@ -33,10 +37,14 @@
         <div class="card-body text--gray-1 py-4 d-flex justify-content-center align-items-center">
           <i class="ph-lightbulb h3 mb-0 text--gray-1 mr-2"></i>
           <div>
-            <span class="mr-1">Lowest numher of</span>
-            <span class="mr-1 text--primary">{{ minAmount }}</span>
+            <span>
+              {{ this.payloadChartType === 'unique_addresses' ? 'Lowest increase of' : 'Lowest number of' }}
+            </span>
+            <span class="mr-1 text--primary">{{ minAmount | number : global.formatNumberOnlyDecimal }}</span>
             <br class="d-lg-none" />
-            <span class="mr-1">transactions on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_txs'">transactions on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'unique_addresses'">new addresses was recorded on</span>
+            <span class="mr-1" *ngIf="payloadChartType === 'daily_active_addresses'">addresses on</span>
             <span class="text--primary">{{ minAmountDate }}</span>
           </div>
         </div>
@@ -52,9 +60,9 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="body-01 fw-semibold text--gray-1 d-none d-lg-block">{{ theTitle }}</div>
                 <div class="h3-mob mb-0 fw-normal text--gray-1 d-lg-none">{{ theTitle }}</div>
-                <button class="button chart__options d-lg-none" (click)="exportChart()">
-                  <i class="ph-download-simple"></i>
-                </button>
+                <!--                <button class="button chart__options d-lg-none" (click)="exportChart()">-->
+                <!--                  <i class="ph-download-simple"></i>-->
+                <!--                </button>-->
               </div>
               <div class="caption fw-normal d-lg-flex align-items-center">
                 <div class="d-flex">
@@ -65,9 +73,9 @@
                 <span class="text--gray-3">Click and drag in the plot area to zoom in</span>
               </div>
             </div>
-            <button class="button chart__options d-none d-lg-block" (click)="exportChart()">
-              <i class="ph-download-simple"></i>
-            </button>
+            <!--            <button class="button chart__options d-none d-lg-block" (click)="exportChart()">-->
+            <!--              <i class="ph-download-simple"></i>-->
+            <!--            </button>-->
           </div>
         </div>
         <div class="divider divider-horizontal"></div>

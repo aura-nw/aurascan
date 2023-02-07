@@ -41,6 +41,7 @@
       <div *ngIf="!loading">
         <!-- Token list -->
         <div
+          id="nft-cards"
           class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           *ngIf="soulboundData.data.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
@@ -50,11 +51,16 @@
                   <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
                   <img
                     *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
-                    src="{{ token.token_img ? ((token.animation_url || token.token_img) | replaceIpfs) : commonService.getDefaultImg() }}"
+                    src="{{
+                      token.token_img
+                        ? (token.animation_url || token.token_img | replaceIpfs)
+                        : commonService.getDefaultImg()
+                    }}"
                     alt="{{ token.token_name }}" />
                   <app-custom-video-player
                     [videoSrc]="token.animation_url | replaceIpfs"
                     [showControl]="false"
+                    [nftId]="'nft#' + i"
                     *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
                   </app-custom-video-player>
                   <app-model-view
@@ -67,7 +73,7 @@
                     *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
                     [link]="'#'"
                     [src]="token.animation_url | replaceIpfs"
-                    [nftId]=""
+                    [nftId]="'nft#' + i"
                     [disableLink]="true">
                   </app-audio-player>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">

@@ -17,6 +17,7 @@ import {
   STATISTIC_AREA_SERIES_CHART_OPTIONS,
 } from 'src/app/pages/dashboard/dashboard-chart-options';
 import { MaskPipe } from 'ngx-mask';
+import { Globals } from 'src/app/global/global';
 
 @Component({
   selector: 'app-chart-detail',
@@ -52,6 +53,7 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
     private statisticService: StatisticService,
     public datepipe: DatePipe,
     private maskService: MaskPipe,
+    public global: Globals,
   ) {
     this.chartType = this.route.snapshot.paramMap.get('type');
     if (
@@ -96,6 +98,12 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   initChart() {
     this.chart = createChart(document.getElementById('dailyChart'), DASHBOARD_CHART_OPTIONS);
     this.areaSeries = this.chart.addAreaSeries(STATISTIC_AREA_SERIES_CHART_OPTIONS);
+    if (this.chartType !== 'unique-addresses')
+      this.areaSeries.applyOptions({
+        topColor: 'rgba(136,198,203,0)',
+        bottomColor: 'rgba(119, 182, 188, 0)',
+      });
+
     this.subscribeVisibleLogicalRangeChange();
     this.initTooltip();
   }
@@ -240,7 +248,18 @@ export class ChartDetailComponent implements OnInit, OnDestroy {
   initTooltip() {
     const container = document.getElementById('dailyChart');
     const toolTip = document.createElement('div');
-    const label = 'Transaction';
+    let label = '';
+    switch (this.payloadChartType) {
+      case 'daily_txs':
+        label = 'Transactions';
+        break;
+      case 'unique_addresses':
+        label = 'Unique Addresses';
+        break;
+      case 'daily_active_addresses':
+        label = 'Active Addresses';
+        break;
+    }
     toolTip.className = 'floating-tooltip-2';
     container.appendChild(toolTip);
 

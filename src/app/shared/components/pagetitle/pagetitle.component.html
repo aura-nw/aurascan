@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-12">
     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-      <h1 class="mb-0 text--white">{{ title }}</h1>
+      <h1 class="mb-0 text--white fw-700">{{ title }}</h1>
       <div class="page-title-right d-none d-lg-block">
         <ol class="breadcrumb m-0" *ngIf="!displayInfo">
           <ng-container *ngFor="let item of breadcrumbItems">
@@ -10,10 +10,18 @@
           </ng-container>
         </ol>
         <div class="text--white d-flex align-items-center" *ngIf="displayInfo">
-          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.block_height"><span class="h4 text--white">Height:</span> {{ global?.dataHeader?.block_height | number }}</div>
-          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.bonded_tokens"><span class="h4 text--white">Bonded:</span> {{ global?.dataHeader?.bonded_tokens }}</div>
-          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.inflation"><span class="h4 text--white">Inflation:</span> {{ global?.dataHeader?.inflation }}</div>
-          <div class="body-01 mb-0"><span class="h4 text--white">Community Pool:</span> {{ global?.dataHeader?.community_pool_format || 0}}</div>
+          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.block_height">
+            <span class="h4 text--white">Height:</span> {{ global?.dataHeader?.block_height | number }}
+          </div>
+          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.bonded_tokens">
+            <span class="h4 text--white">Bonded:</span> {{ global?.dataHeader?.bonded_tokens }}
+          </div>
+          <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.inflation">
+            <span class="h4 text--white">Inflation:</span> {{ global?.dataHeader?.inflation }}
+          </div>
+          <div class="body-01 mb-0">
+            <span class="h4 text--white">Community Pool:</span> {{ global?.dataHeader?.community_pool_format || 0 }}
+          </div>
         </div>
       </div>
     </div>
