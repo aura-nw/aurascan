@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,6 +18,7 @@ import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail
   styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
 export class SoulboundTokenUnequippedComponent implements OnInit {
+  @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   tokenList = [];
@@ -75,6 +76,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
+      this.totalUnEquip.emit(this.pageData.length);
     });
     this.loading = false;
   }

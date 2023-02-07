@@ -1,4 +1,4 @@
-<h2 class="mb-0 text--white">Soulbound Tokens ({{ assetSoulBound?.length || 0 }})</h2>
+<h2 class="mb-0 text--white">Account Bound Tokens ({{ assetSoulBound?.length || 0 }})</h2>
 <div class="card mt-3">
   <div class="card-body">
     <div *ngIf="loading" class="m-auto mt-10">
@@ -41,7 +41,7 @@
           <div class="nft-cards__col col" *ngFor="let item of showedData">
             <div class="nft-cards__item-border">
               <a
-                [routerLink]="['/tokens/token-nft/' + item.contract_address + '/' + item.token_id]"
+                [routerLink]="['/tokens/token-abt/' + item.contract_address + '/' + item.token_id]"
                 class="nft-cards__item">
                 <div class="nft-cards__img">
                   <img *ngIf="item.uri" src="{{ item.uri }}" alt="" />

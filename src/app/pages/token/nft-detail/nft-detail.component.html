@@ -13,7 +13,7 @@
         <span class="burnt-tag caption" *ngIf="nftDetail?.is_burned">Burnt</span>
       </h1>
       <div class="mt-2">
-        <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]">{{
+        <a class="text--primary h6 mb-0 mt-2" [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]">{{
           nftDetail?.name || nftDetail?.token_name
         }}</a>
       </div>
@@ -62,7 +62,7 @@
           <div class="mt-1 mt-lg-2 mb-4 d-lg-flex d-none">
             <a
               class="body-01 text--primary break-word"
-              [routerLink]="['/tokens/token-nft', nftDetail?.contract_address]"
+              [routerLink]="['/tokens/' + linkToken, nftDetail?.contract_address]"
               >{{ nftDetail?.name || nftDetail?.token_name }}</a
             >
           </div>
