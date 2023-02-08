@@ -148,7 +148,7 @@ export class PopupAddGrantComponent implements OnInit {
     }
 
     const timeEndDate = moment(expiration_time)?.toDate()?.setHours(23, 59, 59);
-    const executeStaking = async () => {
+    const executeAddGrant = async () => {
       const { hash, error } = await this.walletService.signAndBroadcast({
         messageType:
           isInstantiate || isExecute
@@ -183,7 +183,7 @@ export class PopupAddGrantComponent implements OnInit {
       }
     };
 
-    executeStaking();
+    executeAddGrant();
   }
 
   addClassFocus(e: HTMLInputElement) {

@@ -179,7 +179,7 @@
                           </span>
                           <a
                             class="text--primary"
-                            href="/tokens/token/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
+                            href="/tokens/{{linkToken}}/{{ contractAddress }}?a={{ encodeData(data['token_id']) }}"
                             *ngIf="data['status'] !== 'Fail' && data['token_id'] !== 'More'">
                             {{ data[template.matColumnDef] | stringEllipsis : 16 }}
                           </a>
