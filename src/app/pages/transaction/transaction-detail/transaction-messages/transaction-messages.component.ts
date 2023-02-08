@@ -441,7 +441,7 @@ export class TransactionMessagesComponent implements OnInit {
   getDateValue(time) {
     try {
       if (time) {
-        if (typeof time === 'object' && time !== null) {
+        if (time?.seconds) {
           time = new Date(time.seconds * 1000).toISOString();
         }
         return formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC);

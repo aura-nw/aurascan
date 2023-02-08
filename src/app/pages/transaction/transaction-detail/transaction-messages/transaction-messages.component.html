@@ -587,9 +587,12 @@
         *ngIf="typeGrantAllowance === 'Periodic'"
         [label]="'Period'"
         [value]="
+          transactionDetail?.messages[0]?.allowance?.period?.seconds ||
+          transactionDetail?.messages[0]?.allowance?.allowance?.period?.seconds ||
+          transactionDetail?.messages[0]?.allowance?.allowance?.allowance?.period?.seconds ||
           transactionDetail?.messages[0]?.allowance?.period ||
-          transactionDetail?.messages[0]?.allowance?.allowance?.allowance?.period ||
-          transactionDetail?.messages[0]?.allowance?.allowance?.period
+          transactionDetail?.messages[0]?.allowance?.allowance?.period ||
+          transactionDetail?.messages[0]?.allowance?.allowance?.allowance?.period
         "></app-messages-item>
     </div>
   </ng-container>
