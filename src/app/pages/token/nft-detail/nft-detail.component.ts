@@ -127,6 +127,9 @@ export class NFTDetailComponent implements OnInit {
     this.loading = true;
     const encoded = encodeURIComponent(this.nftId);
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
+      if (res.data === null) {
+        this.route.navigate(['/']);
+      }
       this.nftDetail = res.data;
       this.nftType = checkTypeFile(this.nftDetail);
 
