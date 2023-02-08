@@ -19,7 +19,7 @@
       }
     }
     i.icon {
-      font-size: 2.4rem;
+      font-size: 2rem;
     }
   }
 }
@@ -28,11 +28,12 @@
   padding-left: 0px !important;
   .menu-dropdown__button {
     background-color: var(--aura-gray-10);
-    &:after, &:before {
+    &:after,
+    &:before {
       content: '';
       position: absolute;
       bottom: 0;
-      background: url("../../../assets/icons/icons-svg/basic/chevron-down.svg") center no-repeat;
+      background: url('../../../assets/icons/icons-svg/basic/chevron-down.svg') center no-repeat;
       background-size: contain;
       right: 12px;
       top: 18px;
@@ -46,7 +47,7 @@
       transform: rotate(180deg);
       opacity: 0;
     }
-    &[aria-expanded="true"]{
+    &[aria-expanded='true'] {
       &:before {
         opacity: 0;
       }
@@ -89,7 +90,8 @@
         min-width: 200px;
         li.dropdown-item.menu-link {
           color: var(--aura-gray-1);
-          &.active, &:hover {
+          &.active,
+          &:hover {
             background: rgba(54, 56, 67, 0.5);
             color: var(--aura-white);
           }

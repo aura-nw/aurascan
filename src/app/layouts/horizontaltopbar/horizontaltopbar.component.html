@@ -118,15 +118,19 @@
                     <ng-container *ngFor="let subMenu of item.subItems">
                       <a
                         *ngIf="
-                          subMenu.label !== 'Account Bound Token' || (subMenu.label === 'Account Bound Token' && lengthSBT > 0)
+                          subMenu.label !== 'Account Bound Token' ||
+                          (subMenu.label === 'Account Bound Token' && lengthSBT > 0)
                         "
                         [routerLink]="subMenu.link"
                         class="d-flex align-items-center mb-0 nav-link__item nav-link__sub-item py-0"
                         [class.active]="checkMenuActive(subMenu.link)">
                         <!-- Menu token has special icon -->
-                        <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721 || subMenu.name === menuName.TokenCW4973"></i>
+                        <i class="icon icon-nft" *ngIf="subMenu.name === menuName.TokenCW721"></i>
+                        <i class="icon icon-bound-token" *ngIf="subMenu.name === menuName.TokenCW4973"></i>
                         <!-- . -->
-                        <i class="ph-{{ subMenu.icon }}" *ngIf="subMenu.name !== menuName.TokenCW721 && subMenu.name !== menuName.TokenCW4973"></i>
+                        <i
+                          class="ph-{{ subMenu.icon }}"
+                          *ngIf="subMenu.name !== menuName.TokenCW721 && subMenu.name !== menuName.TokenCW4973"></i>
                         <span class="ml-2">{{ subMenu.label | translate }}</span>
                       </a>
                     </ng-container>
