@@ -24,9 +24,9 @@
       #ngForm="ngForm"
       class="aura-form single-input-field"
       autocomplete="off">
-      <!-- Soulbound Token URI -->
+      <!-- Account Bound Token URI -->
       <div class="form-group mt-4 mt-lg-6">
-        <label for="soulboundTokenURI" class="form-label required body-01">Soulbound Token URI</label>
+        <label for="soulboundTokenURI" class="form-label required body-01">Account Bound Token URI</label>
         <input
           id="soulboundTokenURI"
           formControlName="soulboundTokenURI"
@@ -47,6 +47,7 @@
           (ngModelChange)="resetCheck()"
           [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && ngForm.submitted" />
         <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">This is not aura's externally owned account</div>
+        <div class="error" *ngIf="isCurrentAddress && ngForm.submitted">You can not attest a Account Bound Token for yourself</div>
       </div>
 
       <!-- Button group -->
@@ -56,7 +57,7 @@
         </button>
         <button
           class="button button-pill button-outline button-outline--gradient button-outline__in-card button--md ml-4"
-          [disabled]="!createSBTokenForm.valid || isAddressInvalid"
+          [disabled]="!createSBTokenForm.valid || isAddressInvalid || isCurrentAddress"
           type="submit">
           <span>Create</span>
         </button>

@@ -1,5 +1,5 @@
 <div class="mb-4 mb-md-6">
-  <app-pagetitle title="Soulbound Token (SBT)"></app-pagetitle>
+  <app-pagetitle title="Account Bound Token (ABT)"></app-pagetitle>
 </div>
 <section class="soulbound-list text--white">
   <!-- Summary info -->
@@ -34,9 +34,12 @@
           </div>
         </div>
         <div class="mt-6 mt-lg-4">
-          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">Total Equipped Badges</div>
+          <div class="body-01 fw-semibold mb-1 mb-lg-2 text--white">
+            <ng-container *ngIf="activeId !== 1">Total Equipped Badges</ng-container>
+            <ng-container *ngIf="activeId === 1">Total Un-equipped Badges</ng-container>
+          </div>
           <div class="d-flex justify-content-between align-items-center d-lg-block">
-            <span class="h1 h2-mob mb-0 fw-bold mb-0 text-gradient d-inline">{{ totalSBT }} SBT</span>
+            <span class="h1 h2-mob mb-0 fw-bold mb-0 text-gradient d-inline">{{ totalSBT }} ABT</span>
             <div class="button button--md button-circle ml-1 d-lg-none">
               <img
                 [src]="'assets/icons/icons-svg/color/qr-code.svg' | imageS3"
@@ -70,7 +73,9 @@
     </ul>
   </div>
   <app-soulbound-token-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event"></app-soulbound-token-equipped>
-  <app-soulbound-token-unequipped *ngIf="activeId === 1"></app-soulbound-token-unequipped>
+  <app-soulbound-token-unequipped
+    *ngIf="activeId === 1"
+    (totalUnEquip)="totalSBT = $event"></app-soulbound-token-unequipped>
 </section>
 
 <!-- QR code popup-->

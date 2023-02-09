@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-nft-card',
@@ -15,6 +16,7 @@ export class NftCardComponent implements OnInit {
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   isError = false;
+  MEDIA_TYPE = MEDIA_TYPE;
 
   constructor(private environmentService: EnvironmentService) {}
 

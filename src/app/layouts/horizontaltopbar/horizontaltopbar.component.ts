@@ -386,23 +386,45 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   }
 
   checkMenuActive(menuLink: string) {
-    if((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
+    if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
       return true;
     }
 
-    if(!menuLink.includes('/tokens')) {
-      if(menuLink === ('/' + this.router.url.split('/')[1]) && this.router.url.includes(menuLink)) {
+    if (!menuLink.includes('/tokens')) {
+      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
         return true;
       }
     }
 
-    if(menuLink === '/tokens' && (this.router.url == ('/tokens') ||  this.router.url.includes('/tokens/token/')) ) {
+    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
       return true;
     }
 
-    if(menuLink === '/tokens/tokens-nft' && (this.router.url == ('/tokens/tokens-nft') ||  this.router.url.includes('/tokens/token-nft')) ) {
+    if (
+      menuLink === '/tokens/tokens-nft' &&
+      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
+    ) {
       return true;
     }
+
+    if (
+      menuLink === '/tokens/token-abt' &&
+      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/statistics/charts-stats' &&
+      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
+    ) {
+      return true;
+    }
+
+    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
+      return true;
+    }
+
     return false;
   }
 }

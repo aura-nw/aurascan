@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/token/token.module').then((m) => m.TokenModule),
   },
   {
+    path: 'statistics',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
+  },
+  {
     path: 'contracts',
     component: LayoutComponent,
     loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
@@ -57,7 +62,7 @@ const routes: Routes = [
   // { path: 'pages', loadChildren: () => import('./extrapages/extrapages.module').then(m => m.ExtrapagesModule)},
   { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   {
-    path: 'soulbound',
+    path: 'accountbound',
     component: LayoutComponent,
     loadChildren: () => import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule) },
   { path: '**', redirectTo: '' },

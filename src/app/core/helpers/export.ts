@@ -49,3 +49,51 @@ export function exportChart(data: any, range: string, isPrice: boolean, currDate
     console.error(e);
   }
 }
+
+export function exportStatisticChart(data: any, type: string, currDate: string) {
+  let label = '';
+  switch (type) {
+    case 'daily-transactions':
+      label = 'Aura Daily Transactions Data';
+      break;
+    case 'unique-addresses':
+      label = 'Aura Unique Addresses Data';
+      break;
+    case 'cumulative-addresses':
+      label = 'Active Aura Addresses Data';
+      break;
+  }
+
+  const SETTINGS_FOR_EXPORT = {
+    // Table settings
+    fileName: type + '-' + 'statistic-' + currDate,
+    workSheets: [
+      {
+        sheetName: 'Statistic',
+        startingRowNumber: 2,
+        gapBetweenTwoTables: 2,
+        tableSettings: {
+          table1: {
+            tableTitle: label,
+            headerDefinition: [
+              {
+                name: 'Date',
+                key: 'date',
+              },
+              {
+                name: 'Value',
+                key: 'value',
+              },
+            ],
+          },
+        },
+      },
+    ],
+  };
+  try {
+    const excelExport = new ExcelExport();
+    excelExport.downloadExcel(SETTINGS_FOR_EXPORT, data);
+  } catch (e) {
+    console.error(e);
+  }
+}

@@ -82,6 +82,13 @@ export class BalanceOf implements PipeTransform {
 @Pipe({ name: 'replaceIpfs' })
 export class ReplaceIpfs implements PipeTransform {
   transform(value: string): string {
-    return 'https://ipfs.io/' + value.replace('://', '/')
+    return 'https://ipfs.io/' + value.replace('://', '/');
+  }
+}
+
+@Pipe({ name: 'convertUauraToAura' })
+export class ConvertUauraToAura implements PipeTransform {
+  transform(value: number, powNum?: number): number {
+    return value / Math.pow(10, powNum);
   }
 }

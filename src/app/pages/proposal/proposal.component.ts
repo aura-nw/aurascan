@@ -114,8 +114,9 @@ export class ProposalComponent implements OnInit {
                   wallet: addr,
                 };
                 this.proposalService.getVotes(payload).subscribe((res) => {
+                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option);
                   pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+                    (s) => s.key === optionVote,
                   )?.voteOption;
                 });
               }

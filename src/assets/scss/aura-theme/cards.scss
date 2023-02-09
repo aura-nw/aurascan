@@ -94,6 +94,7 @@
   }
   &.token-cards {
     .token-cards__img {
+      position: relative;
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
       min-height: 184px;
@@ -101,12 +102,14 @@
       align-items: center;
       justify-content: center;
       background-color: var(--aura-black);
+      max-height: 153px;
+      @media (min-width: 991.98px) {
+        height: 270px;
+        max-height: unset;
+      }
       img {
         width: 100%;
         object-fit: contain;
-      }
-      @media (min-width: 991.98px) {
-        min-height: 270px;
       }
     }
   }

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { Globals } from 'src/app/global/global';
 import { MAX_LENGTH_SEARCH_TOKEN, TOKEN_TAB } from '../../../../core/constants/token.constant';
@@ -36,6 +36,7 @@ export class TokenContentComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
+  linkToken = 'token-nft';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -92,8 +93,9 @@ export class TokenContentComponent implements OnInit {
       this.TABS = tempTabs || this.tabsBackup;
       this.route.queryParams.subscribe((params) => {
         if (!params?.a) {
-          if (this.tokenDetail?.isNFTContract) {
-            window.location.href = `/tokens/token-nft/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
+          if (this.tokenDetail.type !== ContractRegisterType.CW20) {
+            this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
+            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           } else {
             window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
@@ -113,8 +115,9 @@ export class TokenContentComponent implements OnInit {
     this.searchTemp = '';
     if (this.paramQuery) {
       const params = { ...this.route.snapshot.params };
-      if (this.tokenDetail?.isNFTContract) {
-        window.location.href = `/tokens/token-nft/${params.contractAddress}`;
+      if (this.tokenDetail.type !== ContractRegisterType.CW20) {
+        this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
+        window.location.href = `/tokens/${this.linkToken}/${params.contractAddress}`;
       } else {
         window.location.href = `/tokens/token/${params.contractAddress}`;
       }

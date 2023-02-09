@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -18,6 +18,7 @@ import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail
   styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
 export class SoulboundTokenUnequippedComponent implements OnInit {
+  @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   tokenList = [];
@@ -35,6 +36,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   currentAddress = '';
   sbType = SB_TYPE;
   isClick = false;
+  MEDIA_TYPE = MEDIA_TYPE;
 
   constructor(
     public dialog: MatDialog,
@@ -74,6 +76,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
       this.soulboundData.data = res.data;
       this.pageData.length = res.meta.count;
+      this.totalUnEquip.emit(this.pageData.length);
     });
     this.loading = false;
   }
@@ -107,7 +110,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
-        this.getListSB();
+        setTimeout(() => {
+          this.getListSB();
+        }, 4000);
       }
     });
   }

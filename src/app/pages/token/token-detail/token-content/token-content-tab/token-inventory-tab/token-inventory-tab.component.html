@@ -24,13 +24,13 @@
                 [nftItem]="item"
                 [nftType]="getTypeFile(item)"
                 nftId="{{ 'nft#' + i }}"
-                [nftLink]="'/tokens/token-nft/' + item.contract_address + '/' + encodeData(item.token_id)">
+                [nftLink]="'/tokens/' + linkToken + '/' + item.contract_address + '/' + encodeData(item.token_id)">
               </app-nft-card>
               <div class="mt-3 nft__info">
                 <span class="small-text mr-1 text--gray-1">Token ID:</span>
                 <a
                   class="small-text text--primary hover-link"
-                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ encodeData(item.token_id) }}">
+                  href="/tokens/{{linkToken}}/{{ item.contract_address }}?a={{ encodeData(item.token_id) }}">
                   {{ item.token_id }}
                 </a>
               </div>
@@ -38,12 +38,12 @@
                 <span class="small-text mr-1 text--gray-1">Owner:</span>
                 <a
                   class="small-text text--primary d-lg-none hover-link"
-                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.owner }}"
+                  href="/tokens/{{linkToken}}/{{ item.contract_address }}?a={{ item.owner }}"
                   >{{ item.owner | cutStringPipe: 6:6 }}</a
                 >
                 <a
                   class="small-text text--primary d-none d-lg-inline hover-link"
-                  href="/tokens/token-nft/{{ item.contract_address }}?a={{ item.owner }}"
+                  href="/tokens/{{linkToken}}/{{ item.contract_address }}?a={{ item.owner }}"
                   >{{ item.owner | cutStringPipe: 8:8 }}</a
                 >
               </div>

@@ -67,7 +67,7 @@
               <a
                 *ngIf="contractDetail.type !== contractRegisterType.CW20"
                 class="text--primary break-word"
-                [routerLink]="['/tokens/token-nft', contractDetail?.contract_address]">
+                [routerLink]="['/tokens/' + linkNft, contractDetail?.contract_address]">
                 {{ contractDetail?.token_name }} ({{ contractDetail?.token_symbol }})
               </a>
               <!-- <span class="ml-1 text--light-gray">(@$1)</span> -->

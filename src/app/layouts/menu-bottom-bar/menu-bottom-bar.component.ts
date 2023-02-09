@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'src/app/layouts/horizontaltopbar/menu.model';
-import { MENU, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
+import { MENU, MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu';
 import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { WalletService } from 'src/app/core/services/wallet.service';
@@ -11,7 +11,7 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   styleUrls: ['./menu-bottom-bar.component.scss'],
 })
 export class MenuBottomBarComponent implements OnInit {
-  menu: MenuItem[] = MENU;
+  menu: MenuItem[] = MENU_MOB;
   menuName = MenuName;
   menuLink = [];
   overlayPanel = false;
@@ -38,6 +38,11 @@ export class MenuBottomBarComponent implements OnInit {
         this.menuLink.push(arr);
       }
     }
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+      // or
+      return true;
+    };
   }
 
   @HostListener('body:click', ['$event'])
@@ -72,21 +77,42 @@ export class MenuBottomBarComponent implements OnInit {
   }
 
   checkMenuActive(menuLink: string) {
-    if((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
+    if ((this.router.url === '/' || this.router.url === '/dashboard') && menuLink === '/dashboard') {
       return true;
     }
 
-    if(!menuLink.includes('/tokens')) {
-      if(menuLink === ('/' + this.router.url.split('/')[1]) && this.router.url.includes(menuLink)) {
+    if (!menuLink.includes('/tokens')) {
+      if (menuLink === '/' + this.router.url.split('/')[1] && this.router.url.includes(menuLink)) {
         return true;
       }
     }
 
-    if(menuLink === '/tokens' && (this.router.url == ('/tokens') ||  this.router.url.includes('/tokens/token/')) ) {
+    if (menuLink === '/tokens' && (this.router.url == '/tokens' || this.router.url.includes('/tokens/token/'))) {
       return true;
     }
 
-    if(menuLink === '/tokens/tokens-nft' && (this.router.url == ('/tokens/tokens-nft') ||  this.router.url.includes('/tokens/token-nft')) ) {
+    if (
+      menuLink === '/tokens/tokens-nft' &&
+      (this.router.url == '/tokens/tokens-nft' || this.router.url.includes('/tokens/token-nft'))
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/tokens/token-abt' &&
+      (this.router.url == '/tokens/token-abt' || this.router.url.includes('/tokens/token-abt'))
+    ) {
+      return true;
+    }
+
+    if (
+      menuLink === '/statistics/charts-stats' &&
+      (this.router.url == '/statistics/charts-stats' || this.router.url.includes('/statistics/chart/'))
+    ) {
+      return true;
+    }
+
+    if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
       return true;
     }
     return false;
