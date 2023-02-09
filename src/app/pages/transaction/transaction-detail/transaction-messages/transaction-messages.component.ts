@@ -346,7 +346,7 @@ export class TransactionMessagesComponent implements OnInit {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
             let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp) || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }

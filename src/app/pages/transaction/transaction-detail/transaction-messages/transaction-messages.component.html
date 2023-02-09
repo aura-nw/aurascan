@@ -21,7 +21,7 @@
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="item?.amount[0]?.amount > 0">
               {{ item?.amount[0]?.amount | balanceOf | mask : 'separator.6' }}
-              <span class="text--primary">{{ denom }}</span>
+              <span class="text--primary">{{ commonService.mappingNameIBC(item?.amount[0]?.denom) }}</span>
             </ng-container>
             <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
           </div>

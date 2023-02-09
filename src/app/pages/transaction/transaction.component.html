@@ -57,7 +57,7 @@
                       <div *ngSwitchCase="'amount'">
                         <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
                           {{ +data[template.matColumnDef] | mask: 'separator.6' }}
-                          <span class="text--primary">{{ data?.denom }}</span>
+                          <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
                         </ng-container>
                         <ng-template #displayNonNumber>
                           <span *ngIf="!data[template.matColumnDef]"> - </span>
