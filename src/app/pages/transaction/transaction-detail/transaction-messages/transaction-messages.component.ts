@@ -363,6 +363,7 @@ export class TransactionMessagesComponent implements OnInit {
       if (code === 200) {
         let typeTx;
         this.listIBCProgress = [];
+        console.log(data);
         let txs = _.get(data, 'transactions').map((element) => {
           const code = _.get(element, 'tx_response.code');
           const tx_hash = _.get(element, 'tx_response.txhash');
@@ -384,10 +385,13 @@ export class TransactionMessagesComponent implements OnInit {
           const denom = temp === this.coinMinimalDenom ? this.denom : temp;
           return { code, tx_hash, typeTx, denom, time, effected };
         });
+        console.log(txs);
         if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
           txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
+          txs[0]['denomIBC'] = data.transactions[0].indexes.denomination_trace_denom[0];
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
+          txs[0]['denomIBC'] = this.coinMinimalDenom;
         }
         this.listIBCProgress = txs;
       }
@@ -417,6 +421,7 @@ export class TransactionMessagesComponent implements OnInit {
     arr.forEach((k) => {
       k.denom = k.denom === this.denom ? this.denom : k?.denom;
     });
+    console.log(arr);
     return arr;
   }
 
