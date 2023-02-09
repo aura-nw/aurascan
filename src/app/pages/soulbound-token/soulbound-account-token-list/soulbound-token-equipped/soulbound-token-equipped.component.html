@@ -53,7 +53,7 @@
                     <img
                       *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
                       src="{{
-                        token.token_img
+                        (token.animation_url || token.token_img)
                           ? (token.animation_url || token.token_img | replaceIpfs)
                           : commonService.getDefaultImg()
                       }}"
