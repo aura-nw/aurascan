@@ -49,7 +49,9 @@ export class SoulboundTokenCreatePopupComponent implements OnInit {
 
   async onSubmit() {
     const minter = this.walletService.wallet?.bech32Address;
-    const { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
+    let { soulboundTokenURI, receiverAddress } = this.createSBTokenForm.value;
+    soulboundTokenURI = soulboundTokenURI.trim();
+    receiverAddress = receiverAddress.trim();
 
     if (!isContract(receiverAddress)) {
       this.isAddressInvalid = true;

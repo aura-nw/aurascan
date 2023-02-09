@@ -20,7 +20,7 @@
           <img
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG"
             src="{{
-              soulboundDetail?.ipfs.image
+              (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image)
                 ? (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs)
                 : commonService.getDefaultImg()
             }}"
@@ -60,22 +60,22 @@
       <ng-container *ngIf="soulboundDetail.ipfs?.attributes">
         <span *ngIf="!isObject(soulboundDetail.ipfs?.attributes)" class="px-1 px-lg-2">-</span>
         <ng-container *ngIf="isObject(soulboundDetail.ipfs?.attributes)">
-          <div class="col-4 col-lg-3 mb-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
+          <div class="col-6 col-lg-3 mb-2 mb-lg-4 px-1 px-lg-2" *ngFor="let prop of soulboundDetail.ipfs?.attributes">
             <div class="nft__prop">
               <div class="caption fw-normal">
                 <span class="d-none d-lg-flex">
-                  {{ prop.trait_type | stringEllipsis : 13 }}
+                  {{ prop.trait_type | stringEllipsis : 18 }}
                 </span>
                 <span class="d-flex d-lg-none">
-                  {{ prop.trait_type | stringEllipsis : 6 }}
+                  {{ prop.trait_type | stringEllipsis : 13 }}
                 </span>
               </div>
               <div class="h5 body-mob fw-semibold mb-0 text--white">
                 <span class="d-none d-lg-flex">
-                  {{ prop.value | stringEllipsis : 13 }}
+                  {{ prop.trait_type | stringEllipsis : 13 }}
                 </span>
                 <span class="d-flex d-lg-none">
-                  {{ prop.value | stringEllipsis : 5 }}
+                  {{ prop.trait_type | stringEllipsis : 10 }}
                 </span>
               </div>
             </div>
