@@ -19,6 +19,10 @@
   border-bottom-color: var(--aura-gray-9);
 }
 
+.card-info {
+  padding: var(--spacer-1);
+}
+
 .content-transfer {
   min-width: 170px;
   display: inline-block;
@@ -141,6 +145,19 @@
         border-radius: 10px;
         background-color: var(--aura-gray-9);
       }
+    }
+  }
+  &__row {
+    margin: 0 -4px;
+    @media (min-width: 992px) {
+      margin: 0 -8px;
+    }
+
+  }
+  &__col {
+    padding: 0 4px;
+    @media (min-width: 992px) {
+      padding: 0 8px;
     }
   }
 }
