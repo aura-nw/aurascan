@@ -1,4 +1,4 @@
-<ng-container>
+<ng-container *ngIf="nftDetail">
   <div class="text--white">
     <div class="d-lg-none">
       <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
@@ -240,24 +240,24 @@
           <ng-container *ngIf="nftDetail?.ipfs?.attributes">
             <ng-container *ngIf="isObject(nftDetail.ipfs?.attributes)">
               <div class="box-prop-item">
-                <div class="row text--gray-1 m-0">
+                <div class="row text--gray-1 box-prop-item__row">
                   <ng-container *ngFor="let prop of nftDetail?.ipfs?.attributes; index as i">
-                    <div class="col-4 mb-lg-6 mb-4">
+                    <div class="col-lg-4 col-6 mb-lg-6 mb-2 box-prop-item__col">
                       <div class="card-info py-4 text-center">
                         <div class="caption fw-normal text--white">
                           <span class="d-none d-lg-block">
-                            {{ prop.trait_type | stringEllipsis : 10 }}
+                            {{ prop.trait_type | stringEllipsis : 15 }}
                           </span>
                           <span class="d-block d-lg-none">
-                            {{ prop.trait_type | stringEllipsis : 6 }}
+                            {{ prop.trait_type | stringEllipsis : 18 }}
                           </span>
                         </div>
                         <div class="mt-2 caption text--white">
                           <span class="d-none d-lg-block">
-                            {{ prop.value | stringEllipsis : 10 }}
+                            {{ prop.trait_type | stringEllipsis : 14 }}
                           </span>
                           <span class="d-block d-lg-none">
-                            {{ prop.value | stringEllipsis : 5 }}
+                            {{ prop.trait_type | stringEllipsis : 17 }}
                           </span>
                         </div>
                       </div>
