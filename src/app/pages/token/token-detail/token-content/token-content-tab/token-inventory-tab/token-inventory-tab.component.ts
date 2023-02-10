@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { LENGTH_CHARACTER, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { ContractRegisterType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
@@ -28,6 +29,7 @@ export class TokenInventoryComponent implements OnInit {
   dataSourceMobile: any[];
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
   isMoreTx = true;
+  linkToken = 'token-nft';
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +39,9 @@ export class TokenInventoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.typeContract === ContractRegisterType.CW4973) {
+      this.linkToken = 'token-abt';
+    }
     this.route.params.subscribe((params) => {
       this.contractAddress = params?.contractAddress;
     });
@@ -61,7 +66,9 @@ export class TokenInventoryComponent implements OnInit {
     if (this.keyWord) {
       if (this.keyWord?.length >= LENGTH_CHARACTER.ADDRESS && this.keyWord?.startsWith(this.prefixAdd)) {
         payload.owner = this.keyWord;
-      } else if (this.keyWord?.length !== LENGTH_CHARACTER.TRANSACTION) {
+      } else if (
+        !(this.keyWord?.length === LENGTH_CHARACTER.TRANSACTION && this.keyWord == this.keyWord?.toUpperCase())
+      ) {
         payload.token_id = this.keyWord;
       }
     }

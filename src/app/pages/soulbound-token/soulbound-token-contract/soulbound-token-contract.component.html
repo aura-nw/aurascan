@@ -1,4 +1,4 @@
-<h1 class="mb-0 text--white">Soulbound Token</h1>
+<h1 class="mb-0 text--white">Account Bound Token</h1>
 <section class="mt-6" *ngIf="currentAddress; else noValues">
   <div class="card">
     <div class="card-body">
@@ -96,7 +96,7 @@
               <th mat-header-cell *matHeaderCellDef class="col-per-25">TOKEN URI</th>
               <td mat-cell *matCellDef="let element" class="py-4">
                 <div class="d-flex align-items-center">
-                  <a class="hover-link" href="{{ element.token_uri }}">{{ element.token_uri | cutStringPipe : 40 }}</a>
+                  <a class="hover-link" href="{{ element.token_uri | replaceIpfs }}" target="_blank">{{ element.token_uri | cutStringPipe : 40 }}</a>
                 </div>
               </td>
             </ng-container>

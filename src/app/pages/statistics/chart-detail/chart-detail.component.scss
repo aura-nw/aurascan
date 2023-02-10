@@ -1,0 +1,55 @@
+.dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background-color: var(--aura-gray-2);
+}
+.chart-contain .chart__name {
+  left: -13px;
+}
+
+::ng-deep {
+  .floating-tooltip-2 {
+    width: 120px;
+    height: 80px;
+    position: absolute;
+    display: none;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: var(--aura-white);
+    background-color: #3b403d;
+    text-align: left;
+    z-index: 1000;
+    top: 12px;
+    left: 12px;
+    pointer-events: none;
+    border-radius: 8px;
+  }
+  .floating-tooltip__header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: var(--aura-gray-8);
+    padding: 8px;
+  }
+  .floating-tooltip__body {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: var(--aura-gray-9);
+    padding: 8px;
+  }
+  .tv-lightweight-charts table tr:last-child {
+    //border-top: 1.5px solid #FFA741;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 1.5px;
+      z-index: 2;
+      background: linear-gradient(113.1deg, #5ee6d0 13.45%, #bfc6ff 50.33%, #ffba69 85.05%);
+    }
+  }
+}

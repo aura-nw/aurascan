@@ -108,7 +108,8 @@ $textColors: (
   "green-2",
   "red-3",
   "yellow-3",
-  "blue-2"
+  "blue-2",
+  "blue-3link"
 );
 @each $color in $textColors {
   .text--#{$color} {

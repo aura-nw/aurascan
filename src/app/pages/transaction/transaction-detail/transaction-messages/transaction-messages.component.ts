@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import * as _ from 'lodash';
 import { formatWithSchema } from '../../../../core/helpers/date';
+import { ProposalService } from 'src/app/core/services/proposal.service';
 
 @Component({
   selector: 'app-transaction-messages',
@@ -73,6 +74,7 @@ export class TransactionMessagesComponent implements OnInit {
     private layout: BreakpointObserver,
     public commonService: CommonService,
     private transactionService: TransactionService,
+    private proposalService: ProposalService,
   ) {}
 
   ngOnInit(): void {
@@ -325,8 +327,8 @@ export class TransactionMessagesComponent implements OnInit {
           }
 
           if (this.ibcData['acknowledgement']) {
-            let dataEncode = atob(this.ibcData['acknowledgement']?.packet?.data);
             try {
+              let dataEncode = atob(this.ibcData['acknowledgement']?.packet?.data);
               const data = JSON.parse(dataEncode);
               this.ibcData['acknowledgement'] = {
                 ...this.ibcData['acknowledgement'],
@@ -393,7 +395,8 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   parsingOptionVote(option) {
-    const statusObj = this.voteConstant.find((s) => s.key === option);
+    const optionVote = this.proposalService.getVoteMessageByConstant(option);
+    const statusObj = this.voteConstant.find((s) => s.key === optionVote);
     if (statusObj !== undefined) {
       return statusObj.value;
     }
@@ -436,9 +439,16 @@ export class TransactionMessagesComponent implements OnInit {
   }
 
   getDateValue(time) {
-    if (time) {
-      return formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC);
-    } else {
+    try {
+      if (time) {
+        if (time?.seconds) {
+          time = new Date(time.seconds * 1000).toISOString();
+        }
+        return formatWithSchema(new Date(time).getTime(), DATEFORMAT.DATETIME_UTC);
+      } else {
+        return '-';
+      }
+    } catch {
       return '-';
     }
   }

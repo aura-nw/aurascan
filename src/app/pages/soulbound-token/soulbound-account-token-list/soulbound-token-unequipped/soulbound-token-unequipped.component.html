@@ -1,5 +1,5 @@
 <section class="mt-4 mt-lg-6">
-  <h2 class="text--white">Un-equipped SBT</h2>
+  <h2 class="text--white">Un-equipped ABT</h2>
   <div class="card">
     <div class="card-body">
       <!-- Title -->
@@ -41,6 +41,7 @@
       <div *ngIf="!loading">
         <!-- Token list -->
         <div
+          id="nft-cards"
           class="nft-cards nft__unclaimed token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           *ngIf="soulboundData.data.length > 0; else noValues">
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
@@ -49,25 +50,30 @@
                 <div class="token-cards__img">
                   <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
                   <img
-                    *ngIf="getTypeFile(token) === 'img' && !token.animation_url"
-                    src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
+                    src="{{
+                      (token.animation_url || token.token_img)
+                        ? (token.animation_url || token.token_img | replaceIpfs)
+                        : commonService.getDefaultImg()
+                    }}"
                     alt="{{ token.token_name }}" />
                   <app-custom-video-player
                     [videoSrc]="token.animation_url | replaceIpfs"
                     [showControl]="false"
-                    *ngIf="token.animation_url">
+                    [nftId]="'nft#' + i"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
                   </app-custom-video-player>
                   <app-model-view
-                    *ngIf="getTypeFile(token) === '3d'"
-                    [modelUrl]="token.token_img | replaceIpfs"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE._3D"
+                    [modelUrl]="token.animation_url | replaceIpfs"
                     [link]=""
                     [disablePan]="true">
                   </app-model-view>
                   <app-audio-player
-                    *ngIf="getTypeFile(token) === 'audio'"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
                     [link]="'#'"
-                    [src]="token.token_img | replaceIpfs"
-                    [nftId]=""
+                    [src]="token.animation_url | replaceIpfs"
+                    [nftId]="'nft#' + i"
                     [disableLink]="true">
                   </app-audio-player>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">

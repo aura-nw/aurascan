@@ -112,7 +112,7 @@ export interface DeployContractListReq {
   name: string,
   email: string,
   contract_description: string,
-  project_sector?: string, // can hoi lai
+  project_sector?: string,
   whitepaper?: string,
   github?: string,
   telegram?: string,

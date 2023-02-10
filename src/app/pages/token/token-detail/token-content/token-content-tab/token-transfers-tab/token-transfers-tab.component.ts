@@ -98,7 +98,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
 
     if (this.typeContract !== this.contractType.CW20) {
-      this.linkToken = 'token-nft';
+      this.linkToken = this.typeContract === this.contractType.CW721 ? 'token-nft' : 'token-abt';
     }
   }
 
@@ -207,5 +207,9 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       return true;
     }
     return false;
+  }
+
+  viewNFTDetail(contract: string, tokenID: string) {
+    window.location.href = `/tokens/${this.linkToken}/${contract}/` + encodeURIComponent(tokenID);
   }
 }

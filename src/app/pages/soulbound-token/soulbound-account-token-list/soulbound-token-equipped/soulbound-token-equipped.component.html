@@ -1,5 +1,5 @@
 <section class="mt-4 mt-lg-6">
-  <h2 class="text--white">Equipped SBT</h2>
+  <h2 class="text--white">Equipped ABT</h2>
   <div class="card">
     <div class="card-body">
       <!-- Title -->
@@ -41,47 +41,62 @@
       <div *ngIf="!loading">
         <!-- Token list -->
         <div
+          id="nft-cards"
           class="nft-cards token-cards row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-2 g-md-3 g-lg-4 g-xl-5"
           *ngIf="soulboundData.data.length > 0; else noValues">
-          <div class="nft-cards__col col" *ngFor="let token of soulboundData.data">
+          <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
-                <div class="token-cards__img">
-                  <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
-                  <img
-                    *ngIf="getTypeFile(token) === 'img' && !token.animation_url"
-                    src="{{ token.token_img ? (token.token_img | replaceIpfs) : commonService.getDefaultImg() }}"
-                    alt="{{ token.token_name }}" />
-                  <app-custom-video-player
-                    [videoSrc]="token.animation_url | replaceIpfs"
-                    [showControl]="false"
-                    *ngIf="token.animation_url">
-                  </app-custom-video-player>
-                  <app-model-view
-                    *ngIf="getTypeFile(token) === '3d'"
-                    [link]=""
-                    [modelUrl]="token.token_img | replaceIpfs"
-                    [disablePan]="true">
-                  </app-model-view>
-                  <app-audio-player
-                    *ngIf="getTypeFile(token) === 'audio'"
-                    [link]="'/tokens/token-nft/' + token?.contract_address +'/'+token?.token_id"
-                    [src]="token.token_img | replaceIpfs"
-                    [nftId]="">
-                  </app-audio-player>
+                <div class="nft-cards__img">
+                  <div class="token-cards__img">
+                    <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
+                    <img
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
+                      src="{{
+                        (token.animation_url || token.token_img)
+                          ? (token.animation_url || token.token_img | replaceIpfs)
+                          : commonService.getDefaultImg()
+                      }}"
+                      alt="{{ token.token_name }}" />
+                    <app-custom-video-player
+                      [videoSrc]="token.animation_url | replaceIpfs"
+                      [showControl]="false"
+                      [nftId]="'nft#' + i"
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
+                    </app-custom-video-player>
+                    <app-model-view
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE._3D"
+                      [link]=""
+                      [modelUrl]="token.animation_url | replaceIpfs"
+                      [disablePan]="true">
+                    </app-model-view>
+                    <app-audio-player
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
+                      [link]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                      [src]="token.animation_url | replaceIpfs"
+                      [nftId]="'nft#' + i"
+                      [disableLink]="true">
+                    </app-audio-player>
+                  </div>
                 </div>
-                <a
-                  href="/tokens/token-nft/{{ token?.contract_address }}/{{ token?.token_id }}"
-                  class="box-nft-info d-block">
+                <div class="box-nft-info d-block">
                   <div class="nft__info body-01 caption-mob fw-normal">
                     <span class="mr-1 text--gray-1">Token:</span>
-                    <span>{{ token.token_name }}</span>
+                    <span
+                      class="text--primary hover-link"
+                      (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
+                      >{{ token.token_name }}</span
+                    >
                   </div>
                   <div class="nft__info body-01 caption-mob fw-normal mt-1">
                     <span class="mr-1 text--gray-1">Token ID:</span>
-                    <span>{{ token.token_id | cutStringPipe : 8 : 8 }}</span>
+                    <span
+                      class="text--primary hover-link"
+                      (click)="handleRouterLink('/tokens/token-abt/' + token.contract_address + '/' + token?.token_id)"
+                      >{{ token.token_id | cutStringPipe : 8 : 8 }}</span
+                    >
                   </div>
-                </a>
+                </div>
               </div>
               <ng-container *ngIf="userAddress === walletAddress">
                 <i

@@ -1,0 +1,12 @@
+section.top-statistics {
+  @media (min-width: 992px) {
+    .aura-nav-tabs {
+      li {
+        width: 100%;
+        flex-shrink: 0;
+        flex-grow: 1;
+        padding: 0 var(--spacer-4);
+      }
+    }
+  }
+}
