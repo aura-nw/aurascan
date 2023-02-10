@@ -886,7 +886,7 @@
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">
               <div class="d-lg-flex justify-content-between">
-                <div>{{ commonService.mappingNameIBC(item.denomIBC) }}</div>
+                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC) : item.denom }}</div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">

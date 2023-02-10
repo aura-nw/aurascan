@@ -103,7 +103,7 @@
                 class: 'body-01-mob text--gray-1',
                 info:
                   data.amount > 0
-                    ? (+data.amount | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+                    ? (+data.amount | mask: 'separator.6') + '<span class=text--primary> ' + commonService.mappingNameIBC(data?.denom) + '</span>'
                     : checkAmountValue(data.amount, data.tx_hash)
               },
               {
