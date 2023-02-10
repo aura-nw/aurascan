@@ -147,7 +147,8 @@ export class NFTDetailComponent implements OnInit {
         }
       } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
-          this.route.navigate(['/']);
+          this.toastr.error('Token invalid');
+          return;
         }
         this.linkToken = 'token-abt';
         this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
