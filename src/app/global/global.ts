@@ -213,6 +213,12 @@ export function convertDataTransaction(data, coinInfo) {
     let _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
     let lstType = _.get(element, 'tx_response.tx.body.messages');
     let denom = coinInfo.coinDenom;
+
+    //check send token ibc same chain
+    if (_type === TRANSACTION_TYPE_ENUM.Send && messages[0].amount[0].denom !== denom) {
+      denom = messages[0].amount[0].denom;
+    }
+
     if (lstType?.length > 1) {
       lstType.forEach((type) => {
         if (type['@type'] !== TRANSACTION_TYPE_ENUM.IBCUpdateClient && type['@type'].indexOf('ibc') > -1) {

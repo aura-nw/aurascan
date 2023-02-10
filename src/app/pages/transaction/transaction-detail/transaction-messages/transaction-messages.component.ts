@@ -60,6 +60,7 @@ export class TransactionMessagesComponent implements OnInit {
   dataTimeOut = {};
   spendLimitAmount = 0;
   typeGrantAllowance = 'Basic';
+  denomIBC = '';
 
   listIBCProgress = [];
 
@@ -346,7 +347,7 @@ export class TransactionMessagesComponent implements OnInit {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
             let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp) || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }
@@ -386,6 +387,7 @@ export class TransactionMessagesComponent implements OnInit {
         });
         if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
           txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
+          this.denomIBC = data.transactions[0].indexes.denomination_trace_denom[0];
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
         }
