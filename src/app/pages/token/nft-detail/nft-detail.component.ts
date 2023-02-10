@@ -71,6 +71,7 @@ export class NFTDetailComponent implements OnInit {
   isError = false;
   nftUrl = '';
   sbType = SB_TYPE;
+  contractType = ContractRegisterType;
   linkToken = 'token-nft';
 
   image_s3 = this.environmentService.configValue.image_s3;
