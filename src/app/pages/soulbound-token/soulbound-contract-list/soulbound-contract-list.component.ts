@@ -46,21 +46,20 @@ export class SoulboundContractListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.router.navigate(['/']);
-    // from([1])
-    //   .pipe(
-    //     delay(800),
-    //     mergeMap((_) => this.walletService.wallet$),
-    //   )
-    //   .subscribe((wallet) => {
-    //     if (wallet) {
-    //       this.currentAddress = this.walletService.wallet?.bech32Address;
-    //       this.getListSmartContract();
-    //     } else {
-    //       this.currentAddress = null;
-    //       this.router.navigate(['/']);
-    //     }
-    //   });
+    from([1])
+      .pipe(
+        delay(800),
+        mergeMap((_) => this.walletService.wallet$),
+      )
+      .subscribe((wallet) => {
+        if (wallet) {
+          this.currentAddress = this.walletService.wallet?.bech32Address;
+          this.getListSmartContract();
+        } else {
+          this.currentAddress = null;
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   searchToken() {
