@@ -143,7 +143,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           up_time: 100,
         };
 
-        // this.getTotalSBT(this.currentValidatorDetail.acc_address);
+        this.getTotalSBT(this.currentValidatorDetail.acc_address);
         this.getBlocksMiss(this.currentAddress);
       },
       (error) => {

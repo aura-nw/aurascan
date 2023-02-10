@@ -250,7 +250,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
       if (wallet) {
         this.userAddress = wallet.bech32Address;
       }
-      // this.getSBTPick();
+      this.getSBTPick();
     });
 
     let retrievedObject = localStorage.getItem('accountDetail');

@@ -35,14 +35,14 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.userAddress = this.router.snapshot.paramMap.get('address');
-    // this.walletService.wallet$.subscribe((wallet) => {
-    //   this.wallet = wallet?.bech32Address;
-    //   this.getData();
-    //   this.timerGetUpTime = setInterval(() => {
-    //     this.getData();
-    //   }, 30000);
-    // });
+    this.userAddress = this.router.snapshot.paramMap.get('address');
+    this.walletService.wallet$.subscribe((wallet) => {
+      this.wallet = wallet?.bech32Address;
+      this.getData();
+      this.timerGetUpTime = setInterval(() => {
+        this.getData();
+      }, 30000);
+    });
   }
 
   getData() {
