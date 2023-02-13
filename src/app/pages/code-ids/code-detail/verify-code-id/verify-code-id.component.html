@@ -1,0 +1,57 @@
+<div class="box-contract text-white">
+  <ng-container *ngIf="contract_verification === 'Unverified'">
+    <div class="d-flex content-contract body-02">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        Are you the contract creator?
+        <a
+          class="text--primary"
+          [routerLink]="[
+            '/contracts/verify',
+            'aura1pfhnr2ur22ff0xyjx208jhjq7s9d8hyq4qkms8hmpsz4j8v2qtqsgr93z5',
+            '1001'
+          ]">
+          Verify and Publish
+        </a>
+        your contract source code today!
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="contract_verification === 'Verified'">
+    <div class="d-flex fw-semibold">
+      <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
+      <div class="ml-2">Code ID Verified</div>
+    </div>
+    <div class="mt-6 fw-semibold">
+      <span class="gray-5">Compiler Version: </span>
+      <span>v0.7.6+commit.7338295f</span>
+    </div>
+    <div class="d-flex fw-semibold mt-6">
+      <i class="icon icon-file-document text--gray-4"></i>
+      <div class="ml-2">Link Code ID source code</div>
+    </div>
+
+    <div class="form-group mt-4 d-flex align-items-center">
+      <input
+        id="popupCopy"
+        type="text"
+        class="form-control form-check-input body mt-0"
+        readonly
+        value="https://github.com/aura-nw/flower-store-contract" />
+      <button
+        class="button button-outline button-pill ml-4"
+        matTooltip="Copied!"
+        #tooltip2="matTooltip"
+        (mouseenter)="$event.stopImmediatePropagation()"
+        (mouseleave)="$event.stopImmediatePropagation()"
+        (click)="copyData('https://github.com/aura-nw/flower-store-contract'); tooltip2.toggle()">
+        <span>Copy</span>
+      </button>
+    </div>
+  </ng-container>
+</div>

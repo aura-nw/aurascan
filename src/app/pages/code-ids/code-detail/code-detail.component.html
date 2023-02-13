@@ -1,0 +1,85 @@
+<app-pagetitle title="Code IDs" [displayInfo]="false"></app-pagetitle>
+<section class="information mt-4 mt-lg-6">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="h3-mob text--white mb-4">Information</h2>
+      <div class="row">
+        <div class="col-6 col-lg-2">
+          <div class="text--gray-4 body">Code ID</div>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <div class="text--gray-light body">1</div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-6 col-lg-2">
+          <div class="text--gray-4 body">Creator</div>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <a href="#" class="text--primary body d-none d-lg-block">aurac77482e45F1F44dE1745F52C74426C6316DD52</a>
+          <a href="#" class="text--primary body d-lg-none">{{
+            'aurac77482e45F1F44dE1745F52C74426C6316DD52' | cutStringPipe : 8 : 8
+          }}</a>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-6 col-lg-2">
+          <div class="text--gray-4 body">Tx Hash</div>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <a href="#" class="text--primary body d-none d-lg-block"
+            >EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63</a
+          >
+          <a href="#" class="text--primary body d-lg-none">{{
+            'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63' | cutStringPipe : 8 : 8
+          }}</a>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-6 col-lg-2">
+          <div class="text--gray-4 body">Type</div>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <div class="text--gray-light body">CW-4973</div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-6 col-lg-2">
+          <div class="text--gray-4 body">Instantiate times</div>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <div class="text--gray-light body">2</div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-6 col-lg-2">
+          <div class="text--gray-4 body">Created At</div>
+        </div>
+        <div class="col-6 col-lg-auto">
+          <div class="text--gray-1 body">{{ '2023-02-07T09:35:03.680Z' | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="tab">
+  <div class="card">
+    <div class="card-body">
+      <!-- Tabs -->
+      <ul ngbNav #customNav="ngbNav" [activeId]="tabIndex" class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-flex">
+        <ng-container *ngFor="let tab of TAB; index as index">
+          <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
+            <a ngbNavLink (click)="tabIndex = tab.id" class="fw-semibold">
+              <span>{{ tab.value | uppercase }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+      <!-- content -->
+      <div class="mt-4 mt-lg-6">
+        <app-contracts-list *ngIf="tabIndex === 0"></app-contracts-list>
+        <app-verify-code-id *ngIf="tabIndex === 1"></app-verify-code-id>
+      </div>
+    </div>
+  </div>
+</section>

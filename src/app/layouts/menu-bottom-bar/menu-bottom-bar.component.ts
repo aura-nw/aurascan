@@ -115,6 +115,10 @@ export class MenuBottomBarComponent implements OnInit {
     if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
       return true;
     }
+
+    if (menuLink === '/code-ids/list' && this.router.url == '/code-ids/list') {
+      return true;
+    }
     return false;
   }
 }

@@ -29,7 +29,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    //{ matColumnDef: 'project_name', headerCellDef: 'Project' },
     { matColumnDef: 'type', headerCellDef: 'Type Contract' },
     { matColumnDef: 'compiler_version', headerCellDef: 'Version' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified' },
@@ -62,7 +61,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     private route: ActivatedRoute,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnDestroy(): void {

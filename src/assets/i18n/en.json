@@ -82,6 +82,7 @@
         }
     },
     "MENUITEMS": {
+        "CODE-LIST": "Code IDs",
         "CHART-STATS": "Chart & Stats",
         "TOP-STATISTICS": "Top Statistics",
         "MULTI-SEND": "Multi-send",
