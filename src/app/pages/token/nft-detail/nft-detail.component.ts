@@ -273,6 +273,7 @@ export class NFTDetailComponent implements OnInit {
       pubKey: dataWallet['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
+      contractAddress: this.nftDetail?.contract_address
     };
 
     let feeGas = {
