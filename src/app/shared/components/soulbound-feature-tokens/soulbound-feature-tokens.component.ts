@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
@@ -32,6 +33,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     private dialog: MatDialog,
     private walletService: WalletService,
     private router: ActivatedRoute,
+    private contractService: ContractService
   ) {}
 
   ngOnInit(): void {
@@ -76,13 +78,12 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     return 'https://ipfs.io/' + value.replace('://', '/');
   }
 
-  getSBTDetail(tokenID) {
-    const encoded = encodeURIComponent(tokenID);
+  getSBTDetail(contractAddress, tokenID) {
     this.isClick = true;
-    this.soulboundService.getSBTDetail(encoded).subscribe((res) => {
+    this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
       this.isClick = false;
       if (res) {
-        this.openDialogDetail(res);
+        this.openDialogDetail(res.data);
       }
     });
   }
