@@ -16,15 +16,14 @@
                 placeholder="Search for Token Name or Address"
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
-                (keyup)="searchToken()"
-                (keyup.enter)="setPageList()"
+                (keyup)="onKeyUp()"
                 [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button
                 type="submit"
                 class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
+                (click)="getListToken()">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -36,36 +35,6 @@
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
-              <div class="box-search-data text-white">
-                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
-                  <span> There are no matching contracts </span>
-                </ng-container>
-                <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search mb-2">CW-20 Tokens</div>
-                  <ng-container *ngFor="let item of filterSearchData">
-                    <div
-                      class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.contract_address]">
-                      <img [src]="item.image || defaultLogoToken" class="logo-token rounded-circle" />
-                      <div class="ml-3">
-                        <div class="d-flex align-items-center">
-                          <div class="text-clamp">
-                            {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
-                          </div>
-                          <div class="box-price">
-                            <span class="text--green-3">${{ item.price | number : global.formatNumber2Decimal }}</span>
-                          </div>
-                        </div>
-                        <span class="text-clamp small-body text--primary">{{
-                          item.contract_address | cutStringPipe : 8 : 8
-                        }}</span>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-            </ng-container>
           </form>
         </div>
         <div class="divider divider-horizontal d-lg-none my-4"></div>
