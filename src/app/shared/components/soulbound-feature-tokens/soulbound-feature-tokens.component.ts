@@ -18,6 +18,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() accountAddress = null;
   @Input() soulboundListData = null;
   @Output() totalSBT = new EventEmitter<number>();
+  @Output() totalPick = new EventEmitter<number>();
 
   isClick = false;
   soulboundList = [];
@@ -69,6 +70,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
       }
       this.soulboundList = res.data;
       this.totalSBT.emit(res.meta.count);
+      this.totalPick.emit(res.data?.length || 0);
     });
   }
 
