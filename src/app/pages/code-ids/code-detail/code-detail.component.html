@@ -16,10 +16,16 @@
           <div class="text--gray-4 body">Creator</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <a href="#" class="text--primary body d-none d-lg-block">aurac77482e45F1F44dE1745F52C74426C6316DD52</a>
-          <a href="#" class="text--primary body d-lg-none">{{
-            'aurac77482e45F1F44dE1745F52C74426C6316DD52' | cutStringPipe : 8 : 8
-          }}</a>
+          <a
+            [routerLink]="['/account', 'aurac77482e45F1F44dE1745F52C74426C6316DD52']"
+            class="text--primary body d-none d-lg-block"
+            >aurac77482e45F1F44dE1745F52C74426C6316DD52</a
+          >
+          <a
+            [routerLink]="['/account', 'aurac77482e45F1F44dE1745F52C74426C6316DD52']"
+            class="text--primary body d-lg-none"
+            >{{ 'aurac77482e45F1F44dE1745F52C74426C6316DD52' | cutStringPipe : 8 : 8 }}</a
+          >
         </div>
       </div>
       <div class="row mt-2">
@@ -27,12 +33,16 @@
           <div class="text--gray-4 body">Tx Hash</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <a href="#" class="text--primary body d-none d-lg-block"
+          <a
+            [routerLink]="['/transaction', 'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63']"
+            class="text--primary body d-none d-lg-block"
             >EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63</a
           >
-          <a href="#" class="text--primary body d-lg-none">{{
-            'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63' | cutStringPipe : 8 : 8
-          }}</a>
+          <a
+            [routerLink]="['/transaction', 'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63']"
+            class="text--primary body d-lg-none"
+            >{{ 'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63' | cutStringPipe : 8 : 8 }}</a
+          >
         </div>
       </div>
       <div class="row mt-2">

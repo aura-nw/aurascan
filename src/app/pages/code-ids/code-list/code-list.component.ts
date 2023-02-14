@@ -22,8 +22,8 @@ export class CodeListComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH' },
-    { matColumnDef: 'creator_address', headerCellDef: 'Creator' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
+    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
     { matColumnDef: 'created_at', headerCellDef: 'created at' },

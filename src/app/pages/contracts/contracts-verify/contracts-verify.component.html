@@ -1,5 +1,5 @@
 <section class="contract-verify">
-  <h1 class="text--white mb-2 mb-lg-0">Verify & Publish Contract Source Code</h1>
+  <h1 class="text--white mb-2 mb-lg-0">Verify & Publish Code ID Source Code</h1>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
   <div class="body-02 caption-mob fw-normal-mob text--gray-6">
     Source code verification provides transparency for users interacting with smart contracts. By uploading link GitHub
@@ -9,71 +9,112 @@
   </div>
   <div class="card mt-4">
     <div class="card-body">
+      <!-- Tabs -->
+      <ul
+        ngbNav
+        #customNav="ngbNav"
+        [activeId]="tabIndex"
+        class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 mb-lg-6 d-flex">
+        <ng-container *ngFor="let tab of TAB; index as index">
+          <li
+            [disabled]="true"
+            [ngbNavItem]="index"
+            class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4"
+            [class.d-none]="tabIndex === 0 && tab.id === 1">
+            <a ngbNavLink (click)="tabIndex = tab.id" class="fw-semibold">
+              <span>{{ tab.value }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
       <!-- Contract Source Code -->
-      <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="aura-form" autocomplete="off">
-        <div class="form-group mb-4 mb-lg-6">
-          <label for="address" class="form-label text--gray-1 body-02">Contract Address to verify </label>
-          <input
-            formControlName="contract_address"
-            type="text"
-            class="form-control"
-            id="address"
-            placeholder="aura..." />
-          <div class="error" *ngIf="formControls['contract_address'].invalid">Contract address is required!</div>
-        </div>
-        <div class="form-group mb-4 mb-lg-6">
-          <label for="link" class="form-label text--gray-1 body-02"> Link GitHub Source Code </label>
-          <input
-            formControlName="link"
-            type="text"
-            class="form-control"
-            id="link"
-            maxlength="200"
-            placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
-          <ng-container *ngIf="formControls['link'].touched">
-            <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
-            <div class="error" *ngIf="formControls['link'].errors?.maxlength">
-              Link GitHub Source Code is not allowed more 200 characters!
+      <form
+        [formGroup]="contractForm"
+        (ngSubmit)="onSubmit()"
+        *ngIf="tabIndex === 0"
+        class="aura-form"
+        autocomplete="off">
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <div class="form-group mb-4 mb-lg-6">
+              <label for="address" class="form-label text--gray-1 body-02">Contract Address to verify </label>
+              <input
+                formControlName="contract_address"
+                type="text"
+                class="form-control form-check-input"
+                id="address"
+                placeholder="aura..." />
+              <div class="error" *ngIf="formControls['contract_address'].invalid">Contract address is required!</div>
             </div>
-            <div class="error" *ngIf="formControls['link'].errors?.pattern && !formControls['link'].errors?.required">
-              Invalid link Github Source Code
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-group mb-4 mb-lg-6">
+              <label for="wasm_file" class="form-label text--gray-1 body-02"> Compiled wasm file name </label>
+              <input
+                formControlName="wasm_file"
+                type="text"
+                class="form-control form-check-input"
+                id="wasm_file"
+                maxlength="200"
+                placeholder="xxx.wasm" />
+              <ng-container *ngIf="formControls['wasm_file'].touched">
+                <div class="error" *ngIf="formControls['wasm_file'].errors?.required">Required</div>
+                <div class="error" *ngIf="formControls['wasm_file'].errors?.maxlength">
+                  Compiled wasm file name is not allowed more 200 characters!
+                </div>
+              </ng-container>
             </div>
-          </ng-container>
+          </div>
         </div>
-        <div class="form-group mb-4 mb-lg-6">
-          <label for="wasm_file" class="form-label text--gray-1 body-02"> Compiled wasm file name </label>
-          <input
-            formControlName="wasm_file"
-            type="text"
-            class="form-control"
-            id="wasm_file"
-            maxlength="200"
-            placeholder="xxx.wasm" />
-          <ng-container *ngIf="formControls['wasm_file'].touched">
-            <div class="error" *ngIf="formControls['wasm_file'].errors?.required">Required</div>
-            <div class="error" *ngIf="formControls['wasm_file'].errors?.maxlength">
-              Compiled wasm file name is not allowed more 200 characters!
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <div class="form-group mb-4 mb-lg-6">
+              <label for="link" class="form-label text--gray-1 body-02"> Link GitHub Source Code </label>
+              <input
+                formControlName="link"
+                type="text"
+                class="form-control form-check-input"
+                id="link"
+                maxlength="200"
+                placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
+              <div class="text--warning mt-2 caption">
+                Enter the Github URL at the right commit version of source code ou would like to verify E.g:
+                http://github.com/***/commit/***
+              </div>
+              <ng-container *ngIf="formControls['link'].touched">
+                <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
+                <div class="error" *ngIf="formControls['link'].errors?.maxlength">
+                  Link GitHub Source Code is not allowed more 200 characters!
+                </div>
+                <div
+                  class="error"
+                  *ngIf="formControls['link'].errors?.pattern && !formControls['link'].errors?.required">
+                  Invalid link Github Source Code
+                </div>
+              </ng-container>
             </div>
-          </ng-container>
-        </div>
-        <div class="form-group mb-4 mb-lg-6">
-          <label for="version" class="form-label text--gray-1 body-02">Compiler Version</label>
-          <mat-select
-            #version
-            id="version"
-            formControlName="compiler_version"
-            class="form-control select-input-field select-input--flat"
-            panelClass="aura-optional-panel aura-optional-panel--flat"
-            [disableOptionCentering]="true"
-            placeholder="Please select compiler version">
-            <mat-option *ngFor="let item of versionList" [value]="item.value">
-              {{ item.label }}
-            </mat-option>
-          </mat-select>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-group mb-4 mb-lg-6">
+              <label for="version" class="form-label text--gray-1 body-02">Compiler Version</label>
+              <mat-select
+                #version
+                id="version"
+                formControlName="compiler_version"
+                class="form-control select-input-field select-input--flat form-check-input"
+                panelClass="aura-optional-panel aura-optional-panel--flat"
+                [disableOptionCentering]="true"
+                placeholder="Please select compiler version">
+                <mat-option *ngFor="let item of versionList" [value]="item.value">
+                  {{ item.label }}
+                </mat-option>
+              </mat-select>
 
-          <ng-container *ngIf="formControls['compiler_version'].touched">
-            <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
-          </ng-container>
+              <ng-container *ngIf="formControls['compiler_version'].touched">
+                <div class="error" *ngIf="formControls['compiler_version'].errors?.required">Required</div>
+              </ng-container>
+            </div>
+          </div>
         </div>
 
         <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-2 pt-lg-0">
@@ -90,6 +131,8 @@
           </button>
         </div>
       </form>
+      <!-- Contract Verify step -->
+      <app-contract-verify-steps *ngIf="tabIndex === 1"></app-contract-verify-steps>
     </div>
   </div>
 </section>

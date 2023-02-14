@@ -1,6 +1,9 @@
 <div class="box-contract text--white">
   <div class="mb-4" *ngIf="contractDetail.code_id">
-    This contract was instantiated from Code ID <span class="text--primary">{{ contractDetail.code_id }}</span>
+    This contract was instantiated from Code ID
+    <a [routerLink]="['/code-ids/detail', contractDetail.code_id]" class="text--primary">{{
+      contractDetail.code_id
+    }}</a>
   </div>
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && !isVerifying">
     <div class="d-flex fw-500 content-contract">

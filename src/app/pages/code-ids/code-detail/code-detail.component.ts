@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class CodeDetailComponent implements OnInit {
   codeId;
-  tabIndex = 1;
+  tabIndex = 0;
   TAB = [
     {
       id: 0,

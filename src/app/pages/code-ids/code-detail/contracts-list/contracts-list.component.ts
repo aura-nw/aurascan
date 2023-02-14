@@ -17,9 +17,9 @@ export class ContractsListComponent implements OnInit {
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'CONTRACT ADDRESS', isUrl: 'contract' },
-    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: 'transaction' },
-    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: 'account' },
+    { matColumnDef: 'address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contract' },
+    { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
+    { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified at' },

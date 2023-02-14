@@ -16,6 +16,17 @@ import { WSService } from 'src/app/core/services/ws.service';
 export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
   code_id = '';
+  tabIndex = 1;
+  TAB = [
+    {
+      id: 0,
+      value: 'Contract Source Code',
+    },
+    {
+      id: 1,
+      value: 'Complier Output',
+    },
+  ];
   @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
