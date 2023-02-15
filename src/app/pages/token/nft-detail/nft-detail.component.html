@@ -1,4 +1,9 @@
-<ng-container *ngIf="nftDetail">
+<ng-container
+  *ngIf="
+    nftDetail &&
+    (nftDetail.type === contractType.CW721 ||
+      (nftDetail.type === contractType.CW4973 && nftDetail?.status === sbType.EQUIPPED))
+  ">
   <div class="text--white">
     <div class="d-lg-none">
       <h1 class="fw-semibold mb-0 text--white d-flex align-items-center flex-wrap">
@@ -27,7 +32,11 @@
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img *ngIf="!nftType && !nftDetail.ipfs?.animation_url" [src]="defaultImgToken" />
               <img *ngIf="nftType === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="this.nftUrl" />
-              <video [src]="this.nftUrl" controls controlsList="nodownload " *ngIf="nftType === MEDIA_TYPE.VIDEO"></video>
+              <video
+                [src]="this.nftUrl"
+                controls
+                controlsList="nodownload "
+                *ngIf="nftType === MEDIA_TYPE.VIDEO"></video>
               <app-model-view *ngIf="nftType === MEDIA_TYPE._3D" [modelUrl]="this.nftUrl" [disablePan]="false">
               </app-model-view>
               <app-audio-player *ngIf="nftType === MEDIA_TYPE.AUDIO" [src]="this.nftUrl"> </app-audio-player>

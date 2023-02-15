@@ -21,7 +21,7 @@
           <div class="col-12 col-lg-9 text--gray-1">
             <ng-container *ngIf="item?.amount[0]?.amount > 0">
               {{ item?.amount[0]?.amount | balanceOf | mask : 'separator.6' }}
-              <span class="text--primary">{{ denom }}</span>
+              <span class="text--primary">{{ commonService.mappingNameIBC(item?.amount[0]?.denom) }}</span>
             </ng-container>
             <ng-container *ngIf="item?.amount[0]?.amount == 0"> - </ng-container>
           </div>
@@ -886,7 +886,7 @@
           <div class="ml-10 p-3 p-lg-4 bg-gray-8">
             <ng-container *ngFor="let item of filterIBCType(type)">
               <div class="d-lg-flex justify-content-between">
-                <div>{{ item.denom }}</div>
+                <div>{{ denomIBC ? commonService.mappingNameIBC(denomIBC) : item.denom }}</div>
                 <div class="body text-end mt-3 mt-lg-0">
                   <div>
                     <a *ngIf="item.denom === denom" class="text--primary" href="/transaction/{{ item.tx_hash }}">
