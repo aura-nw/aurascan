@@ -9,29 +9,11 @@
   </div>
   <div class="card mt-4">
     <div class="card-body">
-      <!-- Tabs -->
-      <ul
-        ngbNav
-        #customNav="ngbNav"
-        [activeId]="tabIndex"
-        class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 mb-lg-6 d-flex">
-        <ng-container *ngFor="let tab of TAB; index as index">
-          <li
-            [disabled]="true"
-            [ngbNavItem]="index"
-            class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4"
-            [class.d-none]="tabIndex === 0 && tab.id === 1">
-            <a ngbNavLink (click)="tabIndex = tab.id" class="fw-semibold">
-              <span>{{ tab.value }}</span>
-            </a>
-          </li>
-        </ng-container>
-      </ul>
       <!-- Contract Source Code -->
       <form
         [formGroup]="contractForm"
         (ngSubmit)="onSubmit()"
-        *ngIf="tabIndex === 0"
+        *ngIf="currentStep === 'verify'"
         class="aura-form"
         autocomplete="off">
         <div class="row">
@@ -132,7 +114,21 @@
         </div>
       </form>
       <!-- Contract Verify step -->
-      <app-contract-verify-steps *ngIf="tabIndex === 1"></app-contract-verify-steps>
+      <div *ngIf="currentStep === 'compiler'">
+        <app-contract-verify-steps></app-contract-verify-steps>
+
+        <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-4 pt-lg-12">
+          <button class="button button--md button-pill button-outline button-fixed" type="button">
+            <span>Back</span>
+          </button>
+          <button
+            [disabled]="!isCompilerComplete"
+            class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4"
+            type="button">
+            <span>Start over</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>

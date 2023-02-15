@@ -26,14 +26,8 @@
   &__label {
     position: relative;
     z-index: 5;
-    display: flex;
-    align-items: center;
-    @media (min-width: 991.98px) {
-      display: block;
-    }
   }
   &__content {
-    margin: var(--spacer-2) 0;
     margin-left: var(--spacer-8);
     background-color: var(--aura-gray-9);
     border-radius: 12px;
@@ -143,12 +137,18 @@
     height: calc(100% - 25px);
     background-color: var(--aura-gray-9);
     z-index: 1;
+    @media (min-width: 991.98px) {
+      top: 16px;
+      height: 1px;
+      width: 100%;
+    }
   }
   &:before {
-    top: calc(-100% + 25px);
+    left: calc(-50% - 16px);
   }
   &:after {
-    bottom: -7px;
+    right: calc(-50% - 16px);
+    left: unset;
   }
 }
 #step1:after,
@@ -162,22 +162,38 @@
   height: 0;
   transform: rotate(180deg);
   transition: height 0.35s ease-in-out;
+  @media (min-width: 991.98px) {
+    transition: max-width 0.35s ease-in-out;
+    top: 16px !important;
+    height: 1px !important;
+    width: 100%;
+    max-width: 0;
+  }
 }
 
 #step1:after {
   top: 16px;
 }
-
 #step1.complete:after {
   height: 250px;
+  @media (min-width: 991.98px) {
+    max-width: 999px;
+    left: calc(50% + 16px);
+  }
 }
 
 #step3:before {
   top: -226px;
 }
-#step3.active:before {
+#step3.complete:before {
   height: 226px;
+  @media (min-width: 991.98px) {
+    max-width: 999px;
+    right: unset;
+    left: calc(-50% - 16px);
+  }
 }
+
 @keyframes rotation {
   from {
     transform: rotate(359deg);

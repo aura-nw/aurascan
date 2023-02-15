@@ -15,18 +15,9 @@ import { WSService } from 'src/app/core/services/ws.service';
 })
 export class ContractsVerifyComponent implements OnInit, OnDestroy {
   contractAddress = '';
+  currentStep: 'verify' | 'compiler' = 'compiler';
   code_id = '';
-  tabIndex = 1;
-  TAB = [
-    {
-      id: 0,
-      value: 'Contract Source Code',
-    },
-    {
-      id: 1,
-      value: 'Complier Output',
-    },
-  ];
+  isCompilerComplete = false;
   @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
@@ -88,6 +79,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     this.formControls['wasm_file'].markAsTouched();
 
     if (this.contractForm.valid) {
+      this.currentStep = 'compiler';
       // handle contract_address & commit
       const link = this.contractForm.controls['link'].value;
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
