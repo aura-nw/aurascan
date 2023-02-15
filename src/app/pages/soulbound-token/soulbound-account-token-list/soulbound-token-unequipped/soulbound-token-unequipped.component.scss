@@ -29,17 +29,12 @@
   .token-cards__img {
     padding: 8px;
     app-model-view,
+    app-audio-player,
     app-custom-video-player {
-      max-height: 153px;
+      height: 153px;
       @media (min-width: 991.98px) {
-        max-height: 191px;
+        height: 231px;
       }
-      //position: absolute;
-      //top: 50%;
-      //left: 0;
-      //right: 0;
-      //bottom: 0;
-      //transform: translateY(-50%);
     }
   }
 }
