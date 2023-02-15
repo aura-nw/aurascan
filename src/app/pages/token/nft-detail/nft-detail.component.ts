@@ -71,6 +71,7 @@ export class NFTDetailComponent implements OnInit {
   isError = false;
   nftUrl = '';
   sbType = SB_TYPE;
+  contractType = ContractRegisterType;
   linkToken = 'token-nft';
 
   image_s3 = this.environmentService.configValue.image_s3;
@@ -147,7 +148,8 @@ export class NFTDetailComponent implements OnInit {
         }
       } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
-          this.route.navigate(['/']);
+          this.toastr.error('Token invalid');
+          return;
         }
         this.linkToken = 'token-abt';
         this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
@@ -271,6 +273,7 @@ export class NFTDetailComponent implements OnInit {
       pubKey: dataWallet['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
+      contractAddress: this.nftDetail?.contract_address
     };
 
     let feeGas = {

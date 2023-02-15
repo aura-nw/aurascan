@@ -97,8 +97,13 @@ export class CommonService {
   }
 
   mappingNameIBC(value) {
-    let temp = value.slice(value.indexOf('ibc'));
-    let result = this.coins.find((k) => k.denom === temp) || {};
+    let result = value;
+    if (value.indexOf('ibc') >= 0) {
+      let temp = value.slice(value.indexOf('ibc'));
+      result = this.coins.find((k) => k.denom === temp)?.display || {};
+    } else {
+      result = this.chainInfo.currencies[0].coinDenom;
+    }
     return result;
   }
 

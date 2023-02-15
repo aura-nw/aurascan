@@ -60,6 +60,7 @@ export class TransactionMessagesComponent implements OnInit {
   dataTimeOut = {};
   spendLimitAmount = 0;
   typeGrantAllowance = 'Basic';
+  denomIBC = '';
 
   listIBCProgress = [];
 
@@ -236,7 +237,20 @@ export class TransactionMessagesComponent implements OnInit {
 
   displayMsgRaw(): void {
     this.objMsgContract = _.get(this.transactionDetail.tx.tx.body, 'messages').map((element) => {
-      const msg = _.get(element, 'msg');
+      let msg = _.get(element, 'msg');
+      //get type mint don't type token id
+      if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
+        try {
+          const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+          if (jsonData && jsonData[0]) {
+            const data = jsonData[0]?.events[jsonData[0]?.events?.length - 1]?.attributes;
+            let tokenId = data.find((k) => k.key === 'token_id')?.value || null;
+            msg = { mint: { token_id: tokenId || null } };
+          }
+        } catch (e) {
+          msg = { mint: { token_id: null } };
+        }
+      }
       const funds = _.get(element, 'funds');
       return { msg, funds };
     });
@@ -346,7 +360,7 @@ export class TransactionMessagesComponent implements OnInit {
               data = element.events.find((k) => k['type'] === this.typeGetData.Transfer);
             });
             let temp = data?.attributes.find((j) => j['key'] === 'amount')?.value;
-            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp)?.display || '';
+            this.ibcData['receive']['denom'] = this.commonService.mappingNameIBC(temp) || '';
             this.ibcData['typeProgress'] = this.eTransType.IBCReceived;
           }
         }
@@ -386,6 +400,7 @@ export class TransactionMessagesComponent implements OnInit {
         });
         if (this.ibcData['typeProgress'] === this.eTransType.IBCReceived) {
           txs = txs.filter((k) => k.typeTx === this.eTransType.IBCReceived);
+          this.denomIBC = data.transactions[0].indexes.denomination_trace_denom[0];
         } else {
           txs = txs.filter((k) => k.typeTx !== this.eTransType.IBCReceived);
         }
