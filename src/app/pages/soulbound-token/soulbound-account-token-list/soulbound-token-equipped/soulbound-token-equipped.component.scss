@@ -2,15 +2,21 @@
   position: relative;
   .nft-cards__item {
     padding: 0;
-    app-audio-player,
     app-model-view,
+    app-audio-player,
     app-custom-video-player {
-      max-height: 153px;
-      @media (min-width: 991.98px) {
-        max-height: unset;
-      }
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: translateY(-50%);
     }
     .token-cards__img {
+      min-height: unset;
+      height: auto;
+      max-height: unset;
       position: absolute;
       top: 8px;
       left: 8px;
