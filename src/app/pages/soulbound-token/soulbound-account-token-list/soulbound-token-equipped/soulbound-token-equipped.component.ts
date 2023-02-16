@@ -41,6 +41,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   sbType = SB_TYPE;
   walletAddress = null;
   network = this.environmentService.configValue.chain_info;
+  seachValue = '';
 
   constructor(
     private soulboundService: SoulboundService,
@@ -66,22 +67,24 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.getListSB(this.textSearch);
+    this.textSearch = this.seachValue;
+    this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
+    this.seachValue = '';
     this.getListSB();
   }
 
-  getListSB(keySearch = '') {
+  getListSB() {
     this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.userAddress,
       isEquipToken: true,
-      keyword: keySearch?.trim(),
+      keyword: this.textSearch?.trim(),
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
