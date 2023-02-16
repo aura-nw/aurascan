@@ -76,13 +76,22 @@ export class SoulboundTokenContractComponent implements OnInit {
 
   searchToken() {
     this.pageData.pageIndex = 0;
-    this.pageChange?.selectPage(0);
+    if (this.pageChange) {
+      this.pageChange?.selectPage(0);
+    } else {
+      this.getListToken();
+    }
   }
 
   resetSearch() {
     this.textSearch = '';
+    this.searchValue = '';
     this.pageData.pageIndex = 0;
-    this.getListToken();
+    if (this.pageChange) {
+      this.pageChange?.selectPage(0);
+    } else {
+      this.getListToken();
+    }
   }
 
   paginatorEmit(event): void {
@@ -95,6 +104,7 @@ export class SoulboundTokenContractComponent implements OnInit {
   }
 
   getSearchValue() {
+    this.pageData.pageIndex = 0;
     this.textSearch = this.searchValue;
     this.getListToken();
   }
