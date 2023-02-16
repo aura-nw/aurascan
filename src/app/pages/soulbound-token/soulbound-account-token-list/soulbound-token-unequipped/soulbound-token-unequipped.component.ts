@@ -20,6 +20,7 @@ import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail
 export class SoulboundTokenUnequippedComponent implements OnInit {
   @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
+  seachValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   tokenList = [];
   loading = false;
@@ -56,21 +57,23 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.getListSB(this.textSearch);
+    this.textSearch = this.seachValue;
+    this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
+    this.seachValue = '';
     this.getListSB();
   }
 
-  getListSB(keySearch = '') {
+  getListSB() {
     this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.currentAddress,
-      keyword: keySearch?.trim(),
+      keyword: this.textSearch?.trim(),
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {

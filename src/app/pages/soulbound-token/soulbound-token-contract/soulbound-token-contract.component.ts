@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,6 +11,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-popup/soulbound-token-create-popup.component';
 
 @Component({
@@ -19,7 +20,9 @@ import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-po
   styleUrls: ['./soulbound-token-contract.component.scss'],
 })
 export class SoulboundTokenContractComponent implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
+  searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -73,7 +76,7 @@ export class SoulboundTokenContractComponent implements OnInit {
 
   searchToken() {
     this.pageData.pageIndex = 0;
-    this.getListToken(this.textSearch);
+    this.pageChange?.selectPage(0);
   }
 
   resetSearch() {
@@ -91,13 +94,18 @@ export class SoulboundTokenContractComponent implements OnInit {
     this.getListToken();
   }
 
-  getListToken(keySearch = '') {
+  getSearchValue() {
+    this.textSearch = this.searchValue;
+    this.getListToken();
+  }
+
+  getListToken() {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       minterAddress: this.currentAddress,
       contractAddress: this.contractAddress,
-      keyword: keySearch?.trim(),
+      keyword: this.textSearch?.trim(),
       status: this.selectedType,
     };
 
