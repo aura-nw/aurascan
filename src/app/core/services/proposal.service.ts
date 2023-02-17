@@ -11,6 +11,7 @@ export class ProposalService extends CommonService {
   chainInfo = this.environmentService.configValue.chain_info;
   indexerUrl = `${this.environmentService.configValue.indexerUri}`;
   reloadList$ = new Subject();
+  pageIndexObj = {};
 
   reloadList() {
     this.reloadList$.next(true);
