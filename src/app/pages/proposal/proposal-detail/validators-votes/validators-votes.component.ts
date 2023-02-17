@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbNav } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime } from 'rxjs/operators';
 import { ProposalService } from '../../../../../app/core/services/proposal.service';
-import { PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
+import { PROPOSAL_TABLE_MODE, PROPOSAL_VOTE, VOTE_OPTION } from '../../../../core/constants/proposal.constant';
 
 export interface IValidatorVotes {
   rank: number;
@@ -49,6 +49,7 @@ export class ValidatorsVotesComponent implements OnInit {
   countCurrent: string = '';
   isFirstChange = false;
   tabAll = 0;
+  proposalValidatorVote = PROPOSAL_TABLE_MODE.VALIDATORS_VOTES;
 
   voteData = {
     all: null,
@@ -68,7 +69,7 @@ export class ValidatorsVotesComponent implements OnInit {
     });
   }
 
-  getValidatorVotes(): void {
+  getValidatorVotes(isInit = false): void {
     if (this.proposalId) {
       this.proposalService.getValidatorVotesFromIndexer(this.proposalId).subscribe((res) => {
         this.voteDataListLoading = true;
@@ -89,15 +90,20 @@ export class ValidatorsVotesComponent implements OnInit {
         this.countVote.set('null', this.voteData.didNotVote.length);
 
         this.voteDataListLoading = false;
+        this.changeTab(this.countCurrent);
       });
     }
-    this.customNav?.select(this.tabAll);
+    isInit && this.customNav?.select(this.tabAll);
   }
+
   ngOnInit(): void {
-    this.getValidatorVotes();
+    this.getValidatorVotes(true);
   }
 
   changeTab(tabId): void {
+    if (this.countCurrent !== tabId) {
+      this.proposalService.pageIndexObj['validator_votes'] = {};
+    }
     this.countCurrent = tabId;
     switch (tabId) {
       case '':

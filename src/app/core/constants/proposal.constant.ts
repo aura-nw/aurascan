@@ -103,3 +103,9 @@ export enum VOTING_QUORUM {
   REACHED= '(Reached)',
   NOT_REACHED = '(Not Reached)',
 }
+
+export enum PROPOSAL_TABLE_MODE {
+  VOTES = 'VOTES',
+  DEPOSITORS = 'DEPOSITORS',
+  VALIDATORS_VOTES = 'VALIDATORS_VOTES',
+}

@@ -44,6 +44,8 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
   currentSubTitle = '';
   isNotReached = true;
   quorumStatus = VOTING_QUORUM.NOT_REACHED;
+  timerGetUpTime: any;
+
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(
@@ -159,6 +161,19 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
             }
           } else {
             this.proposalDtl.emit(this.proposalDetail);
+          }
+
+          //set interval reload when type = voting period or deposit period
+          if (
+            this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_VOTING_PERIOD ||
+            this.proposalDetail.status === VOTING_STATUS.PROPOSAL_STATUS_DEPOSIT_PERIOD
+          ) {
+            this.timerGetUpTime = setInterval(() => {
+              this.proposalService.reloadList();
+              this.getProposalDetail();
+              this.getVotedProposal();
+              clearInterval(this.timerGetUpTime);
+            }, 10000);
           }
         }),
       )
@@ -306,16 +321,6 @@ export class SummaryInfoComponent implements OnInit, AfterViewChecked {
     let dialogRef = this.dialog.open(ProposalVoteComponent, {
       width: '431px',
       data: data,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result !== 'canceled') {
-        setTimeout(() => {
-          this.proposalService.reloadList();
-          this.getProposalDetail();
-          this.getVotedProposal();
-        }, 3000);
-      }
     });
   }
 

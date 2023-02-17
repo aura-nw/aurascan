@@ -1,5 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
+import { debounceTime } from 'rxjs/operators';
+import { PROPOSAL_TABLE_MODE } from 'src/app/core/constants/proposal.constant';
 import { TRANSACTION_TYPE_ENUM } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { balanceOf } from 'src/app/core/utils/common/parsing';
@@ -17,32 +19,37 @@ export class DepositorsComponent implements OnInit {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
   nextKey = '';
-  dataLenght = 0;
+  dataLength = 0;
+  isNextPage = false;
+  proposalDeposit = PROPOSAL_TABLE_MODE.DEPOSITORS;
 
   constructor(
     private proposalService: ProposalService,
     private layout: BreakpointObserver,
     private environmentService: EnvironmentService,
-  ) {}
+  ) {
+    this.proposalService.reloadList$.pipe(debounceTime(3000)).subscribe((event) => {
+      if (event) {
+        this.getDepositorsList();
+      }
+    });
+  }
 
   ngOnInit() {
     this.loading = true;
-    this.getDepositorsList();
+    this.getDepositorsList(true);
     this.loading = false;
   }
 
-  getDepositorsList(): void {
+  getDepositorsList(isInit = false): void {
     const payload = {
       proposalId: this.proposalId,
       pageLimit: 100,
-      nextKey: this.nextKey,
     };
     this.proposalService.getDepositors(payload).subscribe((res) => {
       let dataList: any[] = [];
       if (res?.data?.transactions?.length > 0) {
-        if (this.dataLenght === 0) {
-          this.dataLenght = res.data.count;
-        }
+        this.dataLength = res.data.count || 0;
         dataList = res?.data?.transactions?.filter(
           (transaction) =>
             transaction?.tx_response?.tx?.body?.messages[0]['@type'] === TRANSACTION_TYPE_ENUM.Deposit ||
@@ -61,12 +68,7 @@ export class DepositorsComponent implements OnInit {
           item.txhash = item?.tx_response?.txhash;
           item.timestamp = item?.tx_response?.timestamp;
         });
-        if (this.depositorsList.length > 0) {
-          this.depositorsList = [...this.depositorsList, ...dataList];
-        } else {
-          this.depositorsList = dataList;
-        }
-        this.nextKey = res.data?.nextKey;
+        this.depositorsList = dataList;
       }
     });
   }
