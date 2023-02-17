@@ -112,7 +112,7 @@
       <div>
         <ng-container *ngFor="let data of getListData(); index as i">
           <!-- VOTES -->
-          <ng-container *ngIf="type === 'VOTES'">
+          <ng-container *ngIf="type === proposalMode.VOTES">
             <app-card-mob-simple
               [content]="[
                 {
@@ -152,7 +152,7 @@
               ]"></app-card-mob-simple>
           </ng-container>
           <!-- VALIDATORS_VOTES -->
-          <ng-container *ngIf="type === 'VALIDATORS_VOTES'">
+          <ng-container *ngIf="type === proposalMode.VALIDATORS_VOTES">
             <app-card-mob-simple
               [validatorData]="{
                 imgUrl: getValidatorAvatar(data.operator_address),
@@ -192,7 +192,7 @@
               ]"></app-card-mob-simple>
           </ng-container>
           <!-- DEPOSITORS -->
-          <ng-container *ngIf="type === 'DEPOSITORS'">
+          <ng-container *ngIf="type === proposalMode.DEPOSITORS">
             <app-card-mob-simple
               [content]="[
                 {

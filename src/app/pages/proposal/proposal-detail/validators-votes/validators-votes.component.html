@@ -20,7 +20,7 @@
     <div class="mt-3">
       <app-proposal-table
         [tabId]="countCurrent"
-        [type]="'VALIDATORS_VOTES'"
+        [type]="proposalValidatorVote"
         [length]="countVote.get(countCurrent)"
         [data]="voteDataList"
         (loadMore)="loadMore($event)"></app-proposal-table>
