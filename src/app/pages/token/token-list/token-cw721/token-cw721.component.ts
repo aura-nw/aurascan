@@ -3,6 +3,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -43,7 +45,8 @@ export class TokenCw721Component implements OnInit {
   sortBy = this.typeSortBy.transfers24h;
   sortOrder = 'desc';
   isSorting = true;
-
+  searchSubject = new Subject();
+  deptroy$ = new Subject();
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
@@ -56,6 +59,13 @@ export class TokenCw721Component implements OnInit {
 
   ngOnInit(): void {
     this.getTokenData();
+
+    this.searchSubject
+      .asObservable()
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .subscribe(() => {
+        this.getTokenData();
+      });
   }
 
   getTokenData() {
@@ -76,11 +86,14 @@ export class TokenCw721Component implements OnInit {
             data.change = Number(data.change.toString().substring(1));
           }
         });
-
-        this.dataSource = new MatTableDataSource<any>(res.data);
-        this.pageData.length = res.meta.count;
       }
+      this.dataSource = new MatTableDataSource<any>(res.data);
+      this.pageData.length = res.meta.count;
     });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   paginatorEmit(event): void {

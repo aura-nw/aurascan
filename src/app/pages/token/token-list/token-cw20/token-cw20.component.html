@@ -17,7 +17,6 @@
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="onKeyUp()"
-                [disabled]="enterSearch?.length > 0"
                 name="search"
                 autocomplete="off" />
               <button

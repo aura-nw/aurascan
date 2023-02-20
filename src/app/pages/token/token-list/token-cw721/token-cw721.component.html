@@ -16,7 +16,7 @@
                 placeholder="Search for Token Name or Address"
                 [maxLength]="maxLengthSearch"
                 [(ngModel)]="textSearch"
-                (ngModelChange)="getTokenData()"
+                (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
               <button
