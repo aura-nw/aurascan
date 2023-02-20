@@ -1,11 +1,36 @@
 <h1 class="mb-4 mb-lg-6 text--white">Contracts</h1>
 <div class="d-lg-flex align-items-center justify-content-between">
   <div class="filter-group d-flex align-items-center flex-nowrap">
-    <button class="button button-pill button-flat" [class.active]="true">All types</button>
-    <button class="button button-pill button-flat">CW- 20</button>
-    <button class="button button-pill button-flat">CW- 721</button>
-    <button class="button button-pill button-flat">CW- 4973</button>
-    <button class="button button-pill button-flat">Others</button>
+    <button
+      class="button button-pill button-flat"
+      [class.active]="filterButtons.length === 0"
+      (click)="filterButton('All')">
+      All types
+    </button>
+    <button
+      class="button button-pill button-flat"
+      [class.active]="filterButtons.includes('CW20')"
+      (click)="filterButton('CW20')">
+      CW-20
+    </button>
+    <button
+      class="button button-pill button-flat"
+      [class.active]="filterButtons.includes('CW721')"
+      (click)="filterButton('CW721')">
+      CW-721
+    </button>
+    <button
+      class="button button-pill button-flat"
+      [class.active]="filterButtons.includes('CW4973')"
+      (click)="filterButton('CW4973')">
+      CW-4973
+    </button>
+    <button
+      class="button button-pill button-flat"
+      [class.active]="filterButtons.includes('Others')"
+      (click)="filterButton('Others')">
+      Others
+    </button>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
     <div class="input-group px-6">

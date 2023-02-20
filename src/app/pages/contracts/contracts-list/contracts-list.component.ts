@@ -47,10 +47,10 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   urlParam = '';
   showBoxSearch = false;
+  filterButtons = [];
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-
   searchSubject = new Subject<string>();
   searchSubscription: Subscription;
 
@@ -62,7 +62,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     private route: ActivatedRoute,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnDestroy(): void {
@@ -164,5 +164,28 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     this.textSearch = '';
     this.showBoxSearch = false;
     this.filterSearchData = [];
+  }
+
+  filterButton(val: string) {
+    const i = this.filterButtons.findIndex((i) => i === val);
+    switch (val) {
+      case 'All':
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons = [];
+        }
+        break;
+      case 'CW20':
+      case 'CW721':
+      case 'CW4973':
+      case 'Others':
+      default:
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons.push(val);
+        }
+    }
   }
 }
