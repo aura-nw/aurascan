@@ -27,8 +27,8 @@
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes('Others')"
-      (click)="filterButton('Others')">
+      [class.active]="filterButtons.includes('')"
+      (click)="filterButton('')">
       Others
     </button>
   </div>
@@ -40,8 +40,7 @@
         placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
-        (ngModelChange)="searchSubject.next($event)"
-        (keyup.enter)="handleLink()"
+        (keyup)="onKeyUp()"
         name="search"
         autocomplete="off" />
       <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
@@ -54,31 +53,11 @@
         <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
       </button>
     </div>
-    <ng-container *ngIf="showBoxSearch">
-      <div class="box-search-data text-white" (clickOutside)="showBoxSearch = false">
-        <ng-container *ngIf="filterSearchData && filterSearchData?.length === 0">
-          <span> There are no matching contracts </span>
-        </ng-container>
-        <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-          <div class="txt-title-search">Contracts</div>
-          <ng-container *ngFor="let item of filterSearchData">
-            <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
-              <img [src]="item.image || defaultLogoToken" class="logo-token rounded-circle" />
-              <div class="ml-3">
-                <div class="d-flex align-items-center">
-                  <span class="text-clamp">{{ item.contract_name || '-' }}</span>
-                </div>
-              </div>
-            </div>
-          </ng-container>
-        </ng-container>
-      </div>
-    </ng-container>
   </form>
 </div>
 
 <section>
-  <ng-container *ngIf="pageData?.length > 0; else noValues">
+  <ng-container>
     <div class="card mt-4 mt-lg-6">
       <div class="card-body">
         <div>
@@ -103,37 +82,19 @@
                 placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
-                (ngModelChange)="searchSubject.next($event)"
-                (keyup.enter)="handleLink()"
+                (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
-              <button type="reset" class="btn-reset cursor-pointer" (click)="textSearch = ''; searchMobVisible = false">
+              <button
+                type="reset"
+                class="btn-reset cursor-pointer"
+                (click)="resetFilterSearch(); searchMobVisible = false">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="showBoxSearch === true">
-              <div class="box-search-data text-white" (clickOutside)="showBoxSearch = false">
-                <ng-container *ngIf="filterSearchData && filterSearchData?.length === 0">
-                  <span> There are no matching contracts </span>
-                </ng-container>
-                <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search">Contracts</div>
-                  <ng-container *ngFor="let item of filterSearchData">
-                    <div class="d-flex p-3 cursor-pointer" [routerLink]="['/contracts', item.contract_address]">
-                      <img [src]="item.image || defaultLogoToken" class="logo-token rounded-circle" />
-                      <div class="ml-3">
-                        <div class="d-flex align-items-center">
-                          <span class="text-clamp">{{ item.contract_name || '-' }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-            </ng-container>
           </form>
         </div>
-        <div class="table-responsive aura-table-contain mt-4 mt-lg-0">
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">

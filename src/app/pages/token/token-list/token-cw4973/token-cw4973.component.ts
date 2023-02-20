@@ -61,6 +61,12 @@ export class TokenCw4973Component implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.deptroy$.next();
+    this.deptroy$.complete();
+  }
+
   onKeyUp() {
     this.searchSubject.next(this.textSearch);
   }
@@ -88,6 +94,7 @@ export class TokenCw4973Component implements OnInit {
 
   resetSearch() {
     this.textSearch = '';
+    this.onKeyUp();
     this.getTokenData();
   }
 }

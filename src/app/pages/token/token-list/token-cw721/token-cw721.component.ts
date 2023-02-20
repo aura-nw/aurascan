@@ -68,6 +68,12 @@ export class TokenCw721Component implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.deptroy$.next();
+    this.deptroy$.complete();
+  }
+
   getTokenData() {
     const payload = {
       limit: this.pageData.pageSize,
@@ -107,6 +113,7 @@ export class TokenCw721Component implements OnInit {
 
   resetSearch() {
     this.textSearch = '';
+    this.onKeyUp();
     this.getTokenData();
   }
 

@@ -58,6 +58,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
+  
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
     this.deptroy$.next();
@@ -176,6 +177,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
   resetSearch() {
     this.textSearch = '';
+    this.onKeyUp();
     this.getListToken();
   }
 
