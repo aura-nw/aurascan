@@ -29,3 +29,31 @@
 .aura-table.contract-table th.mat-header-cell:nth-child(5) {
   max-width: 150px;
 }
+.filter-group {
+  overflow: auto;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+  button.button {
+    height: 30px;
+    padding: 0 12px;
+    background: rgba(157, 161, 172, 0.2);
+    color: var(--aura-gray-2);
+    font-weight: 600;
+    flex: 1 0 auto;
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+    &.active {
+      border: 1px solid var(--aura-green-3);
+    }
+    @media (min-width: 991.98px) {
+      &:hover {
+        border: 1px solid var(--aura-green-3);
+      }
+    }
+  }
+}

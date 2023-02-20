@@ -1,6 +1,6 @@
 <h1 class="mb-0 text--white fw-500-mob">Non-Fungible Tokens (NFT)</h1>
 <section>
-  <ng-container *ngIf="pageData?.length > 0; else noValues">
+  <ng-container>
     <div class="card mt-4 mt-lg-5">
       <div class="card-body">
         <!-- Title -->
@@ -38,7 +38,7 @@
         </div>
         <div class="divider divider-horizontal d-lg-none my-4"></div>
         <!-- Table -->
-        <div class="table-responsive aura-table-contain mt-4">
+        <div class="table-responsive aura-table-contain mt-4" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>#</th>
@@ -96,18 +96,19 @@
               </td>
             </tr>
           </table>
+          <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="pageEvent($event)">
+          </app-paginator>
         </div>
-        <app-paginator
-          [length]="pageData.length"
-          [pageSize]="pageData.pageSize"
-          (paginator)="paginatorEmit($event)"
-          (pageEvent)="pageEvent($event)">
-        </app-paginator>
+        <!-- No data -->
+        <ng-template #noValues>
+          <app-table-no-data></app-table-no-data>
+        </ng-template>
       </div>
     </div>
   </ng-container>
-  <ng-template #noValues>
-    <app-table-no-data></app-table-no-data>
-  </ng-template>
   <ng-template #noData> - </ng-template>
 </section>

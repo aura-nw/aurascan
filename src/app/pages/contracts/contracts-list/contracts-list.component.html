@@ -1,9 +1,11 @@
+<h1 class="mb-4 mb-lg-6 text--white">Contracts</h1>
 <div class="d-lg-flex align-items-center justify-content-between">
-  <div>
-    <h1 class="mb-0 text--white">Contracts</h1>
-    <div class="text--gray-5 body-02 d-none d-lg-block">
-      A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
-    </div>
+  <div class="filter-group d-flex align-items-center flex-nowrap">
+    <button class="button button-pill button-flat" [class.active]="true">All types</button>
+    <button class="button button-pill button-flat">CW- 20</button>
+    <button class="button button-pill button-flat">CW- 721</button>
+    <button class="button button-pill button-flat">CW- 4973</button>
+    <button class="button button-pill button-flat">Others</button>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
     <div class="input-group px-6">
@@ -54,12 +56,12 @@
   <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-4 mt-lg-6">
       <div class="card-body">
-        <div class="d-lg-none">
+        <div>
           <div class="d-flex justify-content-between align-items-center" *ngIf="!searchMobVisible">
-            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">
+            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0 mb-lg-6">
               A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
             </div>
-            <button class="button">
+            <button class="button d-lg-none">
               <img
                 [src]="'assets/icons/icons-svg/white/search.svg' | imageS3"
                 alt=""
