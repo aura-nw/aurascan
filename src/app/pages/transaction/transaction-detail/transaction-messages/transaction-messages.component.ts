@@ -237,7 +237,20 @@ export class TransactionMessagesComponent implements OnInit {
 
   displayMsgRaw(): void {
     this.objMsgContract = _.get(this.transactionDetail.tx.tx.body, 'messages').map((element) => {
-      const msg = _.get(element, 'msg');
+      let msg = _.get(element, 'msg');
+      //get type mint don't type token id
+      if (!msg && this.transactionDetail?.raw_log.indexOf('mint') >= 0) {
+        try {
+          const jsonData = JSON.parse(this.transactionDetail?.raw_log);
+          if (jsonData && jsonData[0]) {
+            const data = jsonData[0]?.events[jsonData[0]?.events?.length - 1]?.attributes;
+            let tokenId = data.find((k) => k.key === 'token_id')?.value || null;
+            msg = { mint: { token_id: tokenId || null } };
+          }
+        } catch (e) {
+          msg = { mint: { token_id: null } };
+        }
+      }
       const funds = _.get(element, 'funds');
       return { msg, funds };
     });

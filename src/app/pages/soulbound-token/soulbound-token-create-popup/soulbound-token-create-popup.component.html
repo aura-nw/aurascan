@@ -35,6 +35,20 @@
           [placeholder]="'ipfs://...'"
           [class.form-control--error]="createSBTokenForm.get('soulboundTokenURI')?.invalid && ngForm.submitted" />
       </div>
+      <!-- NOTE -->
+      <div class="box-note mt-4 mt-lg-6 body-02 fw-normal">
+        <div class="d-flex align-items-center mb-2 fw-semibold">
+          <i class="ph-warning-fill icon-warning text--yellow-3 mr-2 h3"></i>
+          NOTE
+        </div>
+        <div>
+          Implement Account Bound Token URI should follow
+          <a class="text--primary" target="_blank" href="https://docs.opensea.io/docs/metadata-standards"
+            >Metadata Standard</a
+          >
+          <br />Metadata json file must contain field with key <span class="font-italic">“image”</span>
+        </div>
+      </div>
       <!-- Receiver’s Address -->
       <div class="form-group mt-4 mt-lg-6">
         <label for="receiverAddress" class="form-label required body-01">Receiver’s Address</label>
@@ -46,8 +60,12 @@
           [placeholder]="'aura...'"
           (ngModelChange)="resetCheck()"
           [class.form-control--error]="createSBTokenForm.get('receiverAddress')?.invalid && ngForm.submitted" />
-        <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">This is not aura's externally owned account</div>
-        <div class="error" *ngIf="isCurrentAddress && ngForm.submitted">You can not attest a Account Bound Token for yourself</div>
+        <div class="error" *ngIf="isAddressInvalid && ngForm.submitted">
+          This is not aura's externally owned account
+        </div>
+        <div class="error" *ngIf="isCurrentAddress && ngForm.submitted">
+          You can not attest a Account Bound Token for yourself
+        </div>
       </div>
 
       <!-- Button group -->

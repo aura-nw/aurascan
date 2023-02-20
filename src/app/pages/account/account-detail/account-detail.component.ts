@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from 'ng-apexcharts';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LIMIT_NUM_SBT } from 'src/app/core/constants/soulbound.constant';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
@@ -169,6 +169,7 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   isNoData = false;
 
   destroyed$ = new Subject();
+  timerUnSub: Subscription;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(takeUntil(this.destroyed$));
   timeStaking = `${this.environmentService.configValue.timeStaking}`;
 
@@ -242,6 +243,18 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
         this.getTxsFromHoroscope();
       }
     });
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+
+    if (this.timerUnSub) {
+      this.timerUnSub.unsubscribe();
+    }
   }
 
   loadDataTemp(): void {
@@ -351,12 +364,16 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   }
 
   getAccountDetail(): void {
+    this.isNoData = false;
+    const halftime = 30000;
     this.accountService.getAccountDetail(this.currentAddress).subscribe((res) => {
       this.chartLoading = true;
       this.accDetailLoading = true;
-
       if (res.data.code === 200 && !res.data?.data) {
         this.isNoData = true;
+        setTimeout(() => {
+          this.getAccountDetail();
+        }, halftime);
         return;
       }
 
