@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="soulbound-feature-tokens mt-6 mt-lg-0" *ngIf="userAddress">
-        <app-soulbound-feature-tokens [extend]="false" [accountAddress]="userAddress"></app-soulbound-feature-tokens>
+        <app-soulbound-feature-tokens [extend]="false" [accountAddress]="userAddress" (closeDlg)="reloadAPI = true"></app-soulbound-feature-tokens>
       </div>
     </div>
   </div>
@@ -65,15 +65,16 @@
       class="aura-nav-tabs nav-tabs nav-tabs-custom nav-justified col-12">
       <ng-container *ngFor="let tab of TABS; index as index">
         <li [ngbNavItem]="index">
-          <a ngbNavLink (click)="activeId = tab.key">
+          <a ngbNavLink (click)="changeTab(tab.key)">
             <span class="tab-title h5 body-mob fw-semibold mb-0 text-capitalize">{{ tab.value }}</span>
           </a>
         </li>
       </ng-container>
     </ul>
   </div>
-  <app-soulbound-token-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event"></app-soulbound-token-equipped>
+  <app-soulbound-token-equipped *ngIf="activeId === 0" (totalSBT)="totalSBT = $event" [reloadAPI]="reloadAPI"></app-soulbound-token-equipped>
   <app-soulbound-token-unequipped
+    [reloadAPI]="reloadAPI"
     *ngIf="activeId === 1"
     (totalUnEquip)="totalSBT = $event"></app-soulbound-token-unequipped>
 </section>
