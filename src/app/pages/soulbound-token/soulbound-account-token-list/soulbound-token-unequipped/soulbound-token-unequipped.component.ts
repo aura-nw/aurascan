@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,6 +18,7 @@ import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail
   styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
 export class SoulboundTokenUnequippedComponent implements OnInit {
+  @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
   seachValue = '';
@@ -54,6 +55,14 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
         this.getListSB();
       }
     });
+  }
+
+  ngOnChanges(): void {
+    if (this.reloadAPI) {
+      setTimeout(() => {
+        this.getListSB();
+      }, 4000);
+    }
   }
 
   searchToken() {

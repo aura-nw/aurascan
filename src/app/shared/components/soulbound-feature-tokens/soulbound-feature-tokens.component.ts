@@ -20,6 +20,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
   @Input() soulboundListData = null;
   @Output() totalSBT = new EventEmitter<number>();
   @Output() totalPick = new EventEmitter<number>();
+  @Output() closeDlg = new EventEmitter<number>();
 
   isClick = false;
   soulboundList = [];
@@ -98,6 +99,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== 'canceled') {
+        this.closeDlg.emit();
       }
     });
   }

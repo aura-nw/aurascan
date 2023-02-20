@@ -108,7 +108,7 @@ export class BlockDetailComponent implements OnInit {
   getDetailByHeight() {
     this.blockService.blocksIndexer(1, this.id).subscribe(async (res) => {
       const { code, data } = res;
-      if (code === 200) {
+      if (code === 200 && data?.blocks?.length > 0) {
         const block = convertDataBlock(data)[0];
         block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
         block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
@@ -144,6 +144,10 @@ export class BlockDetailComponent implements OnInit {
           }
           this.loading = false;
         }, 1000);
+      } else {
+        setTimeout(() => {
+          this.getDetailByHeight();
+        }, 10000);
       }
     });
   }
