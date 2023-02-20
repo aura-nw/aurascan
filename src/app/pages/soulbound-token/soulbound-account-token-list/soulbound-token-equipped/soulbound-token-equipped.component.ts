@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -13,6 +14,7 @@ import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { checkTypeFile } from 'src/app/core/utils/common/info-common';
+import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail-popup/soulbound-token-detail-popup.component';
 
 @Component({
   selector: 'app-soulbound-token-equipped',
@@ -20,6 +22,7 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
   styleUrls: ['./soulbound-token-equipped.component.scss'],
 })
 export class SoulboundTokenEquippedComponent implements OnInit {
+  @Input() reloadAPI: boolean = false;
   @Output() totalSBT = new EventEmitter<number>();
   MEDIA_TYPE = MEDIA_TYPE;
   textSearch = '';
@@ -64,6 +67,14 @@ export class SoulboundTokenEquippedComponent implements OnInit {
         this.getListSB();
       }
     });
+  }
+
+  ngOnChanges(): void {
+    if (this.reloadAPI) {
+      setTimeout(() => {
+        this.getListSB();
+      }, 4000);
+    }
   }
 
   searchToken() {
@@ -123,7 +134,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
       pubKey: dataWallet['pub_key']?.value,
       id: data.token_id,
       picked: pick,
-      contractAddress: data.contract_address
+      contractAddress: data.contract_address,
     };
 
     this.soulboundService.pickSBToken(payload).subscribe((res) => {
