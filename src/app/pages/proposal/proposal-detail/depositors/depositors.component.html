@@ -7,9 +7,9 @@
     <div *ngIf="!loading">
       <app-proposal-table
         *ngIf="depositorsList.length > 0"
-        [type]="'DEPOSITORS'"
+        [type]="proposalDeposit"
         [data]="depositorsList"
-        [length]="dataLenght"
+        [length]="dataLength"
         (loadMore)="loadMore($event)">
       </app-proposal-table>
       <div *ngIf="depositorsList.length === 0">

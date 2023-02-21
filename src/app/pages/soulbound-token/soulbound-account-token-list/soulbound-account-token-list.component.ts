@@ -33,6 +33,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
       value: SB_TYPE.UNEQUIPPED,
     },
   ];
+  reloadAPI = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -83,5 +84,10 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     setTimeout(function () {
       document.getElementById('tokenAddress').click();
     }, 800);
+  }
+
+  changeTab(key){
+    this.activeId = key;
+    this.reloadAPI = false;
   }
 }

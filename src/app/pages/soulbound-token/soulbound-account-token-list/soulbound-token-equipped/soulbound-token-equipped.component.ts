@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -20,6 +20,7 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
   styleUrls: ['./soulbound-token-equipped.component.scss'],
 })
 export class SoulboundTokenEquippedComponent implements OnInit {
+  @Input() reloadAPI: boolean = false;
   @Output() totalSBT = new EventEmitter<number>();
   MEDIA_TYPE = MEDIA_TYPE;
   textSearch = '';
@@ -41,6 +42,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   sbType = SB_TYPE;
   walletAddress = null;
   network = this.environmentService.configValue.chain_info;
+  seachValue = '';
 
   constructor(
     private soulboundService: SoulboundService,
@@ -65,23 +67,33 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     });
   }
 
+  ngOnChanges(): void {
+    if (this.reloadAPI) {
+      setTimeout(() => {
+        this.getListSB();
+      }, 4000);
+    }
+  }
+
   searchToken() {
-    this.getListSB(this.textSearch);
+    this.textSearch = this.seachValue;
+    this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
+    this.seachValue = '';
     this.getListSB();
   }
 
-  getListSB(keySearch = '') {
+  getListSB() {
     this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.userAddress,
       isEquipToken: true,
-      keyword: keySearch?.trim(),
+      keyword: this.textSearch?.trim(),
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
@@ -120,7 +132,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
       pubKey: dataWallet['pub_key']?.value,
       id: data.token_id,
       picked: pick,
-      contractAddress: data.contract_address
+      contractAddress: data.contract_address,
     };
 
     this.soulboundService.pickSBToken(payload).subscribe((res) => {

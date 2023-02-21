@@ -19,6 +19,7 @@ import { SoulboundTokenCreatePopupComponent } from '../soulbound-token-create-po
 })
 export class SoulboundContractListComponent implements OnInit {
   textSearch = '';
+  searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -63,11 +64,14 @@ export class SoulboundContractListComponent implements OnInit {
   }
 
   searchToken() {
-    this.getListSmartContract(this.textSearch);
+    this.pageData.pageIndex = 0;
+    this.textSearch = this.searchValue;
+    this.getListSmartContract();
   }
 
   resetSearch() {
     this.textSearch = '';
+    this.searchValue = '';
     this.getListSmartContract();
   }
 
@@ -80,12 +84,12 @@ export class SoulboundContractListComponent implements OnInit {
     this.getListSmartContract();
   }
 
-  getListSmartContract(keySearch = '') {
+  getListSmartContract() {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       minterAddress: this.currentAddress,
-      keyword: keySearch,
+      keyword: this.textSearch,
     };
 
     this.soulboundService.getListSoulbound(payload).subscribe((res) => {
