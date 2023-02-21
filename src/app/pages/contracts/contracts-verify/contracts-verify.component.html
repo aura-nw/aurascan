@@ -115,7 +115,7 @@
       </form>
       <!-- Contract Verify step -->
       <div *ngIf="currentStep === 'compiler'">
-        <app-contract-verify-steps></app-contract-verify-steps>
+        <app-contract-verify-steps [codeID]="code_id"></app-contract-verify-steps>
 
         <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-4 pt-lg-12">
           <button class="button button--md button-pill button-outline button-fixed" type="button">

@@ -59,7 +59,11 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
   }
 
-  verifyContract(data: any): Observable<any> {
+  // verifyContract(data: any): Observable<any> {
+  //   return this.http.post<any>(`${this.apiUrl}/contracts/verify-contract`, data);
+  // }
+
+  verifyCodeID(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/contracts/verify-contract`, data);
   }
 
@@ -117,5 +121,9 @@ export class ContractService extends CommonService {
 
   getListContractById(codeId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contract-codes/${codeId}`);
+  }
+
+  getVerifyCodeStep(codeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/verify-code-id/${codeId}`);
   }
 }

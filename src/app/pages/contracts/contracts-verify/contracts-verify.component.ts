@@ -1,22 +1,21 @@
-import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { DialogService } from 'src/app/core/services/dialog.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
-import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contracts-verify',
   templateUrl: './contracts-verify.component.html',
   styleUrls: ['./contracts-verify.component.scss'],
 })
-export class ContractsVerifyComponent implements OnInit, OnDestroy {
+export class ContractsVerifyComponent implements OnInit {
   contractAddress = '';
-  currentStep: 'verify' | 'compiler' = 'compiler';
+  currentStep: 'verify' | 'compiler' = 'verify';
   code_id = '';
   isCompilerComplete = false;
   @ViewChild('version') versionSelect: any;
@@ -28,7 +27,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private wSService: WSService,
-    private dlgService: DialogService,
     private toastr: NgxToastrService,
   ) {
     this.contractAddress = this.route.snapshot.paramMap.get('addressId');
@@ -40,9 +38,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   }
 
   githubCommitPattern = /https:\/\/github.com\/[\w-\/]+\/commit\/\w+/;
-
-  ngOnDestroy(): void {}
-
   contractForm: FormGroup;
 
   get formControls() {
@@ -72,7 +67,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         updateOn: 'submit',
       },
     );
-    this.getContractDetail2();
+    this.getContractDetail();
   }
 
   onSubmit() {
@@ -93,28 +88,30 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         wasm_file: this.contractForm.controls['wasm_file'].value,
       };
 
-      this.contractService.verifyContract(contractData).subscribe((res: IResponsesTemplates<any>) => {
+      this.contractService.verifyCodeID(contractData).subscribe((res: IResponsesTemplates<any>) => {
         const data = res?.data;
         if (data) {
           switch (data?.Code) {
             case 'SUCCESSFUL':
-              this.dlgServiceOpen();
-              this.wSService.subscribeVerifyContract(
-                Number(this.code_id),
-                () => {
-                  this.contractService.loadContractDetail(contractData.contract_address);
-                },
-                () => {
-                  this.router.navigate(['contracts', this.contractAddress], {
-                    queryParams: {
-                      tabId: 'contract',
-                    },
-                    state: {
-                      reload: true,
-                    },
-                  });
-                },
-              );
+              this.currentStep = 'compiler';
+
+              //this.dlgServiceOpen();
+              // this.wSService.subscribeVerifyContract(
+              //   Number(this.code_id),
+              //   () => {
+              //     this.contractService.loadContractDetail(contractData.contract_address);
+              //   },
+              //   () => {
+              //     this.router.navigate(['contracts', this.contractAddress], {
+              //       queryParams: {
+              //         tabId: 'contract',
+              //       },
+              //       state: {
+              //         reload: true,
+              //       },
+              //     });
+              //   },
+              // );
               break;
             default:
               this.toastr.error(data?.Message);
@@ -125,35 +122,41 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     }
   }
 
-  dlgServiceOpen(): void {
-    this.dlgService.showDialog({
-      content:
-        'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
-      title: '',
-      callback: (e) => {
-        if (e) {
-          this.router.navigate(['contracts', this.contractAddress], {
-            queryParams: {
-              tabId: 'contract',
-            },
-            state: {
-              reload: true,
-            },
-          });
-        } else {
-          this.handleReset();
-        }
-      },
-    });
-  }
+  // dlgServiceOpen(): void {
+  //   this.dlgService.showDialog({
+  //     content:
+  //       'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
+  //     title: '',
+  //     callback: (e) => {
+  //       if (e) {
+  //         this.router.navigate(['contracts', this.contractAddress], {
+  //           queryParams: {
+  //             tabId: 'contract',
+  //           },
+  //           state: {
+  //             reload: true,
+  //           },
+  //         });
+  //       } else {
+  //         this.handleReset();
+  //       }
+  //     },
+  //   });
+  // }
 
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
   }
 
-  getContractDetail2() {
-    this.contractService.checkVerified(this.contractAddress).subscribe((res) => {
-      console.log(res.data);
+  getContractDetail() {
+    this.contractService.getContractDetail(this.contractAddress).subscribe((res) => {
+      if (res.data) {
+        if (res.data.contract_verification.toLowerCase() == ContractVerifyType.Unverified.toLowerCase()) {
+          this.currentStep = 'verify';
+        } else {
+          this.currentStep = 'compiler';
+        }
+      }
     });
   }
 

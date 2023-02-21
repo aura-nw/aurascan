@@ -53,7 +53,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="contractTypeData !== contractVerifyType.Unverified">
+  <ng-container *ngIf="contractTypeData === contractVerifyType.Verified">
     <div class="button-tab-group">
       <button
         class="button-tab"
@@ -99,11 +99,11 @@
     <div class="mt-4 mt-lg-6">
       Let check the status of the last time this Code ID source code was unable to Verify and Publish
     </div>
-    <app-contract-verify-steps></app-contract-verify-steps>
+    <app-contract-verify-steps [codeID]="contractDetail.code_id"></app-contract-verify-steps>
   </ng-container>
 </div>
 <div class="mt-4 mt-lg-8">
-  <ng-container *ngIf="contractDetail">
+  <ng-container *ngIf="contractDetail && contractTypeData === contractVerifyType.Verified">
     <app-code-contract
       *ngIf="countCurrent === contractType.Code"
       [contractDetailData]="contractDetail"></app-code-contract>
