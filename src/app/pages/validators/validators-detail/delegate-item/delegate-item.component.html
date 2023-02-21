@@ -42,7 +42,7 @@
 
         <div class="input-group pr-0 mt-3" [ngStyle]="{ 'border-color': isExceedAmount ? 'red' : '' }">
           <input type="number" [max]="globals.maxNumberInput" [(ngModel)]="amountFormat" (blur)="resetCheck()" />
-          <div class="d-flex align-items-center py-2 mr-4">
+          <div class="d-flex align-items-center py-1 mr-4">
             <button
               class="button button-primary active button-flat button--xs button--sm-mob button-max fw-semibold"
               type="button"

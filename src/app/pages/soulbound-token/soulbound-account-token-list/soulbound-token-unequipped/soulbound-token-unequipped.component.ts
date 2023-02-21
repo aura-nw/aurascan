@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,8 +18,10 @@ import { SoulboundTokenDetailPopupComponent } from '../../soulbound-token-detail
   styleUrls: ['./soulbound-token-unequipped.component.scss'],
 })
 export class SoulboundTokenUnequippedComponent implements OnInit {
+  @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
+  seachValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   tokenList = [];
   loading = false;
@@ -55,22 +57,32 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     });
   }
 
+  ngOnChanges(): void {
+    if (this.reloadAPI) {
+      setTimeout(() => {
+        this.getListSB();
+      }, 4000);
+    }
+  }
+
   searchToken() {
-    this.getListSB(this.textSearch);
+    this.textSearch = this.seachValue;
+    this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
+    this.seachValue = '';
     this.getListSB();
   }
 
-  getListSB(keySearch = '') {
+  getListSB() {
     this.loading = true;
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       receiverAddress: this.currentAddress,
-      keyword: keySearch?.trim(),
+      keyword: this.textSearch?.trim(),
     };
 
     this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {

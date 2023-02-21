@@ -131,6 +131,10 @@ $textColors: (
   font-weight: 400 !important;
 }
 
+.font-italic {
+  font-style: italic;
+}
+
 @media (max-width: 991.98px) {
   .fw-700-mob {
     font-weight: 700 !important;

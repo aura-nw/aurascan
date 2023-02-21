@@ -28,17 +28,13 @@
   padding: 0;
   .token-cards__img {
     padding: 8px;
-    app-model-view, app-custom-video-player {
-      max-height: 153px;
+    app-model-view,
+    app-audio-player,
+    app-custom-video-player {
+      height: 153px;
       @media (min-width: 991.98px) {
-        max-height: 191px;
+        height: 231px;
       }
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transform: translateY(-50%);
     }
   }
 }
@@ -84,7 +80,4 @@
       }
     }
   }
-}
-.button-review--mob {
-  box-shadow: 2px 1000px 1px rgba(54, 56, 67, 0.9) inset !important;
 }
