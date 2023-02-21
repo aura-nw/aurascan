@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 
 @Component({
   selector: 'app-verify-code-id',
@@ -6,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./verify-code-id.component.scss'],
 })
 export class VerifyCodeIdComponent implements OnInit {
-  contract_verification: 'Unverified' | 'Verified' = 'Verified';
+  contractVerifyType: any = ContractVerifyType.Unverified;
+  isVerifying = false;
+  contractAddress;
+  contractDetail;
   constructor() {}
 
   ngOnInit(): void {}

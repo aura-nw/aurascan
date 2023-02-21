@@ -9,6 +9,7 @@ export enum ContractTab {
 export enum ContractVerifyType {
   Unverified = 'UNVERIFIED',
   Verified = 'VERIFIED',
+  VerifiedFail = 'VERIFYFAIL',
 }
 
 export enum ContractTransactionType {

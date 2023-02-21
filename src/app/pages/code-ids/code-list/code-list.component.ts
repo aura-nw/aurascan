@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { shortenAddress } from '../../../core/utils/common/shorten';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-code-list',
@@ -123,7 +124,7 @@ export class CodeListComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(private contractService: ContractService) {}
 
   ngOnInit(): void {
     this.getListCodeIds();
@@ -144,6 +145,10 @@ export class CodeListComponent implements OnInit {
       pageSize: 20,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
+    // this.contractService.getListContractById().subscribe((res) => {
+    //   console.log(res.data);
+    // });
+
     this.dataSource.data = this.mockData;
   }
 

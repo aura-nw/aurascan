@@ -71,5 +71,6 @@ import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify
     ReadContractModule,
   ],
   providers: [ContractService],
+  exports: [ContractVerifyStepsComponent],
 })
 export class ContractsModule {}

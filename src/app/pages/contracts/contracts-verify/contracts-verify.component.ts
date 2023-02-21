@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contracts-verify',
@@ -71,6 +72,7 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
         updateOn: 'submit',
       },
     );
+    this.getContractDetail2();
   }
 
   onSubmit() {
@@ -79,7 +81,6 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
     this.formControls['wasm_file'].markAsTouched();
 
     if (this.contractForm.valid) {
-      this.currentStep = 'compiler';
       // handle contract_address & commit
       const link = this.contractForm.controls['link'].value;
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
@@ -149,6 +150,13 @@ export class ContractsVerifyComponent implements OnInit, OnDestroy {
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
   }
+
+  getContractDetail2() {
+    this.contractService.checkVerified(this.contractAddress).subscribe((res) => {
+      console.log(res.data);
+    });
+  }
+
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event) {
     this.versionSelect.close();

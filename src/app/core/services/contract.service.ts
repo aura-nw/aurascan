@@ -114,4 +114,8 @@ export class ContractService extends CommonService {
   getNFTDetail(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
   }
+
+  getListContractById(codeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contract-codes/${codeId}`);
+  }
 }

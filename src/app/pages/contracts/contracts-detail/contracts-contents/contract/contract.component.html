@@ -5,6 +5,7 @@
       contractDetail.code_id
     }}</a>
   </div>
+
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && !isVerifying">
     <div class="d-flex fw-500 content-contract">
       <img
@@ -27,16 +28,29 @@
   </ng-container>
 
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && isVerifying">
-    <div class="d-flex fw-normal content-contract mb-4 mb-lg-6">
+    <div class="d-flex fw-normal content-contract">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
         alt=""
         width="16"
         height="16"
         class="mr-2 mt-1" />
-      <div>Let check the status of the last time this Code ID source code was unable to Verify and Publish</div>
+      <div>
+        <div>
+          The code ID source code that this smart contract was instantiated from is currently pending in Verify and
+          Publish process.
+        </div>
+        <div>
+          Kindly click
+          <a
+            class="text--primary fw-500 cursor-pointer"
+            [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+            here
+          </a>
+          for more detail
+        </div>
+      </div>
     </div>
-    <app-contract-verify-steps></app-contract-verify-steps>
   </ng-container>
 
   <ng-container *ngIf="contractTypeData !== contractVerifyType.Unverified">
@@ -62,6 +76,30 @@
         <span class="d-lg-none">Write</span>
       </button>
     </div>
+  </ng-container>
+
+  <ng-container *ngIf="contractTypeData === contractVerifyType.VerifiedFail">
+    <div class="d-flex fw-500 content-contract">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        Are you the contract creator?
+        <a
+          class="text--primary fw-500 ml-1 mr-1 cursor-pointer"
+          [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+          Verify and Publish
+        </a>
+        your contract source code today!
+      </div>
+    </div>
+    <div class="mt-4 mt-lg-6">
+      Let check the status of the last time this Code ID source code was unable to Verify and Publish
+    </div>
+    <app-contract-verify-steps></app-contract-verify-steps>
   </ng-container>
 </div>
 <div class="mt-4 mt-lg-8">

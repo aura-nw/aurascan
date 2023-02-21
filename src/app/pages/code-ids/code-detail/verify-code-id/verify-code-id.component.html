@@ -1,5 +1,6 @@
 <div class="box-contract text-white">
-  <ng-container *ngIf="contract_verification === 'Unverified'">
+  <!-- Chưa verify -->
+  <ng-container *ngIf="contractVerifyType === contractVerifyType.Unverified && contractDetail && !isVerifying">
     <div class="d-flex content-contract body-02">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -22,7 +23,62 @@
       </div>
     </div>
   </ng-container>
-  <ng-container *ngIf="contract_verification === 'Verified'">
+  <!-- Đang verify -->
+  <ng-container *ngIf="contractVerifyType === contractVerifyType.Unverified && contractDetail && isVerifying">
+    <div class="d-flex content-contract body-02">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2 mt-1" />
+      <div>
+        <div>
+          The code ID source code that this smart contract was instantiated from is currently pending in Verify and
+          Publish process.
+        </div>
+        <div>
+          Kindly click
+          <a
+            class="text--primary fw-500 cursor-pointer"
+            [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+            here
+          </a>
+          for more detail
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <!-- Verify Fail -->
+  <ng-container *ngIf="contractVerifyType === contractVerifyType.VerifiedFail">
+    <div class="d-flex content-contract body-02">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        Are you the contract creator?
+        <a
+          class="text--primary"
+          [routerLink]="[
+            '/contracts/verify',
+            'aura1pfhnr2ur22ff0xyjx208jhjq7s9d8hyq4qkms8hmpsz4j8v2qtqsgr93z5',
+            '1001'
+          ]">
+          Verify and Publish
+        </a>
+        your contract source code today!
+      </div>
+    </div>
+    <div class="mt-4 mt-lg-6">
+      Let check the status of the last time this Code ID source code was unable to Verify and Publish
+    </div>
+    <app-contract-verify-steps></app-contract-verify-steps>
+  </ng-container>
+  <!-- Verify Successfull -->
+  <ng-container *ngIf="contractVerifyType !== contractVerifyType.Unverified">
     <div class="d-flex fw-semibold">
       <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
       <div class="ml-2">Code ID Verified</div>

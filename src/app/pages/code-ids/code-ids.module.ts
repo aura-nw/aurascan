@@ -15,6 +15,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { ContractsListComponent } from './code-detail/contracts-list/contracts-list.component';
 import { VerifyCodeIdComponent } from './code-detail/verify-code-id/verify-code-id.component';
+import {ContractsModule} from "src/app/pages/contracts/contracts.module";
 
 @NgModule({
   declarations: [CodeListComponent, CodeDetailComponent, ContractsListComponent, VerifyCodeIdComponent],
@@ -30,6 +31,7 @@ import { VerifyCodeIdComponent } from './code-detail/verify-code-id/verify-code-
     TranslateModule,
     SharedModule,
     NgbNavModule,
+    ContractsModule,
   ],
 })
 export class CodeIdsModule {}
