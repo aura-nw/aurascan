@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
@@ -16,7 +17,7 @@ import { Globals } from '../../../../global/global';
   templateUrl: './token-cw20.component.html',
   styleUrls: ['./token-cw20.component.scss'],
 })
-export class TokenCw20Component implements OnInit {
+export class TokenCw20Component implements OnInit, OnDestroy {
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
@@ -37,7 +38,6 @@ export class TokenCw20Component implements OnInit {
   };
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
   filterSearchData = [];
@@ -49,28 +49,44 @@ export class TokenCw20Component implements OnInit {
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
+  searchSubject = new Subject();
+  deptroy$ = new Subject();
+
   constructor(
-    private route: ActivatedRoute,
     public translate: TranslateService,
     public global: Globals,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
+  
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.deptroy$.next();
+    this.deptroy$.complete();
+  }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.enterSearch = params?.a || '';
-      this.textSearch = this.enterSearch;
-    });
     this.getListToken();
+
+    this.searchSubject
+      .asObservable()
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .subscribe(() => {
+        this.getListToken();
+      });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   getListToken() {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.enterSearch,
+      keyword: this.textSearch,
     };
+
     this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
       res.data.forEach((data) => {
         Object.assign(data, {
@@ -88,30 +104,8 @@ export class TokenCw20Component implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource<any>(res.data);
-      this.dataSourceBk = this.dataSource;
       this.pageData.length = res.meta.count;
     });
-  }
-
-  searchToken(): void {
-    if (this.textSearch?.length > 0) {
-      const payload = {
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-
-      this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          this.dataSearch = res.data;
-        }
-
-        let keyWord = this.textSearch.toLowerCase();
-        this.filterSearchData = this.dataSearch?.filter(
-          (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
-        );
-      });
-    }
   }
 
   paginatorEmit(event): void {
@@ -181,19 +175,10 @@ export class TokenCw20Component implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  setPageList(): void {
-    if (this.filterSearchData?.length > 0) {
-      window.location.href = `/tokens?a=${this.textSearch}`;
-    }
-  }
-
   resetSearch() {
-    if (this.enterSearch) {
-      window.location.href = `/tokens`;
-    } else {
-      this.textSearch = '';
-      this.enterSearch = '';
-    }
+    this.textSearch = '';
+    this.onKeyUp();
+    this.getListToken();
   }
 
   pageEvent(e: PageEvent): void {
