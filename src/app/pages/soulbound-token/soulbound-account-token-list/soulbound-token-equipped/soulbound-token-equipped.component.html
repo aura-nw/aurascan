@@ -13,21 +13,21 @@
               type="text"
               class="form-control"
               placeholder="Search for Token Name or Token ID"
-              [(ngModel)]="textSearch"
+              [(ngModel)]="seachValue"
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
               autocomplete="off" />
             <button
               type="submit"
-              class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
+              class="btn-search {{ seachValue && seachValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
               class="btn-reset cursor-pointer {{
-                !textSearch || (textSearch && textSearch?.length === 0) ? 'd-none' : ''
+                !seachValue || (seachValue && seachValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
