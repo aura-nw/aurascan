@@ -5,8 +5,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -47,26 +47,27 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   urlParam = '';
   showBoxSearch = false;
+  filterButtons = [];
+  searchSubject = new Subject();
+  deptroy$ = new Subject();
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
-  searchSubject = new Subject<string>();
-  searchSubscription: Subscription;
-
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private router: Router,
     private contractService: ContractService,
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
     private route: ActivatedRoute,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
   ) {}
 
   ngOnDestroy(): void {
-    this.searchSubscription?.unsubscribe();
+    // throw new Error('Method not implemented.');
+    this.deptroy$.next();
+    this.deptroy$.complete();
   }
 
   ngOnInit(): void {
@@ -76,34 +77,16 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     this.textSearch = this.urlParam ? this.urlParam : '';
     this.getListContract();
 
-    this.searchSubscription = this.searchSubject
+    this.searchSubject
       .asObservable()
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        switchMap((text) => {
-          this.showBoxSearch = true;
-
-          this.textSearch = text;
-          let payload = {
-            limit: 0,
-            offset: 0,
-            keyword: this.textSearch,
-          };
-
-          this.filterSearchData = [];
-
-          return this.contractService.getListContract(payload);
-        }),
-      )
-      .subscribe((res) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.filterSearchData = res.data;
-        }
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .subscribe(() => {
+        this.getListContract();
       });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   getListContract() {
@@ -111,6 +94,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       limit: this.pageSize,
       offset: this.pageIndex * this.pageSize,
       keyword: this.textSearch,
+      contractType: this.filterButtons,
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {
@@ -147,12 +131,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     this.getListContract();
   }
 
-  handleLink(): void {
-    if (this.filterSearchData[0]?.contract_address) {
-      this.router.navigate(['/contracts/', this.filterSearchData[0]?.contract_address]);
-    }
-  }
-
   shortenAddress(address: string): string {
     if (address) {
       return shortenAddress(address, 8);
@@ -162,7 +140,31 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.showBoxSearch = false;
-    this.filterSearchData = [];
+    this.onKeyUp();
+    this.getListContract();
+  }
+
+  filterButton(val: string) {
+    const i = this.filterButtons.findIndex((i) => i === val);
+    switch (val) {
+      case 'All':
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons = [];
+        }
+        break;
+      case 'CW20':
+      case 'CW721':
+      case 'CW4973':
+      case '': //Others
+      default:
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons.push(val);
+        }
+    }
+    this.getListContract();
   }
 }
