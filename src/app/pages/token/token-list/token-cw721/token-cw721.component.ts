@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -16,7 +17,6 @@ import { Globals } from '../../../../global/global';
   templateUrl: './token-cw721.component.html',
   styleUrls: ['./token-cw721.component.scss'],
 })
-
 export class TokenCw721Component implements OnInit {
   textSearch = '';
   filterSearchData = [];
@@ -35,11 +35,9 @@ export class TokenCw721Component implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   sortedData: any;
   sort: MatSort;
-  enterSearch = '';
   typeSortBy = {
     transfers24h: 'transfers_24h',
     transfers3d: 'transfers_3d',
@@ -47,31 +45,40 @@ export class TokenCw721Component implements OnInit {
   sortBy = this.typeSortBy.transfers24h;
   sortOrder = 'desc';
   isSorting = true;
-
+  searchSubject = new Subject();
+  deptroy$ = new Subject();
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private route: ActivatedRoute,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.enterSearch = params?.a || '';
-      this.textSearch = this.enterSearch;
-    });
     this.getTokenData();
+
+    this.searchSubject
+      .asObservable()
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .subscribe(() => {
+        this.getTokenData();
+      });
+  }
+
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.deptroy$.next();
+    this.deptroy$.complete();
   }
 
   getTokenData() {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.enterSearch,
+      keyword: this.textSearch,
       sort_column: this.sortBy,
       sort_order: this.sortOrder,
     };
@@ -85,33 +92,14 @@ export class TokenCw721Component implements OnInit {
             data.change = Number(data.change.toString().substring(1));
           }
         });
-
-        this.dataSource = new MatTableDataSource<any>(res.data);
-        this.dataSourceBk = this.dataSource;
-        this.pageData.length = res.meta.count;
       }
+      this.dataSource = new MatTableDataSource<any>(res.data);
+      this.pageData.length = res.meta.count;
     });
   }
 
-  searchToken(): void {
-    if (this.textSearch?.length > 0) {
-      let payload = {
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-
-      this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          this.dataSearch = res.data;
-        }
-
-        let keyWord = this.textSearch.toLowerCase();
-        this.filterSearchData = this.dataSearch?.filter(
-          (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
-        );
-      });
-    }
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   paginatorEmit(event): void {
@@ -123,19 +111,10 @@ export class TokenCw721Component implements OnInit {
     this.getTokenData();
   }
 
-  setPageList(): void {
-    if (this.filterSearchData?.length > 0) {
-      window.location.href = `/tokens/tokens-nft?a=${this.textSearch}`;
-    }
-  }
-
   resetSearch() {
-    if (this.enterSearch) {
-      window.location.href = `/tokens/tokens-nft`;
-    } else {
-      this.textSearch = '';
-      this.enterSearch = '';
-    }
+    this.textSearch = '';
+    this.onKeyUp();
+    this.getTokenData();
   }
 
   sortData(sort: Sort) {
