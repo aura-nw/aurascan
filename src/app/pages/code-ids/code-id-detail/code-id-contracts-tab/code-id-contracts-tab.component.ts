@@ -1,9 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { DATEFORMAT, PAGE_EVENT } from 'src/app/core/constants/common.constant';
+import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
+import { ContractService } from 'src/app/core/services/contract.service';
 import { shortenAddress } from '../../../../core/utils/common/shorten';
-import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 
 @Component({
   selector: 'app-code-id-contracts-tab',
@@ -17,97 +20,15 @@ export class CodeIdContractsTabComponent implements OnInit {
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contract' },
+    { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contract' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
-    { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
-    { matColumnDef: 'contract_verification', headerCellDef: 'Verified at' },
+    { matColumnDef: 'created_at', headerCellDef: 'INSTANTIATED at' },
+    { matColumnDef: 'verified_at', headerCellDef: 'Verified at' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  mockData = [
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-4973',
-      instantiates: '345',
-      contract_verification: '2023-02-07T09:35:03.680Z',
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-20',
-      instantiates: '25',
-      contract_verification: '2023-02-07T09:35:03.680Z',
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-20',
-      instantiates: '10',
-      contract_verification: '2023-02-07T09:35:03.680Z',
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-721',
-      instantiates: '3',
-      contract_verification: '2023-02-07T09:35:03.680Z',
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-4973',
-      instantiates: '345',
-      contract_verification: null,
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-721',
-      instantiates: '15',
-      contract_verification: null,
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-20',
-      instantiates: '3',
-      contract_verification: '2023-02-07T09:35:03.680Z',
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-20',
-      instantiates: '22',
-      contract_verification: null,
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-4973',
-      instantiates: '345',
-      contract_verification: '2023-02-07T09:35:03.680Z',
-    },
-    {
-      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
-      creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
-      type: 'CW-721',
-      instantiates: '345',
-      contract_verification: null,
-    },
-  ];
-  constructor() {}
+  constructor(private contractService: ContractService, private datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this.getListContract();
@@ -129,11 +50,32 @@ export class CodeIdContractsTabComponent implements OnInit {
   }
 
   getListContract() {
-    this.pageData = {
-      length: this.mockData.length,
-      pageSize: 20,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
+    let payload = {
+      limit: this.pageSize,
+      offset: this.pageIndex * this.pageSize,
+      keyword: this.codeId.toString(),
+      contractType: [],
     };
-    this.dataSource.data = this.mockData;
+
+    this.contractService.getListContract(payload).subscribe((res) => {
+      this.pageData = {
+        length: res?.meta?.count,
+        pageSize: 20,
+        pageIndex: PAGE_EVENT.PAGE_INDEX,
+      };
+      console.log(res);
+      
+      if (res?.data?.length > 0) {
+        res.data.forEach((item) => {
+          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+          if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
+            item.type = '-';
+          } else if (item.result === CONTRACT_RESULT.TBD) {
+            item.type = CONTRACT_RESULT.TBD;
+          }
+        });
+        this.dataSource = res.data;
+      }
+    });
   }
 }

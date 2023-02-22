@@ -58,7 +58,7 @@
           <div class="text--gray-4 body">Created At</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <div class="text--gray-1 body">{{ codeIdDetail.create_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
+          <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@
       </ul>
       <!-- content -->
       <div class="mt-4 mt-lg-6">
-        <app-code-id-contracts-tab *ngIf="tabIndex === 0"></app-code-id-contracts-tab>
+        <app-code-id-contracts-tab [codeId]="codeIdDetail.code_id" *ngIf="tabIndex === 0"></app-code-id-contracts-tab>
         <app-verify-code-id *ngIf="tabIndex === 1"></app-verify-code-id>
       </div>
     </div>
