@@ -15,9 +15,10 @@ import { WSService } from 'src/app/core/services/ws.service';
 })
 export class ContractsVerifyComponent implements OnInit {
   contractAddress = '';
-  currentStep: 'verify' | 'compiler' = 'verify';
+  currentStep: 'verify' | 'compiler' = 'compiler';
   code_id = '';
   isCompilerComplete = true;
+  loading = true;
   @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
@@ -155,6 +156,7 @@ export class ContractsVerifyComponent implements OnInit {
   checkStatusVerify() {
     this.contractService.checkVerified(this.contractAddress).subscribe((res) => {
       if (res.data) {
+        this.loading = false;
         if (res.data.status.toLowerCase() == ContractVerifyType.Verifying.toLowerCase()) {
           this.currentStep = 'compiler';
           // this.wSService.subscribeVerifyContract(
@@ -163,7 +165,7 @@ export class ContractsVerifyComponent implements OnInit {
           //     this.contractService.loadContractDetail(this.contractAddress);
           //   },
           //   () => {
-             
+
           //   },
           // );
         } else {
@@ -177,4 +179,6 @@ export class ContractsVerifyComponent implements OnInit {
   onScroll(event) {
     this.versionSelect.close();
   }
+
+  redirectToPreviousPage() {}
 }
