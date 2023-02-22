@@ -45,7 +45,10 @@ export class ContractsVerifyComponent implements OnInit {
   ngOnInit(): void {
     this.contractForm = new FormGroup(
       {
-        contract_address: new FormControl('', { validators: [Validators.required], updateOn: 'submit' }),
+        codeId: new FormControl(
+          { value: this.code_id, disabled: true },
+          { validators: [Validators.required], updateOn: 'submit' },
+        ),
         link: new FormControl('', {
           validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
           updateOn: 'submit',
@@ -76,7 +79,7 @@ export class ContractsVerifyComponent implements OnInit {
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
       this.contractForm.controls['commit'].setValue(link.split('/')[link.split('/').length - 1]);
       const contractData = {
-        contract_address: this.contractForm.controls['contract_address'].value,
+        codeID: this.contractForm.controls['codeId'].value,
         url: this.contractForm.controls['url'].value,
         compiler_version: this.contractForm.controls['compiler_version'].value,
         commit: this.contractForm.controls['commit'].value,
