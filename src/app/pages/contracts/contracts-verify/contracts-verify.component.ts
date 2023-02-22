@@ -67,7 +67,7 @@ export class ContractsVerifyComponent implements OnInit {
         updateOn: 'submit',
       },
     );
-    this.getContractDetail();
+    this.checkStatusVerify();
   }
 
   onSubmit() {
@@ -152,13 +152,22 @@ export class ContractsVerifyComponent implements OnInit {
     this.currentStep = 'verify';
   }
 
-  getContractDetail() {
-    this.contractService.getContractDetail(this.contractAddress).subscribe((res) => {
+  checkStatusVerify() {
+    this.contractService.checkVerified(this.contractAddress).subscribe((res) => {
       if (res.data) {
-        if (res.data.contract_verification.toLowerCase() == ContractVerifyType.Unverified.toLowerCase()) {
-          this.currentStep = 'verify';
-        } else {
+        if (res.data.status.toLowerCase() == ContractVerifyType.Verifying.toLowerCase()) {
           this.currentStep = 'compiler';
+          // this.wSService.subscribeVerifyContract(
+          //   Number(this.code_id),
+          //   () => {
+          //     this.contractService.loadContractDetail(this.contractAddress);
+          //   },
+          //   () => {
+             
+          //   },
+          // );
+        } else {
+          this.currentStep = 'verify';
         }
       }
     });

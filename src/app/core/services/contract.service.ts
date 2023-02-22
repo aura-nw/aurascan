@@ -64,7 +64,7 @@ export class ContractService extends CommonService {
   // }
 
   verifyCodeID(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/verify-contract`, data);
+    return this.http.post<any>(`${this.apiUrl}/contracts/verify-code-id`, data);
   }
 
   getMatchCreationCode(contractAddress: string): Observable<any> {
