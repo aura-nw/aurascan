@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-verify-code-id',
@@ -11,7 +12,7 @@ export class VerifyCodeIdComponent implements OnInit {
   isVerifying = false;
   contractAddress;
   contractDetail;
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -27,5 +28,10 @@ export class VerifyCodeIdComponent implements OnInit {
     setTimeout(function () {
       document.getElementById('popupCopy').click();
     }, 800);
+  }
+
+  navigateToVerify(codeId: string) {
+    sessionStorage.setItem('codeIdPrePage', this.router.url);
+    this.router.navigate(['/contracts/verify', 123]);
   }
 }

@@ -10,15 +10,7 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a
-          class="text--primary"
-          [routerLink]="[
-            '/contracts/verify',
-            'aura1pfhnr2ur22ff0xyjx208jhjq7s9d8hyq4qkms8hmpsz4j8v2qtqsgr93z5',
-            '1001'
-          ]">
-          Verify and Publish
-        </a>
+        <span class="text--primary" (click)="navigateToVerify('123123')"> Verify and Publish </span>
         your contract source code today!
       </div>
     </div>
@@ -39,11 +31,9 @@
         </div>
         <div>
           Kindly click
-          <a
-            class="text--primary fw-500 cursor-pointer"
-            [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+          <span class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
             here
-          </a>
+          </span>
           for more detail
         </div>
       </div>
@@ -60,15 +50,7 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a
-          class="text--primary"
-          [routerLink]="[
-            '/contracts/verify',
-            'aura1pfhnr2ur22ff0xyjx208jhjq7s9d8hyq4qkms8hmpsz4j8v2qtqsgr93z5',
-            '1001'
-          ]">
-          Verify and Publish
-        </a>
+        <span class="text--primary" (click)="navigateToVerify(contractDetail.code_id)"> Verify and Publish </span>
         your contract source code today!
       </div>
     </div>

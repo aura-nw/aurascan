@@ -60,6 +60,7 @@ export class ContractComponent implements OnInit, OnDestroy {
   }
 
   navigateToVerify(codeId: string) {
+    sessionStorage.setItem('codeIdPrePage', this.router.url);
     this.router.navigate(['/contracts/verify', codeId]);
   }
 }

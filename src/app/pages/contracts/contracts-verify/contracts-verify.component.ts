@@ -27,6 +27,7 @@ export class ContractsVerifyComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private wSService: WSService,
+    private location: Location,
   ) {
     this.code_id = this.route.snapshot.paramMap.get('code_id');
 
@@ -176,5 +177,12 @@ export class ContractsVerifyComponent implements OnInit {
     this.versionSelect.close();
   }
 
-  redirectToPreviousPage() {}
+  redirectToPreviousPage() {
+    const preUrl = sessionStorage.getItem('codeIdPrePage');
+    if (preUrl) {
+      this.location.href = preUrl;
+    } else {
+      this.router.navigate(['contracts']);
+    }
+  }
 }
