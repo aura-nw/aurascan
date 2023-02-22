@@ -8,7 +8,7 @@
           <div class="text--gray-4 body">Code ID</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <div class="text--gray-light body">1</div>
+          <div class="text--gray-light body">{{ codeIdDetail.code_id }}</div>
         </div>
       </div>
       <div class="row mt-2">
@@ -16,16 +16,12 @@
           <div class="text--gray-4 body">Creator</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <a
-            [routerLink]="['/account', 'aurac77482e45F1F44dE1745F52C74426C6316DD52']"
-            class="text--primary body d-none d-lg-block"
-            >aurac77482e45F1F44dE1745F52C74426C6316DD52</a
-          >
-          <a
-            [routerLink]="['/account', 'aurac77482e45F1F44dE1745F52C74426C6316DD52']"
-            class="text--primary body d-lg-none"
-            >{{ 'aurac77482e45F1F44dE1745F52C74426C6316DD52' | cutStringPipe : 8 : 8 }}</a
-          >
+          <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-none d-lg-block">{{
+            codeIdDetail.creator
+          }}</a>
+          <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-lg-none">{{
+            codeIdDetail.creator | cutStringPipe : 8 : 8
+          }}</a>
         </div>
       </div>
       <div class="row mt-2">
@@ -33,16 +29,12 @@
           <div class="text--gray-4 body">Tx Hash</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <a
-            [routerLink]="['/transaction', 'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63']"
-            class="text--primary body d-none d-lg-block"
-            >EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63</a
-          >
-          <a
-            [routerLink]="['/transaction', 'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63']"
-            class="text--primary body d-lg-none"
-            >{{ 'EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63EFA8892C9A8E63' | cutStringPipe : 8 : 8 }}</a
-          >
+          <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-none d-lg-block">{{
+            codeIdDetail.tx_hash
+          }}</a>
+          <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
+            codeIdDetail.tx_hash | cutStringPipe : 8 : 8
+          }}</a>
         </div>
       </div>
       <div class="row mt-2">
@@ -50,7 +42,7 @@
           <div class="text--gray-4 body">Type</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <div class="text--gray-light body">CW-4973</div>
+          <div class="text--gray-light body">{{ codeIdDetail.type }}</div>
         </div>
       </div>
       <div class="row mt-2">
@@ -58,7 +50,7 @@
           <div class="text--gray-4 body">Instantiate times</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <div class="text--gray-light body">2</div>
+          <div class="text--gray-light body">{{ codeIdDetail.instantiates }}</div>
         </div>
       </div>
       <div class="row mt-2">
@@ -66,7 +58,7 @@
           <div class="text--gray-4 body">Created At</div>
         </div>
         <div class="col-6 col-lg-auto">
-          <div class="text--gray-1 body">{{ '2023-02-07T09:35:03.680Z' | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
+          <div class="text--gray-1 body">{{ codeIdDetail.create_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
         </div>
       </div>
     </div>
@@ -87,7 +79,7 @@
       </ul>
       <!-- content -->
       <div class="mt-4 mt-lg-6">
-        <app-contracts-list *ngIf="tabIndex === 0"></app-contracts-list>
+        <app-code-id-contracts-tab *ngIf="tabIndex === 0"></app-code-id-contracts-tab>
         <app-verify-code-id *ngIf="tabIndex === 1"></app-verify-code-id>
       </div>
     </div>

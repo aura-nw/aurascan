@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -39,8 +39,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSearch: any;
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -112,7 +110,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           }
         });
         this.dataSource = res.data;
-        this.dataSearch = res.data;
       }
     });
   }

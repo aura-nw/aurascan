@@ -2,7 +2,7 @@
   <div>
     <h1 class="mb-0 text--white">Code IDs</h1>
     <div class="text--gray-5 body-02 d-none d-lg-block">
-      A total of {{ 380390 | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
+      A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
     </div>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
@@ -13,6 +13,7 @@
         placeholder="Search for Code ID/ Contract address/ Owner"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
+        (keyup)="onKeyUp()"
         name="search"
         autocomplete="off" />
       <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
@@ -35,7 +36,7 @@
         <div class="d-lg-none">
           <div class="d-flex justify-content-between align-items-center" *ngIf="!searchMobVisible">
             <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">
-              A total of {{ 380390 | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
+              A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
             </div>
             <button class="button">
               <img
@@ -54,6 +55,7 @@
                 placeholder="Search for Code ID/ Contract address/ Owner"
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
+                (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
               <button type="reset" class="btn-reset cursor-pointer" (click)="textSearch = ''; searchMobVisible = false">
@@ -74,9 +76,9 @@
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['contract_verification']"
+                          *ngIf="data['result']"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                          alt="contract_verification"
+                          alt="result"
                           width="16px"
                           height="16px" />
                       </div>
@@ -94,7 +96,7 @@
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                     </a>
                   </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'creator_address'">
+                  <ng-container *ngIf="template.matColumnDef === 'creator'">
                     <a
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                       [class.disabled-link]="!data[template.matColumnDef]">
@@ -103,6 +105,7 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'type'">
                     <div>{{ data[template.matColumnDef] }}</div>
+                    <span *ngIf="!data['type']">-</span>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'instantiates'">
                     <div>{{ data[template.matColumnDef] }}</div>
@@ -112,12 +115,12 @@
                       <span>{{ data['created_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}</span>
                     </div>
                   </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
+                  <ng-container *ngIf="template.matColumnDef === 'verified_at'">
                     <div class="d-flex align-items-center ml-1">
-                      <span *ngIf="data['contract_verification']">{{
-                        data['contract_verification'] | customDate : 'yyyy-MM-dd HH:mm:ss'
+                      <span *ngIf="data['verified_at']">{{
+                        data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'
                       }}</span>
-                      <span *ngIf="!data['contract_verification']">-</span>
+                      <span *ngIf="!data['verified_at']">-</span>
                     </div>
                   </ng-container>
                 </td>

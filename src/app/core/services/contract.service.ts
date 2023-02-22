@@ -126,4 +126,12 @@ export class ContractService extends CommonService {
   getVerifyCodeStep(codeId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/verify-code-id/${codeId}`);
   }
+
+  getListCodeID(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/contract-code/list`, data);
+  }
+
+  getCodeIDDetail(codeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/contract-code/${codeId}`);
+  }
 }

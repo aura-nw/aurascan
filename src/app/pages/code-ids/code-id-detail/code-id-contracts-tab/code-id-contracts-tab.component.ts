@@ -1,133 +1,122 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableTemplate } from 'src/app/core/models/common.model';
-import { shortenAddress } from '../../../core/utils/common/shorten';
+import { shortenAddress } from '../../../../core/utils/common/shorten';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
-import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
-  selector: 'app-code-list',
-  templateUrl: './code-list.component.html',
-  styleUrls: ['./code-list.component.scss'],
+  selector: 'app-code-id-contracts-tab',
+  templateUrl: './code-id-contracts-tab.component.html',
+  styleUrls: ['./code-id-contracts-tab.component.scss'],
 })
-export class CodeListComponent implements OnInit {
+export class CodeIdContractsTabComponent implements OnInit {
+  @Input() codeId;
   pageData: PageEvent;
   pageSize = 20;
   pageIndex = 0;
-  textSearch = '';
-  maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  showBoxSearch = false;
-  searchMobVisible = false;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },
+    { matColumnDef: 'address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contract' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'instantiates', headerCellDef: 'INSTANTIATES' },
-    { matColumnDef: 'created_at', headerCellDef: 'created at' },
     { matColumnDef: 'contract_verification', headerCellDef: 'Verified at' },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   mockData = [
     {
-      code_id: 1,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-4973',
       instantiates: '345',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: '2023-02-07T09:35:03.680Z',
     },
     {
-      code_id: 2,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-20',
       instantiates: '25',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: '2023-02-07T09:35:03.680Z',
     },
     {
-      code_id: 3,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-20',
       instantiates: '10',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: '2023-02-07T09:35:03.680Z',
     },
     {
-      code_id: 4,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-721',
       instantiates: '3',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: '2023-02-07T09:35:03.680Z',
     },
     {
-      code_id: 5,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-4973',
       instantiates: '345',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: null,
     },
     {
-      code_id: 6,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-721',
       instantiates: '15',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: null,
     },
     {
-      code_id: 7,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-20',
       instantiates: '3',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: '2023-02-07T09:35:03.680Z',
     },
     {
-      code_id: 8,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-20',
       instantiates: '22',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: null,
     },
     {
-      code_id: 9,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-4973',
       instantiates: '345',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: '2023-02-07T09:35:03.680Z',
     },
     {
-      code_id: 10,
+      address: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       tx_hash: '3246114066CF3FC4225EFDC6DE1B818B262B56A54163184B7FB89B42D16D385F',
       creator_address: 'aura1v52kz96vjcjzq90jjkwxreqrrve65mx2csd6j0',
       type: 'CW-721',
       instantiates: '345',
-      created_at: '2023-01-07T09:35:03.680Z',
       contract_verification: null,
     },
   ];
-
-  constructor(private contractService: ContractService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    this.getListCodeIds();
+    this.getListContract();
+  }
+  shortenAddress(address: string): string {
+    if (address) {
+      return shortenAddress(address, 8);
+    }
+    return '';
   }
 
   paginatorEmit(event): void {
@@ -136,31 +125,15 @@ export class CodeListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
-    this.getListCodeIds();
+    this.getListContract();
   }
 
-  getListCodeIds() {
+  getListContract() {
     this.pageData = {
       length: this.mockData.length,
       pageSize: 20,
       pageIndex: PAGE_EVENT.PAGE_INDEX,
     };
-    // this.contractService.getListContractById().subscribe((res) => {
-    //   console.log(res.data);
-    // });
-
     this.dataSource.data = this.mockData;
-  }
-
-  resetFilterSearch() {
-    this.textSearch = '';
-    this.showBoxSearch = false;
-  }
-
-  shortenAddress(address: string): string {
-    if (address) {
-      return shortenAddress(address, 8);
-    }
-    return '';
   }
 }
