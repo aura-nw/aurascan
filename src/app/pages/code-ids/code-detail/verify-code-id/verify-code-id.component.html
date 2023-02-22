@@ -1,6 +1,6 @@
 <div class="box-contract text-white">
   <!-- Chưa verify -->
-  <ng-container>
+  <ng-container *ngIf="contractVerifyType === contractVerifyType.Unverified && contractDetail && !isVerifying">
     <div class="d-flex content-contract body-02">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
@@ -10,7 +10,9 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <span class="text--primary" (click)="navigateToVerify('123123')"> Verify and Publish </span>
+        <span class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
+          Verify and Publish
+        </span>
         your contract source code today!
       </div>
     </div>
@@ -50,7 +52,9 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <span class="text--primary" (click)="navigateToVerify(contractDetail.code_id)"> Verify and Publish </span>
+        <span class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
+          Verify and Publish
+        </span>
         your contract source code today!
       </div>
     </div>
