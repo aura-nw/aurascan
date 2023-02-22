@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ContractType } from 'src/app/core/constants/token.enum';
@@ -21,7 +21,7 @@ export class ContractComponent implements OnInit, OnDestroy {
   contractDetail: any;
   isVerifying = false;
 
-  constructor(private contractService: ContractService, private route: ActivatedRoute) {}
+  constructor(private contractService: ContractService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnDestroy(): void {}
 
@@ -57,5 +57,9 @@ export class ContractComponent implements OnInit, OnDestroy {
 
   changeTab(tabId): void {
     this.countCurrent = tabId;
+  }
+
+  navigateToVerify(codeId: string) {
+    this.router.navigate(['/contracts/verify', codeId]);
   }
 }

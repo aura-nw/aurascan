@@ -16,11 +16,9 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a
-          class="text--primary fw-500 ml-1 mr-1 cursor-pointer"
-          [routerLink]="['/contracts/verify', contractDetail.code_id]">
+        <span class="text--primary fw-500 ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
           Verify and Publish
-        </a>
+        </span>
         your contract source code today!
       </div>
     </div>
@@ -88,11 +86,9 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a
-          class="text--primary fw-500 ml-1 mr-1 cursor-pointer"
-          [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+        <span class="text--primary fw-500 ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
           Verify and Publish
-        </a>
+        </span>
         your contract source code today!
       </div>
     </div>

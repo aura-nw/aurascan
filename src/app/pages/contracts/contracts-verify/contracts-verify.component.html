@@ -30,7 +30,11 @@
                   class="form-control form-check-input"
                   id="address"
                   placeholder="aura..." />
-                <div class="error" *ngIf="formControls['contract_address'].invalid">Contract address is required!</div>
+                <div
+                  class="error"
+                  *ngIf="formControls['contract_address'].errors?.required && formControls['contract_address'].touched">
+                  Contract address is required!
+                </div>
               </div>
             </div>
             <div class="col-12 col-lg-6">
@@ -144,4 +148,3 @@
     </div>
   </div>
 </section>
-<button (click)="redirectToPreviousPage()">click me</button>
