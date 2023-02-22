@@ -5,7 +5,6 @@ import { CONTRACT_VERSIONS } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WSService } from 'src/app/core/services/ws.service';
 
 @Component({
@@ -27,12 +26,10 @@ export class ContractsVerifyComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private wSService: WSService,
-    private toastr: NgxToastrService,
   ) {
-    this.contractAddress = this.route.snapshot.paramMap.get('addressId');
     this.code_id = this.route.snapshot.paramMap.get('code_id');
 
-    if (this.contractAddress.trim().length === 0 || this.code_id.trim().length === 0) {
+    if (this.code_id.trim().length === 0) {
       this.router.navigate(['contracts']);
     }
   }
@@ -47,10 +44,7 @@ export class ContractsVerifyComponent implements OnInit {
   ngOnInit(): void {
     this.contractForm = new FormGroup(
       {
-        contract_address: new FormControl(
-          { value: this.contractAddress, disabled: true },
-          { validators: [Validators.required], updateOn: 'submit' },
-        ),
+        contract_address: new FormControl('', { validators: [Validators.required], updateOn: 'submit' }),
         link: new FormControl('', {
           validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
           updateOn: 'submit',
@@ -94,7 +88,7 @@ export class ContractsVerifyComponent implements OnInit {
           switch (data?.Code) {
             case 'SUCCESSFUL':
               this.currentStep = 'compiler';
-
+              this.startWS();
               //this.dlgServiceOpen();
               // this.wSService.subscribeVerifyContract(
               //   Number(this.code_id),
@@ -114,7 +108,7 @@ export class ContractsVerifyComponent implements OnInit {
               // );
               break;
             default:
-              this.toastr.error(data?.Message);
+              // this.toastr.error(data?.Message);
               break;
           }
         }
@@ -152,20 +146,22 @@ export class ContractsVerifyComponent implements OnInit {
     this.currentStep = 'verify';
   }
 
+  startWS(): void {
+    this.wSService.subscribeVerifyContract(
+      Number(this.code_id),
+      () => {
+        this.contractService.loadContractDetail(this.contractAddress);
+      },
+      () => {},
+    );
+  }
+
   checkStatusVerify() {
-    this.contractService.checkVerified(this.contractAddress).subscribe((res) => {
+    this.contractService.checkVerified(this.code_id).subscribe((res) => {
       if (res.data) {
         if (res.data.status.toLowerCase() == ContractVerifyType.Verifying.toLowerCase()) {
           this.currentStep = 'compiler';
-          // this.wSService.subscribeVerifyContract(
-          //   Number(this.code_id),
-          //   () => {
-          //     this.contractService.loadContractDetail(this.contractAddress);
-          //   },
-          //   () => {
-             
-          //   },
-          // );
+          this.startWS();
         } else {
           this.currentStep = 'verify';
         }

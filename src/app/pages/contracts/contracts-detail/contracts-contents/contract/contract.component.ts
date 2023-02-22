@@ -43,7 +43,7 @@ export class ContractComponent implements OnInit, OnDestroy {
             this.isVerifying = false;
           }
 
-          return this.contractService.checkVerified(this.contractAddress);
+          return this.contractService.checkVerified(this.contractDetail.code_id);
         }),
       )
       .subscribe(({ data }) => {
