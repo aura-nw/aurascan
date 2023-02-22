@@ -124,11 +124,12 @@
           <button
             [disabled]="!isCompilerComplete"
             class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4"
+            (click)="startOver()"
             type="button">
             <span>Start over</span>
           </button>
-          <button class="button button--md button-pill button-flat button-fixed ml-4" type="button">
-            <span>Create</span>
+          <button *ngIf="!isCompilerComplete" class="button button--md button-pill button-flat button-fixed ml-4" type="button">
+            <span>Confirm</span>
           </button>
         </div>
       </div>

@@ -17,7 +17,7 @@ export class ContractsVerifyComponent implements OnInit {
   contractAddress = '';
   currentStep: 'verify' | 'compiler' = 'verify';
   code_id = '';
-  isCompilerComplete = false;
+  isCompilerComplete = true;
   @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
@@ -146,6 +146,10 @@ export class ContractsVerifyComponent implements OnInit {
 
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
+  }
+
+  startOver(): void {
+    this.currentStep = 'verify';
   }
 
   getContractDetail() {
