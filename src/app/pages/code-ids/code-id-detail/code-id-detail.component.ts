@@ -28,13 +28,12 @@ export class CodeIdDetailComponent implements OnInit {
     if (this.codeId === 'null') {
       this.route.navigate(['/']);
     } else {
-      this.getCodeDetail();
+      this.getCodeIdDetail();
     }
   }
-  getCodeDetail() {
+  
+  getCodeIdDetail() {
     this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      console.log(res);
-      
       this.codeIdDetail = res.data;
     });
   }

@@ -30,9 +30,7 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-
     this.contractService.loadContractDetail(this.contractAddress);
-
     this.subscription = this.contractService.contractObservable.subscribe((res: ResponseDto) => {
       if (res?.data) {
         this.contractDetail = res?.data;

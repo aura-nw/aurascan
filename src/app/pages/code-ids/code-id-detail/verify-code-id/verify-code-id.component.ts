@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
   selector: 'app-verify-code-id',
@@ -7,13 +9,32 @@ import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
   styleUrls: ['./verify-code-id.component.scss'],
 })
 export class VerifyCodeIdComponent implements OnInit {
-  contractVerifyType: any = ContractVerifyType.Unverified;
-  isVerifying = false;
-  contractAddress;
-  contractDetail;
-  constructor() {}
+  @Input() codeId: string;
+  contractStatus: any = ContractVerifyType.Unverified;
+  contractVerifyType = ContractVerifyType;
+  codeIdDetail;
+  constructor(private contractService: ContractService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checkStatusVerify();
+  }
+
+  checkStatusVerify() {
+    this.contractService.checkVerified(this.codeId).subscribe((res) => {
+      if (res.data) {
+        this.contractStatus = res.data.status;
+        if (this.contractStatus === ContractVerifyType.Verified) {
+          this.getCodeIdDetail();
+        }
+      }
+    });
+  }
+
+  getCodeIdDetail() {
+    this.contractService.getCodeIDDetail(Number(this.codeId)).subscribe((res) => {
+      this.codeIdDetail = res.data;
+    });
+  }
 
   copyData(text: string): void {
     var dummy = document.createElement('textarea');
@@ -27,5 +48,10 @@ export class VerifyCodeIdComponent implements OnInit {
     setTimeout(function () {
       document.getElementById('popupCopy').click();
     }, 800);
+  }
+
+  navigateToVerify(codeId: string) {
+    sessionStorage.setItem('codeIdPrePage', this.router.url);
+    this.router.navigate(['/contracts/verify', codeId]);
   }
 }

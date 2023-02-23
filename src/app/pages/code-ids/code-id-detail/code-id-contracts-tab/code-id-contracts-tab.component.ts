@@ -14,13 +14,13 @@ import { shortenAddress } from '../../../../core/utils/common/shorten';
   styleUrls: ['./code-id-contracts-tab.component.scss'],
 })
 export class CodeIdContractsTabComponent implements OnInit {
-  @Input() codeId;
+  @Input() codeId: string;
   pageData: PageEvent;
   pageSize = 20;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
-    { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contract' },
+    { matColumnDef: 'contract_address', headerCellDef: 'CONTRACT ADDRESS', isUrl: '/contracts' },
     { matColumnDef: 'tx_hash', headerCellDef: 'TX HASH', isUrl: '/transaction' },
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account' },
     { matColumnDef: 'type', headerCellDef: 'Type' },
