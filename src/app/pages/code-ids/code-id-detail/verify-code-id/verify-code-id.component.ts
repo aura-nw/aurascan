@@ -10,13 +10,12 @@ import { ContractService } from 'src/app/core/services/contract.service';
 })
 export class VerifyCodeIdComponent implements OnInit {
   @Input() codeIdDetail: any;
+  loading = true;
   contractStatus: any = ContractVerifyType.Unverified;
   contractVerifyType = ContractVerifyType;
   constructor(private contractService: ContractService, private router: Router) {}
 
   ngOnInit(): void {
-    console.log(this.codeIdDetail);
-    
     this.checkStatusVerify();
   }
 
@@ -24,6 +23,7 @@ export class VerifyCodeIdComponent implements OnInit {
     this.contractService.checkVerified(this.codeIdDetail.code_id).subscribe((res) => {
       if (res.data) {
         this.contractStatus = res.data.status;
+        this.loading = false;
         if (this.contractStatus === ContractVerifyType.Verified) {
         }
       }

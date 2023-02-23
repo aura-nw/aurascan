@@ -1,93 +1,98 @@
 <div class="box-contract text-white">
   <!-- Chưa verify -->
-  <ng-container *ngIf="contractStatus === contractVerifyType.Unverified">
-    <div class="d-flex content-contract body-02">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2" />
-      <div>
-        Are you the contract creator?
-        <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
-        your contract source code today!
-      </div>
-    </div>
-  </ng-container>
-  <!-- Đang verify -->
-  <ng-container *ngIf="contractStatus === contractVerifyType.Verifying">
-    <div class="d-flex content-contract body-02">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2 mt-1" />
-      <div>
+  <div *ngIf="loading">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+  <div  *ngIf="!loading">
+    <ng-container *ngIf="contractStatus === contractVerifyType.Unverified">
+      <div class="d-flex content-contract body-02">
+        <img
+          [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+          alt=""
+          width="16"
+          height="16"
+          class="mr-2" />
         <div>
-          The code ID source code that this smart contract was instantiated from is currently pending in Verify and
-          Publish process.
-        </div>
-        <div>
-          Kindly click
-          <a class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(codeIdDetail.code_id)"> here </a>
-          for more detail
+          Are you the contract creator?
+          <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
+          your contract source code today!
         </div>
       </div>
-    </div>
-  </ng-container>
-  <!-- Verify Fail -->
-  <ng-container *ngIf="contractStatus === contractVerifyType.VerifiedFail">
-    <div class="d-flex content-contract body-02">
-      <img
-        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-        alt=""
-        width="16"
-        height="16"
-        class="mr-2" />
-      <div>
-        Are you the contract creator?
-        <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
-        your contract source code today!
+    </ng-container>
+    <!-- Đang verify -->
+    <ng-container *ngIf="contractStatus === contractVerifyType.Verifying">
+      <div class="d-flex content-contract body-02">
+        <img
+          [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+          alt=""
+          width="16"
+          height="16"
+          class="mr-2 mt-1" />
+        <div>
+          <div>
+            The code ID source code that this smart contract was instantiated from is currently pending in Verify and
+            Publish process.
+          </div>
+          <div>
+            Kindly click
+            <a class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(codeIdDetail.code_id)"> here </a>
+            for more detail
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="mt-4 mt-lg-6">
-      Let check the status of the last time this Code ID source code was unable to Verify and Publish
-    </div>
-    <app-contract-verify-steps></app-contract-verify-steps>
-  </ng-container>
-  <!-- Verify Successfull -->
-  <ng-container *ngIf="contractStatus === contractVerifyType.Verified">
-    <div class="d-flex fw-semibold">
-      <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
-      <div class="ml-2">Code ID Verified</div>
-    </div>
-    <div class="mt-6 fw-semibold">
-      <span class="gray-5">Compiler Version: </span>
-      <span>{{ codeIdDetail.compiler_version }}</span>
-    </div>
-    <div class="d-flex fw-semibold mt-6">
-      <i class="icon icon-file-document text--gray-4"></i>
-      <div class="ml-2">Link Code ID source code</div>
-    </div>
+    </ng-container>
+    <!-- Verify Fail -->
+    <ng-container *ngIf="contractStatus === contractVerifyType.VerifiedFail">
+      <div class="d-flex content-contract body-02">
+        <img
+          [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+          alt=""
+          width="16"
+          height="16"
+          class="mr-2" />
+        <div>
+          Are you the contract creator?
+          <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
+          your contract source code today!
+        </div>
+      </div>
+      <div class="mt-4 mt-lg-6">
+        Let check the status of the last time this Code ID source code was unable to Verify and Publish
+      </div>
+      <app-contract-verify-steps></app-contract-verify-steps>
+    </ng-container>
+    <!-- Verify Successfull -->
+    <ng-container *ngIf="contractStatus === contractVerifyType.Verified">
+      <div class="d-flex fw-semibold">
+        <img [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3" alt="" width="16px" height="16px" />
+        <div class="ml-2">Code ID Verified</div>
+      </div>
+      <div class="mt-6 fw-semibold">
+        <span class="gray-5">Compiler Version: </span>
+        <span>{{ codeIdDetail.compiler_version }}</span>
+      </div>
+      <div class="d-flex fw-semibold mt-6">
+        <i class="icon icon-file-document text--gray-4"></i>
+        <div class="ml-2">Link Code ID source code</div>
+      </div>
 
-    <div class="form-group mt-4 d-flex align-items-center">
-      <input
-        id="popupCopy"
-        type="text"
-        class="form-control form-check-input body mt-0"
-        readonly
-        value='{{ codeIdDetail.url }}' />
-      <button
-        class="button button-outline button-pill ml-4"
-        matTooltip="Copied!"
-        #tooltip2="matTooltip"
-        (mouseenter)="$event.stopImmediatePropagation()"
-        (mouseleave)="$event.stopImmediatePropagation()"
-        (click)="copyData(codeIdDetail.url); tooltip2.toggle()">
-        <span>Copy</span>
-      </button>
-    </div>
-  </ng-container>
+      <div class="form-group mt-4 d-flex align-items-center">
+        <input
+          id="popupCopy"
+          type="text"
+          class="form-control form-check-input body mt-0"
+          readonly
+          value="{{ codeIdDetail.url }}" />
+        <button
+          class="button button-outline button-pill ml-4"
+          matTooltip="Copied!"
+          #tooltip2="matTooltip"
+          (mouseenter)="$event.stopImmediatePropagation()"
+          (mouseleave)="$event.stopImmediatePropagation()"
+          (click)="copyData(codeIdDetail.url); tooltip2.toggle()">
+          <span>Copy</span>
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>
