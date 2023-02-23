@@ -43,6 +43,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   walletAddress = null;
   network = this.environmentService.configValue.chain_info;
   seachValue = '';
+  isError = false;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -147,12 +148,19 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     });
   }
 
+  handleRouterLink(link): void {
+    window.location.href = link;
+  }
+
   getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft);
+    let nftType = '';
+    if (nft.animation_url) {
+      nftType = checkTypeFile(nft);
+    }
     return nftType;
   }
 
-  handleRouterLink(link): void {
-    window.location.href = link;
+  error(): void {
+    this.isError = true;
   }
 }

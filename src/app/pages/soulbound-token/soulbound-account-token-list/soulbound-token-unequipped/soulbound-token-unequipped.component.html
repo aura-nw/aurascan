@@ -48,14 +48,10 @@
             <div class="nft-cards__item-border">
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
-                  <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
+                  <img *ngIf="getTypeFile(token) === '' || isError" [src]="commonService.getDefaultImg()" alt="" />
                   <img
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
-                    src="{{
-                      (token.animation_url || token.token_img)
-                        ? (token.animation_url || token.token_img | replaceIpfs)
-                        : commonService.getDefaultImg()
-                    }}"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG" (error)="error()"
+                    src="{{ token.animation_url || token.token_img | replaceIpfs }}"
                     alt="{{ token.token_name }}" />
                   <app-custom-video-player
                     [videoSrc]="token.animation_url | replaceIpfs"

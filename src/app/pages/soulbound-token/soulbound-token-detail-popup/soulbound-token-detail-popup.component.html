@@ -13,17 +13,11 @@
     <div class="row">
       <div class="col-12 col-lg-5">
         <div class="nft__img">
-          <img
-            *ngIf="!soulboundDetail.img_type && !soulboundDetail?.ipfs?.animation_url"
-            [src]="commonService.getDefaultImg()"
-            alt="" />
+          <img *ngIf="getTypeFile(soulboundDetail) === '' || isError" [src]="commonService.getDefaultImg()" alt="" />
           <img
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG"
-            src="{{
-              (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image)
-                ? (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs)
-                : commonService.getDefaultImg()
-            }}"
+            (error)="error()"
+            src="{{ soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs }}"
             alt="{{ soulboundDetail.token_name }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
