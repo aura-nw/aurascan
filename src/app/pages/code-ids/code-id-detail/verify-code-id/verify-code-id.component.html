@@ -10,7 +10,7 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a class="text--primary" (click)="navigateToVerify(codeId)"> Verify and Publish </a>
+        <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
         your contract source code today!
       </div>
     </div>
@@ -31,7 +31,7 @@
         </div>
         <div>
           Kindly click
-          <a class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(codeId)"> here </a>
+          <a class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(codeIdDetail.code_id)"> here </a>
           for more detail
         </div>
       </div>
@@ -48,7 +48,7 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a class="text--primary" (click)="navigateToVerify(codeId)"> Verify and Publish </a>
+        <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
         your contract source code today!
       </div>
     </div>
@@ -65,7 +65,7 @@
     </div>
     <div class="mt-6 fw-semibold">
       <span class="gray-5">Compiler Version: </span>
-      <span>v0.7.6+commit.7338295f</span>
+      <span>{{ codeIdDetail.compiler_version }}</span>
     </div>
     <div class="d-flex fw-semibold mt-6">
       <i class="icon icon-file-document text--gray-4"></i>
@@ -78,14 +78,14 @@
         type="text"
         class="form-control form-check-input body mt-0"
         readonly
-        value="https://github.com/aura-nw/flower-store-contract" />
+        value='{{ codeIdDetail.url }}' />
       <button
         class="button button-outline button-pill ml-4"
         matTooltip="Copied!"
         #tooltip2="matTooltip"
         (mouseenter)="$event.stopImmediatePropagation()"
         (mouseleave)="$event.stopImmediatePropagation()"
-        (click)="copyData('https://github.com/aura-nw/flower-store-contract'); tooltip2.toggle()">
+        (click)="copyData(codeIdDetail.url); tooltip2.toggle()">
         <span>Copy</span>
       </button>
     </div>

@@ -9,30 +9,24 @@ import { ContractService } from 'src/app/core/services/contract.service';
   styleUrls: ['./verify-code-id.component.scss'],
 })
 export class VerifyCodeIdComponent implements OnInit {
-  @Input() codeId: string;
+  @Input() codeIdDetail: any;
   contractStatus: any = ContractVerifyType.Unverified;
   contractVerifyType = ContractVerifyType;
-  codeIdDetail;
   constructor(private contractService: ContractService, private router: Router) {}
 
   ngOnInit(): void {
+    console.log(this.codeIdDetail);
+    
     this.checkStatusVerify();
   }
 
   checkStatusVerify() {
-    this.contractService.checkVerified(this.codeId).subscribe((res) => {
+    this.contractService.checkVerified(this.codeIdDetail.code_id).subscribe((res) => {
       if (res.data) {
         this.contractStatus = res.data.status;
         if (this.contractStatus === ContractVerifyType.Verified) {
-          this.getCodeIdDetail();
         }
       }
-    });
-  }
-
-  getCodeIdDetail() {
-    this.contractService.getCodeIDDetail(Number(this.codeId)).subscribe((res) => {
-      this.codeIdDetail = res.data;
     });
   }
 
@@ -52,6 +46,6 @@ export class VerifyCodeIdComponent implements OnInit {
 
   navigateToVerify(codeId: string) {
     sessionStorage.setItem('codeIdPrePage', this.router.url);
-    this.router.navigate(['/contracts/verify', codeId]);
+    this.router.navigate(['/contracts/verify', this.codeIdDetail.code_id]);
   }
 }

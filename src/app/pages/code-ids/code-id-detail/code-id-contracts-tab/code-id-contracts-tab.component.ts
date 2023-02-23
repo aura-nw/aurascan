@@ -63,8 +63,6 @@ export class CodeIdContractsTabComponent implements OnInit {
         pageSize: 20,
         pageIndex: PAGE_EVENT.PAGE_INDEX,
       };
-      console.log(res);
-      
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);

@@ -80,7 +80,7 @@
       <!-- content -->
       <div class="mt-4 mt-lg-6">
         <app-code-id-contracts-tab [codeId]="codeIdDetail.code_id" *ngIf="tabIndex === 0"></app-code-id-contracts-tab>
-        <app-verify-code-id [codeId]="codeIdDetail.code_id" *ngIf="tabIndex === 1"></app-verify-code-id>
+        <app-verify-code-id [codeIdDetail]="codeIdDetail" *ngIf="tabIndex === 1"></app-verify-code-id>
       </div>
     </div>
   </div>
