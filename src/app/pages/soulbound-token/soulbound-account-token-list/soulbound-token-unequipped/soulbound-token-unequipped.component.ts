@@ -39,6 +39,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   sbType = SB_TYPE;
   isClick = false;
   MEDIA_TYPE = MEDIA_TYPE;
+  isError = false;
 
   constructor(
     public dialog: MatDialog,
@@ -130,7 +131,14 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft);
+    let nftType = '';
+    if (nft.animation_url) {
+      nftType = checkTypeFile(nft);
+    }
     return nftType;
+  }
+
+  error(): void {
+    this.isError = true;
   }
 }

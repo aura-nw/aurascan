@@ -88,12 +88,15 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     }
   }
 
-  isObject(data){
-    return typeof data === 'object' && data !== null
+  isObject(data) {
+    return typeof data === 'object' && data !== null;
   }
 
   getTypeFile(nft: any) {
-    let nftType = checkTypeFile(nft);
+    let nftType = '';
+    if (nft.ipfs.animation_url) {
+      nftType = checkTypeFile(nft);
+    }
     return nftType;
   }
 }
