@@ -135,6 +135,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
     if (nft.animation_url) {
       nftType = checkTypeFile(nft);
     }
+    if (nftType === '' && nft.token_img) {
+      nftType = nft.img_type;
+    }
     return nftType;
   }
 
