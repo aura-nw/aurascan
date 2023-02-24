@@ -13,26 +13,33 @@
     <div class="row">
       <div class="col-12 col-lg-5">
         <div class="nft__img">
-          <img *ngIf="getTypeFile(soulboundDetail) === '' || isError" [src]="commonService.getDefaultImg()" alt="" />
+          <img
+            *ngIf="
+              (getTypeFile(soulboundDetail) !== MEDIA_TYPE.IMG && !soulboundDetail?.ipfs?.animation_url) || isError"
+            [src]="commonService.getDefaultImg()" />
           <img
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG"
             (error)="error()"
-            src="{{ soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs }}"
+            src="{{
+              soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image
+                ? (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs)
+                : commonService.getDefaultImg()
+            }}"
             alt="{{ soulboundDetail.token_name }}" />
           <app-custom-video-player
             [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
             [showControl]="true"
             [isDetail]="true"
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO">
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO && soulboundDetail?.ipfs?.animation_url">
           </app-custom-video-player>
           <app-model-view
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D && soulboundDetail?.ipfs?.animation_url"
             [link]=""
             [modelUrl]="soulboundDetail.ipfs.animation_url | replaceIpfs"
             [disablePan]="false">
           </app-model-view>
           <app-audio-player
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.AUDIO"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.AUDIO && soulboundDetail?.ipfs?.animation_url"
             [link]=""
             [src]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
             [nftId]="">
