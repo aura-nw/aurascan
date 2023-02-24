@@ -150,5 +150,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
         }
     }
     this.getListContract();
+    this.pageChange.selectPage(0);
   }
 }
