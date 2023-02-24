@@ -1,15 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -23,6 +22,7 @@ import { Globals } from '../../../global/global';
   styleUrls: ['./contracts-list.component.scss'],
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   searchMobVisible = false;
   templates: Array<TableTemplate> = [
@@ -40,19 +40,12 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSearch: any;
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  urlParam = '';
-  showBoxSearch = false;
   filterButtons = [];
   searchSubject = new Subject();
   deptroy$ = new Subject();
-
-  image_s3 = this.environmentService.configValue.image_s3;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   constructor(
     public translate: TranslateService,
@@ -60,8 +53,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     private contractService: ContractService,
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
-    private route: ActivatedRoute,
-    private environmentService: EnvironmentService,
   ) {}
 
   ngOnDestroy(): void {
@@ -71,10 +62,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.urlParam = params.param;
-    });
-    this.textSearch = this.urlParam ? this.urlParam : '';
     this.getListContract();
 
     this.searchSubject
@@ -82,6 +69,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
       .subscribe(() => {
         this.getListContract();
+        this.pageChange.selectPage(0);
       });
   }
 
@@ -113,7 +101,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           }
         });
         this.dataSource = res.data;
-        this.dataSearch = res.data;
+        this.pageData.length = res?.meta?.count;
       }
     });
   }
@@ -124,10 +112,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   pageEvent(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
-    if (!this.urlParam) {
-      this.textSearch = '';
-      this.showBoxSearch = false;
-    }
     this.getListContract();
   }
 
@@ -166,5 +150,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
         }
     }
     this.getListContract();
+    this.pageChange.selectPage(0);
   }
 }
