@@ -67,7 +67,6 @@ export class NFTDetailComponent implements OnInit {
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;
   currentKey: string;
-  nftType: string;
   isError = false;
   nftUrl = '';
   sbType = SB_TYPE;
@@ -133,8 +132,6 @@ export class NFTDetailComponent implements OnInit {
         return;
       }
       this.nftDetail = res.data;
-      this.nftType = checkTypeFile(this.nftDetail);
-
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
           this.nftDetail['isDisplayName'] = true;
@@ -152,14 +149,15 @@ export class NFTDetailComponent implements OnInit {
           return;
         }
         this.linkToken = 'token-abt';
-        this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
+        if (this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image) {
+          this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
+        }
         if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
           this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || '';
         }
         this.isSoulBound = true;
       }
-
       this.loading = false;
     });
   }
@@ -273,7 +271,7 @@ export class NFTDetailComponent implements OnInit {
       pubKey: dataWallet['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
-      contractAddress: this.nftDetail?.contract_address
+      contractAddress: this.nftDetail?.contract_address,
     };
 
     let feeGas = {
@@ -338,10 +336,15 @@ export class NFTDetailComponent implements OnInit {
       dialogConfig.disableClose = false;
       dialogConfig.panelClass = 'transparent-dialog';
       dialogConfig.data = {
-        mediaType: this.nftType,
+        mediaType: this.getTypeFile(this.nftDetail),
         mediaSrc: this.nftUrl,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }
+  }
+  
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }
