@@ -14,10 +14,13 @@ import { WSService } from 'src/app/core/services/ws.service';
 })
 export class ContractsVerifyComponent implements OnInit {
   contractAddress = '';
-  currentStep: 'verify' | 'compiler' = 'compiler';
+  currentStep: 'verify' | 'compiler' = 'verify';
   code_id = '';
-  isCompilerComplete = true;
+  isCompilerComplete = false;
   loading = true;
+  isExitCode = false;
+  isVerifyFail = false;
+
   @ViewChild('version') versionSelect: any;
 
   versionList = CONTRACT_VERSIONS;
@@ -79,7 +82,7 @@ export class ContractsVerifyComponent implements OnInit {
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
       this.contractForm.controls['commit'].setValue(link.split('/')[link.split('/').length - 1]);
       const contractData = {
-        codeID: this.contractForm.controls['codeId'].value,
+        code_id: this.contractForm.controls['codeId'].value,
         url: this.contractForm.controls['url'].value,
         compiler_version: this.contractForm.controls['compiler_version'].value,
         commit: this.contractForm.controls['commit'].value,
@@ -93,26 +96,8 @@ export class ContractsVerifyComponent implements OnInit {
             case 'SUCCESSFUL':
               this.currentStep = 'compiler';
               this.startWS();
-              //this.dlgServiceOpen();
-              // this.wSService.subscribeVerifyContract(
-              //   Number(this.code_id),
-              //   () => {
-              //     this.contractService.loadContractDetail(contractData.contract_address);
-              //   },
-              //   () => {
-              //     this.router.navigate(['contracts', this.contractAddress], {
-              //       queryParams: {
-              //         tabId: 'contract',
-              //       },
-              //       state: {
-              //         reload: true,
-              //       },
-              //     });
-              //   },
-              // );
               break;
             default:
-              // this.toastr.error(data?.Message);
               break;
           }
         }
@@ -120,42 +105,20 @@ export class ContractsVerifyComponent implements OnInit {
     }
   }
 
-  // dlgServiceOpen(): void {
-  //   this.dlgService.showDialog({
-  //     content:
-  //       'Contract Source Code Verification is pending!<br>We will notify the compiler output after verification is successful.',
-  //     title: '',
-  //     callback: (e) => {
-  //       if (e) {
-  //         this.router.navigate(['contracts', this.contractAddress], {
-  //           queryParams: {
-  //             tabId: 'contract',
-  //           },
-  //           state: {
-  //             reload: true,
-  //           },
-  //         });
-  //       } else {
-  //         this.handleReset();
-  //       }
-  //     },
-  //   });
-  // }
-
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
   }
 
   startOver(): void {
     this.currentStep = 'verify';
+    this.isCompilerComplete = false;
+    this.isVerifyFail = false;
   }
 
   startWS(): void {
     this.wSService.subscribeVerifyContract(
       Number(this.code_id),
-      () => {
-        this.contractService.loadContractDetail(this.contractAddress);
-      },
+      () => {},
       () => {},
     );
   }
@@ -164,6 +127,7 @@ export class ContractsVerifyComponent implements OnInit {
     this.contractService.checkVerified(this.code_id).subscribe((res) => {
       if (res.data) {
         this.loading = false;
+        this.isExitCode = true;
         if (res.data.status.toLowerCase() == ContractVerifyType.Verifying.toLowerCase()) {
           this.currentStep = 'compiler';
           this.startWS();

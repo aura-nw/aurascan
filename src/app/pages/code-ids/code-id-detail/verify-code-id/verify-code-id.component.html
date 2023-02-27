@@ -59,7 +59,7 @@
       <div class="mt-4 mt-lg-6">
         Let check the status of the last time this Code ID source code was unable to Verify and Publish
       </div>
-      <app-contract-verify-steps></app-contract-verify-steps>
+      <app-contract-verify-steps [codeID]="codeIdDetail.code_id"></app-contract-verify-steps>
     </ng-container>
     <!-- Verify Successfull -->
     <ng-container *ngIf="contractStatus === contractVerifyType.Verified">

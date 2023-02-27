@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
@@ -46,7 +46,8 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   showBoxSearch = false;
   filterButtons = [];
   searchSubject = new Subject();
-  deptroy$ = new Subject();
+  destroy$ = new Subject();
+  contractRegisterType = ContractRegisterType;
 
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
@@ -62,9 +63,8 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    // throw new Error('Method not implemented.');
-    this.deptroy$.next();
-    this.deptroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         this.getListContract();
       });
@@ -150,9 +150,9 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           this.filterButtons = [];
         }
         break;
-      case 'CW20':
-      case 'CW721':
-      case 'CW4973':
+      case ContractRegisterType.CW20:
+      case ContractRegisterType.CW721:
+      case ContractRegisterType.CW4973:
       case '': //Others
       default:
         if (i >= 0) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -7,6 +7,7 @@ import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { shortenAddress } from '../../../core/utils/common/shorten';
 
 @Component({
@@ -15,6 +16,7 @@ import { shortenAddress } from '../../../core/utils/common/shorten';
   styleUrls: ['./code-id-list.component.scss'],
 })
 export class CodeIdListComponent implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   pageData: PageEvent;
   pageSize = 20;
   pageIndex = 0;
@@ -24,7 +26,7 @@ export class CodeIdListComponent implements OnInit {
   searchMobVisible = false;
   filterButtons = [];
   searchSubject = new Subject();
-  deptroy$ = new Subject();
+  destroy$ = new Subject();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   templates: Array<TableTemplate> = [
     { matColumnDef: 'code_id', headerCellDef: 'Code ID', isUrl: '/code-ids/detail' },
@@ -42,9 +44,9 @@ export class CodeIdListComponent implements OnInit {
     this.getListCodeIds();
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.getListCodeIds();
+        this.pageChange?.selectPage(0);
       });
   }
 

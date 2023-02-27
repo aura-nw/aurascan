@@ -9,20 +9,20 @@
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes('CW20')"
-      (click)="filterButton('CW20')">
+      [class.active]="filterButtons.includes(contractRegisterType.CW20)"
+      (click)="filterButton(contractRegisterType.CW20)">
       CW-20
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes('CW721')"
-      (click)="filterButton('CW721')">
+      [class.active]="filterButtons.includes(contractRegisterType.CW721)"
+      (click)="filterButton(contractRegisterType.CW721)">
       CW-721
     </button>
     <button
       class="button button-pill button-flat"
-      [class.active]="filterButtons.includes('CW4973')"
-      (click)="filterButton('CW4973')">
+      [class.active]="filterButtons.includes(contractRegisterType.CW4973)"
+      (click)="filterButton(contractRegisterType.CW4973)">
       CW-4973
     </button>
     <button
