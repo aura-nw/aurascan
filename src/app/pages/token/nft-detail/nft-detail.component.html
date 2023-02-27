@@ -31,7 +31,11 @@
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img
-                *ngIf="(getTypeFile(nftDetail) !== MEDIA_TYPE.IMG && !nftDetail.ipfs?.animation_url) || isError"
+                *ngIf="
+                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
+                    !(nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)) ||
+                  isError
+                "
                 [src]="defaultImgToken" />
               <img
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
@@ -41,14 +45,23 @@
                 [src]="this.nftUrl"
                 controls
                 controlsList="nodownload "
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO && nftDetail.ipfs?.animation_url"></video>
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
+                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                "></video>
               <app-model-view
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE._3D && nftDetail.ipfs?.animation_url"
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
+                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                "
                 [modelUrl]="this.nftUrl"
                 [disablePan]="false">
               </app-model-view>
               <app-audio-player
-                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO && nftDetail.ipfs?.animation_url"
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
+                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                "
                 [src]="this.nftUrl">
               </app-audio-player>
             </div>
