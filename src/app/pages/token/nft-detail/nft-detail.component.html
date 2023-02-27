@@ -27,42 +27,46 @@
     <div class="row p-lg-3">
       <!-- nft-media -->
       <div class="col-12 col-lg-4 my-4 my-md-0 pl-lg-0">
-        <div class="nft-img__contain w-100 h-100" (click)="expandMedia()">
+        <div class="nft-img__contain w-100 h-100">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
               <img
                 *ngIf="
                   (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
-                    !(nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)) ||
+                    !(nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)) ||
                   isError
                 "
                 [src]="defaultImgToken" />
               <img
+                (click)="expandMedia()"
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
                 (error)="error()"
-                [src]="this.nftUrl" />
+                [src]="nftUrl" />
               <video
-                [src]="this.nftUrl"
+                (click)="expandMedia()"
+                [src]="nftUrl"
                 controls
                 controlsList="nodownload "
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
-                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                  (nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)
                 "></video>
               <app-model-view
+                (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
-                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                  (nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)
                 "
-                [modelUrl]="this.nftUrl"
+                [modelUrl]="nftUrl"
                 [disablePan]="false">
               </app-model-view>
               <app-audio-player
+                (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
-                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                  (nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)
                 "
-                [src]="this.nftUrl">
+                [src]="nftUrl">
               </app-audio-player>
             </div>
           </div>
