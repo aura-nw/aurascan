@@ -82,6 +82,7 @@
         }
     },
     "MENUITEMS": {
+        "CODE-LIST": "Code IDs",
         "CHART-STATS": "Chart & Stats",
         "TOP-STATISTICS": "Top Statistics",
         "MULTI-SEND": "Multi-send",
@@ -262,5 +263,18 @@
         "SUCCESS_TRANSACTION": "Successful transaction!",
         "SUBMIT_FORM_SUCCESS": "Submit form successfully!",
         "CHART_WAIT_DATA": "Please wait for chart info"
+    },
+    "VERIFY_CODE_ID": {
+        "E001": "Code ID not found",
+        "E002": "Wrong compiler image",
+        "E003": "Code ID is currently being verified",
+        "E004": "Cannot get data hash of Code ID",
+        "E005A": "Cannot find github repository of this contract. Maybe your project is Private",
+        "E005B": "Commit not found",
+        "E005C": "Source code is missing Cargo.lock file",
+        "E006": "Smart contract source code or compiler version is incorrect",
+        "E007A": "Incorrect wasm file",
+        "E007B": "Data hash mismatch",
+        "E008": "Internal server error"
     }
 }

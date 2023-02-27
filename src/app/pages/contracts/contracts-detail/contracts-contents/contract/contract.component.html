@@ -1,4 +1,11 @@
 <div class="box-contract text--white">
+  <div class="mb-4" *ngIf="contractDetail.code_id">
+    This contract was instantiated from Code ID
+    <a [routerLink]="['/code-ids/detail', contractDetail.code_id]" class="text--primary">{{
+      contractDetail.code_id
+    }}</a>
+  </div>
+
   <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && !isVerifying">
     <div class="d-flex fw-500 content-contract">
       <img
@@ -9,10 +16,9 @@
         class="mr-2" />
       <div>
         Are you the contract creator?
-        <a class="text--primary fw-500 ml-1 mr-1 cursor-pointer" 
-          [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+        <span class="text--primary fw-500 ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
           Verify and Publish
-        </a>
+        </span>
         your contract source code today!
       </div>
     </div>
@@ -28,12 +34,24 @@
         height="16"
         class="mr-2 mt-1" />
       <div>
-        Contract source code verification is pending! We will notify the compiler output after verification is successful.
+        <div>
+          The code ID source code that this smart contract was instantiated from is currently pending in Verify and
+          Publish process.
+        </div>
+        <div>
+          Kindly click
+          <a
+            class="text--primary fw-500 cursor-pointer"
+            [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+            here
+          </a>
+          for more detail
+        </div>
       </div>
     </div>
-    <div class="mt-3 content-info caption fw-normal">{{ contractDetail.tx_hash }}</div>
   </ng-container>
-  <ng-container *ngIf="contractTypeData !== contractVerifyType.Unverified">
+
+  <ng-container *ngIf="contractTypeData === contractVerifyType.Verified">
     <div class="button-tab-group">
       <button
         class="button-tab"
@@ -45,21 +63,43 @@
         class="button-tab"
         [class.active]="countCurrent === contractType.ReadContract"
         (click)="changeTab(contractType.ReadContract)">
-          <span class="d-none d-lg-block">Read Contract</span>
-          <span class="d-lg-none">Read</span>
+        <span class="d-none d-lg-block">Read Contract</span>
+        <span class="d-lg-none">Read</span>
       </button>
       <button
         class="button-tab"
         [class.active]="countCurrent === contractType.WriteContract"
         (click)="changeTab(contractType.WriteContract)">
-          <span class="d-none d-lg-block">Write Contract</span>
-          <span class="d-lg-none">Write</span>
+        <span class="d-none d-lg-block">Write Contract</span>
+        <span class="d-lg-none">Write</span>
       </button>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="contractTypeData === contractVerifyType.VerifiedFail">
+    <div class="d-flex fw-500 content-contract">
+      <img
+        [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+        alt=""
+        width="16"
+        height="16"
+        class="mr-2" />
+      <div>
+        Are you the contract creator?
+        <span class="text--primary fw-500 ml-1 mr-1 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
+          Verify and Publish
+        </span>
+        your contract source code today!
+      </div>
+    </div>
+    <div class="mt-4 mt-lg-6">
+      Let check the status of the last time this Code ID source code was unable to Verify and Publish
+    </div>
+    <app-contract-verify-steps [codeID]="contractDetail.code_id"></app-contract-verify-steps>
+  </ng-container>
 </div>
 <div class="mt-4 mt-lg-8">
-  <ng-container *ngIf="contractDetail">
+  <ng-container *ngIf="contractDetail && contractTypeData === contractVerifyType.Verified">
     <app-code-contract
       *ngIf="countCurrent === contractType.Code"
       [contractDetailData]="contractDetail"></app-code-contract>

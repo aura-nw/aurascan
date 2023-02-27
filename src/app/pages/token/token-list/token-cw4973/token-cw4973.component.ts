@@ -40,7 +40,7 @@ export class TokenCw4973Component implements OnInit {
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
   searchSubject = new Subject();
-  deptroy$ = new Subject();
+  destroy$ = new Subject();
 
   constructor(
     public translate: TranslateService,
@@ -55,7 +55,7 @@ export class TokenCw4973Component implements OnInit {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         this.getTokenData();
       });
@@ -63,8 +63,8 @@ export class TokenCw4973Component implements OnInit {
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
-    this.deptroy$.next();
-    this.deptroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onKeyUp() {
