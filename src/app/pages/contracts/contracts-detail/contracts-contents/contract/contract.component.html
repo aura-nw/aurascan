@@ -40,11 +40,9 @@
         </div>
         <div>
           Kindly click
-          <a
-            class="text--primary fw-500 cursor-pointer"
-            [routerLink]="['/contracts/verify', contractAddress, contractDetail.code_id]">
+          <span class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify(contractDetail.code_id)">
             here
-          </a>
+          </span>
           for more detail
         </div>
       </div>
