@@ -52,7 +52,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
   searchSubject = new Subject();
-  deptroy$ = new Subject();
+  destroy$ = new Subject();
 
   constructor(
     public translate: TranslateService,
@@ -63,8 +63,8 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
-    this.deptroy$.next();
-    this.deptroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
@@ -72,7 +72,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         this.pageChange.selectPage(0);
       });

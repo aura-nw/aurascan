@@ -1,43 +1,16 @@
-<h1 class="mb-4 mb-lg-6 text--white">Contracts</h1>
 <div class="d-lg-flex align-items-center justify-content-between">
-  <div class="filter-group d-flex align-items-center flex-nowrap">
-    <button
-      class="button button-pill button-flat"
-      [class.active]="filterButtons.length === 0"
-      (click)="filterButton('All')">
-      All types
-    </button>
-    <button
-      class="button button-pill button-flat"
-      [class.active]="filterButtons.includes(contractRegisterType.CW20)"
-      (click)="filterButton(contractRegisterType.CW20)">
-      CW-20
-    </button>
-    <button
-      class="button button-pill button-flat"
-      [class.active]="filterButtons.includes(contractRegisterType.CW721)"
-      (click)="filterButton(contractRegisterType.CW721)">
-      CW-721
-    </button>
-    <button
-      class="button button-pill button-flat"
-      [class.active]="filterButtons.includes(contractRegisterType.CW4973)"
-      (click)="filterButton(contractRegisterType.CW4973)">
-      CW-4973
-    </button>
-    <button
-      class="button button-pill button-flat"
-      [class.active]="filterButtons.includes('')"
-      (click)="filterButton('')">
-      Others
-    </button>
+  <div>
+    <h1 class="mb-0 text--white">Code IDs</h1>
+    <div class="text--gray-5 body-02 d-none d-lg-block">
+      A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
+    </div>
   </div>
   <form class="aura-form single-input-field search-form contract-search-form d-none d-lg-block">
     <div class="input-group px-6">
       <input
         type="text"
         class="form-control pl-0"
-        placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
+        placeholder="Search for Code ID/ Contract address/ Owner"
         [(ngModel)]="textSearch"
         [maxLength]="maxLengthSearch"
         (keyup)="onKeyUp()"
@@ -57,15 +30,15 @@
 </div>
 
 <section>
-  <ng-container>
+  <ng-container *ngIf="pageData?.length > 0; else noValues">
     <div class="card mt-4 mt-lg-6">
       <div class="card-body">
-        <div>
+        <div class="d-lg-none">
           <div class="d-flex justify-content-between align-items-center" *ngIf="!searchMobVisible">
-            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0 mb-lg-6">
+            <div class="text--gray-5 caption-mob fw-normal-mob flex-shrink-0">
               A total of {{ pageData?.length | number }} Contract{{ pageData?.length > 1 ? 's' : '' }} found
             </div>
-            <button class="button d-lg-none">
+            <button class="button">
               <img
                 [src]="'assets/icons/icons-svg/white/search.svg' | imageS3"
                 alt=""
@@ -79,22 +52,19 @@
               <input
                 type="text"
                 class="form-control pl-0"
-                placeholder="Search for Contract Name/ Address/ Creator address/ Code ID"
+                placeholder="Search for Code ID/ Contract address/ Owner"
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
                 (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
-              <button
-                type="reset"
-                class="btn-reset cursor-pointer"
-                (click)="resetFilterSearch(); searchMobVisible = false">
+              <button type="reset" class="btn-reset cursor-pointer" (click)="textSearch = ''; searchMobVisible = false">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
           </form>
         </div>
-        <div class="table-responsive aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-0">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -102,66 +72,56 @@
                   <div [innerHTML]="template.headerCellDef | translate" [style.width]="'180px'"></div>
                 </th>
                 <td mat-cell *matCellDef="let data">
-                  <ng-container
-                    *ngIf="template.isUrl && template.isShort && template.matColumnDef === 'contract_address'">
+                  <ng-container *ngIf="template.matColumnDef === 'code_id'">
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['contract_verification'] === contractVerifyType.Verified"
+                          *ngIf="data['result']"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
-                          alt="contract_verification"
+                          alt="result"
                           width="16px"
                           height="16px" />
                       </div>
                       <a
                         [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                         [class.disabled-link]="!data[template.matColumnDef]">
-                        {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                        {{ data[template.matColumnDef] }}
                       </a>
                     </div>
                   </ng-container>
-                  <ng-container
-                    *ngIf="template.isUrl && template.isShort && template.matColumnDef !== 'contract_address'">
+                  <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                     <a
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                       [class.disabled-link]="!data[template.matColumnDef]">
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}
                     </a>
                   </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'contract_verification'">
-                    <div
-                      class="d-flex align-items-center ml-1"
-                      *ngIf="data[template.matColumnDef] === contractVerifyType.Verified">
-                      <span>{{ data['verified_at'] | customDate : 'yyyy-MM-dd' }}</span>
-                      <div class="divider divider-vertical divider-lighter mx-2"></div>
-                      <span>{{ data['verified_at'] | customDate : 'HH:mm:ss' }}</span>
+                  <ng-container *ngIf="template.matColumnDef === 'creator'">
+                    <a
+                      [routerLink]="[template.isUrl, data[template.matColumnDef]]"
+                      [class.disabled-link]="!data[template.matColumnDef]">
+                      {{ shortenAddress(data[template.matColumnDef]) || '-' }}
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'type'">
+                    <div>{{ data[template.matColumnDef] }}</div>
+                    <span *ngIf="!data['type']">-</span>
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'instantiates'">
+                    <div>{{ data[template.matColumnDef] }}</div>
+                  </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'created_at'">
+                    <div class="d-flex align-items-center ml-1">
+                      <span>{{ data['created_at'] | customDate : 'yyyy-MM-dd HH:mm:ss' }}</span>
                     </div>
-                    <div *ngIf="data[template.matColumnDef] !== contractVerifyType.Verified">-</div>
                   </ng-container>
-                  <ng-container *ngIf="template.matColumnDef === 'contract_name'">
-                    {{ (data[template.matColumnDef] | cutStringPipe : 16) || '-' }}
-                  </ng-container>
-                  <!-- <ng-container *ngIf="template.matColumnDef === 'project_name'">
-                    <a [routerLink]="['/project', data.request_id]" class="g-ellipsis-project">{{
-                      data[template.matColumnDef]
-                    }}</a>
-                  </ng-container> -->
-                  <ng-container
-                    *ngIf="
-                      (!template.isUrl || data[template.matColumnDef] === '') &&
-                      template.matColumnDef !== 'contract_verification' &&
-                      template.matColumnDef !== 'contract_name' &&
-                      template.matColumnDef !== 'project_name'
-                    ">
-                    <ng-container [ngSwitch]="template.matColumnDef">
-                      <ng-container *ngSwitchDefault>
-                        {{
-                          (template.isShort
-                            ? shortenAddress(data[template.matColumnDef])
-                            : data[template.matColumnDef]) || '-'
-                        }}
-                      </ng-container>
-                    </ng-container>
+                  <ng-container *ngIf="template.matColumnDef === 'verified_at'">
+                    <div class="d-flex align-items-center ml-1">
+                      <span *ngIf="data['verified_at']">{{
+                        data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'
+                      }}</span>
+                      <span *ngIf="!data['verified_at']">-</span>
+                    </div>
                   </ng-container>
                 </td>
               </ng-container>

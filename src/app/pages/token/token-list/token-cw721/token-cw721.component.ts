@@ -45,7 +45,7 @@ export class TokenCw721Component implements OnInit {
   sortOrder = 'desc';
   isSorting = true;
   searchSubject = new Subject();
-  deptroy$ = new Subject();
+  destroy$ = new Subject();
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
@@ -61,7 +61,7 @@ export class TokenCw721Component implements OnInit {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         this.pageChange.selectPage(0);
       });
@@ -69,8 +69,8 @@ export class TokenCw721Component implements OnInit {
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
-    this.deptroy$.next();
-    this.deptroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getTokenData() {
