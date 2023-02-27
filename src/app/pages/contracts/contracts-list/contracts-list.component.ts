@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
@@ -46,6 +46,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   filterButtons = [];
   searchSubject = new Subject();
   deptroy$ = new Subject();
+  contractRegisterType = ContractRegisterType;
 
   constructor(
     public translate: TranslateService,
@@ -136,9 +137,9 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           this.filterButtons = [];
         }
         break;
-      case 'CW20':
-      case 'CW721':
-      case 'CW4973':
+      case ContractRegisterType.CW20:
+      case ContractRegisterType.CW721:
+      case ContractRegisterType.CW4973:
       case '': //Others
       default:
         if (i >= 0) {
@@ -147,7 +148,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           this.filterButtons.push(val);
         }
     }
-    this.getListContract();
     this.pageChange.selectPage(0);
   }
 }
