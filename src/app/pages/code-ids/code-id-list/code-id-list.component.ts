@@ -24,7 +24,6 @@ export class CodeIdListComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   showBoxSearch = false;
   searchMobVisible = false;
-  filterButtons = [];
   searchSubject = new Subject();
   destroy$ = new Subject();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
@@ -69,6 +68,7 @@ export class CodeIdListComponent implements OnInit {
       };
       if (res?.data?.length > 0) {
         this.dataSource.data = res.data;
+        this.pageData.length = res?.meta?.count;
       }
     });
   }
@@ -85,7 +85,6 @@ export class CodeIdListComponent implements OnInit {
 
   pageEvent(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
-    this.textSearch = '';
     this.showBoxSearch = false;
     this.getListCodeIds();
   }
