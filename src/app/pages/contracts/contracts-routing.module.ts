@@ -16,7 +16,7 @@ const routes: Routes = [
     component: ContractsRegisterComponent,
   },
   {
-    path: 'verify/:addressId/:code_id',
+    path: 'verify/:code_id',
     component: ContractsVerifyComponent,
   },
   {

@@ -17,6 +17,7 @@ export enum MenuName {
   Account = 'Account',
   BlockChain = 'Block chain',
   Resources = 'Resources',
+  CodeList = 'Code IDs',
   More = 'More',
 }
 
@@ -105,6 +106,13 @@ export const MENU: MenuItem[] = [
         icon: 'newspaper',
         link: '/contracts',
         name: MenuName.Contract,
+      },
+      {
+        id: 2,
+        label: 'MENUITEMS.CODE-LIST',
+        icon: 'code-simple',
+        link: '/code-ids/list',
+        name: MenuName.CodeList,
       },
     ],
   },
@@ -247,13 +255,20 @@ export const MENU_MOB: MenuItem[] = [
       },
       {
         id: 2,
+        label: 'MENUITEMS.CODE-LIST',
+        icon: 'code-simple',
+        link: '/code-ids/list',
+        name: MenuName.CodeList,
+      },
+      {
+        id: 3,
         label: 'MENUITEMS.CHART-STATS',
         link: '/statistics/charts-stats',
         name: MenuName.ChartStats,
         icon: 'line-segments',
       },
       {
-        id: 3,
+        id: 4,
         label: 'MENUITEMS.TOP-STATISTICS',
         link: '/statistics/top-statistic',
         name: MenuName.TopStatistics,

@@ -50,6 +50,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/contracts/contracts.module').then((m) => m.ContractsModule),
   },
   {
+    path: 'code-ids',
+    component: LayoutComponent,
+    loadChildren: () => import('./pages/code-ids/code-ids.module').then((m) => m.CodeIdsModule),
+  },
+  {
     path: 'raw-data',
     loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
     pathMatch: 'full',
@@ -64,7 +69,8 @@ const routes: Routes = [
   {
     path: 'accountbound',
     component: LayoutComponent,
-    loadChildren: () => import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule) },
+    loadChildren: () => import('./pages/soulbound-token/soulbound-token.module').then((m) => m.SoulboundTokenModule),
+  },
   { path: '**', redirectTo: '' },
 ];
 
