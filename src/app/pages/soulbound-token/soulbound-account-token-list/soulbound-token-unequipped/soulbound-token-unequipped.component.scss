@@ -32,6 +32,7 @@
     app-audio-player,
     app-custom-video-player {
       height: 153px;
+      width: 100%;
       @media (min-width: 991.98px) {
         height: 231px;
       }

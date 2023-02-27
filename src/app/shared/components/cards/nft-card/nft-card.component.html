@@ -1,17 +1,28 @@
 <div class="nft-cards__img">
   <a href="{{ nftLink }}">
-    <img *ngIf="!nftType || isError" [src]="defaultImgToken" alt="" />
-    <img *ngIf="nftType === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="this.nftUrl" alt="" />
+    <img
+      *ngIf="(getTypeFile(nftItem) !== MEDIA_TYPE.IMG && !nftItem.animation?.link_s3) || isError"
+      [src]="defaultImgToken"
+      alt="" />
+    <img *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="this.nftUrl" alt="" />
   </a>
   <app-custom-video-player
     [videoSrc]="this.nftUrl"
     [showControl]="false"
     [link]="nftLink"
     [nftId]="nftId"
-    *ngIf="nftType === MEDIA_TYPE.VIDEO">
+    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.VIDEO && nftItem.animation?.link_s3">
   </app-custom-video-player>
-  <app-model-view *ngIf="nftType === MEDIA_TYPE._3D" [modelUrl]="this.nftUrl" [link]="nftLink" [disablePan]="true">
+  <app-model-view
+    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE._3D && nftItem.animation?.link_s3"
+    [modelUrl]="this.nftUrl"
+    [link]="nftLink"
+    [disablePan]="true">
   </app-model-view>
-  <app-audio-player *ngIf="nftType === MEDIA_TYPE.AUDIO" [link]="nftLink" [src]="this.nftUrl" [nftId]="nftId">
+  <app-audio-player
+    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.AUDIO && nftItem.animation?.link_s3"
+    [link]="nftLink"
+    [src]="this.nftUrl"
+    [nftId]="nftId">
   </app-audio-player>
 </div>

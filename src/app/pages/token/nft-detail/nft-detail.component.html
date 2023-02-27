@@ -30,16 +30,40 @@
         <div class="nft-img__contain w-100 h-100" (click)="expandMedia()">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
-              <img *ngIf="!nftType && !nftDetail.ipfs?.animation_url" [src]="defaultImgToken" />
-              <img *ngIf="nftType === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="this.nftUrl" />
+              <img
+                *ngIf="
+                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
+                    !(nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)) ||
+                  isError
+                "
+                [src]="defaultImgToken" />
+              <img
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
+                (error)="error()"
+                [src]="this.nftUrl" />
               <video
                 [src]="this.nftUrl"
                 controls
                 controlsList="nodownload "
-                *ngIf="nftType === MEDIA_TYPE.VIDEO"></video>
-              <app-model-view *ngIf="nftType === MEDIA_TYPE._3D" [modelUrl]="this.nftUrl" [disablePan]="false">
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
+                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                "></video>
+              <app-model-view
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
+                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                "
+                [modelUrl]="this.nftUrl"
+                [disablePan]="false">
               </app-model-view>
-              <app-audio-player *ngIf="nftType === MEDIA_TYPE.AUDIO" [src]="this.nftUrl"> </app-audio-player>
+              <app-audio-player
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
+                  (nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url)
+                "
+                [src]="this.nftUrl">
+              </app-audio-player>
             </div>
           </div>
         </div>
