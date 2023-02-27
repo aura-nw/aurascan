@@ -14,7 +14,6 @@ import {
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -331,18 +330,25 @@ export class NFTDetailComponent implements OnInit {
   }
 
   expandMedia(): void {
+    let content;
+    if (this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url) {
+      content = this.nftUrl;
+    } else {
+      content = this.nftDetail?.ipfs?.image ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image) : this.defaultImgToken;
+    }
+
     if (!this.isMobileMatched) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = false;
       dialogConfig.panelClass = 'transparent-dialog';
       dialogConfig.data = {
         mediaType: this.getTypeFile(this.nftDetail),
-        mediaSrc: this.nftUrl,
+        mediaSrc: content,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }
   }
-  
+
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
