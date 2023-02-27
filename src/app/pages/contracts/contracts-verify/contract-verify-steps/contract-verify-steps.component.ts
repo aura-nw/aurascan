@@ -45,7 +45,8 @@ export class ContractVerifyStepsComponent implements OnInit {
         className: this.getClassName(dta.result),
       }));
 
-      this.currentStep = this.steps.find((dta) => dta.result !== 'Success')?.check_id || 0;
+      const stepTemp = this.steps.find((dta) => dta.result !== 'Success')?.check_id;
+      this.currentStep = stepTemp - 1 > 0 ? stepTemp - 1 : 0;
     });
   }
 
