@@ -148,16 +148,13 @@ export class SoulboundTokenEquippedComponent implements OnInit {
     });
   }
 
-  handleRouterLink(link): void {
-    window.location.href = link;
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 
-  getTypeFile(nft: any) {
-    let nftType = '';
-    if (nft.animation_url) {
-      nftType = checkTypeFile(nft);
-    }
-    return nftType;
+  handleRouterLink(link): void {
+    window.location.href = link;
   }
 
   error(): void {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
@@ -18,6 +19,7 @@ import { Globals } from '../../../../global/global';
   styleUrls: ['./token-cw20.component.scss'],
 })
 export class TokenCw20Component implements OnInit, OnDestroy {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
@@ -72,7 +74,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.getListToken();
+        this.pageChange.selectPage(0);
       });
   }
 

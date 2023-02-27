@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
+import { checkTypeFile } from 'src/app/core/utils/common/info-common';
 
 @Component({
   selector: 'app-nft-card',
@@ -33,5 +34,10 @@ export class NftCardComponent implements OnInit {
 
   error(): void {
     this.isError = true;
+  }
+
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }

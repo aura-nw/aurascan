@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,6 +9,7 @@ import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
@@ -18,9 +19,8 @@ import { Globals } from '../../../../global/global';
   styleUrls: ['./token-cw721.component.scss'],
 })
 export class TokenCw721Component implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
-  filterSearchData = [];
-  dataSearch: any;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
@@ -36,7 +36,6 @@ export class TokenCw721Component implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  sortedData: any;
   sort: MatSort;
   typeSortBy = {
     transfers24h: 'transfers_24h',
@@ -64,7 +63,7 @@ export class TokenCw721Component implements OnInit {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.getTokenData();
+        this.pageChange.selectPage(0);
       });
   }
 
