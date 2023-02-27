@@ -68,7 +68,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
       .subscribe(() => {
-        this.getListContract();
         this.pageChange.selectPage(0);
       });
   }
@@ -101,7 +100,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           }
         });
         this.dataSource = res.data;
-        this.pageData.length = res?.meta?.count;
       }
     });
   }
