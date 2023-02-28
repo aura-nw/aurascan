@@ -14,7 +14,7 @@ export class ContractVerifyStepsComponent implements OnInit {
   @Output() isVerifyFail = new EventEmitter<boolean>();
   @Output() isVerifySuccess = new EventEmitter<boolean>();
 
-  currentStep = 1;
+  currentStep = 0;
   steps = [];
   currentCode = 0;
 

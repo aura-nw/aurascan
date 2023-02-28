@@ -45,7 +45,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   filterButtons = [];
   searchSubject = new Subject();
-  deptroy$ = new Subject();
+  destroy$ = new Subject();
   contractRegisterType = ContractRegisterType;
 
   constructor(
@@ -58,8 +58,8 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
-    this.deptroy$.next();
-    this.deptroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
@@ -67,7 +67,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
     this.searchSubject
       .asObservable()
-      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.deptroy$))
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
         this.pageChange.selectPage(0);
       });
