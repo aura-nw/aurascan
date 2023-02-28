@@ -30,7 +30,7 @@
 </div>
 
 <section>
-  <ng-container *ngIf="pageData?.length > 0; else noValues">
+  <ng-container>
     <div class="card mt-4 mt-lg-6">
       <div class="card-body">
         <div class="d-lg-none">
@@ -64,7 +64,7 @@
             </div>
           </form>
         </div>
-        <div class="table-responsive aura-table-contain mt-4 mt-lg-0">
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-0"  *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
