@@ -114,6 +114,7 @@
                           height="16px" />
                       </div>
                       <a
+                        class="text--primary"
                         [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                         [class.disabled-link]="!data[template.matColumnDef]">
                         {{ shortenAddress(data[template.matColumnDef]) || '-' }}
@@ -123,6 +124,7 @@
                   <ng-container
                     *ngIf="template.isUrl && template.isShort && template.matColumnDef !== 'contract_address'">
                     <a
+                      class="text--primary"
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                       [class.disabled-link]="!data[template.matColumnDef]">
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}

@@ -20,6 +20,7 @@ export class ContractsVerifyComponent implements OnInit {
   loading = true;
   isExitCode = false;
   isVerifyFail = false;
+  isVerifySuccess = false;
 
   @ViewChild('version') versionSelect: any;
 
