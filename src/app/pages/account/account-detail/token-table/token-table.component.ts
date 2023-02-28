@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
@@ -23,7 +23,6 @@ export class TokenTableComponent implements OnChanges {
 
   math = Math;
   textSearch = '';
-  searchTemp: string = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'asset', headerCellDef: 'asset' },
     { matColumnDef: 'symbol', headerCellDef: 'symbol' },
@@ -42,13 +41,9 @@ export class TokenTableComponent implements OnChanges {
   };
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  sortedData: any;
-  sort: MatSort;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  currentBalance = 0;
   assetsLoading = true;
   total = 0;
-  stableTokenName = 'Aura';
   pageEvent: any;
   paginator: MatPaginator;
 

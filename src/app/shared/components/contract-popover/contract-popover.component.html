@@ -4,27 +4,27 @@
     <div class="small-body fw-semibold pb-1">Status:</div>
 
     <div
-        class="small-body d-flex align-items-center gap-2"
-        [class.text--active]="popoverData?.code == codeTransaction.Success"
-        [class.text--danger]="popoverData?.code != codeTransaction.Success">
+      class="small-body d-flex align-items-center gap-2"
+      [class.text--active]="popoverData?.code == codeTransaction.Success"
+      [class.text--danger]="popoverData?.code != codeTransaction.Success">
       <img
-          width="16px"
-          alt="{{ popoverData.code }}"
-          [src]="
+        width="16px"
+        alt="{{ popoverData.code }}"
+        [src]="
           popoverData?.code == codeTransaction.Success
             ? ('assets/icons/icons-svg/color/check-circle-2.svg' | imageS3)
             : ('assets/icons/icons-svg/color/fail.svg' | imageS3)
-        "/>
+        " />
       {{ popoverData?.status }}
     </div>
-    <hr/>
+    <hr />
     <div class="d-flex flex-column gap-2 small-body">
       <ng-container *ngIf="popoverData?.nftDetail === undefined">
         <div>Token Transfer</div>
         <div>
-          <img class="d-inline" width="20px" [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="aura"/>
-          {{ popoverData?.amount | mask: 'separator.6' }}
-          (${{ popoverData?.amount * popoverData?.price || 0 | number: FORMAT.PRICE_2 }})
+          <img class="d-inline" width="20px" [src]="'assets/icons/icons-svg/color/aura.svg' | imageS3" alt="aura" />
+          {{ popoverData?.amount | mask : 'separator.6' }}
+          (${{ popoverData?.amount * popoverData?.price || 0 | number : FORMAT.PRICE_2 }})
           <a class="text--primary" [routerLink]="['/tokens/token', popoverData.tokenAddress]">
             {{ popoverData.symbol }}
           </a>
@@ -32,7 +32,7 @@
         <div>
           <span class="text--light-gray mr-1 ml-sm-1">From</span>
           <span [innerHTML]="popoverData['from_address_convert']"></span>
-          <br class="d-sm-none"/>
+          <br class="d-sm-none" />
           <span class="text--light-gray mr-1 ml-sm-1">To</span>
           <span [innerHTML]="popoverData['to_address_convert']"></span>
         </div>
@@ -43,17 +43,17 @@
           <div class="text--light-gray mr-1">
             Transfer of
             <img
-                [src]="popoverData['image'] || defaultLogoToken"
-                width="24px"
-                height="24px"
-                class="mr-1 object-fit--none"/>
+              [src]="popoverData['image'] || defaultLogoToken"
+              width="24px"
+              height="24px"
+              class="mr-1 object-fit--none" />
             <a class="text--primary" [routerLink]="['/tokens/token-nft', popoverData?.nftDetail?.contract_address]"
-            >({{ popoverData?.nftDetail?.name }})</a
+              >({{ popoverData?.nftDetail?.name }})</a
             >
             From
           </div>
           <span [innerHTML]="popoverData['from_address_convert']"></span>
-          <br class="d-sm-none"/>
+          <br class="d-sm-none" />
           <span class="text--light-gray mr-1 ml-sm-1">To</span>
           <span [innerHTML]="popoverData['to_address_convert']"></span>
         </div>
@@ -63,40 +63,41 @@
             href="/tokens/token-nft/{{ popoverData?.nftDetail?.contract_address }}?a={{
               popoverData?.nftDetail?.token_id
             }}"
-        >{{ popoverData?.nftDetail?.token_id }}</a>]
+            >{{ popoverData?.nftDetail?.token_id }}</a
+          >]
         </div>
       </ng-container>
     </div>
 
-    <hr/>
+    <hr />
 
     <div class="d-flex flex-column gap-2 small-body">
       <div>Transaction Fee:</div>
       <div class="text--contract">
-        {{ popoverData.fee | mask: 'separator.6' }} {{ denom }} (${{
-          popoverData?.fee * popoverData?.price || 0 | number: FORMAT.PRICE_2
+        {{ popoverData.fee | mask : 'separator.6' }} {{ denom }} (${{
+          popoverData?.fee * popoverData?.price || 0 | number : FORMAT.PRICE_2
         }})
       </div>
     </div>
-    <hr/>
+    <hr />
 
     <div class="d-flex flex-column gap-2 small-body">
       <div>Gas info:</div>
       <div class="text--contract">
-        {{ popoverData.gas_used | mask: 'separator' }} Gas Used From
-        {{ popoverData.gas_wanted | mask: 'separator' }} Gas Limit<br/>
-        {{ popoverData['gasPrice'] | mask: 'separator.6' }} {{ denom }} ({{
-          popoverData['gasPriceU'] | mask: 'separator.6'
+        {{ popoverData.gas_used | mask : 'separator' }} Gas Used From
+        {{ popoverData.gas_wanted | mask : 'separator' }} Gas Limit<br />
+        {{ popoverData['gasPrice'] | mask : 'separator.6' }} {{ denom }} ({{
+          popoverData['gasPriceU'] | mask : 'separator.6'
         }}
         {{ coinMinimalDenom }})
       </div>
     </div>
-    <hr/>
+    <hr />
     <a
-        class="small-text text--primary cursor-pointer d-flex align-items-center gap-2"
-        [routerLink]="['/transaction', popoverData?.tx_hash]"
-        target="_blank">
-      See more details <img class="d-inline" [src]="'assets/icons/icons-svg/color/share.svg' | imageS3" alt="share"/>
+      class="small-text text--primary cursor-pointer d-flex align-items-center gap-2"
+      [routerLink]="['/transaction', popoverData?.tx_hash]"
+      target="_blank">
+      See more details <img class="d-inline" [src]="'assets/icons/icons-svg/color/share.svg' | imageS3" alt="share" />
     </a>
   </div>
 </div>

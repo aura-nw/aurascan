@@ -35,7 +35,7 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     private dialog: MatDialog,
     private walletService: WalletService,
     private router: ActivatedRoute,
-    private contractService: ContractService
+    private contractService: ContractService,
   ) {}
 
   ngOnInit(): void {
@@ -61,9 +61,8 @@ export class SoulboundFeatureTokensComponent implements OnInit {
 
   getSBTPick() {
     let address = this.accountAddress || this.userAddress;
-
     const payload = {
-      receiverAddress: (address),
+      receiverAddress: address,
       limit: LIMIT_NUM_SBT,
     };
 
