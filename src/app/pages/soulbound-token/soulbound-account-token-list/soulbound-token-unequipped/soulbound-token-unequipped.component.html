@@ -48,11 +48,15 @@
             <div class="nft-cards__item-border">
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
-                  <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
+                  <img
+                    *ngIf="(!token.animation_url && getTypeFile(token) !== MEDIA_TYPE.IMG) || isError"
+                    [src]="commonService.getDefaultImg()"
+                    alt="" />
                   <img
                     *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
+                    (error)="error()"
                     src="{{
-                      (token.animation_url || token.token_img)
+                      token.animation_url || token.token_img
                         ? (token.animation_url || token.token_img | replaceIpfs)
                         : commonService.getDefaultImg()
                     }}"
@@ -61,16 +65,16 @@
                     [videoSrc]="token.animation_url | replaceIpfs"
                     [showControl]="false"
                     [nftId]="'nft#' + i"
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url">
                   </app-custom-video-player>
                   <app-model-view
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE._3D"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE._3D && token.animation_url"
                     [modelUrl]="token.animation_url | replaceIpfs"
                     [link]=""
                     [disablePan]="true">
                   </app-model-view>
                   <app-audio-player
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO && token.animation_url"
                     [link]="'#'"
                     [src]="token.animation_url | replaceIpfs"
                     [nftId]="'nft#' + i"

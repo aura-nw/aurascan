@@ -43,6 +43,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   walletAddress = null;
   network = this.environmentService.configValue.chain_info;
   seachValue = '';
+  isError = false;
 
   constructor(
     private soulboundService: SoulboundService,
@@ -154,5 +155,9 @@ export class SoulboundTokenEquippedComponent implements OnInit {
 
   handleRouterLink(link): void {
     window.location.href = link;
+  }
+
+  error(): void {
+    this.isError = true;
   }
 }
