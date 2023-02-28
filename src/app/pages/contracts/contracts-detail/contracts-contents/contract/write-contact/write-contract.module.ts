@@ -10,7 +10,15 @@ import { WriteContractComponent } from './write-contract.component';
 
 @NgModule({
   declarations: [WriteContractComponent],
-  imports: [CommonModule, CommonPipeModule, TableNoDataModule, MatExpansionModule, RouterModule, FormsModule, SharedModule],
+  imports: [
+    CommonModule,
+    CommonPipeModule,
+    TableNoDataModule,
+    MatExpansionModule,
+    RouterModule,
+    FormsModule,
+    SharedModule,
+  ],
   exports: [WriteContractComponent],
 })
 export class WriteContractModule {}

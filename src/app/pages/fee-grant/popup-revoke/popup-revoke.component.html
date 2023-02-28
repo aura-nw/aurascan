@@ -16,23 +16,10 @@
     <div class="body-03 text--gray-1 mt-2">{{ data?.granteeAddress || '' }}</div>
 
     <div class="mt-6 d-flex align-items-center justify-content-end">
-      <button
-        type="button"
-        class="button button--md button-pill button-outline mr-4"
-        (click)="closeDialog()">
+      <button type="button" class="button button--md button-pill button-outline mr-4" (click)="closeDialog()">
         <span>Cancel</span>
       </button>
-      <button
-        type="button"
-        class="button button--md button-pill button-flat d-flex"
-        (click)="executeRevoke()">
-        <img
-          class="mr-2"
-          [src]="'assets/icons/icons-svg/color/spinner.svg' | imageS3"
-          alt=""
-          width="20"
-          height="20"
-          *ngIf="isLoading" />
+      <button type="button" class="button button--md button-pill button-flat d-flex" (click)="executeRevoke()">
         <span>Revoke</span>
       </button>
     </div>

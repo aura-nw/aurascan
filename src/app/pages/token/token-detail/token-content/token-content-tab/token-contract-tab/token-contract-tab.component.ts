@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -18,7 +17,7 @@ export class TokenContractTabComponent implements OnInit {
   tokenDetail: any;
   contractVerifyType = ContractVerifyType;
 
-  constructor(private tokenService: TokenService, private route: ActivatedRoute) {}
+  constructor(private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.getContractDetail();

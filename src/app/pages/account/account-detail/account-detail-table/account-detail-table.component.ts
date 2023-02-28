@@ -1,15 +1,14 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { CommonService } from '../../../../core/services/common.service';
-import { TableTemplate } from '../../../../core/models/common.model';
-import { Globals } from '../../../../global/global';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { PageEventType } from '../../../../../app/core/constants/account.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { STATUS_VALIDATOR } from 'src/app/core/constants/validator.enum';
+import { PageEventType } from '../../../../../app/core/constants/account.enum';
+import { TableTemplate } from '../../../../core/models/common.model';
+import { CommonService } from '../../../../core/services/common.service';
+import { Globals } from '../../../../global/global';
 
 @Component({
   selector: 'app-account-detail-table',
@@ -28,10 +27,7 @@ export class AccountDetailTableComponent implements OnInit, OnChanges, AfterView
   pageType = PageEventType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
   currentPage = 0;
-  statusValidator = STATUS_VALIDATOR;
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
-
   dataSourceMobile: any[];
 
   constructor(
