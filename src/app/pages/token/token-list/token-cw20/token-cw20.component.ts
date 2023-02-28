@@ -60,7 +60,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
-  
+
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
     this.destroy$.next();
@@ -74,7 +74,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.pageChange.selectPage(0);
+        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
+          this.getListToken();
+        } else {
+          this.pageChange.selectPage(0);
+        }
       });
   }
 
@@ -154,15 +158,15 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
     }
 
-    if (sort.active === 'holders') {
-      let lstUp = this.sortedData
-        .filter((data) => data.isValueUp)
-        ?.sort((a, b) => this.compare(a.holders, b.holders, isAsc));
-      let lstDown = this.sortedData
-        .filter((data) => !data.isValueUp)
-        .sort((a, b) => this.compare(a.holders, b.holders, !isAsc));
-      this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
-    }
+    // if (sort.active === 'holders') {
+    //   let lstUp = this.sortedData
+    //     .filter((data) => data.isValueUp)
+    //     ?.sort((a, b) => this.compare(a.holders, b.holders, isAsc));
+    //   let lstDown = this.sortedData
+    //     .filter((data) => !data.isValueUp)
+    //     .sort((a, b) => this.compare(a.holders, b.holders, !isAsc));
+    //   this.sortedData = isAsc ? lstDown.concat(lstUp) : lstUp.concat(lstDown);
+    // }
 
     let dataFilter = this.sortedData;
     this.pageData = {

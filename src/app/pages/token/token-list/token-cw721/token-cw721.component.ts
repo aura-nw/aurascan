@@ -63,7 +63,11 @@ export class TokenCw721Component implements OnInit {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.pageChange.selectPage(0);
+        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
+          this.getTokenData();
+        } else {
+          this.pageChange.selectPage(0);
+        }
       });
   }
 
