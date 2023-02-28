@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { Globals } from 'src/app/global/global';
@@ -25,7 +24,7 @@ export class SoulboundTokenComponent implements OnInit {
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   paginator: MatPaginator;
 
-  constructor(private router: Router, public global: Globals) {}
+  constructor(public global: Globals) {}
 
   ngOnInit(): void {
     this.getNftData();

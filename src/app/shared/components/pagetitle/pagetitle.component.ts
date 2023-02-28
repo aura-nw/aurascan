@@ -4,14 +4,13 @@ import { Globals } from '../../../global/global';
 @Component({
   selector: 'app-pagetitle',
   templateUrl: './pagetitle.component.html',
-  styleUrls: ['./pagetitle.component.scss']
+  styleUrls: ['./pagetitle.component.scss'],
 })
 
 /**
  * Page Title Component
  */
 export class PagetitleComponent implements OnInit {
-
   @Input()
   breadcrumbItems!: Array<{
     active?: boolean;
@@ -21,8 +20,7 @@ export class PagetitleComponent implements OnInit {
   @Input() title: string | undefined;
   @Input() displayInfo: boolean = false;
 
-  constructor(public global: Globals) { }
+  constructor(public global: Globals) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

@@ -62,39 +62,41 @@ export class TokenHoldersTabComponent implements OnInit {
     if (this.typeContract !== ContractRegisterType.CW20) {
       this.getQuantity();
     } else {
-      this.getListTokenHolder(this.tokenType);
+      this.getListTokenHolder();
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
   }
 
-  getListTokenHolder(tokenType: string) {
+  getListTokenHolder() {
     this.loading = true;
-    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe((res) => {
-      if (res && res.data?.resultAsset?.length > 0) {
-        this.totalHolder = res.data?.resultCount;
-        if (this.totalHolder > this.numberTopHolder) {
-          this.pageData.length = this.numberTopHolder;
-        } else {
-          this.pageData.length = this.totalHolder;
-        }
+    this.tokenService
+      .getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress)
+      .subscribe((res) => {
+        if (res && res.data?.resultAsset?.length > 0) {
+          this.totalHolder = res.data?.resultCount;
+          if (this.totalHolder > this.numberTopHolder) {
+            this.pageData.length = this.numberTopHolder;
+          } else {
+            this.pageData.length = this.totalHolder;
+          }
 
-        let topHolder = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
-        this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
-        res.data?.resultAsset.forEach((element) => {
-          element['value'] = 0;
-        });
-
-        if (this.totalQuantity) {
-          res.data?.resultAsset.forEach((k) => {
-            k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
-            k['width_chart'] = (k.quantity / this.numberTop) * 100;
+          let topHolder = Math.max(...res.data?.resultAsset.map((o) => o.quantity)) || 1;
+          this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
+          res.data?.resultAsset.forEach((element) => {
+            element['value'] = 0;
           });
+
+          if (this.totalQuantity) {
+            res.data?.resultAsset.forEach((k) => {
+              k['percent_hold'] = (k.quantity / this.totalQuantity) * 100;
+              k['width_chart'] = (k.quantity / this.numberTop) * 100;
+            });
+          }
+          this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
         }
-        this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
-      }
-      this.loading = false;
-    });
+        this.loading = false;
+      });
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -121,7 +123,7 @@ export class TokenHoldersTabComponent implements OnInit {
     try {
       const config = await client.queryContractSmart(this.contractAddress, queryData);
       this.totalQuantity = config?.count || 0;
-      this.getListTokenHolder(this.tokenType);
+      this.getListTokenHolder();
     } catch (error) {}
   }
 }

@@ -14,9 +14,8 @@ import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { EnvironmentService } from '../../../../app/core/data-services/environment.service';
 import { WalletService } from '../../../../app/core/services/wallet.service';
 import local from '../../../../app/core/utils/storage/local';
-import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT, TYPE_ACCOUNT } from '../../../core/constants/account.constant';
+import { ACCOUNT_WALLET_COLOR, TABS_TITLE_ACCOUNT } from '../../../core/constants/account.constant';
 import {
-  ACCOUNT_TYPE_ENUM,
   ACCOUNT_WALLET_COLOR_ENUM,
   PageEventType,
   StakeModeAccount,
@@ -24,7 +23,6 @@ import {
   WalletAcount,
 } from '../../../core/constants/account.enum';
 import { DATE_TIME_WITH_MILLISECOND, PAGE_EVENT } from '../../../core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../core/constants/transaction.constant';
 import { IAccountDetail } from '../../../core/models/account.model';
 import { TableTemplate } from '../../../core/models/common.model';
 import { AccountService } from '../../../core/services/account.service';
@@ -148,16 +146,9 @@ export class AccountDetailComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataSourceMobile: any[];
-
-  typeTransaction = TYPE_TRANSACTION;
   pageEventType = PageEventType;
-  assetsType = TYPE_ACCOUNT;
-  isCopy = false;
-  selected = ACCOUNT_TYPE_ENUM.All;
   searchNullData = false;
   chartCustomOptions = chartCustomOptions;
-  assetCW20: any[] = [];
-  assetCW721: any[] = [];
 
   // loading param check
   transactionLoading = true;

@@ -58,7 +58,7 @@
                 (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
-              <button type="reset" class="btn-reset cursor-pointer" (click)="textSearch = ''; searchMobVisible = false">
+              <button type="reset" class="btn-reset cursor-pointer" (click)="resetFilterSearch(); searchMobVisible = false">
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>

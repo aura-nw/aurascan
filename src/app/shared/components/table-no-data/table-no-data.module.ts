@@ -4,15 +4,8 @@ import { TableNoDataComponent } from './table-no-data.component';
 import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 
 @NgModule({
-  declarations: [
-    TableNoDataComponent
-  ],
-  imports: [
-    CommonModule,
-    CommonPipeModule
-  ],
-  exports: [
-    TableNoDataComponent
-  ]
+  declarations: [TableNoDataComponent],
+  imports: [CommonModule, CommonPipeModule],
+  exports: [TableNoDataComponent],
 })
-export class TableNoDataModule { }
+export class TableNoDataModule {}

@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
@@ -20,9 +19,9 @@ import { Globals } from '../../../../global/global';
 })
 export class TokenCw4973Component implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
+  searchSubject = new Subject();
+  destroy$ = new Subject();
   textSearch = '';
-  filterSearchData = [];
-  dataSearch: any;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
     { matColumnDef: 'token', headerCellDef: 'name' },
@@ -37,19 +36,12 @@ export class TokenCw4973Component implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  enterSearch = '';
-
-  image_s3 = this.environmentService.configValue.image_s3;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-  searchSubject = new Subject();
-  destroy$ = new Subject();
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
     public tokenService: TokenService,
     public soulboundService: SoulboundService,
-    private environmentService: EnvironmentService,
   ) {}
 
   ngOnInit(): void {

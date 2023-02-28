@@ -11,7 +11,6 @@ import { WalletService } from 'src/app/core/services/wallet.service';
   styleUrls: ['./popup-revoke.component.scss'],
 })
 export class PopupRevokeComponent implements OnInit {
-  isLoading = false;
   walletAccount: any;
 
   constructor(

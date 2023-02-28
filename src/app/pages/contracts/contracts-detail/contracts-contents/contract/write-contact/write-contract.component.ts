@@ -23,12 +23,10 @@ export class WriteContractComponent implements OnInit {
   walletAccount: any;
 
   chainInfo = this.environmentService.configValue.chain_info;
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinMinimalDenom = this.environmentService.configValue.chain_info.currencies[0].coinMinimalDenom;
 
   jsValidator = new Validator();
-
   root: any[];
 
   constructor(

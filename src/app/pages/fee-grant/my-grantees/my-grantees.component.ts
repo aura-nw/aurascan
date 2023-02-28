@@ -5,17 +5,15 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { Subject, Subscription } from 'rxjs';
-import { PAGE_EVENT, TIME_OUT_CALL_API } from 'src/app/core/constants/common.constant';
+import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
-import { CodeTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FeeGrantService } from 'src/app/core/services/feegrant.service';
 import { MappingErrorService } from 'src/app/core/services/mapping-error.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
-import { TransactionService } from 'src/app/core/services/transaction.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
 import { Globals } from 'src/app/global/global';
 import { PopupAddGrantComponent } from 'src/app/pages/fee-grant/popup-add-grant/popup-add-grant.component';
@@ -76,7 +74,6 @@ export class MyGranteesComponent implements OnInit {
     private feeGrantService: FeeGrantService,
     private toastr: NgxToastrService,
     public translate: TranslateService,
-    private transactionService: TransactionService,
     private walletService: WalletService,
     private mappingErrorService: MappingErrorService,
   ) {}
