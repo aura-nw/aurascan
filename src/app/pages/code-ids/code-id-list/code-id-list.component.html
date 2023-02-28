@@ -76,13 +76,14 @@
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['result']"
+                          *ngIf="data['verified_at']"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="result"
                           width="16px"
                           height="16px" />
                       </div>
                       <a
+                        class="text--primary"
                         [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                         [class.disabled-link]="!data[template.matColumnDef]">
                         {{ data[template.matColumnDef] }}
@@ -91,6 +92,7 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'tx_hash'">
                     <a
+                      [class.text--primary]="data[template.matColumnDef]"
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                       [class.disabled-link]="!data[template.matColumnDef]">
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}
@@ -98,6 +100,7 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'creator'">
                     <a
+                      [class.text--primary]="data[template.matColumnDef]"
                       [routerLink]="[template.isUrl, data[template.matColumnDef]]"
                       [class.disabled-link]="!data[template.matColumnDef]">
                       {{ shortenAddress(data[template.matColumnDef]) || '-' }}

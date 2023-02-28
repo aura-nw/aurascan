@@ -3,7 +3,7 @@
   <div *ngIf="loading">
     <app-loading-sprint></app-loading-sprint>
   </div>
-  <div  *ngIf="!loading">
+  <div *ngIf="!loading">
     <ng-container *ngIf="contractStatus === contractVerifyType.Unverified">
       <div class="d-flex content-contract body-02">
         <img
@@ -68,19 +68,23 @@
         <div class="ml-2">Code ID Verified</div>
       </div>
       <div class="mt-6 fw-semibold">
-        <span class="gray-5">Compiler Version: </span>
+        <span class="text--gray-5">Compiler Version: </span>
         <span>{{ codeIdDetail.compiler_version }}</span>
       </div>
-      <div class="d-flex fw-semibold mt-6">
+      <div class="mt-2 fw-semibold" *ngIf="codeIdDetail.verified_at">
+        <span class="text--gray-5">Verified Time: </span>
+        <span>{{ codeIdDetail.verified_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</span>
+      </div>
+      <div class="d-flex mt-6">
         <i class="icon icon-file-document text--gray-4"></i>
-        <div class="ml-2">Link Code ID source code</div>
+        <div class="ml-2 fw">Link Code ID source code</div>
       </div>
 
       <div class="form-group mt-4 d-flex align-items-center">
         <input
           id="popupCopy"
           type="text"
-          class="form-control form-check-input body mt-0"
+          class="form-control form-check-input body mt-0 text--gray-1"
           readonly
           value="{{ codeIdDetail.url }}" />
         <button
@@ -90,7 +94,7 @@
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
           (click)="copyData(codeIdDetail.url); tooltip2.toggle()">
-          <span>Copy</span>
+          <span class="body">Copy</span>
         </button>
       </div>
     </ng-container>

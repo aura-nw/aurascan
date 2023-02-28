@@ -1,4 +1,4 @@
-<app-pagetitle title="Code IDs" [displayInfo]="false"></app-pagetitle>
+<app-pagetitle title="Code ID Details" [displayInfo]="false"></app-pagetitle>
 <ng-container *ngIf="codeIdDetail">
   <section class="information mt-4 mt-lg-6">
     <div class="card">
@@ -43,7 +43,7 @@
             <div class="text--gray-4 body">Type</div>
           </div>
           <div class="col-6 col-lg-auto">
-            <div class="text--gray-light body">{{ codeIdDetail.type }}</div>
+            <div class="text--gray-light body">{{ codeIdDetail.type || '-' }}</div>
           </div>
         </div>
         <div class="row mt-2">

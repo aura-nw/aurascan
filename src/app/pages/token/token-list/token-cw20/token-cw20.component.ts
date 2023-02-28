@@ -60,7 +60,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
-  
+
   ngOnDestroy(): void {
     // throw new Error('Method not implemented.');
     this.destroy$.next();
@@ -74,7 +74,11 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.pageChange.selectPage(0);
+        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
+          this.getListToken();
+        } else {
+          this.pageChange.selectPage(0);
+        }
       });
   }
 

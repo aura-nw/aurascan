@@ -119,25 +119,29 @@
             <app-contract-verify-steps
               [codeID]="code_id"
               (isCompilerComplete)="isCompilerComplete = $event"
-              (isVerifyFail)="isVerifyFail = $event"></app-contract-verify-steps>
+              (isVerifyFail)="isVerifyFail = $event"
+              (isVerifySuccess)="isVerifySuccess = $event"></app-contract-verify-steps>
             <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-4 pt-lg-12">
+              <ng-container *ngIf="!isVerifySuccess">
+                <button
+                  class="button button--md button-pill button-outline button-fixed"
+                  (click)="redirectToPreviousPage()"
+                  type="button">
+                  <span>Back</span>
+                </button>
+                <button
+                  [disabled]="!isCompilerComplete || !isVerifyFail"
+                  class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4"
+                  (click)="startOver()"
+                  type="button">
+                  <span>Start over</span>
+                </button>
+              </ng-container>
               <button
-                class="button button--md button-pill button-outline button-fixed"
-                (click)="redirectToPreviousPage()"
-                type="button">
-                <span>Back</span>
-              </button>
-              <button
-                [disabled]="!isCompilerComplete || !isVerifyFail"
-                class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4"
-                (click)="startOver()"
-                type="button">
-                <span>Start over</span>
-              </button>
-              <button
-                *ngIf="isCompilerComplete && !isVerifyFail"
+                *ngIf="isVerifySuccess"
                 class="button button--md button-pill button-flat button-fixed ml-4"
-                type="button">
+                type="button"
+                (click)="redirectToPreviousPage()">
                 <span>Confirm</span>
               </button>
             </div>
