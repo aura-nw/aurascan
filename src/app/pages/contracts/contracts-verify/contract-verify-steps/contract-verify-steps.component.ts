@@ -12,6 +12,7 @@ export class ContractVerifyStepsComponent implements OnInit {
   @Input() codeID: any;
   @Output() isCompilerComplete = new EventEmitter<boolean>();
   @Output() isVerifyFail = new EventEmitter<boolean>();
+  @Output() isVerifySuccess = new EventEmitter<boolean>();
 
   currentStep = 1;
   steps = [];
@@ -45,8 +46,14 @@ export class ContractVerifyStepsComponent implements OnInit {
         className: this.getClassName(dta.result),
       }));
 
-      const stepTemp = this.steps.find((dta) => dta.result !== 'Success')?.check_id;
-      this.currentStep = stepTemp - 1 > 0 ? stepTemp - 1 : 0;
+      
+      let stepTemp = this.steps.find((dta) => dta.result !== 'Success')?.check_id;
+      if (stepTemp) {
+        this.currentStep = stepTemp - 1 > 0 ? stepTemp - 1 : 0;
+      } else {
+        this.currentStep = 8;
+        this.isVerifySuccess.emit(true);
+      }
     });
   }
 
