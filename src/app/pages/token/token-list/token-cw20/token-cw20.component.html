@@ -154,13 +154,13 @@
               </td>
             </tr>
           </table>
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
-          </app-paginator>
         </div>
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
         <!-- No data -->
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>

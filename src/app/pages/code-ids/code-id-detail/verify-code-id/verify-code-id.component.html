@@ -1,9 +1,9 @@
 <div class="box-contract text-white">
-  <!-- Chưa verify -->
   <div *ngIf="loading">
     <app-loading-sprint></app-loading-sprint>
   </div>
   <div *ngIf="!loading">
+    <!-- Unverified -->
     <ng-container *ngIf="contractStatus === contractVerifyType.Unverified">
       <div class="d-flex content-contract body-02">
         <img
@@ -13,13 +13,13 @@
           height="16"
           class="mr-2" />
         <div>
-          Are you the contract creator?
+          Are you the Code ID's owner?
           <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
-          your contract source code today!
+          your Code ID source code today!
         </div>
       </div>
     </ng-container>
-    <!-- Đang verify -->
+    <!-- Verifying -->
     <ng-container *ngIf="contractStatus === contractVerifyType.Verifying">
       <div class="d-flex content-contract body-02">
         <img
@@ -51,9 +51,9 @@
           height="16"
           class="mr-2" />
         <div>
-          Are you the contract creator?
+          Are you the Code ID's owner?
           <a class="text--primary" (click)="navigateToVerify(codeIdDetail.code_id)"> Verify and Publish </a>
-          your contract source code today!
+          your Code ID source code today!
         </div>
       </div>
       <div class="mt-4 mt-lg-6">
@@ -94,7 +94,7 @@
           (mouseenter)="$event.stopImmediatePropagation()"
           (mouseleave)="$event.stopImmediatePropagation()"
           (click)="copyData(codeIdDetail.url); tooltip2.toggle()">
-          <span class="body">Copy</span>
+          <span class="body-01">Copy</span>
         </button>
       </div>
     </ng-container>
