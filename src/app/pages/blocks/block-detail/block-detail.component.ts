@@ -1,5 +1,5 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,12 +11,10 @@ import { tap } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TransactionService } from 'src/app/core/services/transaction.service';
 import { PAGE_EVENT } from '../../../../app/core/constants/common.constant';
-import { TYPE_TRANSACTION } from '../../../../app/core/constants/transaction.constant';
 import { TableTemplate } from '../../../../app/core/models/common.model';
 import { BlockService } from '../../../../app/core/services/block.service';
 import { CommonService } from '../../../../app/core/services/common.service';
 import { convertDataBlock, convertDataTransaction, Globals } from '../../../../app/global/global';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-block-detail',
@@ -56,8 +54,6 @@ export class BlockDetailComponent implements OnInit {
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
-  typeTransaction = TYPE_TRANSACTION;
-  dateFormat;
   loading = true;
   isRawData = false;
   isCurrentMobile;
@@ -95,7 +91,6 @@ export class BlockDetailComponent implements OnInit {
     if (this.id === 'null' || this.blockId === 'null') {
       this.router.navigate(['/']);
     }
-
     this.getDetail();
   }
 

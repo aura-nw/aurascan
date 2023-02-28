@@ -1,38 +1,38 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountDetailTableComponent } from './account-detail-table.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatIconModule } from '@angular/material/icon';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { TranslateModule } from '@ngx-translate/core';
-import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
-import { SimplebarAngularModule } from 'simplebar-angular';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
-import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
-import {LoadingImageModule} from "src/app/shared/components/loading-image/loading-image.module";
+import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskModule } from 'ngx-mask';
+import { SimplebarAngularModule } from 'simplebar-angular';
+import { LoadingImageModule } from 'src/app/shared/components/loading-image/loading-image.module';
+import { CommonPipeModule } from '../../../../core/pipes/common-pipe.module';
+import { PaginatorModule } from '../../../../shared/components/paginator/paginator.module';
+import { TableNoDataModule } from '../../../../shared/components/table-no-data/table-no-data.module';
+import { AccountDetailTableComponent } from './account-detail-table.component';
 
 @NgModule({
   declarations: [AccountDetailTableComponent],
-    imports: [
-        CommonModule,
-        MatTableModule,
-        MatSortModule,
-        MatIconModule,
-        MatButtonModule,
-        MatPaginatorModule,
-        TranslateModule,
-        CommonPipeModule,
-        SimplebarAngularModule,
-        RouterModule,
-        TableNoDataModule,
-        PaginatorModule,
-        LoadingImageModule,
-        NgxMaskModule
-    ],
-  exports: [AccountDetailTableComponent]
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatSortModule,
+    MatIconModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    TranslateModule,
+    CommonPipeModule,
+    SimplebarAngularModule,
+    RouterModule,
+    TableNoDataModule,
+    PaginatorModule,
+    LoadingImageModule,
+    NgxMaskModule,
+  ],
+  exports: [AccountDetailTableComponent],
 })
-export class AccountDetailTableModule { }
+export class AccountDetailTableModule {}

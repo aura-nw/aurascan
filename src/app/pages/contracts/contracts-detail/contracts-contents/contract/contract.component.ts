@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -10,7 +10,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
   templateUrl: './contract.component.html',
   styleUrls: ['./contract.component.scss'],
 })
-export class ContractComponent implements OnInit, OnDestroy {
+export class ContractComponent implements OnInit {
   @Input() contractTypeData: string;
   @Input() contractsAddress: string;
 
@@ -22,8 +22,6 @@ export class ContractComponent implements OnInit, OnDestroy {
   isVerifying = false;
 
   constructor(private contractService: ContractService, private route: ActivatedRoute, private router: Router) {}
-
-  ngOnDestroy(): void {}
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
