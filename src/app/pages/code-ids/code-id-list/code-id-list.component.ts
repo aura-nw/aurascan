@@ -45,7 +45,11 @@ export class CodeIdListComponent implements OnInit {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.pageChange?.selectPage(0);
+        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
+          this.getListCodeIds();
+        } else {
+          this.pageChange.selectPage(0);
+        }
       });
   }
 
