@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,6 +9,7 @@ import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
 import { Globals } from '../../../../global/global';
 
@@ -18,6 +19,7 @@ import { Globals } from '../../../../global/global';
   styleUrls: ['./token-cw4973.component.scss'],
 })
 export class TokenCw4973Component implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   filterSearchData = [];
   dataSearch: any;
@@ -57,7 +59,11 @@ export class TokenCw4973Component implements OnInit {
       .asObservable()
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(() => {
-        this.getTokenData();
+        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
+          this.getTokenData();
+        } else {
+          this.pageChange.selectPage(0);
+        }
       });
   }
 
