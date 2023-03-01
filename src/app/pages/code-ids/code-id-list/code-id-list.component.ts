@@ -17,9 +17,11 @@ import { shortenAddress } from '../../../core/utils/common/shorten';
 })
 export class CodeIdListComponent implements OnInit {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
-  pageData: PageEvent;
-  pageSize = 20;
-  pageIndex = 0;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   showBoxSearch = false;
@@ -59,21 +61,14 @@ export class CodeIdListComponent implements OnInit {
 
   getListCodeIds() {
     let payload = {
-      limit: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
     };
 
     this.contractService.getListCodeID(payload).subscribe((res) => {
-      this.pageData = {
-        length: res?.meta?.count,
-        pageSize: 20,
-        pageIndex: PAGE_EVENT.PAGE_INDEX,
-      };
-      if (res?.data?.length > 0) {
-        this.dataSource.data = res.data;
-        this.pageData.length = res?.meta?.count;
-      }
+      this.dataSource.data = res.data;
+      this.pageData.length = res?.meta?.count;
     });
   }
 
@@ -88,7 +83,7 @@ export class CodeIdListComponent implements OnInit {
   }
 
   pageEvent(e: PageEvent): void {
-    this.pageIndex = e.pageIndex;
+    this.pageData.pageIndex = e.pageIndex;
     this.showBoxSearch = false;
     this.getListCodeIds();
   }
