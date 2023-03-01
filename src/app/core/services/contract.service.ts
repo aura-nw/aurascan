@@ -20,7 +20,6 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  apiAdminUrl = `${this.environmentService.configValue.urlAdmin}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
 
