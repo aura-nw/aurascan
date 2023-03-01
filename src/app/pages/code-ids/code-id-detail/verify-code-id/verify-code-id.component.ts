@@ -45,7 +45,8 @@ export class VerifyCodeIdComponent implements OnInit {
   }
 
   navigateToVerify(codeId: string) {
-    sessionStorage.setItem('codeIdPrePage', this.router.url);
+    let linkVerify = this.router.url.includes('?tab=1') ? this.router.url : this.router.url + '?tab=1';
+    sessionStorage.setItem('codeIdPrePage', linkVerify);
     this.router.navigate(['/contracts/verify', this.codeIdDetail.code_id]);
   }
 }
