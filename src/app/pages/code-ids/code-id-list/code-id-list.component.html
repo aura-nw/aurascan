@@ -45,9 +45,7 @@
                 (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
-              <button
-                type="submit"
-                class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
+              <button type="submit" class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -66,7 +64,7 @@
             </div>
           </div>
         </div>
-        <div class="table-responsive aura-table-contain mt-4 mt-lg-0"  *ngIf="pageData?.length > 0; else noValues">
+        <div class="table-responsive aura-table-contain mt-4 mt-lg-0" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table contract-table">
             <ng-container *ngFor="let template of templates; index as i">
               <ng-container [matColumnDef]="template.matColumnDef">
@@ -109,8 +107,15 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'type'">
-                    <div>{{ data[template.matColumnDef] }}</div>
-                    <span *ngIf="!data['type']">-</span>
+                    <div>
+                      {{
+                        data['result'] === contractResult.CORRECT
+                          ? data[template.matColumnDef]
+                          : data['result'] === contractResult.TBD
+                          ? contractResult.TBD
+                          : '-'
+                      }}
+                    </div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'instantiates'">
                     <div>{{ data[template.matColumnDef] }}</div>
