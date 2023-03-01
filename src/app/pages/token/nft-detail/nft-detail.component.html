@@ -1,3 +1,7 @@
+<div *ngIf="loading" class="m-auto mt-10">
+  <app-loading-sprint></app-loading-sprint>
+</div>
+
 <ng-container
   *ngIf="
     nftDetail &&
@@ -33,7 +37,7 @@
               <img
                 *ngIf="
                   (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
-                    !(nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)) ||
+                    !(nftDetail.animation?.link_s3 || nftDetail?.animation_url)) ||
                   isError
                 "
                 [src]="defaultImgToken" />
@@ -49,13 +53,13 @@
                 controlsList="nodownload "
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)
+                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "></video>
               <app-model-view
                 (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)
+                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
                 [modelUrl]="nftUrl"
                 [disablePan]="false">
@@ -64,7 +68,7 @@
                 (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
-                  (nftDetail.animation?.link_s3 || nftDetail?.ipfs?.animation_url)
+                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
                 [src]="nftUrl">
               </app-audio-player>
