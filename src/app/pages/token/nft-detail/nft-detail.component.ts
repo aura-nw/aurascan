@@ -154,7 +154,7 @@ export class NFTDetailComponent implements OnInit {
         }
         if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || this.nftDetail.token_name_ipfs || '';
+          this.nftDetail['nftName'] = this.nftDetail.token_name_ipfs || this.nftDetail.ipfs?.name || '';
         }
         this.isSoulBound = true;
       }
