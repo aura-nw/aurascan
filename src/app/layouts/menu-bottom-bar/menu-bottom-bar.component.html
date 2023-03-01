@@ -135,7 +135,10 @@
     <ul class="justify-content-around mb-0 p-0">
       <ng-container *ngFor="let item of menu[4].subItems">
         <ng-container
-          *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
+          *ngIf="item.label !== 'Account Bound Token' || (item.label === 'Account Bound Token' && lengthSBT > 0)">
+          <ng-container
+            *ngTemplateOutlet="menuItem; context: { data: { link: item.link, icon: item.icon, label: item.label } }">
+          </ng-container>
         </ng-container>
       </ng-container>
     </ul>
