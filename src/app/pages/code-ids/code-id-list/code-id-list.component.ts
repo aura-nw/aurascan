@@ -23,7 +23,6 @@ export class CodeIdListComponent implements OnInit {
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   showBoxSearch = false;
-  searchMobVisible = false;
   searchSubject = new Subject();
   destroy$ = new Subject();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
