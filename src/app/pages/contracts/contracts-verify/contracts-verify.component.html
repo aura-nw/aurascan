@@ -58,9 +58,9 @@
                       id="link"
                       maxlength="200"
                       placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
-                    <div class="text--warning mt-2 caption">
-                      Enter the Github URL at the right commit version of source code ou would like to verify E.g:
-                      http://github.com/***/commit/***
+                    <div class="text--white mt-2 caption">
+                      Enter the Github URL at the right commit version of source code you would like to verify<br>
+                      E.g: http://github.com/***/commit/***
                     </div>
                     <ng-container *ngIf="formControls['link'].touched">
                       <div class="error" *ngIf="formControls['link'].errors?.required">Required</div>
