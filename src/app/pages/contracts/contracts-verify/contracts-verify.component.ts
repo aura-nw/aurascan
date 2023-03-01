@@ -78,6 +78,7 @@ export class ContractsVerifyComponent implements OnInit {
     this.formControls['wasm_file'].markAsTouched();
 
     if (this.contractForm.valid) {
+      localStorage.setItem('startOver', 'true');
       // handle contract_address & commit
       const link = this.contractForm.controls['link'].value;
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
@@ -93,6 +94,7 @@ export class ContractsVerifyComponent implements OnInit {
       this.contractService.verifyCodeID(contractData).subscribe((res: IResponsesTemplates<any>) => {
         const data = res?.data;
         if (data) {
+          localStorage.setItem('startOver', 'false');
           switch (data?.Code) {
             case 'SUCCESSFUL':
               this.currentStep = 'compiler';
@@ -130,11 +132,14 @@ export class ContractsVerifyComponent implements OnInit {
       if (res.data) {
         this.loading = false;
         this.isExitCode = true;
-        if (res.data.status.toLowerCase() == ContractVerifyType.Verifying.toLowerCase()) {
+        let startOver = localStorage.getItem('startOver');
+        if (startOver && startOver == 'false') {
           this.currentStep = 'compiler';
           this.startWS();
-        } else {
-          this.currentStep = 'verify';
+          if (res.data.status.toLowerCase() == ContractVerifyType.VerifiedFail.toLowerCase()) {
+            this.isCompilerComplete = true;
+            this.isVerifyFail = true;
+          }
         }
       }
     });

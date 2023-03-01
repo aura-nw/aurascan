@@ -15,7 +15,6 @@ export interface IConfiguration {
   coins: any;
   env: string;
   indexerUri: string;
-  urlAdmin: string;
 }
 
 @Injectable()
@@ -32,27 +31,13 @@ export class EnvironmentService {
     coins: '',
     env: '',
     indexerUri: '',
-    urlAdmin: ''
   });
 
   get configValue(): IConfiguration {
     return this.config.value;
   }
 
-  // config$ = this.config.asObservable();
-
-  constructor(private http: HttpClient) {
-    // this.config = new BehaviorSubject<IConfiguration>({
-    //   fabric: '',
-    //   beUri: '',
-    //   chainId: '',
-    //   timeStaking: '',
-    //   urlSocket: '',
-    //   validator_s3: '',
-    //   chain_info: {},
-    // });
-    // this.config$.subscribe(console.log)
-  }
+  constructor(private http: HttpClient) {}
 
   async load(): Promise<void> {
     return this.http
@@ -74,7 +59,6 @@ export class EnvironmentService {
           coins: config['coins'],
           env: config['env'],
           indexerUri: config['urlIndexer'],
-          urlAdmin: config['urlAdmin'],
         };
 
         this.config.next(data);

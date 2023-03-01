@@ -43,7 +43,9 @@
             <div class="text--gray-4 body">Type</div>
           </div>
           <div class="col-6 col-lg-auto">
-            <div class="text--gray-light body">{{ codeIdDetail.type || '-' }}</div>
+            <div class="text--gray-light body">
+              {{ codeIdDetail.result === contractResult.CORRECT ? codeIdDetail.type : '-' }}
+            </div>
           </div>
         </div>
         <div class="row mt-2">

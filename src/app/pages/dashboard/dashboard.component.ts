@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     { matColumnDef: 'timestamp', headerCellDef: 'Time' },
   ];
   displayedColumnsBlock: string[] = this.templatesBlock.map((dta) => dta.matColumnDef);
-  dataSourceBlock: MatTableDataSource<any>;
+  dataSourceBlock: MatTableDataSource<any> = new MatTableDataSource();
 
   templatesTx: Array<TableTemplate> = [
     { matColumnDef: 'tx_hash', headerCellDef: 'Tx Hash' },

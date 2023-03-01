@@ -59,7 +59,7 @@
                       maxlength="200"
                       placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
                     <div class="text--white mt-2 caption">
-                      Enter the Github URL at the right commit version of source code you would like to verify<br>
+                      Enter the Github URL at the right commit version of source code you would like to verify<br />
                       E.g: http://github.com/***/commit/***
                     </div>
                     <ng-container *ngIf="formControls['link'].touched">
@@ -115,7 +115,7 @@
           </div>
           <!-- Contract Verify step -->
           <div *ngIf="currentStep === 'compiler'">
-            <h2 class="h3-mob fw-semibold text--white mb-0">Code ID Source Code</h2>
+            <h2 class="h3-mob fw-semibold text--white mb-0">Compiler Output</h2>
             <div class="divider divider-horizontal divider-lighter my-4 mb-lg-6"></div>
             <app-contract-verify-steps
               [codeID]="code_id"
