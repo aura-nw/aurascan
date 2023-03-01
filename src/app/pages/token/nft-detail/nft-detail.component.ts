@@ -128,6 +128,7 @@ export class NFTDetailComponent implements OnInit {
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       if (res.data === null) {
         this.toastr.error('Token invalid');
+        this.loading = false;
         return;
       }
       this.nftDetail = res.data;
@@ -153,7 +154,7 @@ export class NFTDetailComponent implements OnInit {
         }
         if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || '';
+          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || this.nftDetail.token_name_ipfs || '';
         }
         this.isSoulBound = true;
       }
@@ -183,7 +184,6 @@ export class NFTDetailComponent implements OnInit {
       this.dataSource.data = txs;
       this.pageData.length = txs?.length;
     }
-    this.loading = false;
   }
 
   paginatorEmit(event): void {
