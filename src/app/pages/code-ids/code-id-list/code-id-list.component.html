@@ -108,7 +108,13 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'type'">
                     <div>
-                      {{ data['result'] === contractResult.CORRECT ? data[template.matColumnDef] : '-' }}
+                      {{
+                        data['result'] === contractResult.CORRECT
+                          ? data[template.matColumnDef]
+                          : data['result'] === contractResult.TBD
+                          ? contractResult.TBD
+                          : '-'
+                      }}
                     </div>
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'instantiates'">
