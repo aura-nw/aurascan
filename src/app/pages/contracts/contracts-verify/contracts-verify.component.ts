@@ -78,6 +78,7 @@ export class ContractsVerifyComponent implements OnInit {
     this.formControls['wasm_file'].markAsTouched();
 
     if (this.contractForm.valid) {
+      localStorage.setItem('startOver', 'true');
       // handle contract_address & commit
       const link = this.contractForm.controls['link'].value;
       this.contractForm.controls['url'].setValue(link.substring(0, link.indexOf('/commit')));
@@ -113,7 +114,6 @@ export class ContractsVerifyComponent implements OnInit {
   }
 
   startOver(): void {
-    localStorage.setItem('startOver', 'true');
     this.currentStep = 'verify';
     this.isCompilerComplete = false;
     this.isVerifyFail = false;
