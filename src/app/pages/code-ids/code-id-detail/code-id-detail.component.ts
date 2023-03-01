@@ -27,13 +27,16 @@ export class CodeIdDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');
+    if (this.router.snapshot.queryParams['tab'] == 1) {
+      this.tabIndex = 1;
+    }
     if (this.codeId === 'null') {
       this.route.navigate(['/']);
     } else {
       this.getCodeIdDetail();
     }
   }
-  
+
   getCodeIdDetail() {
     this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
       this.codeIdDetail = res.data;
