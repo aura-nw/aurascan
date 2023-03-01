@@ -73,7 +73,7 @@ export class ContractsRegisterComponent implements OnInit {
   ngOnInit(): void {
     from([1])
       .pipe(
-        delay(600),
+        delay(1000),
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
