@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="col-12 col-lg-4">
-      <div class="step" id="step2" [class.complete]="currentStep >= 8" [class.active]="currentStep === 2">
+      <div class="step" id="step2" [class.complete]="currentStep >= 8" [class.active]="currentStep < 8">
         <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
           <div class="step__num mx-lg-auto">2</div>
           <div class="step__title">Verify process ({{ currentStep < 4 ? 0 : currentStep - 4 }}/4)</div>

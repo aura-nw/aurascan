@@ -108,6 +108,7 @@ export class ContractsVerifyComponent implements OnInit {
 
   handleReset() {
     this.contractForm.reset({ contract_address: this.contractAddress });
+    this.contractForm.controls['codeId'].setValue(this.code_id);
   }
 
   startOver(): void {
