@@ -1,7 +1,7 @@
 <ng-container *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <section class="lasted-list" *ngIf="proposalData && proposalData?.length > 0">
     <app-pagetitle title="Votings"></app-pagetitle>
-    <div class="row row-eq-height">
+    <div class="row row-eq-height mt-4 mt-md-6">
       <ng-container *ngIf="!breakpoint.value.matches">
         <div class="col-6 proposal-lasted" *ngFor="let lastedItem of proposalData; index as idx">
           <div class="card mb-0 h-100">

@@ -24,7 +24,6 @@ import { Globals } from '../../../global/global';
 export class ContractsListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
-  searchMobVisible = false;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },

@@ -93,6 +93,7 @@ export class ContractsVerifyComponent implements OnInit {
       this.contractService.verifyCodeID(contractData).subscribe((res: IResponsesTemplates<any>) => {
         const data = res?.data;
         if (data) {
+          localStorage.setItem('startOver', 'false');
           switch (data?.Code) {
             case 'SUCCESSFUL':
               this.currentStep = 'compiler';
@@ -112,6 +113,7 @@ export class ContractsVerifyComponent implements OnInit {
   }
 
   startOver(): void {
+    localStorage.setItem('startOver', 'true');
     this.currentStep = 'verify';
     this.isCompilerComplete = false;
     this.isVerifyFail = false;
@@ -130,11 +132,14 @@ export class ContractsVerifyComponent implements OnInit {
       if (res.data) {
         this.loading = false;
         this.isExitCode = true;
-        if (res.data.status.toLowerCase() == ContractVerifyType.Verifying.toLowerCase()) {
+        let startOver = localStorage.getItem('startOver');
+        if (startOver && startOver == 'false') {
           this.currentStep = 'compiler';
           this.startWS();
-        } else {
-          this.currentStep = 'verify';
+          if (res.data.status.toLowerCase() == ContractVerifyType.VerifiedFail.toLowerCase()) {
+            this.isCompilerComplete = true;
+            this.isVerifyFail = true;
+          }
         }
       }
     });
