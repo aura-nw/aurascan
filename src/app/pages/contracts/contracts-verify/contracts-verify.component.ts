@@ -21,6 +21,7 @@ export class ContractsVerifyComponent implements OnInit {
   isExitCode = false;
   isVerifyFail = false;
   isVerifySuccess = false;
+  formValid = false;
 
   @ViewChild('version') versionSelect: any;
 
@@ -47,28 +48,18 @@ export class ContractsVerifyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contractForm = new FormGroup(
-      {
-        codeId: new FormControl(
-          { value: this.code_id, disabled: true },
-          { validators: [Validators.required], updateOn: 'submit' },
-        ),
-        link: new FormControl('', {
-          validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
-          updateOn: 'submit',
-        }),
-        wasm_file: new FormControl('', {
-          validators: [Validators.required, Validators.maxLength(200)],
-          updateOn: 'submit',
-        }),
-        url: new FormControl(''),
-        compiler_version: new FormControl('', { validators: [Validators.required], updateOn: 'submit' }),
-        commit: new FormControl(''),
-      },
-      {
-        updateOn: 'submit',
-      },
-    );
+    this.contractForm = new FormGroup({
+      codeId: new FormControl({ value: this.code_id, disabled: true }, { validators: [Validators.required] }),
+      link: new FormControl('', {
+        validators: [Validators.required, Validators.maxLength(200), Validators.pattern(this.githubCommitPattern)],
+      }),
+      wasm_file: new FormControl('', {
+        validators: [Validators.required, Validators.maxLength(200)],
+      }),
+      url: new FormControl(''),
+      compiler_version: new FormControl('', { validators: [Validators.required] }),
+      commit: new FormControl(''),
+    });
     this.checkStatusVerify();
   }
 
@@ -137,7 +128,7 @@ export class ContractsVerifyComponent implements OnInit {
             this.isCompilerComplete = true;
             this.isVerifyFail = true;
           }
-        } 
+        }
       }
     });
   }
@@ -154,5 +145,13 @@ export class ContractsVerifyComponent implements OnInit {
     } else {
       this.router.navigate(['contracts']);
     }
+  }
+
+  checkFormValid(): boolean {
+    this.formValid = true;
+    if (this.contractForm.status !== "INVALID") {
+      this.formValid = false;
+    }
+    return this.formValid;
   }
 }
