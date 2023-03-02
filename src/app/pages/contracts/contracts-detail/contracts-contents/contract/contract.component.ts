@@ -45,6 +45,7 @@ export class ContractComponent implements OnInit {
         }),
       )
       .subscribe(({ data }) => {
+        this.contractTypeData = data.status || this.contractTypeData;
         if (data?.status === 'verifying' && !notCheck) {
           this.isVerifying = true;
         } else {
