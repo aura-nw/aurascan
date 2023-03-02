@@ -25,7 +25,7 @@
     <div class="mt-3 content-info caption fw-normal">{{ contractDetail.tx_hash }}</div>
   </ng-container>
 
-  <ng-container *ngIf="contractTypeData === contractVerifyType.Unverified && contractDetail && isVerifying">
+  <ng-container *ngIf="contractTypeData === contractVerifyType.Verifying">
     <div class="d-flex fw-normal content-contract">
       <img
         [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
