@@ -37,6 +37,7 @@
                       class="form-control form-check-input"
                       id="wasm_file"
                       maxlength="200"
+                      (change)="checkFormValid()"
                       placeholder="xxx.wasm" />
                     <ng-container *ngIf="formControls['wasm_file'].touched">
                       <div class="error" *ngIf="formControls['wasm_file'].errors?.required">Required</div>
@@ -57,6 +58,7 @@
                       class="form-control form-check-input"
                       id="link"
                       maxlength="200"
+                      (change)="checkFormValid()"
                       placeholder="https://github.com/{repo-name}/commit/{commit-hash}" />
                     <div class="text--white mt-2 caption">
                       Enter the Github URL at the right commit version of source code you would like to verify<br />
@@ -85,6 +87,7 @@
                       class="form-control select-input-field select-input--flat form-check-input"
                       panelClass="aura-optional-panel aura-optional-panel--flat"
                       [disableOptionCentering]="true"
+                      (change)="checkFormValid()"
                       placeholder="Please select compiler version">
                       <mat-option *ngFor="let item of versionList" [value]="item.value">
                         {{ item.label }}
@@ -107,7 +110,8 @@
                 </button>
                 <button
                   class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4 px-1 px-sm-6"
-                  type="submit">
+                  type="submit"
+                  [disabled]="contractForm.status === 'INVALID'">
                   <span>Verify & Publish</span>
                 </button>
               </div>
