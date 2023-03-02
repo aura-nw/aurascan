@@ -408,7 +408,7 @@
         [label]="'Sender'"
         [value]="transactionDetail?.messages[0]?.sender || transactionDetail?.messages[0]?.validator_address"
         [dataLink]="{ url: '/account' }"></app-messages-item>
-      <app-messages-item [label]="'Code Id'" [value]="storeCodeId"></app-messages-item>
+      <app-messages-item [label]="'Code Id'" [value]="storeCodeId" [dataLink]="{ url: '/code-ids/detail' }"></app-messages-item>
       <app-messages-item
         [label]="'Byte Code'"
         [value]="transactionDetail?.messages[0]?.wasm_byte_code"></app-messages-item>
