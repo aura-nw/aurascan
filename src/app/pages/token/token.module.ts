@@ -19,6 +19,7 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { TokenService } from '../../core/services/token.service';
 import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
+import { ContractsModule } from '../contracts/contracts.module';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
 import { PopupShareComponent } from './nft-detail/popup-share/popup-share.component';
 import { TokenContractTabComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
@@ -79,6 +80,7 @@ import { TokenRoutingModule } from './token-routing.module';
     ModelViewModule,
     NftCardModule,
     AudioPlayerModule,
+    ContractsModule
   ],
   providers: [TokenService, AccountService],
 })

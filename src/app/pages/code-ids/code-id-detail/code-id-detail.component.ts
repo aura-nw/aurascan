@@ -27,9 +27,11 @@ export class CodeIdDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeId = this.router.snapshot.paramMap.get('codeId');
-    if (this.router.snapshot.queryParams['tab'] == 1) {
+    if (localStorage.getItem('isVerifyTab') == 'true') {
       this.tabIndex = 1;
+      localStorage.setItem('isVerifyTab', null);
     }
+
     if (this.codeId === 'null') {
       this.route.navigate(['/']);
     } else {
