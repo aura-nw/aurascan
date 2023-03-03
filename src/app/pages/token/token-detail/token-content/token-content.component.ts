@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -23,7 +23,6 @@ export class TokenContentComponent implements OnInit {
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = [];
-  countCurrent: string = '';
   paramQuery = '';
   textSearch: string = '';
   searchTemp: string = '';
@@ -31,12 +30,14 @@ export class TokenContentComponent implements OnInit {
   isSearchAddress = false;
   resultSearch = 0;
   tokenTab = TokenTab;
+  currentTab = this.tokenTab.Transfers;
   tabsBackup: any;
   infoSearch = {};
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
+  activeTabID = 0;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -45,6 +46,7 @@ export class TokenContentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private environmentService: EnvironmentService,
     public global: Globals,
     private layout: BreakpointObserver,
@@ -56,7 +58,7 @@ export class TokenContentComponent implements OnInit {
     ).map((tab) => ({
       ...tab,
       value: tab.value,
-      key: tab.key === TokenTab.Transfers ? '' : tab.key,
+      key: tab.key,
     }));
     this.tabsBackup = this.TABS;
 
@@ -65,10 +67,16 @@ export class TokenContentComponent implements OnInit {
       this.searchTemp = this.paramQuery;
       this.handleSearch();
     });
+
+    if (localStorage.getItem('isVerifyTab') == 'true') {
+      this.currentTab = this.tokenTab.Contract;
+      this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
+      localStorage.setItem('isVerifyTab', null);
+    }
   }
 
   changeTab(tabId): void {
-    this.countCurrent = tabId;
+    this.currentTab = tabId;
   }
 
   handleSearch() {

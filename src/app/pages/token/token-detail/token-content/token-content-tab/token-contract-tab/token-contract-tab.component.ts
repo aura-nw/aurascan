@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ResponseDto } from 'src/app/core/models/common.model';
 import { TokenService } from 'src/app/core/services/token.service';
@@ -17,7 +18,7 @@ export class TokenContractTabComponent implements OnInit {
   tokenDetail: any;
   contractVerifyType = ContractVerifyType;
 
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: TokenService, private router: Router) {}
 
   ngOnInit(): void {
     this.getContractDetail();
@@ -31,5 +32,11 @@ export class TokenContractTabComponent implements OnInit {
     this.tokenService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
       this.tokenDetail = res?.data;
     });
+  }
+
+  navigateToVerify() {
+    sessionStorage.setItem('codeIdPrePage', this.router.url);
+    localStorage.setItem('isVerifyTab', 'true');
+    this.router.navigate(['/contracts/verify', this.tokenDetail.code_id]);
   }
 }
