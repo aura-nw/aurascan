@@ -61,3 +61,11 @@
     background: url('/assets/icons/icons-svg/white/close.svg') var(--aura-red-3) center no-repeat;
   }
 }
+
+.ellipsis-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

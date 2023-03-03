@@ -274,7 +274,7 @@
         "E005C": "Source code is missing Cargo.lock file",
         "E006": "Smart contract source code or compiler version is incorrect",
         "E007A": "Incorrect wasm file",
-        "E007B": "Data hash mismatch",
+        "E007B": "Data hash mismatch. Maybe your compiler version or commit is incorrect",
         "E008": "Internal server error"
     }
 }
