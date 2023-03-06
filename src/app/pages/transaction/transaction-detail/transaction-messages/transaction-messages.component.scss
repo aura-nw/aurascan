@@ -69,3 +69,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.content-byte-code{
+  max-width: 90%;
+  @media (min-width: 992px) {
+    max-width: 95%;
+  }
+}
