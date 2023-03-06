@@ -118,7 +118,7 @@ export class ContractsVerifyComponent implements OnInit {
 
   checkStatusVerify() {
     this.contractService.checkVerified(this.code_id).subscribe((res) => {
-      if (res.data) {
+      if (res.data?.codeId) {
         this.loading = false;
         this.isExitCode = true;
         if (res.data.status !== ContractVerifyType.Unverified) {

@@ -401,18 +401,28 @@
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.StoreCode">
-    <div class="card-info">
-      <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
-      </ng-container>
-      <app-messages-item
-        [label]="'Sender'"
-        [value]="transactionDetail?.messages[0]?.sender || transactionDetail?.messages[0]?.validator_address"
-        [dataLink]="{ url: '/account' }"></app-messages-item>
-      <app-messages-item [label]="'Code Id'" [value]="storeCodeId" [dataLink]="{ url: '/code-ids/detail' }"></app-messages-item>
-      <app-messages-item
-        [label]="'Byte Code'"
-        [value]="transactionDetail?.messages[0]?.wasm_byte_code"></app-messages-item>
-    </div>
+    <ng-container *ngFor="let item of transactionDetail?.messages; let i = index">
+      <div class="card-info">
+        <ng-container *ngTemplateOutlet="messageHeader; context: { data: { label: transactionDetailType } }">
+        </ng-container>
+        <app-messages-item
+          [label]="'Sender'"
+          [value]="item.sender || item.validator_address"
+          [dataLink]="{ url: '/account' }"></app-messages-item>
+        <app-messages-item
+          [label]="'Code Id'"
+          [value]="getStoreCode(i)"
+          [dataLink]="{ url: '/code-ids/detail' }"></app-messages-item>
+        <div class="row mb-3">
+          <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
+          <div class="col-12 col-lg-9 text--gray-1 box-byte-code">
+            <span style="width: 900px;">{{ item?.wasm_byte_code }}</span>
+            <div (click)="seeLessArr[i] = true" class="text--primary cursor-pointer mt-1" *ngIf="!seeLessArr[i]">See More </div>
+            <div (click)="seeLessArr[i] = false" class="text--primary cursor-pointer mt-1" *ngIf="seeLessArr[i]">See Less </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="transactionDetail?.type === eTransType.Unjail">
@@ -552,7 +562,6 @@
             {{ spendLimitAmount | balanceOf | mask : 'separator.6' }}
             <span class="text--primary">{{ denom }}</span>
           </ng-container>
-          
         </div>
       </div>
       <app-messages-item
