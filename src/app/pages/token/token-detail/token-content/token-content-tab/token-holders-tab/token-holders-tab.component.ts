@@ -19,6 +19,7 @@ export class TokenHoldersTabComponent implements OnInit {
   @Input() contractAddress: string;
   @Input() typeContract: string;
   @Input() tokenDetail: any;
+  @Input() decimalValue: number;
 
   CW20Templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'rank' },
@@ -85,6 +86,7 @@ export class TokenHoldersTabComponent implements OnInit {
           this.numberTop = topHolder > this.numberTop ? topHolder : this.numberTop;
           res.data?.resultAsset.forEach((element) => {
             element['value'] = 0;
+            element['balance'] = element['balance'] / this.decimalValue;
           });
 
           if (this.totalQuantity) {

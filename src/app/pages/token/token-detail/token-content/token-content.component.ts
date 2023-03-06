@@ -38,6 +38,7 @@ export class TokenContentComponent implements OnInit {
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
   activeTabID = 0;
+  decimalValue = 0;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -73,6 +74,10 @@ export class TokenContentComponent implements OnInit {
       this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
       localStorage.setItem('isVerifyTab', null);
     }
+
+    if (this.tokenDetail.decimals > 0) {
+      this.decimalValue = Math.pow(10, this.tokenDetail.decimals);
+    }
   }
 
   changeTab(tabId): void {
@@ -103,7 +108,9 @@ export class TokenContentComponent implements OnInit {
         if (!params?.a) {
           if (this.tokenDetail.type !== ContractRegisterType.CW20) {
             this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
-            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
+            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(
+              this.paramQuery,
+            )}`;
           } else {
             window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }

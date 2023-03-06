@@ -110,3 +110,20 @@ export const REGISTER_CONTRACT = [
     value: ContractRegisterType.CW4973,
   },
 ];
+
+
+export const LIST_ZEROES = [
+  {
+    value: '6',
+  },
+  {
+    value: '8',
+  },
+  {
+    value: '18',
+  },
+  {
+    value: 'custom',
+  },
+];
+

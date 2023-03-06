@@ -111,10 +111,12 @@
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"
+      [decimalValue]="decimalValue"
       (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="currentTab === tokenTab.Holders"
+      [decimalValue]="decimalValue"
       [keyWord]="textSearch"
       [tokenDetail]="tokenDetail"
       [typeContract]="tokenDetail?.type"

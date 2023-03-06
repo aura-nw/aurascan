@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import BigNumber from 'bignumber.js';
 import { Schema, Validator } from 'jsonschema';
 import * as _ from 'lodash';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
@@ -7,6 +9,7 @@ import { EnvironmentService } from 'src/app/core/data-services/environment.servi
 import { getRef, getType, parseValue } from 'src/app/core/helpers/contract-schema';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { PopupAddZeroComponent } from 'src/app/shared/components/popup-add-zero/popup-add-zero.component';
 
 @Component({
   selector: 'app-write-contract',
@@ -34,6 +37,7 @@ export class WriteContractComponent implements OnInit {
     private toastr: NgxToastrService,
     public translate: TranslateService,
     private environmentService: EnvironmentService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -114,6 +118,7 @@ export class WriteContractComponent implements OnInit {
 
     if (childProps) {
       fieldList = Object.keys(childProps).map((e) => ({
+        isAddButtonZero: e === 'amount', //button add zero for amount field
         fieldName: e,
         isRequired: (props.required as string[])?.includes(e),
         ...getType(this.jsValidator.schemas, childProps[e]),
@@ -222,5 +227,21 @@ export class WriteContractComponent implements OnInit {
         );
       });
     }
+  }
+
+  showAddZero(msg) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'grant-overlay-panel';
+    dialogConfig.data = {};
+    let dialogRef = this.dialog.open(PopupAddZeroComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        let { fieldList, fieldName } = msg;
+        let amount = fieldList.find((k) => k.fieldName === 'amount')?.value;
+        amount = amount.toString() + Math.pow(10, result).toString();
+        msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
+      }
+    });
   }
 }

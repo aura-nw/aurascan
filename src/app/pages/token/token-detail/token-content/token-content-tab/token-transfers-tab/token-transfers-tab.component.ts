@@ -29,6 +29,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
   @Input() contractAddress: string;
   @Input() keyWord = '';
   @Input() isSearchAddress: boolean;
+  @Input() decimalValue: number;
   @Output() resultLength = new EventEmitter<any>();
   @Output() hasMore = new EventEmitter<any>();
 
