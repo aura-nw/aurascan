@@ -1,4 +1,11 @@
+.card-grant {
+  padding: var(--spacer-2) var(--spacer-4);
+}
+
 .card {
+  .card-header {
+    border-bottom: none;
+  }
   @media (min-width: 992px) {
     width: 500px;
   }
@@ -47,7 +54,7 @@
       transform: translateY(-5%);
 
       .mat-select-arrow {
-        border: solid #E6E7E8;
+        border: solid #e6e7e8;
         border-width: 0 2.3px 2.3px 0;
         display: inline-block;
         padding: 2.8px;
@@ -58,7 +65,7 @@
   }
 
   .contractPanel {
-    background: #25252C;
+    background: #25252c;
     min-width: calc(100% + 20px) !important;
     transform: translate3D(5px, 35px, 0) !important;
     padding: var(--spacer-3) 0 !important;

@@ -238,8 +238,12 @@ export class WriteContractComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         let { fieldList, fieldName } = msg;
-        let amount = fieldList.find((k) => k.fieldName === 'amount')?.value;
-        amount = amount.toString() + Math.pow(10, result).toString();
+        let amount = fieldList.find((k) => k.fieldName === 'amount')?.value || '';
+        //check amount is exit
+        const numPow = amount.toString()
+          ? Math.pow(10, result).toString().substring(1)
+          : Math.pow(10, result).toString();
+        amount = amount.toString() + numPow;
         msg['fieldList'].find((k) => k.fieldName === 'amount').value = amount.toString();
       }
     });
