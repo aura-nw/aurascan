@@ -123,7 +123,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   resetFilterSearch() {
     this.textSearch = '';
     this.onKeyUp();
-    this.getListContract();
   }
 
   filterButton(val: string) {

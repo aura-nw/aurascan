@@ -36,7 +36,7 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   userAddress = '';
   sbType = SB_TYPE;
   walletAddress = null;
-  seachValue = '';
+  searchValue = '';
   isError = false;
 
   constructor(
@@ -70,13 +70,13 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.textSearch = this.seachValue;
+    this.textSearch = this.searchValue;
     this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.seachValue = '';
+    this.searchValue = '';
     this.getListSB();
   }
 
