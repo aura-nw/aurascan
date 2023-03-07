@@ -117,7 +117,6 @@ export class TokenCw721Component implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.onKeyUp();
-    this.getTokenData();
   }
 
   sortData(sort: Sort) {
