@@ -427,7 +427,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
     if (
       menuLink === '/code-ids/list' &&
-      (this.router.url == '/code-ids/list' || this.router.url.includes('/code-ids/detail/'))
+      (this.router.url == '/code-ids/list' ||
+        this.router.url.includes('/code-ids/detail/') ||
+        this.router.url.includes('/code-ids/verify/'))
     ) {
       return true;
     }
