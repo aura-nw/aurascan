@@ -1,22 +1,21 @@
 <div class="contract-register" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <div class="d-md-flex justify-content-between box-title-register">
-    <h1 class="text--white mb-0">Type Smart Contract</h1>
+    <h1 class="text--white mb-0">Register Code ID Type</h1>
     <button
       class="button button-outline button--md button-pill button-flat btn-register button-fixed mt-4 mt-md-0"
       (click)="viewPopupDetail(modalManage, '')">
       <img [src]="'assets/icons/icons-svg/black/plus.svg' | imageS3" alt="" width="16px" height="16px" />
-      <span class="ml-2 text--black">Register Contract</span>
+      <span class="ml-2 text--black">Register</span>
     </button>
   </div>
   <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
   <div class="d-lg-flex justify-content-between mt-4 mt-lg-0">
     <div>
       <div class="text--gray-1 body-01">
-        Before a user wants to register a type contract for a Code ID, the user has to claim ownership of the Code ID
-        successfully
+        Only Code ID's owner can be able to register type for a Code ID
       </div>
       <div class="body-03-mob body-02 mt-1 text--gray-5">
-        {{ pageData?.length }} contract{{ pageData?.length > 1 ? 's' : '' }} registered
+        {{ pageData?.length }} Code ID{{ pageData?.length > 1 ? 's' : '' }} registered
       </div>
     </div>
     <form class="aura-form single-input-field search-form mt-4 mt-lg-0 d-none d-lg-block">
@@ -27,10 +26,10 @@
           placeholder="Search for Code ID"
           [(ngModel)]="textSearch"
           [maxLength]="maxLengthSearch"
-          (keyup)="searchCode()"
+          (keyup)="onKeyUp()"
           name="search"
           autocomplete="off" />
-        <button type="submit" class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}" (click)="searchCode()">
+        <button type="submit" class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}">
           <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
         </button>
         <button
@@ -40,33 +39,6 @@
           <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
         </button>
       </div>
-      <ng-container *ngIf="textSearch?.length > 0">
-        <div class="box-search-data text-white" [style.display]="isHideSearch ? 'none' : 'block'">
-          <ng-container *ngIf="filterSearchData?.length === 0">
-            <span> There are no matching contracts </span>
-          </ng-container>
-          <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-            <div class="txt-title-search">Smart Contract</div>
-            <ng-container *ngFor="let item of filterSearchData">
-              <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
-                <div class="ml-1">
-                  <div class="d-flex align-items-center">
-                    <span class="text-clamp">
-                      {{ item.code_id }} - {{ item.type }} Contract -
-                      <span
-                        [ngStyle]="{
-                          color: item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#D5625E' : '#67C091'
-                        }">
-                        {{ item.result }}
-                      </span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-          </ng-container>
-        </div>
-      </ng-container>
     </form>
   </div>
 </div>
@@ -82,13 +54,12 @@
             placeholder="Search for Code ID"
             [(ngModel)]="textSearch"
             [maxLength]="maxLengthSearch"
-            (keyup)="searchCode()"
+            (keyup)="onKeyUp()"
             name="search"
             autocomplete="off" />
           <button
             type="submit"
-            class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}"
-            (click)="searchCode()">
+            class="btn-search cursor-pointer {{ textSearch ? 'd-none' : '' }}">
             <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
           </button>
           <button
@@ -100,34 +71,6 @@
             <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
           </button>
         </div>
-        <ng-container *ngIf="textSearch?.length > 0">
-          <div class="box-search-data box-search-contract text-white" [style.display]="isHideSearch ? 'none' : 'block'">
-            <ng-container *ngIf="filterSearchData?.length === 0">
-              <span> There are no matching contracts </span>
-            </ng-container>
-            <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-              <div class="txt-title-search">Smart Contract</div>
-              <ng-container *ngFor="let item of filterSearchData">
-                <div class="d-flex p-3 cursor-pointer" (click)="replacePageList(item)">
-                  <div class="ml-1">
-                    <div class="d-flex align-items-center">
-                      <span class="text-clamp">
-                        {{ item.code_id }} - {{ item.type }} Contract -
-                        <span
-                          [ngStyle]="{
-                            color:
-                              item.result === 'TBD' ? '#5E84E6' : item.result === 'Incorrect' ? '#D5625E' : '#67C091'
-                          }">
-                          {{ item.result }}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-            </ng-container>
-          </div>
-        </ng-container>
       </div>
     </form>
     <div class="card-body">
@@ -208,7 +151,7 @@
                   width="16px"
                   height="16px"
                   class="mr-2" />
-                You have yet to register any type contract
+                You have not yet registered type for any Code ID
               </div>
             </td>
           </tr>
@@ -264,7 +207,7 @@
       <ng-template #noValues>
         <div class="d-flex d-lg-none justify-content-center align-items-center text-white">
           <img [src]="'assets/icons/icons-svg/white/info.svg' | imageS3" alt="" width="24" height="24" class="mr-2" />
-          <span class="">You have yet to register any type contract</span>
+          <span class="">You have not yet registered type for any Code ID</span>
         </div>
       </ng-template>
     </div>
