@@ -93,6 +93,5 @@ export class TokenCw4973Component implements OnInit {
   resetSearch() {
     this.textSearch = '';
     this.onKeyUp();
-    this.getTokenData();
   }
 }

@@ -76,7 +76,6 @@ export class CodeIdListComponent implements OnInit {
   resetFilterSearch() {
     this.textSearch = '';
     this.onKeyUp();
-    this.getListCodeIds();
   }
 
   paginatorEmit(event): void {
