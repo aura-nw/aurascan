@@ -459,4 +459,14 @@ export class TransactionMessagesComponent implements OnInit {
       return '-';
     }
   }
+
+  checkRateFloatNumber(value) {
+    const temp = value / Math.pow(10, 18);
+    let tempPercent = temp * 100;
+    //check is int value
+    if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
+      value = temp;
+    }
+    return value;
+  }
 }
