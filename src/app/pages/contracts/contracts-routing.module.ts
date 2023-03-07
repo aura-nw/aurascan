@@ -4,7 +4,6 @@ import { ContractsDetailComponent } from './contracts-detail/contracts-detail.co
 import { ContractsListComponent } from './contracts-list/contracts-list.component';
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
-import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
 
 const routes: Routes = [
   {
@@ -14,10 +13,6 @@ const routes: Routes = [
   {
     path: 'register',
     component: ContractsRegisterComponent,
-  },
-  {
-    path: 'verify/:code_id',
-    component: ContractsVerifyComponent,
   },
   {
     path: 'transactions/:addressId',

@@ -60,6 +60,6 @@ export class ContractComponent implements OnInit {
 
   navigateToVerify(codeId: string) {
     sessionStorage.setItem('codeIdPrePage', this.router.url);
-    this.router.navigate(['/contracts/verify', codeId]);
+    this.router.navigate(['/code-ids/verify', codeId]);
   }
 }
