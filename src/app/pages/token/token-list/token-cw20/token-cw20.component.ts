@@ -181,7 +181,6 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   resetSearch() {
     this.textSearch = '';
     this.onKeyUp();
-    this.getListToken();
   }
 
   pageEvent(e: PageEvent): void {

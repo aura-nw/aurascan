@@ -42,7 +42,7 @@ export class ContractsRegisterComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataBk: any[];
-  dataBlock: any[];
+  dataContract: any[];
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -132,7 +132,7 @@ export class ContractsRegisterComponent implements OnInit {
           });
           this.dataSource = new MatTableDataSource<any>(res.data);
           this.dataBk = res.data || [];
-          this.dataBlock = res.data || [];
+          this.dataContract = res.data || [];
         }
       },
       () => {},
