@@ -19,7 +19,7 @@
           <div class="body-01 mb-0 mr-6" *ngIf="global?.dataHeader?.inflation">
             <span class="h4 text--white">Inflation:</span> {{ global?.dataHeader?.inflation }}
           </div>
-          <div class="body-01 mb-0">
+          <div class="body-01 mb-0" *ngIf="global?.dataHeader?.community_pool_format">
             <span class="h4 text--white">Community Pool:</span> {{ global?.dataHeader?.community_pool_format || 0 }}
           </div>
         </div>

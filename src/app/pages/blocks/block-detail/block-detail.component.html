@@ -1,4 +1,4 @@
-<app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
+<app-pagetitle title="Details for Block #{{ id || blockDetail?.height }}"></app-pagetitle>
 <!-- Tabs -->
 <ul
   ngbNav
@@ -27,7 +27,7 @@
         #tooltip="matTooltip"
         (mouseenter)="$event.stopImmediatePropagation()"
         (mouseleave)="$event.stopImmediatePropagation()"
-        (click)="copyData(item?.json_data); tooltip.toggle()" />
+        (click)="copyData(blockDetail?.json_data); tooltip.toggle()" />
     </button>
   </div>
   <div class="card-body body">
@@ -42,7 +42,7 @@
             #tooltip="matTooltip"
             (mouseenter)="$event.stopImmediatePropagation()"
             (mouseleave)="$event.stopImmediatePropagation()"
-            (click)="copyData(item?.json_data); tooltip.toggle()" />
+            (click)="copyData(blockDetail?.json_data); tooltip.toggle()" />
         </button>
       </div>
       <!-- Tabs -->
@@ -60,32 +60,32 @@
       <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
-          <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ item?.chainid }}</div>
+          <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ blockDetail?.chainid }}</div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Height</div>
-          <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ item?.height }}</div>
+          <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.height }}</div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
           <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
-            <div>{{ commonService.getDateValue(item?.timestamp)[0] }}</div>
+            <div>{{ commonService.getDateValue(blockDetail?.timestamp)[0] }}</div>
             <div class="d-flex align-items-center ml-1">
               <span class="d-none d-lg-block">(</span>
-              <span>{{ item?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
+              <span>{{ blockDetail?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
               <div class="divider divider-vertical divider-lighter mx-2"></div>
-              <span>{{ item?.timestamp | customDate: 'HH:mm:ss' }}</span>
+              <span>{{ blockDetail?.timestamp | customDate: 'HH:mm:ss' }}</span>
               <span class="d-none d-lg-block">)</span>
             </div>
           </div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Block Hash</div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.block_hash }}</div>
+          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.block_hash }}</div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Number of Tx</div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.num_txs }}</div>
+          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.num_txs }}</div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
@@ -93,18 +93,18 @@
             <div class="ml-md-1">(used / wanted)</div>
           </div>
           <div class="col-auto col-lg-9 mb-0 text--gray-1">
-            {{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}
+            {{ blockDetail?.gas_used | number }} / {{ blockDetail?.gas_wanted | number }}
           </div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.round | number }}</div>
+          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.round | number }}</div>
         </div>
         <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
           <div class="col-auto col-lg-3 text--gray-4">Proposer</div>
           <div class="col-auto col-lg-9 text--primary mb-0">
-            <a class="text--primary" routerLink="/validators/{{ item?.operator_address }}">
-              {{ item?.proposer }}
+            <a class="text--primary" routerLink="/validators/{{ blockDetail?.operator_address }}">
+              {{ blockDetail?.proposer }}
             </a>
           </div>
         </div>
@@ -114,9 +114,9 @@
       </div>
     </ng-container>
     <ng-container *ngIf="isRawData">
-      <ng-container *ngIf="item?.json_data; else noValues">
+      <ng-container *ngIf="blockDetail?.json_data; else noValues">
         <div class="body">
-          <pre id="json" class="raw-content text--gray-1 px-4" [innerHtml]="item?.json_data | appJson"></pre>
+          <pre id="json" class="raw-content text--gray-1 px-4" [innerHtml]="blockDetail?.json_data | appJson"></pre>
         </div>
       </ng-container>
     </ng-container>

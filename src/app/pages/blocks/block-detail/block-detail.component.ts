@@ -30,7 +30,7 @@ export class BlockDetailComponent implements OnInit {
     pageIndex: PAGE_EVENT.PAGE_INDEX,
   };
 
-  item = undefined;
+  blockDetail = null;
   TAB = [
     {
       id: 0,
@@ -109,7 +109,7 @@ export class BlockDetailComponent implements OnInit {
         block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
         block['json_data'] = _.get(data.blocks[0], 'block');
         block['gas_used'] = block['gas_wanted'] = 0;
-        this.item = block;
+        this.blockDetail = block;
 
         //get list tx detail
         let txs = [];
@@ -131,8 +131,8 @@ export class BlockDetailComponent implements OnInit {
             if (txs.length > 0) {
               txs = convertDataTransaction(dataTempTx, this.coinInfo);
               txs.forEach((k) => {
-                this.item['gas_used'] += +k.gas_used;
-                this.item['gas_wanted'] += +k.gas_wanted;
+                this.blockDetail['gas_used'] += +k.gas_used;
+                this.blockDetail['gas_wanted'] += +k.gas_wanted;
               });
               this.dataSource.data = txs;
             }

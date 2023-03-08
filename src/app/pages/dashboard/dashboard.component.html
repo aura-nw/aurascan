@@ -133,7 +133,7 @@
                 <div class="body text--gray-1">Height</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.block_height > 0" class="h4 mb-0 fw-semibold text--white">
+            <div class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.block_height || 0 | number }}
             </div>
           </div>
@@ -157,8 +157,8 @@
                 <div class="body text--gray-1">Transactions</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.total_txs_num >= 0" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.total_txs_num | number }}
+            <div class="h4 mb-0 fw-semibold text--white">
+              {{ global?.dataHeader?.total_txs_num || 0 | number }}
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@
                 <div class="body text--gray-1">Bonded Token</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.bonded_tokens" class="h4 mb-0 fw-semibold text--white">
+            <div class="h4 mb-0 fw-semibold text--white">
               {{ global?.dataHeader?.bonded_tokens || 0 }} / {{ global?.dataHeader?.supply || 0 }}
             </div>
           </div>
@@ -184,8 +184,8 @@
                 <div class="body text--gray-1">Inflation rate</div>
               </div>
             </div>
-            <div *ngIf="global?.dataHeader?.inflation" class="h4 mb-0 fw-semibold text--white">
-              {{ global?.dataHeader?.inflation }}
+            <div class="h4 mb-0 fw-semibold text--white">
+              {{ global?.dataHeader?.inflation || 0 }}
             </div>
           </div>
           <div class="divider divider-horizontal my-4 my-md-1 my-lg-2"></div>
