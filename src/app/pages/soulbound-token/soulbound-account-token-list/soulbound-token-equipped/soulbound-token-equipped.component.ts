@@ -6,7 +6,6 @@ import { MEDIA_TYPE, PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { SB_TYPE } from 'src/app/core/constants/soulbound.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ContractService } from 'src/app/core/services/contract.service';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
@@ -25,7 +24,6 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   MEDIA_TYPE = MEDIA_TYPE;
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  tokenList = [];
   countSelected = 0;
   loading = false;
   pageData: PageEvent = {
@@ -35,19 +33,15 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   };
   // soulboundData param use for paginator
   soulboundData: MatTableDataSource<any> = new MatTableDataSource();
-  showData: any[];
-  nextKey = null;
-  currentKey = null;
   userAddress = '';
   sbType = SB_TYPE;
   walletAddress = null;
-  network = this.environmentService.configValue.chain_info;
-  seachValue = '';
+  searchValue = '';
+  isError = false;
 
   constructor(
     private soulboundService: SoulboundService,
     private route: ActivatedRoute,
-    private environmentService: EnvironmentService,
     private walletService: WalletService,
     public commonService: CommonService,
     private contractService: ContractService,
@@ -76,13 +70,13 @@ export class SoulboundTokenEquippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.textSearch = this.seachValue;
+    this.textSearch = this.searchValue;
     this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.seachValue = '';
+    this.searchValue = '';
     this.getListSB();
   }
 
@@ -154,5 +148,9 @@ export class SoulboundTokenEquippedComponent implements OnInit {
 
   handleRouterLink(link): void {
     window.location.href = link;
+  }
+
+  error(): void {
+    this.isError = true;
   }
 }

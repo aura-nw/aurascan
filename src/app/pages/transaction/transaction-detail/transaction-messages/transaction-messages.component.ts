@@ -61,6 +61,7 @@ export class TransactionMessagesComponent implements OnInit {
   spendLimitAmount = 0;
   typeGrantAllowance = 'Basic';
   denomIBC = '';
+  seeLessArr = [false];
 
   listIBCProgress = [];
 
@@ -94,8 +95,6 @@ export class TransactionMessagesComponent implements OnInit {
     ) {
       this.getListValidator();
       this.checkGetReward();
-    } else if (this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.StoreCode) {
-      this.checkStoreCode();
     } else if (
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.InstantiateContract ||
       this.transactionDetail?.type === TRANSACTION_TYPE_ENUM.ExecuteContract
@@ -261,16 +260,9 @@ export class TransactionMessagesComponent implements OnInit {
     }
   }
 
-  checkStoreCode(): void {
-    try {
-      const jsonData = JSON.parse(this.transactionDetail?.raw_log);
-      if (jsonData && jsonData[0]) {
-        const temp = jsonData[0]?.events.filter((f) => f.type === this.typeGetData.StoreCode);
-        if (temp) {
-          this.storeCodeId = temp[0]?.attributes.find((k) => k.key === 'code_id')?.value || 0;
-        }
-      }
-    } catch (e) {}
+  getStoreCode(index): number {
+    let temp = this.transactionDetail.tx.logs[index].events[1];
+    return temp?.attributes.find((k) => k.key === 'code_id')?.value || 0;
   }
 
   getDataIBC(type = '', index = 0): void {
@@ -466,5 +458,15 @@ export class TransactionMessagesComponent implements OnInit {
     } catch {
       return '-';
     }
+  }
+
+  checkRateFloatNumber(value) {
+    const temp = value / Math.pow(10, 18);
+    let tempPercent = temp * 100;
+    //check is int value
+    if (Number(tempPercent) === tempPercent && tempPercent % 1 === 0) {
+      value = temp;
+    }
+    return value;
   }
 }

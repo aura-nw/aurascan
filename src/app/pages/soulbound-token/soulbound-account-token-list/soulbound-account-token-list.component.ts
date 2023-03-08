@@ -13,9 +13,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
   userAddress = '';
   modalReference: any;
   totalSBT = 0;
-  soulboundFeatureList = [];
   activeId = 0;
-  walletAddress = '';
   TABS = [];
   TAB_EQUIPPED = [
     {
@@ -86,7 +84,7 @@ export class SoulboundAccountTokenListComponent implements OnInit {
     }, 800);
   }
 
-  changeTab(key){
+  changeTab(key) {
     this.activeId = key;
     this.reloadAPI = false;
   }

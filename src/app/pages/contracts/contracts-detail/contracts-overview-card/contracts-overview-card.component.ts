@@ -12,7 +12,6 @@ export class ContractsOverviewCardComponent implements OnInit {
   @Input() contractDetail: any;
   selectedToken = '$0.00';
   assetsType = TYPE_ACCOUNT;
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
 
   constructor(public global: Globals, private environmentService: EnvironmentService) {}

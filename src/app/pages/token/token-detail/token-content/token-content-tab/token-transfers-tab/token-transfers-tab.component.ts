@@ -208,8 +208,4 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
     }
     return false;
   }
-
-  viewNFTDetail(contract: string, tokenID: string) {
-    window.location.href = `/tokens/${this.linkToken}/${contract}/` + encodeURIComponent(tokenID);
-  }
 }

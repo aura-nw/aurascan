@@ -14,7 +14,6 @@ import {
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { MESSAGES_CODE_CONTRACT } from 'src/app/core/constants/messages.constant';
 import { LIMIT_NUM_SBT, SB_TYPE } from 'src/app/core/constants/soulbound.constant';
-import { TYPE_TRANSACTION } from 'src/app/core/constants/transaction.constant';
 import { ModeExecuteTransaction } from 'src/app/core/constants/transaction.enum';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TableTemplate } from 'src/app/core/models/common.model';
@@ -67,7 +66,6 @@ export class NFTDetailComponent implements OnInit {
   modeExecuteTransaction = ModeExecuteTransaction;
   nextKey = null;
   currentKey: string;
-  nftType: string;
   isError = false;
   nftUrl = '';
   sbType = SB_TYPE;
@@ -130,11 +128,10 @@ export class NFTDetailComponent implements OnInit {
     this.contractService.getNFTDetail(this.contractAddress, encoded).subscribe((res) => {
       if (res.data === null) {
         this.toastr.error('Token invalid');
+        this.loading = false;
         return;
       }
       this.nftDetail = res.data;
-      this.nftType = checkTypeFile(this.nftDetail);
-
       if (this.nftDetail.type === ContractRegisterType.CW721) {
         if (this.nftDetail?.asset_info?.data?.info?.extension?.image?.indexOf('twilight') > 1) {
           this.nftDetail['isDisplayName'] = true;
@@ -152,14 +149,15 @@ export class NFTDetailComponent implements OnInit {
           return;
         }
         this.linkToken = 'token-abt';
-        this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
+        if (this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image) {
+          this.nftUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image);
+        }
         if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
-          this.nftDetail['nftName'] = this.nftDetail.ipfs?.name || '';
+          this.nftDetail['nftName'] = this.nftDetail.token_name_ipfs || this.nftDetail.ipfs?.name || '';
         }
         this.isSoulBound = true;
       }
-
       this.loading = false;
     });
   }
@@ -186,7 +184,6 @@ export class NFTDetailComponent implements OnInit {
       this.dataSource.data = txs;
       this.pageData.length = txs?.length;
     }
-    this.loading = false;
   }
 
   paginatorEmit(event): void {
@@ -273,7 +270,7 @@ export class NFTDetailComponent implements OnInit {
       pubKey: dataWallet['pub_key'].value,
       id: this.nftDetail?.token_id,
       status: this.sbType.PENDING,
-      contractAddress: this.nftDetail?.contract_address
+      contractAddress: this.nftDetail?.contract_address,
     };
 
     let feeGas = {
@@ -333,15 +330,27 @@ export class NFTDetailComponent implements OnInit {
   }
 
   expandMedia(): void {
+    let content;
+    if (this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url) {
+      content = this.nftUrl;
+    } else {
+      content = this.nftDetail?.ipfs?.image ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image) : this.defaultImgToken;
+    }
+
     if (!this.isMobileMatched) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = false;
       dialogConfig.panelClass = 'transparent-dialog';
       dialogConfig.data = {
-        mediaType: this.nftType,
-        mediaSrc: this.nftUrl,
+        mediaType: this.getTypeFile(this.nftDetail),
+        mediaSrc: content,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }
+  }
+
+  getTypeFile(nft: any) {
+    let nftType = checkTypeFile(nft);
+    return nftType;
   }
 }

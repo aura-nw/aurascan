@@ -13,21 +13,21 @@
               type="text"
               class="form-control"
               placeholder="Search for Token Name or Token ID"
-              [(ngModel)]="seachValue"
+              [(ngModel)]="searchValue"
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
               autocomplete="off" />
             <button
               type="submit"
-              class="btn-search {{ seachValue && seachValue?.length > 0 ? 'd-none' : '' }}"
+              class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
               class="btn-reset cursor-pointer {{
-                !seachValue || (seachValue && seachValue?.length === 0) ? 'd-none' : ''
+                !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
@@ -49,11 +49,15 @@
               <div class="nft-cards__item">
                 <div class="nft-cards__img">
                   <div class="token-cards__img">
-                    <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
+                    <img
+                      *ngIf="(!token.animation_url && getTypeFile(token) !== MEDIA_TYPE.IMG) || isError"
+                      [src]="commonService.getDefaultImg()"
+                      alt="" />
                     <img
                       *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
+                      (error)="error()"
                       src="{{
-                        (token.animation_url || token.token_img)
+                        token.animation_url || token.token_img
                           ? (token.animation_url || token.token_img | replaceIpfs)
                           : commonService.getDefaultImg()
                       }}"
@@ -62,16 +66,16 @@
                       [videoSrc]="token.animation_url | replaceIpfs"
                       [showControl]="false"
                       [nftId]="'nft#' + i"
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url">
                     </app-custom-video-player>
                     <app-model-view
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE._3D"
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE._3D && token.animation_url"
                       [link]=""
                       [modelUrl]="token.animation_url | replaceIpfs"
                       [disablePan]="true">
                     </app-model-view>
                     <app-audio-player
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
+                      *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO && token.animation_url"
                       [link]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
                       [src]="token.animation_url | replaceIpfs"
                       [nftId]="'nft#' + i"

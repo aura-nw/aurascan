@@ -1,0 +1,63 @@
+<section class="mt-12 verify-step {{ currentStep < 3 ? 'mb-20 mb-lg-0' : '' }}">
+  <div class="row">
+    <div class="col-12 col-lg-4">
+      <div class="step" id="step1" [class.complete]="currentStep > 1" [class.active]="currentStep === 1">
+        <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
+          <div class="step__num mx-lg-auto">1</div>
+          <div class="step__title">Pre check ({{ currentStep > 4 ? 4 : currentStep }}/4)</div>
+        </div>
+        <div class="step__content my-2 my-lg-4">
+          <ul>
+            <ng-container *ngFor="let step of steps; index as index">
+              <ng-container *ngIf="index < 4">
+                <li [class]="step.className">
+                  <div>{{ step.check_name }}</div>
+                  <div class="step__error" *ngIf="step.result === 'Fail'">
+                    {{ 'VERIFY_CODE_ID.' + step.msg_code | translate }}
+                  </div>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="step" id="step2" [class.complete]="currentStep >= 8" [class.active]="currentStep < 8">
+        <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
+          <div class="step__num mx-lg-auto">2</div>
+          <div class="step__title">Verify process ({{ currentStep < 4 ? 0 : currentStep - 4 }}/4)</div>
+        </div>
+        <div class="step__content my-2 my-lg-4">
+          <ul>
+            <ng-container *ngFor="let step of steps; index as index">
+              <ng-container *ngIf="index > 3">
+                <li [class]="step.className">
+                  <div>{{ step.check_name }}</div>
+                  <div class="step__error" *ngIf="step.result === 'Fail'">
+                    {{ 'VERIFY_CODE_ID.' + step.msg_code | translate }}
+                  </div>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="step" id="step3" [class.complete]="currentStep >= 8">
+        <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
+          <div class="step__num mx-lg-auto">3</div>
+          <div class="step__title">Complete</div>
+        </div>
+        <div class="step__content my-2 my-lg-4" *ngIf="currentStep >= 8">
+          <ul>
+            <li class="isComplete">
+              <div>Code Id source code verified successfully</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

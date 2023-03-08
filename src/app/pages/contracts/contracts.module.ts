@@ -28,7 +28,7 @@ import { ContractsListComponent } from './contracts-list/contracts-list.componen
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
-import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
+import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
 
 @NgModule({
@@ -42,8 +42,8 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ContractComponent,
     CodeContractComponent,
     ContractsVerifyComponent,
-    CompilerOutputComponent,
-    ContractsRegisterComponent,
+    ContractVerifyStepsComponent,
+    ContractsRegisterComponent
   ],
   imports: [
     CommonModule,
@@ -69,5 +69,6 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ReadContractModule,
   ],
   providers: [ContractService],
+  exports: [ContractVerifyStepsComponent],
 })
 export class ContractsModule {}
