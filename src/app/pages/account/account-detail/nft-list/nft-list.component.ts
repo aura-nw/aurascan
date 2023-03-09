@@ -60,30 +60,35 @@ export class NftListComponent implements OnChanges {
       keyword: this.searchValue,
       next_key: this.nextKey,
     };
-    this.accountService.getAssetCW721ByOwner(payload).subscribe((res: ResponseDto) => {
-      if (res?.data?.length > 0) {
-        if (this.nftList.length > 0) {
-          this.nftList = [...this.nftList, ...res.data];
-        } else {
-          this.nftList = res?.data;
-        }
-        this.nextKey = res.meta?.next_key;
-        this.pageData.length = this.nftList.length;
-
-        this.nftList.forEach((element) => {
-          if (!this.searchValue) {
-            this.totalValue += element.price * +element.balance || 0;
+    this.accountService.getAssetCW721ByOwner(payload).subscribe(
+      (res: ResponseDto) => {
+        if (res?.data?.length > 0) {
+          if (this.nftList.length > 0) {
+            this.nftList = [...this.nftList, ...res.data];
+          } else {
+            this.nftList = res?.data;
           }
-        });
-        let start = this.pageData.pageIndex * this.pageData.pageSize;
-        let end = this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize;
-        this.showedData = this.nftList.slice(start, end);
-        this.totalValueNft.emit(this.totalValue);
-      } else {
-        this.nftList.length = 0;
-      }
-    });
-    this.loading = false;
+          this.nextKey = res.meta?.next_key;
+          this.pageData.length = this.nftList.length;
+
+          this.nftList.forEach((element) => {
+            if (!this.searchValue) {
+              this.totalValue += element.price * +element.balance || 0;
+            }
+          });
+          let start = this.pageData.pageIndex * this.pageData.pageSize;
+          let end = this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize;
+          this.showedData = this.nftList.slice(start, end);
+          this.totalValueNft.emit(this.totalValue);
+        } else {
+          this.nftList.length = 0;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   resetSearch(): void {

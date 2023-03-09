@@ -103,7 +103,6 @@ export class MyGranteesComponent implements OnInit {
   }
 
   getGranteesData() {
-    this.loading = true;
     if (this.isActive) {
       this.templates = this.templatesActive;
       this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);

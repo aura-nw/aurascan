@@ -1,26 +1,32 @@
 <app-loading-sprint *ngIf="loading"></app-loading-sprint>
 <ng-container *ngIf="!loading">
-  <div class="d-flex mb-4 mb-lg-5 align-items-center">
-    <!-- <img [src]="tokenDetail?.image || defaultLogoToken" alt="" width="32px" height="32px" /> -->
-    <h1 class="mb-0 text--white ml-2">
-      Token <span class="text--gray-5 break-word">{{ tokenDetail?.name }}</span>
-    </h1>
-  </div>
-  <div class="row">
-    <div class="col-12 col-lg-6">
-      <app-token-overview *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-overview>
+  <ng-container *ngIf="tokenDetail; else noValues">
+    <div class="d-flex mb-4 mb-lg-5 align-items-center">
+      <!-- <img [src]="tokenDetail?.image || defaultLogoToken" alt="" width="32px" height="32px" /> -->
+      <h1 class="mb-0 text--white ml-2">
+        Token <span class="text--gray-5 break-word">{{ tokenDetail?.name }}</span>
+      </h1>
+    </div>
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <app-token-overview *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-overview>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <app-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-summary>
+      </div>
     </div>
 
-    <div class="col-12 col-lg-6">
-      <app-token-summary *ngIf="tokenDetail" [tokenDetail]="tokenDetail"></app-token-summary>
-    </div>
-  </div>
-
-  <app-token-content
-    *ngIf="tokenDetail"
-    [tokenDetail]="tokenDetail"
-    [contractAddress]="contractAddress"
-    (resultLength)="getLength($event)"
-    (hasMore)="getMoreTx($event)">
-  </app-token-content>
+    <app-token-content
+      *ngIf="tokenDetail"
+      [tokenDetail]="tokenDetail"
+      [contractAddress]="contractAddress"
+      (resultLength)="getLength($event)"
+      (hasMore)="getMoreTx($event)">
+    </app-token-content>
+  </ng-container>
 </ng-container>
+
+<ng-template #noValues>
+  <app-table-no-data></app-table-no-data>
+</ng-template>

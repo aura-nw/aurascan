@@ -158,6 +158,9 @@ export class NFTDetailComponent implements OnInit {
         }
         this.isSoulBound = true;
       }
+    },
+    () => {},
+    () => {
       this.loading = false;
     });
   }

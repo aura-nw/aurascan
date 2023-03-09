@@ -24,20 +24,25 @@
     </button>
   </div>
 </div>
-<div class="row">
-  <div class="col-12 col-lg-6">
-    <app-contracts-overview-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contracts-overview-card>
+
+<ng-container *ngIf="contractDetail; else noValues">
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <app-contracts-overview-card
+        [contractDetail]="contractDetail"
+        *ngIf="contractDetail"></app-contracts-overview-card>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <app-contract-info-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
+    </div>
   </div>
 
-  <div class="col-12 col-lg-6">
-    <app-contract-info-card [contractDetail]="contractDetail" *ngIf="contractDetail"></app-contract-info-card>
-  </div>
-</div>
-
-<app-contract-content
-  *ngIf="contractDetail"
-  [contractsAddress]="contractAddress + ''"
-  [contractTypeData]="contractDetail.contract_verification"></app-contract-content>
+  <app-contract-content
+    *ngIf="contractDetail"
+    [contractsAddress]="contractAddress + ''"
+    [contractTypeData]="contractDetail.contract_verification"></app-contract-content>
+</ng-container>
 
 <div class="col-lg-3">
   <ng-template #modalManage let-modal>
@@ -54,3 +59,7 @@
     </div>
   </ng-template>
 </div>
+
+<ng-template #noValues>
+  <app-table-no-data></app-table-no-data>
+</ng-template>

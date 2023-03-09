@@ -41,10 +41,15 @@ export class VerifyCodeIdComponent implements OnInit {
   }
 
   getCodeIdDetail() {
-    this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      this.codeIdDetail = res.data;
-      this.contractStatus = this.codeIdDetail?.contract_verification;
-      this.loading = false;
-    });
+    this.contractService.getCodeIDDetail(this.codeId).subscribe(
+      (res) => {
+        this.codeIdDetail = res.data;
+        this.contractStatus = this.codeIdDetail?.contract_verification;
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 }

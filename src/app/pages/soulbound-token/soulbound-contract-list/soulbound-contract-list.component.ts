@@ -92,11 +92,16 @@ export class SoulboundContractListComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
-      this.dataSource.data = res.data;
-      this.pageData.length = res.meta.count;
-    });
-    this.loading = false;
+    this.soulboundService.getListSoulbound(payload).subscribe(
+      (res) => {
+        this.dataSource.data = res.data;
+        this.pageData.length = res.meta.count;
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   openDialog(contract_address): void {

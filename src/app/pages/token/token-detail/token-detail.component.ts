@@ -33,14 +33,18 @@ export class TokenDetailComponent implements OnInit {
   }
 
   getTokenDetail(): void {
-    this.loading = true;
-    this.tokenService.getTokenDetail(this.contractAddress).subscribe((res: ResponseDto) => {
-      this.tokenDetail = res.data;
-      if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
-        this.tokenDetail.isNFTContract = true;
-      }
-    });
-    this.loading = false;
+    this.tokenService.getTokenDetail(this.contractAddress).subscribe(
+      (res: ResponseDto) => {
+        this.tokenDetail = res.data;
+        if (this.tokenDetail?.type !== ContractRegisterType.CW20) {
+          this.tokenDetail.isNFTContract = true;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   getLength(result: string) {

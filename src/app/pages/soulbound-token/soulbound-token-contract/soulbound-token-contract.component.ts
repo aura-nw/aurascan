@@ -119,11 +119,16 @@ export class SoulboundTokenContractComponent implements OnInit {
       status: this.selectedType,
     };
 
-    this.soulboundService.getSBContractDetail(payload).subscribe((res) => {
-      this.dataSource.data = res.data;
-      this.pageData.length = res.meta.count;
-    });
-    this.loading = false;
+    this.soulboundService.getSBContractDetail(payload).subscribe(
+      (res) => {
+        this.dataSource.data = res.data;
+        this.pageData.length = res.meta.count;
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   openDialog(): void {

@@ -28,7 +28,7 @@ export class TokenInventoryComponent implements OnInit {
   keyWord = '';
   dataSourceMobile: any[];
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-  isMoreTx = true;
+  isMoreTx = false;
   linkToken = 'token-nft';
 
   constructor(
@@ -77,29 +77,31 @@ export class TokenInventoryComponent implements OnInit {
       payload.pageOffset = 100;
     }
 
-    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe((res) => {
-      const asset = _.get(res, `data.assets[${this.typeContract}]`);
-      this.pageData.length = _.get(res, `data.assets[${this.typeContract}].count`);
+    this.tokenService.getListTokenNFTFromIndexer(payload).subscribe(
+      (res) => {
+        const asset = _.get(res, `data.assets[${this.typeContract}]`);
+        this.pageData.length = _.get(res, `data.assets[${this.typeContract}].count`);
 
-      if (this.nftData.data.length > 0) {
-        this.nftData.data = [...this.nftData.data, ...asset.asset];
-      } else {
-        this.nftData.data = [...asset.asset];
-      }
-      this.dataSourceMobile = this.nftData.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
-
-      if (this.pageData.length > 200) {
-        this.pageData.length = 200;
-      } else {
-        if (this.pageData.length === this.nftData.data.length) {
-          this.isMoreTx = false;
+        if (this.nftData.data.length > 0) {
+          this.nftData.data = [...this.nftData.data, ...asset.asset];
+        } else {
+          this.nftData.data = [...asset.asset];
         }
-      }
-      this.loading = false;
-    });
+        this.dataSourceMobile = this.nftData.data.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
+
+        if (this.pageData.length > 200) {
+          this.pageData.length = 200;
+          this.isMoreTx = true;
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   pageEvent(e: PageEvent): void {

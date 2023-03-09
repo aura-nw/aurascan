@@ -48,7 +48,11 @@ export class ContractTableComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [];
   transactionTableData: TableData[];
 
-  pageData: PageEvent = null;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
@@ -72,12 +76,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   loadTableData() {
-    this.pageData = {
-      length: this.dataList.count,
-      pageSize: this.pageSize,
-      pageIndex: PAGE_EVENT.PAGE_INDEX,
-    };
-
     if (this.dataSource) {
       this.dataSource.data = this.transactionTableData;
     } else {
@@ -126,7 +124,6 @@ export class ContractTableComponent implements OnInit, OnChanges {
   }
 
   getListContractTransaction(): void {
-    this.isLoading = true;
     this.contractInfo.count = this.dataList?.count || 0;
     const ret = this.dataList?.data?.map((contract) => {
       let value = 0;

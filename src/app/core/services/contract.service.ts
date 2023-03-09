@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IResponsesTemplates } from 'src/app/core/models/common.model';
-import { DeployContractListReq, SmartContractListReq } from 'src/app/core/models/contract.model';
+import { SmartContractListReq } from 'src/app/core/models/contract.model';
 import { EnvironmentService } from '../data-services/environment.service';
 import { CommonService } from './common.service';
 
@@ -95,10 +94,6 @@ export class ContractService extends CommonService {
 
   getNFTDetail(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
-  }
-
-  getListContractById(codeId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/contract-codes/${codeId}`);
   }
 
   getVerifyCodeStep(codeId: number): Observable<any> {

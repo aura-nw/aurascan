@@ -43,7 +43,7 @@ export class TokenCw721Component implements OnInit {
   };
   sortBy = this.typeSortBy.transfers24h;
   sortOrder = 'desc';
-  isSorting = true;
+  isSorting = false;
   searchSubject = new Subject();
   destroy$ = new Subject();
   image_s3 = this.environmentService.configValue.image_s3;
@@ -86,7 +86,6 @@ export class TokenCw721Component implements OnInit {
       sort_order: this.sortOrder,
     };
     this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
-      this.isSorting = false;
       if (res.data.length > 0) {
         res.data.forEach((data) => {
           data['isValueUp'] = true;

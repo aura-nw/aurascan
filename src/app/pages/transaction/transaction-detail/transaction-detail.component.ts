@@ -51,7 +51,7 @@ export class TransactionDetailComponent implements OnInit {
     private mappingErrorService: MappingErrorService,
     private environmentService: EnvironmentService,
     private layout: BreakpointObserver,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
   ) {}
 
   ngOnInit(): void {
@@ -82,11 +82,11 @@ export class TransactionDetailComponent implements OnInit {
 
             if (this.transaction.raw_log && +this.transaction.code !== CodeTransaction.Success) {
               this.errorMessage = this.transaction.raw_log;
-              this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(this.errorMessage, this.transaction.code);
+              this.errorMessage = this.mappingErrorService.checkMappingErrorTxDetail(
+                this.errorMessage,
+                this.transaction.code,
+              );
             }
-            this.loading = false;
-          } else if (this.isReload) {
-            this.loading = false;
           } else {
             setTimeout(() => {
               this.getDetail();
@@ -94,13 +94,14 @@ export class TransactionDetailComponent implements OnInit {
             }, 10000);
           }
         },
-        (_) => {
-          this.router.navigate(['/']);
+        () => {},
+        () => {
+          this.loading = false;
         },
       );
     }
   }
-  
+
   changeType(type: boolean): void {
     this.isRawData = type;
   }
@@ -114,8 +115,8 @@ export class TransactionDetailComponent implements OnInit {
     document.body.removeChild(dummy);
     // fake event click out side copy button
     // this event for hidden tooltip
-    setTimeout(function (){
+    setTimeout(function () {
       document.getElementById('popupCopy').click();
-    }, 800)
+    }, 800);
   }
 }

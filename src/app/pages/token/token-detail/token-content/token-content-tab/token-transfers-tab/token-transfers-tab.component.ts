@@ -122,7 +122,7 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
         trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
       });
 
-      if (this.dataSource.data.length > 0) {
+      if (this.dataSource?.data?.length > 0) {
         this.dataSource.data = [...this.dataSource.data, ...res.data.data.transactions];
       } else {
         this.dataSource.data = [...res.data.data.transactions];

@@ -35,9 +35,11 @@ export class ContractsListComponent implements OnInit, OnDestroy {
     { matColumnDef: 'creator_address', headerCellDef: 'Creator', isUrl: '/account', isShort: true },
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
-  pageData: PageEvent;
-  pageSize = 20;
-  pageIndex = 0;
+  pageData: PageEvent = {
+    length: PAGE_EVENT.LENGTH,
+    pageSize: 20,
+    pageIndex: PAGE_EVENT.PAGE_INDEX,
+  };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
@@ -78,18 +80,13 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   getListContract() {
     let payload = {
-      limit: this.pageSize,
-      offset: this.pageIndex * this.pageSize,
+      limit: this.pageData.pageSize,
+      offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
       contractType: this.filterButtons,
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {
-      this.pageData = {
-        length: res?.meta?.count,
-        pageSize: 20,
-        pageIndex: PAGE_EVENT.PAGE_INDEX,
-      };
       if (res?.data?.length > 0) {
         res.data.forEach((item) => {
           item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
@@ -100,6 +97,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           }
         });
         this.dataSource = res.data;
+        this.pageData.length = res?.meta?.count;
       }
     });
   }
@@ -109,7 +107,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   }
 
   pageEvent(e: PageEvent): void {
-    this.pageIndex = e.pageIndex;
+    this.pageData.pageIndex = e.pageIndex;
     this.getListContract();
   }
 

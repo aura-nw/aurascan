@@ -117,20 +117,25 @@ export class ContractsVerifyComponent implements OnInit {
   }
 
   checkStatusVerify() {
-    this.contractService.checkVerified(this.code_id).subscribe((res) => {
-      if (res.data?.codeId) {
-        this.loading = false;
-        this.isExitCode = true;
-        if (res.data.status !== ContractVerifyType.Unverified) {
-          this.currentStep = 'compiler';
-          this.startWS();
-          if (res.data.status.toLowerCase() == ContractVerifyType.VerifiedFail.toLowerCase()) {
-            this.isCompilerComplete = true;
-            this.isVerifyFail = true;
+    this.contractService.checkVerified(this.code_id).subscribe(
+      (res) => {
+        if (res.data?.codeId) {
+          this.isExitCode = true;
+          if (res.data.status !== ContractVerifyType.Unverified) {
+            this.currentStep = 'compiler';
+            this.startWS();
+            if (res.data.status.toLowerCase() == ContractVerifyType.VerifiedFail.toLowerCase()) {
+              this.isCompilerComplete = true;
+              this.isVerifyFail = true;
+            }
           }
         }
-      }
-    });
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events
@@ -149,7 +154,7 @@ export class ContractsVerifyComponent implements OnInit {
 
   checkFormValid(): boolean {
     this.formValid = true;
-    if (this.contractForm.status !== "INVALID") {
+    if (this.contractForm.status !== 'INVALID') {
       this.formValid = false;
     }
     return this.formValid;

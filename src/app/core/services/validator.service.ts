@@ -80,8 +80,4 @@ export class ValidatorService extends CommonService {
   getValidatorAvatar(validatorAddress: string): string {
     return `${this.environmentService.configValue.validator_s3}/${validatorAddress}.png`;
   }
-
-  getStakeInfo(delegatorAddress: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/validators/delegations/delegator/${delegatorAddress}`);
-  }
 }

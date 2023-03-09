@@ -176,7 +176,7 @@
     </div>
   </div>
   <div class="card py-10" *ngIf="!currentValidatorDetail">
-    <app-loading-sprint></app-loading-sprint>
+    <app-table-no-data></app-table-no-data>
   </div>
   <!-- Proposed Blocks + Uptime -->
   <div class="row">
@@ -400,9 +400,6 @@
                 </app-paginator>
               </div>
             </ng-container>
-            <ng-template #noValues>
-              <app-table-no-data></app-table-no-data>
-            </ng-template>
           </ngx-simplebar>
         </div>
       </div>
@@ -517,3 +514,7 @@
   [isOpenDialog]="isOpenDialog"
   (changeStatus)="updateStatus($event)"
   (reloadData)="loadData()"></app-delegate-item>
+
+<ng-template #noValues>
+  <app-table-no-data></app-table-no-data>
+</ng-template>

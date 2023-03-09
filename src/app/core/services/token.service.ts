@@ -29,10 +29,6 @@ export class TokenService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/token/${address}`);
   }
 
-  getTokenCW721Detail(address): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cw721-tokens/${address}`);
-  }
-
   getListTokenTransferIndexer(pageLimit: string | number, contractAddress: string, filterData: any, nextKey = null) {
     const params = _({
       chainid: this.chainInfo.chainId,

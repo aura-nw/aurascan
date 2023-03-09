@@ -82,12 +82,17 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
       keyword: this.textSearch?.trim(),
     };
 
-    this.soulboundService.getListSoulboundByAddress(payload).subscribe((res) => {
-      this.soulboundData.data = res.data;
-      this.pageData.length = res.meta.count;
-      this.totalUnEquip.emit(this.pageData.length);
-    });
-    this.loading = false;
+    this.soulboundService.getListSoulboundByAddress(payload).subscribe(
+      (res) => {
+        this.soulboundData.data = res.data;
+        this.pageData.length = res.meta.count;
+        this.totalUnEquip.emit(this.pageData.length);
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {
