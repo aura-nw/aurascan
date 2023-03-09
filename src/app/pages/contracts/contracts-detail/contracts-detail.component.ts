@@ -36,6 +36,8 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
         this.contractDetail = res?.data;
         this.contractDetail.balance = balanceOf(this.contractDetail?.balance);
         this.contractDetail.price = this.contractDetail?.balance * this.priceToken || 0;
+      } else {
+        this.contractDetail = null;
       }
     });
   }

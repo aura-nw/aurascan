@@ -36,7 +36,6 @@ export class TokenContractTabComponent implements OnInit {
 
   navigateToVerify() {
     sessionStorage.setItem('codeIdPrePage', this.router.url);
-    localStorage.setItem('isVerifyTab', 'true');
     this.router.navigate(['/code-ids/verify', this.tokenDetail.code_id]);
   }
 }
