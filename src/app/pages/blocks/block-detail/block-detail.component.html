@@ -1,40 +1,31 @@
-<app-pagetitle title="Details for Block #{{ id || item?.height }}"></app-pagetitle>
-<!-- Tabs -->
-<ul
-  ngbNav
-  #customNav="ngbNav"
-  [activeId]="isRawData ? 1 : 0"
-  class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
-  <ng-container *ngFor="let tab of TAB; index as index">
-    <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-      <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-        <span>{{ tab.value }}</span>
-      </a>
-    </li>
-  </ng-container>
-</ul>
+<div *ngIf="loading" class="m-auto mt-10">
+  <app-loading-sprint></app-loading-sprint>
+</div>
 
-<div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
-  <div class="d-flex align-items-baseline">
-    <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0" id="popupCopy">
-      {{ !isRawData ? 'Information' : 'Raw Data' }}
-    </h2>
-    <button class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex" *ngIf="isRawData">
-      <img
-        [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
-        alt=""
-        matTooltip="Copied!"
-        #tooltip="matTooltip"
-        (mouseenter)="$event.stopImmediatePropagation()"
-        (mouseleave)="$event.stopImmediatePropagation()"
-        (click)="copyData(item?.json_data); tooltip.toggle()" />
-    </button>
-  </div>
-  <div class="card-body body">
-    <div class="d-lg-none mb-4">
+<ng-container *ngIf="!loading">
+  <ng-container *ngIf="blockDetail; else noValues">
+    <app-pagetitle title="Details for Block #{{ id || blockDetail?.height }}"></app-pagetitle>
+    <!-- Tabs -->
+    <ul
+      ngbNav
+      #customNav="ngbNav"
+      [activeId]="isRawData ? 1 : 0"
+      class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-none d-lg-flex">
+      <ng-container *ngFor="let tab of TAB; index as index">
+        <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
+          <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
+            <span>{{ tab.value }}</span>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+
+    <div class="card text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
       <div class="d-flex align-items-baseline">
-        <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
-        <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
+        <h2 class="card-header mb-0 text--white d-none d-lg-flex pb-0 pr-0" id="popupCopy">
+          {{ !isRawData ? 'Information' : 'Raw Data' }}
+        </h2>
+        <button class="button button--xxs button--sm-mob button-circle ml-2 d-none d-lg-flex" *ngIf="isRawData">
           <img
             [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
             alt=""
@@ -42,197 +33,218 @@
             #tooltip="matTooltip"
             (mouseenter)="$event.stopImmediatePropagation()"
             (mouseleave)="$event.stopImmediatePropagation()"
-            (click)="copyData(item?.json_data); tooltip.toggle()" />
+            (click)="copyData(blockDetail?.json_data); tooltip.toggle()" />
         </button>
       </div>
-      <!-- Tabs -->
-      <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
-        <ng-container *ngFor="let tab of TAB; index as index">
-          <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
-            <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
-              <span>{{ tab.value }}</span>
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-    <ng-container *ngIf="!isRawData">
-      <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
-          <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ item?.chainid }}</div>
+      <div class="card-body body">
+        <div class="d-lg-none mb-4">
+          <div class="d-flex align-items-baseline">
+            <h2 class="mb-4 text--white">{{ !isRawData ? 'Information' : 'Raw Data' }}</h2>
+            <button class="button button--xxs button--sm-mob button-circle ml-2" *ngIf="isRawData">
+              <img
+                [src]="'assets/icons/icons-svg/basic/copy.svg' | imageS3"
+                alt=""
+                matTooltip="Copied!"
+                #tooltip="matTooltip"
+                (mouseenter)="$event.stopImmediatePropagation()"
+                (mouseleave)="$event.stopImmediatePropagation()"
+                (click)="copyData(blockDetail?.json_data); tooltip.toggle()" />
+            </button>
+          </div>
+          <!-- Tabs -->
+          <ul ngbNav #customNav="ngbNav" [activeId]="isRawData ? 1 : 0" class="aura-nav-tabs nav-tabs nav-tabs-custom">
+            <ng-container *ngFor="let tab of TAB; index as index">
+              <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1">
+                <a ngbNavLink (click)="changeType(tab.id === 1)" class="fw-semibold">
+                  <span>{{ tab.value }}</span>
+                </a>
+              </li>
+            </ng-container>
+          </ul>
         </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Height</div>
-          <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ item?.height }}</div>
-        </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
-          <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
-            <div>{{ commonService.getDateValue(item?.timestamp)[0] }}</div>
-            <div class="d-flex align-items-center ml-1">
-              <span class="d-none d-lg-block">(</span>
-              <span>{{ item?.timestamp | customDate: 'yyyy-MM-dd' }}</span>
-              <div class="divider divider-vertical divider-lighter mx-2"></div>
-              <span>{{ item?.timestamp | customDate: 'HH:mm:ss' }}</span>
-              <span class="d-none d-lg-block">)</span>
+        <ng-container *ngIf="!isRawData">
+          <div *ngIf="!loading" [ngClass]="{ 'card-info': breakpoint.value.matches }">
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Chain Id</div>
+              <div class="col-auto col-lg-9 text--gray-1 h6 mb-0">{{ blockDetail?.chainid }}</div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Height</div>
+              <div class="col-auto col-lg-9 text--gray-1 mb-0">{{ blockDetail?.height }}</div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Block Time</div>
+              <div class="col-auto col-lg-9 text-end text-lg-start text--gray-1 d-lg-flex align-items-center">
+                <div>{{ commonService.getDateValue(blockDetail?.timestamp)[0] }}</div>
+                <div class="d-flex align-items-center ml-1">
+                  <span class="d-none d-lg-block">(</span>
+                  <span>{{ blockDetail?.timestamp | customDate : 'yyyy-MM-dd' }}</span>
+                  <div class="divider divider-vertical divider-lighter mx-2"></div>
+                  <span>{{ blockDetail?.timestamp | customDate : 'HH:mm:ss' }}</span>
+                  <span class="d-none d-lg-block">)</span>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Block Hash</div>
+              <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.block_hash }}</div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Number of Tx</div>
+              <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.num_txs }}</div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
+                <div>Gas</div>
+                <div class="ml-md-1">(used / wanted)</div>
+              </div>
+              <div class="col-auto col-lg-9 mb-0 text--gray-1">
+                {{ blockDetail?.gas_used | number }} / {{ blockDetail?.gas_wanted | number }}
+              </div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
+              <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ blockDetail?.round | number }}</div>
+            </div>
+            <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
+              <div class="col-auto col-lg-3 text--gray-4">Proposer</div>
+              <div class="col-auto col-lg-9 text--primary mb-0">
+                <a class="text--primary" routerLink="/validators/{{ blockDetail?.operator_address }}">
+                  {{ blockDetail?.proposer }}
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Block Hash</div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.block_hash }}</div>
-        </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Number of Tx</div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.num_txs }}</div>
-        </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4 d-md-flex">
-            <div>Gas</div>
-            <div class="ml-md-1">(used / wanted)</div>
+          <div class="card-body body" *ngIf="loading">
+            <app-loading-sprint></app-loading-sprint>
           </div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">
-            {{ item?.gas_used | number }} / {{ item?.gas_wanted | number }}
-          </div>
-        </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Block Round</div>
-          <div class="col-auto col-lg-9 mb-0 text--gray-1">{{ item?.round | number }}</div>
-        </div>
-        <div class="row mb-3 body-02 body-01-mob justify-content-between justify-content-lg-start">
-          <div class="col-auto col-lg-3 text--gray-4">Proposer</div>
-          <div class="col-auto col-lg-9 text--primary mb-0">
-            <a class="text--primary" routerLink="/validators/{{ item?.operator_address }}">
-              {{ item?.proposer }}
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body body" *ngIf="loading">
-        <app-loading-sprint></app-loading-sprint>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="isRawData">
-      <ng-container *ngIf="item?.json_data; else noValues">
-        <div class="body">
-          <pre id="json" class="raw-content text--gray-1 px-4" [innerHtml]="item?.json_data | appJson"></pre>
-        </div>
-      </ng-container>
-    </ng-container>
-  </div>
-</div>
-<div class="card text--gray-1" *ngIf="!isRawData">
-  <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
-  <div class="card-body body">
-    <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-      <div class="table-responsive d-none d-lg-block">
-        <table mat-table [dataSource]="dataSource" class="aura-table">
-          <ng-container *ngFor="let template of templates; index as i">
-            <ng-container [matColumnDef]="template.matColumnDef">
-              <th mat-header-cell *matHeaderCellDef>
-                <div [innerHTML]="template.headerCellDef | translate"></div>
-              </th>
-
-              <td mat-cell *matCellDef="let data">
-                <div>
-                  <ng-container [ngSwitch]="template.matColumnDef">
-                    <div *ngSwitchCase="'timestamp'">
-                      {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
-                    </div>
-                    <a
-                      *ngSwitchCase="'tx_hash'"
-                      class="text--primary cursor-pointer hash-link"
-                      [routerLink]="['/transaction', data['tx_hash']]">
-                      {{ data[template.matColumnDef] | cutStringPipe: 8:8 }}
-                    </a>
-                    <a
-                      *ngSwitchCase="'height'"
-                      class="text--primary cursor-pointer block-link"
-                      [routerLink]="['/blocks', data['height']]">
-                      {{ data[template.matColumnDef] }}
-                    </a>
-                    <div *ngSwitchCase="'type'" class="g-type aura-status">
-                      <span class="status">{{ data[template.matColumnDef] }}</span>
-                    </div>
-                    <div *ngSwitchCase="'status'">
-                      <div [ngSwitch]="data[template.matColumnDef]">
-                        <div *ngSwitchCase="'Success'" class="text--green-3">
-                          {{ data[template.matColumnDef] | uppercase }}
-                        </div>
-                        <div *ngSwitchCase="'Fail'" class="text--red-3">
-                          {{ data[template.matColumnDef] | uppercase }}
-                        </div>
-                        <div *ngSwitchCase="'Pending'" class="text--yellow-3">
-                          {{ data[template.matColumnDef] | uppercase }}
-                        </div>
-                      </div>
-                    </div>
-                    <div *ngSwitchCase="'fee'">
-                      {{ +data[template.matColumnDef] | mask: 'separator.6' }} <span class="text--primary">{{ denom }}</span>
-                    </div>
-                    <div *ngSwitchCase="'amount'">
-                      <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
-                        {{ data[template.matColumnDef] | mask: 'separator.6' }}
-                        <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
-                      </ng-container>
-                      <ng-template #displayNonNumber>
-                        <span *ngIf="!data[template.matColumnDef]"> - </span>
-                        <a
-                          *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
-                          class="text--primary cursor-pointer"
-                          [routerLink]="['/transaction', data['tx_hash']]">
-                          More
-                        </a>
-                      </ng-template>
-                    </div>
-                    <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
-                  </ng-container>
-                </div>
-              </td>
-            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="isRawData">
+          <ng-container *ngIf="blockDetail?.json_data; else noValues">
+            <div class="body">
+              <pre id="json" class="raw-content text--gray-1 px-4" [innerHtml]="blockDetail?.json_data | appJson"></pre>
+            </div>
           </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div *ngIf="loadingTxs">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
+    <div class="card text--gray-1" *ngIf="!loadingTxs && !isRawData">
+      <h2 class="card-header mb-0 text--white pb-0">Transactions</h2>
+      <div class="card-body body">
+        <ng-container *ngIf="!loadingTxs && dataSource?.data?.length > 0; else noValues">
+          <div class="table-responsive d-none d-lg-block">
+            <table mat-table [dataSource]="dataSource" class="aura-table">
+              <ng-container *ngFor="let template of templates; index as i">
+                <ng-container [matColumnDef]="template.matColumnDef">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <div [innerHTML]="template.headerCellDef | translate"></div>
+                  </th>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell g-no-data" colspan="9999">
-              {{ 'NO DATA' | translate }}
-            </td>
-          </tr>
-        </table>
+                  <td mat-cell *matCellDef="let data">
+                    <div>
+                      <ng-container [ngSwitch]="template.matColumnDef">
+                        <div *ngSwitchCase="'timestamp'">
+                          {{ commonService.getDateValue(data[template.matColumnDef])[0] }}
+                        </div>
+                        <a
+                          *ngSwitchCase="'tx_hash'"
+                          class="text--primary cursor-pointer hash-link"
+                          [routerLink]="['/transaction', data['tx_hash']]">
+                          {{ data[template.matColumnDef] | cutStringPipe : 8 : 8 }}
+                        </a>
+                        <a
+                          *ngSwitchCase="'height'"
+                          class="text--primary cursor-pointer block-link"
+                          [routerLink]="['/blocks', data['height']]">
+                          {{ data[template.matColumnDef] }}
+                        </a>
+                        <div *ngSwitchCase="'type'" class="g-type aura-status">
+                          <span class="status">{{ data[template.matColumnDef] }}</span>
+                        </div>
+                        <div *ngSwitchCase="'status'">
+                          <div [ngSwitch]="data[template.matColumnDef]">
+                            <div *ngSwitchCase="'Success'" class="text--green-3">
+                              {{ data[template.matColumnDef] | uppercase }}
+                            </div>
+                            <div *ngSwitchCase="'Fail'" class="text--red-3">
+                              {{ data[template.matColumnDef] | uppercase }}
+                            </div>
+                            <div *ngSwitchCase="'Pending'" class="text--yellow-3">
+                              {{ data[template.matColumnDef] | uppercase }}
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'fee'">
+                          {{ +data[template.matColumnDef] | mask : 'separator.6' }}
+                          <span class="text--primary">{{ denom }}</span>
+                        </div>
+                        <div *ngSwitchCase="'amount'">
+                          <ng-container *ngIf="data[template.matColumnDef] > 0; else displayNonNumber">
+                            {{ data[template.matColumnDef] | mask : 'separator.6' }}
+                            <span class="text--primary">{{ commonService.mappingNameIBC(data?.denom) }}</span>
+                          </ng-container>
+                          <ng-template #displayNonNumber>
+                            <span *ngIf="!data[template.matColumnDef]"> - </span>
+                            <a
+                              *ngIf="data[template.matColumnDef] && data[template.matColumnDef] !== 0"
+                              class="text--primary cursor-pointer"
+                              [routerLink]="['/transaction', data['tx_hash']]">
+                              More
+                            </a>
+                          </ng-template>
+                        </div>
+                        <div *ngSwitchDefault>{{ data[template.matColumnDef] }}</div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell g-no-data" colspan="9999">
+                  {{ 'NO DATA' | translate }}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="d-lg-none" *ngIf="dataSource?.data?.length > 0">
+            <app-card-mob-simple
+              *ngFor="let data of dataSource.data"
+              [link]="'/transaction/' + data.tx_hash"
+              [title]="{
+                size: 'md',
+                label: data.tx_hash | cutStringPipe : 6 : 6,
+                subLabelContent: data.type,
+                subLabelClass: 'label__status',
+                status: data.code
+              }"
+              [content]="[
+                {
+                  label: 'Amount',
+                  info:
+                    data.amount > 0
+                      ? (data.amount | mask : 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
+                      : checkAmountValue(data.amount, data.tx_hash)
+                },
+                { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
+              ]"></app-card-mob-simple>
+          </div>
+          <app-paginator
+            [length]="pageData.length"
+            [pageSize]="pageData.pageSize"
+            (paginator)="paginatorEmit($event)"
+            (pageEvent)="handlePageEvent($event)">
+          </app-paginator>
+        </ng-container>
       </div>
-      <div class="d-lg-none" *ngIf="dataSource?.data?.length > 0">
-        <app-card-mob-simple
-          *ngFor="let data of dataSource.data"
-          [link]="'/transaction/' + data.tx_hash"
-          [title]="{
-            size: 'md',
-            label: data.tx_hash | cutStringPipe: 6:6,
-            subLabelContent: data.type,
-            subLabelClass: 'label__status',
-            status: data.code
-          }"
-          [content]="[
-            {
-              label: 'Amount',
-              info:
-                data.amount > 0
-                  ? (data.amount | mask: 'separator.6') + '<span class=text--primary> ' + denom + '</span>'
-                  : checkAmountValue(data.amount, data.tx_hash)
-            },
-            { label: 'Time', info: commonService.getDateValue(data.timestamp, false)[1] }
-          ]"></app-card-mob-simple>
-      </div>
-      <app-paginator
-        [length]="pageData.length"
-        [pageSize]="pageData.pageSize"
-        (paginator)="paginatorEmit($event)"
-        (pageEvent)="handlePageEvent($event)">
-      </app-paginator>
-    </ng-container>
-  </div>
-</div>
+    </div>
+  </ng-container>
+</ng-container>
 
 <ng-template #noValues>
   <app-loading-sprint *ngIf="loading"></app-loading-sprint>
