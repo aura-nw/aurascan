@@ -15,6 +15,7 @@ export class NftCardComponent implements OnInit {
   @Input() nftLink: string;
   @Input() nftId: string;
   @Input() nftUrl: string = '';
+  @Input() disableLink: boolean;
   @ViewChild('timeline') timeline!: ElementRef;
   @ViewChild('video') video!: ElementRef;
   image_s3 = this.environmentService.configValue.image_s3;
@@ -76,7 +77,9 @@ export class NftCardComponent implements OnInit {
   }
 
   goTo(link) {
-    this.router.navigate([link]);
+    if (!this.disableLink) {
+      this.router.navigate([link]);
+    }
   }
 
   replaceImgIpfs(value) {
