@@ -150,7 +150,7 @@ export class NFTDetailComponent implements OnInit {
           return;
         }
         this.linkToken = 'token-abt';
-        if (this.nftDetail?.ipfs?.animation_url || this.nftDetail?.ipfs?.image) {
+        if (this.nftDetail?.ipfs?.animation_url) {
           this.imageUrl = this.nftDetail?.ipfs?.image
             ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
             : this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);

@@ -45,7 +45,6 @@
     (click)="nftLink && goTo(nftLink)"
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE._3D && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
     [modelUrl]="animationUrl"
-    [link]="nftLink"
     [disablePan]="true"
     [previewImg]="imageUrl">
   </app-model-view>
@@ -58,6 +57,7 @@
     [src]="animationUrl"
     [nftId]="nftId"
     [previewImg]="imageUrl"
+    [disableLink]="disableLink"
     #audioPlayer>
   </app-audio-player>
   <!-- Audio-view End-->
