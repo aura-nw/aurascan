@@ -48,38 +48,12 @@
             <div class="nft-cards__item-border">
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
-                  <img
-                    *ngIf="(!token.animation_url && getTypeFile(token) !== MEDIA_TYPE.IMG) || isError"
-                    [src]="commonService.getDefaultImg()"
-                    alt="" />
-                  <img
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
-                    (error)="error()"
-                    src="{{
-                      token.animation_url || token.token_img
-                        ? (token.animation_url || token.token_img | replaceIpfs)
-                        : commonService.getDefaultImg()
-                    }}"
-                    alt="{{ token.token_name }}" />
-                  <video
-                    [src]="token.animation_url | replaceIpfs"
-                    [id]="'nft#' + i"
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url"
-                    poster="{{ token?.token_img | replaceIpfs }}"></video>
-                  <app-model-view
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE._3D && token.animation_url"
-                    [modelUrl]="token.animation_url | replaceIpfs"
-                    [link]=""
-                    [disablePan]="true">
-                  </app-model-view>
-                  <app-audio-player
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO && token.animation_url"
-                    [link]="'#'"
-                    [src]="token.animation_url | replaceIpfs"
-                    [nftId]="'nft#' + i"
-                    [disableLink]="true"
-                    [previewImg]="token.token_img | replaceIpfs">
-                  </app-audio-player>
+                  <app-nft-card
+                    [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                    [nftItem]="token"
+                    nftId="{{ 'nft#' + i }}"
+                    [nftType]="getTypeFile(token)">
+                  </app-nft-card>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
                     {{ sbType.UNCLAIMED }}
                   </div>

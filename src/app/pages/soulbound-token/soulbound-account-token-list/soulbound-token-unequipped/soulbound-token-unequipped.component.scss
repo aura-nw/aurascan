@@ -28,9 +28,7 @@
   padding: 0;
   .token-cards__img {
     padding: 8px;
-    app-model-view,
-    app-audio-player,
-    video {
+    app-nft-card {
       height: 153px;
       width: 100%;
       @media (min-width: 991.98px) {

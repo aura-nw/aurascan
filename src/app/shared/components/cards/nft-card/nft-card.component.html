@@ -1,12 +1,26 @@
-<div class="nft-cards__img" (click)="nftLink && goTo(nftLink)">
+<div class="nft-cards__img">
+  <!-- Image Default -->
   <img
     *ngIf="
       (getTypeFile(nftItem) !== MEDIA_TYPE.IMG && !nftItem.animation?.link_s3 && !this.nftItem.animation_url) || isError
     "
     [src]="defaultImgToken"
-    alt="" />
-  <img *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="imageUrl" alt="" />
+    alt=""
+    (click)="nftLink && goTo(nftLink)" />
+  <!-- Image Default End -->
+
+  <!-- Image -->
+  <img
+    *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.IMG && isError === false"
+    (error)="error()"
+    [src]="imageUrl"
+    alt=""
+    (click)="nftLink && goTo(nftLink)" />
+  <!-- Image End -->
+
+  <!-- Video -->
   <video
+    (click)="nftLink && goTo(nftLink)"
     [src]="animationUrl"
     [id]="nftId"
     #video
@@ -17,25 +31,34 @@
   <div
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.VIDEO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
     class="control-container">
-    <button class="button control__button test" *ngIf="paused" (click)="playVideo(video); $event.stopPropagation()">
+    <button class="button control__button" *ngIf="paused" (click)="playVideo(video); $event.stopPropagation()">
       <i class="ph-play"></i>
     </button>
-    <button class="button control__button test" *ngIf="!paused" (click)="pauseVideo(video); $event.stopPropagation()">
+    <button class="button control__button" *ngIf="!paused" (click)="pauseVideo(video); $event.stopPropagation()">
       <i class="ph-pause"></i>
     </button>
   </div>
+  <!-- Video End -->
+
+  <!-- Model-view -->
   <app-model-view
+    (click)="nftLink && goTo(nftLink)"
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE._3D && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
     [modelUrl]="animationUrl"
     [link]="nftLink"
     [disablePan]="true"
     [previewImg]="imageUrl">
   </app-model-view>
+  <!-- Model-view end -->
+
+  <!-- Audio-view -->
   <app-audio-player
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.AUDIO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
     [link]="nftLink"
     [src]="animationUrl"
     [nftId]="nftId"
-    [previewImg]="imageUrl">
+    [previewImg]="imageUrl"
+    #audioPlayer>
   </app-audio-player>
+  <!-- Audio-view End-->
 </div>
