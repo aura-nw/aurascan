@@ -7,7 +7,7 @@
         <div class="body text--gray-4 mt-4 mt-lg-0">
           {{ countSelected ?? 0 }} of {{ pageData?.length }} item{{ pageData?.length > 1 ? 's' : '' }} selected
         </div>
-        <form class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
+        <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
           <div class="input-group">
             <input
               type="text"

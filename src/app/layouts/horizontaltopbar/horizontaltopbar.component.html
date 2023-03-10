@@ -60,7 +60,7 @@
   </div>
   <!-- App Search mobile-->
   <div class="app-search d-lg-none px-4 mt-4 pb-3">
-    <form class="aura-form single-input-field">
+    <form (ngSubmit)="handleSearch()" class="aura-form single-input-field">
       <div class="input-group">
         <input
           type="text"
