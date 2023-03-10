@@ -51,7 +51,6 @@ const routes: Routes = [
         path: 'fee-grant',
         loadChildren: () => import('./pages/fee-grant/fee-grant.module').then((m) => m.FeeGrantModule),
       },
-      { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
       {
         path: 'accountbound',
         loadChildren: () =>
@@ -59,6 +58,7 @@ const routes: Routes = [
       },
     ],
   },
+  { path: 'account', loadChildren: () => import('./pages/account/account.module').then((m) => m.AccountModule) },
   {
     path: 'raw-data',
     loadChildren: () => import('./pages/blank/blank.module').then((m) => m.BlankModule),
