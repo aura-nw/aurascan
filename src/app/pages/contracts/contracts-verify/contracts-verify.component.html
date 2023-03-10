@@ -3,11 +3,11 @@
   <ng-container *ngIf="isExitCode">
     <div class="divider divider-horizontal my-4 d-none d-lg-block"></div>
     <div class="body-02 caption-mob fw-normal-mob text--gray-6">
-      Source code verification provides transparency for users interacting with smart contracts <b>which is instantiated
-      from Code ID source code</b>. By uploading link GitHub source code, Aurascan will match the compiled code with that on
-      the blockchain. Just like contracts, a smart contract should provide end users with more information on what they
-      are "digitally signing" for and give users an opportunity to audit the code to independently verify that it
-      actually does what it is supposed to do.
+      Source code verification provides transparency for users interacting with smart contracts
+      <b>which is instantiated from Code ID source code</b>. By uploading link GitHub source code, Aurascan will match
+      the compiled code with that on the blockchain. Just like contracts, a smart contract should provide end users with
+      more information on what they are "digitally signing" for and give users an opportunity to audit the code to
+      independently verify that it actually does what it is supposed to do.
     </div>
     <div class="card mt-4">
       <div class="card-body">
@@ -126,17 +126,17 @@
               (isCompilerComplete)="isCompilerComplete = $event"
               (isVerifyFail)="isVerifyFail = $event"
               (isVerifySuccess)="isVerifySuccess = $event"></app-contract-verify-steps>
-            <div class="d-flex justify-content-center justify-content-lg-end align-items-center pt-4 pt-lg-12">
+            <div class="d-flex justify-content-end align-items-center pt-lg-6">
               <ng-container *ngIf="!isVerifySuccess">
                 <button
-                  class="button button--md button-pill button-outline button-fixed"
+                  class="button button--md button-pill button-outline"
                   (click)="redirectToPreviousPage()"
                   type="button">
                   <span>Back</span>
                 </button>
                 <button
                   [disabled]="!isCompilerComplete || !isVerifyFail"
-                  class="button button--md button-pill button-outline button-outline--gradient button-fixed button-outline__in-card ml-4"
+                  class="button button--md button-pill button-outline button-outline--gradient button-outline__in-card ml-4"
                   (click)="startOver()"
                   type="button">
                   <span>Start over</span>
@@ -144,7 +144,7 @@
               </ng-container>
               <button
                 *ngIf="isVerifySuccess"
-                class="button button--md button-pill button-flat button-fixed ml-4"
+                class="button button--md button-pill button-flat ml-4"
                 type="button"
                 (click)="redirectToPreviousPage()">
                 <span>Confirm</span>

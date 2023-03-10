@@ -1,4 +1,4 @@
-<section class="mt-12 verify-step {{ currentStep < 3 ? 'mb-20 mb-lg-0' : '' }}">
+<section class="mt-12 mb-6 verify-step">
   <div class="row">
     <div class="col-12 col-lg-4">
       <div class="step" id="step1" [class.complete]="currentStep >= 4" [class.active]="currentStep <= 3">
@@ -23,7 +23,11 @@
       </div>
     </div>
     <div class="col-12 col-lg-4">
-      <div class="step" id="step2" [class.complete]="currentStep >= 8" [class.active]="currentStep > 3 && currentStep < 8">
+      <div
+        class="step"
+        id="step2"
+        [class.complete]="currentStep >= 8"
+        [class.active]="currentStep > 3 && currentStep < 8">
         <div class="step__label text-lg-center d-flex align-items-center d-lg-block">
           <div class="step__num mx-lg-auto">2</div>
           <div class="step__title">Verify process ({{ currentStep < 4 ? 0 : currentStep - 4 }}/4)</div>
