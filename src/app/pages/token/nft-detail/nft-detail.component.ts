@@ -334,7 +334,11 @@ export class NFTDetailComponent implements OnInit {
     if (this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url) {
       content = this.nftUrl;
     } else {
-      content = this.nftDetail?.ipfs?.image ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image) : this.defaultImgToken;
+      content = this.nftDetail.image?.link_s3
+      ? this.nftDetail.image?.link_s3
+      : this.nftDetail?.ipfs?.image
+      ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
+      : this.defaultImgToken;
     }
 
     if (!this.isMobileMatched) {
@@ -344,6 +348,11 @@ export class NFTDetailComponent implements OnInit {
       dialogConfig.data = {
         mediaType: this.getTypeFile(this.nftDetail),
         mediaSrc: content,
+        mediaPoster: this.nftDetail.image?.link_s3
+          ? this.nftDetail.image?.link_s3
+          : this.nftDetail?.ipfs?.image
+          ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
+          : this.defaultImgToken,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }

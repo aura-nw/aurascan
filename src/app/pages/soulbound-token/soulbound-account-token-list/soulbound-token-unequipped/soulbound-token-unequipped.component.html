@@ -61,12 +61,11 @@
                         : commonService.getDefaultImg()
                     }}"
                     alt="{{ token.token_name }}" />
-                  <app-custom-video-player
-                    [videoSrc]="token.animation_url | replaceIpfs"
-                    [showControl]="false"
-                    [nftId]="'nft#' + i"
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url">
-                  </app-custom-video-player>
+                  <video
+                    [src]="token.animation_url | replaceIpfs"
+                    [id]="'nft#' + i"
+                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url"
+                    poster="{{ token?.token_img | replaceIpfs }}"></video>
                   <app-model-view
                     *ngIf="getTypeFile(token) === MEDIA_TYPE._3D && token.animation_url"
                     [modelUrl]="token.animation_url | replaceIpfs"
@@ -78,7 +77,8 @@
                     [link]="'#'"
                     [src]="token.animation_url | replaceIpfs"
                     [nftId]="'nft#' + i"
-                    [disableLink]="true">
+                    [disableLink]="true"
+                    [previewImg]="token.token_img | replaceIpfs">
                   </app-audio-player>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
                     {{ sbType.UNCLAIMED }}

@@ -16,6 +16,8 @@ export class CustomVideoPlayerComponent implements OnInit, AfterViewInit {
   @Input() isMuted = false;
   @Input() isDetail = false;
   @Input() nftId;
+  @Input() previewImg: string;
+
   isFullScreen = false;
   showCustomControl = false;
   paused = true;
