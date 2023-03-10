@@ -26,12 +26,12 @@
                 : commonService.getDefaultImg()
             }}"
             alt="{{ soulboundDetail.token_name }}" />
-          <app-custom-video-player
-            [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
-            [showControl]="true"
-            [isDetail]="true"
+          <video
+            [src]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
+            controlslist="nodownload noplaybackrate"
+            controls
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO && soulboundDetail?.ipfs?.animation_url">
-          </app-custom-video-player>
+          </video>
           <app-model-view
             *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D && soulboundDetail?.ipfs?.animation_url"
             [link]=""

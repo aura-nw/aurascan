@@ -50,11 +50,12 @@
                 (click)="expandMedia()"
                 [src]="nftUrl"
                 controls
-                controlsList="nodownload "
+                controlsList="nodownload"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
-                "></video>
+                "
+                poster="{{ replaceImgIpfs(nftDetail?.ipfs?.image) }}"></video>
               <app-model-view
                 (click)="expandMedia()"
                 *ngIf="
@@ -70,7 +71,8 @@
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [src]="nftUrl">
+                [src]="nftUrl"
+                [previewImg]="nftDetail?.image?.link_s3 || nftDetail?.ipfs?.image">
               </app-audio-player>
             </div>
           </div>

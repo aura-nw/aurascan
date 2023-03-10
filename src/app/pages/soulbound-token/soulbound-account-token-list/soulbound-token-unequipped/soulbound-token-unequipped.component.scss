@@ -28,9 +28,7 @@
   padding: 0;
   .token-cards__img {
     padding: 8px;
-    app-model-view,
-    app-audio-player,
-    app-custom-video-player {
+    app-nft-card {
       height: 153px;
       width: 100%;
       @media (min-width: 991.98px) {
@@ -78,6 +76,12 @@
         .btn-preview {
           opacity: 1;
         }
+      }
+    }
+    ::ng-deep .nft-cards__img {
+      overflow: visible;
+      .control-container {
+        bottom: -12px;
       }
     }
   }
