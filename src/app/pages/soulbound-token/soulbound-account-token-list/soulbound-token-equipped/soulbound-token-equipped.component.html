@@ -47,42 +47,12 @@
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
-                <div class="nft-cards__img">
-                  <div class="token-cards__img">
-                    <img
-                      *ngIf="(!token.animation_url && getTypeFile(token) !== MEDIA_TYPE.IMG) || isError"
-                      [src]="commonService.getDefaultImg()"
-                      alt="" />
-                    <img
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
-                      (error)="error()"
-                      src="{{
-                        token.animation_url || token.token_img
-                          ? (token.animation_url || token.token_img | replaceIpfs)
-                          : commonService.getDefaultImg()
-                      }}"
-                      alt="{{ token.token_name }}" />
-                    <app-custom-video-player
-                      [videoSrc]="token.animation_url | replaceIpfs"
-                      [showControl]="false"
-                      [nftId]="'nft#' + i"
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url">
-                    </app-custom-video-player>
-                    <app-model-view
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE._3D && token.animation_url"
-                      [link]=""
-                      [modelUrl]="token.animation_url | replaceIpfs"
-                      [disablePan]="true">
-                    </app-model-view>
-                    <app-audio-player
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO && token.animation_url"
-                      [link]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
-                      [src]="token.animation_url | replaceIpfs"
-                      [nftId]="'nft#' + i"
-                      [disableLink]="true">
-                    </app-audio-player>
-                  </div>
-                </div>
+                <app-nft-card
+                  [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                  [nftItem]="token"
+                  nftId="{{ 'nft#' + i }}"
+                  [nftType]="getTypeFile(token)">
+                </app-nft-card>
                 <div class="box-nft-info d-block">
                   <div class="nft__info body-01 caption-mob fw-normal">
                     <span class="mr-1 text--gray-1">Token:</span>

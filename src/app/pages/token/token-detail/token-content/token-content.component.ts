@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -38,6 +38,7 @@ export class TokenContentComponent implements OnInit {
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
   activeTabID = 0;
+  textPlaceHolder = 'Filter Address/ TX Hash';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -46,7 +47,6 @@ export class TokenContentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private environmentService: EnvironmentService,
     public global: Globals,
     private layout: BreakpointObserver,
@@ -103,7 +103,9 @@ export class TokenContentComponent implements OnInit {
         if (!params?.a) {
           if (this.tokenDetail.type !== ContractRegisterType.CW20) {
             this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
-            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
+            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(
+              this.paramQuery,
+            )}`;
           } else {
             window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }

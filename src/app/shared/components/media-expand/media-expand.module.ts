@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MediaExpandComponent } from './media-expand.component';
+import { NgModule } from '@angular/core';
 import { AudioPlayerModule } from '../audio-player/audio-player.module';
 import { ModelViewModule } from '../model-view/model-view.module';
-import { CustomVideoPlayerModule } from '../custom-video-player/custom-video-player.module';
+import { MediaExpandComponent } from './media-expand.component';
 
 @NgModule({
   declarations: [MediaExpandComponent],
-  imports: [CommonModule, AudioPlayerModule, ModelViewModule, AudioPlayerModule, CustomVideoPlayerModule],
+  imports: [CommonModule, AudioPlayerModule, ModelViewModule, AudioPlayerModule],
 })
 export class MediaExpandModule {}
