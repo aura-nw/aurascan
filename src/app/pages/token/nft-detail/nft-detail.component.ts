@@ -150,11 +150,13 @@ export class NFTDetailComponent implements OnInit {
           return;
         }
         this.linkToken = 'token-abt';
+        if (this.nftDetail?.ipfs?.image) {
+          this.imageUrl = this.nftDetail?.ipfs?.image
+            ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
+            : this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+        }
         if (this.nftDetail?.ipfs?.animation_url) {
           this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
-        }
-        if (this.nftDetail?.ipfs?.image) {
-          this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
         }
         if (this.nftDetail.ipfs?.name) {
           this.nftDetail['isDisplayName'] = true;
@@ -336,11 +338,11 @@ export class NFTDetailComponent implements OnInit {
   expandMedia(): void {
     let content;
     if (this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url) {
-      content = this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url;
+      content = this.nftDetail.animation?.link_s3 || this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
     } else {
       content = this.nftDetail.image?.link_s3
         ? this.nftDetail.image?.link_s3
-        : this.nftDetail?.ipfs?.image
+        : this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
         ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
         : this.defaultImgToken;
     }
@@ -352,11 +354,7 @@ export class NFTDetailComponent implements OnInit {
       dialogConfig.data = {
         mediaType: this.getTypeFile(this.nftDetail),
         mediaSrc: content,
-        mediaPoster: this.nftDetail.image?.link_s3
-          ? this.nftDetail.image?.link_s3
-          : this.nftDetail?.ipfs?.image
-          ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
-          : this.defaultImgToken,
+        mediaPoster: this.imageUrl,
       };
       this.dialog.open(MediaExpandComponent, dialogConfig);
     }
