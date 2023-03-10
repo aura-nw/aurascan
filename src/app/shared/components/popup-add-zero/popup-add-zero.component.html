@@ -1,5 +1,5 @@
-<div class="card card-grant">
-  <div class="card-header">
+<div class="card">
+  <div class="card-header pb-0">
     <div class="d-flex justify-content-between align-items-center">
       <div class="h1 mb-0 text--white w-100 fw-700">Add Zeroes</div>
       <img
@@ -8,9 +8,9 @@
         alt=""
         (click)="closeDialog()" />
     </div>
-    <div class="divider divider-horizontal divider-lighter my-2"></div>
+    <div class="divider divider-horizontal divider-lighter my-4"></div>
   </div>
-  <div class="card-body">
+  <div class="card-body pt-0">
     <div class="box-select">
       <mat-select
         class="list-token"
@@ -32,12 +32,14 @@
           </div>
         </mat-option>
         <mat-select-trigger>
-          <span *ngIf="selectedZeroes !== 'custom'"
-            ><var
-              >10<sup>{{ selectedZeroes }}</sup></var
-            ></span
-          >
-          <span *ngIf="selectedZeroes === 'custom'" class="text-capitalize">{{ selectedZeroes }}</span>
+          <div class="text--white">
+            <span *ngIf="selectedZeroes !== 'custom'"
+              ><var
+                >10<sup>{{ selectedZeroes }}</sup></var
+              ></span
+            >
+            <span *ngIf="selectedZeroes === 'custom'" class="text-capitalize">{{ selectedZeroes }}</span>
+          </div>
         </mat-select-trigger>
       </mat-select>
     </div>

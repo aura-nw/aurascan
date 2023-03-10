@@ -38,7 +38,7 @@ export class TokenContentComponent implements OnInit {
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
   activeTabID = 0;
-  decimalValue = 0;
+  decimalValue = 1;
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -153,8 +153,12 @@ export class TokenContentComponent implements OnInit {
     const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
     try {
       const data = await client.queryContractSmart(this.contractAddress, queryData);
-      this.infoSearch['balance'] = this.tokenDetail.isNFTContract ? data?.tokens?.length : data?.balance;
-      this.infoSearch['balance'] = this.infoSearch['balance'] || 0;
+      if (this.tokenDetail.isNFTContract) {
+        this.infoSearch['balance'] = data?.tokens?.length;
+      } else {
+        const tempConvert = data?.balance / this.decimalValue;
+        this.infoSearch['balance'] = tempConvert < 0.000001 ? 0 : tempConvert;
+      }
     } catch (error) {}
   }
 

@@ -121,6 +121,8 @@ export class TokenTransfersTabComponent implements OnInit, AfterViewInit {
       this.nextKey = res.data.data.nextKey || null;
       res?.data?.data?.transactions.forEach((trans) => {
         trans = parseDataTransaction(trans, this.coinMinimalDenom, this.contractAddress);
+        const tempConvert = trans.amountToken / this.decimalValue;
+        trans.amountToken = tempConvert < 0.000001 ? 0 : tempConvert;
       });
 
       if (this.dataSource.data.length > 0) {

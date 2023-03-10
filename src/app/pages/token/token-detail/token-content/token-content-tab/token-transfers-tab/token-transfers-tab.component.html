@@ -70,7 +70,7 @@
                     <ng-container *ngIf="!template.isUrl || data[template.matColumnDef] === ''">
                       <ng-container [ngSwitch]="template.matColumnDef">
                         <ng-container *ngSwitchCase="'amountToken'">
-                          {{ (data[template.matColumnDef] / decimalValue) | mask : 'separator.6' }}
+                          {{ data[template.matColumnDef] | mask : 'separator.6' }}
                         </ng-container>
                         <ng-container *ngSwitchCase="'status'">
                           <div [ngSwitch]="data[template.matColumnDef]" class="text-uppercase">
