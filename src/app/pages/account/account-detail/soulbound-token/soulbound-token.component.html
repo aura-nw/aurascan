@@ -7,7 +7,7 @@
     <!-- Filter -->
     <div class="mb-6 d-lg-flex align-items-center justify-content-between">
       <div class="h1 mb-0 text-gradient"></div>
-      <form class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
+      <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
         <div class="input-group">
           <input
             type="text"

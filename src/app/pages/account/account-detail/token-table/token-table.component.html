@@ -5,7 +5,7 @@
       <div class="d-lg-flex justify-content-between align-items-center">
         <div class="h1 mb-0 text-gradient">$ {{ total || 0 | number : global.formatNumber2Decimal }}</div>
         <div class="position-relative">
-          <form class="aura-form single-input-field search-form account-search-form mt-4 mt-lg-0" #searchForm>
+          <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form account-search-form mt-4 mt-lg-0" #searchForm>
             <div class="input-group">
               <input
                 type="text"

@@ -70,6 +70,7 @@
     </ul>
     <div class="d-lg-flex align-item-center justify-content-end mb-3 mb-lg-0">
       <form
+        (ngSubmit)="handleSearch()"
         class="aura-form single-input-field search-form"
         *ngIf="
           !breakpoint.value.matches ||
