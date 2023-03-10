@@ -45,10 +45,10 @@
                 (click)="expandMedia()"
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
                 (error)="error()"
-                [src]="nftUrl" />
+                [src]="imageUrl && animationUrl ? animationUrl : imageUrl"/>
               <video
                 (click)="expandMedia()"
-                [src]="nftUrl"
+                [src]="animationUrl"
                 controls
                 controlsList="nodownload"
                 *ngIf="
@@ -62,7 +62,7 @@
                   getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [modelUrl]="nftUrl"
+                [modelUrl]="animationUrl"
                 [disablePan]="false"
                 [previewImg]="this.nftDetail.image?.link_s3 || replaceImgIpfs(nftDetail?.ipfs?.image)">
               </app-model-view>
@@ -72,7 +72,7 @@
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [src]="nftUrl"
+                [src]="animationUrl"
                 [previewImg]="nftDetail?.image?.link_s3 || replaceImgIpfs(nftDetail?.ipfs?.image)">
               </app-audio-player>
             </div>
