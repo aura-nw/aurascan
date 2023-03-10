@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -47,7 +47,6 @@ export class TokenContentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private environmentService: EnvironmentService,
     public global: Globals,
     private layout: BreakpointObserver,
@@ -74,8 +73,6 @@ export class TokenContentComponent implements OnInit {
       this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
       localStorage.setItem('isVerifyTab', null);
     }
-
-    console.log(this.tokenDetail?.type);
   }
 
   changeTab(tabId): void {
