@@ -51,6 +51,7 @@
                   <app-nft-card
                     [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
                     [nftItem]="token"
+                    [disableLink]="true"
                     nftId="{{ 'nft#' + i }}"
                     [nftType]="getTypeFile(token)">
                   </app-nft-card>
