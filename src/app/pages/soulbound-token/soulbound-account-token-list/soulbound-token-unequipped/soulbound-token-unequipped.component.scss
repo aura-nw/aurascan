@@ -78,5 +78,11 @@
         }
       }
     }
+    ::ng-deep .nft-cards__img {
+      overflow: visible;
+      .control-container {
+        bottom: -12px;
+      }
+    }
   }
 }
