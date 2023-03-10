@@ -45,26 +45,26 @@
                 (click)="expandMedia()"
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
                 (error)="error()"
-                [src]="nftUrl" />
+                [src]="imageUrl" />
               <video
                 (click)="expandMedia()"
-                [src]="nftUrl"
+                [src]="animationUrl"
                 controls
                 controlsList="nodownload"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                poster="{{ this.nftDetail.image?.link_s3 || replaceImgIpfs(nftDetail?.ipfs?.image) }}"></video>
+                poster="{{ imageUrl }}"></video>
               <app-model-view
                 (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [modelUrl]="nftUrl"
+                [modelUrl]="animationUrl"
                 [disablePan]="false"
-                [previewImg]="this.nftDetail.image?.link_s3 || replaceImgIpfs(nftDetail?.ipfs?.image)">
+                [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
                 (click)="expandMedia()"
@@ -72,8 +72,8 @@
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [src]="nftUrl"
-                [previewImg]="nftDetail?.image?.link_s3 || replaceImgIpfs(nftDetail?.ipfs?.image)">
+                [src]="animationUrl"
+                [previewImg]="imageUrl">
               </app-audio-player>
             </div>
           </div>
