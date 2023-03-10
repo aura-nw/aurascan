@@ -13,7 +13,7 @@
   <img
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.IMG && isError === false"
     (error)="error()"
-    [src]="imageUrl"
+    [src]="imageUrl || animationUrl"
     alt=""
     (click)="nftLink && goTo(nftLink)" />
   <!-- Image End -->
