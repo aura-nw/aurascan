@@ -14,7 +14,6 @@ export class NftCardComponent implements OnInit {
   @Input() nftType: string;
   @Input() nftLink: string;
   @Input() nftId: string;
-  @Input() nftUrl: string = '';
   @Input() disableLink: boolean;
   @ViewChild('timeline') timeline!: ElementRef;
   @ViewChild('video') video!: ElementRef;
@@ -29,21 +28,27 @@ export class NftCardComponent implements OnInit {
   constructor(private environmentService: EnvironmentService, private router: Router) {}
 
   ngOnInit(): void {
-    if (!this.nftUrl) {
-      // CW721
-      if (this.nftItem.animation && this.nftItem.animation?.content_type) {
+    // CW721
+    if (this.nftItem.animation && this.nftItem.animation?.content_type) {
+      if (this.nftItem.animation?.content_type === 'image/gif') {
+        this.imageUrl = this.nftItem.animation?.link_s3 || '';
+      } else {
         this.animationUrl = this.nftItem.animation?.link_s3 || '';
       }
-      if (this.nftItem.image && this.nftUrl == '') {
-        this.imageUrl = this.nftItem.image?.link_s3 || '';
-      }
-      // account bound token
-      if (this.nftItem.animation_url && this.nftItem.img_type) {
+    }
+    if (this.nftItem.image) {
+      this.imageUrl = this.nftItem.image?.link_s3 || '';
+    }
+    // account bound token
+    if (this.nftItem.animation_url && this.nftItem.img_type) {
+      if (this.nftItem.img_type === 'image/gif') {
+        this.imageUrl = this.replaceImgIpfs(this.nftItem.animation_url) || '';
+      } else {
         this.animationUrl = this.replaceImgIpfs(this.nftItem.animation_url) || '';
       }
-      if (this.nftItem.token_img) {
-        this.imageUrl = this.replaceImgIpfs(this.nftItem.token_img) || '';
-      }
+    }
+    if (this.nftItem.token_img) {
+      this.imageUrl = this.replaceImgIpfs(this.nftItem.token_img) || '';
     }
   }
 
