@@ -2,7 +2,7 @@
   <!-- Image Default -->
   <img
     *ngIf="
-      (getTypeFile(nftItem) !== MEDIA_TYPE.IMG && !nftItem.animation?.link_s3 && !this.nftItem.animation_url) || isError
+      (getTypeFile(nftItem) !== MEDIA_TYPE.IMG && !(nftItem.animation?.link_s3 || this.nftItem.animation_url)) || isError
     "
     [src]="defaultImgToken"
     alt=""
@@ -13,7 +13,7 @@
   <img
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE.IMG && isError === false"
     (error)="error()"
-    [src]="imageUrl || animationUrl"
+    [src]="imageUrl && animationUrl ? animationUrl : imageUrl"
     alt=""
     (click)="nftLink && goTo(nftLink)" />
   <!-- Image End -->
