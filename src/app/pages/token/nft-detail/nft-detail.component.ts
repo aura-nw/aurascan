@@ -157,7 +157,9 @@ export class NFTDetailComponent implements OnInit {
         }
         if (this.nftDetail?.ipfs?.animation_url) {
           if (this.nftDetail.img_type === 'image/gif') {
-            this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+            if (!this.nftDetail?.ipfs?.image) {
+              this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+            }
           } else {
             this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
           }
