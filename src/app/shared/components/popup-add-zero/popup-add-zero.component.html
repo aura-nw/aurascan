@@ -1,0 +1,73 @@
+<div class="card">
+  <div class="card-header pb-0">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="h1 mb-0 text--white w-100 fw-700">Add Zeroes</div>
+      <img
+        class="icon-close"
+        [src]="'assets/icons/icons-svg/basic/close.svg' | imageS3"
+        alt=""
+        (click)="closeDialog()" />
+    </div>
+    <div class="divider divider-horizontal divider-lighter my-4"></div>
+  </div>
+  <div class="card-body pt-0">
+    <div class="box-select">
+      <mat-select
+        class="list-token"
+        placeholder="Select a type contract"
+        panelClass="contractPanel"
+        [(value)]="selectedZeroes"
+        (change)="numberCustom = null"
+        [disableOptionCentering]="true">
+        <mat-option *ngFor="let item of lstZeroes" [value]="item.value">
+          <div class="d-flex option-contain">
+            <div class="option-lable">
+              <span *ngIf="item.value !== 'custom'"
+                ><var
+                  >10<sup>{{ item.value }}</sup></var
+                ></span
+              >
+              <span *ngIf="item.value === 'custom'" class="text-capitalize">{{ item.value }}</span>
+            </div>
+          </div>
+        </mat-option>
+        <mat-select-trigger>
+          <div class="text--white">
+            <span *ngIf="selectedZeroes !== 'custom'"
+              ><var
+                >10<sup>{{ selectedZeroes }}</sup></var
+              ></span
+            >
+            <span *ngIf="selectedZeroes === 'custom'" class="text-capitalize">{{ selectedZeroes }}</span>
+          </div>
+        </mat-select-trigger>
+      </mat-select>
+    </div>
+
+    <div *ngIf="selectedZeroes === 'custom'">
+      <input
+        class="form-check-input mt-4"
+        type="text"
+        [(ngModel)]="numberCustom"
+        (ngModelChange)="checkCustomValue()"
+        (keypress)="validateNumber($event)" /><br />
+      <div class="caption mt-2 text--gray-5 fw-normal">
+        Enter the number of zeroes to add. Example: 3 to add three (000) zeroes.
+      </div>
+    </div>
+
+    <!-- button group -->
+    <div class="d-flex mt-2 py-4 justify-content-end">
+      <button class="button button--md button-pill button-outline" type="button" (click)="dialogRef.close()">
+        <span>Cancel</span>
+      </button>
+      <button
+        class="button button--md button-pill button-flat ml-4"
+        type="button"
+        [disabled]="!selectedZeroes"
+        (click)="updateZero()">
+        <span>Add</span>
+      </button>
+    </div>
+  </div>
+</div>

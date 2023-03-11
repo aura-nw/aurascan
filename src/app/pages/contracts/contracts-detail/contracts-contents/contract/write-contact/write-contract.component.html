@@ -31,17 +31,26 @@
       <!-- <p>{{ index + 1 }}.{{ getRequired(msg) }} <br />{{ msg | json }}</p> -->
       <mat-expansion-panel hideToggle *ngIf="msg.fieldName">
         <mat-expansion-panel-header class="content-contract">
-          <mat-panel-title class="item-content body-02 text--gray-1"> {{ index + 1 }}. {{ msg.fieldName }} </mat-panel-title>
+          <mat-panel-title class="item-content body-02 text--gray-1">
+            {{ index + 1 }}. {{ msg.fieldName }}
+          </mat-panel-title>
           <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="d-flex row px-3 py-1 fw-semibold-mob text--gray-1">
           <!-- {{ msg.fieldList | json}} -->
           <ng-container *ngFor="let item of msg.fieldList">
-            <p class="px-0 text--gray-1 body-02 mb-2" [class.input-require]="item.isRequired">
-              {{ item.fieldName }} ({{ item.type }})
-            </p>
-
+            <div class="d-flex align-items-center mb-2">
+              <span class="px-0 text--gray-1 body-02" [class.input-require]="item.isRequired">
+                {{ item.fieldName }} ({{ item.type }})
+              </span>
+              <button
+                class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
+                *ngIf="item.isAddButtonZero"
+                (click)="showAddZero(msg)">
+                <i class="ph ph-gear icon-add-zero"></i>
+              </button>
+            </div>
             <input
               class="form-check-input {{ item.isRequired }} {{ item.fieldName }} col-12 mb-4"
               [class.input-require]="item.isRequired"
