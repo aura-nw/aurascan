@@ -81,6 +81,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   currentNextKeyBlock = null;
   isOpenDialog = false;
   totalSBT = 0;
+  isLoadingSummary = true;
 
   arrayUpTime = new Array(this.numberLastBlock);
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -150,6 +151,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       (error) => {
         this.router.navigate(['/']);
       },
+      () => {
+        this.isLoadingSummary = false;
+      },
     );
   }
 
@@ -172,11 +176,11 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           );
 
           this.lengthBlock = this.dataSourceBlock.data.length;
-          this.isLoadingPower = false;
         }
       },
       () => {},
       () => {
+        this.isLoadingPower = false;
         this.lengthBlockLoading = false;
       },
     );

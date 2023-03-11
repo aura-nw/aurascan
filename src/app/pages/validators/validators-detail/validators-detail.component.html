@@ -15,169 +15,175 @@
 
 <section *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
-  <div class="card text--white" *ngIf="currentValidatorDetail">
-    <div class="card-header header-mob pb-0">
-      <div class="d-flex align-items-center">
-        <div class="avatar-wrapper flex-shrink-0 mr-2" *ngIf="!breakpoint.value.matches">
-          <div class="validator-avatar medium">
-            <app-loading-image
-              [identity]="currentValidatorDetail.identity"
-              [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
-            </app-loading-image>
-          </div>
-          <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
-            <div class="box-rank _fill _small">
-              <span> {{ currentValidatorDetail?.rank }} </span>
+  <div class="card text--white">
+    <div class="py-10" *ngIf="isLoadingSummary">
+      <app-loading-sprint></app-loading-sprint>
+    </div>
+    <ng-container *ngIf="!isLoadingSummary && currentValidatorDetail">
+      <div class="card-header header-mob pb-0">
+        <div class="d-flex align-items-center">
+          <div class="avatar-wrapper flex-shrink-0 mr-2" *ngIf="!breakpoint.value.matches">
+            <div class="validator-avatar medium">
+              <app-loading-image
+                [identity]="currentValidatorDetail.identity"
+                [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+              </app-loading-image>
+            </div>
+            <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
+              <div class="box-rank _fill _small">
+                <span> {{ currentValidatorDetail?.rank }} </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flex-grow-1 validator-detail">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-              <div class="avatar-wrapper flex-shrink-0 mr-3" *ngIf="breakpoint.value.matches">
-                <div class="validator-avatar small">
-                  <app-loading-image
-                    [identity]="currentValidatorDetail.identity"
-                    [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
-                  </app-loading-image>
-                </div>
-                <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
-                  <div class="box-rank _fill _small">
-                    <span> {{ currentValidatorDetail?.rank }} </span>
+          <div class="flex-grow-1 validator-detail">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="avatar-wrapper flex-shrink-0 mr-3" *ngIf="breakpoint.value.matches">
+                  <div class="validator-avatar small">
+                    <app-loading-image
+                      [identity]="currentValidatorDetail.identity"
+                      [srcImg]="getValidatorAvatar(currentValidatorDetail.operator_address)">
+                    </app-loading-image>
+                  </div>
+                  <div class="rank-wrapper" [class._small]="breakpoint.value.matches">
+                    <div class="box-rank _fill _small">
+                      <span> {{ currentValidatorDetail?.rank }} </span>
+                    </div>
                   </div>
                 </div>
+                <h5 class="mb-0 text--primary">{{ currentValidatorDetail?.title }}</h5>
               </div>
-              <h5 class="mb-0 text--primary">{{ currentValidatorDetail?.title }}</h5>
-            </div>
-            <div
-              class="valid-status caption"
-              [class.status-inactive]="
-                !currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active
-              "
-              [class.status-jailed]="currentValidatorDetail?.jailed"
-              [ngClass]="{ 'small-body': breakpoint.value.matches }">
-              <ng-container *ngIf="currentValidatorDetail?.jailed"> Jailed </ng-container>
-              <ng-container *ngIf="currentValidatorDetail?.status === statusValidator.Active"> Active </ng-container>
-              <ng-container
-                *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
-                inActive
-              </ng-container>
+              <div
+                class="valid-status caption"
+                [class.status-inactive]="
+                  !currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active
+                "
+                [class.status-jailed]="currentValidatorDetail?.jailed"
+                [ngClass]="{ 'small-body': breakpoint.value.matches }">
+                <ng-container *ngIf="currentValidatorDetail?.jailed"> Jailed </ng-container>
+                <ng-container *ngIf="currentValidatorDetail?.status === statusValidator.Active"> Active </ng-container>
+                <ng-container
+                  *ngIf="!currentValidatorDetail?.jailed && currentValidatorDetail?.status !== statusValidator.Active">
+                  inActive
+                </ng-container>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row mt-4">
-        <div class="col-12 col-lg-6">
-          <div class="d-flex position-relative">
-            <h6 class="mb-0 text--gray-1">Operator Address</h6>
-            <div class="img-wrap">
-              <img
-                class="img-question ml-1"
-                [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
-                alt=""
-                matTooltip="Validator operator address at which token
+        <div class="row mt-4">
+          <div class="col-12 col-lg-6">
+            <div class="d-flex position-relative">
+              <h6 class="mb-0 text--gray-1">Operator Address</h6>
+              <div class="img-wrap">
+                <img
+                  class="img-question ml-1"
+                  [src]="'assets/images/icons/questionmark-icon.svg' | imageS3"
+                  alt=""
+                  matTooltip="Validator operator address at which token
                                          holders delegate their voting powers to."
-                [matTooltipPosition]="'above'"
-                *ngIf="!breakpoint.value.matches" />
-            </div>
-          </div>
-          <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
-        </div>
-        <div class="col-12 col-lg-6 mt-3 mt-lg-0">
-          <h6 class="mb-0 text--gray-1">Address</h6>
-          <a class="text--primary mt-1 body-01" [routerLink]="['/account', currentValidatorDetail?.acc_address]">
-            {{ currentValidatorDetail?.acc_address }}
-          </a>
-        </div>
-      </div>
-      <div class="divider divider-horizontal mt-4"></div>
-    </div>
-    <div class="card-body body-01 pt-2 text--gray-4">
-      <div class="row mt-4" *ngIf="soulboundList && soulboundList.length > 0">
-        <div class="col-12">
-          <!-- Aura Marking Milestone -->
-          <div class="body-01 text--gray-4 mb-2">Aura Marking Milestone</div>
-          <div class="soulbound-feature-tokens mt-2">
-            <app-soulbound-feature-tokens
-              [extend]="false"
-              [accountAddress]="currentValidatorDetail.acc_address"
-              [soulboundListData]="soulboundList"></app-soulbound-feature-tokens>
-          </div>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-12 col-lg-6">
-          <!-- Website -->
-          <div class="row">
-            <div class="col-6">Website</div>
-            <div class="col-6 text-end text-lg-start">
-              <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}">
-                {{ currentValidatorDetail?.website }}
-              </a>
-            </div>
-          </div>
-          <!-- Commission -->
-          <div class="row mt-3">
-            <div class="col-6">Commission</div>
-            <div class="col-6 text--gray-1 text-end text-lg-start">
-              {{ currentValidatorDetail?.commission | percent : global.formatNumber2Decimal }}
-            </div>
-          </div>
-          <!-- Uptime -->
-          <div class="row mt-3">
-            <div class="col-6">Uptime</div>
-            <div class="col-6 text--gray-1 text-end text-lg-start">
-              <ng-container *ngIf="currentValidatorDetail['status'] === statusValidator.Active">
-                {{ currentValidatorDetail?.up_time | number : global.formatNumber2Decimal }}%
-              </ng-container>
-              <ng-container *ngIf="currentValidatorDetail['status'] !== statusValidator.Active"> 0.00% </ng-container>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-6">
-          <!-- Voting Power -->
-          <div class="row mt-3 mt-lg-0">
-            <div class="col-6">Voting Power</div>
-            <div class="col-6 text-end text-lg-start d-xl-flex">
-              <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
-                <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+                  [matTooltipPosition]="'above'"
+                  *ngIf="!breakpoint.value.matches" />
               </div>
-              <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
+            </div>
+            <span class="body-01 text--gray-5 mt-1">{{ currentValidatorDetail?.operator_address }}</span>
+          </div>
+          <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+            <h6 class="mb-0 text--gray-1">Address</h6>
+            <a class="text--primary mt-1 body-01" [routerLink]="['/account', currentValidatorDetail?.acc_address]">
+              {{ currentValidatorDetail?.acc_address }}
+            </a>
+          </div>
+        </div>
+        <div class="divider divider-horizontal mt-4"></div>
+      </div>
+      <div class="card-body body-01 pt-2 text--gray-4">
+        <div class="row mt-4" *ngIf="soulboundList && soulboundList.length > 0">
+          <div class="col-12">
+            <!-- Aura Marking Milestone -->
+            <div class="body-01 text--gray-4 mb-2">Aura Marking Milestone</div>
+            <div class="soulbound-feature-tokens mt-2">
+              <app-soulbound-feature-tokens
+                [extend]="false"
+                [accountAddress]="currentValidatorDetail.acc_address"
+                [soulboundListData]="soulboundList"></app-soulbound-feature-tokens>
             </div>
           </div>
-          <!-- Bonded Height -->
-          <div class="row mt-3">
-            <div class="col-6">Bonded Height</div>
-            <div class="col-6 text--gray-1 text-end text-lg-start">
-              {{ currentValidatorDetail?.bonded_height | number }}
-            </div>
-          </div>
-          <!-- Self Bonded -->
-          <div class="row mt-3">
-            <div class="col-6">Self Bonded</div>
-            <div class="col-6 text-end text-lg-start d-xl-flex">
-              <div>
-                <span class="text--gray-1">{{ currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
-                <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12 col-lg-6">
+            <!-- Website -->
+            <div class="row">
+              <div class="col-6">Website</div>
+              <div class="col-6 text-end text-lg-start">
+                <a class="text--primary cursor-pointer" href="{{ currentValidatorDetail?.website }}">
+                  {{ currentValidatorDetail?.website }}
+                </a>
               </div>
-              <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
+            </div>
+            <!-- Commission -->
+            <div class="row mt-3">
+              <div class="col-6">Commission</div>
+              <div class="col-6 text--gray-1 text-end text-lg-start">
+                {{ currentValidatorDetail?.commission | percent : global.formatNumber2Decimal }}
+              </div>
+            </div>
+            <!-- Uptime -->
+            <div class="row mt-3">
+              <div class="col-6">Uptime</div>
+              <div class="col-6 text--gray-1 text-end text-lg-start">
+                <ng-container *ngIf="currentValidatorDetail['status'] === statusValidator.Active">
+                  {{ currentValidatorDetail?.up_time | number : global.formatNumber2Decimal }}%
+                </ng-container>
+                <ng-container *ngIf="currentValidatorDetail['status'] !== statusValidator.Active"> 0.00% </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <!-- Voting Power -->
+            <div class="row mt-3 mt-lg-0">
+              <div class="col-6">Voting Power</div>
+              <div class="col-6 text-end text-lg-start d-xl-flex">
+                <div>
+                  <span class="text--gray-1">{{ currentValidatorDetail?.power | mask : 'separator.6' }}</span>
+                  <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+                </div>
+                <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_power }}%)</span>
+              </div>
+            </div>
+            <!-- Bonded Height -->
+            <div class="row mt-3">
+              <div class="col-6">Bonded Height</div>
+              <div class="col-6 text--gray-1 text-end text-lg-start">
+                {{ currentValidatorDetail?.bonded_height | number }}
+              </div>
+            </div>
+            <!-- Self Bonded -->
+            <div class="row mt-3">
+              <div class="col-6">Self Bonded</div>
+              <div class="col-6 text-end text-lg-start d-xl-flex">
+                <div>
+                  <span class="text--gray-1">{{ currentValidatorDetail?.self_bonded | mask : 'separator.6' }}</span>
+                  <span class="text--primary ml-1 break-word text-nowrap">{{ denom }}</span>
+                </div>
+                <span class="text--gray-5 ml-xl-1">({{ currentValidatorDetail?.percent_self_bonded }})</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Details -->
-      <div class="mt-3">
-        <div>Details</div>
-        <div class="editorial-container p-4 mt-2" *ngIf="currentValidatorDetail?.details">
-          <div id="marked" class="editorial"></div>
+        <!-- Details -->
+        <div class="mt-3">
+          <div>Details</div>
+          <div class="editorial-container p-4 mt-2" *ngIf="currentValidatorDetail?.details">
+            <div id="marked" class="editorial"></div>
+          </div>
         </div>
       </div>
-    </div>
+      <div class="card py-10" *ngIf="!currentValidatorDetail">
+        <app-table-no-data></app-table-no-data>
+      </div>
+    </ng-container>
   </div>
-  <div class="card py-10" *ngIf="!currentValidatorDetail">
-    <app-table-no-data></app-table-no-data>
-  </div>
+
   <!-- Proposed Blocks + Uptime -->
   <div class="row">
     <div class="col-xl-6">
