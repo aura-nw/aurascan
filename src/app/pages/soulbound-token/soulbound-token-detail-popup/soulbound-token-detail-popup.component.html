@@ -19,7 +19,7 @@
             "
             [src]="commonService.getDefaultImg()" />
           <img
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG && isError === false"
             (error)="error()"
             src="{{ imageUrl && animationUrl ? animationUrl : imageUrl }}"
             alt="{{ soulboundDetail.token_name }}" />

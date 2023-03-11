@@ -19,7 +19,7 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   isLoading = false;
   MEDIA_TYPE = MEDIA_TYPE;
   previewImg = '';
-  imageUrl = this.commonService.getDefaultImg();
+  imageUrl = '';
   animationUrl = '';
 
   constructor(
