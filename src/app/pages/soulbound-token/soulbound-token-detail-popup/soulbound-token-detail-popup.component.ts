@@ -18,6 +18,9 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   currentAddress = '';
   isLoading = false;
   MEDIA_TYPE = MEDIA_TYPE;
+  previewImg = '';
+  imageUrl = this.commonService.getDefaultImg();
+  animationUrl = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public soulboundDetail: any,
@@ -28,7 +31,25 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
     public translate: TranslateService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.soulboundDetail?.ipfs?.image) {
+      this.previewImg = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
+      this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
+    }
+    if (this.soulboundDetail?.ipfs.animation_url) {
+      if (this.soulboundDetail.img_type === 'image/gif') {
+        if (!this.soulboundDetail?.ipfs?.image) {
+          this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+        }
+      } else {
+        this.animationUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+      }
+    }
+  }
+
+  replaceImgIpfs(value) {
+    return 'https://ipfs.io/' + value.replace('://', '/');
+  }
 
   error(): void {
     this.isError = true;
