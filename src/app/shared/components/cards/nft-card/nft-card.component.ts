@@ -24,6 +24,7 @@ export class NftCardComponent implements OnInit {
   paused = true;
   animationUrl: string;
   imageUrl: string;
+  previewImg = '';
 
   constructor(private environmentService: EnvironmentService, private router: Router) {}
 
@@ -31,28 +32,26 @@ export class NftCardComponent implements OnInit {
     // CW721
     if (this.nftItem.animation && this.nftItem.animation?.content_type) {
       if (this.nftItem.animation?.content_type === 'image/gif') {
-        if (!this.nftItem.image?.link_s3) {
-          this.imageUrl = this.nftItem.animation?.link_s3 || '';
-        }
+        this.imageUrl = this.nftItem.animation?.link_s3 || this.defaultImgToken;
       } else {
-        this.animationUrl = this.nftItem.animation?.link_s3 || '';
+        this.animationUrl = this.nftItem.animation?.link_s3 || this.defaultImgToken;
       }
     }
     if (this.nftItem.image) {
-      this.imageUrl = this.nftItem.image?.link_s3 || '';
+      this.previewImg = this.nftItem.image?.link_s3;
+      this.imageUrl = this.nftItem.image?.link_s3 || this.defaultImgToken;
     }
     // account bound token
     if (this.nftItem.animation_url && this.nftItem.img_type) {
       if (this.nftItem.img_type === 'image/gif') {
-        if (!this.nftItem.token_img) {
-          this.imageUrl = this.replaceImgIpfs(this.nftItem.animation_url) || '';
-        }
+        this.imageUrl = this.replaceImgIpfs(this.nftItem.animation_url) || this.defaultImgToken;
       } else {
-        this.animationUrl = this.replaceImgIpfs(this.nftItem.animation_url) || '';
+        this.animationUrl = this.replaceImgIpfs(this.nftItem.animation_url) || this.defaultImgToken;
       }
     }
     if (this.nftItem.token_img) {
-      this.imageUrl = this.replaceImgIpfs(this.nftItem.token_img) || '';
+      this.previewImg = this.replaceImgIpfs(this.nftItem.token_img);
+      this.imageUrl = this.replaceImgIpfs(this.nftItem.token_img) || this.defaultImgToken;
     }
   }
 
