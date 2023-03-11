@@ -39,6 +39,7 @@ export class TransactionDetailComponent implements OnInit {
   chainId = this.environmentService.configValue.chainId;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   coinInfo = this.environmentService.configValue.chain_info.currencies[0];
+  env = this.environmentService.configValue.env;
   loading = true;
   isReload = false;
 
@@ -99,6 +100,8 @@ export class TransactionDetailComponent implements OnInit {
           this.loading = false;
         },
       );
+    } else {
+      this.loading = false;
     }
   }
 

@@ -12,7 +12,8 @@
       (onViewDialog)="handleViewPopup($event)"></app-user-wallet-info>
   </section>
 
-  <div class="card box-validators">
+  <app-loading-sprint *ngIf="isLoadingList"></app-loading-sprint>
+  <div class="card box-validators" *ngIf="!isLoadingList">
     <div class="card-header card-header-dark d-lg-flex justify-content-between pb-2">
       <h2 class="h3-mob mb-0 text--white">Validators</h2>
       <form class="aura-form single-input-field search-form-validators" *ngIf="!breakpoint.value.matches">

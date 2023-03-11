@@ -98,6 +98,7 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   pageYOffset = 0;
   scrolling = false;
   numBlock = NUM_BLOCK.toLocaleString('en-US', { minimumFractionDigits: 0 });
+  isLoadingList = true;
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYOffset = window.pageYOffset;
@@ -159,42 +160,48 @@ export class ValidatorsComponent implements OnInit, OnDestroy {
   }
 
   getList(): void {
-    this.validatorService.validators().subscribe((res: ResponseDto) => {
-      if (res?.data?.length > 0) {
-        this.lstValidatorOrigin = res.data;
-        this.rawData = res.data;
-        res.data.forEach((val) => {
-          val.vote_count = val.vote_count || 0;
-          val.participation = val.vote_count;
-          val.power = val.power / NUMBER_CONVERT;
-          val.up_time = Number(val.up_time.replace('%', ''));
-        });
+    this.validatorService.validators().subscribe(
+      (res: ResponseDto) => {
+        if (res?.data?.length > 0) {
+          this.lstValidatorOrigin = res.data;
+          this.rawData = res.data;
+          res.data.forEach((val) => {
+            val.vote_count = val.vote_count || 0;
+            val.participation = val.vote_count;
+            val.power = val.power / NUMBER_CONVERT;
+            val.up_time = Number(val.up_time.replace('%', ''));
+          });
 
-        let dataFilter = res.data.filter((event) =>
-          this.typeValidator === this.statusValidator.Active
-            ? event.status === this.statusValidator.Active
-            : event.status !== this.statusValidator.Active,
-        );
+          let dataFilter = res.data.filter((event) =>
+            this.typeValidator === this.statusValidator.Active
+              ? event.status === this.statusValidator.Active
+              : event.status !== this.statusValidator.Active,
+          );
 
-        //get init list Redelegate validator
-        if (this.typeValidator === this.statusValidator.Active && !(this.lstValidator?.length > 0)) {
-          this.lstValidator = dataFilter;
-        }
-
-        // this.dataSource.data = dataFilter;
-        Object.keys(dataFilter).forEach((key) => {
-          if (this.dataSource.data[key]) {
-            Object.assign(this.dataSource.data[key], dataFilter[key]);
-          } else {
-            this.dataSource.data[key] = dataFilter[key];
+          //get init list Redelegate validator
+          if (this.typeValidator === this.statusValidator.Active && !(this.lstValidator?.length > 0)) {
+            this.lstValidator = dataFilter;
           }
-        });
 
-        this.dataSourceBk = this.dataSource;
-        this.dataSource.sort = this.sort;
-        this.searchValidator();
-      }
-    });
+          // this.dataSource.data = dataFilter;
+          Object.keys(dataFilter).forEach((key) => {
+            if (this.dataSource.data[key]) {
+              Object.assign(this.dataSource.data[key], dataFilter[key]);
+            } else {
+              this.dataSource.data[key] = dataFilter[key];
+            }
+          });
+
+          this.dataSourceBk = this.dataSource;
+          this.dataSource.sort = this.sort;
+          this.searchValidator();
+        }
+      },
+      () => {},
+      () => {
+        this.isLoadingList = false;
+      },
+    );
   }
 
   getBlocksMiss() {

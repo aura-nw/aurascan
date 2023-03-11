@@ -23,6 +23,8 @@ export class CodeIdDetailComponent implements OnInit {
   ];
   codeIdDetail;
   contractResult = CONTRACT_RESULT;
+  isLoading = true;
+
   constructor(private router: ActivatedRoute, public route: Router, private contractService: ContractService) {}
 
   ngOnInit(): void {
@@ -40,8 +42,14 @@ export class CodeIdDetailComponent implements OnInit {
   }
 
   getCodeIdDetail() {
-    this.contractService.getCodeIDDetail(this.codeId).subscribe((res) => {
-      this.codeIdDetail = res.data;
-    });
+    this.contractService.getCodeIDDetail(this.codeId).subscribe(
+      (res) => {
+        this.codeIdDetail = res.data;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 }

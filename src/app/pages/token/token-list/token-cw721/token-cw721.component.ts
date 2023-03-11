@@ -48,6 +48,7 @@ export class TokenCw721Component implements OnInit {
   destroy$ = new Subject();
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
@@ -85,19 +86,25 @@ export class TokenCw721Component implements OnInit {
       sort_column: this.sortBy,
       sort_order: this.sortOrder,
     };
-    this.tokenService.getListCW721Token(payload).subscribe((res: ResponseDto) => {
-      if (res.data.length > 0) {
-        res.data.forEach((data) => {
-          data['isValueUp'] = true;
-          if (data.change < 0) {
-            data['isValueUp'] = false;
-            data.change = Number(data.change.toString().substring(1));
-          }
-        });
-      }
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
-    });
+    this.tokenService.getListCW721Token(payload).subscribe(
+      (res: ResponseDto) => {
+        if (res.data.length > 0) {
+          res.data.forEach((data) => {
+            data['isValueUp'] = true;
+            if (data.change < 0) {
+              data['isValueUp'] = false;
+              data.change = Number(data.change.toString().substring(1));
+            }
+          });
+        }
+        this.dataSource = new MatTableDataSource<any>(res.data);
+        this.pageData.length = res.meta.count;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   onKeyUp() {

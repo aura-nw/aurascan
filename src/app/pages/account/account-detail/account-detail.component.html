@@ -1,6 +1,7 @@
 <div class="mb-4 mb-md-6">
   <app-pagetitle title="Account Details"></app-pagetitle>
 </div>
+
 <section class="account-detail text--white" *ngIf="{ value: breakpoint$ | async } as breakpoint">
   <!-- Summary info -->
   <div class="card">
@@ -96,6 +97,7 @@
         (totalAssets)="totalAssets = $event"
         (totalValue)="totalValueToken = $event"
         *ngIf="!isNoData"></app-token-table>
+      <app-loading-sprint *ngIf="isNoData"></app-loading-sprint>
       <ng-container *ngTemplateOutlet="reloadTemplate"></ng-container>
 
       <!-- NFT -->

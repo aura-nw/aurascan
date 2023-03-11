@@ -1,85 +1,87 @@
-<ng-container *ngIf="tokenDetail; else noValues">
-  <div class="box-contract text-white">
-    <!-- Unverified -->
-    <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Unverified">
-      <div class="d-flex content-contract body-02">
-        <img
-          [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-          alt=""
-          width="16"
-          height="16"
-          class="mr-2" />
-        <div>
-          Are you the Code ID's owner?
-          <a class="text--primary" [routerLink]="['/code-ids/verify', contractAddress, tokenDetail.tx_hash]">
-            Verify and Publish
-          </a>
-          your Code ID source code today!
-        </div>
-      </div>
-      <div class="mt-3 small-text content-info">{{ tokenDetail.tx_hash }}</div>
-    </ng-container>
-
-    <!-- Verifying -->
-    <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Verifying">
-      <div class="d-flex content-contract body-02">
-        <img
-          [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-          alt=""
-          width="16"
-          height="16"
-          class="mr-2 mt-1" />
-        <div>
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="tokenDetail; else noValues">
+    <div class="box-contract text-white">
+      <!-- Unverified -->
+      <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Unverified">
+        <div class="d-flex content-contract body-02">
+          <img
+            [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+            alt=""
+            width="16"
+            height="16"
+            class="mr-2" />
           <div>
-            The code ID source code that this smart contract was instantiated from is currently pending in Verify and
-            Publish process.
-          </div>
-          <div>
-            Kindly click
-            <a class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify()"> here </a>
-            for more detail
+            Are you the Code ID's owner?
+            <a class="text--primary" [routerLink]="['/code-ids/verify', contractAddress, tokenDetail.tx_hash]">
+              Verify and Publish
+            </a>
+            your Code ID source code today!
           </div>
         </div>
-      </div>
-    </ng-container>
+        <div class="mt-3 small-text content-info">{{ tokenDetail.tx_hash }}</div>
+      </ng-container>
 
-    <!-- Verify Fail -->
-    <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.VerifiedFail">
-      <div class="d-flex content-contract body-02">
-        <img
-          [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
-          alt=""
-          width="16"
-          height="16"
-          class="mr-2" />
-        <div>
-          Are you the Code ID's owner?
-          <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
-          your Code ID source code today!
+      <!-- Verifying -->
+      <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Verifying">
+        <div class="d-flex content-contract body-02">
+          <img
+            [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+            alt=""
+            width="16"
+            height="16"
+            class="mr-2 mt-1" />
+          <div>
+            <div>
+              The code ID source code that this smart contract was instantiated from is currently pending in Verify and
+              Publish process.
+            </div>
+            <div>
+              Kindly click
+              <a class="text--primary fw-500 cursor-pointer" (click)="navigateToVerify()"> here </a>
+              for more detail
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="mt-4 mt-lg-6">
-        Let check the status of the last time this Code ID source code was unable to Verify and Publish
-      </div>
-      <app-contract-verify-steps [codeID]="tokenDetail.code_id"></app-contract-verify-steps>
-    </ng-container>
+      </ng-container>
 
-    <!-- Verify Successfull -->
-    <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Verified">
-      <div class="button-tab-group mb-4 mt-lg-3">
-        <button
-          class="button-tab"
-          [class.active]="countCurrent === contractType.ReadContract"
-          (click)="changeTab(contractType.ReadContract)">
-          <span>Read Contract</span>
-        </button>
-        <button
-          class="button-tab"
-          [class.active]="countCurrent === contractType.WriteContract"
-          (click)="changeTab(contractType.WriteContract)">
-          <span>Write Contract</span>
-        </button>
-        <!--
+      <!-- Verify Fail -->
+      <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.VerifiedFail">
+        <div class="d-flex content-contract body-02">
+          <img
+            [src]="'assets/icons/icons-svg/color/info-circle.svg' | imageS3"
+            alt=""
+            width="16"
+            height="16"
+            class="mr-2" />
+          <div>
+            Are you the Code ID's owner?
+            <a class="text--primary" (click)="navigateToVerify()"> Verify and Publish </a>
+            your Code ID source code today!
+          </div>
+        </div>
+        <div class="mt-4 mt-lg-6">
+          Let check the status of the last time this Code ID source code was unable to Verify and Publish
+        </div>
+        <app-contract-verify-steps [codeID]="tokenDetail.code_id"></app-contract-verify-steps>
+      </ng-container>
+
+      <!-- Verify Successfull -->
+      <ng-container *ngIf="tokenDetail?.contract_verification === contractVerifyType.Verified">
+        <div class="button-tab-group mb-4 mt-lg-3">
+          <button
+            class="button-tab"
+            [class.active]="countCurrent === contractType.ReadContract"
+            (click)="changeTab(contractType.ReadContract)">
+            <span>Read Contract</span>
+          </button>
+          <button
+            class="button-tab"
+            [class.active]="countCurrent === contractType.WriteContract"
+            (click)="changeTab(contractType.WriteContract)">
+            <span>Write Contract</span>
+          </button>
+          <!--
       <button class="button-tab" [class.active]="countCurrent === contractType.ReadProxy"
               (click)="changeTab(contractType.ReadProxy)">
         <span>Read as Proxy</span>
@@ -88,22 +90,24 @@
               (click)="changeTab(contractType.WriteProxy)">
         <span>Write as Proxy</span>
       </button>
-      --></div>
+      -->
+        </div>
 
-      <div class="mt-3">
-        <ng-container *ngIf="tokenDetail">
-          <app-read-contract
-            *ngIf="countCurrent === contractType.ReadContract"
-            [contractDetailData]="tokenDetail"></app-read-contract>
-          <app-write-contract
-            *ngIf="countCurrent === contractType.WriteContract"
-            [contractDetailData]="tokenDetail"></app-write-contract>
-        </ng-container>
-      </div>
-    </ng-container>
-  </div>
+        <div class="mt-3">
+          <ng-container *ngIf="tokenDetail">
+            <app-read-contract
+              *ngIf="countCurrent === contractType.ReadContract"
+              [contractDetailData]="tokenDetail"></app-read-contract>
+            <app-write-contract
+              *ngIf="countCurrent === contractType.WriteContract"
+              [contractDetailData]="tokenDetail"></app-write-contract>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #noValues>
+    <app-table-no-data></app-table-no-data>
+  </ng-template>
 </ng-container>
-
-<ng-template #noValues>
-  <app-table-no-data></app-table-no-data>
-</ng-template>

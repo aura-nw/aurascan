@@ -31,15 +31,15 @@
           }}">
           <div class="caption text--gray-5 mb-1 mb-lg-0">BALANCE</div>
           <span *ngIf="!tokenDetail?.isNFTContract">
-            {{ infoSearch['balance'] || 0 | mask: 'separator.6' }}
+            {{ infoSearch['balance'] || 0 | mask : 'separator.6' }}
             {{ tokenDetail.symbol || tokenDetail.name }}
           </span>
           <span *ngIf="tokenDetail?.isNFTContract">{{ infoSearch['balance'] || 0 }}</span>
         </div>
         <div class="col-12 col-lg-3 py-3 py-lg-0 text--gray-1" *ngIf="!tokenDetail?.isNFTContract">
           <div class="caption text--gray-5 mb-1 mb-lg-0">VALUE</div>
-          ${{ +infoSearch['balance'] * tokenDetail.price | number: global.formatNumber2Decimal }} (
-          {{ (infoSearch['balance'] * tokenDetail.price) / global.price.aura | mask: 'separator.6' }}
+          ${{ +infoSearch['balance'] * tokenDetail.price | number : global.formatNumber2Decimal }} (
+          {{ (infoSearch['balance'] * tokenDetail.price) / global.price.aura | mask : 'separator.6' }}
           {{ denom }})
         </div>
       </div>
@@ -59,9 +59,7 @@
             <span class="text-uppercase">{{ tab.value }}</span>
             <img
               class="ml-2"
-              *ngIf="
-                tab.key === tokenTab.Contract && tokenDetail.contract_verification === contractVerifyType.Verified
-              "
+              *ngIf="tab.key === tokenTab.Contract && tokenDetail.contract_verification === contractVerifyType.Verified"
               [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
               alt="contract_verification"
               width="16px"
@@ -72,6 +70,7 @@
     </ul>
     <div class="d-lg-flex align-item-center justify-content-end mb-3 mb-lg-0">
       <form
+        (ngSubmit)="handleSearch()"
         class="aura-form single-input-field search-form"
         *ngIf="
           !breakpoint.value.matches ||
@@ -81,7 +80,7 @@
           <input
             type="text"
             class="form-control aura-form"
-            placeholder="Filter Address/ TX Hash/ Token ID"
+            [placeholder]="tokenDetail?.type === 'CW20' ? textPlaceHolder : textPlaceHolder + '/ Token ID'"
             [(ngModel)]="searchTemp"
             [maxLength]="maxLengthSearch"
             name="search"
@@ -111,15 +110,19 @@
       [contractAddress]="contractAddress"
       [isSearchAddress]="isSearchAddress"
       (resultLength)="getLength($event)"
+      [decimalValue]="decimalValue"
       (hasMore)="getMoreTx($event)">
     </app-token-transfers-tab>
     <app-token-holders-tab
       *ngIf="currentTab === tokenTab.Holders"
+      [decimalValue]="decimalValue"
       [keyWord]="textSearch"
       [tokenDetail]="tokenDetail"
       [typeContract]="tokenDetail?.type"
       [contractAddress]="contractAddress"></app-token-holders-tab>
-    <app-token-inventory-tab *ngIf="currentTab === tokenTab.Inventory" [typeContract]="tokenDetail?.type"></app-token-inventory-tab>
+    <app-token-inventory-tab
+      *ngIf="currentTab === tokenTab.Inventory"
+      [typeContract]="tokenDetail?.type"></app-token-inventory-tab>
     <app-token-info-tab *ngIf="currentTab === tokenTab.Info"></app-token-info-tab>
     <app-token-contract-tab
       *ngIf="currentTab === tokenTab.Contract"

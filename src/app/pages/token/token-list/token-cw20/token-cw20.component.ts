@@ -47,6 +47,7 @@ export class TokenCw20Component implements OnInit, OnDestroy {
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
+  isLoading = true;
 
   searchSubject = new Subject();
   destroy$ = new Subject();
@@ -90,25 +91,31 @@ export class TokenCw20Component implements OnInit, OnDestroy {
       keyword: this.textSearch,
     };
 
-    this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
-      res.data.forEach((data) => {
-        Object.assign(data, {
-          ...data,
-          circulating_market_cap: +data.circulating_market_cap || 0,
-          onChainMarketCap: +data.circulating_market_cap || 0,
-          volume: +data.volume_24h,
-          price: +data.price,
-          isValueUp: data.price_change_percentage_24h < 0 ? false : true,
-          change: Number(data.price_change_percentage_24h.toString()),
-          isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
-          holders: +data.holders,
-          holderChange: Number(data.holders_change_percentage_24h.toString()),
+    this.tokenService.getListToken(payload).subscribe(
+      (res: ResponseDto) => {
+        res.data.forEach((data) => {
+          Object.assign(data, {
+            ...data,
+            circulating_market_cap: +data.circulating_market_cap || 0,
+            onChainMarketCap: +data.circulating_market_cap || 0,
+            volume: +data.volume_24h,
+            price: +data.price,
+            isValueUp: data.price_change_percentage_24h < 0 ? false : true,
+            change: Number(data.price_change_percentage_24h.toString()),
+            isHolderUp: data.holders_change_percentage_24h < 0 ? false : true,
+            holders: +data.holders,
+            holderChange: Number(data.holders_change_percentage_24h.toString()),
+          });
         });
-      });
 
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
-    });
+        this.dataSource = new MatTableDataSource<any>(res.data);
+        this.pageData.length = res.meta.count;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {

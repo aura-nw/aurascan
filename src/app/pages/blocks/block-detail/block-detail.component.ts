@@ -55,6 +55,7 @@ export class BlockDetailComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   dataTxs: any[];
   loading = true;
+  loadingTxs = true;
   isRawData = false;
   isCurrentMobile;
 
@@ -101,50 +102,56 @@ export class BlockDetailComponent implements OnInit {
   }
 
   getDetailByHeight() {
-    this.blockService.blocksIndexer(1, this.id).subscribe(async (res) => {
-      const { code, data } = res;
-      if (code === 200 && data?.blocks?.length > 0) {
-        const block = convertDataBlock(data)[0];
-        block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
-        block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
-        block['json_data'] = _.get(data.blocks[0], 'block');
-        block['gas_used'] = block['gas_wanted'] = 0;
-        this.blockDetail = block;
+    this.blockService.blocksIndexer(1, this.id).subscribe(
+      async (res) => {
+        const { code, data } = res;
+        if (code === 200 && data?.blocks?.length > 0) {
+          const block = convertDataBlock(data)[0];
+          block['round'] = _.get(data.blocks[0], 'block.last_commit.round');
+          block['chainid'] = _.get(data.blocks[0], 'block.header.chain_id');
+          block['json_data'] = _.get(data.blocks[0], 'block');
+          block['gas_used'] = block['gas_wanted'] = 0;
+          this.blockDetail = block;
 
-        //get list tx detail
-        let txs = [];
-        for (const key in data.blocks[0]?.block?.data?.txs) {
-          const element = data.blocks[0].block?.data?.txs[key];
-          const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
-          this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => {
-            if (res.data.transactions[0]) {
-              txs.push(res.data.transactions[0]);
-            }
-          });
-        }
-
-        await Promise.all(txs);
-        setTimeout(() => {
-          if (txs?.length > 0) {
-            let dataTempTx = {};
-            dataTempTx['transactions'] = txs;
-            if (txs.length > 0) {
-              txs = convertDataTransaction(dataTempTx, this.coinInfo);
-              txs.forEach((k) => {
-                this.blockDetail['gas_used'] += +k.gas_used;
-                this.blockDetail['gas_wanted'] += +k.gas_wanted;
-              });
-              this.dataSource.data = txs;
-            }
+          //get list tx detail
+          let txs = [];
+          for (const key in data.blocks[0]?.block?.data?.txs) {
+            const element = data.blocks[0].block?.data?.txs[key];
+            const tx = sha256(Buffer.from(element, 'base64')).toUpperCase();
+            this.transactionService.txsIndexer(1, 0, tx).subscribe((res) => {
+              if (res.data.transactions[0]) {
+                txs.push(res.data.transactions[0]);
+              }
+            });
           }
-          this.loading = false;
-        }, 1000);
-      } else {
-        setTimeout(() => {
-          this.getDetailByHeight();
-        }, 10000);
-      }
-    });
+
+          await Promise.all(txs);
+          setTimeout(() => {
+            if (txs?.length > 0) {
+              let dataTempTx = {};
+              dataTempTx['transactions'] = txs;
+              if (txs.length > 0) {
+                txs = convertDataTransaction(dataTempTx, this.coinInfo);
+                txs.forEach((k) => {
+                  this.blockDetail['gas_used'] += +k.gas_used;
+                  this.blockDetail['gas_wanted'] += +k.gas_wanted;
+                });
+                this.dataSource.data = txs;
+              }
+            }
+            this.loadingTxs = false;
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            this.getDetailByHeight();
+          }, 10000);
+        }
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      },
+    );
   }
 
   checkAmountValue(amount: number, txHash: string) {

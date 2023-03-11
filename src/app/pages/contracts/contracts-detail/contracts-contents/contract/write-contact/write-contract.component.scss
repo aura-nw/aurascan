@@ -7,7 +7,8 @@ mat-expansion-panel {
     background-color: var(--aura-gray-9);
     border-color: var(--aura-gray-9);
     padding: 10px var(--spacer-4);
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: var(--aura-gray-9);
     }
 
@@ -61,4 +62,13 @@ input.form-check-input {
 }
 .error-null {
   border: 2px solid var(--aura-red-3) !important;
+}
+
+.btn-add-zero {
+  width: 25px;
+  height: 25px;
+  .icon-add-zero {
+    font-size: 15px;
+    color: var(--aura-white);
+  }
 }

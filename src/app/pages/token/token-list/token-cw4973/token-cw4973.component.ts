@@ -36,6 +36,7 @@ export class TokenCw4973Component implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
@@ -75,10 +76,16 @@ export class TokenCw4973Component implements OnInit {
       offset: this.pageData.pageIndex * this.pageData.pageSize,
       keyword: this.textSearch,
     };
-    this.soulboundService.getListABT(payload).subscribe((res: ResponseDto) => {
-      this.dataSource = new MatTableDataSource<any>(res.data);
-      this.pageData.length = res.meta.count;
-    });
+    this.soulboundService.getListABT(payload).subscribe(
+      (res: ResponseDto) => {
+        this.dataSource = new MatTableDataSource<any>(res.data);
+        this.pageData.length = res.meta.count;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {

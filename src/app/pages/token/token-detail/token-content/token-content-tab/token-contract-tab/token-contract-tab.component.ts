@@ -17,6 +17,7 @@ export class TokenContractTabComponent implements OnInit {
   countCurrent = this.contractType.ReadContract;
   tokenDetail: any;
   contractVerifyType = ContractVerifyType;
+  isLoading = true;
 
   constructor(private tokenService: TokenService, private router: Router) {}
 
@@ -29,14 +30,19 @@ export class TokenContractTabComponent implements OnInit {
   }
 
   getContractDetail() {
-    this.tokenService.getContractDetail(this.contractAddress).subscribe((res: ResponseDto) => {
-      this.tokenDetail = res?.data;
-    });
+    this.tokenService.getContractDetail(this.contractAddress).subscribe(
+      (res: ResponseDto) => {
+        this.tokenDetail = res?.data;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   navigateToVerify() {
     sessionStorage.setItem('codeIdPrePage', this.router.url);
-    localStorage.setItem('isVerifyTab', 'true');
     this.router.navigate(['/code-ids/verify', this.tokenDetail.code_id]);
   }
 }

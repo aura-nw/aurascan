@@ -84,7 +84,6 @@ export class MyGranteesComponent implements OnInit {
         this.currentAddress = wallet.bech32Address;
         this.getGranteesData();
       } else {
-        this.loading = false;
         this.currentAddress = null;
       }
     });
@@ -144,7 +143,6 @@ export class MyGranteesComponent implements OnInit {
           }
           this.pageData.length = this.dataSource.data.length;
         }
-        this.loading = false;
 
         setTimeout(() => {
           this.getListGrant();
@@ -154,6 +152,9 @@ export class MyGranteesComponent implements OnInit {
         setTimeout(() => {
           this.getListGrant();
         }, halftime);
+      },
+      () => {
+        this.loading = false;
       },
     );
   }
@@ -202,6 +203,7 @@ export class MyGranteesComponent implements OnInit {
     this.isActive = type;
     this.dataSource.data = [];
     this.nextKey = null;
+    this.loading = true;
     await this.getGranteesData();
   }
 
@@ -239,5 +241,4 @@ export class MyGranteesComponent implements OnInit {
       }
     });
   }
-
 }

@@ -8,9 +8,15 @@
   </button>
 </div>
 
-<div class="mt-4 mt-lg-5 card">
+<ng-container *ngIf="loading">
+  <div class="m-auto mt-10">
+    <app-loading-sprint></app-loading-sprint>
+  </div>
+</ng-container>
+
+<div class="mt-4 mt-lg-5 card" *ngIf="!loading">
   <div class="card-body">
-    <ng-container *ngIf="!loading">
+    <ng-container>
       <div class="d-lg-flex flex-row-reverse justify-content-between align-items-center">
         <form (ngSubmit)="searchToken()" class="aura-form single-input-field grantees-search-form">
           <div class="input-group px-6">
@@ -131,11 +137,6 @@
         <ng-template #noValues>
           <app-table-no-data></app-table-no-data>
         </ng-template>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="loading">
-      <div class="m-auto mt-10">
-        <app-loading-sprint></app-loading-sprint>
       </div>
     </ng-container>
   </div>

@@ -48,6 +48,7 @@ export class ProposalComponent implements OnInit {
   isLoadingAction = false;
   pageYOffset = 0;
   scrolling = false;
+  isLoading = true;
 
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -114,10 +115,10 @@ export class ProposalComponent implements OnInit {
                   wallet: addr,
                 };
                 this.proposalService.getVotes(payload).subscribe((res) => {
-                  const optionVote = this.proposalService.getVoteMessageByConstant(res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option);
-                  pro.vote_option = this.voteConstant.find(
-                    (s) => s.key === optionVote,
-                  )?.voteOption;
+                  const optionVote = this.proposalService.getVoteMessageByConstant(
+                    res?.data?.transactions[0]?.tx_response?.tx?.body?.messages[0]?.option,
+                  );
+                  pro.vote_option = this.voteConstant.find((s) => s.key === optionVote)?.voteOption;
                 });
               }
             };
@@ -129,32 +130,38 @@ export class ProposalComponent implements OnInit {
   }
 
   getListProposal(nextKey = null) {
-    this.proposalService.getProposalList(40, nextKey).subscribe((res) => {
-      this.nextKey = res.data.nextKey ? res.data.nextKey : null;
-      if (res?.data?.proposals) {
-        let tempDta = res.data.proposals;
-        tempDta.forEach((pro, index) => {
-          pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
-          const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
-          let totalVote = +yes + +no + +no_with_veto + +abstain;
-          tempDta[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
-          tempDta[index].tally.yes = (+yes * 100) / totalVote;
-          tempDta[index].tally.no = (+no * 100) / totalVote;
-          tempDta[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
-          tempDta[index].tally.abstain = (+abstain * 100) / totalVote;
-        });
-        if (this.dataSource.data.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...tempDta];
-        } else {
-          this.dataSource.data = [...tempDta];
+    this.proposalService.getProposalList(40, nextKey).subscribe(
+      (res) => {
+        this.nextKey = res.data.nextKey ? res.data.nextKey : null;
+        if (res?.data?.proposals) {
+          let tempDta = res.data.proposals;
+          tempDta.forEach((pro, index) => {
+            pro.total_deposit[0].amount = balanceOf(pro.total_deposit[0].amount);
+            const { yes, no, no_with_veto, abstain } = pro.final_tally_result;
+            let totalVote = +yes + +no + +no_with_veto + +abstain;
+            tempDta[index]['tally'] = { yes: 0, no: 0, no_with_veto: 0, abstain: 0 };
+            tempDta[index].tally.yes = (+yes * 100) / totalVote;
+            tempDta[index].tally.no = (+no * 100) / totalVote;
+            tempDta[index].tally.no_with_veto = (+no_with_veto * 100) / totalVote;
+            tempDta[index].tally.abstain = (+abstain * 100) / totalVote;
+          });
+          if (this.dataSource.data.length > 0) {
+            this.dataSource.data = [...this.dataSource.data, ...tempDta];
+          } else {
+            this.dataSource.data = [...tempDta];
+          }
         }
-      }
-      this.dataSourceMobile = this.dataSource.data.slice(
-        this.pageData.pageIndex * this.pageData.pageSize,
-        this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
-      );
-      this.length = this.dataSource.data.length;
-    });
+        this.dataSourceMobile = this.dataSource.data.slice(
+          this.pageData.pageIndex * this.pageData.pageSize,
+          this.pageData.pageIndex * this.pageData.pageSize + this.pageData.pageSize,
+        );
+        this.length = this.dataSource.data.length;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   getStatus(key: string) {

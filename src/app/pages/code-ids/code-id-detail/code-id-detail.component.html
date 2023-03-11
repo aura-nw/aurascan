@@ -1,101 +1,110 @@
 <app-pagetitle title="Code ID Details" [displayInfo]="false"></app-pagetitle>
-<ng-container *ngIf="codeIdDetail">
-  <section class="information mt-4 mt-lg-6">
-    <div class="card">
-      <div class="card-body">
-        <h2 class="h3-mob text--white mb-4">Information</h2>
-        <div class="row">
-          <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Code ID</div>
+<app-loading-sprint *ngIf="isLoading"></app-loading-sprint>
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="codeIdDetail">
+    <section class="information mt-4 mt-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h3-mob text--white mb-4">Information</h2>
+          <div class="row">
+            <div class="col-6 col-lg-2">
+              <div class="text--gray-4 body">Code ID</div>
+            </div>
+            <div class="col-6 col-lg-auto">
+              <div class="text--gray-light body">{{ codeIdDetail.code_id }}</div>
+            </div>
           </div>
-          <div class="col-6 col-lg-auto">
-            <div class="text--gray-light body">{{ codeIdDetail.code_id }}</div>
+          <div class="row mt-2">
+            <div class="col-6 col-lg-2">
+              <div class="text--gray-4 body">Creator</div>
+            </div>
+            <div class="col-6 col-lg-auto">
+              <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-none d-lg-block">{{
+                codeIdDetail.creator
+              }}</a>
+              <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-lg-none">{{
+                codeIdDetail.creator | cutStringPipe : 8 : 8
+              }}</a>
+            </div>
           </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Creator</div>
+          <div class="row mt-2">
+            <div class="col-6 col-lg-2">
+              <div class="text--gray-4 body">Tx Hash</div>
+            </div>
+            <div class="col-6 col-lg-auto">
+              <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-none d-lg-block">{{
+                codeIdDetail.tx_hash
+              }}</a>
+              <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
+                codeIdDetail.tx_hash | cutStringPipe : 8 : 8
+              }}</a>
+            </div>
           </div>
-          <div class="col-6 col-lg-auto">
-            <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-none d-lg-block">{{
-              codeIdDetail.creator
-            }}</a>
-            <a [routerLink]="['/account', codeIdDetail.creator]" class="text--primary body d-lg-none">{{
-              codeIdDetail.creator | cutStringPipe : 8 : 8
-            }}</a>
+          <div class="row mt-2">
+            <div class="col-6 col-lg-2">
+              <div class="text--gray-4 body">Type</div>
+            </div>
+            <div class="col-6 col-lg-auto">
+              <div class="text--gray-light body">
+                {{
+                  codeIdDetail.result === contractResult.CORRECT
+                    ? codeIdDetail.type
+                    : codeIdDetail.result === contractResult.TBD
+                    ? contractResult.TBD
+                    : '-'
+                }}
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Tx Hash</div>
+          <div class="row mt-2">
+            <div class="col-6 col-lg-2">
+              <div class="text--gray-4 body">Instantiate times</div>
+            </div>
+            <div class="col-6 col-lg-auto">
+              <div class="text--gray-light body">{{ codeIdDetail.instantiates }}</div>
+            </div>
           </div>
-          <div class="col-6 col-lg-auto">
-            <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-none d-lg-block">{{
-              codeIdDetail.tx_hash
-            }}</a>
-            <a [routerLink]="['/transaction', codeIdDetail.tx_hash]" class="text--primary body d-lg-none">{{
-              codeIdDetail.tx_hash | cutStringPipe : 8 : 8
-            }}</a>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Type</div>
-          </div>
-          <div class="col-6 col-lg-auto">
-            <div class="text--gray-light body">
-              {{
-                codeIdDetail.result === contractResult.CORRECT
-                  ? codeIdDetail.type
-                  : codeIdDetail.result === contractResult.TBD
-                  ? contractResult.TBD
-                  : '-'
-              }}
+          <div class="row mt-2">
+            <div class="col-6 col-lg-2">
+              <div class="text--gray-4 body">Created At</div>
+            </div>
+            <div class="col-6 col-lg-auto">
+              <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
             </div>
           </div>
         </div>
-        <div class="row mt-2">
-          <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Instantiate times</div>
-          </div>
-          <div class="col-6 col-lg-auto">
-            <div class="text--gray-light body">{{ codeIdDetail.instantiates }}</div>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-6 col-lg-2">
-            <div class="text--gray-4 body">Created At</div>
-          </div>
-          <div class="col-6 col-lg-auto">
-            <div class="text--gray-1 body">{{ codeIdDetail.created_at | customDate : 'yyyy-MM-dd HH:mm:ss' }}</div>
+      </div>
+    </section>
+    <section class="tab">
+      <div class="card">
+        <div class="card-body">
+          <!-- Tabs -->
+          <ul
+            ngbNav
+            #customNav="ngbNav"
+            [activeId]="tabIndex"
+            class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-flex">
+            <ng-container *ngFor="let tab of TAB; index as index">
+              <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
+                <a ngbNavLink (click)="tabIndex = tab.id" class="fw-semibold">
+                  <span>{{ tab.value | uppercase }}</span>
+                </a>
+              </li>
+            </ng-container>
+          </ul>
+          <!-- content -->
+          <div class="mt-4 mt-lg-6">
+            <app-code-id-contracts-tab
+              [codeId]="codeIdDetail.code_id"
+              *ngIf="tabIndex === 0"></app-code-id-contracts-tab>
+            <app-verify-code-id [codeId]="codeIdDetail.code_id" *ngIf="tabIndex === 1"></app-verify-code-id>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-  <section class="tab">
-    <div class="card">
-      <div class="card-body">
-        <!-- Tabs -->
-        <ul ngbNav #customNav="ngbNav" [activeId]="tabIndex" class="aura-nav-tabs nav-tabs nav-tabs-custom mb-4 d-flex">
-          <ng-container *ngFor="let tab of TAB; index as index">
-            <li [ngbNavItem]="index" class="flex-shrink-0 flex-grow-1 flex-lg-shrink-1 flex-lg-grow-0 px-lg-4">
-              <a ngbNavLink (click)="tabIndex = tab.id" class="fw-semibold">
-                <span>{{ tab.value | uppercase }}</span>
-              </a>
-            </li>
-          </ng-container>
-        </ul>
-        <!-- content -->
-        <div class="mt-4 mt-lg-6">
-          <app-code-id-contracts-tab [codeId]="codeIdDetail.code_id" *ngIf="tabIndex === 0"></app-code-id-contracts-tab>
-          <app-verify-code-id [codeId]="codeIdDetail.code_id" *ngIf="tabIndex === 1"></app-verify-code-id>
-        </div>
-      </div>
-    </div>
-  </section>
-</ng-container>
-<ng-container *ngIf="!codeIdDetail"
-  ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
-  <div class="py-lg-20"></div>
+    </section>
+  </ng-container>
+  <ng-container *ngIf="!codeIdDetail"
+    ><div class="text--white text-center my-lg-20 mb-5 h6">Code ID was not found!</div>
+    <div class="py-lg-20"></div>
+  </ng-container>
 </ng-container>

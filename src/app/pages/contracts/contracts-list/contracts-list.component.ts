@@ -48,6 +48,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   searchSubject = new Subject();
   destroy$ = new Subject();
   contractRegisterType = ContractRegisterType;
+  isLoading = true;
 
   constructor(
     public translate: TranslateService,
@@ -86,20 +87,26 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       contractType: this.filterButtons,
     };
 
-    this.contractService.getListContract(payload).subscribe((res) => {
-      if (res?.data?.length > 0) {
-        res.data.forEach((item) => {
-          item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
-            item.type = '-';
-          } else if (item.result === CONTRACT_RESULT.TBD) {
-            item.type = CONTRACT_RESULT.TBD;
-          }
-        });
-        this.dataSource = res.data;
-        this.pageData.length = res?.meta?.count;
-      }
-    });
+    this.contractService.getListContract(payload).subscribe(
+      (res) => {
+        if (res?.data?.length > 0) {
+          res.data.forEach((item) => {
+            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
+            if (item.result === CONTRACT_RESULT.INCORRECT || !item.type) {
+              item.type = '-';
+            } else if (item.result === CONTRACT_RESULT.TBD) {
+              item.type = CONTRACT_RESULT.TBD;
+            }
+          });
+          this.dataSource = res.data;
+          this.pageData.length = res?.meta?.count;
+        }
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   paginatorEmit(event): void {

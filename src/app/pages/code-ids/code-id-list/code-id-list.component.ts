@@ -40,6 +40,8 @@ export class CodeIdListComponent implements OnInit {
   ];
   displayedColumns: string[] = this.templates.map((dta) => dta.matColumnDef);
   contractResult = CONTRACT_RESULT;
+  isLoading = true;
+
   constructor(private contractService: ContractService) {}
 
   ngOnInit(): void {
@@ -67,10 +69,16 @@ export class CodeIdListComponent implements OnInit {
       keyword: this.textSearch,
     };
 
-    this.contractService.getListCodeID(payload).subscribe((res) => {
-      this.dataSource.data = res.data;
-      this.pageData.length = res?.meta?.count;
-    });
+    this.contractService.getListCodeID(payload).subscribe(
+      (res) => {
+        this.dataSource.data = res.data;
+        this.pageData.length = res?.meta?.count;
+      },
+      () => {},
+      () => {
+        this.isLoading = false;
+      },
+    );
   }
 
   resetFilterSearch() {

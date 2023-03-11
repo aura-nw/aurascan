@@ -1,13 +1,14 @@
 <h2 class="mb-0 text--white">NFTs ({{ pageData.length || 0 }}<span *ngIf="nextKey"> NFTs and more</span>)</h2>
-<div class="card mt-3">
+<div *ngIf="loading" class="m-auto mt-10">
+  <app-loading-sprint></app-loading-sprint>
+</div>
+
+<div class="card mt-3" *ngIf="!loading">
   <div class="card-body">
-    <div *ngIf="loading" class="m-auto mt-10">
-      <app-loading-sprint></app-loading-sprint>
-    </div>
     <!-- Filter -->
     <div class="mb-6 d-lg-flex align-items-center justify-content-between">
       <div class="h1 mb-0 text-gradient">$ {{ totalValue || 0 | number: global.formatNumber2Decimal }}</div>
-      <form class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
+      <form (ngSubmit)="searchTokenNft()" class="aura-form single-input-field account-search-form mt-4 mt-lg-0">
         <div class="input-group">
           <input
             type="text"

@@ -2,6 +2,10 @@
   <app-loading-sprint></app-loading-sprint>
 </div>
 
+<ng-container *ngIf="!loading && !nftDetail">
+  <app-table-no-data></app-table-no-data>
+</ng-container>
+
 <ng-container
   *ngIf="
     nftDetail &&
@@ -45,24 +49,26 @@
                 (click)="expandMedia()"
                 *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
                 (error)="error()"
-                [src]="nftUrl" />
+                [src]="imageUrl && animationUrl ? animationUrl : imageUrl"/>
               <video
                 (click)="expandMedia()"
-                [src]="nftUrl"
+                [src]="animationUrl"
                 controls
-                controlsList="nodownload "
+                controlsList="nodownload"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
-                "></video>
+                "
+                poster="{{ imageUrl }}"></video>
               <app-model-view
                 (click)="expandMedia()"
                 *ngIf="
                   getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [modelUrl]="nftUrl"
-                [disablePan]="false">
+                [modelUrl]="animationUrl"
+                [disablePan]="false"
+                [previewImg]="imageUrl">
               </app-model-view>
               <app-audio-player
                 (click)="expandMedia()"
@@ -70,14 +76,15 @@
                   getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
                   (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
                 "
-                [src]="nftUrl">
+                [src]="animationUrl"
+                [previewImg]="imageUrl">
               </app-audio-player>
             </div>
           </div>
         </div>
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">
-        <div class="d-lg-flex flex-column justify-content-between h-100">
+        <div class="d-lg-flex flex-column h-100">
           <div class="d-lg-flex justify-content-between">
             <div class="d-flex align-items-center d-lg-flex d-none">
               <h1 class="fw-bold sub-text text--white mb-0 mr-1">
@@ -108,7 +115,8 @@
             >
           </div>
           <!-- Desktop card info -->
-          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">
+          <!--          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">-->
+          <div class="d-none d-lg-block card py-3 px-6" *ngIf="false">
             <div class="d-flex">
               <div class="flex-shrink-0 flex-grow-1 w-auto">
                 <div class="body-01 text--gray-5 mb-1">Min. Price</div>
@@ -140,7 +148,8 @@
             </div>
           </div>
           <!-- Mobile card info -->
-          <div class="d-lg-none" *ngIf="!isSoulBound">
+          <!--          <div class="d-lg-none" *ngIf="!isSoulBound">-->
+          <div class="d-lg-none" *ngIf="false">
             <div class="card px-6 py-3 mb-4">
               <div class="body-02 text--gray-5 mb-1">Min. Price</div>
               <div class="h3 mb-0 text--white">

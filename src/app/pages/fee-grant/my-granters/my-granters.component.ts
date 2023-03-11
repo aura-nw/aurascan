@@ -18,7 +18,7 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./my-granters.component.scss'],
 })
 export class MyGrantersComponent implements OnInit {
-  loading = true;
+  loadingGranter = true;
   isActive = true;
   textSearch = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
@@ -74,7 +74,6 @@ export class MyGrantersComponent implements OnInit {
   }
 
   getGrantersData() {
-    this.loading = true;
     if (this.isActive) {
       this.templates = this.templatesActive;
       this.displayedColumns = this.templatesActive.map((dta) => dta.matColumnDef);
@@ -89,9 +88,8 @@ export class MyGrantersComponent implements OnInit {
     this.filterSearch['isGranter'] = true;
     this.filterSearch['isActive'] = this.isActive;
 
-    this.feeGrantService
-      .getListFeeGrants(this.filterSearch, this.currentAddress, this.nextKey, true)
-      .subscribe((res) => {
+    this.feeGrantService.getListFeeGrants(this.filterSearch, this.currentAddress, this.nextKey, true).subscribe(
+      (res) => {
         const { code, data } = res;
         if (code === 200) {
           this.nextKey = res.data.nextKey || null;
@@ -112,8 +110,12 @@ export class MyGrantersComponent implements OnInit {
           }
           this.pageData.length = this.dataSource.data.length;
         }
-        this.loading = false;
-      });
+      },
+      () => {},
+      () => {
+        this.loadingGranter = false;
+      },
+    );
   }
 
   searchToken(): void {
@@ -160,6 +162,7 @@ export class MyGrantersComponent implements OnInit {
     this.isActive = type;
     this.dataSource.data = null;
     this.nextKey = null;
+    this.loadingGranter = true;
     await this.getGrantersData();
   }
 }
