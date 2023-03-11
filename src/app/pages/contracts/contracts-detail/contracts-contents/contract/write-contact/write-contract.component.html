@@ -45,11 +45,10 @@
                 {{ item.fieldName }} ({{ item.type }})
               </span>
               <button
-                class="button button-pill button--xs button-outline button-outline--gradient button-outline__in-card ml-2"
-                type="button"
+                class="button button--xxs button--sm-mob button-circle ml-2 btn-add-zero"
                 *ngIf="item.isAddButtonZero"
                 (click)="showAddZero(msg)">
-                <span style="height: 12px"><i class="ph-plus"></i></span>
+                <i class="ph ph-gear icon-add-zero"></i>
               </button>
             </div>
             <input

@@ -7,27 +7,27 @@
         <div class="body text--gray-4 mt-4 mt-lg-0">
           A total of {{ pageData.length }} record{{ pageData.length > 1 ? 's' : '' }} found
         </div>
-        <form class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
+        <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
           <div class="input-group">
             <input
               type="text"
               class="form-control"
               placeholder="Search for Token Name"
-              [(ngModel)]="seachValue"
+              [(ngModel)]="searchValue"
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
               autocomplete="off" />
             <button
               type="submit"
-              class="btn-search {{ seachValue && seachValue?.length > 0 ? 'd-none' : '' }}"
+              class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
               class="btn-reset cursor-pointer {{
-                !seachValue || (seachValue && seachValue?.length === 0) ? 'd-none' : ''
+                !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
@@ -48,38 +48,13 @@
             <div class="nft-cards__item-border">
               <div class="nft-cards__item nft-cards__item--unclaimed">
                 <div class="token-cards__img">
-                  <img
-                    *ngIf="(!token.animation_url && getTypeFile(token) !== MEDIA_TYPE.IMG) || isError"
-                    [src]="commonService.getDefaultImg()"
-                    alt="" />
-                  <img
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
-                    (error)="error()"
-                    src="{{
-                      token.animation_url || token.token_img
-                        ? (token.animation_url || token.token_img | replaceIpfs)
-                        : commonService.getDefaultImg()
-                    }}"
-                    alt="{{ token.token_name }}" />
-                  <app-custom-video-player
-                    [videoSrc]="token.animation_url | replaceIpfs"
-                    [showControl]="false"
-                    [nftId]="'nft#' + i"
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO && token.animation_url">
-                  </app-custom-video-player>
-                  <app-model-view
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE._3D && token.animation_url"
-                    [modelUrl]="token.animation_url | replaceIpfs"
-                    [link]=""
-                    [disablePan]="true">
-                  </app-model-view>
-                  <app-audio-player
-                    *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO && token.animation_url"
-                    [link]="'#'"
-                    [src]="token.animation_url | replaceIpfs"
-                    [nftId]="'nft#' + i"
-                    [disableLink]="true">
-                  </app-audio-player>
+                  <app-nft-card
+                    [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                    [nftItem]="token"
+                    [disableLink]="true"
+                    nftId="{{ 'nft#' + i }}"
+                    [nftType]="getTypeFile(token)">
+                  </app-nft-card>
                   <div class="token__unclaimed body caption-mob fw-semibold" *ngIf="token.status === sbType.UNCLAIMED">
                     {{ sbType.UNCLAIMED }}
                   </div>

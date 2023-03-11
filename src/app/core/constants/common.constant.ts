@@ -57,6 +57,7 @@ export const CHART_RANGE = {
 
 export const LENGTH_CHARACTER = {
   ADDRESS: 43,
+  CONTRACT: 63,
   TRANSACTION: 64
 };
 

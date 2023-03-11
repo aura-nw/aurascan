@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import '@google/model-viewer';
 
 @Component({
@@ -11,11 +12,15 @@ export class ModelViewComponent implements OnInit {
   @Input() appWidth: number;
   @Input() appHeight: number;
   @Input() link;
-
-  @Input() disablePan = false
+  @Input() previewImg: string;
+  @Input() disablePan = false;
 
   camera_orbit = '45deg 55deg 2.5m';
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  goTo(link) {
+    this.router.navigate([link]);
+  }
 }

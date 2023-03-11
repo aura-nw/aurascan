@@ -3,7 +3,6 @@ import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
-import { ContractService } from 'src/app/core/services/contract.service';
 import { SoulboundService } from 'src/app/core/services/soulbound.service';
 import { LENGTH_CHARACTER, NETWORK } from '../../../app/core/constants/common.constant';
 import { ResponseDto } from '../../core/models/common.model';
@@ -45,6 +44,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   wallet = null;
   lengthSBT = 0;
   prefixValAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixValAddr;
+  prefixNormalAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
 
   /**
    * Language Listing
@@ -75,7 +75,6 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     private walletService: WalletService,
     private transactionService: TransactionService,
     private environmentService: EnvironmentService,
-    private contractService: ContractService,
     private soulboundService: SoulboundService,
   ) {
     router.events.subscribe((event) => {
@@ -306,29 +305,23 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     const regexRule = VALIDATORS.HASHRULE;
     if (this.searchValue) {
       this.searchValue = this.searchValue.trim();
+      let isNumber = /^\d+$/.test(this.searchValue);
       if (regexRule.test(this.searchValue)) {
-        if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
-          if (this.searchValue.toLowerCase() === this.searchValue) {
+        //check is start with 'aura' and length >= normal address
+        if (this.searchValue.startsWith(this.prefixNormalAdd) && this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
+          if (this.searchValue.length === LENGTH_CHARACTER.CONTRACT) {
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               this.router.navigate(['contracts', this.searchValue]);
             });
           } else {
-            this.getTxhDetail(this.searchValue);
+            let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate([urlLink, this.searchValue]);
+            });
           }
-        } else if (this.searchValue.length >= LENGTH_CHARACTER.ADDRESS) {
-          this.contractService.getContractDetail(this.searchValue).subscribe((res) => {
-            if (res.data) {
-              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['contracts', this.searchValue]);
-              });
-            } else {
-              let urlLink = this.searchValue.startsWith(this.prefixValAdd) ? 'validators' : 'account';
-              this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-                this.router.navigate([urlLink, this.searchValue]);
-              });
-            }
-          });
-        } else {
+        } else if (this.searchValue.length === LENGTH_CHARACTER.TRANSACTION) {
+          this.getTxhDetail(this.searchValue);
+        } else if (isNumber) {
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate(['blocks', this.searchValue]);
           });
@@ -427,7 +420,9 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
 
     if (
       menuLink === '/code-ids/list' &&
-      (this.router.url == '/code-ids/list' || this.router.url.includes('/code-ids/detail/'))
+      (this.router.url == '/code-ids/list' ||
+        this.router.url.includes('/code-ids/detail/') ||
+        this.router.url.includes('/code-ids/verify/'))
     ) {
       return true;
     }

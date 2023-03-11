@@ -140,6 +140,7 @@ export class ContractsVerifyComponent implements OnInit {
 
   redirectToPreviousPage() {
     const preUrl = sessionStorage.getItem('codeIdPrePage');
+    localStorage.setItem('isVerifyTab', 'true');
     if (preUrl) {
       window.location.href = preUrl;
     } else {

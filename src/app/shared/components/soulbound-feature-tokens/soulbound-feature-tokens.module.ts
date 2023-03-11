@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SoulboundFeatureTokensComponent } from './soulbound-feature-tokens.component';
-import { CustomVideoPlayerModule } from '../custom-video-player/custom-video-player.module';
+import { NgModule } from '@angular/core';
 import { SbImgComponent } from './sb-img/sb-img.component';
+import { SoulboundFeatureTokensComponent } from './soulbound-feature-tokens.component';
 
 @NgModule({
   declarations: [SoulboundFeatureTokensComponent, SbImgComponent],
-  imports: [CommonModule, CustomVideoPlayerModule],
+  imports: [CommonModule],
   exports: [SoulboundFeatureTokensComponent],
 })
 export class SoulboundFeatureTokensModule {}

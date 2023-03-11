@@ -99,6 +99,7 @@ export function checkTypeFile(nft: any) {
     case 'application/xml':
     case 'image/svg+xml':
     case 'image/webp':
+    case 'image/avif':
       content_type = MEDIA_TYPE.IMG;
       break;
     case 'model/gltf-binary':

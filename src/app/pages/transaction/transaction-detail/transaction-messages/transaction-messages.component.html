@@ -415,10 +415,16 @@
           [dataLink]="{ url: '/code-ids/detail' }"></app-messages-item>
         <div class="row mb-3">
           <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Byte Code</div>
-          <div class="col-12 col-lg-9 text--gray-1 box-byte-code">
-            <div [class.ellipsis-text]="!seeLessArr[i]" class="content-byte-code">{{ item?.wasm_byte_code }}</div>
-            <div (click)="seeLessArr[i] = true" class="text--primary cursor-pointer mt-1" *ngIf="!seeLessArr[i]">See More </div>
-            <div (click)="seeLessArr[i] = false" class="text--primary cursor-pointer mt-1" *ngIf="seeLessArr[i]">See Less </div>
+          <div class="col-12 col-lg-9 text--gray-1">
+            <div [class.ellipsis-text]="!seeLessArr[i]" class="overflow-hidden">
+              {{ item?.wasm_byte_code }}
+            </div>
+            <div (click)="seeLessArr[i] = true" class="text--primary cursor-pointer mt-1" *ngIf="!seeLessArr[i]">
+              See More
+            </div>
+            <div (click)="seeLessArr[i] = false" class="text--primary cursor-pointer mt-1" *ngIf="seeLessArr[i]">
+              See Less
+            </div>
           </div>
         </div>
       </div>
@@ -494,19 +500,19 @@
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Rate</div>
         <div class="col-9">
-          {{ transactionDetail?.messages[0]?.commission?.rate || 0 | percent : global.formatNumber2Decimal }}
+          {{ checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.rate) || 0 | percent : global.formatNumber2Decimal }}
         </div>
       </div>
       <div class="row mb-3 body-01">
         <div class="col-3 mb-2 mb-lg-0 text--gray-4">Commission Max Rate</div>
         <div class="col-9">
-          {{ transactionDetail?.messages[0]?.commission?.max_rate || 0 | percent : global.formatNumber2Decimal }}
+          {{ checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.max_rate) || 0 | percent : global.formatNumber2Decimal }}
         </div>
       </div>
       <div class="row mb-3 body-01">
         <div class="col-12 col-lg-3 mb-2 mb-lg-0 text--gray-4 body">Commission Max Change Rate</div>
         <div class="col-12 col-lg-9">
-          {{ transactionDetail?.messages[0]?.commission?.max_change_rate || 0 | percent : global.formatNumber2Decimal }}
+          {{ checkRateFloatNumber(transactionDetail?.messages[0]?.commission?.max_change_rate) || 0 | percent : global.formatNumber2Decimal }}
         </div>
       </div>
       <app-messages-item

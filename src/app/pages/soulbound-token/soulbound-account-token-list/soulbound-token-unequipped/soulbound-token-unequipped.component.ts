@@ -21,7 +21,7 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
-  seachValue = '';
+  searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   loading = false;
   pageData: PageEvent = {
@@ -63,13 +63,13 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.textSearch = this.seachValue;
+    this.textSearch = this.searchValue;
     this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.seachValue = '';
+    this.searchValue = '';
     this.getListSB();
   }
 

@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { LENGTH_CHARACTER } from 'src/app/core/constants/common.constant';
 import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
@@ -39,6 +39,7 @@ export class TokenContentComponent implements OnInit {
   linkToken = 'token-nft';
   activeTabID = 0;
   decimalValue = 1;
+  textPlaceHolder = 'Filter Address/ TX Hash';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -47,7 +48,6 @@ export class TokenContentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private environmentService: EnvironmentService,
     public global: Globals,
     private layout: BreakpointObserver,
