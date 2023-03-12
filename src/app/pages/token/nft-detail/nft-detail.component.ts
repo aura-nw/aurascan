@@ -344,7 +344,17 @@ export class NFTDetailComponent implements OnInit {
   expandMedia(): void {
     let content;
     if (this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url) {
-      content = this.nftDetail.animation?.link_s3 || this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+      if (this.nftDetail.img_type === 'image/gif') {
+        if (this.nftDetail.image?.link_s3 || this.nftDetail?.ipfs?.image) {
+          content = this.nftDetail.image?.link_s3
+            ? this.nftDetail.image?.link_s3
+            : this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
+            ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
+            : this.defaultImgToken;
+        } else {
+          content = this.nftDetail.animation?.link_s3 || this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+        }
+      }
     } else {
       content = this.nftDetail.image?.link_s3
         ? this.nftDetail.image?.link_s3
