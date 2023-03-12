@@ -7,27 +7,13 @@
             href="javascript:void(0)"
             class="nft-card d-block"
             (click)="linkSBDetail(token.contract_address, token.token_id)">
-            <app-sb-img
-              [url]="
-                token.token_img
-                  ? replaceImgIpfs(token.token_img)
-                  : token.animation_url
-                  ? replaceImgIpfs(token.animation_url)
-                  : commonService.getDefaultImg()
-              "></app-sb-img>
+            <app-sb-img [token]="token"></app-sb-img>
           </a>
         </ng-container>
         <ng-container *ngIf="!token.picked">
           <div class="nft-card nft__unclaimed">
             <div class="position-relative text-center">
-              <app-sb-img
-                [url]="
-                  token.token_img
-                    ? replaceImgIpfs(token.token_img)
-                    : token.animation_url
-                    ? replaceImgIpfs(token.animation_url)
-                    : commonService.getDefaultImg()
-                "></app-sb-img>
+              <app-sb-img [token]="token"></app-sb-img>
               <button
                 class="button button-pill button--sm button-flat btn-preview border_none px-3 px-lg-4"
                 (click)="getSBTDetail(token.contract_address, token.token_id)">
