@@ -76,10 +76,6 @@ export class SoulboundFeatureTokensComponent implements OnInit {
     });
   }
 
-  replaceImgIpfs(value) {
-    return 'https://ipfs.io/' + value.replace('://', '/');
-  }
-
   getSBTDetail(contractAddress, tokenID) {
     this.isClick = true;
     this.contractService.getNFTDetail(contractAddress, tokenID).subscribe((res) => {
