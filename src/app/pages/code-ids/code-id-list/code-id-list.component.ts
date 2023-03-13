@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -16,7 +16,7 @@ import { shortenAddress } from '../../../core/utils/common/shorten';
   templateUrl: './code-id-list.component.html',
   styleUrls: ['./code-id-list.component.scss'],
 })
-export class CodeIdListComponent implements OnInit {
+export class CodeIdListComponent implements OnInit, OnDestroy {
   @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -54,6 +54,12 @@ export class CodeIdListComponent implements OnInit {
           this.pageChange.selectPage(0);
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onKeyUp() {
