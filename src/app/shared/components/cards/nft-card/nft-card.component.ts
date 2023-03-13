@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MEDIA_TYPE } from 'src/app/core/constants/common.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -9,7 +9,7 @@ import { checkTypeFile } from 'src/app/core/utils/common/info-common';
   templateUrl: './nft-card.component.html',
   styleUrls: ['./nft-card.component.scss'],
 })
-export class NftCardComponent implements OnInit {
+export class NftCardComponent implements OnInit, AfterViewInit {
   @Input() nftItem: any;
   @Input() nftType: string;
   @Input() nftLink: string;
@@ -26,7 +26,15 @@ export class NftCardComponent implements OnInit {
   imageUrl: string;
   previewImg = '';
 
-  constructor(private environmentService: EnvironmentService, private router: Router) {}
+  constructor(private environmentService: EnvironmentService, private router: Router, private cdr: ChangeDetectorRef) {}
+
+  ngAfterViewInit(): void {
+    if (this.video) {
+      this.video.nativeElement.onpause = () => {
+        this.paused = this.video.nativeElement.paused;
+      };
+    }
+  }
 
   ngOnInit(): void {
     // CW721
@@ -68,6 +76,7 @@ export class NftCardComponent implements OnInit {
         }
       }
     }
+    this.cdr.markForCheck();
   }
 
   pauseVideo(element) {
