@@ -10,7 +10,6 @@ import { AccountService } from 'src/app/core/services/account.service';
 import { AudioPlayerModule } from 'src/app/shared/components/audio-player/audio-player.module';
 import { NftCardModule } from 'src/app/shared/components/cards/nft-card/nft-card.module';
 import { ContractPopoverModule } from 'src/app/shared/components/contract-popover/contract-popover.module';
-import { CustomVideoPlayerModule } from 'src/app/shared/components/custom-video-player/custom-video-player.module';
 import { ModelViewModule } from 'src/app/shared/components/model-view/model-view.module';
 import { MaterialModule } from '../../../app/app.module';
 import { PaginatorModule } from '../../../app/shared/components/paginator/paginator.module';
@@ -19,6 +18,7 @@ import { SharedModule } from '../../../app/shared/shared.module';
 import { TokenService } from '../../core/services/token.service';
 import { ReadContractModule } from '../contracts/contracts-detail/contracts-contents/contract/read-contract/read-contract.module';
 import { WriteContractModule } from '../contracts/contracts-detail/contracts-contents/contract/write-contact/write-contract.module';
+import { ContractsModule } from '../contracts/contracts.module';
 import { NFTDetailComponent } from './nft-detail/nft-detail.component';
 import { PopupShareComponent } from './nft-detail/popup-share/popup-share.component';
 import { TokenContractTabComponent } from './token-detail/token-content/token-content-tab/token-contract-tab/token-contract-tab.component';
@@ -75,10 +75,10 @@ import { TokenRoutingModule } from './token-routing.module';
     NgxMaskModule,
     WriteContractModule,
     ReadContractModule,
-    CustomVideoPlayerModule,
     ModelViewModule,
     NftCardModule,
     AudioPlayerModule,
+    ContractsModule
   ],
   providers: [TokenService, AccountService],
 })

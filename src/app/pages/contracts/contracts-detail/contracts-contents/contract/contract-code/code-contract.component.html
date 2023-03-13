@@ -5,7 +5,7 @@
   <ng-container *ngIf="contractDetailData?.contract_verification !== contractVerifyType.Unverified">
     <div class="d-flex align-items-center">
       <img [src]="'assets/images/icons/contract-verify.svg' | imageS3" alt="" width="16" height="16" />
-      <span class="ml-2 mr-1 fw-500 text--gray-1"> Verified Source Code </span>
+      <span class="ml-2 mr-1 fw-500 text--gray-1"> Code ID source code verified </span>
     </div>
   </ng-container>
 
@@ -93,7 +93,7 @@
     </div>
 
     <div class="d-flex justify-content-between align-items-center" [class.row]="breakpoint.value.matches">
-      <span class="text--gray-1" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.ison</span>
+      <span class="text--gray-1" [class.col-12]="breakpoint.value.matches">File 1 of 3: execute msg.json</span>
       <div
         *ngIf="contractDetailData?.execute_msg_schema"
         class="d-flex align-items-center justify-content-end mt-2 mt-lg-0"

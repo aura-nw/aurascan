@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 const { userAgent } = navigator;
 @Component({
@@ -11,13 +11,15 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   @Input() src: any;
   @Input() nftId;
   @Input() disableLink: boolean;
+  @Input() previewImg: string;
   @ViewChild('audio') audio!: ElementRef;
   browserEnv = 'default';
   showCustomControl = false;
   paused = true;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
-  constructor(private cdr: ChangeDetectorRef, private environmentService: EnvironmentService) {}
+  
+  constructor(private environmentService: EnvironmentService) {}
 
   ngAfterViewInit(): void {
     const isSafari = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
@@ -32,7 +34,10 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.defaultImgToken = this.previewImg || this.defaultImgToken;
+  }
+
   playAudio(element) {
     element.play();
     this.paused = false;
@@ -47,6 +52,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   pauseAudio(element) {
     element.pause();
     this.paused = true;

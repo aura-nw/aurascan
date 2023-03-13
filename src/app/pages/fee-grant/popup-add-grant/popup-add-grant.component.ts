@@ -22,7 +22,6 @@ export class PopupAddGrantComponent implements OnInit {
   grantForm;
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   periodShow = false;
-  contractType: 'instantiate' | 'execute';
   allContractAllowActive = false;
   currDate;
   errorSpendLimit = false;

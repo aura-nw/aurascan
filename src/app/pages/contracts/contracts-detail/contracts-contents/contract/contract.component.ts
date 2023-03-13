@@ -1,9 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
 import { ContractType } from 'src/app/core/constants/token.enum';
-import { IResponsesTemplates } from 'src/app/core/models/common.model';
 import { ContractService } from 'src/app/core/services/contract.service';
 
 @Component({
@@ -11,7 +10,7 @@ import { ContractService } from 'src/app/core/services/contract.service';
   templateUrl: './contract.component.html',
   styleUrls: ['./contract.component.scss'],
 })
-export class ContractComponent implements OnInit, OnDestroy {
+export class ContractComponent implements OnInit {
   @Input() contractTypeData: string;
   @Input() contractsAddress: string;
 
@@ -22,37 +21,14 @@ export class ContractComponent implements OnInit, OnDestroy {
   contractDetail: any;
   isVerifying = false;
 
-  constructor(private contractService: ContractService, private route: ActivatedRoute) {}
-
-  ngOnDestroy(): void {}
+  constructor(private contractService: ContractService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-    this.getContractDetail2();
+    this.getContractDetail();
   }
 
   getContractDetail(notCheck = false) {
-    this.contractService
-      .checkVerified(this.contractAddress)
-      .pipe(
-        mergeMap(({ data }) => {
-          if (data?.status === 'verifying' && !notCheck) {
-            this.isVerifying = true;
-          } else {
-            this.isVerifying = false;
-          }
-
-          return this.contractService.contractObservable;
-        }),
-      )
-      .subscribe((res: IResponsesTemplates<any>) => {
-        if (res.data) {
-          this.contractDetail = res.data;
-        }
-      });
-  }
-
-  getContractDetail2(notCheck = false) {
     this.contractService.contractObservable
       .pipe(
         mergeMap(({ data }) => {
@@ -65,10 +41,11 @@ export class ContractComponent implements OnInit, OnDestroy {
             this.isVerifying = false;
           }
 
-          return this.contractService.checkVerified(this.contractAddress);
+          return this.contractService.checkVerified(this.contractDetail.code_id);
         }),
       )
       .subscribe(({ data }) => {
+        this.contractTypeData = data.status || this.contractTypeData;
         if (data?.status === 'verifying' && !notCheck) {
           this.isVerifying = true;
         } else {
@@ -79,5 +56,10 @@ export class ContractComponent implements OnInit, OnDestroy {
 
   changeTab(tabId): void {
     this.countCurrent = tabId;
+  }
+
+  navigateToVerify(codeId: string) {
+    sessionStorage.setItem('codeIdPrePage', this.router.url);
+    this.router.navigate(['/code-ids/verify', codeId]);
   }
 }

@@ -12,6 +12,7 @@ import { CommonPipeModule } from 'src/app/core/pipes/common-pipe.module';
 import { ContractTableModule } from 'src/app/shared/components/contract-table/contract-table.module';
 import { DropdownModule } from 'src/app/shared/components/dropdown/dropdown.module';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
+import { PopupAddZeroModule } from 'src/app/shared/components/popup-add-zero/popup-add-zero.module';
 import { QrModule } from 'src/app/shared/components/qr/qr.module';
 import { TableNoDataModule } from 'src/app/shared/components/table-no-data/table-no-data.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -28,7 +29,7 @@ import { ContractsListComponent } from './contracts-list/contracts-list.componen
 import { ContractsRegisterComponent } from './contracts-register/contracts-register.component';
 import { ContractsRoutingModule } from './contracts-routing.module';
 import { ContractsTransactionsComponent } from './contracts-transactions/contracts-transactions.component';
-import { CompilerOutputComponent } from './contracts-verify/compiler-output/compiler-output.component';
+import { ContractVerifyStepsComponent } from './contracts-verify/contract-verify-steps/contract-verify-steps.component';
 import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.component';
 
 @NgModule({
@@ -42,8 +43,8 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ContractComponent,
     CodeContractComponent,
     ContractsVerifyComponent,
-    CompilerOutputComponent,
-    ContractsRegisterComponent,
+    ContractVerifyStepsComponent,
+    ContractsRegisterComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +68,9 @@ import { ContractsVerifyComponent } from './contracts-verify/contracts-verify.co
     ClickOutsideModule,
     WriteContractModule,
     ReadContractModule,
+    PopupAddZeroModule
   ],
   providers: [ContractService],
+  exports: [ContractVerifyStepsComponent],
 })
 export class ContractsModule {}

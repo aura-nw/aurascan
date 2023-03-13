@@ -7,27 +7,27 @@
         <div class="body text--gray-4 mt-4 mt-lg-0">
           {{ countSelected ?? 0 }} of {{ pageData?.length }} item{{ pageData?.length > 1 ? 's' : '' }} selected
         </div>
-        <form class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
+        <form (ngSubmit)="searchToken()" class="aura-form single-input-field search-form-sbtokenlist" #searchForm>
           <div class="input-group">
             <input
               type="text"
               class="form-control"
               placeholder="Search for Token Name or Token ID"
-              [(ngModel)]="seachValue"
+              [(ngModel)]="searchValue"
               [maxLength]="maxLengthSearch"
               (keyup.enter)="searchToken()"
               name="search"
               autocomplete="off" />
             <button
               type="submit"
-              class="btn-search {{ seachValue && seachValue?.length > 0 ? 'd-none' : '' }}"
+              class="btn-search {{ searchValue && searchValue?.length > 0 ? 'd-none' : '' }}"
               (click)="searchToken()">
               <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
             </button>
             <button
               type="reset"
               class="btn-reset cursor-pointer {{
-                !seachValue || (seachValue && seachValue?.length === 0) ? 'd-none' : ''
+                !searchValue || (searchValue && searchValue?.length === 0) ? 'd-none' : ''
               }}"
               (click)="resetSearch()">
               <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
@@ -47,38 +47,12 @@
           <div class="nft-cards__col col" *ngFor="let token of soulboundData.data; let i = index">
             <div class="nft-cards__item-border">
               <div class="nft-cards__item">
-                <div class="nft-cards__img">
-                  <div class="token-cards__img">
-                    <img *ngIf="!token.img_type && !token.animation_url" [src]="commonService.getDefaultImg()" alt="" />
-                    <img
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.IMG"
-                      src="{{
-                        (token.animation_url || token.token_img)
-                          ? (token.animation_url || token.token_img | replaceIpfs)
-                          : commonService.getDefaultImg()
-                      }}"
-                      alt="{{ token.token_name }}" />
-                    <app-custom-video-player
-                      [videoSrc]="token.animation_url | replaceIpfs"
-                      [showControl]="false"
-                      [nftId]="'nft#' + i"
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.VIDEO">
-                    </app-custom-video-player>
-                    <app-model-view
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE._3D"
-                      [link]=""
-                      [modelUrl]="token.animation_url | replaceIpfs"
-                      [disablePan]="true">
-                    </app-model-view>
-                    <app-audio-player
-                      *ngIf="getTypeFile(token) === MEDIA_TYPE.AUDIO"
-                      [link]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
-                      [src]="token.animation_url | replaceIpfs"
-                      [nftId]="'nft#' + i"
-                      [disableLink]="true">
-                    </app-audio-player>
-                  </div>
-                </div>
+                <app-nft-card
+                  [nftLink]="'/tokens/token-abt/' + token?.contract_address + '/' + token?.token_id"
+                  [nftItem]="token"
+                  nftId="{{ 'nft#' + i }}"
+                  [nftType]="getTypeFile(token)">
+                </app-nft-card>
                 <div class="box-nft-info d-block">
                   <div class="nft__info body-01 caption-mob fw-normal">
                     <span class="mr-1 text--gray-1">Token:</span>

@@ -12,36 +12,36 @@
   <div class="card-body body-01">
     <div class="row">
       <div class="col-12 col-lg-5">
-        <div class="nft__img">
+        <div class="nft-cards__img nft__img">
           <img
-            *ngIf="!soulboundDetail.img_type && !soulboundDetail?.ipfs?.animation_url"
-            [src]="commonService.getDefaultImg()"
-            alt="" />
+            *ngIf="
+              (getTypeFile(soulboundDetail) !== MEDIA_TYPE.IMG && !soulboundDetail?.ipfs?.animation_url) || isError
+            "
+            [src]="commonService.getDefaultImg()" />
           <img
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG"
-            src="{{
-              (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image)
-                ? (soulboundDetail?.ipfs.animation_url || soulboundDetail?.ipfs.image | replaceIpfs)
-                : commonService.getDefaultImg()
-            }}"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.IMG && isError === false"
+            (error)="error()"
+            src="{{ imageUrl && animationUrl ? animationUrl : imageUrl }}"
             alt="{{ soulboundDetail.token_name }}" />
-          <app-custom-video-player
-            [videoSrc]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
-            [showControl]="true"
-            [isDetail]="true"
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO">
-          </app-custom-video-player>
+          <video
+            [src]="animationUrl"
+            controlslist="nodownload noplaybackrate"
+            controls
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.VIDEO && soulboundDetail?.ipfs?.animation_url"
+            poster="{{ previewImg }}"></video>
           <app-model-view
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE._3D && soulboundDetail?.ipfs?.animation_url"
             [link]=""
-            [modelUrl]="soulboundDetail.ipfs.animation_url | replaceIpfs"
-            [disablePan]="false">
+            [modelUrl]="animationUrl"
+            [disablePan]="false"
+            [previewImg]="previewImg">
           </app-model-view>
           <app-audio-player
-            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.AUDIO"
+            *ngIf="getTypeFile(soulboundDetail) === MEDIA_TYPE.AUDIO && soulboundDetail?.ipfs?.animation_url"
             [link]=""
-            [src]="soulboundDetail?.ipfs?.animation_url | replaceIpfs"
-            [nftId]="">
+            [src]="animationUrl"
+            [nftId]=""
+            [previewImg]="previewImg">
           </app-audio-player>
         </div>
       </div>

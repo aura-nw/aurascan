@@ -1,6 +1,6 @@
 <app-pagetitle title="Voting Details"></app-pagetitle>
 <ng-container *ngIf="this.errorPro === false">
-  <section class="summary">
+  <section class="summary mt-4 mt-lg-6">
     <app-summary-info [proposalId]="proposalId" (proposalDtl)="getProposalDetail($event)"></app-summary-info>
   </section>
   <section class="votes">

@@ -37,12 +37,10 @@ export class ContractContentComponent implements OnInit, OnDestroy {
   contractTab = ContractTab;
   contractVerifyType = ContractVerifyType;
   nextKey = null;
-
-  contractTransaction = {};
-  templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
-
   activeId = 0;
   limit = 25;
+  contractTransaction = {};
+  templates: Array<TableTemplate> = CONTRACT_TABLE_TEMPLATES;
 
   contractInfo = {
     contractsAddress: this.contractsAddress,

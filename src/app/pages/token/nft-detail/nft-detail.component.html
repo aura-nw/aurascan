@@ -1,3 +1,7 @@
+<div *ngIf="loading" class="m-auto mt-10">
+  <app-loading-sprint></app-loading-sprint>
+</div>
+
 <ng-container
   *ngIf="
     nftDetail &&
@@ -27,25 +31,56 @@
     <div class="row p-lg-3">
       <!-- nft-media -->
       <div class="col-12 col-lg-4 my-4 my-md-0 pl-lg-0">
-        <div class="nft-img__contain w-100 h-100" (click)="expandMedia()">
+        <div class="nft-img__contain w-100 h-100">
           <div class="card m-0 w-100 h-100 align-items-center justify-content-center">
             <div class="nft__img" [class.nft-soulbound__img]="isSoulBound">
-              <img *ngIf="!nftType && !nftDetail.ipfs?.animation_url" [src]="defaultImgToken" />
-              <img *ngIf="nftType === MEDIA_TYPE.IMG && isError === false" (error)="error()" [src]="this.nftUrl" />
+              <img
+                *ngIf="
+                  (getTypeFile(nftDetail) !== MEDIA_TYPE.IMG &&
+                    !(nftDetail.animation?.link_s3 || nftDetail?.animation_url)) ||
+                  isError
+                "
+                [src]="defaultImgToken" />
+              <img
+                (click)="expandMedia()"
+                *ngIf="getTypeFile(nftDetail) === MEDIA_TYPE.IMG && isError === false"
+                (error)="error()"
+                [src]="imageUrl && animationUrl ? animationUrl : imageUrl"/>
               <video
-                [src]="this.nftUrl"
+                (click)="expandMedia()"
+                [src]="animationUrl"
                 controls
-                controlsList="nodownload "
-                *ngIf="nftType === MEDIA_TYPE.VIDEO"></video>
-              <app-model-view *ngIf="nftType === MEDIA_TYPE._3D" [modelUrl]="this.nftUrl" [disablePan]="false">
+                controlsList="nodownload"
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE.VIDEO &&
+                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
+                "
+                poster="{{ imageUrl }}"></video>
+              <app-model-view
+                (click)="expandMedia()"
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE._3D &&
+                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
+                "
+                [modelUrl]="animationUrl"
+                [disablePan]="false"
+                [previewImg]="imageUrl">
               </app-model-view>
-              <app-audio-player *ngIf="nftType === MEDIA_TYPE.AUDIO" [src]="this.nftUrl"> </app-audio-player>
+              <app-audio-player
+                (click)="expandMedia()"
+                *ngIf="
+                  getTypeFile(nftDetail) === MEDIA_TYPE.AUDIO &&
+                  (nftDetail.animation?.link_s3 || nftDetail?.animation_url)
+                "
+                [src]="animationUrl"
+                [previewImg]="imageUrl">
+              </app-audio-player>
             </div>
           </div>
         </div>
       </div>
       <div class="col-12 col-lg-8 pl-lg-3">
-        <div class="d-lg-flex flex-column justify-content-between h-100">
+        <div class="d-lg-flex flex-column h-100">
           <div class="d-lg-flex justify-content-between">
             <div class="d-flex align-items-center d-lg-flex d-none">
               <h1 class="fw-bold sub-text text--white mb-0 mr-1">
@@ -76,7 +111,8 @@
             >
           </div>
           <!-- Desktop card info -->
-          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">
+          <!--          <div class="d-none d-lg-block card py-3 px-6" *ngIf="!isSoulBound">-->
+          <div class="d-none d-lg-block card py-3 px-6" *ngIf="false">
             <div class="d-flex">
               <div class="flex-shrink-0 flex-grow-1 w-auto">
                 <div class="body-01 text--gray-5 mb-1">Min. Price</div>
@@ -108,7 +144,8 @@
             </div>
           </div>
           <!-- Mobile card info -->
-          <div class="d-lg-none" *ngIf="!isSoulBound">
+          <!--          <div class="d-lg-none" *ngIf="!isSoulBound">-->
+          <div class="d-lg-none" *ngIf="false">
             <div class="card px-6 py-3 mb-4">
               <div class="body-02 text--gray-5 mb-1">Min. Price</div>
               <div class="h3 mb-0 text--white">

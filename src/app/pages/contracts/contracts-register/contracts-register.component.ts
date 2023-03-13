@@ -1,17 +1,18 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import {from} from 'rxjs';
-import { delay, mergeMap } from 'rxjs/operators';
+import { from, Subject } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, mergeMap, takeUntil } from 'rxjs/operators';
 import { REGISTER_CONTRACT } from 'src/app/core/constants/contract.constant';
 import { MESSAGES_CODE } from 'src/app/core/constants/messages.constant';
 import { NgxToastrService } from 'src/app/core/services/ngx-toastr.service';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -24,10 +25,11 @@ import { Globals } from '../../../global/global';
   styleUrls: ['./contracts-register.component.scss'],
 })
 export class ContractsRegisterComponent implements OnInit {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'code_id', headerCellDef: 'Code ID' },
-    { matColumnDef: 'type', headerCellDef: 'Type Contract' },
+    { matColumnDef: 'type', headerCellDef: 'Type' },
     { matColumnDef: 'result', headerCellDef: 'Result registration' },
     { matColumnDef: 'updated_at', headerCellDef: 'Time Registered' },
     { matColumnDef: 'action', headerCellDef: '' },
@@ -40,7 +42,7 @@ export class ContractsRegisterComponent implements OnInit {
   };
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   dataBk: any[];
-  dataBlock: any[];
+  dataContract: any[];
   filterSearchData: any;
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
@@ -58,6 +60,9 @@ export class ContractsRegisterComponent implements OnInit {
   isProcess = false;
   currentType = '';
 
+  searchSubject = new Subject();
+  destroy$ = new Subject();
+
   constructor(
     public translate: TranslateService,
     public global: Globals,
@@ -70,21 +75,37 @@ export class ContractsRegisterComponent implements OnInit {
     public walletService: WalletService,
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit(): void {
     from([1])
       .pipe(
-        delay(600),
+        delay(1000),
         mergeMap((_) => this.walletService.wallet$),
       )
       .subscribe((wallet) => {
         if (wallet) {
           this.userAddress = wallet.bech32Address;
           this.getListContract();
+
+          this.searchSubject
+            .asObservable()
+            .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+            .subscribe(() => {
+              this.pageChange.selectPage(0);
+            });
         } else {
           this.userAddress = null;
           this.router.navigate(['/']);
         }
       });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   getListContract() {
@@ -111,7 +132,7 @@ export class ContractsRegisterComponent implements OnInit {
           });
           this.dataSource = new MatTableDataSource<any>(res.data);
           this.dataBk = res.data || [];
-          this.dataBlock = res.data || [];
+          this.dataContract = res.data || [];
         }
       },
       () => {},
@@ -121,43 +142,9 @@ export class ContractsRegisterComponent implements OnInit {
     );
   }
 
-  searchCode(): void {
-    this.filterSearchData = null;
-    this.isHideSearch = false;
-    if (this.textSearch.length > 0) {
-      let payload = {
-        account_address: this.userAddress,
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-      this.filterSearchData = [];
-      this.contractService.getListTypeContract(payload).subscribe((res) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.filterSearchData = res.data;
-        }
-      });
-    } else {
-      this.clearSearch();
-    }
-  }
-
   clearSearch(): void {
-    this.filterSearchData = null;
-    this.dataSource = new MatTableDataSource<any>(this.dataBk);
-    this.dataBlock = this.dataBk;
-    this.pageData.length = this.pageLength;
-  }
-
-  replacePageList(item: any): void {
-    this.textSearch = item.code_id;
-    this.dataSource = new MatTableDataSource<any>([item]);
-    this.dataBlock = [item];
-    this.isHideSearch = true;
-    this.pageData.length = 1;
+    this.textSearch = '';
+    this.onKeyUp();
   }
 
   paginatorEmit(event): void {
@@ -182,7 +169,7 @@ export class ContractsRegisterComponent implements OnInit {
       this.isEditMode = true;
     }
     this.isProcess = false;
-    if(this.isEditMode) {
+    if (this.isEditMode) {
       this.currentType = this.selectedTypeContract;
     }
 
@@ -261,10 +248,10 @@ export class ContractsRegisterComponent implements OnInit {
 
   checkInput(): void {
     this.isDisable = true;
-    if ((this.currentCodeID && this.currentCodeID > 0) && this.selectedTypeContract) {
+    if (this.currentCodeID && this.currentCodeID > 0 && this.selectedTypeContract) {
       this.isDisable = false;
     }
-    if(this.isEditMode && this.currentType === this.selectedTypeContract) {
+    if (this.isEditMode && this.currentType === this.selectedTypeContract) {
       this.isDisable = true;
     }
   }

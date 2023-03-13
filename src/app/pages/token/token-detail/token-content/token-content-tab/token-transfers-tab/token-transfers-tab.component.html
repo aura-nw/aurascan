@@ -166,7 +166,7 @@
                               data['token_id'] === 'More' ||
                               data.modeExecute === modeExecuteTransaction.UnEquip
                             "
-                            (click)="viewNFTDetail(contractAddress, data.token_id)">
+                            [routerLink]="['/tokens/' + linkToken, contractAddress, data.token_id]">
                             <span *ngIf="typeContract === contractType.CW721">View NFT</span>
                             <span *ngIf="typeContract === contractType.CW4973">View ABT</span>
                           </button>

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
 import { PAGE_EVENT } from 'src/app/core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from 'src/app/core/constants/token.constant';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
@@ -15,11 +14,10 @@ import { Globals } from 'src/app/global/global';
   styleUrls: ['./nft-list.component.scss'],
 })
 export class NftListComponent implements OnChanges {
+  @Input() address: string;
   @Output() totalValueNft = new EventEmitter<number>();
   image_s3 = this.environmentService.configValue.image_s3;
-  defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
   assetCW721: any[];
-  @Input() address: string;
   searchValue = '';
   loading = true;
   pageData: PageEvent = {
@@ -36,7 +34,6 @@ export class NftListComponent implements OnChanges {
 
   constructor(
     private accountService: AccountService,
-    private router: Router,
     public global: Globals,
     private environmentService: EnvironmentService,
   ) {}

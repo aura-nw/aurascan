@@ -20,6 +20,7 @@ export class WSService {
 
   public wsData: BehaviorSubject<any>;
   public data$: Observable<any>;
+  private codeStatus = new BehaviorSubject<any>(null);
 
   socket: Socket;
 
@@ -34,6 +35,10 @@ export class WSService {
 
   public get wsDataValue() {
     return this.wsData.value;
+  }
+
+  public get getCodeStatus(){
+    return this.codeStatus.asObservable();
   }
 
   public connect(): void {
@@ -103,50 +108,12 @@ export class WSService {
         Message: '',
         Verified: false,
         ContractAddress: null,
-        CodeId: null
+        CodeId: null,
       };
 
       if (redisResponse.CodeId === this.codeId && this.codeId) {
         callBack && callBack();
-        if (redisResponse.Verified) {
-          this.toastr
-            .successWithTap('Contract Source Code Verification is successful! Click here to view detail')
-            .pipe(take(1))
-            .subscribe((_) => {
-              tabCallBack && tabCallBack();
-            });
-        } else {
-          switch (redisResponse.Code) {
-            case 'E001':
-              resMessages = 'Smart contract source code or compiler version is incorrect';
-              break;
-            case 'E002':
-              resMessages = 'Error zip contract source code';
-              break;
-            case 'E003':
-              resMessages = 'Internal error';
-              break;
-            case 'E006':
-              resMessages = 'Cannot find github repository of this contract';
-              break;
-            case 'E007':
-              resMessages = 'Commit not found';
-              break;
-            case 'E008':
-              resMessages = 'Missing Cargo.lock file';
-              break;
-            default:
-              resMessages = `Error! Unable to generate Contract Creation Code and Schema for Contract ${redisResponse.CodeId}`;
-              break;
-          }
-          this.toastr
-            .errorWithTap(resMessages)
-            .pipe(take(1))
-            .subscribe((_) => {
-              tabCallBack && tabCallBack();
-            });
-        }
-        this.codeId = null;
+        this.codeStatus.next(redisResponse.Code);
       }
     });
   }
