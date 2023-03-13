@@ -30,19 +30,17 @@ export class ContractsDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contractAddress = this.route.snapshot.paramMap.get('contractAddress');
-
     this.contractService.loadContractDetail(this.contractAddress);
-
     this.subscription = this.contractService.contractObservable.subscribe((res: ResponseDto) => {
       if (res?.data) {
         this.contractDetail = res?.data;
         this.contractDetail.balance = balanceOf(this.contractDetail?.balance);
         this.contractDetail.price = this.contractDetail?.balance * this.priceToken || 0;
+      } else {
+        this.contractDetail = null;
       }
     });
   }
-
-
 
   copyData(): void {
     let text = this.contractAddress.toString();

@@ -1,15 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CONTRACT_RESULT } from 'src/app/core/constants/contract.constant';
-import { ContractVerifyType } from 'src/app/core/constants/contract.enum';
-import { EnvironmentService } from 'src/app/core/data-services/environment.service';
+import { ContractRegisterType, ContractVerifyType } from 'src/app/core/constants/contract.enum';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { DATEFORMAT, PAGE_EVENT } from '../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../core/constants/token.constant';
 import { TableTemplate } from '../../../core/models/common.model';
@@ -23,8 +22,8 @@ import { Globals } from '../../../global/global';
   styleUrls: ['./contracts-list.component.scss'],
 })
 export class ContractsListComponent implements OnInit, OnDestroy {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
-  searchMobVisible = false;
   templates: Array<TableTemplate> = [
     { matColumnDef: 'contract_address', headerCellDef: 'Address', isUrl: '/contracts', isShort: true },
     { matColumnDef: 'contract_name', headerCellDef: 'Contract Name' },
@@ -40,70 +39,41 @@ export class ContractsListComponent implements OnInit, OnDestroy {
   pageSize = 20;
   pageIndex = 0;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSearch: any;
-  filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   breakpoint$ = this.layout.observe([Breakpoints.Small, Breakpoints.XSmall]);
-  urlParam = '';
-  showBoxSearch = false;
-
-  image_s3 = this.environmentService.configValue.image_s3;
-  defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
-
-  searchSubject = new Subject<string>();
-  searchSubscription: Subscription;
+  filterButtons = [];
+  searchSubject = new Subject();
+  destroy$ = new Subject();
+  contractRegisterType = ContractRegisterType;
 
   constructor(
     public translate: TranslateService,
     public global: Globals,
-    private router: Router,
     private contractService: ContractService,
     private datePipe: DatePipe,
     private layout: BreakpointObserver,
-    private route: ActivatedRoute,
-    private environmentService: EnvironmentService
   ) {}
 
   ngOnDestroy(): void {
-    this.searchSubscription?.unsubscribe();
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.urlParam = params.param;
-    });
-    this.textSearch = this.urlParam ? this.urlParam : '';
     this.getListContract();
 
-    this.searchSubscription = this.searchSubject
+    this.searchSubject
       .asObservable()
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        switchMap((text) => {
-          this.showBoxSearch = true;
-
-          this.textSearch = text;
-          let payload = {
-            limit: 0,
-            offset: 0,
-            keyword: this.textSearch,
-          };
-
-          this.filterSearchData = [];
-
-          return this.contractService.getListContract(payload);
-        }),
-      )
-      .subscribe((res) => {
-        if (res?.data?.length > 0) {
-          res.data.forEach((item) => {
-            item.updated_at = this.datePipe.transform(item.updated_at, DATEFORMAT.DATETIME_UTC);
-          });
-          this.filterSearchData = res.data;
-        }
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.pageChange.selectPage(0);
       });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   getListContract() {
@@ -111,6 +81,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
       limit: this.pageSize,
       offset: this.pageIndex * this.pageSize,
       keyword: this.textSearch,
+      contractType: this.filterButtons,
     };
 
     this.contractService.getListContract(payload).subscribe((res) => {
@@ -129,7 +100,6 @@ export class ContractsListComponent implements OnInit, OnDestroy {
           }
         });
         this.dataSource = res.data;
-        this.dataSearch = res.data;
       }
     });
   }
@@ -140,17 +110,7 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   pageEvent(e: PageEvent): void {
     this.pageIndex = e.pageIndex;
-    if (!this.urlParam) {
-      this.textSearch = '';
-      this.showBoxSearch = false;
-    }
     this.getListContract();
-  }
-
-  handleLink(): void {
-    if (this.filterSearchData[0]?.contract_address) {
-      this.router.navigate(['/contracts/', this.filterSearchData[0]?.contract_address]);
-    }
   }
 
   shortenAddress(address: string): string {
@@ -162,7 +122,30 @@ export class ContractsListComponent implements OnInit, OnDestroy {
 
   resetFilterSearch() {
     this.textSearch = '';
-    this.showBoxSearch = false;
-    this.filterSearchData = [];
+    this.onKeyUp();
+  }
+
+  filterButton(val: string) {
+    const i = this.filterButtons.findIndex((i) => i === val);
+    switch (val) {
+      case 'All':
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons = [];
+        }
+        break;
+      case ContractRegisterType.CW20:
+      case ContractRegisterType.CW721:
+      case ContractRegisterType.CW4973:
+      case '': //Others
+      default:
+        if (i >= 0) {
+          this.filterButtons = this.filterButtons.filter((item) => item !== val);
+        } else {
+          this.filterButtons.push(val);
+        }
+    }
+    this.pageChange.selectPage(0);
   }
 }

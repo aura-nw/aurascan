@@ -1,4 +1,4 @@
-<a *ngIf="modelUrl && link" class="model-viewer-container" href="{{ link }}">
+<div *ngIf="modelUrl; else poster" class="model-viewer-container" (click)="link && goTo(link)">
   <ng-container *ngIf="!disablePan">
     <model-viewer
       class="model-viewer"
@@ -8,7 +8,8 @@
       data-js-focus-visible=""
       ar-status="not-presenting"
       touch-action="none"
-      interaction-prompt="none">
+      interaction-prompt="none"
+      [poster]="previewImg">
     </model-viewer>
   </ng-container>
 
@@ -19,33 +20,11 @@
       data-js-focus-visible=""
       ar-status="not-presenting"
       touch-action="none"
-      interaction-prompt="none">
-    </model-viewer>
-  </ng-container>
-</a>
-
-<div *ngIf="modelUrl && !link" class="model-viewer-container">
-  <ng-container *ngIf="!disablePan">
-    <model-viewer
-      class="model-viewer"
-      camera-controls
-      [attr.src]="modelUrl"
-      alt="Aura"
-      data-js-focus-visible=""
-      ar-status="not-presenting"
-      touch-action="none"
-      interaction-prompt="none">
-    </model-viewer>
-  </ng-container>
-
-  <ng-container *ngIf="disablePan">
-    <model-viewer
-      [attr.src]="modelUrl"
-      alt="Aura"
-      data-js-focus-visible=""
-      ar-status="not-presenting"
-      touch-action="none"
-      interaction-prompt="none">
+      interaction-prompt="none"
+      [poster]="previewImg">
     </model-viewer>
   </ng-container>
 </div>
+<ng-template class="model-viewer-container" #poster>
+  <img [src]="previewImg" alt="..." />
+</ng-template>

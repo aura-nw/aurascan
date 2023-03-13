@@ -23,7 +23,6 @@ export class WalletListComponent {
   @Output() onConnect = new EventEmitter<WALLET_PROVIDER>();
   @Output() onDismiss = new EventEmitter();
 
-
   connect(wallet: IWalletInfo): void {
     this.onConnect.emit(wallet.name);
   }

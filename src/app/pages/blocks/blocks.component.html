@@ -1,7 +1,7 @@
 <app-pagetitle title="Blocks" [displayInfo]="true"></app-pagetitle>
 <section *ngIf="!loading">
   <ng-container *ngIf="dataSource?.data?.length > 0; else noValues">
-    <div class="card">
+    <div class="card mt-4 mt-md-6">
       <div class="card-body">
         <div class="table-responsive d-none d-lg-block">
           <table mat-table [dataSource]="dataSource" class="aura-table">

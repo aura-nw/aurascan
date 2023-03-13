@@ -21,9 +21,8 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   @Input() reloadAPI: boolean = false;
   @Output() totalUnEquip = new EventEmitter<number>();
   textSearch = '';
-  seachValue = '';
+  searchValue = '';
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  tokenList = [];
   loading = false;
   pageData: PageEvent = {
     length: PAGE_EVENT.LENGTH,
@@ -32,13 +31,11 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   };
   // soulboundData param use for paginator
   soulboundData: MatTableDataSource<any> = new MatTableDataSource();
-  showData: any[];
-  nextKey = null;
-  currentKey = null;
   currentAddress = '';
   sbType = SB_TYPE;
   isClick = false;
   MEDIA_TYPE = MEDIA_TYPE;
+  isError = false;
 
   constructor(
     public dialog: MatDialog,
@@ -66,13 +63,13 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   }
 
   searchToken() {
-    this.textSearch = this.seachValue;
+    this.textSearch = this.searchValue;
     this.getListSB();
   }
 
   resetSearch() {
     this.textSearch = '';
-    this.seachValue = '';
+    this.searchValue = '';
     this.getListSB();
   }
 
@@ -132,5 +129,9 @@ export class SoulboundTokenUnequippedComponent implements OnInit {
   getTypeFile(nft: any) {
     let nftType = checkTypeFile(nft);
     return nftType;
+  }
+
+  error(): void {
+    this.isError = true;
   }
 }

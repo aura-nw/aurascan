@@ -4,6 +4,7 @@ import { MENU, MENU_MOB, MenuName } from 'src/app/layouts/horizontaltopbar/menu'
 import { Router } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { WalletService } from 'src/app/core/services/wallet.service';
+import { SoulboundService } from 'src/app/core/services/soulbound.service';
 
 @Component({
   selector: 'app-menu-bottom-bar',
@@ -16,13 +17,19 @@ export class MenuBottomBarComponent implements OnInit {
   menuLink = [];
   overlayPanel = false;
   wallet = null;
+  lengthSBT = 0;
   @ViewChild('popover') public popover: NgbPopover;
 
-  constructor(public router: Router, private walletService: WalletService) {}
+  constructor(
+    public router: Router,
+    private walletService: WalletService,
+    private soulboundService: SoulboundService,
+  ) {}
 
   ngOnInit(): void {
     this.walletService.wallet$.subscribe((wallet) => {
       if (wallet) {
+        this.getListSmartContract(wallet.bech32Address);
         this.wallet = wallet;
       }
     });
@@ -115,6 +122,30 @@ export class MenuBottomBarComponent implements OnInit {
     if (menuLink === '/statistics/top-statistic' && this.router.url == '/statistics/top-statistic') {
       return true;
     }
+
+    if (
+      menuLink === '/code-ids/list' &&
+      (this.router.url == '/code-ids/list' ||
+        this.router.url.includes('/code-ids/detail/') ||
+        this.router.url.includes('/code-ids/verify/'))
+    ) {
+      return true;
+    }
     return false;
+  }
+
+  getListSmartContract(currentAddress) {
+    const payload = {
+      limit: 10,
+      offset: 0,
+      minterAddress: currentAddress,
+    };
+
+    this.lengthSBT = 0;
+    this.soulboundService.getListSoulbound(payload).subscribe((res) => {
+      if (res.data.length > 0) {
+        this.lengthSBT = res.meta.count;
+      }
+    });
   }
 }

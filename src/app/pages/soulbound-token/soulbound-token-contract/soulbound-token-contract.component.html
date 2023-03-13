@@ -44,7 +44,7 @@
               </mat-form-field>
             </div>
             <div class="col-12 col-lg-auto">
-              <form class="aura-form single-input-field search-form-sblist" #searchForm>
+              <form (ngSubmit)="getSearchValue()" class="aura-form single-input-field search-form-sblist" #searchForm>
                 <div class="input-group">
                   <input
                     type="text"

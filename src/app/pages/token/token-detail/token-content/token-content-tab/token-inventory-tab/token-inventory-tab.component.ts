@@ -28,7 +28,7 @@ export class TokenInventoryComponent implements OnInit {
   keyWord = '';
   dataSourceMobile: any[];
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
-  isMoreTx = true;
+  isMoreTx = false;
   linkToken = 'token-nft';
 
   constructor(
@@ -93,10 +93,7 @@ export class TokenInventoryComponent implements OnInit {
 
       if (this.pageData.length > 200) {
         this.pageData.length = 200;
-      } else {
-        if (this.pageData.length === this.nftData.data.length) {
-          this.isMoreTx = false;
-        }
+        this.isMoreTx = true;
       }
       this.loading = false;
     });

@@ -20,7 +20,6 @@ export class ContractService extends CommonService {
     return this.contract$.value;
   }
 
-  apiAdminUrl = `${this.environmentService.configValue.urlAdmin}`;
   constructor(private http: HttpClient, private environmentService: EnvironmentService) {
     super(http, environmentService);
 
@@ -59,17 +58,12 @@ export class ContractService extends CommonService {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}`);
   }
 
-  verifyContract(data: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/contracts/verify-contract`, data);
+  verifyCodeID(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/verify-code-id`, data);
   }
 
-  getMatchCreationCode(contractAddress: string): Observable<any> {
-    this.setURL();
-    return this.http.get<any>(`${this.apiUrl}/contracts/match-creation-code/${contractAddress}`);
-  }
-
-  checkVerified(contractAddress: string): Observable<IResponsesTemplates<any>> {
-    return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${contractAddress}`);
+  checkVerified(codeID: string): Observable<IResponsesTemplates<any>> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/verify/status/${codeID}`);
   }
 
   loadContractDetail(contractAddress): void {
@@ -99,19 +93,23 @@ export class ContractService extends CommonService {
     );
   }
 
-  getSmartContractStatus() {
-    return axios.get(`${this.apiUrl}/contracts/get-smart-contract-status`);
-  }
-
-  getContractIdList(creator: string) {
-    return axios.get(`${this.apiUrl}/contracts/get-code-ids/${creator}`);
-  }
-
-  createContractRequest(data: DeployContractListReq) {
-    return this.http.post<any>(`${this.apiAdminUrl}/request/create`, data);
-  }
-
   getNFTDetail(contractAddress: string, tokenId): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/contracts/${contractAddress}/nft/${tokenId}`);
+  }
+
+  getListContractById(codeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contract-codes/${codeId}`);
+  }
+
+  getVerifyCodeStep(codeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/verify-code-id/${codeId}`);
+  }
+
+  getListCodeID(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/contracts/contract-code/list`, data);
+  }
+
+  getCodeIDDetail(codeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/contracts/contract-code/${codeId}`);
   }
 }

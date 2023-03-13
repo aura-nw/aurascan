@@ -13,9 +13,7 @@ export class ContractPopoverComponent implements OnInit, OnChanges {
   @Input() popoverData: IContractPopoverData = null;
 
   FORMAT = MY_FORMATS;
-
   loading = true;
-
   codeTransaction = CodeTransaction;
   modeExecuteTransaction = ModeExecuteTransaction;
 

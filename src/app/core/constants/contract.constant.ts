@@ -89,6 +89,7 @@ export const CONTRACT_VERSIONS = [
   { label: 'cosmwasm/workspace-optimizer:0.12.7', value: 'cosmwasm/workspace-optimizer:0.12.7' },
   { label: 'cosmwasm/workspace-optimizer:0.12.8', value: 'cosmwasm/workspace-optimizer:0.12.8' },
   { label: 'cosmwasm/workspace-optimizer:0.12.9', value: 'cosmwasm/workspace-optimizer:0.12.9' },
+  { label: 'cosmwasm/workspace-optimizer:0.12.10', value: 'cosmwasm/workspace-optimizer:0.12.10' },
 
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.4', value: 'cosmwasm/workspace-optimizer-arm64:0.12.4' },
   // { label: 'cosmwasm/workspace-optimizer-arm64:0.12.5', value: 'cosmwasm/workspace-optimizer-arm64:0.12.5' },
@@ -109,3 +110,20 @@ export const REGISTER_CONTRACT = [
     value: ContractRegisterType.CW4973,
   },
 ];
+
+
+export const LIST_ZEROES = [
+  {
+    value: '6',
+  },
+  {
+    value: '8',
+  },
+  {
+    value: '18',
+  },
+  {
+    value: 'custom',
+  },
+];
+

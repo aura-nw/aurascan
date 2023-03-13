@@ -1,6 +1,6 @@
 <h1 class="mb-0 text--white">CW-20 Tokens</h1>
 <section>
-  <ng-container *ngIf="pageData?.length > 0; else noValues">
+  <ng-container>
     <div class="card mt-4 mt-lg-5">
       <div class="card-body">
         <!-- Title -->
@@ -16,15 +16,13 @@
                 placeholder="Search for Token Name or Address"
                 [(ngModel)]="textSearch"
                 [maxLength]="maxLengthSearch"
-                (keyup)="searchToken()"
-                (keyup.enter)="setPageList()"
-                [disabled]="enterSearch?.length > 0"
+                (keyup)="onKeyUp()"
                 name="search"
                 autocomplete="off" />
               <button
                 type="submit"
                 class="btn-search {{ textSearch && textSearch?.length > 0 ? 'd-none' : '' }}"
-                (click)="searchToken()">
+                (click)="getListToken()">
                 <img [src]="'assets/icons/icons-svg/basic/search.svg' | imageS3" alt="" width="24" height="24" />
               </button>
               <button
@@ -36,41 +34,11 @@
                 <img [src]="'assets/icons/icons-svg/basic/close-circle.svg' | imageS3" alt="" width="24" height="24" />
               </button>
             </div>
-            <ng-container *ngIf="textSearch?.length > 0 && !enterSearch">
-              <div class="box-search-data text-white">
-                <ng-container *ngIf="!filterSearchData || (filterSearchData && filterSearchData?.length === 0)">
-                  <span> There are no matching contracts </span>
-                </ng-container>
-                <ng-container *ngIf="filterSearchData && filterSearchData.length > 0">
-                  <div class="txt-title-search mb-2">CW-20 Tokens</div>
-                  <ng-container *ngFor="let item of filterSearchData">
-                    <div
-                      class="d-flex p-3 cursor-pointer search-result"
-                      [routerLink]="['/tokens/token', item.contract_address]">
-                      <img [src]="item.image || defaultLogoToken" class="logo-token rounded-circle" />
-                      <div class="ml-3">
-                        <div class="d-flex align-items-center">
-                          <div class="text-clamp">
-                            {{ item.name }} <span *ngIf="item.symbol">({{ item.symbol }})</span>
-                          </div>
-                          <div class="box-price">
-                            <span class="text--green-3">${{ item.price | number : global.formatNumber2Decimal }}</span>
-                          </div>
-                        </div>
-                        <span class="text-clamp small-body text--primary">{{
-                          item.contract_address | cutStringPipe : 8 : 8
-                        }}</span>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-            </ng-container>
           </form>
         </div>
         <div class="divider divider-horizontal d-lg-none my-4"></div>
         <!-- Table -->
-        <div class="table-responsive aura-table-contain mt-4">
+        <div class="table-responsive aura-table-contain mt-4" *ngIf="pageData?.length > 0; else noValues">
           <table mat-table matSort [dataSource]="dataSource" class="aura-table" (matSortChange)="sortData($event)">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
@@ -186,18 +154,19 @@
               </td>
             </tr>
           </table>
-          <app-paginator
-            [length]="pageData.length"
-            [pageSize]="pageData.pageSize"
-            (paginator)="paginatorEmit($event)"
-            (pageEvent)="pageEvent($event)">
-          </app-paginator>
         </div>
+        <app-paginator
+          [length]="pageData.length"
+          [pageSize]="pageData.pageSize"
+          (paginator)="paginatorEmit($event)"
+          (pageEvent)="pageEvent($event)">
+        </app-paginator>
+        <!-- No data -->
+        <ng-template #noValues>
+          <app-table-no-data></app-table-no-data>
+        </ng-template>
       </div>
     </div>
   </ng-container>
-  <ng-template #noValues>
-    <app-table-no-data></app-table-no-data>
-  </ng-template>
   <ng-template #noData> - </ng-template>
 </section>

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { EnvironmentService } from 'src/app/core/data-services/environment.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { PaginatorComponent } from 'src/app/shared/components/paginator/paginator.component';
 import { PAGE_EVENT } from '../../../../core/constants/common.constant';
 import { MAX_LENGTH_SEARCH_TOKEN } from '../../../../core/constants/token.constant';
 import { ResponseDto, TableTemplate } from '../../../../core/models/common.model';
@@ -16,7 +18,8 @@ import { Globals } from '../../../../global/global';
   templateUrl: './token-cw20.component.html',
   styleUrls: ['./token-cw20.component.scss'],
 })
-export class TokenCw20Component implements OnInit {
+export class TokenCw20Component implements OnInit, OnDestroy {
+  @ViewChild(PaginatorComponent) pageChange: PaginatorComponent;
   textSearch = '';
   templates: Array<TableTemplate> = [
     { matColumnDef: 'id', headerCellDef: 'id' },
@@ -37,40 +40,56 @@ export class TokenCw20Component implements OnInit {
   };
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  dataSourceBk: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   sortedData: any;
   sort: MatSort;
   filterSearchData = [];
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
-  dataSearch: any;
-  enterSearch = '';
-
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultLogoToken = this.image_s3 + 'images/icons/token-logo.png';
 
+  searchSubject = new Subject();
+  destroy$ = new Subject();
+
   constructor(
-    private route: ActivatedRoute,
     public translate: TranslateService,
     public global: Globals,
     public tokenService: TokenService,
     private environmentService: EnvironmentService,
   ) {}
 
+  ngOnDestroy(): void {
+    // throw new Error('Method not implemented.');
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.enterSearch = params?.a || '';
-      this.textSearch = this.enterSearch;
-    });
     this.getListToken();
+
+    this.searchSubject
+      .asObservable()
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.pageData.pageIndex === PAGE_EVENT.PAGE_INDEX) {
+          this.getListToken();
+        } else {
+          this.pageChange.selectPage(0);
+        }
+      });
+  }
+
+  onKeyUp() {
+    this.searchSubject.next(this.textSearch);
   }
 
   getListToken() {
     const payload = {
       limit: this.pageData.pageSize,
       offset: this.pageData.pageIndex * this.pageData.pageSize,
-      keyword: this.enterSearch,
+      keyword: this.textSearch,
     };
+
     this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
       res.data.forEach((data) => {
         Object.assign(data, {
@@ -88,30 +107,8 @@ export class TokenCw20Component implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource<any>(res.data);
-      this.dataSourceBk = this.dataSource;
       this.pageData.length = res.meta.count;
     });
-  }
-
-  searchToken(): void {
-    if (this.textSearch?.length > 0) {
-      const payload = {
-        limit: 0,
-        offset: 0,
-        keyword: this.textSearch,
-      };
-
-      this.tokenService.getListToken(payload).subscribe((res: ResponseDto) => {
-        if (res?.data?.length > 0) {
-          this.dataSearch = res.data;
-        }
-
-        let keyWord = this.textSearch.toLowerCase();
-        this.filterSearchData = this.dataSearch?.filter(
-          (data) => data.name.toLowerCase().includes(keyWord) || data.contract_address.toLowerCase().includes(keyWord),
-        );
-      });
-    }
   }
 
   paginatorEmit(event): void {
@@ -181,19 +178,9 @@ export class TokenCw20Component implements OnInit {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  setPageList(): void {
-    if (this.filterSearchData?.length > 0) {
-      window.location.href = `/tokens?a=${this.textSearch}`;
-    }
-  }
-
   resetSearch() {
-    if (this.enterSearch) {
-      window.location.href = `/tokens`;
-    } else {
-      this.textSearch = '';
-      this.enterSearch = '';
-    }
+    this.textSearch = '';
+    this.onKeyUp();
   }
 
   pageEvent(e: PageEvent): void {

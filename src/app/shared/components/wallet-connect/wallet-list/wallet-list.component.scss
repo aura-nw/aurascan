@@ -18,7 +18,6 @@
   }
 
   .wallet-list {
-
     &.disabled-connect,
     .disabled-connect {
       opacity: 0.5;
@@ -45,4 +44,7 @@
       }
     }
   }
+}
+.close-dialog {
+  z-index: 10;
 }

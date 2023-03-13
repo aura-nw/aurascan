@@ -23,7 +23,6 @@ export class TokenContentComponent implements OnInit {
   tabToken = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Info, TokenTab.Contract];
   tabNFT = [TokenTab.Transfers, TokenTab.Holders, TokenTab.Inventory, TokenTab.Info, TokenTab.Contract];
   TABS = [];
-  countCurrent: string = '';
   paramQuery = '';
   textSearch: string = '';
   searchTemp: string = '';
@@ -31,12 +30,16 @@ export class TokenContentComponent implements OnInit {
   isSearchAddress = false;
   resultSearch = 0;
   tokenTab = TokenTab;
+  currentTab = this.tokenTab.Transfers;
   tabsBackup: any;
   infoSearch = {};
   maxLengthSearch = MAX_LENGTH_SEARCH_TOKEN;
   contractVerifyType = ContractVerifyType;
   lengthNormalAddress = LENGTH_CHARACTER.ADDRESS;
   linkToken = 'token-nft';
+  activeTabID = 0;
+  decimalValue = 1;
+  textPlaceHolder = 'Filter Address/ TX Hash';
 
   denom = this.environmentService.configValue.chain_info.currencies[0].coinDenom;
   prefixAdd = this.environmentService.configValue.chain_info.bech32Config.bech32PrefixAccAddr;
@@ -56,7 +59,7 @@ export class TokenContentComponent implements OnInit {
     ).map((tab) => ({
       ...tab,
       value: tab.value,
-      key: tab.key === TokenTab.Transfers ? '' : tab.key,
+      key: tab.key,
     }));
     this.tabsBackup = this.TABS;
 
@@ -65,10 +68,20 @@ export class TokenContentComponent implements OnInit {
       this.searchTemp = this.paramQuery;
       this.handleSearch();
     });
+
+    if (localStorage.getItem('isVerifyTab') == 'true') {
+      this.currentTab = this.tokenTab.Contract;
+      this.activeTabID = this.TABS.findIndex((k) => k.key === this.tokenTab.Contract);
+      localStorage.setItem('isVerifyTab', null);
+    }
+
+    if (this.tokenDetail.decimals > 0) {
+      this.decimalValue = Math.pow(10, this.tokenDetail.decimals);
+    }
   }
 
   changeTab(tabId): void {
-    this.countCurrent = tabId;
+    this.currentTab = tabId;
   }
 
   handleSearch() {
@@ -95,7 +108,9 @@ export class TokenContentComponent implements OnInit {
         if (!params?.a) {
           if (this.tokenDetail.type !== ContractRegisterType.CW20) {
             this.linkToken = this.tokenDetail.type === ContractRegisterType.CW721 ? 'token-nft' : 'token-abt';
-            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
+            window.location.href = `/tokens/${this.linkToken}/${this.contractAddress}?a=${encodeURIComponent(
+              this.paramQuery,
+            )}`;
           } else {
             window.location.href = `/tokens/token/${this.contractAddress}?a=${encodeURIComponent(this.paramQuery)}`;
           }
@@ -138,8 +153,12 @@ export class TokenContentComponent implements OnInit {
     const client = await SigningCosmWasmClient.connect(this.chainInfo.rpc);
     try {
       const data = await client.queryContractSmart(this.contractAddress, queryData);
-      this.infoSearch['balance'] = this.tokenDetail.isNFTContract ? data?.tokens?.length : data?.balance;
-      this.infoSearch['balance'] = this.infoSearch['balance'] || 0;
+      if (this.tokenDetail.isNFTContract) {
+        this.infoSearch['balance'] = data?.tokens?.length;
+      } else {
+        const tempConvert = data?.balance / this.decimalValue;
+        this.infoSearch['balance'] = tempConvert < 0.000001 ? 0 : tempConvert;
+      }
     } catch (error) {}
   }
 
