@@ -24,7 +24,6 @@ export class NftCardComponent implements OnInit, AfterViewInit {
   paused = true;
   animationUrl: string;
   imageUrl: string;
-  previewImg = '';
 
   constructor(private environmentService: EnvironmentService, private router: Router, private cdr: ChangeDetectorRef) {}
 
@@ -38,28 +37,38 @@ export class NftCardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // CW721
-    if (this.nftItem.animation && this.nftItem.animation?.content_type) {
-      if (this.nftItem.animation?.content_type === 'image/gif') {
-        this.imageUrl = this.nftItem.animation?.link_s3 || this.defaultImgToken;
-      } else {
-        this.animationUrl = this.nftItem.animation?.link_s3 || this.defaultImgToken;
-      }
+    if (this.nftItem?.image?.link_s3) {
+      this.imageUrl = this.nftItem.image?.link_s3;
     }
-    if (this.nftItem.image) {
-      this.previewImg = this.nftItem.image?.link_s3;
-      this.imageUrl = this.nftItem.image?.link_s3 || this.defaultImgToken;
+    if (this.nftItem.animation?.link_s3) {
+      if (!this.nftItem?.image?.link_s3) {
+        if (this.nftItem.animation?.content_type === 'image/gif') {
+          this.imageUrl = this.nftItem.animation?.link_s3;
+        } else {
+          this.animationUrl = this.nftItem.animation?.link_s3;
+        }
+      } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
+        this.animationUrl = this.nftItem.animation?.link_s3;
+      } else {
+        this.imageUrl = this.nftItem?.image?.link_s3;
+      }
     }
     // account bound token
-    if (this.nftItem.animation_url && this.nftItem.img_type) {
-      if (this.nftItem.img_type === 'image/gif') {
-        this.imageUrl = this.replaceImgIpfs(this.nftItem.animation_url) || this.defaultImgToken;
-      } else {
-        this.animationUrl = this.replaceImgIpfs(this.nftItem.animation_url) || this.defaultImgToken;
-      }
+    if (this.nftItem?.token_img) {
+      this.imageUrl = this.replaceImgIpfs(this.nftItem?.token_img);
     }
-    if (this.nftItem.token_img) {
-      this.previewImg = this.replaceImgIpfs(this.nftItem.token_img);
-      this.imageUrl = this.replaceImgIpfs(this.nftItem.token_img) || this.defaultImgToken;
+    if (this.nftItem?.animation_url) {
+      if (!this.nftItem?.token_img) {
+        if (this.nftItem.img_type === 'image/gif') {
+          this.imageUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+        } else {
+          this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+        }
+      } else if (this.getTypeFile(this.nftItem) !== MEDIA_TYPE.IMG) {
+        this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
+      } else {
+        this.imageUrl = this.replaceImgIpfs(this.nftItem?.token_img);
+      }
     }
   }
 

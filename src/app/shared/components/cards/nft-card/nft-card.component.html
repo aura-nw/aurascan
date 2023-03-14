@@ -24,7 +24,7 @@
     [src]="animationUrl"
     [id]="nftId"
     #video
-    poster="{{ previewImg }}"
+    poster="{{ imageUrl }}"
     *ngIf="
       getTypeFile(nftItem) === MEDIA_TYPE.VIDEO && (nftItem.animation?.link_s3 || this.nftItem.animation_url)
     "></video>
@@ -46,7 +46,7 @@
     *ngIf="getTypeFile(nftItem) === MEDIA_TYPE._3D && (nftItem.animation?.link_s3 || this.nftItem.animation_url)"
     [modelUrl]="animationUrl"
     [disablePan]="true"
-    [previewImg]="previewImg">
+    [previewImg]="imageUrl">
   </app-model-view>
   <!-- Model-view end -->
 
@@ -56,7 +56,7 @@
     [link]="nftLink"
     [src]="animationUrl"
     [nftId]="nftId"
-    [previewImg]="previewImg"
+    [previewImg]="imageUrl"
     [disableLink]="disableLink"
     #audioPlayer>
   </app-audio-player>

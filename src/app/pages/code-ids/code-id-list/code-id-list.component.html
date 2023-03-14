@@ -76,7 +76,7 @@
                     <div class="d-flex align-items-center gap-2">
                       <div class="mr-2" [style.width]="'16px'">
                         <img
-                          *ngIf="data['verified_at']"
+                          *ngIf="data['contract_verification'] === contractVerifyType.Verified"
                           [src]="'assets/icons/icons-svg/color/check-circle.svg' | imageS3"
                           alt="result"
                           width="16px"

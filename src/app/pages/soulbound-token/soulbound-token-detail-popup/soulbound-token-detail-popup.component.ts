@@ -18,7 +18,6 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
   currentAddress = '';
   isLoading = false;
   MEDIA_TYPE = MEDIA_TYPE;
-  previewImg = '';
   imageUrl = '';
   animationUrl = '';
 
@@ -33,16 +32,19 @@ export class SoulboundTokenDetailPopupComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.soulboundDetail?.ipfs?.image) {
-      this.previewImg = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
       this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
     }
-    if (this.soulboundDetail?.ipfs.animation_url) {
-      if (this.soulboundDetail.img_type === 'image/gif') {
-        if (!this.soulboundDetail?.ipfs?.image) {
+    if (this.soulboundDetail?.ipfs?.animation_url) {
+      if (!this.soulboundDetail?.ipfs?.image) {
+        if (this.getTypeFile(this.soulboundDetail) === MEDIA_TYPE.IMG) {
           this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+        } else {
+          this.animationUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
         }
-      } else {
+      } else if (this.getTypeFile(this.soulboundDetail) !== MEDIA_TYPE.IMG) {
         this.animationUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.animation_url);
+      } else {
+        this.imageUrl = this.replaceImgIpfs(this.soulboundDetail?.ipfs?.image);
       }
     }
   }
