@@ -143,7 +143,7 @@ export class NFTDetailComponent implements OnInit {
         }
         if (this.nftDetail.animation?.link_s3) {
           if (!this.nftDetail?.image?.link_s3) {
-            if (this.getTypeFile(this.nftDetail) === MEDIA_TYPE.IMG) {
+            if (this.nftDetail.animation?.content_type === 'image/gif') {
               this.imageUrl = this.nftDetail.animation?.link_s3;
             } else {
               this.animationUrl = this.nftDetail.animation?.link_s3;
@@ -165,7 +165,7 @@ export class NFTDetailComponent implements OnInit {
         }
         if (this.nftDetail?.ipfs?.animation_url) {
           if (!this.nftDetail?.ipfs?.image) {
-            if (this.getTypeFile(this.nftDetail) === MEDIA_TYPE.IMG) {
+            if (this.nftDetail.img_type === 'image/gif') {
               this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
             } else {
               this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
