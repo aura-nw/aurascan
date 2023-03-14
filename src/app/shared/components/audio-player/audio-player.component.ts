@@ -18,7 +18,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   paused = true;
   image_s3 = this.environmentService.configValue.image_s3;
   defaultImgToken = this.image_s3 + 'images/aura__ntf-default-img.png';
-  
+  isError = false;
   constructor(private environmentService: EnvironmentService) {}
 
   ngAfterViewInit(): void {
@@ -34,9 +34,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
-  ngOnInit() {
-    this.defaultImgToken = this.previewImg || this.defaultImgToken;
-  }
+  ngOnInit() {}
 
   playAudio(element) {
     element.play();
@@ -56,5 +54,9 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   pauseAudio(element) {
     element.pause();
     this.paused = true;
+  }
+
+  error(): void {
+    this.isError = true;
   }
 }
