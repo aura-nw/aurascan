@@ -109,6 +109,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
     this.loadData();
     this.timerGetUpTime = setInterval(() => {
       this.getListUpTime();
+      this.loadData();
     }, 30000);
     this.timerGetBlockMiss = setInterval(() => {
       this.getBlocksMiss(this.currentAddress);
@@ -153,27 +154,35 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListBlockWithOperator(nextKeyBlock = null): void {
-    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKeyBlock = data.nextKey || null;
-      if (code === 200) {
-        const blocks = convertDataBlock(data);
-        if (this.dataSourceBlock.data.length > 0) {
-          this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
-        } else {
-          this.dataSourceBlock.data = [...blocks];
+    this.blockService.blockWithOperator(100, this.currentAddress, nextKeyBlock).subscribe(
+      (res) => {
+        const { code, data } = res;
+        this.nextKeyBlock = data.nextKey || null;
+        if (code === 200) {
+          const blocks = convertDataBlock(data);
+          if (
+            this.dataSourceBlock.data.length > 0 &&
+            this.dataSourceBlock.data.length !== blocks.length &&
+            this.pageIndexBlock != 0
+          ) {
+            this.dataSourceBlock.data = [...this.dataSourceBlock.data, ...blocks];
+          } else {
+            this.dataSourceBlock.data = [...blocks];
+          }
+
+          this.dataSourceBlockMob = this.dataSourceBlock?.data.slice(
+            this.pageIndexBlock * this.pageSize,
+            this.pageIndexBlock * this.pageSize + this.pageSize,
+          );
+
+          this.lengthBlock = this.dataSourceBlock.data.length;
         }
-
-        this.dataSourceBlockMob = this.dataSourceBlock?.data.slice(
-          this.pageIndexPower * this.pageSize,
-          this.pageIndexPower * this.pageSize + this.pageSize,
-        );
-
-        this.lengthBlock = this.dataSourceBlock.data.length;
-        this.isLoadingPower = false;
-      }
-      this.lengthBlockLoading = false;
-    });
+      },
+      () => {},
+      () => {
+        this.lengthBlockLoading = false;
+      },
+    );
   }
 
   getListUpTime(): void {
@@ -241,51 +250,53 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
   }
 
   getListPower(nextKey = null): void {
-    if (!this.dataSourcePower.data) {
-      this.isLoadingPower = true;
-    }
-    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe((res) => {
-      const { code, data } = res;
-      this.nextKey = data.nextKey || null;
+    this.validatorService.validatorsDetailListPower(this.currentAddress, 100, nextKey).subscribe(
+      (res) => {
+        const { code, data } = res;
+        this.nextKey = data.nextKey || null;
 
-      if (code === 200) {
-        const txs = _.get(data, 'transactions').map((element) => {
-          let isStakeMode = false;
-          const tx_hash = _.get(element, 'tx_response.txhash');
-          const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
-          const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
-          if (
-            _type === TRANSACTION_TYPE_ENUM.Delegate ||
-            (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
-            _type === TRANSACTION_TYPE_ENUM.CreateValidator
-          ) {
-            isStakeMode = true;
+        if (code === 200) {
+          const txs = _.get(data, 'transactions').map((element) => {
+            let isStakeMode = false;
+            const tx_hash = _.get(element, 'tx_response.txhash');
+            const address = _.get(element, 'tx_response.tx.body.messages[0].validator_dst_address');
+            const _type = _.get(element, 'tx_response.tx.body.messages[0].@type');
+            if (
+              _type === TRANSACTION_TYPE_ENUM.Delegate ||
+              (_type === TRANSACTION_TYPE_ENUM.Redelegate && address === this.currentAddress) ||
+              _type === TRANSACTION_TYPE_ENUM.CreateValidator
+            ) {
+              isStakeMode = true;
+            }
+            const amount = getAmount(
+              _.get(element, 'tx_response.tx.body.messages'),
+              _type,
+              _.get(element, 'tx_response.tx.body.raw_log'),
+            );
+            const height = _.get(element, 'tx_response.height');
+            const timestamp = _.get(element, 'tx_response.timestamp');
+
+            return { tx_hash, amount, isStakeMode, height, timestamp };
+          });
+          if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
+            this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
+          } else {
+            this.dataSourcePower.data = [...txs];
           }
-          const amount = getAmount(
-            _.get(element, 'tx_response.tx.body.messages'),
-            _type,
-            _.get(element, 'tx_response.tx.body.raw_log'),
+
+          this.dataSourcePowerMob = this.dataSourcePower?.data.slice(
+            this.pageIndexPower * this.pageSize,
+            this.pageIndexPower * this.pageSize + this.pageSize,
           );
-          const height = _.get(element, 'tx_response.height');
-          const timestamp = _.get(element, 'tx_response.timestamp');
 
-          return { tx_hash, amount, isStakeMode, height, timestamp };
-        });
-        if (this.dataSourcePower.data.length > 0 && this.pageIndexPower != 0) {
-          this.dataSourcePower.data = [...this.dataSourcePower.data, ...txs];
-        } else {
-          this.dataSourcePower.data = [...txs];
+          this.lengthPower = this.dataSourcePower.data.length;
         }
-
-        this.dataSourcePowerMob = this.dataSourcePower?.data.slice(
-          this.pageIndexPower * this.pageSize,
-          this.pageIndexPower * this.pageSize + this.pageSize,
-        );
-
-        this.lengthPower = this.dataSourcePower.data.length;
+      },
+      () => {},
+      () => {
         this.isLoadingPower = false;
-      }
-    });
+      },
+    );
   }
 
   paginatorEmit(event, type: 'block' | 'delegator' | 'power'): void {
@@ -316,7 +327,7 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
           this.getListBlockWithOperator(this.nextKeyBlock);
           this.currentNextKeyBlock = this.nextKeyBlock;
         }
-        this.pageIndexPower = page.pageIndex;
+        this.pageIndexBlock = page.pageIndex;
         break;
       case 'delegator':
         this.pageIndexDelegator = page.pageIndex;
@@ -386,9 +397,9 @@ export class ValidatorsDetailComponent implements OnInit, AfterViewChecked {
       receiverAddress: address,
       limit: LIMIT_NUM_SBT,
     };
-    
+
     this.soulboundService.getSBTPick(payload).subscribe((res) => {
-      this.soulboundList = res.data.filter(k => k.picked);
+      this.soulboundList = res.data.filter((k) => k.picked);
     });
   }
 }

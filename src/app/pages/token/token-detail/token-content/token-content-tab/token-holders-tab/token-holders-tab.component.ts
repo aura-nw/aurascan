@@ -51,6 +51,8 @@ export class TokenHoldersTabComponent implements OnInit {
   totalQuantity = 0;
   numberTop = 0;
   totalHolder = 0;
+  timerGetUpTime: any;
+
   chainInfo = this.environmentService.configValue.chain_info;
 
   constructor(
@@ -67,13 +69,21 @@ export class TokenHoldersTabComponent implements OnInit {
     }
     this.template = this.getTemplate();
     this.displayedColumns = this.getTemplate().map((template) => template.matColumnDef);
+
+    this.timerGetUpTime = setInterval(() => {
+      this.getListTokenHolder();
+    }, 3000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerGetUpTime) {
+      clearInterval(this.timerGetUpTime);
+    }
   }
 
   getListTokenHolder() {
-    this.loading = true;
-    this.tokenService
-      .getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress)
-      .subscribe((res) => {
+    this.tokenService.getListTokenHolder(this.numberTopHolder, 0, this.typeContract, this.contractAddress).subscribe(
+      (res) => {
         if (res && res.data?.resultAsset?.length > 0) {
           this.totalHolder = res.data?.resultCount;
           if (this.totalHolder > this.numberTopHolder) {
@@ -98,8 +108,12 @@ export class TokenHoldersTabComponent implements OnInit {
           }
           this.dataSource = new MatTableDataSource<any>(res.data?.resultAsset);
         }
+      },
+      () => {},
+      () => {
         this.loading = false;
-      });
+      },
+    );
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
