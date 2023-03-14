@@ -138,11 +138,21 @@ export class NFTDetailComponent implements OnInit {
           this.nftDetail['isDisplayName'] = true;
           this.nftDetail['nftName'] = this.nftDetail?.asset_info?.data?.info?.extension?.name || '';
         }
-        if (this.nftDetail.animation && this.nftDetail.animation?.content_type) {
-          this.animationUrl = this.nftDetail.animation?.link_s3 || this.defaultImgToken;
+        if (this.nftDetail?.image?.link_s3) {
+          this.imageUrl = this.nftDetail.image?.link_s3;
         }
-        if (this.nftDetail.image) {
-          this.imageUrl = this.nftDetail.image?.link_s3 || this.defaultImgToken;
+        if (this.nftDetail.animation?.link_s3) {
+          if (!this.nftDetail?.image?.link_s3) {
+            if (this.nftDetail.animation?.content_type === 'image/gif') {
+              this.imageUrl = this.nftDetail.animation?.link_s3;
+            } else {
+              this.animationUrl = this.nftDetail.animation?.link_s3;
+            }
+          } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
+            this.animationUrl = this.nftDetail.animation?.link_s3;
+          } else {
+            this.imageUrl = this.nftDetail?.image?.link_s3;
+          }
         }
       } else if (this.nftDetail.type === ContractRegisterType.CW4973) {
         if (this.nftDetail.status !== SB_TYPE.EQUIPPED) {
@@ -151,17 +161,19 @@ export class NFTDetailComponent implements OnInit {
         }
         this.linkToken = 'token-abt';
         if (this.nftDetail?.ipfs?.image) {
-          this.imageUrl = this.nftDetail?.ipfs?.image
-            ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
-            : this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+          this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
         }
         if (this.nftDetail?.ipfs?.animation_url) {
-          if (this.nftDetail.img_type === 'image/gif') {
-            if (!this.nftDetail?.ipfs?.image) {
+          if (!this.nftDetail?.ipfs?.image) {
+            if (this.nftDetail.img_type === 'image/gif') {
               this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+            } else {
+              this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
             }
-          } else {
+          } else if (this.getTypeFile(this.nftDetail) !== MEDIA_TYPE.IMG) {
             this.animationUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
+          } else {
+            this.imageUrl = this.replaceImgIpfs(this.nftDetail?.ipfs?.image);
           }
         }
         if (this.nftDetail.ipfs?.name) {
@@ -343,24 +355,10 @@ export class NFTDetailComponent implements OnInit {
 
   expandMedia(): void {
     let content;
-    if (this.nftDetail.animation?.link_s3 || this.nftDetail?.ipfs?.animation_url) {
-      if (this.nftDetail.img_type === 'image/gif') {
-        if (this.nftDetail.image?.link_s3 || this.nftDetail?.ipfs?.image) {
-          content = this.nftDetail.image?.link_s3
-            ? this.nftDetail.image?.link_s3
-            : this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
-            ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
-            : this.defaultImgToken;
-        } else {
-          content = this.nftDetail.animation?.link_s3 || this.replaceImgIpfs(this.nftDetail?.ipfs?.animation_url);
-        }
-      }
+    if (this.getTypeFile(this.nftDetail) === MEDIA_TYPE.IMG) {
+      content = this.imageUrl;
     } else {
-      content = this.nftDetail.image?.link_s3
-        ? this.nftDetail.image?.link_s3
-        : this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
-        ? this.replaceImgIpfs(this.nftDetail?.ipfs?.image)
-        : this.defaultImgToken;
+      content = this.animationUrl;
     }
 
     if (!this.isMobileMatched) {

@@ -1,5 +1,6 @@
 <div class="audio-player audio-player--has-link" [class.isoClass]="browserEnv === 'ios' && !link">
-  <img [src]="defaultImgToken" *ngIf="link" />
+  <img [src]="previewImg || defaultImgToken" *ngIf="link && !isError" (error)="error()" />
+  <img [src]="defaultImgToken" *ngIf="link && isError"/>
   <a href="{{ link }}" *ngIf="link" [class.disable-link]="disableLink"></a>
   <audio id="{{ nftId }}" [controls]="!link" #audio loop>
     <source *ngIf="src" [src]="src" />
@@ -14,4 +15,5 @@
     </button>
   </div>
 </div>
-<img [src]="defaultImgToken" *ngIf="!link" width="100%" class="img-audio" />
+<img [src]="previewImg" *ngIf="!link && !isError" (error)="error()" width="100%" class="img-audio" />
+<img [src]="defaultImgToken" *ngIf="!link && isError" width="100%" class="img-audio" />
