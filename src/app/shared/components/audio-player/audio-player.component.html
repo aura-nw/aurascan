@@ -15,4 +15,5 @@
     </button>
   </div>
 </div>
-<img [src]="defaultImgToken" *ngIf="!link" width="100%" class="img-audio" />
+<img [src]="previewImg" *ngIf="!link && !isError" (error)="error()" width="100%" class="img-audio" />
+<img [src]="defaultImgToken" *ngIf="!link && isError" width="100%" class="img-audio" />
