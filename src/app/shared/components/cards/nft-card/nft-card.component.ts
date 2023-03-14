@@ -42,7 +42,7 @@ export class NftCardComponent implements OnInit, AfterViewInit {
     }
     if (this.nftItem.animation?.link_s3) {
       if (!this.nftItem?.image?.link_s3) {
-        if (this.getTypeFile(this.nftItem) === MEDIA_TYPE.IMG) {
+        if (this.nftItem.animation?.content_type === 'image/gif') {
           this.imageUrl = this.nftItem.animation?.link_s3;
         } else {
           this.animationUrl = this.nftItem.animation?.link_s3;
@@ -59,7 +59,7 @@ export class NftCardComponent implements OnInit, AfterViewInit {
     }
     if (this.nftItem?.animation_url) {
       if (!this.nftItem?.token_img) {
-        if (this.getTypeFile(this.nftItem) === MEDIA_TYPE.IMG) {
+        if (this.nftItem.img_type === 'image/gif') {
           this.imageUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
         } else {
           this.animationUrl = this.replaceImgIpfs(this.nftItem?.animation_url);
