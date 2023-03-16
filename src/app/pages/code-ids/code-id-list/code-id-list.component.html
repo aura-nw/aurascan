@@ -127,10 +127,12 @@
                   </ng-container>
                   <ng-container *ngIf="template.matColumnDef === 'verified_at'">
                     <div class="d-flex align-items-center ml-1">
-                      <span *ngIf="data['verified_at']">{{
-                        data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'
-                      }}</span>
-                      <span *ngIf="!data['verified_at']">-</span>
+                      <span *ngIf="(data['verified_at'] && data['contract_verification'] === contractVerifyType.Verified); else unVerify">
+                        {{data['verified_at'] | customDate : 'yyyy-MM-dd HH:mm:ss'}}
+                      </span>
+                      <ng-template #unVerify>
+                        <span #unVerify>-</span>
+                      </ng-template>
                     </div>
                   </ng-container>
                 </td>
