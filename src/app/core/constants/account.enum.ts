@@ -57,8 +57,10 @@ export enum StakeModeAccount {
   Redelegations = 2,
   Vestings = 3,
 }
+
+// 
 export enum EAccountType {
-  BaseAccount = 'cosmos-sdk/BaseAccount',
+  BaseAccount = '/cosmos.auth.v1beta1.BaseAccount',
   PeriodicVestingAccount = 'cosmos-sdk/PeriodicVestingAccount',
   DelayedVestingAccount = 'cosmos-sdk/DelayedVestingAccount',
 }
