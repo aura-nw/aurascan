@@ -1,10 +1,10 @@
-import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate';
-import {calculateFee, DeliverTxResponse, SigningStargateClient, StdFee} from '@cosmjs/stargate';
-import {ChainInfo} from '@keplr-wallet/types';
-import {TRANSACTION_TYPE_ENUM} from '../../constants/transaction.enum';
-import {KEPLR_ERRORS} from '../../constants/wallet.constant';
-import {messageCreators} from './messages';
-import {getSigner} from './signer';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { calculateFee, DeliverTxResponse, SigningStargateClient, StdFee } from '@cosmjs/stargate';
+import { ChainInfo } from '@keplr-wallet/types';
+import { TRANSACTION_TYPE_ENUM } from '../../constants/transaction.enum';
+import { KEPLR_ERRORS } from '../../constants/wallet.constant';
+import { messageCreators } from './messages';
+import { getSigner } from './signer';
 
 export async function createSignBroadcast(
   {
@@ -55,22 +55,17 @@ export async function createSignBroadcast(
 }
 
 export async function getNetworkFee(network, address, messageType, memo = ''): Promise<StdFee> {
-  const signer = window.getOfflineSignerOnlyAmino(network.chainId);
-
   //set default for multi gas
   let multiGas = 1.3;
   if (messageType?.typeUrl === TRANSACTION_TYPE_ENUM.MsgRevokeAllowance) {
     multiGas = 1.4;
   }
 
-  const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
   let gasEstimation = 0;
   try {
-    gasEstimation = await onlineClient.simulate(
-      address,
-      Array.isArray(messageType) ? messageType : [messageType],
-      '',
-    );
+    const signer = window.getOfflineSignerOnlyAmino(network.chainId);
+    const onlineClient = await SigningCosmWasmClient.connectWithSigner(network.rpc, signer);
+    gasEstimation = await onlineClient.simulate(address, Array.isArray(messageType) ? messageType : [messageType], '');
   } catch (e) {
     gasEstimation = 100000;
   }
